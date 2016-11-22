@@ -1,0 +1,1610 @@
+
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+                        "Light Makes Right"
+
+                           June 26, 1997
+                        Volume 10, Number 2
+
+Compiled by Eric Haines, erich@acm.org
+All contents are copyright (c) 1996, 1997, all rights reserved
+	by the individual authors
+Archive locations:
+	HTML http://www.acm.org/tog/resources/RTNews/html/index.html
+	HTML http://www.povray.org/rtn/index.html
+	text version at http://www.acm.org/tog/resources/RTNews/text/
+
+Contents:
+	SIGGRAPH Roundtable
+	Introduction
+	New People: Marcos Fajardo Orellana
+	Ray Tracing Roundup
+	Illuminated by Black Light, by Dan Wexler
+	What's Wrong with Monte-Carlo Methods? by Nguyen D.C. (JuHu),
+		Pete Shirley, Stephen Westin, and Eric Veach
+	More on Rendering Bugs, by Eric Haines
+	The Curse of the Monkey's Paw, by Eric Haines
+	Global Illumination "Bible"? by Ian Ashdown
+	Megahedron
+	Detecting Points on the Edge of a Polygon, by Eric Haines
+	Rendering Unflat Polygons, by Eric Haines
+	Free Polygon Tessellators, by Eric Haines
+	Octree Neighbor Finding, by Andrew Glassner, Francois Sillion, and
+		Paul Heckbert
+	Author Sues Publisher, by Ralph Grabowski
+	European Graphics Tour, by Nelson Max
+	Fast Shadow Testing Bibliography, by Slawomir Kilanowski
+
+-------------------------------------------------------------------------------
+
+SIGGRAPH Roundtable
+
+The ray tracing roundtable will convene at SIGGRAPH 97:
+
+	Time: Thursday, 6:30 pm to 7:45 pm (room opens at 6)
+	Place: Hotel InterContinental, Cocker Room
+
+As usual, the location is near the Thursday evening papers reception which
+follows. The roundtable is simply a gathering for people interested in
+rendering and ray tracing and who'd like to talk about what they've been
+doing and meet other like-minded souls. It's extremely informal: the agenda
+is that we introduce ourselves, then break up and chat.
+
+-------------------------------------------------------------------------------
+
+Introduction
+
+Not much has happened to me lately, other than getting a new job and selling
+and buying a house.  Which sounds dramatic, but these changes are actually
+surprisingly mild.  The new house is about 6 blocks from my old house - easy
+move (though the amount to pack remains the same).  For the new job I have to
+move even less, exactly 0 blocks in fact.  It turns out Autodesk acquired the
+Ithaca branch of 3D/EYE in February, around Valentine's Day (there's some
+joke about a "sweetheart deal" in there somewhere...).  3D/EYE itself (their
+headquarters is in Atlanta) merged with VDS, a CAD/CAM solutions provider.
+Long and short is that I am happy to find myself still in Ithaca after all of
+this.
+
+Graphically speaking, I've been working a little bit with Java and VRML. I
+went to the VRML '97 symposium back in February, which was pretty fun. The
+most memorable event was the Monday night demo dinner. Each demo was limited
+to five minutes, which was strictly enforced by the use of a countdown and
+nerf guns in the hands of front-row audience members. A brilliant feedback
+system was also implemented by the organizers, in which the audience could
+immediately register their feelings about anything done during the demo. Each
+person at dinner was provided with two toys: if you liked something you
+heard, you would squeeze your squeaky toy; if you disliked something you'd
+turn over your moo-cow can toy.
+
+I helped with the VRML Illumination working group at the conference, and one
+thing that came out of this meeting was the need for a sample "perfect"
+implementation of the VRML illumination model. Happily, there's a nice way to
+do this: Java. This program seemed like it should have been easy: make a GUI
+accepting the various variables, hit a "compute" button, compute an image.
+The two big roadblocks for me were figuring out how to get the GUI elements
+to stay put on the screen and to get the compilers to work. I won't get into
+the particulars, but the hardest part for me was getting the various pieces
+of text and input boxes to not realign themselves in some obscure fashion.
+Also, I found that if certain routines in my code had more than, say, 40
+lines of code, they would not compile (Sun's compiler gave false errors,
+Microsoft's just gave an internal compiler error and quit). Anyway, the
+promise of Java is great, it seems like a pleasant language, but before doing
+another project I'll probably wait another year or two until the tools become
+more visual and more stable. If you want to see my application, check it out
+at http://www.acm.org/tog/resources/applets/vrml/pellucid.html.
+
+The cool thing about Java is that the GUI (once you get it going) is indeed
+portable, a huge advantage over C++. This feature makes it possible to
+actually write tutorials about computer graphics concepts and be able to
+easily distribute them and for educators to share them. Being able to
+actually play with BSP trees, or vary illumination models, or see the
+relationships between matrices and operations is great stuff. Such applets
+can build up an intuition of how variables affect results and how algorithms
+work. I have begun to gather Java applets used to teach about computer
+graphics, go to http://www.acm.org/tog/resources/applets/overview.html to see
+the collection. If you know of related applet URLs or can provide more Java
+code, please do let me know!
+
+One of the more entertaining and enlightening books I've read this year has
+been Scott McCloud's "Understanding Comics". It was recommended by the folks
+at Thinkfish (www.thinkfish.com), who do real-time non-photorealistic
+rendering, this book discusses many different facets of comics. Visual
+styles, portrayal of time, and a zillion other topics are covered. Oh, and
+it's all done entirely in comic form. Good one!
+
+On this issue: I've still got a backlog of about 200K+ bytes of material to
+wade through, and some of it I need to edit (and some I need to just plain
+understand). This issue has a theme of global illumination methods; the next
+looks to be more about ray tracing efficiency (yet again) and various tricks
+and hacks.
+
+----
+
+Contest news: Josh Hays was the first to correctly identify the packages in
+RTNv9n1. The question was what are the real names for !FalseSpace,
+3D-Atelier, LightSwell, RayReverie, and AutoPUNK.  The answers: truespace, 3d
+studio, lightwave, raydream, and autocad.
+
+Stephen Westin was the first to identify the two uses of the acronym "STL" in
+the field of computer graphics (RTNv10n1): (1) Stereolithography (actually
+the triangle-based geometry file format for 3D Systems' Stereolithography (r)
+devices), (2) Standard Template Library (for C++).  Jens Kilian came in a
+close second.
+
+-------------------------------------------------------------------------------
+
+New People
+
+Marcos Fajardo Orellana <mfajardo@freenet.hut.fi>
+
+We've got a small computer graphics research group here at Malaga University,
+Spain, and I've been playing for some time with analytic atmospheric
+scattering effects (I mean, avoiding sampling along rays, using simplified
+scattering models that have a direct integral solution). In particular, we've
+devised a nice solution for Warn spotlights within homogeneous fog.
+
+You can see some test images in:
+	http://www.geocities.com/TimesSquare/2143
+
+-------------------------------------------------------------------------------
+
+Ray Tracing Roundup
+
+----
+
+Efficiency Scheme Pointers
+
+I've been browsing all the Ray Tracing Newses more than I ever have in the
+past, since I'm spending a few weeks in a graduate course I'm currently
+teaching going over spatial data structures to speed up ray tracing.  In a
+sense, we're just putting together the pieces from all the papers that have
+been written over the years.  Your RTN collections are a nice complement to
+the (often too formal and biased) presentations of journal and conference
+papers.
+
+In any case, I've found it helpful to collect together a list of the most
+relevant RTN articles into my own HTML file and organize them by topic,
+instead of chronologically:
+	http://www.cs.cmu.edu/~ph/rtn_index.html
+
+- Paul Heckbert <ph@CS.CMU.EDU>
+
+--------
+
+An encyclopedia-like collection of articles from comp.graphics.* on a wide
+variety of topics is available at:
+    http://research.microsoft.com/~hollasch/cgnotes/
+
+- Steve Hollasch <stevehol@MICROSOFT.com>
+
+--------
+
+On my homepage I have added links to graphics journals and conferences with
+home pages:
+	http://www.cs.utah.edu/~shirley/
+
+I have a list of advanced graphics course pages:
+	http://www.cs.utah.edu/~shirley/courses.html
+
+If you teach some sort of advanced graphics course (e.g. a seminar on
+rendering) and want to be listed send me mail.
+
+- Pete Shirley <shirley@cs.utah.edu>
+
+--------
+
+BMRT 2.3.5 is ready!  Lots of bug fixes and subtle enhancements are there,
+but the big news is that this version has support for true displacements.
+It's expensive, and less flexible than PRMan, but it basically works.  Give
+it a try.  Look in the manual for more details.
+
+Other highlights of 2.3.5 include: fixes to some subtle handedness problems
+of 1-sided primitives; fixes to vertex variable interpolation; working trim
+curve sense attribute; improved derivative calculations for some subtle
+cases; support for RiReadArchive instead of ##Include; and HTML
+documentation.  The full list of fixes and enhancements can be found in the
+"Changes" file that comes with the distribution.
+
+The WWW site for BMRT is http://www.seas.gwu.edu/student/gritz/bmrt.html
+
+- Larry Gritz <lg@pixar.com>
+
+--------
+
+3DS/NFF Online Raytracer!
+
+I just installed an online-raytracer for 3DS/NFF scenes at:
+    http://liz.prakinf.tu-ilmenau.de:8000/cgi-bin/gxtrace.cgi
+
+It's a PVM'ed version of the GX/GENERIC raytracer, running on 10 SGI R5000
+
+- JuHu (Nguyen Duc Cuong) <juhu@rz.tu-ilmenau.de>
+
+--------
+
+There is a wonderful *annotated* global illumination bibliography that has
+been put together by Travlex Yeap. You can access it at:
+	http://www.scs.leeds.ac.uk/mscytsy/md/abs-mnu.htm
+
+- Ian Ashdown <iashdown@ledalite.com>
+
+----
+
+Ian's 1031 bibliography have been converted to a 2 frames hyperlink format
+for easy reference...
+	http://www.scs.leeds.ac.uk/mscytsy/md/abs-ian0.htm
+
+for direct access.
+
+- Tralvex Yeap (T.Rex) <mscytsy@scs.leeds.ac.uk>
+
+--------
+
+SIGGRAPH Articles
+
+Many of the articles in the SIGGRAPH '96 Proceedings were available on the
+web before the conference.  If you don't have this Proceedings, the web site
+is still around, at: http://www.cs.utah.edu/~ppsloan/siggraph96.html
+
+SIGGRAPH '97 articles are also starting to appear on-line. One paper about
+ray tracing is "Rendering Complex Scenes with Memory-Coherent Ray Tracing"
+by Matt Pharr, Craig Kolb, and Pat Hanrahan, at:
+http://www-graphics.stanford.edu/papers/coherentrt/
+
+--------
+
+Cool Relight Trick
+
+At Foundation Imaging we used the primary and secondary specular colors,
+combined with the edge-falloff, to make really cool view-dependent
+iridescence! Set one broad specular to be full strength in direct view and 0
+strength at the edge,  and the other specular to be opposite. It's fun.
+
+- Steve Worley <steve@worley.com>
+
+--------
+
+RT Evolution
+
+For info about RTEvol (RayTraced Evolution), a free package for procedural
+modelling, using Lindenmeyer-grammars and interpreted C-like macros/function,
+look at this URL:
+	http://www.rz.tu-ilmenau.de/~juhu/GX/RTEvol/
+
+Primarily I use this package to test some raytracing-acceleration techniques,
+but now it expands to a fully programmable system. It is an ideal tool for
+quickly generation of test-scenes.
+
+- JuHu (Nguyen Duc Cuong) <juhu@rz.tu-ilmenau.de>
+
+--------
+
+Free Daily Spectrum Subscription
+
+Email subscriptions to Daily Spectrum are now free of charge to members of
+the interactive media/online development industry. If you do not currently
+receive Daily Spectrum by email, and would like to, fill out the following
+form and send it by email to duberman@dnai.com
+
+Please forward copies of this message to associates who you think would like
+to subscribe to Daily Spectrum.
+
+Your name:
+email address:
+Organization name:
+Your title:
+
+Please note: You must fill out the above form in its entirety to receive a
+free subscription to Daily Spectrum.
+
+- David Duberman <duberman@dnai.com>
+
+[I like the Daily Spectrum, I even laid out money for a subscription when it
+first went commercial. Other good computer graphics related ezines include
+"The WAVE" (http://www.fourthwave.com/wave/), "The Tessellation Times"
+(http://www.3dartist.com/tess/tessmain.htm), and "upFront"
+(http://users.uniserve.com/~ralphg/) -EAH]
+
+--------
+
+Java raytracer @ http://web.mit.edu/lbw/www/laser/html/raytrace.html
+
+I believe it is the first real raytracer written in Java; Gamelan
+(www.gamelan.com) only lists one other and it is not very powerful.
+
+- Morgan McGuire <morganm@mit.edu>
+
+--------
+
+The paper "Ray-Tracing with Affine Transforms" is available at:
+	http://www.olympus.net/biz/7seas/contain.html
+
+--------
+
+I was recently pointed to the web page:
+	http://www.erim.org/on-line-docs/GUIDE/guide.frm.html
+
+which has a discussion of several BRDF models.  It has several small errors,
+but also some very good information.
+
+--------
+
+A postscript version of the paper:
+
+	Automatic Termination Criteria for Ray Tracing Hierarchies
+	(from Graphics Interface '91)
+
+is available from my web page: http://www.cs.uncc.edu/~krs/publ.html
+
+I also have a postscript file of my thesis.
+
+- K.R.Subramanian <krs@zappa.cs.uncc.edu>
+
+--------
+
+ART (Advanced Rendering Technology) - has developed a dedicated ray-tracing
+chip claiming 80,000,000 intersections a second.  Also, they will have a box
+with 64 of these chips on it:
+	http://www.art.co.uk
+
+--------
+
+Snapshots of Silly Space v2.00 are now on-line at:
+	http://inside.net/silicon_softworks
+
+Silly Space v2.00 supports:
+
+  - Real-time 3D click and drag, mindless user interface.
+  - Multiple Cameras and multiple views with split panes, zooming, wireframe,
+    field shape/size indicators.
+  - Real-time 3D transparent blob modeling.
+  - Multiple field shapes (not just spheres) with scaling in all directions
+    of *individual field shapes*.
+  - Adjustable space tessellation.
+  - File loading and saving.
+  - It's OpenGL based now so it's really reliable.
+
+Silly Space, it's "Artsy Space."
+
+- Kyle Lussier <lussier@cis.ufl.edu>
+
+--------
+
+Iv2Ray - Inventor (VRML 1.0) to Rayshade Translator
+
+The beta executable of iv2ray for Irix 5.3 is now available from Cow House
+Productions web page at http://www.cowhouse.com/Home/Iv2Ray/IvToRay.html.
+Iv2ray is an OpenInventor to Rayshade translator. It converts Inventor 2.0
+format files (VRML 1.0) to the input language of the Rayshade ray-tracer.
+
+Cow House is offering this program free of charge. If you need the source
+code, drop me an e-mail at laser@cowhouse.com - I will consider giving it
+out if you give me a good reason.
+
+If you do download and use this tool, please drop me an e-mail and let me
+know what you think. And absolutely, let me know if find any bugs.
+
+- Mark Lasersohn <laser@cowhouse.com>
+
+--------
+
+There is a comparison between Lightscape, Specter and Radiance at:
+	http://rmp.kiam1.rssi.ru/articles/pals/
+
+There is also a paper "Comparison of two Methods of Global Illumination
+Analysis" devoted to comparison of Deterministic and Monte Carlo algorithms
+of global illumination analysis:
+	http://rmp.kiam1.rssi.ru/articles/cmgia/
+
+- Andrei Khodulev <abkhod@gin.keldysh.ru>
+
+----
+
+If you want to see some other examples of how close Radiance can come to
+reality (I always do), check out the following web page:
+	http://sap.mit.edu/projects/studioimages.html
+
+This is work done independently by Philip Thompson and Jack DeValpine at MIT.
+
+- Greg Ward <greg@hobbes.lbl.gov>
+
+[If you are seriously interested in the topic, you might contact Greg or
+Andrei; there was an involved debate about the testing conditions used for
+the images. -EAH]
+
+--------
+
+The large (6500 ref) computational geometry bibliography is at:
+	http://www.cs.duke.edu/~jeffe/compgeom/biblios.html
+
+- Paul Heckbert <ph@CS.CMU.EDU>
+
+--------
+
+Free Textures!
+
+You can find free textures on my site : http://www.mnet.fr/axem
+
+- CORREIA Emmanuel <axem@mnet.fr>
+
+--------
+
+I've created an index to mesh generation info on the world wide web.  This
+might be of interest to radiosity researchers:
+	http://www.cs.cmu.edu/~ph/mesh.html
+
+- Paul Heckbert <ph@CS.CMU.EDU>
+
+--------
+
+Here's a haptic web site: http://haptic.mech.nwu.edu/
+
+--------
+
+My Ph.D Thesis is available on the WWW:
+
+http://www.cs.kuleuven.ac.be/cwis/research/graphics/CGRG.PUBLICATIONS/PHDPHD/
+
+The files are available as gzipped postscript. If you have any problems in
+downloading the text, please do not hesitate to contact me.
+
+Title: Mathematical Frameworks and Monte Carlo Algorithms for Global
+Illumination in Computer Graphics
+
+- Philip Dutre <Philip.Dutre@cs.kuleuven.ac.be>
+
+--------
+
+Try rendering through the Web (project I supervised summer of '96):
+	http://www.cse.ucsc.edu/~jastory/volrender.html
+
+Links to Bill Lorensen's neat vol. renderer web interfaces there too.
+
+- Craig Wittenbrink <craig@verity.hpl.hp.com>
+
+-------------------------------------------------------------------------------
+
+Illuminated by Black Light, by Dan Wexler <wexler@pdi.com>
+
+Here's a great little anecdote that illustrates just how far rendering is
+from reality:
+
+One of our animators was trying to simulate a shadow using a projection
+light. He created a texture that was white where he wanted light, and black
+where he wanted shadow. Then he used a special material shader we have called
+a 'shadow-only' shader that renders the inverse shadow (ie. white/gray
+wherever there are shadows and black everywhere else). As you might guess,
+the "shadows" from the projection light did not show up in the image
+generated by the shadow-only shader.
+
+When I explained the situation to him I caught myself saying:
+
+"Well, those points are not in shadow. They are illuminated with black light."
+
+He looked at me with a completely blank expression, so I went on:
+
+"If you were in a completely closed room without a light, would the room be
+completely shadowed, or not illuminated?"
+
+The boundary between science and philosophy is a blurry one.
+
+-------------------------------------------------------------------------------
+
+What's Wrong with Monte-Carlo Methods? by Nguyen D.C. (JuHu), Pete Shirley,
+	Stephen Westin, and Eric Veach
+
+Nguyen D.C. (JuHu) <juhu@rz.tu-ilmenau.de> writes:
+
+I often ask myself: Monte-Carlo ray-tracing, is this the way to do global
+illumination in the future? After reading a lot of papers about Monte Carlo
+methods, I still get confused with their terminologies. I can't see any
+advantage of these methods over traditional methods (radiosity), except the
+fact that meshing is not needed, and that you can do reference-images for
+RMS-benchmarking (!)
+
+[Pete's reply quotes JuHu's text, so the rest of his note is included there]
+
+----
+
+Pete Shirley <shirley@facility.cs.utah.edu> replies:
+
+There is a lot of confusion on this because we all over-hype our methods in
+papers (me included) and as reviewers and authors we are sloppy about making
+people carefully characterize their methods.
+
+Here - I will make up four scenes:
+
+ 1. Lambertian Cornell box
+ 2. Lambertian Cornell box w/smooth metal box
+ 3. Lambertian Cornell box w/glass sphere instead of short block
+ 4. Semi-matte (direction diffuse) Cornell box
+ 5. Semi-matte (direction diffuse) Cornell box with "real object (10^6 patches)
+
+1. Traditional world-space FE (finite elements, i.e. meshed polygons) will
+   work easily and we can do a walkthrough.  RADIANCE will also work easily,
+   but will not in practice allow a walkthrough - the view-independent info
+   is there, but it is not easily accessible.  MCPT (Monte Carlo path
+   tracing) will take all day, but will give an unbiased image (so what?).
+
+2. Now radiosity has problems.  We can add a virtual world, or use
+   particle-tracing based radiosity with a density estimation post-process,
+   but then doing the walkthrough is a problem.  RADIANCE does fine for a
+   given viewpoint, and we can re-use the irradiance map.  MCPT will have LOTS
+   of noise on the ceiling unless very good importance sampling is used.
+
+3. Uh-oh - particle tracing based radiosity works.  RADIANCE and MCPT will
+   have a very noisy caustic under the ball (although RADIANCE will not have
+   this problem for the important glass case - windows!).
+
+4. Ouch.  Sillion-style FE works, as does Jensen's photon map.  MCPT is so
+   dumb, it doesn't realize that this case is harder than Lambertian.
+   RADIANCE will not work because it caches irradiance, so it will degenerate
+   to MCPT (really, you can treat secondary bounces as Lambertian - I believe
+   this is a good move in almost all scenes, but it is hard to quantitatively
+   justify).
+
+5. Ouch^2.  FE runs out of memory FAST.  MCPT works no worse than 4.  Jensen's
+   photon map also works, but will be storage-intensive if the object is not
+   very smooth.  Radiance will perform as in 4.
+
+
+In summary, pure MCPT has only two advantages - it is so dumb that it doesn't
+get hit by big scenes, and it is easy to implement.  If you want an
+interactive walkthrough, then you are currently limited to radiosity (I use
+that term for all world space irradiance calculating alg's), and that limits
+you to a relatively small scene (100k initial polygons will kill almost all
+radiosity implementations).
+
+
+JuHu writes:
+> For me, the most important feature of a rendering method is not its
+> physical-correctness, but its efficiency and visual-aesthetic-possibilty.
+> With MC-rendering, I must spend lot of works to develop specific sampling
+> schemes and reasonable 'good' estimators. Even w/ that, I still get useless
+> images (too noisy!), or I must increase the sampling rate and wait forever...
+> It is not always true that most people find noises less observable than
+> aliasing (i.e. white pixels in a dark-corner versus aliased dark-lines).
+
+I agree with the above, and I think the solution is hybrid methods - add
+bias! (This is blasphemy in MC circles :^) ).  I do want to keep the good
+parts of MC methods - they are damned robust and are possible to implement
+correctly - my MC code does not bomb on weird untweaked inputs - tell me with
+a straight face that is true of most non-MC implementations.  However, you
+are right that the results are too noisy!!!  We can keep these benefits and
+reduce noise if we add bias the right way (not that I know what that right
+way is).
+
+
+JuHu writes:
+> Especially for the direct lighting computation, MC-methods are definitely
+> *NOT* the way to go. Most regions of an image are not in shadow, so why
+> should we cast so many shadow-rays to the light-source? In fact, we don't
+> need to cast any
+> shadow-rays, if the visibilities are known a priori ( w/ shaftculling) and
+> the radiance coming from the light can be easily computed (analytically).
+> Only for the case where complex shadowing occurs would MC-sampling be
+> helpful. Also for this case, the soft-shadows generated w/ them can be much
+> better without increasing the sampling rate (We simple smooth the
+> shadow-regions, visual-aesthetic, not physical-correct!).
+
+I welcome you to implement shaft-culling on scene 5 above.  Slower than MC,
+and will usually core-dump even with a year of implementation I'll bet.  Now
+shaft culling on simplified geometries (which it sounds like you might be
+suggesting) sounds like a very good idea.  Only use MC when needed - yes,
+definitely smart.
+
+Overall, this has got me to again reflect on the state of our field.  It is
+VERY hard to get a rendering paper into SIGGRAPH, even with good reviews.  It
+is easy to get toys based on low-hanging fruit into SIGGRAPH.  Clearly we are
+doing something very wrong (you could rightly argue SIGGRAPH is doing
+something wrong, but that won't change anything - we have to figure out where
+our share of the blame is).  I think this is partially because most graphics
+people think TOY STORY graphics is good enough.  I, however, want virtual
+reality that looks REAL and is predictive - I don't want a virtual cartoon
+world.  We are very far from getting things to look real, and from
+understanding our algorithms' behaviors.  No working program gives useful
+error estimates.  We have totally inadequate local reflection models.  Most
+algorithms are memory hogs and don't parallelize.  Most algorithms do a very
+poor job with dielectrics (water, glass).  I think we need to make our own
+"grand challenge" models, and publicize that they can't currently be done
+(e.g. a human at a desk illuminated through a skylight), so that our field
+won't dry up and blow away.
+
+----
+
+Nguyen D.C. (JuHu) replies:
+
+> I welcome you to implement shaft-culling on scene 5 above.  Slower
+> than MC, and will usually core-dump even with a year
+> of implementation I'll bet.
+
+I've actually implemented shaft-culling for complex-scenes in GX/GENERIC. Not
+really shaft-culling, but a combined version of Arvo's hyperoctree and
+Haines's light-buffer. It's definitely faster than pure MC, because the cost
+for collision-test between a beam and a bbox is quite the same between a ray
+and a bbox.
+
+----
+
+Stephen Westin <swestin@ford.com> writes:
+
+Why do folks bother at all with Monte Carlo methods for global illumination?
+Complexity.
+
+Think of the problem of computing the irradiance at a given point. Do you
+want to go around the whole environment, calculating the irradiance from
+every object, regardless of occlusion or distance from the point? Or do you
+want to probe the environment, spending similar effort for every incident
+direction? This is the basic choice between mesh-based methods and Monte
+Carlo calculations. For simple environments, the mesh-based methods are
+excellent; they give no noise artifacts, and computation is tractable. For
+extremely complex environments, mesh-based algorithms tend to get inefficient.
+
+Actually, the mesh-based world and Monte Carlo are working toward each other.
+Hierarchical meshing is basically a way to make a mesh-based algorithm behave
+more like Monte Carlo, spending effort for irradiance contributions rather
+than for geometric complexity. And any well-designed Monte Carlo calculation
+uses deterministic methods wherever practical, and attempts to take advantage
+of spatial coherence. The ultimate global illumination method will probably
+be a hybrid of Monte Carlo and mesh-based methods.
+
+----
+
+From: Eric Veach <ericv@cs.stanford.edu>
+
+One of the big advantages of MC algorithms is that they let you model the
+scene you actually want to use.  Sure, radiosity algorithms can be efficient
+- if we limit ourselves to diffuse surfaces, with maybe a few mirrors or
+whatever that are handled in a ray-tracing pass.  But flat polygons and
+diffuse reflectors do not go very far in modeling the real world, and
+finite-element algorithms don't seem to be practical for much more than this
+(Memory usage blows up for complex scenes, or when there are lots of glossy
+surfaces).
+
+This is an important issue in graphics, since often the biggest source of
+error is the scene model itself.  What good is an accurate solution to the
+wrong scene model?  At least MC algorithms start with the desired input.
+Even if you aren't interested in physically correct results, diffuse surfaces
+lead to that wonderful "computer graphics look" we all know and love.
+
+It's no wonder that radiosity algorithms tend to be faster, since they are
+solving a much simpler problem: the solution is only a two-dimensional
+function rather than a four-dimensional one.  To me, the amazing thing is
+that radiosity algorithms need to be so *complicated* to be efficient.  By
+the time you implement discontinuity meshing, hierarchical basis functions,
+clustering, shaft culling, etc., how many lines of code are we talking about?
+And can you actually trust it not to core-dump, and to compute a reasonable
+result in a reasonable amount of time?
+
+And let's not kid ourselves that an algorithm is "general" just because it
+can handle a few mirrors or glossy surfaces.  The real test of generality is
+how an algorithm performs when there are *no* diffuse surfaces, since that's
+how it is in the real world.
+
+Another reason to use MC algorithms is scene complexity.  Finite element
+algorithms work with explicit representations of the scene and its
+properties.  They are strongly affected by the size and complexity of the
+scene representation.  On the other hand, Monte Carlo algorithms are based on
+sampling, which means that the scene model is accessed through a small set of
+queries (e.g. what is the first surface point intersected by this ray?)  This
+hides the scene complexity behind a layer of abstraction, and can mean that
+rendering times are only loosely coupled to the scene representation (e.g. it
+may affect the time required to cast a ray).  In effect, Monte Carlo
+algorithms can sample the scene to determine the information they actually
+need, while deterministic algorithms examine every detail, whether it is
+relevant or not.
+
+That's not to say that MC algorithms need to sample *everything*. It's
+perfectly reasonable to embed deterministic calculations within a Monte Carlo
+framework, especially for low-dimensional integration problems (e.g. direct
+lighting from a small number of uniform, diffuse, polygonal luminaires).
+Sometimes this introduces bias, but often this is okay, especially when we
+can bound the errors or at least characterize them.
+
+Ideally, rendering algorithms should not depend on the details of the scene
+representation, but only on the underlying mathematical model.  For example,
+a square area light source can be simulated fairly well with a ten by ten
+array of point sources, but many rendering algorithms would have a much worse
+performance in the second case.  Similarly, if we replace the square light
+source by two fluorescent bulbs covered by a diffusely transmitting panel,
+why should it make a huge difference to our algorithms?  The same comments
+apply to geometric complexity: if we represent an indoor plant as a thousand
+polygons or a million Bezier patches, how much should the rendering time go
+up?
+
+I can't say that MC algorithms have achieved this level of isolation from the
+scene representation, but at least it seems that the opportunity is there.
+There has been a lot of emphasis on rendering algorithms that exploit special
+properties of the input scene, e.g. that lighting is direct rather than
+through a diffusing panel or bouncing off the ceiling.  It would be nice to
+see more work on algorithms whose performance does not go down the tubes when
+these conditions are not met, i.e. algorithms that are more *robust*.  It
+seems that this should be possible without resorting to the level of
+"dumbness" found in MCPT (as Pete Shirley put it).
+
+I guess the last major issue for MC algorithms is the correctness of the
+results.  Here it is important to distinguish between unbiased, biased, and
+consistent estimators.  Intuitively, an unbiased estimator computes the right
+answer, on average.  A biased estimator computes the wrong answer, on
+average.  A consistent estimator also computes the wrong answer, on average,
+but the error can be made arbitrarily small by increasing the number of
+samples.  Most of the "biased" algorithms in graphics are in fact consistent,
+otherwise we wouldn't have any confidence at all in their results.
+
+The main advantage of unbiased algorithms is that they make it far easier to
+estimate the error in a solution.  For unbiased algorithms, this error can be
+estimated by the sample variance, since any error is guaranteed to show up as
+random variation among the samples.  Thus, if an unbiased image is not noisy,
+we can be reasonably sure that it is correct.  For scene of realistic
+complexity, this seems to be the only practical way to generate correct
+images.
+
+For algorithms which are merely consistent, however, we must also bound the
+bias.  In general this is difficult to do; we cannot estimate bias by simply
+drawing a few more samples.  Bias shows up as results that are not noisy, but
+in fact are incorrect.  In graphics algorithms, this error is often
+noticeable visually, in the form of discontinuities, excessive blurring, or
+surface shading that just looks wrong.
+
+Other things being equal, it is clear that we should prefer an unbiased
+algorithm.  If these algorithms were also robust and efficient, then why
+would we want to use anything else?  However, conventional wisdom says that
+unbiased methods are "too expensive", and that we can achieve an acceptable
+image in less time by making approximations.
+
+But where is the research to support this claim?  There has been a huge
+amount of effort on approximate methods in graphics, while there has been
+hardly any work on unbiased algorithms.  Some people seem to think that
+"unbiased" is a synonym for "pure Monte Carlo path tracing".  Until we have
+thoroughly explored this type of algorithm, we can hardly make judgements on
+their capabilities.  I would like to see more results on what can and cannot
+be achieved by unbiased methods, so that we can make better decisions on
+these issues.
+
+(Can you tell that I'm writing a thesis? :-)
+
+-------------------------------------------------------------------------------
+
+More on Rendering Bugs, by Eric Haines
+
+As mentioned in RTNv10n1, the article "It's Really Not a Rendering Bug" by
+Andrew Woo, Andrew Pearce, and Marc Ouellette [free at
+http://ada.computer.org:80/pubs/cg&a/articles/g50021.pdf] is one I consider
+required reading for anyone actually producing a renderer.  I had a few
+additional comments.
+
+- The surface acne problem [in which a ray originating from a surface
+intersects the surface itself - a bad thing] can be fixed by being careful
+about keeping the surface orientation information around and ignoring
+intersections that are definitely acne.  Top of p. 47 of "An Introduction to
+Ray Tracing" discusses this solution, and it's my favorite - I wish I had
+explained it more thoroughly there.
+
+For a polygon, when you know the ray is originating on it, you simply never
+test the ray against the polygon, since there's no way such an originating
+ray can hit it.  For a sphere, you determine which sort of ray it is, i.e.
+whether it is passing into or out of the sphere.  If out of, then you can
+never hit the sphere; if into, then only accept the larger of the two roots
+as an acceptable intersection point (the closer intersection will be at the
+origin).  This is foolproof.
+
+For closed [i.e. manifold, where there is a definite inside and
+outside]higher order surfaces you also don't need an epsilon.  For example,
+imagine you have some arbitrarily high order closed surface, terribly warped,
+and you have a ray originating on its surface.  Say one side of the patch is
+red and the other side blue.  Now, the ray originates and travels away from
+one side or the other, which can be determined at the start of its journey.
+Say we start with the ray leaving from the red side.  Now we get a list of
+intersections for that ray.  What we want is only the intersections in which
+we hit the red side; blue side intersections are not what the ray needs.
+Even if the ray is a shadow feeler for transmitting rays (where you're
+filtering by all it hits, say) or a ray cast for solids properties
+computations, you can wait until you get to the first positive red
+intersection on the ray and then deal with all intersections from here on in.
+
+Spline patches or other surfaces that are not manifold (closed) need more
+care, and this is where an epsilon starts to come back into play, since you
+could view the blue side of a surface from the red side.  The nice thing is
+that you do not need to use an epsilon for the red intersections, so very
+close, valid intersection points are not discarded for being within epsilon.
+Anyway, my main point is that for a large number of classes of primitives you
+can fully solve the problem without using epsilon at all. [For what it's
+worth, I think I invented the "acne" term - some claim to fame! I used it in
+the 1987 ray tracing course at SIGGRAPH - my only laugh-getter in an
+otherwise dull talk.]
+
+- The terminator problem [in which, due to interpolation of the normal across
+a flat polygon, a reflected ray actually reflects into the surface instead of
+away from it] I solve in a similar fashion: I never let reflective rays
+actually reflect through the surface.  By forcing the reflection to stay on
+the same side (rotating it in the reflection plane until it is), it is not a
+problem.  Of course, the reflection itself will not quite be right, but it
+will be a lot better than some sudden blackness due to intersection (i.e. due
+to the ray reflecting into the surface and hitting inside the object).  This
+approach doesn't work for shadows, though...
+
+- Naive texture interpolation: good points, and it's even worse in the
+limiting cases of say the tip of a cone or pole of a sphere: here the quads
+are still quads, but two of the vertices are in the same location (but with
+different (u,v)'s and normals).  Replacing with two triangles is absolutely
+horrible.
+
+Which leads into the next article...
+
+-------------------------------------------------------------------------------
+
+The Curse of the Monkey's Paw, by Eric Haines
+
+I was handing out what I called "The Curse of the Monkey's Paw" at the VRML
+Symposium in February ("Monkey's Paw" only because it's something I no longer
+need to deal with for TriSpectives, it's a curse I could pass on).  You know
+how hardware graphics accelerators are mad for triangles, they just love them
+and use them for everything?  I found a case where triangles alone are not
+enough to (easily) render a simple VRML primitive, a cone with a texture on
+it. Basically, you need quads.
+
+Here's the case:  you have a cone (or section of a cone; the singularity at
+the tip is not the problem, it just exacerbates it.  Having one end of the
+cone have a radius much smaller than the other is the real problem) and a
+texture you want on the cone.  Say the texture image says VRML, and you want
+it to naturally go around the cone in a typical (u,v) [or (s,t) or whatever
+you like to use] fashion, with the cone's tip pointing upwards.  This is the
+default mapping of a texture on a cone in VRML, in fact.
+
+What you typically do is to tessellate the cone into a set of triangles,
+right? However, at the tip of each of these triangles you really need two
+vertices - each of these two vertices have the same x,y,z location (the apex)
+but a different (u,v) pair [e.g. if you tessellate into 10 triangles, you
+really need 10 quads, with the first quad having two apex points with (u,v)
+of (0,1) and (0.1,1), second quad (0.1,1) and (0.2,1), etc].  If you just
+make triangles and not quads and just arbitrarily pick one of the two (u,v)'s
+to store at the apex, you'll lose half of the texture because each triangle
+will only cover half of its section in the texture map.  So anyway you make
+quads.  Using a reasonable software renderer that handles polygons as is,
+these quads will render fine.  However, if you're using hardware and that
+hardware renders triangles (or software renders only triangles, for that
+matter), you're in trouble:  the hardware will "split" the quads you sent to
+it into two triangles. But because two of the quad's vertices are in the same
+location, one of these two triangles will have zero area (coincident
+vertices) and so will have no effect on the rendering; that triangle's part
+of the texture map disappears. An underlying assumption of most hardware
+accelerators is that a convex polygon can be perfectly replaced by a fan of
+triangles, but this turns out to be false.
+
+I don't think most people have really realized that it has a serious effect
+on hardware acceleration schemes.  I personally found this problem surprising
+- I always thought triangles really were enough for rendering any textured
+surface. Of course, you could always subdividing the cone with horizontal
+cuts and so make quads with area for both triangles (Ken Turkowski's idea;
+Woo et al. also present this idea in their article) but there's still a
+problem at the tip.  You could also warp the texture map itself so that the
+"missing" triangles no longer have any texture information and the rest of
+the texture is pushed into the visible textured areas.  Neither of these is
+a good solution for VRML, where polygon counts are to be kept low and the
+level of tessellation is not under the user's control.
+
+This problem is actually more general than just the somewhat pathological
+cone tip problem. It happens any place where a texture mapping has some
+singularity. For example, at the poles of a tessellated sphere you get the
+same sort of problem. The famous teapot has the same problem at the center of
+the handle when texture mapped and when triangles are used. It is not that
+noticeable because these triangles are pretty small, but it is there.
+
+Also, this problem is not limited to texture mapping.  Normals at the tip of
+the cone have the same interpolation problems. The visual artifact is that
+the shading is not smooth near the tip of the cone. In fact, some
+surface-based modelers which use triangles as their underlying primitives
+will not allow the creation of a cone with a tip for a similar reason: since
+each vertex has only one normal stored with it, if a tip gets created then
+the proper set of normals cannot be used. Such modelers address the problem
+by trimming off a tiny bit of the tip so that a set of vertices is generated,
+each storing a reasonable normal. Note that this solution does not fully
+eradicate the discontinuities - the extra points generate extremely thin
+triangles (almost zero area). In practice, such shading discontinuities due
+to normals not matching along an edge between two triangles are not that
+noticeable (the effect is strongest at the tip, which covers little area) and
+can be addressed by simply tessellating the cone into more triangles.
+
+Note that this problem occurs only when using triangles and keeping
+information like normals and texture coordinates at the vertices. Using quads
+solves the problem, and other rendering techniques can also solve the
+problem. For example, if instead of using texture coordinates to do texture
+mapping on the cone you instead accessed the inverse mapping function for the
+cone [i.e. you take the point on the approximated cone that you want to
+texture and compute from it the exact (u,v) coordinate on the cone] you would
+get the right answer. This is often what photo-realistic renderers will do,
+but is usually not practical for real-time performance.
+
+The gist is that triangles are not always enough. Quads turning into
+triangles is the limiting case, but as Woo et al
+[http://ada.computer.org:80/pubs/cg&a/articles/g50021.pdf] show, texturing
+problems occur whenever a non-rectangular quad is tessellated into two
+triangles.
+
+-------------------------------------------------------------------------------
+
+Global Illumination "Bible"? by Ian Ashdown <iashdown@ledalite.com>
+
+Adrian J. Chung <ajc@doc.ic.ac.uk> wrote:
+>I'm surveying a cross section of research publications in global illumination
+>and have come across a few candidates for what I'd consider to be "the bible"
+>for this field (in the same sense that the Foley & Van Dam book is for CG in
+>general). I'd like to hear your opinions on the matter. I've skimmed through
+>the past archived communications for globillum in case this was already
+>discussed, but it doesn't seem to have been recently. So...
+
+In my very humble opinion, the definitive bible on global illumination has
+yet to be written. One good reason for this is that global illumination
+research is still a very active topic. There have been close to 100 global
+illumination papers and theses released in the past six months alone. Given
+that it takes 12 to 18 months to get a book written and published, any
+"bible" will be at least a year out of date as soon as it is released.
+
+>Andrew S. Glassner: Principles of Digital Image Synthesis
+>
+>Is it well worth the US$90? How much does it cost in the UK?
+>I'm considering diverting a portion of my student grant toward acquiring
+>the two volume set. (Fewer beers on weekends, looks like...)
+
+Knowing how much one publisher in particular marks up its books for the UK
+market, I shudder to think how much the two-volume set will cost you. You may
+have to give up beer for the remainder of your academic career :+)
+
+For what it's worth, I much prefer Glassner to Foley et alia as my primary CG
+reference. However, I can appreciate that many undergraduate students may be
+intimidated by the mathematical depth of the former. Different strokes ...
+
+
+>How does it compare to the less expensive alternatives:
+>
+>Francois X. Sillion & Claude Puech: Radiosity and Global Illumination
+>
+>Michael F. Cohen & John R. Wallace: Radiosity and Realistic Image Synthesis
+
+It all depends on your needs and interests, and also on whether you are
+interested in (and enjoy) the mathematical details. I have all three, and I
+can recommend any of them.
+
+
+>...any others I should know about?
+
+I haven't had the opportunity to read this book, but you might try:
+
+  Kok, Arjan J. F. 1994. "Ray Tracing and Radiosity Algorithms for
+  Photorealistic Image Synthesis," Delft University Press, Stevinweg 1,
+  2628 CN Delft, The Netherlands, ISBN 90-6275-981-5. (Also available from
+  Coronet Books, Philadelphia.)
+
+This was Arjan's PhD thesis at the Delft University of Technology.
+
+There have been at least two other books written on radiosity, but neither
+qualify as global illumination "bibles."
+
+Actually, the best sources of up-to-date and comprehensive information on
+global illumination techniques are the most recent MSc and PhD theses, many
+of which are available online. PhD theses in particular are great -- the poor
+students are required to demonstrate their in-depth knowledge of the field,
+which generally means a 50-page prologue to their actual research topic, and
+a bibliography with at least 50 references.
+
+For a complete listing ... ah heck, you know where to find my bibliography ;+>
+[http://www.ledalite.com/]
+
+-------------------------------------------------------------------------------
+
+Megahedron
+
+[A commercial announcement, but the trial is free. This is an updated version
+of Microcosm, reviewed in RTNv7n5. - EAH]
+
+Syndesis Corporation recently released Megahedron, a 3D graphics engine
+controlled by a high-level interpreted language called SMPL.  SMPL reportedly
+combines the broad functionality of C, the ease of Pascal and BASIC, and the
+type-safe, interpreted nature of Java.
+
+With Megahedron, you can write interactive 3D programs containing "smart"
+objects designed to move and react.  Your scripts can build models according
+to rules and procedures, instead of building models by hand.  It includes a
+renderer for static scenes.
+
+This precision is important for simulation, scientific visualization, virtual
+reality and game design.  Megahedron is useful for learning about 3D
+programming, too.  The SMPL language frees you from the chore of writing
+low-level graphics functions.  Useful programs can be written in just a few
+lines of code.
+
+Megahedron includes distributed ray-tracing, combining up to 64 computers to
+compute a single image, sharing computers on a local network or even across
+the Internet.  It can ray-trace in real-time, in an interactive low-res
+fashion.
+
+Megahedron has a retail price of $99.  The CD-ROM includes online
+documentation viewable in any Web browser, more than 300 example SMPL
+programs, and executables for Windows 95, Windows NT Intel and Alpha, Linux
+and SGI IRIX.  With its flexible software license, one person may run as many
+copies as they can.
+
+Time-limited demos of Megahedron for each platform are available on Syndesis'
+Web site at <http://www.threedee.com>. The manual for Megahedron is online,
+too, along with dozens of example scripts and sample images.
+
+-------------------------------------------------------------------------------
+
+Detecting Points on the Edge of a Polygon, by Eric Haines
+
+I've received this question enough times that I think it's worth presenting
+an answer here. The question is, "how do I detect if a point is on the edge
+of a polygon?" In RTNv5n3 and RTNv6n1 we discussed the problem of whether a
+point was inside or outside, but not on.
+
+The first question to ask is, "why do you want to test the on edge
+condition?" One nice feature of the crossings test (where you count the
+number of edges between the test point and the outside world; an odd number
+of edges means the point is inside) is that when a single test point is
+checked against a mesh of polygons, at most one polygon will contain the
+point. That is, when a point is on an edge shared by two polygons, the
+crossings test is consistent (though somewhat arbitrary) in that the point
+will not be inside both or outside both polygons but always inside one
+polygon or the other.  This feature is handy for, say, GIS - any point on a
+map split into areas will be inside one and only one area when using the
+crossings test. [See the next article for another use of this property]
+
+If you truly do want to test for the "on" condition, my general advice is to
+test for this separately. First test each edge against the sample point and
+see if the sample is within your epsilon of the edge. If this test fails,
+then go ahead and do a normal inside-outside test. Yes, it's more expensive
+than trying to modify the crossings test to (attempt to) yield "on"
+conditions, but it's more predictable, understandable, and debuggable.
+
+Actually, you can probably gain a bit of efficiency by using some other
+inside-outside test such as the barycentric or half-plane tests, in which the
+point is tested to see if it is inside an odd number of triangles formed by a
+fan from one polygon vertex. These sorts of inside-outside tests can be a
+little flakey on concave polygons, as if the test point is on an edge shared
+by neighboring triangles it must be counted as being inside only once. The
+advantage of using these sorts of tests is that they compute intermediate
+values (edge vectors, dot products, etc) which are also useful in computing
+the distance from an exterior edge to the test point.
+
+-------------------------------------------------------------------------------
+
+Rendering Unflat Polygons, by Eric Haines
+
+The crossings algorithm has the property that a point inside a polygonal mesh
+will be found to be inside one and only one polygon.  This property is useful
+when ray tracing non-flat polygons. One method of intersecting a ray with a
+polygon is to take the intersection point with the polygon's plane and then
+cast it and the polygon onto an axis' plane. This brings the problem into two
+dimensions and so simplifies it.  Typically the point and polygon are cast
+onto the orthogonal plane which gives the greatest projected area for the
+polygon (i.e. the polygon's plane normal is examined and the largest
+magnitude component identifies the component to ignore; for example, a
+polygon with a normal [-2 -6 3] would have the Y component ignored).
+
+However, not all data is well-defined for some systems. For example, a
+complex bevel might be represented by a quadrilateral mesh and some of the
+quads may be warped. There are other operations which can yield unflat
+general polygons (I recall a beautiful polygonal model of the Statue of
+Liberty which looked great when z-buffered but had all sorts of terrible
+warped polygons when ray traced). If you do point in poly testing you can get
+a bug: some of these unflat polygons will cast onto one orthogonal plane,
+some upon another, and the warped nature of the polygons can give a result in
+which a ray that should have hit *some* polygon in the mesh will miss them
+all. This all sounds unlikely and theoretic, but it definitely does happen.
+
+One answer is to triangulate these polygons (triangles always being flat),
+which costs more memory and changes the database. Also, a tessellator that
+works on all misshapen polygons is hard to find (I don't have one!) - the
+problem is that you usually need to find a direction to cast the polygon
+which keeps the data well-behaved and avoids having any self-intersection.
+However, a direct test is possible: if you cast all polygons along the
+direction of the ray itself when you do inside-outside testing, you guarantee
+that when a ray is directed towards the interior of the mesh it will hit (at
+least) one polygon in the mesh.
+
+One little side effect of such an intersection test is that the intersection
+point first computed for the plane is somewhat arbitrary - since all the
+vertices of this unflat polygon do not lie in a plane, there is no right
+answer for what exact depth a point in the interior has. However, we do know
+the edges have a precise depth, so a good solution is to find the left and
+right edges (by giving the ray an arbitrary "up" direction) and interpolate a
+good depth from these.
+
+Note that this method of casting along the ray is essentially the same as
+that used in scanline hidden surface algorithms, where a projection is used
+to cast the polygons onto the image plane.
+
+-------------------------------------------------------------------------------
+
+Free Polygon Tessellators, by Eric Haines
+
+[in response to a request for what tessellators are out there. I do not know
+of a free tessellator out there which robustly handles polygons with multiple
+outlines (i.e. holes) and/or polygons with bridging edges. If you do, please
+let the rest of us know!]
+
+I'm the archivist for Graphics Gems; the latest Graphics Gems release is at
+http://www.acm.org/tog/GraphicsGems.  Watch out with the Narkhede tessellator
+in Graphics Gems V.  It probably works for polygons without holes, but it
+fails on single outline polygons with holes (in other words, you connect the
+holes to the perimeter with a pair of bridging edges).
+
+O'Rourke does have a tessellator available online, from his (wonderful) book
+"Computational Geometry in C", it's at ftp://cs.smith.edu/pub/compgeom/ - I
+can't vouch for the robustness, I vaguely recall that it may not handle
+bridging edges well either.
+
+Also check Paul Heckbert's site http://www.cs.cmu.edu/~ph/ under "My
+Bibliographies and Link Collections" for some links to mesh generation and
+simplification related material.
+
+-------------------------------------------------------------------------------
+
+Octree Neighbor Finding, by Andrew Glassner, Francois Sillion, and Paul
+	Heckbert
+
+From: jpt@btc.uwe.ac.uk
+
+I have a problem relating to finding neighbouring voxels in octrees and feel
+sure this must have been addressed previously.
+
+I want to be able to find all the neighbouring (adjacent in space) voxels
+from a given voxel stored in an octree. It seems feasible that an operation
+based on traversal of the octree will allow neighbouring voxels to be
+discovered.
+
+----
+
+From: Andrew Glassner <glassner@microsoft.com>
+
+I believe they're called "Neighbor Pointers" - that might be a good place to
+start looking in the index.
+
+----
+
+From: Francois Sillion <Francois.Sillion@imag.fr>
+
+I have only done it with quadtrees, but I believe that you will find simple
+code that does precisely that in one of H. Samet's book on hierarchical data
+structures.
+
+book{Samet90,
+	author = {Hanan Samet},
+	title = {The Design and Analysis of Spatial Data Structures},
+	publisher = {Addison-Wesley},
+	address = {Reading, Massachusetts},
+	year = {1990}
+}
+
+book{Samet,
+	author = {Hanan Samet},
+	title = {Applications of Spatial Data Structures},
+	publisher = {Addison-Wesley},
+	address = {Reading, Massachusetts},
+	year = {1990}
+}
+
+----
+
+From: Paul Heckbert <ph@cs.cmu.edu>
+
+One of the methods that Samet describes does not require neighbor pointers
+(although that is certainly one way to do it), but instead you ascend the
+tree until you can step in the direction you want, then you descend the tree,
+staying as close spatially to the previous point as possible, until you hit a
+leaf, or get to the level of the tree that you desire.
+
+With this method, you don't need neighbor pointers, just 8 child pointers and
+1 parent pointer.  Samet shows, as I recall, that you go up and down 2 times,
+on average, i.e. that the average cost to find a neighbor is O(1). If you
+found neighbors by starting at the root every time, it would cost O(depth).
+
+-------------------------------------------------------------------------------
+
+Author Sues Publisher, by Ralph Grabowski <ralphg@xyzpress.com>
+
+[RTNv9n1 was devoted to writer/publisher relations, so this article caught my
+eye. This article is republished with permission from "upFront". -EAH]
+
+A Canadian free-lance writer (not me!) this week launched a CDN$100 million
+law suit against ITP (International Thompson Publishing) for copyright
+infringement. She had sold an excerpt from her book to ITP's Globe and Mail
+newspaper of Toronto ON. In addition to printing the article in the
+newspaper, ITP placed the article in their electronic database, which is
+accessible by other ITP-owned companies. The author is objecting to the
+possibility of other newspapers reprinting her article without compensation.
+
+One problem faced by authors is that publishers sometimes reuse their work
+without additional compensation.  (The situation is akin to the problem
+software companies have of people using more than one copy of a single
+software license.) One AutoCAD author successfully sued after the publisher
+reused her book as part of a larger book without compensation.
+
+What can authors do? First, remember that no contract is "standard," as
+publishers are fond of describing them.  You are free to change any part you
+don't like, even when the publisher insists no changes are permitted. (I am
+amused at how quickly an iron-clad contract changes when faced by a contract
+with better terms from a competing publisher!) An unsigned contract is merely
+an offer and you have every right to present a counter offer.
+
+Second, follow this procedure: many magazines include a clause in their
+"standard" writer's contract that allows them to reuse the article in any
+form without additional compensation to the author. I routinely cross out
+that section and replace it with: "First North American serial rights only."
+That means the publisher can only print it once ("First") in a magazine
+("serial") in North America. The publisher cannot place the article on a Web
+site, nor reuse the article, nor use the article outside of North America.
+These and other situations require the publisher to negotiate another
+contract with the author.
+
+The Web makes it easy for authors to enforce these legal requirements. Simply
+use any search engine (I prefer Alta Vista) and do a search for your name. In
+less than a minute, you have a list of all Web sites containing your name. In
+case the publisher stripped your name, you may want to search for phrases you
+used in your articles.
+
+----
+
+Ralph runs the XYZ Publishing, Ltd. and, among other things, publishes a
+useful free ezine called upFront, which tracks CAD related topics and VRML.
+Visit his site at http://users.uniserve.com/~ralphg/
+
+-------------------------------------------------------------------------------
+
+European Graphics Tour, by Nelson Max <max2@llnl.gov>
+
+The following is a report on three conferences I attended in 1996. I am
+broadcasting it because it contains summaries of several papers that may not
+appear for awhile in more widely read venues. ... Only the first two
+conferences were on rendering, so you might want to skip the stuff about the
+last one, though my summaries for it are mostly restricted to
+rendering-related talks.
+
+My first stop was the University of Kaiserslautern, where I visited the
+research laboratory of Hans Hagen. Hans arranged for a schedule of
+demonstrations and discussions with his graduate students, and arranged for
+them to take me out to lunch and dinner in town (I paid for my food, but they
+provided the transportation and the company, which was a nice form of
+hospitality.) I was impressed with Hans' personal research in the design of
+plastic reflector and lens shapes for car headlights, to give a desired
+distribution of illumination intensity on the road. I also had a long
+discussion with Alexander Keller, who explained to me in detail the
+Quasi-Monte-Carlo method he was using for global illumination, which he
+presented at both of the next two meetings. He gave me the longer "uncut"
+version of his paper, so I was able to appreciate well the fact that certain
+non-random sequences of test points give estimates that converge much faster
+than for random test points. A final memorable project was a method where
+potential purchasers could design and view semi-custom prefabricated homes
+over the Internet.
+
+The meeting in Schloss Dagstuhl was one of a series of week-long seminars in
+aspects of Computer Science partially supported by the governments of Germany
+and the state of Saarbrucken. The topic of this seminar was rendering, and it
+was scheduled to just precede the Eurographics workshop the following week.
+The hope was that attendees from outside Europe would gain efficiency in
+their long distance travel plans, which was the case for me, but many
+Europeans could not afford more than a week away from their institutions,
+especially if they were teaching, so the attendance at the Eurographics
+Workshop was actually down from last year. A summary of the some of talks
+follows.
+
+Xavier Pueyo proposed methods for generating random densities of infinite
+lines in space, and intersecting each line with all objects in the scene to
+get form factor contributions from each segment in the space between two
+object surfaces. He chose his lines by connecting two random points on the
+surface of a sphere enclosing all the objects, which in fact does give the
+appropriate random density of lines, although this seems non-intuitive at
+first. Dani Tost discussed her work on visualizing blood vessels, involving
+both maximum intensity projection and shading, with voxel splats.
+
+Henrick Wann Jensen's talk on "Global Illumination using Photon Maps"
+generated the most excitement and discussion of the seminar, because of the
+impressive performance of his method, which is based on saving in a spatial
+data structure (a KD tree) both position and direction of all hits by photon
+paths traced from light sources through multiple random bounces. During
+viewpoint dependent rendering, these are used for the intensity at the second
+bounce in a local pass from the eye, by expanding a sphere about the hit
+point until the n closest photon hits are found in the KD tree. At the first
+bounce from the eye, the same distribution is used for importance sampling of
+the bounced rays. Finally, the initial rays from the light source are
+continued past their first surface intersection to create shadow maps at
+subsequent intersections, which are used to decide when shadow feelers are
+necessary to determine direct illumination. Since the incoming directions are
+available, non diffuse reflections can be rendered. A separate caustic map,
+with many more photons directed at only the shiny surfaces, is used similarly
+at the first bounce in rendering.
+
+Dani Lischinski gave a preview of a Siggraph paper on "Hierarchical Image
+Caching for Accelerated Walkthroughs of Complex Environments." Robert Garmann
+talked on the computational complexity of hierarchical radiosity, and gave a
+careful analysis of the number of links required in a simple scene with two
+parallel plane patches, in which the subdivision oracle is based on the total
+form factor of a link. He showed that the total number of links, as the
+allowed error approaches zero, is of order O(N^2), where N is the number of
+leaf nodes in the hierarchical subdivision. This seems to contradict previous
+beliefs that it would be O(N log N), or even O(N).
+
+Dieter Fellner, working with Stefan Mueller's group at Darmstadt, showed how
+real time rendering of radiosity scenes could be accomplished on environments
+with the order of a million polygons, and presented an impressive video of
+additions to the Frankfort airport.
+
+Wolfgang Sturzlinger talked about using hierarchical radiosity links in the
+local pass (final one bounce gather to the viewpoint) by doing a
+Weiler-Atherton type subdivision of the unit hemisphere, using 3D coordinates
+of the unit vectors, in order to determine the links involved at a pixel.
+Mark Summinger from Erlangen University talked about decoupling the
+reflection and transport operators in a progressive radiosity framework for
+non diffuse surfaces. The shot and transported energy is saved in a data
+structure which is indexed by both receiving position and angle bins. The
+advantage is that when it is time to shoot for a patch, all the energy in an
+incoming angle bin can be reflected at once, which requires fewer evaluations
+or accesses to the BDRF.
+
+The abstracts to these talks were handwritten into a Dagstuhl record book,
+and are being transcribed to be sent to the participants and saved at
+Dagstuhl. The proceedings of the next conference I attended, the 7th
+Eurographics Workshop on Rendering, at Porto, Portugal, will be published
+rapidly by Springer.
+
+At Porto, (and also at Dagstuhl) I spoke on "Hierarchical Rendering of Trees
+from Precomputed Multi-Layer Z-Buffers". This is based on reprojecting images
+of trees and their subparts, prerendered from different viewpoints (image
+based rendering). Fabrice Neyret gave a related paper which had an impressive
+video of a flight over a forest, produced by ray tracing hierarchical (mip
+mapped) volume textures with an ellipsoidally approximated surface normal
+distribution at each voxel.
+
+Fredo Durand, George Drettakis, and Claude Puech gave a speculative talk on
+an unimplemented method of dividing the 4D space of all lines in 3D up in to
+regions where the visibility along the ray is constant. To deal with rays
+which have multiple segments in the free volume between objects, they use and
+extra discrete dimension to index the segments, but the space of such
+segments still has only 4 real parameters for a fixed scene. They discuss the
+various lower dimensional manifolds of visibility change events that divide
+this space into regions of homogeneous visibility, and show why the resulting
+data structure is of size O(n^4), where n is the number of polygon edges, and
+can be constructed by a sort and sweep algorithm in time O(n^4 log n). This
+is considerably better than the aspect graph, of size O(n^6), because the
+aspect graph computes for each viewing direction (or viewpoint) the
+intersection of the 2D pencil of lines making up the image, with this
+subdivision of the 4D space of all lines. Eric Veach pointed out that in the
+case of caustic maps under water, and the case of bump mapped shading normals
+differing from the normals of the surfaces which intercept the light
+transport rays, non symmetric scattering functions (BDRFs or BDTFs) must be
+used, which do not satisfy reciprocity, and therefore act differently when
+light energy or importance are being transported, or equivalently, act
+differently for the two directions in bidirectional path tracing (photon
+paths and viewing paths).
+
+Stephen Hardt and Seth Teller from MIT showed how the rendering pipeline and
+texture mapping hardware with perspective correction of a high end
+workstation could be cleverly used to produce accurate radiosity rendering at
+interactive rates by fitting the radiosity off-line (ahead of time) by
+quadratic triangular patches, and then using the hardware polygon renderer to
+deposit at each pixel the polygon ID and two barycentric coordinates in the
+triangle. They use the perspective correction in the texture mapper to get
+the barycentric coordinates accurately. With Michael Allison, I showed in
+Graphic Gems III how the barycentric coordinates could be stored in color
+fields, using only the Gouraud shading interpolation hardware, if perspective
+corrections are not needed. The radiosity is then computed in software as a
+quadratic polynomial in the two barycentric coordinates, with coefficients
+indexed by the polygon ID.
+
+Jos Stam and Eric Languenou spoke about ray tracing in non-constant media
+(mirages). Eric Lafortune and Yves Willems extended bidirectional path
+tracing to the case of 3D volumes with participating media (smoke, steam, or
+clouds). George Dretakis and Francois Sillion spoke on incorporating
+discontinuity meshing into hierarchical quadtree meshes, which allows large
+quadtree cells on homogeneous unoccluded regions; previous discontinuity
+meshes based on BSP trees had unnecessarily long edges crossing into regions
+beyond the discontinuities that defined them.
+
+I spent the 6 days between the Porto and Chamonix conferences on vacation in
+Portugal, cycling with my wife Mika from Coimbra to Alcobaca, on bicycles
+kindly loaned by the local conference organizer, Augusto de Sousa, because
+there were no bicycle rental shops in northern Portugal. The final day before
+the Curves and Surfaces conference began was spent travelling from Porto to
+Chamonix.
+
+The topics of the Chamonix conference were less familiar to me, being
+weighted towards approximation theory based on functional analysis on Sobelov
+spaces (I still haven't figured out what these are) and wavelets. I attended
+because Greg Nielson invited me to give a talk at a Mini-symposium he
+organized an Scientific Visualization. I spoke on "Applications of Texture
+Mapping to Volume and Flow Visualization," giving in 25 minutes almost all
+the content of the version I also earlier presented at the University of
+Kaiserslautern in 65 minutes. In the same session, Marcus Gross gave a talk
+on "Finite Element Modelling and Visualization for Facial Surgery," in which
+the soft tissues between the bone and skin are modelled by finite elements,
+whose deformation is simulated as bones are cut and displaced, so that the
+final appearance of the face can be displayed before the operation is carried
+out.
+
+There were 6 days of mostly 3 parallel sessions of 25 minute talks form 8:30
+AM until 6:30 PM (with a 2 hour break for lunch, and two half hour coffee
+breaks) for 6 conference days, which made for a pretty grueling schedule.  I
+attended most of the time, but admit to "playing hooky" for two mornings in
+order to enjoy the mountain scenery. I probably absorbed some approximation
+theory by osmosis, especially from an excellent Mini-symposium on non-linear
+and adaptive wavelet approximation, including talks by Yves Meyer on the bump
+algebra, by S. Mallet on Image Compression, emphasizing the quantization and
+coding of the wavelet or basis coefficients, and the coding of the position
+indices of the non-zero coefficients, as well as just which coefficients can
+be set to zero, and by Ron DeVore on adaptive numerical methods for partial
+differential equations. There was also an interesting talk by A. Pinkus on
+approximating by ridge functions, the set of finite linear combinations of
+ridges, which are "long crested waves" of one linear parameter in 2 or 3
+dimensions. There were many talks on extending the ideas of wavelets from the
+plane to arbitrary 2-manifolds, and in particular, to the 2-sphere.
+
+Beyond these approximation theory talks, the talks I understood best were on
+surface shape. There were a couple of talks on developable surfaces, which
+are important in manufacturing because they can be formed from sheet metal
+without stretching. An invited talk by Joseph Hoschek on interpolation and
+approximation with developable surfaces gave an example of designing the
+blank holder in a sheet metal forming process. This is the part of the mold
+which should first clamp the sheet, without stretching it, and hold it while
+the part of the deformation involving more severe stretching deformations
+takes place. Another talk by Y. L. Kergosian analyzed the folds and cusps
+where a developable surface can have singularities, and simulated them for
+the case of a bent tin can, generating impressively realistic images.
+
+There was also a Mini-symposium on Multiresolution Methods in Computer
+Graphics, including the following talks. Richard Bartels talked on
+hierarchical splines. Peter Schroeder spoke on spherical wavelets, and showed
+his Siggraph '95 images. After hearing it for the nth time, I finally
+understood the idea behind lifting. R. Westerman described his wavelet-based
+volume rendering, in which the wavelets are used only for determining the
+appropriate adaptive sampling frequency along a ray and for reconstructing
+the samples, for a traditional opacity accumulation algorithm. Thus full
+opacity effects are possible, in contrast to faster algorithms which try to
+precompute the splats of each wavelet, and therefore cannot account for
+interwavelet opacity effects. David Salesin presented three multiresolution
+techniques from his past and future Siggraph papers: image editing, image
+querying, and multiresolution video "clip art".
+
+----
+
+Dieter Fellner writes that I have attributed too much to his group at
+Darmstadt. Here is the text of his message:
+
+May I suggest a minor change to your report on the Dagstuhl workshop?
+
+You write:
+
+>   Dieter Fellner, working with Stefan Mueller's group at Darmstadt,
+> showed how real time rendering of radiosity scenes could be accomplished
+> on environments with the order of a million polygons, and presented an
+> impressive video of additions to the Frankfort airport.
+
+Well, I don't know how the two presentations could be linked so closely. And
+of course, it's quite flattering for my group. But truth is, that our two
+groups have not cooperated in this activity.
+
+My group has been working on a graphics architecture called MRT and as one of
+the more interesting applications I talked about the simulation of radio wave
+propagation in urban environments used in the planing of micro cells for
+mobile phone networks as well as on the consistent handling of approximative
+rendering and radiosity, both based of a clever use of a data structure
+derived from the winged edge data structure.
+
+[There turns out to be a large body of literature using ray tracing for
+mobile phone network related planning - see IEEE's site (members only) at
+http://www.biblio.ieee.org/biblio/keyword_search.html and search on "ray
+tracing". - EAH]
+
+As I don't want to take credit for things we haven't done and your mail
+reached a large number of people I would like to ask you to consider a
+revised version of your report.
+
+-------------------------------------------------------------------------------
+
+Fast Shadow Testing Bibliography, by
+	Slawomir Kilanowski <metagram@wro.ternet.pl>
+
+Below you'll find the small bibliography I have completed on speeding up
+shadow analysis. I hope it may be of some use for someone who will encounter
+the same problem.
+
+For those who are interested in "quick fix" of performance of a ray tracer
+with shadows calculated by ray casting I may honestly devise the Greg Ward's
+method described in "Adaptive Shadow Testing for Ray Tracing". It gave
+average speed-up factor varying from 1.5 - 5.0 calculated on models build of
+10,000 - 40,000 polygons, with 50 - 400 lights. The differences in resultant
+images were not noticeable. In absolute terms (number of differing pixels and
+magnitude of differences) the differences were smaller than introduced by
+standard JPEG compression.
+
+Andrew Woo and Pierre Poulin and Alain Fournier,
+"A Survey of Shadow Algorithms",
+IEEE Computer Graphics and Applications, Vol 10, No 6, November 1990
+
+Andrew Woo and John Amanatides,
+"Voxel Occlusion Testing: A Shadow Determination Accelerator for Ray Tracing",
+Proceedings of Graphics Interface '90,
+held in Halifax, Nova Scotia; 14-18 May 1990",
+
+Andrew Pearce and David Jevans
+"Exploiting Shadow Coherence in Ray Tracing",
+Proceedings of Graphics Interface '91",
+held in Calgary, Alberta; 3-7 June 1991,
+
+Frederic Asensio,
+"A Hierarchical Ray-Casting Algorithm for Radiosity Shadows"
+Third Eurographics Workshop on Rendering, 1991, Bristol, UK
+
+H. K. Choi and C. M. Kyung Pysha:
+"A Shadow-Testing Acceleration Scheme for Ray Tracing"
+Computer-aided design, Vol 24, No 2, February 1992
+
+A. James Stewart and Sherif Ghali,
+"An Output Sensitive Algorithm for the Computation of Shadow Boundaries",
+Canadian Conference on Computational Geometry, August 1993
+
+Arjan J. F. Kok and Frederik W. Jansen and C. Woodward,
+"Efficient, Complete Radiosity Ray Tracing Using a Shadow-Coherence Method",
+The Visual Computer, Vol 10, 1994
+
+A. James Stewart and Sherif Ghali,
+"Fast Computation of Shadow Boundaries Using Spatial Coherence and
+Backprojections",
+Proceedings of SIGGRAPH '94 (Orlando, Florida, July 24--29, 1994)
+
+Yiorgos Chrysanthou and Mel Slater,
+"Shadow Volume BSP Trees for Computation of Shadows in Dynamic Scenes",
+1995 Symposium on Interactive 3D Graphics,
+
+Seth Teller and Pat Hanrahan,
+"Global Visibility Algorithms for Illumination Computations",
+Computer Graphics Proceedings, Annual Conference Series, 1993,
+
+A.J.F. Kok and F.W. Jansen
+"Source Selection of the Direct Lighting Computation in Global Illumination",
+Proceedings Second Rendering Workshop, Barcelona, Spain, May 1991
+In: Photorealistic Rendering in Computer Graphics, Springer Verlag, 75-82.
+
+Kurt Zimmerman, Peter Shirley
+"A Two-Pass Realistic Image Synthesis Method for Complex Scenes"
+Rendering Techniques '95 (Proceedings of the Sixth Eurographics Workshop
+on Rendering), Springer-Verlag, New York, NY 1995, pp 284-295
+
+George Dretakkis and Eugene Fiume,
+"A Fast Shadow Algorithm for Area Light Sources Using Backprojection"
+Proceedings of SIGGRAPH '94 (Orlando, Florida, July 24--29, 1994)
+
+Seth J. Teller and Carlo H. Sequin,
+"Visibility Preprocessing for Interactive Walkthroughs",
+Computer Graphics (SIGGRAPH '91 Proceedings),
+held in Las Vegas, Nevada; 28 July - 2 August 1991,
+
+Ward, Gregory,
+"Adaptive Shadow Testing for Ray Tracing,"
+Second EUROGRAPHICS Workshop on Rendering, Barcelona, Spain, May 1991
+
+Shirley, Peter,
+"Direct Lighting Calculation by Monte Carlo Integration,"
+Second EUROGRAPHICS Workshop on Rendering, Barcelona, Spain, May 1991
+
+George Drettakis, Francois Sillion
+"Accurate Visibility and Meshing Calculations for Hierarchical Radiosity"
+
+Seth Teller, Pat Hanrahan
+"Global Visibility Algorithms for Illumination Computations",
+Computer Graphics, SIGGRAPH '94 proceedings.
+
+Kurt Zimmerman, Peter Shirley
+"A Two-Pass Realistic Image Synthesis Method for Complex Scenes",
+Indiana University, Technical Report No 434
+
+Eric Haines, Donald Greenberg
+"The Light Buffer: A Ray Tracer Shadow Testing Accelerator",
+IEEE Computer Graphics and Applications, Vol. 6, No. 9, Sept. 1986
+
+-------------------------------------------------------------------------------
+END OF RTNEWS

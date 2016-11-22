@@ -1,0 +1,1487 @@
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+                        "Light Makes Right"
+
+                           July 14, 1994
+                        Volume 7, Number 4
+
+Compiled by Eric Haines, 3D/Eye Inc, 1050 Craft Road, Ithaca, NY 14850
+	erich@acm.org
+All contents are copyright (c) 1994 by the individual authors
+Archive locations:  anonymous FTP at princeton.edu (128.112.128.1)
+	/pub/Graphics/RTNews, wuarchive.wustl.edu:/graphics/graphics/RTNews,
+	and many others.
+
+Contents:
+	Introduction and Announcement
+	Call For Participation:  POV Ray Tracing CD ROM, by Christopher Cason
+	Tracers and Tracings #1, by Tom Hoover
+	Review of Tracers and Tracings CD ROM, by Eric Haines
+	Ray Tracer Comparison, by Amanda L. Osborne
+	Blob Sculptor, by Alfonso Hermida
+	Book Announcements, and Modeler vs. Scripting Language, by Mitch Waite
+	A Quick Writeup of Ray Tracing for the Macintosh CD, from notes by
+		Eduard Schwan
+	Ray Tracing Roundup
+	POV-Help, by Chris Cason
+	Lenticular 3D, by Keith Rule
+	POV Official News, Issue #1, POV Team
+	A Quick Explanation of Radiosity Computation vs. Output, by
+		Steve Hollasch
+	A Grand Unified Modeller (GUM), by Lex van der Sluijs
+	New (at least to me) Bulletin Boards, collected by Eric Haines
+	GemCAD Review, by Greg Prior
+	A Summary of the Reyes Algorithm, by Steve Demlow
+	Version 1.7 of Polyray Available, by Alexander Enzmann
+	Use of External Program Calling for Polyray, by Alexander Enzmann
+	POV-Ray Legal Stipulations Correction, by Dan Farmer
+	3D Graphics Book List, by Brian Hook
+
+-------------------------------------------------------------------------------
+
+Introduction
+
+Before we get started, an announcement:
+
+A POV-Team member, Christopher Cason <cjcason@yarrow.wt.uwa.edu.au> is setting
+up a new POV FTP site in the USA to take some of the load off the USA<->AU
+link.  The POV site at ftp.uwa can sometimes handle over 1500 POV-related
+downloads a day.
+
+At this stage, Chris has a site available but has *no nameserver* for the MX.
+If there is a stable, well-connected site out there that satisfies INTERNIC
+requirements for nameserving for a USA-based MX record, and would like to
+volunteer, please contact Chris.
+
+Nameserving requires virtually no work or hard disk space.
+
+----
+
+Chris has tried a number of people on the FTP list, so far with no luck, so
+don't expect someone else to volunteer.  Note that Chris has got an FTP site
+in the US, but needs a nameserver - you're NOT mirroring his site and the task
+needs a minimal amount of time; it sounds like an easy way to be a hero.  So
+if you have any say about your FTP site, please do volunteer.
+
+
+This is something of a hobbyist issue, focussing on resources which are for
+either users of rendering packages or for beginning/intermediate level
+graphics programmers.  In this issue we have another fine article by Amanda
+Osborne giving her impressions of the various public domain and shareware ray
+tracers out there.  There's also, oh...  just read the issue and find out!
+This (like RTNv7n3) is a catch-up issue:  some late breaking news is in here,
+but mostly I'm still caught in a backlog.
+
+One bit of errata about RTNv7n3:  Francois Sillion & Claude Puech's book on
+Radiosity will be out in time for SIGGRAPH (subscribers' issues were
+incorrect).
+
+To end the intro, here's a tidbit that fits nowhere else (from Keith Higgs
+<dhiggs@magnus.acs.ohio-state.edu>):
+
+  I know a guy who runs PoV 1.0 on an old 386SX16 and just locks the keyboard
+  after starting a finished quality image at 640*480.  He's run images which
+  took up to 21 WEEKS to render.  I keep telling him he's got to upgrade.  :)
+
+I believe this is a realtime record - has anyone done better (or should I say
+worse)?
+
+-------------------------------------------------------------------------------
+
+Call For Participation:  POV Ray Tracing CD ROM, by Christopher Cason
+	<cjcason@yarrow.wt.uwa.edu.au>
+
+I'm doing up a POV CD-ROM, which will be produced and distributed by Walnut
+Creek.  My intention is to have Pov 1.0, 2.2, all official binaries, DJGCC and
+GCC's for various platforms (especially Unix) to allow out-of-the-box
+compiles, and as many unofficial compiles as possible.  I will also include a
+good number of scenes, textures, 3D objects, etc.  I want to include any
+interesting theses, technical documents, articles, as well as anything
+remotely useful.  More of a 'get your hands dirty'-type of disk than one with
+lots of pretty pictures (though I'll have a decent number of them, too...).
+
+Please do send or upload (to ftp.uwa.edu.au) any contributions.  I'm
+particularly looking for utilities, scene files and animations, as long as
+they're done with POV.
+
+As important, please send in your suggestions.  Obviously, I want to put on
+the CD what people *want*.
+
+I'm also looking for a stunning tracing for the poster that will be used to
+advertise the CD.
+
+We may even issue a Mac version of the CD.  [when I recently announced that
+the Mac files were up at ftp.uwa, the logs showed over 1000 downloads of files
+from the Mac directory in 24 hours ...  and there's only about 7 files there.]
+
+[There is a CD ROM about ray tracing already out, see the next articles.  It
+is focussed on PC related software, images, and hobbyist material, where
+Chris' is more programmer/designer oriented and more platform independent.
+-EAH]
+
+-------------------------------------------------------------------------------
+
+Tracers and Tracings #1, by Tom Hoover (thoover@infi.net)
+
+[Note that this CD ROM is online at the Tackle Box BBS, which is described
+elsewhere in this issue.  -EAH]
+
+A CDROM OF RAYTRACING PROGRAMS AND IMAGES HAS BEEN RELEASED!
+
+Tracers and Tracings #1, a collection of public domain and shareware programs
+for raytracing has been released by the Information Guild.  The disk contains
+over 850 images created with raytracers and over 180 computer generated
+animations in addition to over 400 programs for creating your own original
+raytraced images and animations.  The total data content of TRACERS AND
+TRACING #1 is 489 megabytes.
+
+The ROM is organized in the style of a shareware collection, with a simple
+program for extracting the data from the CDROM to your hard drive.  The disk
+is FULLY indexed with descriptions for each file in the collection.
+
+The retail price is US$30.00 + shipping.  Distributors and resellers are
+encouraged to contact The Information Guild for quantity discount pricing.
+Orders are currently being taken on a cash or money order basis.  COD shipping
+is available for an extra fee.  Checks are acceptable for prepayment, but
+require a 10 day shipping delay.
+
+Shipping is $3.00 in the US, $5.00 elsewhere.
+
+The Information Guild
+4962 Country Club Road
+Troutville, Virginia  24175
+
+Contact:  Tom Hoover
+Phone:    (703) 992-1645
+Email:    thoover@infoguild.com
+
+-------------------------------------------------------------------------------
+
+Review of Tracers and Tracings CD ROM, by Eric Haines
+
+If you're interested in ray tracing, get this disk.  It'll save you hours of
+searching and downloading, you'll free up disk space since you'll know the
+various resources are immediately available, and in general it's A Good Thing.
+
+I've navigated the directory tree a fair bit and this disk has a lot.  It's
+aimed for the PC, and has executables for most of the major ray tracers on it,
+including POV 2.2, PolyRay 1.7, Vivid, Rayshade and Radiance (about the only
+one missing is RTrace, I believe).  Note that source for many of these ray
+tracers is not available on the disc; in general, this disk is aimed more at
+the user/hobbyist than the programmer.
+
+The larger directories are FLI animations (120 MB of the uncompressed movies,
+i.e. immediately playable and a separate directory of 82 MB of the movies
+compressed), still images (130 MB), scene and data files (24 MB), and
+utilities galore (37 MB).  There's also documentation, image displayers, and
+other related files.  There are also random bits like a directory of fractal
+generators, VR tools (VRend386 and suchlike), and even DOOM v1.2 and similar
+games.  All in all, a pretty amazing collection.  BTW, if you explore the
+still images, note that there is a set of catalog GIF files which contain all
+the images in 3x3 "contact sheets".
+
+There are a few minor flaws on the disc.  For example, all the issues of the
+Ray Tracing News are here, except for RTNv6n1.  The FLI player aaplay.exe has
+a bug in it (at least on my system) where it can display only the first five
+pages of the CD's directory of FLIs (though there are ways around this) - a
+flaw in aaplay, not the disc, but still annoying.  In the images directory
+chksph2.gif is corrupt, and I leave it as a puzzle to find the random image of
+Charles Barkley.  Speaking of images, I was surprised to find no texture
+files.
+
+As is common with CD ROMs, there's a lot of stuff shoveled onto this disc.
+Some of it is wonderful to have, but there's also a fair bit of clutter:
+awful images and FLIs, many versions of the same software (e.g. vpic* has 8
+versions on the disc), and various poor quality tools.  I wish the authors,
+who obviously spent a lot of time putting this package together, had taken a
+few hours to put together a brief text file listing their top picks.  Also,
+don't fool or be fooled:  quite a few of the images and movies needed no rays
+to be traced during their creation, but rather were done with scanline
+methods.  This said, I am glad to have all the clutter and non-ray-traced
+stuff around.  For one, it definitely gets your critical juices flowing and
+may even teach you something about what makes a good image.  Also, the space
+is there and might as well get used.  It's a great collection for the
+hobbyist, and I recommend it; I'm extremely glad I have one, and it's still
+vaguely miraculous that all this material fits on one CD.
+
+p.s. my favorite FLI was Drop_it2 and my favorite GIF was Frosty (though I
+have to admit to burning out on looking through all the gifs:  plan on being
+sick of perfectly shiny surfaces, especially spheres, after an hour or two of
+viewing these things).
+
+-------------------------------------------------------------------------------
+
+Ray Tracer Comparison, by Amanda L. Osborne <alo@northshore.ecosoft.com>
+
+[You may recall that Amanda wrote up the terrific list of POV-ray utilities
+available out there for RTNv7n1.  I asked her for a follow-up article on what
+ray tracers she's tried, liked, etc.  Here's her response.  - EAH]
+
+
+I'm afraid all I can come up with is a classic politician's answer:  there are
+good, positive things about them all.  Since I began tracing with an early
+version of Povray, I'm probably more comfortable with that tracer's syntax
+than any other.  However, I got BOB with Stephen Coy's book and, except for
+pages and pages of code-for-its-own-sake, I read everything and took lots of
+notes that I later applied to BOB.  I was really pleased with the quality of
+the images that came out of that particular exploration.  (I had tried Vivid
+but reluctantly set it aside when I realized that I couldn't pay the
+registration any time soon.)  I would describe BOB and Vivid as being closely
+related but not identical twins, by the way.  But, because of the wealth of
+primitives supported by Povray and the wonderful shapes include file, I found
+BOB clumsy and intimidating to use by comparison.  It took several weeks of
+using just BOB for that feeling to evaporate.
+
+When I was first reading about tracing and had *definitely* been bitten by the
+graphics bug, I tried out MTV and QRT, more for the "historical" value than
+anything else.  Questions had arisen about what had been necessary to produce
+traced images, pre-povray and -vivid, and I had to satisfy myself about them.
+But I couldn't recommend either one to someone starting out, especially with
+the wealth of utilities that can serve as crutches (using a program like
+Povcad or Moray, one no longer has to keep, say, the left-hand rule in mind,
+but rather can just fiddle until the view is correct) which are available now.
+
+I like Rayshade a lot, but wish that things were a bit more cohesive.  I know
+most people seem to use it on other platforms (as opposed to MSDOS), but I
+still wish there was up-to-date documentation (non-postscript) and that some
+part of that documentation was devoted to what the DOS executable can and
+cannot do (I can't get the CPP stuff to work at all, so any #include is out of
+the question).  The same holds true for RTrace, which I've had terrible luck
+with.  I can't even give an opinion about it, since I've never gotten it to
+work on my machine (wish I could).  Since RTrace is so faithfully updated and
+supported, I'd love to get it up-to-speed on my machine so I could try out the
+radiosity add-on.  I'll try again sometime soon.
+
+There are a couple of new raytracers from Europe, Rayce and Probe, that I also
+can't give any real opinion about, except to say that both seem to be very
+much works-in-progress.
+
+I have one commercial tracing program, Imagine.  (By far the most bang for the
+buck of all the commercial programs I looked at; sure, 3DStudio would be nice,
+but so is putting food on the table...)  I really like it a lot; for a tracing
+program, it is really, really fast (and I am talking about trace mode, as
+opposed to scanline).  It is not, however, all that intuitive to use,
+particularly to someone used to scripting a datafile.  There are also more
+unexplained lock-ups than I would like to see (although this is true for any
+program, it's especially frustrating when it's something you've *paid* for).
+And I hate the way it deals with memory (I have to fiddle around or shut off
+QEMM to get it to work).
+
+Finally, I love Polyray.  Like Imagine, I still consider myself on a learning
+curve with it, but it is such a stable and powerful tracing tool.  It offers
+more outputting options, more shadowing options, more texturing tools, than
+anything I've used to date.  I would describe it as a tough program to learn,
+unless you're really into math, but definitely worth the effort.  It has many
+great strengths, but I would sum up the top two as:  math functions and
+animation.  Polyray is set up to aid the user in creating animations; for the
+most part you can avoid lots of datafiles and batch files and place all the
+necessary data within one datafile.
+
+I really didn't mean to go on like this, I just got carried away a bit.  I
+think I'll create a little script and try to generate it in each of the
+programs and see how it goes, kind of like your timing tests, but with quality
+of the resultant image and ease-of-use being tested rather than speed.
+Non-scientific, of course, but maybe it would be helpful, just to clarify
+things for myself if nothing else...
+
+-------------------------------------------------------------------------------
+
+Blob Sculptor, by Alfonso Hermida (AFANH@STDVAX.GSFC.NASA.GOV)
+
+[This thing's a blast!  Marching Cubes rendering of blobbies on a PC. -EAH]
+
+Blob Sculptor 1.0 is a blob modeler/previewer.  It requires a 386/486 with a
+coprocessor, VGA and a mouse.  The program is distributed as freeware.
+
+The current versions for the modeler are version 1.0a for DOS and 1.0 for
+Windows.  Both versions support only spherical components, but cones,
+cylinders, ellipsoids and tori are on the way.
+
+The DOS version exports to POV, Polyray, Rayshade, RAW, DXF and CTDS.  The
+Windows version supports some additional file outputs besides NFF.
+
+The DOS version has a bug in the DXF output routine:  it also dumps the
+Rayshade output.  To fix this, simply load the DXF file into a text editor and
+delete any statements that appear after the line that reads "EOF".  That will
+take care of it.
+
+The team consists of Steve Anger, Truman Brown, Ron Praver and myself.  Future
+versions will include more component types and keyframing support.
+
+I wrote a partial port to SGI's OpenGL and works fine.  If someone is
+interested in porting the code completely please contact me.
+
+I wrote a series of 3 articles in 3D Artist magazine to introduce the reader
+to Blobs.  One of the readers of the 1st article developed an Animator Pro
+(AutoDesk) POCO language utility to animate 2D blobs.
+
+Finally, the source code for Blob Sculptor will appear in a book to be
+published by SAMS named "PC Graphics Unleashed".  Each of the team members
+except Ron Praver wrote a chapter explaining a certain part of the program.
+The book is around 1000 pages and there are lots of topics.  The book is
+similar in style to "Tricks of the Graphics Gurus".  Lots of good code and
+info.
+
+-------------------------------------------------------------------------------
+
+Book Announcements, and Modeler vs. Scripting Language, by Mitch Waite
+	<75146.3515@CompuServe.COM>
+
+[Mitch asked why I recommended _Adventures in Ray Tracing_, by Alfonso
+Hermida, in RTNv7n1 as a good all-around book on ray tracing for the
+hobbyist/professional.  I replied:
+
+    Two words:  "no modeler".  Rendering without modeling is fun to toy with,
+    but after a few shiny spheres pictures you can't do much more without a
+    modeler or model generating programs.  - EAH]
+
+
+Oh, wow, I see.  Well, not sure I agree; I created some amazing book covers
+using the data language approach, in fact I discovered that trying to build
+similar covers with a modeler was harder!  Walkthroughs and Flybys CD cover is
+a case in point, it's a large 3D grid made of tubes that go to infinity.  Most
+modeling programs have major visibility problems with that.  However you'll be
+pleased to hear about a book we are about to publish called _Ray Tracing
+Worlds_ with POV Ray.  It comes with MORAY and POV Ray 2.0 and shows how to do
+3D modeling to build extensive 3D worlds.  It's by Alexander Enzmann (creator
+of PolyRay), Chris Young and Lutz, the creator of MORAY.  Also we are about to
+bring out a 2.0 version of _Ray Tracing Creations_ as well as a Mac version
+called _Ray Tracing on the Mac_ [by Eduard Schwan, see next article -EAH] that
+comes with MacPOV 2.0.
+
+_Ray Tracing Worlds_ is at the printer and due to arrive at our shipment
+center on July 14th, and that means it will be on the store shelfs around the
+end of July.  _Ray Tracing on the Mac_ is about to go to the printer so look
+for it to be on the shelfs in mid August.  The Mac title comes with a
+fantastic CD interface that contains the entire POV reference.  You can look
+up a keyword and they play a QuickTime movie to see its effect!
+
+-------------------------------------------------------------------------------
+
+A Quick Writeup of Ray Tracing for the Macintosh CD, from notes by Eduard Schwan
+	(esp@CERF.NET)
+
+[I edited down the info from email from Chris Cason.  The book should be out
+by mid-July. -EAH]
+
+Title:  Ray Tracing for the Macintosh CD
+Subtitle:  Explore the Magic of Ray Tracing on your Mac
+Author:  Eduard Schwan
+Publisher:  Waite Group Press, (800) 368-9369
+ISBN:  1-878739-72-7
+
+The accompanying CD-ROM contains over 250 megabytes of software utilities and
+example ray traced images and QuickTime movies.  Versions of POV-Ray are
+provided for Macintoshes with and without a floating point unit, and there is
+a native version for the Power Macintosh family of computers.  POV-Ray will
+run under either System 6 or System 7.  There are utilities for creating
+complex objects, for creating and viewing QuickTime movies, and for converting
+between many common types of graphics file formats.  There are ray traced
+images and movies contributed by many different artists, with the original
+scene files provided for you to study.  It also holds an interactive
+multimedia reference chapter of the book, and an on-line information center
+that guides you through the contents of the CD-ROM.
+
+This book is organized into the following chapters:
+Chapter 1 - Introduction to Ray Tracing
+Chapter 2 - Installing POV-Ray on Your Macintosh
+Chapter 3 - Jumping Right In
+Chapter 4 - Advanced Scene Building Techniques
+Chapter 5 - POV-Ray Animation on the Macintosh
+Chapter 6 - Exploring the CD-ROM
+plus appendices
+
+-------------------------------------------------------------------------------
+
+Ray Tracing Roundup
+
+
+Animation FAQ
+
+The beginnings of a FAQ for comp.graphics.animation now exists.  Download it
+from rtfm.mit.edu in /pub/usenet-by-group/comp.graphics.animation.  The
+author/editor is Angus Y. Montgomery (rcsaym@minyos.xx.rmit.EDU.AU).
+	Eric Haines
+
+--------
+
+WWW CG FTP list (enough acronyms for you?)
+
+There is a Web version of the Computer Graphics FTP list, the URL is:
+	http://www.actwin.com/grg
+
+("grg" is Graphics Resource Guide, which right now consists of the CG FTP
+list, will be expanded with other data as I receive/collect it).
+	Jay Laird (jaide@looney.actwin.com)
+
+--------
+
+RenderWare
+
+We have set up an anonymous FTP site with RenderWare information and
+demonstrations.
+
+The site is        ftp.canon.co.uk
+
+Those of you who haven't seen it can download the windows Dungeon demo "rwmaze".
+
+pub/renderware/ms-windows/demo/rwmaze.zip
+
+all of these are pkzip archives and should be decompressed using pkunzip -d.
+	Mike King, Criterion (mking@criterion.canon.co.uk)
+
+[Yes, it's not ray tracing, but this is the most amazing thing I've seen all
+year, Doom included.  It's slower than Doom, but it moves along even on my
+dinosaur 386/25 (no FPU) and there are no tricks in limiting the view to a
+certain orientation - true 3D rendering in real-time {NT users:  the demos
+won't work for you, just Windows 3.1.  There are also full-screen DOS-only
+versions of the demos; haven't tried these under NT}.  There are some odd
+little rendering artifacts, but for speed this seemed to beat the pants off of
+OpenGL on Daytona, from what little I've seen.  -EAH]
+
+--------
+
+World Render 3D
+
+There is a software package for Windows called World Render 3D which converts
+from many to many different 3D scene formats.  It also has various scene setup
+and editing tools.  I have uploaded a demo to wuarchive.wustl.edu:
+/pub/msdos_uploads/win_graphics/wr3ddemo.zip.  Unfortunately, the demo does
+not save files (which is understandable as a crippling method, but it's also
+the feature that's most interesting about the package).
+
+From the description file:
+
+World Render 3D supports the reading and writing of files in Sculpt 3D/4D,
+DXF, VideoScape, 3D Workshop, Script, Imagine, TART, Lightwave, 3D Studio, DBW
+2.0, NapCad 3D, RAW, NFF, POV1.0, VIVID 2.0, Envisage, Sculptura, Wavefront
+and native World Render 3D formats.  Object primitives not directly supported
+by a target format are automatically decomposed into a triangle mesh
+representation.
+
+Contact Ron Praver <rpraver@gate.net> (Mazar Software, 305-936-9290) for more
+information.
+	Eric Haines
+
+--------
+
+Bitmap Textures for 3D objects
+
+> I'd like to known if I can find bitmap textures for 3D objects.
+
+FTP anonymously to ftp.cdrom.com and look in /pub/aminet/wb.  I'm pretty sure
+that this is the right directory...  Anyway there are 5 volumes of 'WallPaper'
+for the WorkBench background.  I think it's about 65-70 files in all...  These
+are mostly IFF images, which make great textures for ray tracing.  I use many
+of these for my objects in Real3DV2.
+	Dean Pompilio (dean@cssmp.corp.mot.com)
+
+--------
+
+From comp.binaries.ibm.pc, posting-number Volume 25, Issue 075:
+
+This is POV-Ray ray tracer for IBM's.  It runs in 32-bit protected mode with
+the included dos extender.  I am fairly certain this is only compatible with
+486 DX and DX2's.  It's at least 2 times faster than the standard mode
+compilation of pov-ray.  Enjoy.  [FTP from ftp.uml.edu in cbip/volume25/075/
+pov20z4y/*]
+	Ritchie Hunt (unicorn@acs.bu.edu)
+
+--------
+
+There is a new version of the enhanced Standard Procedural Databases package,
+due to the efforts of Eduard Schwan, Philipp Slusallek, and myself.  The SPD
+package (which generates various standard test scenes for testing ray tracer
+efficiency) now outputs RIB and DXF format files, and there are now both DXF
+and NFF reader programs to convert from these formats to many others (POV,
+Rayshade, etc etc).  The model generators themselves have not changed, nor
+have the previewing capabilities.  FTP from princeton.edu in pub/Graphics/SPD
+(there are also PC and Mac versions there).
+	Eric Haines
+
+--------
+
+Lego Rayshade Images and Files
+
+I've uploaded ray_car.gif to earthsea.stanford.edu in pub/lego/uploads.  It is
+a computer generated instruction sheet for building a small LEGO racecar,
+mostly to demonstrate the new wheel and tire pieces in my LEGO modeling
+library for Rayshade.  The source to create the image is in
+pub/lego/cad/click/examples/car, plus you will need the file
+pub/lego/cad/rayshade/legolib.ray and the Click compiler (and Rayshade, of
+course).  Image splicing and the shaded background were done with tools from
+the URT toolkit.
+	Paul Gyugyi (pjg@tesla.esl.com)
+
+--------
+
+Walnut Creek CD ROMs
+
+These guys are masters at grabbing stuff off of the Internet and putting it
+on disks.  They'll be publishing Chris Cason's ray tracing disk.
+
+The most current version of [the Walnut Creek] catalog is available via
+anonymous ftp from ftp.cdrom.com:/pub/cdrom/catalog, by fingering
+info@cdrom.com, or you can request it by sending email to (the human at)
+info@cdrom.com.
+
+--------
+
+Palette Selection
+
+>I am doing images that will/may be incorporated into
+>a computer game with a specific palette. The results I get when I use
+>piclab, image alchemy, etc just aren't good enough "most" of the time.
+
+You aren't going to get acceptable results with Image Alchemy, from my
+experience.  Piclab generally works quite well, but it does have certain
+situations where it falls on its face.  Stephen Coy's CONVERT is my favorite
+in general.  Try using DTA to create a common colormap from all of the Targas.
+	Dan Farmer (Dan.Farmer@TGA.damar.com)
+
+--------
+
+Amiga Rayshade Port
+
+I've uploaded my amiga port of rayshade 4.6pl2enh2 on aminet.  I believe it is
+much more complete than the previous port.  It can be found in
+gfx/3d/RayShadeNew.lha, and is 1.1M big.  The archive contains source,
+documentation, example files, and binaries compiled for a 68020+68881 or
+higher configuration.
+
+Among the new features of this port are:
+
+* Utah RLE support.
+* Several RLE utilities.
+* CPP support.
+* Raypaint.
+* Numerous patches from the rayshade mailing list.
+* Improved memory allocation that permits rayshade to allocate up to twice the
+  amount of memory than with the standard memory allocator.
+* -L switch to invoke the SAS/C preprocessor, if you have it. Slower than GNU
+  cpp, but can preprocess things like #include "huge_file", on which cpp
+  runs out of memory on the Amiga.
+
+	Kriton Kyrimis (kriton!kyrimis%theseas.ntua.gr@Princeton.EDU)
+
+----
+
+Bresenham and Convex Polygon Renderer Code [soon...]
+
+I just sent an article to PCVR magazine that covers [Bresenham's line drawer
+and more].  It includes working, tested, source code for a fixed point convex
+polygon renderer.  It will appear in a few months :-( until then I can't post
+anything from the article because PCVR has first publication rights.
+
+The source code from previous issues of PCVR is starting to show up on the net
+and it is available from their BBS.  There are some real gems in there.  [does
+anyone know more about this, i.e. where PCVR is located?  -EAH]
+	Bob P.  (bobp@bga.com)
+
+-------------------------------------------------------------------------------
+
+POV-Help, by Chris Cason (cjcason@yarrow.wt.uwa.edu.au)
+
+POV-Help is about to be released and I need some people to beta test it.
+
+POV-Help is a hypertext help reader that runs under DOS and can pop-up over
+your editor (or run stand-alone.)  It provides an on-line reference to both
+the official Docs and the POV-specific FAQ.  This is convenient when coding
+new scenes, especially if you are new to POV.
+
+If you want a copy, please email povray@yarrow.wt.uwa.edu.au with the message
+SEND POVHELP in the body.  If you don't hear back it's probably because your
+address bounces our replies.  Please don't distribute copies yet, and please
+DO let me know of any problems.
+
+-------------------------------------------------------------------------------
+
+Lenticular 3D, by Keith Rule (keithr@europa.com)
+
+A while back I asked for some help finding a lowcost service bureau for
+creating lenticular 3d images.  I got several interesting replies so I thought
+I would answer some of questions folks asked.
+
+1) What is lenticular 3d?
+
+   It is a process that allows 3d images to be made with a plastic prizmic
+   face and several image behind.  This allows different images to be view by
+   each eye giving a 3d effect without any special viewing device.  There are
+   currently a couple of cameras on the market the allow lenticular images to
+   be photographiced.  They are manufactured by ImageTech (404) 416-8848 and
+   are less than $100.
+
+   [Sorry if this is completely technically accurate, I'm not expert on this
+    process]
+
+2) Why can't take photos off of the computer screen or use a ordinary service
+   bureau to create lenticular images?
+
+   I want to use the ImageTech consumer lenticular process (because it's very
+   inexpensive at ~$1 per 4x5 image).  They require a 35mm negative in an
+   unusual format (3 consecutive half-frame images with very specific
+   spacing).  This is an unusual request for most service bureaus.
+
+I finally found a fellow who can create the appropriate negative from 3
+2048x1536 Resolution TARGA files.  His charge is $75 and his turnaround time
+is suppose to be around a week.
+
+If you are serious about creating a lenticular image from your renderings drop
+me a note and I will send you the name of this fellow (please be serious about
+this - this guy does this part-time so doesn't need to be bothered by
+looky-loos).  He will create the negative you need for ImageTech's lowcost
+process.
+
+-------------------------------------------------------------------------------
+
+POV Official News, Issue #1, POV Team (povray@uniwa.uwa.edu.au)
+
+[I normally won't include these, since you can retrieve them from the various
+archives; since this is the first, it seemed worthwhile.  -EAH]
+
+This is the first of a series of irregular bulletins about POV.  This is an
+official POV-Team publication.
+
+They will be issued only when there is sufficient news to report to make it
+worthwhile, and will be posted to comp.graphics and comp.graphics.raytracing
+from time to time.
+
+Responses to this article should be placed in comp.graphics.raytracing to gain
+the attention of the POV-Team.  A POV-Team member usually checks this every
+couple of days.
+
+Email to Team Members
+=====================
+
+Recently, a couple of incidents have occurred where users on the internet
+have emailed large files to POV team members on Compuserve.  POVDOC requests
+that this NOT be done without prior arrangement.  Compuserve charges on a
+per-kilobyte basis for such mail and the most recent occurrence cost the
+POV-Team member in question US$30.00 in charges.  What's worse, most of the
+information sent (a custom version of POV complete with all source, scene
+files, &c) was redundant.  PLEASE ask first before sending any large email to
+anyone on Compuserve !!!
+
+New POV FTP Site.
+=================
+
+The main official site for POV is alfred.ccs.carleton.ca (134.117.1.1).
+
+uniwa.uwa.edu.au [now ftp.uwa.edu.au] in pub/povray is the new official
+secondary distribution site for official POV-Ray files.  It also carries a
+good selection of unofficial files (but no unofficial compiles).
+
+uniwa, BTW, is a hub so should give you pretty good response.
+
+If you want to get POV but are unsure of what files you need, grab POVINF.DOC
+from one of the abovementioned sites.
+
+A listing of some of the more relevant current contents of uniwa may be
+obtained by performing a finger on povray@uniwa.uwa.edu.au, or by retrieving
+the file CONTENTS_PLEASE_READ from uniwa.
+
+Some utilities of note - MORAY (1.5 of course !), SUDS, CTDS, POVCAD, TGA2GIF,
+TTG, DXF2POV and RAYLATHE, just to mention a few.  The contents file gives a
+more specific description, explaining what each one does.
+
+The uniwa site is also currently mirrored (once a week, on Sundays) at
+wuarchive.wustl.edu in /graphics/graphics/ray/pov/official-archive.
+
+We can't guarantee how up-to-date this mirror is as we do not have control of
+the mirroring process, but expect that it will be pretty good.
+
+Image of the Month !
+====================
+
+The image of the month for April is FROSTY by Dan Farmer, a POV classic !
+This image also featured in the book Ray Tracing Creations by The Waite Group.
+it is available at the below site as IMAGE_OF_THE_MONTH.TGA/JPG, 800x600x16m.
+Looks even better if you have a hicolour or truecolour card !
+
+It is also available in the HALL_OF_FAME subdirectory as FROSTY.GIF.
+
+For those with Compuserve access, a full range of high-quality images done
+with POV-Ray and other raytracers can be found in GRAPHDEV section 3, 'Hall of
+Fame'.  Since the POV-Team is based on Compuserve and not the internet,
+GRAPHDEV is the best place to get up-to-date POV info, though the uniwa and
+carleton sites will be maintained on a regular basis.
+
+Official Files
+==============
+
+The most current POVDOC*.???, POVSCN*.???, POVIBM*.EXE and POVSRC*.???  files.
+These are in the top-level directory, pub/povray.  Only official files are
+found here.  Unofficial files are in subdirectories.
+
+All official archives have the current version appended to them, therefore,
+POVDOC.ZIP is POVDOC-2.2.ZIP.  Note that all files are actually stored as
+lower-case ; the use of capitals is just for this newsletter.
+
+Hall Of Fame
+============
+
+The above FTP site has a HALL_OF_FAME subdirectory containing a selection of
+some of the best images around today !  Mike Miller and Truman Brown feature
+strongly.
+
+You are encouraged to provide submissions for this library, the only
+requirement being that the image is traced with POV-Ray.
+
+Truman Brown's WOILD series features strongly, and I encourage people to check
+them out.  The source for some of these is available and I will put it up if
+there is enough requests, and the author OK's it.
+
+Images have more chance of remaining on the site permanently if they have a
+scene file accompanying them.  Incoming scenes should have a description (in a
+.TXT file or zipped up with the scene) and can be placed in incoming/scenes.
+
+Retrieve CONTENTS_PLEASE_READ or finger povray@uniwa.uwa.edu.au for more
+detailed submission criteria.
+
+Images/Scenes
+=============
+
+Apart from the above, there is an images and scenes (image source) sub-
+directory for non-Hall Of Fame-type images.  Contributions most welcome.
+
+BinHex files
+============
+
+Several MAC users have had problems downloading the current MacBinary SEA
+archive format on the internet, and have requested binhex'ed files to be made
+available instead.
+
+Official binhex'ed archives have been produced and are up at uniwa now.  If
+anyone has problems with these files, please let us know.
+
+Help Reader
+===========
+
+An official POV-Ray hypertext-based help system has been produced and will be
+released once the current work on FAQ's (both here and on Compuserve) has been
+completed.  Designed to be portable, the reader currently only runs under DOS
+but will probably be ported to UNIX as soon as time is available to do so.
+
+The help database itself is portable and eventually will probably have back
+ends to create native (i.e. Windows, Mac) help files as well.
+
+-------------------------------------------------------------------------------
+
+A Quick Explanation of Radiosity Computation vs. Output, by Steve Hollasch
+	(hollasch@kpc.com)
+
+    Solving for radiosity is a separate pass from rendering the resulting
+scene.  Any system that can display realtime graphics (with Gouraud shading)
+can display a realtime session derived from a radiosity solver.  Thus, you
+basically wait a bit for the radiosity solution of a scene, and then you take
+the resulting geometry and view it in realtime.  [As a bonus, no shading
+equations have to be computed for the scene during display, as the colors are
+attached to the vertices of the polygons output.  This often means radiosity
+output is faster than databases shaded on the fly.  -EAH]
+
+    This is true for classic radiosity, anyway, since it's independent of
+view.  However, some hybrid approaches which also incorporate specular
+reflection, true reflection, or refraction are view-dependent, and so require
+extra footwork to do the viewing.  In addition, some systems allow for
+interactive adjustment of the lighting parameters (e.g. light color or
+intensity), which means that the radiosity solution has to be recalculated.
+
+-------------------------------------------------------------------------------
+
+A Grand Unified Modeller (GUM), by Lex van der Sluijs
+	(Alexander.vanderSluijs@stud.io.tudelft.nl)
+
+After nearly a year of hard work I am very proud to present to the world
+
+	       GUM - A Grand Unified Modeller (to be)
+
+A direct-manipulation-based 3D modeller that exports to POV, Polyray  and Rayce.
+
+Some highlights:
+ - CSG evaluation
+ - realtime pan, zoom and camera operations
+ - select by pick, window, crossing, hierarchy-view
+ - grid, snap
+ - very flexible fastdraw (full, skip, box, multiple viewport)
+ - printing
+ - metafile export
+ - (almost) full shell of all raytracers (also exports batchfile)
+ - realtime bezier patch editing
+ - all transformations available in user-view and multiple orthogonal views
+ - user-definable boundary representations for objects with a surface.
+ - text-based texture editor for all tracers, also reads available texture files
+ - imports RAW.
+
+Platform: Microsoft Windows 3.1 or 3.11
+System requirements: resolution 800x600 or higher. 4Mb should do. CoPro.
+486 (highly) recommended
+
+The demo is free but there is a limitation to the maximum number of objects
+that can be saved of 25.
+Special introductory price: $50
+
+Gum has been uploaded to:
+
+Internet:
+wuarchive.wustl.edu      \pub\msdos_uploads\win_graphics\gum_0b8.*
+alfred.ccs.carleton.ca   The upload has yet to be validated.
+
+BBS:
+CAD BBS Amsterdam +31-20-6861533
+
+The author's address:
+Alexander.vanderSluijs@stud.io.tudelft.nl
+2:281/500.4 in Fidonet
+or leave a message on the above BBS to Lex van der Sluijs
+
+[This thing takes a little messing around to set up, but seems pretty cool.
+EAH]
+
+-------------------------------------------------------------------------------
+
+New (at least to me) Bulletin Boards, collected by Eric Haines
+
+The Tackle Box BBS (405) 359-3301
+
+100% DEDICATED to Ray Tracing!!!!
+
+Over 2 GIG online with 40 file areas.  Now featuring the 'Tracers and Tracings
+CD-ROM'!!  Now over 5,500 files!!!
+
+File areas include:  Graphics Programs, Ray Traced Images, Hall of Fame
+Images, POV-Ray scene files, POV-Ray utilities, POV-Ray Modelers, Graphics
+Converters, Ray Traced Animations, OBJ objects such as Viewpoint Engineering
+(from avalon site), Textures, Fractal Programs, Virtual Reality, Graphics
+Source code, and MUCH MORE!
+
+Access is FREE with downloads on the very first call.  Subscriptions are
+available for only $20 for a whole year.  (70 min/ 2MEG per day)
+
+The Tackle Box BBS is the largest Ray Tracing and Graphics BBS in the entire
+SouthWest, providing support for the OKC PC-User's group on Graphics and Ray
+Tracing.  Why not check it out??
+
+2400-14.4 baud, 24 hours a day.
+
+Neil Clark
+SysOp - SIG Leader
+E-Mail: clark@qns.com
+
+--------
+
+Eminent Illusion BBS
+
+	O
+      //\/
+RUN! \/\....... To The Eminent Illusion BBS for Windows 3.1
+(Dedicated to computer graphics thru advanced mathematics)
+
+		  (513) 866-8181
+
+A _NEW_ Ray-Tracing Site.  We support POV and PolyRay.  A User Group is
+forming for local traceaholics and fractal fanatics.
+
+If you are a traceaholic, _PLEASE_ upload IBM specific utility programs and
+.POV or .PI scene files.  No GIFs or .TGAs please.  Still waiting on my big
+hard drive for those <G>.
+
+No hassle registration.  You call, your registered.  Nuff said.  90 min/day
+(On first call!)  and 2 meg daily DL limit.  NO RATIOS, No fees.  Got money,
+want friendly users.  Currently servicing 138 members from around the country.
+
+CICA (Center for Innovative Computer Applications) CD now on line (current
+thru 12/93).  We also carry lots of custom Ray-Traced GIFS.
+
+Anxiously awaiting your handshake at 2400 to v.32bis (14.4k)
+
+	  486DX-33 and U.S. Robotics
+
+The most exciting BBS software to come into existence is Excalibur.  It is a
+true Windows GUI, written for Windows, requiring Windows.  I am a site beta
+tester.  Use of the board requires a dedicated terminal program which will be
+automatically downloaded on your first call.  Now supporting Zmodem
+downloading of the terminal program.  Once you have seen the board, you will
+wonder why it took so long.
+
+The system offers graphics *Previews*, view GIFs while downloading.  True
+multi-tasking BBS!  Upload and Download simultaneously!  Read or write
+messages while D/Ling and it's all point and click.  No menus to memorize.  No
+more waiting for downloads to finish before doing something else.  Sound
+support using .wav files.  No sound card needed.  Screen updates faster than
+ANSI or RIP.  It's FANTASTIC!
+
+Full 24 hour operation. Sometimes down 9am-12am M-F EDT (maint)
+
+30,000 files available.  Always 700 meg on line.  1 gig and second node coming
+in May.  FIDO and Usenet by September.
+
+BTW, If you run Windows under OS-2, you will be able to call.
+
+--------
+
+For those of you into ray tracing...  There is a BBS in San Diego, CA, that
+has a lot of support programs for making images of this type.  I would give
+more info but I don't know much about the programs that are involved.  Here is
+the bbs # (619)426-7760 [Anyone know the name of this one? -EAH
+	Shadowhawk (shdwhawk@netcom.com)
+
+-------------------------------------------------------------------------------
+
+GemCAD Review, by Greg Prior
+
+[something that popped up on rec.crafts.jewelry - EAH]
+
+Clive Washington (pazcw@unicorn.ccc.nottingham.ac.uk) writes:
+>... Do you mean there's a
+>computer package to design facet cuts?  Could you mail me the
+>supplier's address so I could get some details, please? I'd need
+>a Mac version.
+>
+
+GemCAD is a shareware program.  There is no version for the Mac, however the
+custodian for this list, Tom Greenwalt (tomg@mishima.mn.org), has a copy of
+the DOS version available to download.  There are also some design files.  We
+would like to see this library build up if you care to make any contributions.
+I almost always do my design first in GemCAD before cutting.  This allows me
+to cut the stone once on the computer before learning on the real thing!  It
+also makes for easy tangent-ratio angle conversions, and ray tracing to
+optimize for brilliance.
+
+Or you can get it direct for $50 + $5 for international shipping from the
+author:
+
+Robert W. Strickland
+6408 Earlyway Dr.
+Austin, TX 78749
+(512) 892-1887
+
+He has several add-on modules available too:  "Raytrace" and a couple of
+print/plot utilities.
+
+-------------------------------------------------------------------------------
+
+A Summary of the Reyes Algorithm, by Steve Demlow (demlow@cis.ohio-state.edu)
+
+[I thought this summary would be useful for people who don't really know how
+RenderMan works - it's a unique architecture.  -EAH]
+
+REYES refers to a system based on 'micropolygon rendering', wherein all
+primitives are broken down into small polygons which are of size ~ 1/4 pixel
+in image space and rendered using a scanline technique.  Texture mapping is
+then used to get all the nifty effects associated with high- quality
+rendering.  There is no ray tracing involved, since one of the stated goals of
+the REYES system was to render images quickly - a full length feature in a
+year, or roughly 3 minutes per image.  The '87 REYES paper refers to the Cook
+paper regarding motion blur and the other nifty stuff that Cook used ray
+tracing for, but Cook also mentioned that the same ideas were applicable to
+scanline renderers.
+
+-------------------------------------------------------------------------------
+
+Version 1.7 of Polyray Available, by Alexander Enzmann
+	(70323.2461@CompuServe.COM)
+
+Polyray is a rendering program for producing scenes of 3D shapes and surfaces.
+Polyray supports raytracing, polygon scan conversion, wireframe preview, and
+raw triangle output.  All the normal primitive objects are supported (box,
+sphere, cone, ...).  Many more advanced primitives are also supported:  height
+fields, Bezier patches, NURBS, arbitrary functions of three variables,
+parametric surfaces, TrueType style glyph objects...
+
+Texturing is provided using standard shading models for your favorite plastic
+look, as well as textures based on runtime variables (some folks call this
+sort of thing shaders).
+
+The files associated with Polyray are distributed in several archives:
+
+   PLYEXE.ZIP - Executable requiring a 386/387 or 486DX
+   PLY386.ZIP - Executable that will run on any 386 or 486SX
+   PLYDOC.ZIP - Documentation
+   PLYDAT.ZIP - A whole bunch of sample images and animations, ready to
+		render
+   PLYUTL.ZIP - A couple of useful utilities (necessary to extract
+		TrueType font information into a form Polyray can use)
+
+You want all of them.
+
+The following lists some of the more significant enhancements made to Polyray
+since version 1.6.
+
+     o  Parametric surfaces.
+     o  Bump maps
+     o  Support for JPEG  and GIF images in textures, etc.
+     o  Can now call an external program from within Polyray (system).
+     o  Significantly enhanced the "function" object.
+     o  Added NURBS objects.  (Sorry, no trim curves yet.)
+     o  Added a glyph object to support TrueType style extruded
+	surfaces.
+     o  Support for simple particle systems.
+     o  Many VESA display modes now supported
+     o  Way better antialiasing
+
+If you registered a previous version then you should be getting a floppy in
+the mail.  Please contact me if it doesn't get there.
+
+-------------------------------------------------------------------------------
+
+Use of External Program Calling for Polyray, by Alexander Enzmann
+	(70323.2461@CompuServe.COM)
+
+[I asked, "What's the external program calling used for?" in the new Polyray]
+
+During the course of an animation you may want to invoke another program to
+create include files.  This can be accommodated by using something like the
+following lines in the data file:
+
+   ...
+   system("foo ", frame, " > foo.inc")
+   include "foo.inc"
+   ...
+
+Polyray calls the program (using DOS) with the current value of the frame
+counter passed to it.  The resulting output gets dumped into foo.inc.  The
+next line tells Polyray to parse the contents of foo.inc.  I've used this in
+conjunction with a C program to make data and CTDS to process the data and
+generate the include file.  An excerpt is:
+
+   // Call the program "spiral2" with both the frame number and the
+   // total number of frames in the animation.  The output will be
+   // data ready to go for CTDS
+   system("spiral2 ", frame, " ", total_frames, " > spiral2.ctd")
+
+   // Call CTDS to process the data created by the spiral program.
+   // The object will have the shiny_red texture
+   system("ctds -i spiral2.ctd -o spiral2.inc -p -tu shiny_red")
+
+   // Now read in the data created by CTDS
+   include "spiral2.inc"
+
+The program spiral2 creates points and radii on a nice loopy shape.  The radii
+are modulated by a sine wave over the course of the animation.  The code is:
+
+main(int argc, char *argv[])
+{
+   double a = 10.0;
+   double b =  5.0;
+   double c =  5.0;
+   double x, y, z, t, r, theta, phase;
+   int frame_num, frame_count, steps = 1024.0;
+
+   frame_num = (argc > 1 ? atoi(argv[1]) : 0);
+   frame_count = (argc > 2 ? atoi(argv[2]) : 60);
+   phase = 2.0 * M_PI * (double)frame_num / (double)frame_count;
+
+   for (theta = 0.0;
+	theta < 2.0 * M_PI;
+	theta += 2.0 * M_PI / steps) {
+      t = sqrt(1 + c * c * cos(a * theta) * cos(a * theta));
+      x = b * t * cos(theta);
+      y = c * cos(a * theta) + 6;
+      z = b * t * sin(theta);
+      r = 1.25 + sin(3 * theta + phase);
+      printf("%f %f %f %f\n", x, y, z, r);
+      }
+}
+
+Clearly, since the program is invoked for every frame and DOS doesn't support
+concurrent processes & pipes, the external program either has to be able to
+create all the information given only frame number, or it has to have its own
+persistent store of intermediate results.
+
+-------------------------------------------------------------------------------
+
+POV-Ray Legal Stipulations Correction, by Dan Farmer <70703.1632@CompuServe.COM>
+
+In Peter Campbell's article on Optimized POV, you (trying to cover our butts,
+I'm sure) claimed that "the POV developers have asked that exe.s other than
+theirs not be distributed..."
+
+Well, that's no longer entirely true.  As of the 2.0 release, the legal
+stipulations about distributing executables have been made a bit more
+tolerant.  We now allow them to be distributed, but only under the conditions
+explained in the POVLEGAL.DOC file.  In essence, the stipulations state that
+the user must support the compilation, must use a special header file that
+includes information about how to contact the originator, and must contain the
+full distribution package.
+
+BTW, I agree with Peter that the DJGCC version is almost as fast as the Watcom
+version, with fewer problems.  That's what I do all of my POV compiling with.
+Watcom compiles have been subject to drastically overrated benchmarks in the
+past.  One reason for this is that certain chipsets (OPTI 486/33 is one, I
+think the other is called Symphony or something similar) have a known problem
+with the ICB compiler that causes ICB programs to run at about 1/2 the speed
+that they run on other chipsets.  I personally had this problem with the OPTI
+set until I upgraded to a 50 MHz motherboard.  Upon checking with these Watcom
+worshippers, I learned that they often had an OPTI chipset.  I'd recommend
+that these folks get ahold of a DJGCC version.
+
+-------------------------------------------------------------------------------
+
+3D Graphics Book List, by Brian Hook (bwh@beach.cis.ufl.edu)
+
+{All is the opinion of the author and no one else}
+
+[A long article, but I haven't had a full book summary of the classics here
+in years, and there are also some mentioned which I've never seen. -EAH]
+
+In the course of attempting to write games, simulators, and virtual reality
+applications for the PC I've run across an amazing lack of information on how
+to program 3D graphics.  The problem, actually, wasn't LACK of information, it
+was lack of information that told where the information I needed WAS!  So, in
+an attempt to help other budding 3D programmers get the necessary literature
+for programming, here is a list of books that I've found useful.
+
+Some of these references were taken from the comp.graphics FAQ, but the
+reviews were done by myself.  I am personally interested in interactive
+real-time 3d graphics, so stuff on advanced rendering, radiosity, or
+raytracing is not of huge significance.  [even so, the reviews do cover books
+in these areas. -EAH] I have not seen many of the "Bibles" of graphics --
+Newmann and Sproull, Burger and Gillies, etc.  but I hear they are invaluable
+so they may be worth a peek.  I could special order them, but I don't have 50
+bucks lying around just to take a risk.
+
+GRAPHICS BOOKS:
+
+*   Advanced Animation and Rendering Techniques, Alan Watt, Mark Watt,
+Addison-Wesley 1993, ISBN 0-201-54412-1
+Computer Graphics:  An Introduction to the Mathematics and Geometry,
+Michael Mortenson, Industrial Press 1989, ISBN 0831111828
+*   Computer Graphics: Principles and Practice (2nd Ed.), J.D. Foley,
+A. van Dam, S.K. Feiner, J.F. Hughes, Addison-Wesley 1990, ISBN
+0-201-12110-7
+*   Mathematical Elements for Computer Graphics 2nd Ed., David F. Rogers
+and J. Alan Adams, McGraw Hill 1990, ISBN 0-07-053530-2
+*   3D Computer Graphics 2nd Ed., Alan Watt, Addison-Wesley 1993, ISBN ????
+*   3D Computer Animation, John Vince, Addison-Wesley 1992
+*   Flights of Fantasy, Chris Lampton, The Waite Group 1993, ISBN
+1-878739-18-2
+Graphics Gems, Andrew Glassner (ed.), Academic Press 1990, ISBN
+0-12-286165-5
+Graphics Gems II, James Arvo (ed.), Academic Press 1991, ISBN
+0-12-64480-0
+Graphics Gems III, David Kirk (ed.), Academic Press 1992, ISBN
+0-12-409670-0 (with IBM disk) or 0-12-409671-9 (with Mac disk)
+*   Procedural Elements for Computer Graphics, Osborne McGraw-Hill 1985
+0-07-053534-5
+
+* I personally have seen/used/own this book
+
+OTHER USEFUL BOOKS:
+
+Programming graphics (especially real-time graphics) involves a lot of
+optimization and efficiency considerations, which means that to program
+graphics well you must be able to PROGRAM well.  Some other books on
+programming that I have either heard rave reviews about or, even better, I own
+and consider invaluable, are listed here with a very short description.  Skip
+this part if you don't care (but you owe it to yourself to at least give these
+books a look).
+
+The Art of Programming, vols. 1-3, Donald Knuth, Addison-Wesley
+
+THE Holy Trinity of programming in general.  I don't own any of the three
+books, mostly because I don't have 150 dollars handy.  The books, however, are
+considered classics and have some of the most exhaustive analyses of various
+algorithms in print.
+
+*	The Mythical Man Month, Brooks, Addison-Wesley
+
+A wonderful book on how to and how NOT to manage a large project.  Not of much
+use to a single programmer, but for someone who must program as part of a team
+this book is a MUST have.  Very entertaining reading.  Dated, but relevant
+nonetheless.
+
+*	Introduction to Algorithms, Cormen, Leiserson, and Rivest,
+McGraw-Hill
+
+A great book on algorithms and data structures....more digestible than Knuth's
+"Art of Computer Programming" and more up to date, but not quite as
+comprehensive...sort of a "Knuth Lite" if you will.  I've found it to be my
+primary reference on algorithms and data structures.
+
+*	Algorithms (in C/C++), Robert Sedgewick, Addison-Wesley
+
+Considered a modern day classic, there are actually three books:  Algorithms,
+Algorithms in C, and Algorithms in C++.  They are the same book, just in a
+different language.  I am familiar with the "Algorithms in C" book.  It is has
+some bugs in the code, and the text can be a little terse, but it is still a
+useful book.  More implementation oriented than "Introduction to Algorithms"
+-- sort of a "Knuth Lite Lite".  Used to be my primary book on algorithms
+until "Introduction to Algorithms" kicked it out of first place.  Still a good
+book though, and I refer to it a lot.
+
+*	Programming Pearls and More Programming Pearls, Bentley, ????
+
+Great books -- kind of pricey though.  Litte anecdotes and stories about
+programming "way back when", but some of the lessons on optimization and
+invaluable for day to day programming tasks.  Really good books, but just kind
+of expensive for their size (they're more like pamphlets really).  If you have
+some extra dough, buy these books, but they aren't real necessary.
+
+*	The C Programming Language, 2nd Ed., Kernighan and Ritchie,
+Prentice-Hall
+
+If you don't know C, buy this book NOW.  Great C reference, eminently
+readable.  Wonderful wonderful book.  If you do know C already, then you
+probably already OWN this book.  If you are learning C and trying to do it
+with some lame SAMS/Que/MIS Press/M&T/Wiley/McGraw-Hill cheezy trade paperback
+with a title like "Using Borland C++" or "C in 21 days" or "Learning C" or
+"Using C" or "Learning C by Example" then you are doing yourself a disservice.
+Get this book instead.
+
+[p.s. personally I like Harbison and Steele's _C:  A Reference Manual_,
+Prentice Hall, for reference - EAH]
+
+
+*	The C++ Primer, 2nd. Ed., Stan Lippman, Addison-Wesley
+
+Everything that goes for "The C Programming Language" above applies here also.
+I like this book a bit more than Stroustrup's "The C++ Programming Language"
+but to each his own.
+
+*	Advanced C++, 2nd Ed., Coplien, Addison-Wesley
+
+Great book on using C++ to solve real-world problems.  Invaluable if you are
+trying to write a graphics package in C++ and need to balance ease of use,
+readability, "correctness", and efficiency.  Pretty bad indictment of the C++
+language, actually, since it shows the ugly messes that you have to go through
+in order to make C++ act like a true OOP language like Eiffel, Sather, or
+Objective-C.
+
+Okay, now onto the graphics stuff....
+
+OVERVIEWS:
+
+Most of these books assume that you have a fairly firm grasp of trigonometry,
+matrix and vector math, and possibly some other stuff.  Some of the books give
+a quick summary of the above, and Flights of Fantasy sort of weasels out on
+the whole deal by letting you ignore the nitty gritty math stuff -- but be
+forewarned, Flights of Fantasy is pretty weak material as far as "advanced"
+stuff goes and you probably won't learn a lot from it beyond the very basics.
+
+The books are categorized as either being BEGINNER, INTERMEDIATE, or ADVANCED.
+Simple test (pretty crappy one, but it works for now):  see how many of the
+following phrases you are VERY familiar with -- i.e. you know the literal
+definition of it.
+
+plane equation
+dot product
+cross product
+normalized/unit vector
+normal to a plane
+matrix inverse
+identity matrix
+similar triangles
+parametric equation
+linear interpolation
+column vs. row major matrices
+right-hand/left-hand coordinate system
+orthogonal matrix
+orthonormal matrix
+pure rotation matrix
+
+BEGINNER:	0-5
+INTERMEDIATE:	6-10
+ADVANCED:	11-15
+
+WARNING:  STAY AWAY FROM BOOKS WRITTEN BY LEE ADAMS.
+
+Lee Adams' books suck suck suck suck suck.  Bad.  Period.  I cannot stress to
+you how badly his books suck.  The code is horrible, the text is horrible, the
+performance of his code is horrible, his algorithms are horrible, EVERYTHING
+about his books is horrible.
+
+--------------------------------------------------------------
+TITLE:		Advanced Animation and Rendering Techniques
+AUTHOR:		Alan Watt and Mark Watt
+PUBLISHER:	Addison-Wesley
+FOCUS:		Photo-realistic images and animation
+LEVEL:		INTERMEDIATE/ADVANCED
+
+This book is by far one of the best books in the field of 3D graphics.  [I
+definitely agree. - EAH] Most of it covers static rendering and ray tracing,
+which means it is not very useful for real-time graphics (like 3D on a PC, for
+example).  The authors don't feel you are in "real 3d animation" territory
+until you have a Z-buffer working and an incremental shading algorithm
+(preferably Phong) with 24-bit true color.  Needless to say, few PCs have ANY
+of the above real-time capabilities.
+
+Even so, the stuff it covers is invaluable and very difficult to find
+elsewhere.  We are talking heavy rendering and ray tracing stuff, volume
+rendering techniques, shading languages, quaternions and Euler angles,
+radiosity, inverse/forward kinematics, etc.  Excellent book, but not very
+useful if you are looking to write only a game (although the chapters on
+segmented object animation would be useful for robots/tanks).
+
+--------------------------------------------------------------
+TITLE:		Computer Graphics: Principles and Practice, 2nd Edition
+AUTHOR:		Foley, Van Dam, Feiner, and Hughes
+PUBLISHER:	Addison-Wesley
+FOCUS:		EVERYTHING
+LEVEL:		ALL
+
+As Knuth's "Art of Computer Programming" is to algorithms, this book is to
+computer graphics.  THE reference.  It covers just about every topic you need
+to know, however because of its scope it is very generalized and so
+information on any one specific topic may be lacking.  Pascal-like pseudo code
+is strewn liberally throughout the book, which is a big help.  Everything you
+would expect in 3D graphics is covered, including shading, ray tracing,
+radiosity, texture mapping, etc.  Once again, it's very generalized and serves
+mostly as a good reference to other material and an overview of individual
+areas.  But at over 1000 pages, it's a must have if you do graphics.  If you
+can afford only ONE book on graphics, get this one.
+
+--------------------------------------------------------------
+TITLE:		Mathematical Elements for Computer Graphics, 2nd Edition
+AUTHOR:		David F. Rogers and J. Alan Adams
+PUBLISHER:	McGraw-Hill
+FOCUS:		Math of computer graphics
+LEVEL:		ALL
+
+Excellent book on curves, patches, and a lot of math.  Does not cover
+rendering at all -- no shading, etc.  It does a lot of theory on
+transformations in general, especially on the basics of matrices and how they
+apply.  Great stuff on projections, too.  Lots of theory.  Don't expect too
+much on object databases or implementation efficiency -- this book is about
+math and theory, not implementation.  Sucks as a reference on rendering
+algorithms, but for modeling in general and math it's wonderful.  Also, it has
+an insane amount of stuff on curves, splines, Bezier curves, NURBS, Coons
+patches, surfaces, and basically anything that has to do with math and
+graphics, get this book.  One of the few McGraw-Hill books I've liked (the
+other is "An Introduction to Algorithms" and Rogers' other book "Procedural
+Elements for Computer Graphics").  This book is great as a companion volume to
+PECG.
+
+--------------------------------------------------------------
+TITLE:		3D Computer Graphics, 2nd Edition
+AUTHOR:		Alan Watt
+PUBLISHER:	Addison Wesley
+FOCUS:		3d Computer Graphics
+LEVEL:		INTERMEDIATE/ADVANCED
+
+This is also one of those classic texts.  The new second edition covers a lot
+of ground.  Watt's style is highly readable, and the code is in Pascal.  A
+complete rendering system (or two) is supplied in the appendices, along with
+the data file for the Utah teapot.
+
+If you do 3d graphics, you MUST have this book.
+
+Interesting note:  the author (and I) prefer the left-handed coordinate system
+because it tends to be more intuitive than the right-handed coordinate system,
+which is preferred by mathematical types.  Watt stubbornly refuses to switch
+to the right-hand coordinate systems (which Foley and Van Dam et.  al.  and
+PHIGS/PHIGS+ have done).
+
+Chapters include:
+
+1.  Three-dimensional Geometry in Computer Graphics
+2.  Representation of Objects
+3.  Viewing systems
+4.  Reflection and Illumination Models
+5.  Rendering Algorithms
+6.  Parametric Representation and Practice
+7.  Shadows and Textures
+8.  Ray Tracing
+9.  Volume Rendering
+10. Radiosity
+11. Anti-aliasing
+12. Functionally Based Modeling Methods
+13. Three-dimensional Computer Animation
+14. Colour Spaces and Monitor Considerations
+A.  Viewing Transformation from a Simple Four-Parameter Viewing
+	System
+B.  A Wireframe System
+C.  An Implementation of a Renderer
+D.  The Utah Teapot
+
+The book has a fairly decent mix of interactive and photorealistic stuff, and
+it is an excellent supplement to the 3d graphics section of Foley and Van Dam.
+Between the two you are pretty well set for 3d graphics.
+
+--------------------------------------------------------------
+TITLE:		3D Computer Animation
+AUTHOR:		John Vince
+PUBLISHER:	Addison Wesley
+FOCUS:		3d Computer Graphics
+LEVEL:		INTERMEDIATE/ADVANCED
+
+Excellent book on 3D animation in general.  Don't get the wrong idea, however,
+because it's not about coding 3D animation libraries.  It's about the field of
+3D computer animation.  It's got a lot of technical stuff and discusses a lot
+of the stuff in the field of 3D computer animation, including packages
+available and the technology involved in the field.  A damned good book, and
+if you do animations then it's a must have.  Some of the algorithms described
+in it are real nice, and since it's recent it's got some good information on
+newer rendering algorithms that some other books don't have.  Highly
+recommended.
+
+--------------------------------------------------------------
+TITLE:		Flights of Fantasy
+AUTHOR:		Chris Lampton
+PUBLISHER:	The Waite Group Press
+FOCUS:		Writing a 3d flight sim for the PC
+LEVEL:		BEGINNER
+
+A lot of controversy has been caused by this book, not because of its content
+but because of widely varying opinions as to its quality.  Personally, I think
+that it is a great beginner's book, however the rendering engine is incredibly
+primitive and inefficient.  It doesn't cover shading, gradient fill sky lines,
+etc.  The renderer iis incredibly crude -- if you are expecting something that
+will let you do a commercial game, keep looking.  It dodges the math bullet
+fairly well, which I don't like since if you REALLY want to know 3D graphics
+then you are going to need to know the math.  A nice thing about the book is
+that it covers some topics that are hard to find elsewhere, such as joystick
+programming, etc.  It doesn't cover advanced video modes (320x240 or 320x400),
+SVGA programming, digitized sound, shading, etc.  A great beginner's book, but
+you'll outgrow it soon enough.
+
+--------------------------------------------------------------
+TITLE:		Graphics Gems I-IV
+EDITORS:	Glassner, Arvo, others
+PUBLISHER:	Addison Wesley
+FOCUS:		ALL
+LEVEL:		INTERMEDIATE/ADVANCED
+
+Some people swear by these books.  I don't know.  They cover a lot of little
+tricks and tips for a lot of little things, but personally I haven't found
+much use for them, but I'm looking only at the interactive 3D side of things.
+Every now and then a friend tells me "Wow, this one little paragraph in Gems
+[X] gave me a huge insight into what I needed to do and now my [program] is
+MUCH faster".  So to be fair, a lot of others have found these books to be
+invaluable.  They cover a bit too much ground for me, so I'm still kind of
+hesitant on recommending them to others since it's not readily apparent if
+they will be helpful to you.  Your mileage may vary.
+
+--------------------------------------------------------------
+TITLE:		Procedural Elements for Computer Graphics
+AUTHOR:		David F. Rogers
+PUBLISHER:	Osborne McGraw-Hill
+FOCUS:		ALL
+LEVEL:		INTERMEDIATE/ADVANCED
+
+This is another book by the author of "Mathematical Elements for Computer
+Graphics".  This book covers a lot of the stuff that MECG doesn't cover.
+Rogers' style is, in my opinion, incredibly dry, but then again, this is a
+reference book and not "Gone With the Wind".  It covers most of the major
+algorithms out there and explains enough where you can get some reasonably
+decent working code from it.  As a basic reference it is EXCELLENT and HIGHLY
+recommended.  However if you own most of the other books (Foley and Van Dam,
+Watt's, Watt & Watt) then this book isn't going to be a big eye opener -- no
+new algorithms are described, so if you know all of the major ones then this
+book is going to be redundant.  HOWEVER, if you haven't started building up
+your library yet, then this book is a great start.  A wonderful computer
+graphics algorithm reference.  Rogers positions this book as the logical
+followup to MECG, and I agree completely.  For example, MECG covers a LOT of
+ground in areas such as coordinate transformations, perspective, etc.  whereas
+PECG doesn't cover ANY of the aforementioned subjects.  It stresses rendering
+algorithms typically at the polygon level, such as hidden line/surface
+removal, shading, etc.  If you don't know your transformations, this book
+isn't going to teach you.  As a quick reference, this book is great, too
+("Gee, how do I implement a scan line Z-buffer again?....").
+
+-------------------------------------------------------------------------------
+END OF RTNEWS

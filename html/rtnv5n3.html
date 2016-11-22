@@ -1,0 +1,1079 @@
+<!-- html version of Volume 5, Number 3 :  -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 5, Number 3</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>September 2, 1992</FONT>
+<P><FONT size=+1>Volume 5, Number 3</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1992, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction
+</A></LI>
+<LI><A HREF="#art2">
+Intersection Between a Line and a Polygon (UNDECIDABLE??),
+</A></LI>
+by Dave Baraff,
+Tom Duff
+<LI><A HREF="#art3">
+Fastest Point in Polygon Test,
+</A></LI>
+by Aladdin Nassar, Philip Walden, Eric
+Haines, Tom Dickens, Ron Capelli, Sundar Narasimhan, Christopher Jam,
+and (last but not least) Stuart MacMartin
+<LI><A HREF="#art4">
+Polygon Intersection via Barycentric Coordinates,
+</A></LI>
+by Peter Shirley
+<LI><A HREF="#art5">
+Many-Sided Polygon Intersection,
+</A></LI>
+by Eric Haines, Benjamin Zhu
+<LI><A HREF="#art6">
+Code for Point in Polygon Intersectors,
+</A></LI>
+by Eric Haines
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction
+</A></FONT>
+</H4>
+This special issue is dedicated to everyone's (well, at least my) favorite
+computer graphics FAQ:  how do you find if a given point is inside a polygon?
+John Griegg's FAQ posting points at _An Introduction to Ray Tracing_, edited
+by Andrew Glassner.  This issue speeds up that algorithm (count the crossings
+of a test ray), and hopefully lays to rest the idea of using the "sum the
+angles" algorithm.  Plus there's a little discussion of what to do for special
+cases such as triangles and complex polygons, and code for four different ways
+to do this test at the end of the issue.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Intersection Between a Line and a Polygon (UNDECIDABLE??),
+</A></FONT>
+        by Dave Baraff, Tom Duff
+</H4>
+<P>
+[To begin this issue,
+here is one of the better pieces of obfuscatory writing in the field of computer graphics. Reprinted from RTNews8 - EAH]
+<P>
+<PRE>
+        From: <A HREF="mailto:deb@charisma.graphics.cornell.edu">deb@charisma.graphics.cornell.edu</A>
+        Newsgroups: comp.graphics
+        Keywords: P, NP, Jordan curve separation, Ursyhon Metrization Theorem
+        Organization: Program of Computer Graphics
+</PRE>
+<P>
+In article [...] <A HREF="mailto:ncsmith@ndsuvax.UUCP">ncsmith@ndsuvax.UUCP</A> (Timothy Lyle Smith) writes:<BR>
+&gt;<BR>
+&gt;  I need to find a formula/algorithm to determine if a line intersects<BR>
+&gt;  a polygon.  I would prefer a method that would do this in as little<BR>
+&gt;  time as possible.  I need this for use in a forward raytracing<BR>
+&gt;  program.<BR>
+<P>
+I think that this is a very difficult problem.  To start with, lines and
+polygons are semi-algebraic sets which both contain uncountable number of
+points.  Here are a few off-the-cuff ideas.
+<P>
+First, we need to check if the line and the polygon are separated.  Now, the
+Jordan curve separation theorem says that the polygon divides the plane into
+exactly two open (and thus non-compact) regions.  Thus, the line lies
+completely inside the polygon, the line lies completely outside the polygon,
+or possibly (but this will rarely happen) the line intersects the polyon.
+<P>
+Now, the phrasing of this question says "if a line intersects a polygon", so
+this is a decision problem.  One possibility (the decision model approach) is
+to reduce the question to some other (well known) problem Q, and then try to
+solve Q.  An answer to Q gives an answer to the original decision problem.
+<P>
+In recent years, many geometric problems have been successfully modeled in a
+new language called PostScript.  (See "PostScript Language", by Adobe Systems
+Incorporated, ISBN # 0-201-10179-3, co. 1985).
+<P>
+So, given a line L and a polygon P, we can write a PostScript program that
+draws the line L and the polygon P, and then "outputs" the answer.  By
+"output", we mean the program executes a command called "showpage", which
+actually prints a page of paper containing the line and the polygon.  A quick
+examination of the paper provides an answer to the reduced problem Q, and thus
+the original problem.
+<P>
+There are two small problems with this approach.
+<P>
+<PRE>
+        (1) There is an infinite number of ways to encode L and P into the
+        reduced problem Q.  So, we will be forced to invoke the Axiom of
+        Choice (or equivalently, Zorn's Lemma).  But the use of the Axiom of
+        Choice is not regarded in a very serious light these days.
+
+        (2) More importantly, the question arises as to whether or not the
+        PostScript program Q will actually output a piece of paper; or in
+        other words, will it halt?
+
+        Now, PostScript is expressive enough to encode everything that a
+        Turing Machine might do; thus the halting problem (for PostScript) is
+        undecidable.  It is quite possible that the original problem will turn
+        out to be undecidable.
+</PRE>
+<P>
+I won't even begin to go into other difficulties, such as aliasing, finite
+precision and running out of ink, paper or both.
+<P>
+A couple of references might be:
+<P>
+1. Principia Mathematica.  Newton, I.  Cambridge University Press, Cambridge,
+   England.  (Sorry, I don't have an ISBN# for this).
+<P>
+2. An Introduction to Automata Theory, Languages, and Computation.  Hopcroft, J
+  and Ulman, J.
+<P>
+3. The C Programming Language. Kernighan, B and Ritchie, D.
+<P>
+4. A Tale of Two Cities. Dickens, C.
+<P>
+________
+<P>
+<PRE>
+From: <A HREF="mailto:td@alice.UUCP">td@alice.UUCP</A> (Tom Duff)
+Summary: Overkill.
+Organization: AT&T Bell Laboratories, Murray Hill NJ
+</PRE>
+<P>
+The situation is not nearly as bleak as Baraff suggests (he should know
+better, he's hung around The Labs for long enough).  By the well known
+Dobbin-Dullman reduction (see J. Dullman & D. Dobbin, J. Comp. Obfusc.
+37,ii:  pp. 33-947, lemma 17(a)) line-polygon intersection can be reduced to
+Hamiltonian Circuit, without(!) the use of Grobner bases, so LPI (to coin an
+acronym) is probably only NP-complete.  Besides, Turing-completeness will no
+longer be a problem once our Cray-3 is delivered, since it will be able to
+complete an infinite loop in 4 milliseconds (with scatter-gather.)
+<P>
+________
+<P>
+From: <A HREF="mailto:deb@svax.cs.cornell.edu">deb@svax.cs.cornell.edu</A> (David Baraff)
+<P>
+Well, sure it's no worse than NP-complete, but that's ONLY if you restrict
+yourself to the case where the line satisfies a Lipschitz condition on its
+second derivative.  (I think there's an '89 SIGGRAPH paper from Caltech that
+deals with this).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Fastest Point in Polygon Test,
+</A></FONT>
+by Aladdin Nassar, Philip Walden, Eric Haines, Tom Dickens, Ron Capelli, Sundar Narasimhan, Christopher Jam, and (last but not least) Stuart MacMartin
+</H4>
+Aladdin Nassar asked a variant on the classic question:
+<P>
+What is the MOST EFFICIENT way to find if a point lies within a SIMPLE
+polygon given a set of vertices (in no particular order) and the point
+coordinate ?   Are there anonymous ftp sites with such canned functions
+instead of re-inventing the wheel.  Excuse me if that is a trivial question.
+<P>
+____
+<P>
+Philip Walden (<A HREF="mailto:pwalden@hpcc01.corp.hp.com">pwalden@hpcc01.corp.hp.com</A>) replies:
+<P>
+Another alternative to using a test ray is to sum the arc angles from
+the vertices to the test point. If the sum is 2pi, the point is inside,
+if 0 it's outside. i.e.
+<P>
+<PRE>
+        give a polygon with a set of vertices v[1:n] and test point p
+
+        if (SUM i=1 to n (arcangle(v[i]-&gt;p-&gt;v[i+1])) &gt; pi
+        then p is inside
+        else it's outside
+</PRE>
+<P>
+____
+<P>
+Eric Haines replies:
+<P>
+This method turns out to be exceedingly slow, about an order of magnitude
+slower than the "shoot a ray and count crossings" method.  The problem is that
+the "arcangle" routine takes awhile:  you need to normalize your vectors, you
+need to compute the dot product (for the angle) and cross product (for the
+sign of the angle), and you need the arccosine of the dot product for the
+angle itself.  This is done for every vertex of the polygon.  All of this adds
+up!
+<P>
+In fact, I wrote a program to test the two algorithms head-to-head when I was
+deciding which to use:  code attached (for a switch!).  The test program makes
+polygons from 3 to 7 (though you can change this) and random scatters the
+vertices from [0-1).  It then tests each of these polygons with a series of
+random points from [0-1).
+<P>
+I won't claim that either implementation of the angle summation or segment
+crossing routines below are optimal (though I do try to share intermediate
+results between vertices).  But I don't care how much you tune the angle
+summation algorithm:  it's still going to be slower than crossing counting.
+Please do tell me of any hacks you make to get either algorithm faster,
+anyway.
+<P>
+Code's at the end of this issue; you should mess with *_TEST_TIMES however you
+see fit.  I found you could set them pretty low, but I felt better when they
+were relatively high (i.e. the test times were greater than the granularity
+of the "time" command).  The crossing counting inside/outside test is the one
+I wrote up in _An Introduction to Ray Tracing_, edited by Andrew Glassner,
+Academic Press, plus a trick or two not in the book.
+<P>
+I should also mention that the tests below assuming that an even winding
+number means that the point is outside, as this is how the Jordan Curve test
+is used.  Think of the winding number as the number of loops around a point.
+As an example, think of a star shape:  the interior pentagon is considered
+"outside" since points in it cross two lines.  You can modify the tests as
+shown in the comments if you want to test for just a non-zero winding number
+(i.e. the star is fully filled).
+<P>
+Timings are shown after the next comment.
+<P>
+____
+<P>
+Tom Dickens notes in a related article:
+<P>
+Additional logic [in the barycentric test] can be added to avoid checking
+triangles which are located in a region which has already been determined to
+be beyond of a side of a previous triangle which returned a negative check.
+<P>
+[I don't know if such an enhancement is possible (one triangle's outside is
+another's inside) if the polygon is not convex, but mention it here for
+interest's sake; it is certainly not incorporated in my code.  - EAH]
+<P>
+____
+<P>
+comments from Ron Capelli (<A HREF="mailto:capelli@vnet.ibm.com">capelli@vnet.ibm.com</A>):
+<P>
+&gt;the "arcangle" routine takes awhile:  you need to normalize your vectors, you<BR>
+&gt;need to compute the dot product (for the angle) and cross product (for the<BR>
+&gt;sign of the angle), and you need the arccosine of the dot product for the<BR>
+&gt;angle itself.  This is done for every vertex of the polygon.<BR>
+<P>
+See "Fast Approximation to the Arctangent" in Graphics Gems II (p.389).  The
+maximum error of this approximation allows polygons with up to about 40
+vertexes to be handled safely.
+<P>
+No need to normalize, take dot products, or cross products either.  From the
+vector components (dx, dy) from a test point to a polygon vertex, get an angle
+using arctan (or the fast approximation, in which case do not scale to radians
+or degrees; use the angle value in the range 0 to 8).  Calculate the signed
+angle between two successive vertexes by subtracting the angles for each
+vertex.  Add up all the signed angle differences, and compare to the mid-range
+value.
+<P>
+The case of a test point coincident with a polygon vertex must be explicitly
+checked, as the arctangent for a zero-length vector is undefined.  Another
+fine point is that angle differences must be wrapped in the range -180 to +180
+degrees.
+<P>
+As fond as I am :-) of this method, I still won't argue that the "count ray
+crossings" method is not better.  For a polygon with N edges, an optimized
+"count ray crossings" algorithm requires at most one multiply, one divide, and
+about a half-dozen add/subtract/compare operations per edge.  The "add angle
+differences" algorithm using the fast approximation to the arctangent requires
+only one divide but more than twice as many add/subtract/compare operations
+per edge...
+<P>
+____
+<P>
+Sundar Narasimhan (<A HREF="mailto:sundar@fiber-one.ai.mit.edu">sundar@fiber-one.ai.mit.edu</A>) comments on Ron's post:
+<P>
+I think it is somewhat misleading to count worst case operations / edge and
+then multiply it blindly by N esp.  since the "count ray crossings" algorithm
+can be optimized to consider only the subset of N edges that actually have a
+chance of intersecting the fired ray, whereas I haven't seen any such
+pre-filtering done to the add angle difference algorithm.
+<P>
+____
+<P>
+Christopher Jam (<A HREF="mailto:phillips@swanee.ee.uwa.oz.au">phillips@swanee.ee.uwa.oz.au</A>) writes:
+<P>
+For the "count ray crossings" method, if your processor has no multiply or
+divide instructions, the multiply and divide may be replaced by a binary
+search for the point on the edge with the same y coordinate as the point being
+tested.  Alternatively, if you are going to draw the polygon at some stage,
+generate a list of points on the line for plotting, and keep these in a table
+to completely remove any requirements for multiplies, divides or searches.
+Just look up a point on the same line ;)
+<P>
+____
+<P>
+Stuart MacMartin (<A HREF="mailto:sjm@bcrki65.bnr.ca">sjm@bcrki65.bnr.ca</A>) comments:
+<P>
+I know the purpose of your code was for a simple comparison of the two
+algorithms, but for production you might want to write optimal code.
+<P>
+The loop overhead is actually quite expensive, as I found out when I optimized
+someone else's implementation of this algorithm.  Most of the time is spent
+looking for the next y that is on/below the ray or the next y that is above
+the ray.  You should be able to get at lease a factor of 2 improvement by
+optimizing those two loops.  Call a subroutine if necessary for the deleted
+stuff.  (Note that subroutines can be MORE efficient because the compiler may
+make a better use of registers for the time-consuming part of the loop.)  Use
+pointers to the y rather than to the x to avoid the extra adding, and don't
+keep track of so many variables in the loop.
+<P>
+Finally, is it necessary to use doubles?  With appropriate units, will long
+suffice?  Just be careful if you make this switch:  if you have to have
+doubles in some places in your code, watch out for conversions from long to
+double and back.  On some platforms (definitely Apollo; I don't know about
+others) such casts take so long that they totally swamp anything else that is
+inefficient in a loop.
+<P>
+My code for the loop:
+<P>
+<PRE>
+    stop = vertices + (numVertices &lt;&lt; 1);
+
+    for(y = vertices[1], p = vertices+3;  p &lt; stop;  y = *p,p+=2) {
+        /* Skip all lines above */
+        if      (y &gt; ay) while ((p &lt; stop) && (*p &gt; ay)) p += 2;
+        /* Skip all lines below */
+        else if (y &lt; ay) while ((p &lt; stop) && (*p &lt; ay)) p += 2;
+            /* NOTE! Don't skip horizontal edges at ay! */
+        if (p &gt;= stop) break;
+</PRE>
+<P>
+The routine requires that the first point is duplicated as the last.
+<P>
+____
+<P>
+Final (for now) comments, by Eric Haines:
+<P>
+Other people noted the barycentric test as being a way to do inside/outside
+testing.  The barycentric test is included below in Peter Shirley's article,
+and is also written up on page 390-393 of Graphics Gems, Didier Badouel's
+article.  You can do better than figuring out all the intermediate differences
+(as shown in Badouel's article), instead computing them as needed.  Also, my
+code worries about zero area triangles just to be safe, so it could be a bit
+faster without these sanity checks.
+<P>
+Badouel points out that triangle testing works for convex polygons:  you
+simply test all of the triangles, and any intersection ends the test.  Most
+people assume that concave triangles must be intersected using a different
+test.  Not so!  As Berlin pointed out (Vol 11, SIGGRAPH '85 course notes -
+sorry for the obscure reference!), you can test a concave polygon by checking
+all its triangles generated from one vertex.  If the number of triangles hit
+is odd, the point is inside the (potentially concave) polygon - try it out, it
+actually works!  You do have to test all triangles, however; if you knew the
+polygon was convex you can stop on the first intersection.  Also, the
+barycentric coordinates become somewhat meaningless, since more than one
+triangle can be found to overlap your test point.
+<P>
+So, included in the new code (which is at the end of this issue) are two
+flavors of the crossings (segment) test, one which is fairly fast and
+readable, the other is "macmartinized" by me and runs a bit faster still.
+The barycentric polygon intersector is also included, and it works for all
+polygons (concave, self-intersecting, etc).
+<P>
+Random polygon testing:
+<P>
+<PRE>
+                         number (or range) of vertices
+                    3       4       5       3-7     20      100
+
+angle              57.21   69.81   86.44   82.98  303.33 1435.78
+barycentric         1.80    3.44    5.29    4.90   30.78  164.38
+crossings           2.17    2.76    3.32    3.24   12.51   60.13
+macmartin           1.86    2.35    2.87    2.64   11.04   52.27
+
+inside %            6.00   12.00   13.78    9.33   26.89   41.22
+</PRE>
+<P>
+Times are in microseconds per intersection test, on an HP 720 workstation.
+The "for" loop for repeating each test is counted into these test times
+(basically, I repeat each polygon/point test a number of times so that there's
+some reasonable amount of time to count) - not counting it just means the
+"crossings" tests is all that much faster.  Basically, the macmartinized
+crossing test wins on my machine; your mileage may vary.
+<P>
+Note that the barycentric intersector could be faster if the polygons are
+known to be convex, since then a quick out could be taken (i.e. the first hit
+ends testing).  I won't swear at all for the completeness of the barycentric
+code:  I suspect you can get into roundoff error problems for intersection
+points which lay exactly on some internal, invisible triangle testing edge
+(rare, but possible).
+<P>
+There are also a few hacks I haven't done on the barycentric intersector:  you
+could make the set of if statements into two big if statements, the variable
+"v0" is not all that useful, etc.  Also, if the polygon is a triangle the test
+could be made a special case and the "for" loop and other baggage could be
+eliminated (this I tried, and it resulted in about a 20% reduction in run
+time).  However, the code presented is at least readable, and the general
+behavior is the same:  this intersector gets more expensive than the crossing
+methods as the number of polygon vertices rises.
+<P>
+Looking over the branch flow analysis, I find that my test case polygons
+(randomly generated points) cause a lot of algebraic tests to occur when using
+the crossing algorithms (i.e.  the exact x intersection point has to be
+computed when a polygon edge goes from one quadrant to its diagonal opposite).
+For real polygons, this case is much less prevalent since vertices tend to be
+close to each other, so the polygons I've generated are more pathological than
+normally encountered.  For example, if the polygons generated are regular
+polygons inscribed in a circle of radius 1.0 and given a random rotation about
+the origin, the timings are
+<P>
+Regular polygon testing:
+<P>
+<PRE>
+                         number (or range) of vertices
+                    3       4       5       3-7     20      100
+
+angle              54.20   70.80   85.14   87.83  314.53 1522.00
+barycentric         2.11    3.98    5.48    5.64   27.63  144.27
+crossings           2.50    3.09    3.30    3.42    9.46   42.71
+macmartin           2.32    2.81    2.91    2.92    6.29   23.91
+
+inside %           33.22   51.00   60.22   55.22   77.44   80.22
+</PRE>
+<P>
+I'm not sure why there's any noticeable difference in the "angle summation"
+tests, since this test should be the same for any test point (I suspect it's
+just the "times()" routine's granularity).  The barycentric times change a
+little for better and worse, probably due to times() and to different polygon
+vs. point tests.  The two crossings test noticeably improve for large polygons
+(29% and 54% savings, respectively) - this is due to less "difficult" edges,
+and for the macmartin test there are now longer series of edges fully above or
+fully below the test point.  These tests show off the real improvement of the
+macmartin algorithm when testing many sided polygons.
+<P>
+The near-final word is that the crossings tests seems to be the most efficient
+overall, the angle test should generally be avoided like the plague, and the
+barycentric test is good for the special case of triangles (and you also
+get the vertex interpolant weights).  Just to add to the confusion, I talk
+about intersecting complex polygons in an article below; if you're using a lot
+of these then another intersection algorithm might be a better route to go.
+<P>
+<i><a href="rtnv4n1.html#art7">previous discussion of topic</a></i>
+<P>
+<i><a href="rtnv6n1.html#art6">more discussion of topic</a></i>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Polygon Intersection via Barycentric Coordinates,
+</A></FONT>
+by Peter Shirley (<A HREF="mailto:shirley@iuvax.cs.indiana.edu">shirley@iuvax.cs.indiana.edu</A>)
+</H4>
+One good way to do ray triangle intersection is to use barycentric
+coordinates.  If the triangle has vertices p0, p1, p2, then any point in the
+plane containing the triangle can be represented as
+<P>
+<PRE>
+        p = a*p0 + b*p2 + g*p3
+</PRE>
+<P>
+and the constraint a + b + g = 1 will also hold.  If you want to interpolate
+colors or normals across the triangle, you can use a similar formula.  A
+little messing around will convince you that for points inside the triangle,
+a, b, and g are all positive, and outside the triangle, at least one is
+negative.  We can take this info, and get rid of a:
+<P>
+<PRE>
+        p = p0 + b*(p1 - p0) + g*(p2-p0)
+</PRE>
+<P>
+The point p is inside if b and g are positive, and (b+g) &lt; 1.
+<P>
+A point on our ray can be represented as p' = o + t*v, where o is the point of
+origin on the ray, and v is the direction of propagation.  Plugging this into
+the triangle formula, we can find whether any point on the ray is also a point
+on the plane:
+<P>
+<PRE>
+        o + t*v = p0 + b*(p1 - p0) + g*(p2-p0)
+</PRE>
+<P>
+Note that this is really 3 linear equations (one for x, y and z).  You can
+rewrite this as a 3 by 3 linear system and solve for (t, b, g) and there is a
+hit if and only if:
+<P>
+<PRE>
+        t &gt; 0
+        b &gt; 0
+        g &gt; 0
+        b+g &lt; 1
+</PRE>
+<P>
+Alternatively, you can first find the equation of the plane containing the
+triangle and find t.  This will give you an explicit point h on the plane.
+You now have:
+<P>
+<PRE>
+        h = p0 + b*(p1 - p0) + g*(p2-p0)
+</PRE>
+<P>
+Now you have 3 equations and 2 unknowns.  Choosing any two of the equations is
+equivalent to projecting the problem onto one of the cartesian planes.  Watch
+out if the triangle is in one of the planes, because the projection might be a
+line segment.  You can check the surface normal to see if it is one of those
+cases (I just use the dimensions associated with the smallest magnitude
+components of the normal).
+<P>
+Note-- none of this is new.  GG II and the ray tracing book have other ways to
+do it.  Also, if your scenes are large, you are probably better off optimizing
+your spatial partitioning code (the part which takes longer for bigger
+scenes).
+<P>
+[For more info, see Didier Badouel's article in "Graphics Gems", p. 390-393]
+<P>
+<a href="rtnv6n2.html#art4">more discussion of topic</a>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Many-Sided Polygon Intersection,
+</A></FONT>
+by Eric Haines, Benjamin Zhu
+</H4>
+Jon Bennett (jb7m+@andrew.cmu.edu) writes:
+<P>
+&gt;For a project i was working on i needed a very fast 2-D point-in-polygon<BR>
+&gt;routine for a monte-carlo simulation, and came up with a variation of the<BR>
+&gt;standard jordan curve theorem algorithm which ran approximately on the<BR>
+&gt;order of O(n/20) when n &gt; ~100 (for "mostly" round-ish polygons), instead<BR>
+&gt;of O(n).  What I can't find, and no one here seems to know, is for large<BR>
+&gt;polygons what is the best 2-D algorithm.  Everything they've heard of runs<BR>
+&gt;in O(n) (I know that n and n/20 are the same "order" but the you know what<BR>
+&gt;I mean). I'd like to know if there is something faster.<BR>
+<P>
+You might check Preparata & Shamos's _Computational Geometry_ book, I believe
+they talk about faster algorithms.  Unfortunately, much of the stuff in CG
+tends to be things like O(K * log n), where K is something pretty large.
+<P>
+A simple way to test polygons with a large number of edges in O(n/K) time is
+to sort the edges into buckets, then find out which bucket the test point
+falls into.  Then you do the usual ray test, but only against those edges in
+the bucket.
+<P>
+For example, you could take a hundred edge polygon and find the Y extent in the
+polygon's plane.  Split this extent into, say, 20 buckets (or whatever number
+you like, more ==> more efficient, but also more memory and preprocessing).
+Now take each edge and note which buckets it's in.  As an added speed-up, sort
+the edges by their leftmost X values in that bucket.
+<P>
+Now testing can begin.  When you test a point, use the Y coordinate to find
+which bucket to check.  Now test each edge by the normal Jordan test against
+the point.  You only need to test edges to the left of the point (i.e. you are
+using a test ray in the -X direction), so as soon as you reach an edge whose
+leftmost X is greater than the point's X, you can stop testing.
+<P>
+The bucket sort immediately gets rid of a lot of edges, and the X test means
+often not having to test all edges in the bucket (it's optional icing).
+<P>
+If you're really into using memory and like preprocessing, you could use a
+grid structure to place buckets on the polygon.  Each grid cell is inside,
+outside, or indeterminate.  There are some tricks, but I leave these as an
+exercise for the reader...  Anyway, this method can be very fast, since much
+of the polygon's area is classified as in or out and much of the time no edges
+have to be tested at all.  The only limit is the grid cell resolution.  As the
+resolution rises the actual testing approaches constant time ( O(1)!).
+There's more preprocessing involved, but if you're making a lot of tests then
+this is worth doing.
+<P>
+____
+<P>
+Benjamin Zhu (<A HREF="mailto:zhu@graphack.asd.sgi.com">zhu@graphack.asd.sgi.com</A>) comments on a similar question:
+<P>
+If your polygon is convex, (more generally, your polygon is star-shaped,) you
+can pre-process the polygon into triangle strips by connecting any point in
+the kernel of the polygon with each vertex of the polygon.  This takes you
+O(n) pre-processing time.  After that, for each point, you do a binary search
+in polar coordinates to locate the potential triangle where the point might
+lie.  Then you can determine if the point lies within this triangle, which is
+trivial.  See Preparata and Shamos' "Computational Geometry" for more details.
+Obviously, this algorithm will give you O(log(n)) time per point.  So you
+might consider this one if you need to solve the point-inclusion problem many
+times.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Code for Point in Polygon Intersectors,
+</A></FONT>
+by Eric Haines
+</H4>
+Here it is, code for the angle test, the barycentric test, and the two
+crossings tests, with a main program to test their speeds.  You may need to
+use something other than srand()/drand48() for your random number generator,
+and the times() command for timing.  You'll also want to change the
+*_TEST_TIMES constants if you're using something slower than an HP 720
+workstation.  Feel free to complain about the slowness of any of the code -
+I'm always interested in new hacks.
+<P>
+/* Point in polygon inside/outside tester.  Angle summation, barycentric
+ * coordinates, and ray along x-axis (crossings testing) compared.
+ *
+ * copyright 1992 by Eric Haines, 3D/Eye Inc, <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+ */
+<P>
+<PRE>
+#include &lt;math.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;sys/param.h&gt;
+#include &lt;sys/times.h&gt;
+
+#define X       0
+#define Y       1
+
+double  drand48() ;
+
+double  AngleTimeTotal ;
+double  BarycentricTimeTotal ;
+double  CrossingsTimeTotal ;
+double  MacmartinTimeTotal ;
+
+/* minimum & maximum number of polygon vertices to generate */
+#define MIN_VERTS       3
+#define MAX_VERTS       7
+
+/* number of different polygons to try */
+#define TEST_POLYGONS   30
+
+/* number of different intersection points to try */
+#define TEST_POINTS     30
+
+/* number of times to try a single point vs. a polygon */
+/* this should be &gt; 1 / ( HZ * approx. single test time in seconds ) */
+#define ANGLE_TEST_TIMES        1000
+#define BARYCENTRIC_TEST_TIMES  10000
+#define CROSSINGS_TEST_TIMES    10000
+#define MACMARTIN_TEST_TIMES    10000
+
+main(argc,argv)
+int argc;  char *argv[];
+{
+int     i, j, k, numverts, inside_tot ;
+int     angle_flag, barycentric_flag, crossings_flag, macmartin_flag ;
+double  pgon[MAX_VERTS][2] ;
+double  point[2] ;
+
+    srand( 12345 ) ;
+
+    AngleTimeTotal = 0.0 ;
+    BarycentricTimeTotal = 0.0 ;
+    CrossingsTimeTotal = 0.0 ;
+    MacmartinTimeTotal = 0.0 ;
+    inside_tot = 0 ;
+
+    for ( i = 0 ; i &lt; TEST_POLYGONS ; i++ ) {
+
+#ifdef CENTERED_SQUARE
+        /* for debugging purposes, test against a square */
+        numverts = 4 ;
+        pgon[0][X] = 0.2 ;
+        pgon[0][Y] = 0.2 ;
+        pgon[1][X] = 0.8 ;
+        pgon[1][Y] = 0.2 ;
+        pgon[2][X] = 0.8 ;
+        pgon[2][Y] = 0.8 ;
+        pgon[3][X] = 0.2 ;
+        pgon[3][Y] = 0.8 ;
+#else
+        /* make an arbitrary polygon fitting 0-1 range in x and y */
+        numverts = MIN_VERTS +
+                (int)(drand48() * (double)(MAX_VERTS-MIN_VERTS+1)) ;
+        for ( j = 0 ; j &lt; numverts ; j++ ) {
+            pgon[j][X] = drand48() ;
+            pgon[j][Y] = drand48() ;
+        }
+#endif
+
+        /* now try # of points against it */
+        for ( j = 0 ; j &lt; TEST_POINTS ; j++ ) {
+            point[X] = drand48() ;
+            point[Y] = drand48() ;
+            angle_flag = angletest( pgon, numverts, point ) ;
+            barycentric_flag = barycentrictest( pgon, numverts, point ) ;
+            crossings_flag = crossingstest( pgon, numverts, point ) ;
+            macmartin_flag = macmartintest( pgon, numverts, point ) ;
+
+            /* reality check */
+            if ( angle_flag != crossings_flag ) {
+                printf( "angle test says %s, crossings test says %s\n",
+                    angle_flag ? "INSIDE" : "OUTSIDE",
+                    crossings_flag ? "INSIDE" : "OUTSIDE" ) ;
+                printf( "point %g %g\n", (float)point[X], (float)point[Y] ) ;
+                printf( "polygon:\n" ) ;
+                for ( k = 0 ; k &lt; numverts ; k++ ) {
+                    printf( "  %g %g\n", (float)pgon[k][X], (float)pgon[k][Y]);
+                }
+            }
+            if ( barycentric_flag != macmartin_flag ) {
+                printf( "barycentric test says %s, macmartin test says %s\n",
+                    barycentric_flag ? "INSIDE" : "OUTSIDE",
+                    macmartin_flag ? "INSIDE" : "OUTSIDE" ) ;
+                printf( "point %g %g\n", (float)point[X], (float)point[Y] ) ;
+                printf( "polygon:\n" ) ;
+                for ( k = 0 ; k &lt; numverts ; k++ ) {
+                    printf( "  %g %g\n", (float)pgon[k][X], (float)pgon[k][Y]);
+                }
+            }
+
+            inside_tot += crossings_flag ;
+        }
+    }
+    printf( "angle test time: %g microseconds per test\n",
+        (float)( AngleTimeTotal/(double)(TEST_POINTS*TEST_POLYGONS) ) ) ;
+    printf( "barycentric test time: %g microseconds per test\n",
+        (float)( BarycentricTimeTotal/(double)(TEST_POINTS*TEST_POLYGONS) ) ) ;
+    printf( "crossings test time: %g microseconds per test\n",
+        (float)( CrossingsTimeTotal/(double)(TEST_POINTS*TEST_POLYGONS) ) ) ;
+    printf( "macmartin crossings test time: %g microseconds per test\n",
+        (float)( MacmartinTimeTotal/(double)(TEST_POINTS*TEST_POLYGONS) ) ) ;
+
+    printf( "%g %% of all points were inside polygons\n",
+        (float)inside_tot * 100.0 / (float)(TEST_POINTS*TEST_POLYGONS) ) ;
+}
+
+/* sum angles of vtxN - point - vtxN+1, check if in PI to 3*PI range */
+int
+angletest( pgon, numverts, point )
+double  pgon[MAX_VERTS][2] ;
+int     numverts ;
+double  point[2] ;
+{
+int     i, j, inside_flag ;
+struct  tms     timebuf ;
+long    timestart ;
+long    timestop ;
+double  *vtx0, *vtx1, angle, len, vec0[2], vec1[2] ;
+
+    /* do the test a bunch of times to get a useful time reading */
+    timestart = times( &timebuf ) ;
+    for ( i = 0 ; i &lt; ANGLE_TEST_TIMES ; i++ ) {
+        /* sum the angles and see if answer mod 2*PI &gt; PI */
+        vtx0 = pgon[numverts-1] ;
+        vec0[X] = vtx0[X] - point[X] ;
+        vec0[Y] = vtx0[Y] - point[Y] ;
+        if ( (len = hypot( vec0[X], vec0[Y] )) &lt;= 0.0 ) {
+            /* point and vertex coincide */
+            return( 1 ) ;
+        }
+        vec0[X] /= len ;
+        vec0[Y] /= len ;
+
+        angle = 0.0 ;
+        for ( j = 0 ; j &lt; numverts ; j++ ) {
+            vtx1 = pgon[j] ;
+            vec1[X] = vtx1[X] - point[X] ;
+            vec1[Y] = vtx1[Y] - point[Y] ;
+            if ( (len = hypot( vec1[X], vec1[Y] )) &lt;= 0.0 ) {
+                /* point and vertex coincide */
+                return( 1 ) ;
+            }
+            vec1[X] /= len ;
+            vec1[Y] /= len ;
+
+            /* check if vec1 is to "left" or "right" of vec0 */
+            if ( vec0[X] * vec1[Y] - vec1[X] * vec0[Y] &gt;= 0.0 ) {
+                /* add angle due to dot product of vectors */
+                angle += acos( vec0[X] * vec1[X] + vec0[Y] * vec1[Y] ) ;
+            } else {
+                /* subtract angle due to dot product of vectors */
+                angle -= acos( vec0[X] * vec1[X] + vec0[Y] * vec1[Y] ) ;
+            }
+
+            /* get to next point */
+            vtx0 = vtx1 ;
+            vec0[X] = vec1[X] ;
+            vec0[Y] = vec1[Y] ;
+        }
+        /* test if between PI and 3*PI, 5*PI and 7*PI, etc */
+        /* if we care about is winding number &gt; 0, then just:
+               inside_flag = fabs(angle) &gt; M_PI ;
+         */
+        inside_flag = fmod( fabs(angle) + M_PI, 4.0*M_PI ) &gt; 2.0*M_PI ;
+    }
+    timestop = times( &timebuf ) ;
+    /* time in microseconds */
+    AngleTimeTotal += 1000000.0 * (double)(timestop - timestart) /
+        (double)(HZ * ANGLE_TEST_TIMES) ;
+
+    return (inside_flag) ;
+}
+
+/* barycentric, a la Gems I, with a little efficiency tuning */
+int
+barycentrictest( pgon, numverts, point )
+double  pgon[MAX_VERTS][2] ;
+int     numverts ;
+double  point[2] ;
+{
+int     i, tris_hit, inside_flag, p1, p2 ;
+struct  tms     timebuf ;
+long    timestart ;
+long    timestop ;
+double  tx, ty, u0, u1, u2, v0, v1, alpha, beta, denom ;
+
+    /* do the test a bunch of times to get a useful time reading */
+    timestart = times( &timebuf ) ;
+    for ( i = 0 ; i &lt; BARYCENTRIC_TEST_TIMES ; i++ ) {
+
+        tx = point[X] ;
+        ty = point[Y] ;
+
+        tris_hit = 0 ;
+
+        for ( p1 = 1, p2 = 2 ; p2 &lt; numverts ; p1++, p2++ ) {
+
+            if ( ( u1 = pgon[0][X] - pgon[p2][X] ) == 0.0 ) {
+
+                /* zero area test - optional */
+                if ( ( u2 = pgon[p1][X] - pgon[p2][X] ) == 0.0 ) {
+                    goto NextTri;
+                }
+
+                /* Compute intersection point */
+                if ( ( ( beta = ( tx - pgon[p2][X] ) / u2 ) &lt; 0.0 ) ||
+                       ( beta &gt; 1.0 ) ) {
+
+                    goto NextTri;
+                }
+
+                if ( ( v1 = pgon[0][Y] - pgon[p2][Y] ) == 0.0 ) {
+                    goto NextTri;
+                }
+
+                if ( ( alpha = ( ty - pgon[p2][Y] - beta *
+                        ( pgon[p1][Y] - pgon[p2][Y] ) ) / v1 ) &lt; 0.0 ) {
+                    goto NextTri;
+                }
+
+            } else {
+                if ( ( denom = ( pgon[p1][Y] - pgon[p2][Y] ) * u1 -
+                        ( u2 = pgon[p1][X] - pgon[p2][X] ) *
+                        ( v1 = pgon[0][Y] - pgon[p2][Y] ) ) == 0.0 ) {
+
+                    goto NextTri;
+                }
+
+                /* Compute intersection point & subtract 0 vertex */
+                u0 = tx - pgon[p2][X] ;
+                v0 = ty - pgon[p2][Y] ;
+
+                if ( ( ( ( beta = ( v0 * u1 - u0 * v1 ) / denom ) ) &lt; 0.0 ) ||
+                       ( beta &gt; 1.0 ) ) {
+
+                    goto NextTri;
+                }
+                if ( ( alpha = ( u0 - beta * u2 ) / u1 ) &lt; 0.0 ) {
+                    goto NextTri;
+                }
+            }
+
+            /* check gamma */
+            if ( alpha + beta &lt;= 1.0 ) {
+                /* survived */
+                tris_hit++ ;
+            }
+
+            NextTri: ;
+        }
+        inside_flag = tris_hit & 0x1 ;
+    }
+    timestop = times( &timebuf ) ;
+    /* time in microseconds */
+    BarycentricTimeTotal += 1000000.0 * (double)(timestop - timestart) /
+        (double)(HZ * BARYCENTRIC_TEST_TIMES) ;
+
+    return (inside_flag) ;
+}
+
+/* shoot a test ray along +X axis - slower version, less messy */
+int
+crossingstest( pgon, numverts, point )
+double  pgon[MAX_VERTS][2] ;
+int     numverts ;
+double  point[2] ;
+{
+int     i, j, inside_flag, xflag0 ;
+struct  tms     timebuf ;
+long    timestart ;
+long    timestop ;
+double  *vtx0, *vtx1, dv0 ;
+int     crossings, yflag0, yflag1 ;
+
+    /* do the test a bunch of times to get a useful time reading */
+    timestart = times( &timebuf ) ;
+    for ( i = 0 ; i &lt; CROSSINGS_TEST_TIMES ; i++ ) {
+
+        vtx0 = pgon[numverts-1] ;
+        /* get test bit for above/below Y axis */
+        yflag0 = ( dv0 = vtx0[Y] - point[Y] ) &gt;= 0.0 ;
+
+        crossings = 0 ;
+        for ( j = 0 ; j &lt; numverts ; j++ ) {
+            /* cleverness:  bobble between filling endpoints of edges, so
+             * that the previous edge's shared endpoint is maintained.
+             */
+            if ( j & 0x1 ) {
+                vtx0 = pgon[j] ;
+                yflag0 = ( dv0 = vtx0[Y] - point[Y] ) &gt;= 0.0 ;
+            } else {
+                vtx1 = pgon[j] ;
+                yflag1 = ( vtx1[Y] &gt;= point[Y] ) ;
+            }
+
+            /* check if points not both above/below X axis - can't hit ray */
+            if ( yflag0 != yflag1 ) {
+                /* check if points on same side of Y axis */
+                if ( ( xflag0 = ( vtx0[X] &gt;= point[X] ) ) ==
+                     ( vtx1[X] &gt;= point[X] ) ) {
+
+                    if ( xflag0 ) crossings++ ;
+                } else {
+                    /* compute intersection of pgon segment with X ray, note
+                     * if &gt; point's X.
+                     */
+                    crossings += (vtx0[X] -
+                        dv0*( vtx1[X]-vtx0[X])/(vtx1[Y]-vtx0[Y])) &gt;= point[X] ;
+                }
+            }
+        }
+        /* test if crossings is odd */
+        /* if we care about is winding number &gt; 0, then just:
+               inside_flag = crossings &gt; 0 ;
+         */
+        inside_flag = crossings & 0x01 ;
+    }
+    timestop = times( &timebuf ) ;
+    /* time in microseconds */
+    CrossingsTimeTotal += 1000000.0 * (double)(timestop - timestart) /
+        (double)(HZ * CROSSINGS_TEST_TIMES) ;
+
+    return (inside_flag) ;
+}
+
+/* shoot a test ray along +X axis - macmartinized by me, a bit messier */
+int
+macmartintest( pgon, numverts, point )
+double  pgon[MAX_VERTS][2] ;
+int     numverts ;
+double  point[2] ;
+{
+int     i, inside_flag, xflag0 ;
+struct  tms     timebuf ;
+long    timestart ;
+long    timestop ;
+double  *p, *stop ;
+int     crossings ;
+double  tx, ty, y ;
+
+    /* do the test a bunch of times to get a useful time reading */
+    timestart = times( &timebuf ) ;
+    for ( i = 0 ; i &lt; MACMARTIN_TEST_TIMES ; i++ ) {
+
+        crossings = 0 ;
+
+        tx = point[X] ;
+        ty = point[Y] ;
+        y = pgon[numverts-1][Y] ;
+
+        p = (double *)pgon + 1 ;
+        if ( ( y &gt;= ty ) != ( *p &gt;= ty ) ) {
+            /* x crossing */
+            if ( ( xflag0 = ( pgon[numverts-1][X] &gt;= tx ) ) ==
+                 ( *(double *)pgon &gt;= tx ) ) {
+
+                if ( xflag0 ) crossings++ ;
+            } else {
+                /* compute intersection of pgon segment with X ray, note
+                 * if &gt; point's X.
+                 */
+                crossings += ( pgon[numverts-1][X] -
+                (y-ty)*( *(double *)pgon - pgon[numverts-1][X])/(*p-y)) &gt;= tx ;
+            }
+        }
+
+        stop = pgon[numverts] ;
+
+        for ( y=*p,p += 2 ; p &lt; stop ; y=*p,p+=2) {
+
+            if ( y &gt;= ty ) {
+                while ( (p &lt; stop) && (*p &gt;= ty) ) p+=2 ;
+                if ( p &gt;= stop ) goto Exit ;
+                /* y crosses */
+                if ( ( xflag0 = ( *(p-3) &gt;= tx ) ) ==
+                     ( *(p-1) &gt;= tx ) ) {
+
+                    if ( xflag0 ) crossings++ ;
+                } else {
+                    /* compute intersection of pgon segment with X ray, note
+                     * if &gt; point's X.
+                     */
+                    crossings += ( *(p-3) -
+                        (*(p-2)-ty)*( *(p-1)-*(p-3))/(*p-*(p-2))) &gt;= tx ;
+                }
+            } else {
+                while ( (p &lt; stop) && (*p &lt; ty)) p+=2 ;
+                if ( p &gt;= stop ) goto Exit ;
+                /* y crosses */
+                if ( ( xflag0 = ( *(p-3) &gt;= tx ) ) ==
+                     ( *(p-1) &gt;= tx ) ) {
+
+                    if ( xflag0 ) crossings++ ;
+                } else {
+                    /* compute intersection of pgon segment with X ray, note
+                     * if &gt; point's X.
+                     */
+                    crossings += ( *(p-3) -
+                        (*(p-2)-ty)*( *(p-1)-*(p-3))/(*p-*(p-2))) &gt;= tx ;
+                }
+            }
+        }
+
+        Exit:
+        /* test if crossings is odd */
+        /* if we care about is winding number &gt; 0, then just:
+               inside_flag = crossings &gt; 0 ;
+         */
+        inside_flag = crossings & 0x01 ;
+    }
+    timestop = times( &timebuf ) ;
+    /* time in microseconds */
+    MacmartinTimeTotal += 1000000.0 * (double)(timestop - timestart) /
+        (double)(HZ * MACMARTIN_TEST_TIMES) ;
+</PRE>
+<P>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

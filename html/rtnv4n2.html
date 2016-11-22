@@ -1,0 +1,1324 @@
+<!-- html version of Volume 4, Number 2 :  -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 4, Number 2</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>July 15, 1991</FONT>
+<P><FONT size=+1>Volume 4, Number 2</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1991, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction - SIGGRAPH get-together, etc
+</A></LI>
+<LI><A HREF="#art2">
+New People, Address Changes, etc
+</A></LI>
+<LI><A HREF="#art3">
+Ray Tracing Related FTP sites,
+</A></LI>
+compiled by Eric Haines
+<LI><A HREF="#art4">
+Ray Tracing, the way I do it,
+</A></LI>
+by Haakan 'Zap' Andersson
+<LI><A HREF="#art5">
+More Thoughts on Anti-Aliasing,
+</A></LI>
+by John Woolverton
+<LI><A HREF="#art6">
+Spatial Measures for Accelerated Ray Tracing,
+</A></LI>
+by John Spackman
+<LI><A HREF="#art7">
+Barcelona Workshop Summary,
+</A></LI>
+by Arjan Kok
+<LI><A HREF="#art8">
+Book Announcement,
+</A></LI>
+from Stuart Green
+<LI><A HREF="#art9">
+Spiral Scene Generator,
+</A></LI>
+by Tom Wilson
+<LI><A HREF="#art10">
+An Announcement From The 'Paper Bank' Project,
+</A></LI>
+by Juhana Kouhia
+<LI><A HREF="#art10a">
+Radiance 1.4 via FTP,
+</A></LI>
+by Greg Ward
+<LI><A HREF="#art11">
+Proceedings of Graphics Interface '91 Availability,
+</A></LI>
+by Irene Gargantini
+<LI><A HREF="#art12">
+NFF Previewers,
+</A></LI>
+by Bernie Kirby, Patrick Flynn, Mike Gigante, Eric Haines
+<LI><A HREF="#art13">
+RayTracker Demos Available,
+</A></LI>
+by Jari Kahkonen
+<LI><A HREF="#art14">
+RayTracker Info,
+</A></LI>
+by Zap Andersson
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction
+</A></FONT>
+</H4>
+    I admit it, I've strayed from the One True Way of pure ray tracing:  I've
+been dabbling in radiosity.  We recently finished a film of Ronchamp chapel
+illuminated with radiosity techniques, rendered with an a-buffer, and with
+stochastic ray traced beams of lights streaming in the windows, coming to a
+film show near you (SIGGRAPH and Eurographics, I hope).  My one piece of
+advice from doing the film is this:  try to make everything originate from
+you.  The rights to music are amazingly expensive (in our case, thousands of
+dollars for just one showing at SIGGRAPH), and tracking down and obtaining
+permission to use quotes, drawings, or photos can be a real hassle.
+<P>
+    If you want to know how we did the beams of light effect, get the
+"Frontiers in Rendering" course notes (or even go to the course).  There
+should be some good & weird topics at this course, such as Charlie Gunn's
+animations of hyperbolic space (where dodecahedra meet 8 at a corner) and
+Peter Kochevar's shading computations via cellular automata ("the lunatic
+fringe of rendering", as he puts it).  Me, I'm going to talk about ray
+casting for radiosity, and also all the things that drive me crazy about
+radiosity (with lots of dirty laundry pictures showing where and how radiosity
+falls apart, and some solutions).
+<P>
+    As usual, there will be a ray tracing researchers get-together at SIGGRAPH,
+open to anyone.  On Thursday from 5:15 to 6:30 at room N223 in the convention
+center we'll meet and gab about this and that.  No planned activities, just a
+place and time to connect names to faces.
+<P>
+    When our son Ryan was born, Zap Andersson sent a nice little GIF from his
+ray tracer of a cigar in an ashtray as congratulations; the texture mapped
+smoke was particularly well done.  Zap was just married, so I was able to send
+two interlinked rings with his wife's & his names inscribed in them.
+Definitely a future trend:  graphical greeting cards/presents by e-mail.
+<P>
+    The wedding rings picture was also my first worthwhile test image using
+the two-pass software we've developed to blend radiosity and ray-tracing.  The
+nice thing about two-pass algorithms is that you generally get soft shadows
+cheaply, as the radiosity mesh picks up the shadows adaptively and so saves
+the ray tracer much shadow-testing time.  You also get all the nice features
+of ray tracing, including exact geometry:  spheres are truly spherical,
+instead of straight radiosity's polygonalized representation.  Being able to
+combine the sampling mesh from radiosity and the geometry from ray tracing is
+usually a great combination.
+<P>
+    Just so it is not buried in the bits:  note that Greg Ward's Radiance ray
+tracer with radiosity effects built in (see his SIGGRAPH paper) is now
+available via FTP.  As important, he has also begun a directory of "test"
+radiosity scenes which researchers can use to attempt to compare radiosities
+generated for these scenes.  For those of you trying to write your own
+radiosity system this is a valuable tool for checking if you're getting
+anything near the right answer.  Finally, Greg has also collected various
+object models and made them available.
+<P>
+    Books of note:  _Digital Image Warping_ by George Wolberg (IEEE Computer
+Society Press Monograph, 1990) is very handy if you're involved in texture
+mapping.  Many different topics are covered, with good illustrations and
+sample code.  It's not the ultimate book from a theory standpoint, but is very
+practical and understandable.  Recommended.
+<P>
+    Last issue someone mentioned the book _Fractal Programming and Ray Tracing
+with C++_ by Roger Stevens (M&T Books for $30, $20 more for the disk of code).
+I bought it, and cannot recommend it to the general reader.  If you are
+getting your feet wet with C++ it might be of some interest, and beginning PC
+programmers might find bits of it useful.  The author takes Steve Koren's QRT
+input language and develops a C++ ray tracer for it.  One major problem with
+such a ray tracer is that there is no definition for a general polygon; only
+triangles and parallelograms are provided.  There's a lot of padding in the
+book, with 20 or 30 page stretches of nothing but code listings, and 70 pages
+of data file listings (42 pages for his version of "sphereflake" alone - he
+could have printed the listings for the whole SPD package in that space!).
+The index is somewhat dysfunctional, e.g. minor variations on the words
+"bounding boxes" are given separate listings, some with wrong page numbers.
+References to almost all other work in ray tracing is missing, and the
+interested reader is given almost no help on where to go for more information.
+I wish it had been better.
+<P>
+    Coming out at SIGGRAPH is "Graphics Gems II", edited by Jim Arvo this time
+around.  Does anyone else know of good books to look for there?  The other
+SIGGRAPH question:  any guesses on how many times humorous references to
+"Monte Carlo" techniques will be made?
+<P>
+    Get a job:  one subscriber pointed out an interesting relationship between
+public domain ray tracers and future employment.  The authors of two of the
+more popular public domain ray tracers (MTV by Mark VandeWettering and
+RayShade by Craig Kolb) are currently employed by PIXAR.  Now if David Buck of
+DKBtrace gets a job there (no, I have no idea if he's even looking for work)
+this relationship can become a firmly established principle...
+<P>
+    Finally:  I've pretty much stopped culling USENET for news in
+comp.graphics, figuring that most everyone plows through this stuff by now.
+What convinced me was looking at my file of comp.graphics clippings and seeing
+that the accumulation surpassed half a megabyte!  Updating the ray tracing and
+radiosity bibliographies, mailing list, and the FTP site list are time
+consuming enough; also running a clipping service was too much.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+New People,
+</A></FONT>
+Address Changes, etc
+</H4>
+The first subscriber connected across the now-slagged Iron Curtain:
+<P>
+# Janusz Kalinowski - density clouds (metaballs), parallelism, textures
+# Technical University of Wroclaw, Computing Center
+# Wybrzeze Wyspianskiego 27
+# Wroclaw, Poland
+alias   janusz_kalinowski       kalinows@plwrtu11
+<P>
+I am a lecturer at Technical University of Wroclaw.  I am mainly involved in
+CG-related subjects, but also in system software.  We are preparing a
+metaballs system (modeller, renderer).  I made my MS in DataFlow (I wrote an
+emulator of Manchester Prototype Dataflow System), but I prefer CG now.  Maybe
+I will marry both domains in the future?
+<P>
+________
+<P>
+<PRE>
+# Chris Green - efficiency, fancy primitives, radiosity, textures
+# Commodore Business Machines
+# 1200 Wilson Drive
+# West Chester, PA 19380
+# (215)-431-9100
+alias   chris_green njin!cbmvax.cbm.commodore.com!chrisg
+</PRE>
+<P>
+When I've got spare time away from working on Amiga graphics, and doing
+contract work on 3d games, I spend it working on my ray tracer.  My ray tracer
+is extremely fast, due to being written completely in 680x0 assembly with all
+fixed point math.  I support spheres, triangles, hypertexture (!), and general
+implicit functions.  It also has depth of field, penumbras, procedural
+textures, and more.  The efficiency scheme used is my own invention and is
+especially fast for radiosity ray tracing (some day) and penumbras (now).
+<P>
+________
+<P>
+<PRE>
+Russ Tuck
+<A HREF="mailto:tuck@maspar.com">tuck@maspar.com</A>
+MasPar Computer Corporation, 749 N. Mary Ave, Sunnyvale, CA 94086
+</PRE>
+<P>
+(Old:  <A HREF="mailto:tuck@cs.unc.edu">tuck@cs.unc.edu</A>)
+<P>
+________
+<P>
+<PRE>
+# Billy Ferrer - ray tracing on the Atari STe, efficiency.
+# University of California, Irvine
+# 2520 Golden Ave.
+# Long Beach, CA 90806
+# (213) 595-5279
+alias bill_ferrer <A HREF="mailto:bferrer@bonnie.ics.uci.edu">bferrer@bonnie.ics.uci.edu</A>
+</PRE>
+<P>
+I am a sophomore at University of California, Irvine studying computer
+science.  My interest in ray tracing stemmed from seeing impressive displays
+from Amiga, NCGA and Siggraph shows.  I am just a beginner in the ray tracing
+programming department, but during my spare, spare, spare time I am writing a
+ray tracing program for the Atari STe because first there isn't a good and
+reliable ray tracing program on the ST/STe and second to write a ray tracing
+program for learning purposes.  Currently my program traces checkered floors,
+spheres, and reflections.  Right now, my effort is going towards texture
+mapping the floor by mapping an image on the floor.  Hopefully my program will
+support refractions and other various 3d object formats.
+<P>
+________
+<P>
+<PRE>
+Name:    Thomas Michael Burgey
+Goals:   modelling of objects, modelling of textures, RT art
+Company: Cadlab - Kooperation Uni-GH Paderborn / Siemens Nixdorf AG
+         Bahnhofstrasse 32
+         W-4790 Paderborn
+Tel:     +49 5251 284 151
+Mail:    <A HREF="mailto:tmb@cadlab.cadlab.de">tmb@cadlab.cadlab.de</A>
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Ray Tracing related FTP sites (and maintainers),
+</A></FONT>
+7/15/91 compiled by Eric Haines, <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</H4>
+[Ironically, we still don't have our FTP connection yet (it's been "one month
+away" since last December...), so I can't verify much of this data!  Please do
+send me any updates & corrections.]
+<P>
+Some highlights:
+<P>
+<PRE>
+RayShade - a great ray tracer for workstations on up.
+DKBtrace - another good ray tracer, from all reports; works on PCs.
+Radiance - a ray tracer w/radiosity effects, a la Greg Ward (who wrote it).
+VORT,QRT,MTV,DBW - yet more ray tracers, some with interesting features.
+prt, VM_pRAY - parallel ray tracers.
+SIPP - scanline Z-buffer renderer.
+VOGLE - graphics learning environment (device portable).
+</PRE>
+<P>
+SPD - a set of procedural databases for testing ray tracers.
+NFF - simplistic file format used by SPD.
+OFF - another file format.
+<P>
+RT News - collections of articles on ray tracing.
+RT bib - all known (by me) articles on ray tracing, in "refer" format.
+RT abstracts - collection of abstracts of many many RT articles.
+<P>
+<PRE>
+Utah Raster Toolkit - nice image manipulation tools.
+FBM - another set of image manipulation tools.
+Graphics Gems - code from the ever so useful book.
+</PRE>
+<P>
+(*) means site is an "official" distributor, so is most up to date.
+<P>
+<A HREF="ftp://weedeater.math.yale.edu">weedeater.math.yale.edu</A> [130.132.23.17]:  /pub - *Rayshade 3.0 ray tracer*,
+        *color quantization code*, *SPD*, *RT News*, *Wilson's RT
+        abstracts*, "RT bib*, *new Utah raster toolkit*, newer FBM,
+        *Graphics Gems code*.  Craig Kolb (<A HREF="mailto:kolb@yale.edu">kolb@yale.edu</A>)
+<P>
+<A HREF="ftp://rascal.ics.utexas.edu">rascal.ics.utexas.edu</A> [128.83.144.1]:  /misc/mac/inqueue - VISION-3D facet
+        based modeller, can output RayShade files.
+<P>
+<A HREF="ftp://ccu1.aukuni.ac.nz">ccu1.aukuni.ac.nz</A> [130.216.1.5]:  ftp/mac/architec - *VISION-3D facet
+        based modeller, can output RayShade files*.  P.D. Bourke
+        (<A HREF="mailto:pdbourke@ccu1.aukuni.ac.nz">pdbourke@ccu1.aukuni.ac.nz</A>)
+<P>
+<A HREF="ftp://alfred.ccs.carleton.ca">alfred.ccs.carleton.ca</A> [134.117.1.1]:  /pub/dkbtrace - *DKB ray tracer*.
+        David Buck (<A HREF="mailto:david_buck@carleton.ca">david_buck@carleton.ca</A>)
+<P>
+<A HREF="ftp://hobbes.lbl.gov">hobbes.lbl.gov</A> [128.3.12.38]: Radiance ray trace/radiosity package.  Greg Ward
+        (<A HREF="mailto:gjward@lbl.gov">gjward@lbl.gov</A>)
+<P>
+<A HREF="ftp://nic.funet.fi">nic.funet.fi</A> [128.214.6.100]:  pub/graphics/papers - *Paper bank project,
+        including Pete Shirley's entire thesis (with pics)*, *Wilson's RT
+        abstracts in PostScript*, Kouhia Juhana Krister (<A HREF="mailto:jk87377@cs.tut.fi">jk87377@cs.tut.fi</A>)
+<P>
+<A HREF="ftp://isy.liu.se">isy.liu.se</A> [130.236.1.3]:  pub/sipp-2.0.tar.Z scan line z-buffer and Phong
+        shading renderer.  Jonas Yngvesson (<A HREF="mailto:jonas-y@isy.liu.se">jonas-y@isy.liu.se</A>)
+<P>
+<A HREF="ftp://calpe.psc.edu">calpe.psc.edu</A> [128.182.66.148]:  pub/p3d - p3d_2_0.tar P3D lispy scene
+        language & renderers.  Joel Welling (<A HREF="mailto:welling@seurat.psc.edu">welling@seurat.psc.edu</A>)
+<P>
+<A HREF="ftp://ftp.ee.lbl.gov">ftp.ee.lbl.gov</A> [128.3.254.68]: *pbmplus.tar.Z*, RayShade data files.  Jef
+        Poskanzer (<A HREF="mailto:jef@ace.ee.lbl.gov">jef@ace.ee.lbl.gov</A>)
+<P>
+<A HREF="ftp://irisa.fr">irisa.fr</A> [131.254.2.3]:  */iPSC2/VM_pRAY ray tracer*, SPD, /NFF - many non-SPD
+        NFF format scenes, RayShade data files (Americans: check
+        <A HREF="ftp://ftp.ee.lbl.gov">ftp.ee.lbl.gov</A> first).  Didier Badouel (badouel@irisa.irisa.fr)
+<P>
+<A HREF="ftp://wuarchive.wustl.edu">wuarchive.wustl.edu</A> [128.252.135.4]:  /mirrors/unix-c/graphics - Rayshade ray
+        tracer, MTV ray tracer, Vort ray tracer, FBM, PBM, popi, Utah raster
+        toolkit.  /mirrors/msdos/graphics - DKB ray tracer, FLI RayTracker
+        demos.  Tracey Bernath (<A HREF="mailto:tmbernath@tiger.waterloo.edu">tmbernath@tiger.waterloo.edu</A>)
+<P>
+<A HREF="ftp://tolsun.oulu.fi">tolsun.oulu.fi</A> [128.214.5.6]:  *FLI RayTracker animation files (PC VGA)*,
+        *RayScene demos* (Americans:  check wustl first).  Jari Kahkonen
+        (<A HREF="mailto:hole@rieska.oulu.fi">hole@rieska.oulu.fi</A>)
+<P>
+<A HREF="ftp://cs.uoregon.edu">cs.uoregon.edu</A> [128.223.4.13]:  /pub - *MTV ray tracer*, *RT News*, *RT
+        bibliography*, other raytracers (including RayShade, QRT, VM_pRAY),
+        SPD/NFF, OFF objects, musgrave papers, some Netlib polyhedra, Roy Hall
+        book source code, Hershey fonts, old FBM.  Mark VandeWettering
+        (<A HREF="mailto:markv@acm.princeton.edu">markv@acm.princeton.edu</A>)
+<P>
+<A HREF="ftp://hanauma.stanford.edu">hanauma.stanford.edu</A> [36.51.0.16]: /pub/graphics/Comp.graphics - best of
+        comp.graphics (very extensive), ray-tracers - DBW, MTV, QRT, and more.
+        Joe Dellinger (<A HREF="mailto:joe@hanauma.stanford.edu">joe@hanauma.stanford.edu</A>)
+<P>
+<A HREF="ftp://freedom.graphics.cornell.edu">freedom.graphics.cornell.edu</A> [128.84.247.85]:  *RT News back issues*, *source
+        code from Roy Hall's book "Illumination and Color in Computer
+        Generated Imagery"*, SPD package, *Heckbert/Haines ray tracing article
+        bibliography*, Muuss timing papers.
+<P>
+<A HREF="ftp://uunet.uu.net">uunet.uu.net</A> [192.48.96.2]:  /graphics - RT News back issues (not complete),
+        NURBS models, other graphics related material.
+<P>
+<A HREF="ftp://iear.arts.rpi.edu">iear.arts.rpi.edu</A> [128.113.6.10]:  /pub - *Kyriazis stochastic Ray Tracer*.
+        qrt, ohta's ray tracer, prt, other RT's (including one for the AT&T
+        Pixel Machine), RT News, *Wilson's RT abstracts*, Graphics Gems, wave
+        ray tracing using digital filter method.  George Kyriazis
+        (<A HREF="mailto:kyriazis@turing.cs.rpi.edu">kyriazis@turing.cs.rpi.edu</A>)
+<P>
+<A HREF="ftp://jyu.fi">jyu.fi</A> [128.214.7.5]: /pub/graphics/ray-traces - many ray tracers, including
+        VM_pRAY, DBW, DKB, MTV, QRT, RayShade, some RT News, NFF files.  Jari
+        Toivanen (<A HREF="mailto:toivanen@jyu.fi">toivanen@jyu.fi</A>)
+<P>
+<A HREF="ftp://life.pawl.rpi.edu">life.pawl.rpi.edu</A> [128.113.10.2]: /pub/ray - *Kyriazis stochastic Ray Tracer*.
+        George Kyriazis (<A HREF="mailto:kyriazis@turing.cs.rpi.edu">kyriazis@turing.cs.rpi.edu</A>)
+<P>
+<PRE>
+<A HREF="ftp://ab20.larc.nasa.gov">ab20.larc.nasa.gov</A> [128.155.23.64]: /amiga - DBW,
+        /usenet/comp.{sources|binaries}.amiga/volume90/applications -
+        DKBTrace 2.01.  (<A HREF="mailto:ftp@abcfd20.larc.nasa.gov">ftp@abcfd20.larc.nasa.gov</A>)
+</PRE>
+<P>
+<A HREF="ftp://munnari.oz.au">munnari.oz.au</A> [128.250.1.21]:  pub/graphics/vort.tar.Z - *VORT CSG and
+        algebraic surface ray tracer*, *VOGLE*, /pub - DBW, pbmplus.  David
+        Hook (<A HREF="mailto:dgh@munnari.oz.au">dgh@munnari.oz.au</A>)
+<P>
+<A HREF="ftp://gondwana.ecr.mu.oz.au">gondwana.ecr.mu.oz.au</A> [128.250.1.63]:  pub - *VORT ray tracer*, *VOGLE*,
+        Wilson's ray tracing abstracts.  Bernie Kirby (<A HREF="mailto:bernie@ecr.mu.oz.au">bernie@ecr.mu.oz.au</A>)
+<P>
+<A HREF="ftp://freebie.engin.umich.edu">freebie.engin.umich.edu</A> [141.212.68.23]:  *Utah Raster Toolkit*, Spencer Thomas
+        (<A HREF="mailto:thomas@eecs.umich.edu">thomas@eecs.umich.edu</A>) or Rod Bogart (rgb@caen.engin.umich.edu).
+<P>
+<A HREF="ftp://cs.utah.edu">cs.utah.edu</A> [128.110.4.21]: /pub - Utah raster toolkit, *NURBS databases*.
+        Jamie Painter (<A HREF="mailto:jamie@cs.utah.edu">jamie@cs.utah.edu</A>)
+<P>
+<A HREF="ftp://gatekeeper.dec.com">gatekeeper.dec.com</A> [16.1.0.2]: /pub/DEC/off.tar.Z - *OFF objects*,
+        /pub/misc/graf-bib - *graphics bibliographies (incomplete)*.  Randi
+        Rost (<A HREF="mailto:rost@granite.dec.com">rost@granite.dec.com</A>)
+<P>
+<A HREF="ftp://expo.lcs.mit.edu">expo.lcs.mit.edu</A> [18.30.0.212]:  contrib - *pbm.tar.Z portable bitmap
+        package*, *poskbitmaptars bitmap collection*, *Raveling Img*,
+        xloadimage.  Jef Poskanzer (<A HREF="mailto:jef@well.sf.ca.us">jef@well.sf.ca.us</A>)
+<P>
+<A HREF="ftp://venera.isi.edu">venera.isi.edu</A> [128.9.0.32]:  */pub/Img.tar.z and img.tar.z - some image
+        manipulation*, /pub/images - RGB separation photos.  Paul Raveling
+        (<A HREF="mailto:raveling@venera.isi.edu">raveling@venera.isi.edu</A>)
+<P>
+<A HREF="ftp://wuarchive.wustl.edu">wuarchive.wustl.edu</A> [128.252.135.4]:  /mirrors/unix-c/graphics - Rayshade ray
+        tracer, MTV ray tracer, Vort ray tracer, FBM, PBM, popi, Utah raster
+        toolkit.  /mirrors/msdos/graphics - DKB ray tracer.
+<P>
+<A HREF="ftp://ucsd.edu">ucsd.edu</A> [128.54.16.1]:  /graphics - utah rle toolkit, pbmplus, fbm,
+        databases, MTV, DBW and other ray tracers, world map, other stuff.
+        Not updated much recently.
+<P>
+<A HREF="ftp://okeeffe.berkeley.edu">okeeffe.berkeley.edu</A> [128.32.130.3]:  /pub - TIFF software and pics.  Sam
+        Leffler (<A HREF="mailto:sam@okeeffe.berkeley.edu">sam@okeeffe.berkeley.edu</A>)
+<P>
+<A HREF="ftp://surya.waterloo.edu">surya.waterloo.edu</A> [129.97.129.72]: /graphics - FBM, ray tracers
+<P>
+<A HREF="ftp://vega.hut.fi">vega.hut.fi</A> [128.214.3.82]: /graphics - RTN archive, ray tracers (MTV, QRT,
+        others), NFF, some models
+<P>
+<A HREF="ftp://gondwana.ecr.mu.oz.au">gondwana.ecr.mu.oz.au</A> [128.250.1.63]:  SPD, NFF & OFF databases, Graphics Gems
+        code.  Bernie Kirby (<A HREF="mailto:bernie@ecr.mu.oz.au">bernie@ecr.mu.oz.au</A>)
+<P>
+<A HREF="ftp://hp4nl.nluug.nl">hp4nl.nluug.nl</A> [192.16.202.2]: /pub/graphics/raytrace - DBW.microray, MTV,
+        etc.
+<P>
+<A HREF="ftp://ftp.brl.mil">ftp.brl.mil</A> [128.63.16.158]: /old/brl-cad - information on how to get the
+        BRL CAD package & ray tracer.
+<P>
+<A HREF="ftp://karazm.math.uh.edu">karazm.math.uh.edu</A> [129.7.7.6]:  pub/Graphics/rtabs.shar.12.90.Z - *Wilson's
+        RT abstracts*, VM_pRAY.  J. Eric Townsend
+        (<A HREF="mailto:jet@karazm.math.uh.edu">jet@karazm.math.uh.edu</A>)
+<P>
+<A HREF="ftp://maeglin.mt.luth.se">maeglin.mt.luth.se</A> [130.240.0.25]:  graphics/raytracing/Doc - *Wilson's RT
+        abstracts*.
+<P>
+<A HREF="ftp://ftp.fu-berlin.de">ftp.fu-berlin.de</A> []:  /pub/unix/graphics/rayshade4.0/inputs - aq.tar.Z is
+        RayShade aquarium (Americans:  check <A HREF="ftp://ftp.ee.lbl.gov">ftp.ee.lbl.gov</A> first).  Heiko
+        Schlichting (<A HREF="mailto:heiko@math.fu-berlin.de">heiko@math.fu-berlin.de</A>)
+<P>
+<A HREF="ftp://apple.apple.com">apple.apple.com</A> [130.43.2.2?]:  /pub/ArchiveVol2/prt.
+<P>
+netlib automatic mail replier:  UUCP - research!netlib, Internet -
+        <A HREF="mailto:netlib@ornl.gov">netlib@ornl.gov</A>.  *SPD package*, *polyhedra databases*.  Send one
+        line message "send index" for more info, "send haines from graphics"
+        to get the SPD.
+<P>
+UUCP archive: avatar - RT News back issues.  For details, write Kory Hamzeh
+        (<A HREF="mailto:kory@avatar.avatar.com">kory@avatar.avatar.com</A>)
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Ray Tracing,
+</A></FONT>
+the way I do it, by Haakan 'Zap' Andersson
+</H4>
+[See the RayTracker description later in this issue for what his system looks
+like.  I don't agree with the usefulness of some of these, but find them
+interesting reading.  I particularly like the idea of hashing, though as
+John Woolverton points out, this idea has problems with soft shadows. - EAH]
+<P>
+<PRE>
+* TIGHT screen space bounding.
+  Some people neglect screen space bounding, and don't use it. MANY people
+  use it, but they project the 3D bounding box onto screen space, potenti-
+  ally getting a lot of 'slack' around 'em.
+     Gain: Speedier bounding box generation
+     Loss: Slack around objects = more wasteful intersections.
+  My Way: Do a vector rendering and get minmax screen coordinates from
+          that.  Yes, a vector rendering might take time, but hey, what's that
+          compared to the tracing time, eh?
+  (Yes I know about the method of doing a Z buffer rendering first... but
+   then you have to write a Z buffer renderer first, right?)
+  Comments:
+    Think about the standard axis-aligned bounding box around an object.
+    Seen from the vector 1,1,1 you will have the corners 'sticking out'
+    maximally. Also, bounding box intersection takes this 'n that amount
+    of FP operation. A screen space bounding box is done with four integer
+    compares. For eye rays I NEVER intersect the actual bounding boxes at
+    all, ONLY use the screenspace bounding, plus a stored minimum distance
+    to the eye for each bounding box. So my bounding box intersection for
+    eye rays is 4 integer and one FP compare.
+
+* Self sorting list
+  Most objects in my structure has the minimum distance to the eye recorded.
+  When intersection the object, the first thing you do is to see if the
+  currently valid 't' is smaller than this distance. If so we have already
+  hit a closer object, and can never hit this object. Also, when the ray-
+  intersection checker has found the closest object, this is put first in
+  the list and will be checked first next time.
+
+  Since the intersection check function is called recursively when we enter
+  a bounding box, objects INSIDE the bounding box is also sorted, so for
+  each 'level' in the ray tree we always have the object we hit last first.
+
+* Light buffer
+  Similar to the 2d bounding boxes on screen for eye rays, shadow rays have
+  their 2d bounding boxes, but since a light source can shine all around and
+  is not limited to one direction, this is done in polar coordinates (a
+  spherical coordinate system). So, for shadow rays I don't intersect any
+  real bounding boxes either, but do some more compare operations. And since
+  the ranges for a spherical coordinate system is fixed (i.e. 2 pi * pi)
+  there is no point in using floating point, so fixed point integers can be
+  used instead.
+
+  The minimum distance to each object is also constant for each light, and
+  may then be calculated and stored when we set up things and do the wire
+  frame rendering.
+
+* Reflected/fracted rays
+  This is the only case where I actually intersect bounding boxes. And now
+  to the next weird issue: I do NOT use axis-aligned bounding boxes, they
+  are transformed together with the rest of things, since my bounding boxes
+  actually work as "transformers" for my objects. But FIRST, for each box,
+  I check the MINIMUM distance with the current 't' and if bigger, just
+  discard.
+
+  To find the minimum distance, I am helped by the fact that my bounding
+  boxes are stored as a center point and x, y and z extends from that
+  centre. So I can use a rough (distance to center) - (x_size + y_size +
+  z_size), and I get a value that is guaranteed to be SMALLER than the
+  actual distance. And to avoid square roots, my actual comparisons is
+  of course done on the distances squared, i.e. from the ray origin, I take
+  the x distance to the bbox centre squared, plus y distance squared, plus
+  z distance squared. Now I have the distance from ray origin to the
+  center of the bbox squared. Now subtract from that (x_size + y_size +
+  z_size) squared, and compare that to 't' squared. If 't' is smaller, we
+  can never hit that bounding box.
+
+* Transformed bounding boxes
+  I've always been in love with tight bounding volumes, because they avoid
+  unnecessary TRUE intersections. Thus, my bounding boxes are transformed
+  with everything else. Actually, it works like this (pseudo code-ish):
+
+  trace_ray(first_object,ray)
+  {
+    object = first_object;
+
+    while (object)
+    {
+      .
+      .
+      (( do the 2d intersection checking, either eye-ray 2d or
+         polar 2d for lamps. only do rest of code if 2d hit, and
+         distance is below current 't' ))
+      .
+      (( Ok, we hit 2D-wise, OR this was a reflected/fracted ray then:
+         transform ray to object's coordinate system ))
+      .
+      switch(object-&gt;type)
+      {
+         case SPHERE: /* Intersect sphere(oids) */
+                 .
+                 .
+         case BOUNDING_BOX:
+                ((check boundbox intersection, if refl/frac ray,
+                  if not refl/frac ray, set hit to true.))
+
+                if (hit)
+                {
+                   /* Ok, let's trace rays in this new coordinate system
+                      we are in now */
+                   trace_ray(object-&gt;bbox-&gt;contents_of_box,transformed_ray);
+                }
+      }
+      object = object-&gt;next;
+    }
+  }
+
+
+  What this gives me, besides the ability to twiddle my bounding boxes, is
+  local coordinate systems WITHIN those boxes. So if I have a HUNDRED objects
+  that would feel happy if they got their bounding boxes tilted 30 degrees
+  to the right, I could create ONE bounding box that transforms the ray 30
+  degrees to the right, and then use axis-aligned boxes (which of course are
+  faster) INSIDE the box for each of the hundred objects, making them happy.
+
+  Also, it helps animating stuff a lot. Move the bounding box, ans wham you
+  have an aggregate object. Move a box within the box, and Wham you have
+  hierarchical motion control without sweating too much.
+
+* Filtering texture maps
+  The way I filter texture maps may be considered "nasty" but it works OK
+  for me. I know the resolution, and I also know (from reverse engineering
+  my perspective ray creator ;-) how "big" the screen is in units, I can
+  easily calculate how "big" one pixel is in the screen plane. Deeper into
+  the model, the pixel covers a larger area, increasing linearly. So, the
+  distance an object is from the eye, guide the "pixel size" at that point
+  in a very simple and linear way.
+
+  Now the first error you do when you want to sample from your texture map
+  is to sample an area that is pixel_size * pixel_size large. Well, that is
+  correct for planes that are facing you. But if we are looking almost para-
+  llell to the surface? No, the actual area covered by the pixel is roughly
+  pixel_size / cos(view_angle), and since cos() is simply a dot product
+  (that you'll need later anyway) it's easily calculated. Now I simply grab
+  a square area that is this size large, and average it. Nasty, but looks
+  quite OK without overwhelming calculations.
+
+   Oh yes, there is the pathetic case where you are supposed to sample
+  10000 x 10000 pixels and average. Well, I never sample more than 8 x 8,
+  then I start to pick out 64 pixels at random within an n x n grid, and I
+  don't bother if I get the same one twice, since the impact of that on an
+  average of 64 pixels is mostly killed by the dithering noise anyway ;-)
+
+  Also, I use the eye-distance calculation ALL THE WAY DOWN THE RAY TREE,
+  which looks very OK as soon as the mirroring surfaces are flat, or there
+  is no heavy refraction going on. But now let's move on to other anti-
+  aliasing.
+
+* Hashing anti aliasing
+  I never use color difference as my subdivision criteria for supersampling.
+  What I do is this:
+
+  Before each sample for a pixel, set hash_number to 0.
+  The trace_ray() procedure does the following:
+    If it hits an object
+      Is it a smoothed patch mesh or similar?
+         Add its "smoothing group" or anything else that is
+         same for all faces smoothed together (I use the vertexlist
+         pointer) to the hashnumber
+      else
+         Add something unique for the object, its "number" or the
+         objectpointer to the hashnumber.
+
+      Set shadow_count to zero
+      For each light source:
+         Check shadows. If in shadow, shadow_count++.
+
+      hash_number += shadow_count &lt; 5 (or whatever);
+
+      If object is reflecting/fracting, call trace_ray() recursively
+      as always in a raytracer....
+
+  So what is all this? Well the hashnumber we get we compare with the
+  hashnumber for last pixel and the pixel in the last scanline. If it is
+  different then:
+    * We have hit different objects than last pixel/line
+    * We are in/out of different number than shadows than last pixel/line
+  AND THIS IS FOR THE ENTIRE RAY TREE! So if we hit anything else, ANYWHERE
+  down the tree, the hashnumber is bound to be different.
+
+  Oh yes, there are a number of weird cases where you just HAPPEN to miss
+  a supersample just because we get out of shadow the same time we move
+  from object 0 to object 32, and thereby by mistake get the same hash
+  number. But who cares? Don't worry, be happy.
+
+* Surface acne [NEW! NEW! NEW! NEW! NEW?] ??? Or is it? You tell me...
+
+  How to avoid it. Well, somebody proposed normal vector testing, and that
+  is OK for the system with well behaved users. The rest of us do a small
+  epsilon to avoid it. But someone said that this epsilon might be too big
+  or small for a given scene. And the funniest of them all (I laughed quite
+  a while), he proposed scaling it to the "diameter of the scene" or
+  something else. Why on earth do things like this?
+
+  The epsilon for displacing the ray for any object, is of course related
+  to the pixel_size as described above! I use pixel_size / 4 and it works
+  like a charm even if I model molecules or the solar system (which I have
+  done both, actually!) even in the same scene!!
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+More Thoughts on Anti-Aliasing,
+</A></FONT>
+John Woolverton (<A HREF="mailto:woolstar@cobalt.caltech.edu">woolstar@cobalt.caltech.edu</A>)
+</H4>
+[Zap Andersson also talks about this problem and independently invented this
+hashing method.  I neglected to publish a rough draft of Zap's idea last issue
+- see his article this issue for a more polished version.  - EAH]
+<P>
+   I was also troubled by the fact that my ray-tracer was anti-aliasing across
+textures (causing massive thrashing on my machine), and took the problem to
+the local gurus.
+<P>
+   I got back the suggestion of building a hash code, and putting all the
+things I wanted to detect for in the hash calculation.
+<P>
+   So I hashed together, object pointers, and light sources (when they weren't
+shadowed, or outside the cone of a spotlight...).  So first I'd check the hash
+code, skipping color changes due purely to textures.  Only if the hash
+differed, would I check the colors, just so I didn't SSamp a smooth edge also.
+<P>
+<PRE>
+   However, this didn't fix sampling across a soft shadow edge.
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Spatial Measures for Accelerated Ray Tracing,
+</A></FONT>
+by John Spackman
+</H4>
+[Here are some interesting passages from a note from him to me]
+<P>
+...Mind you, my thesis is more to do with the navigation of oct-trees AFTER
+they have been constructed with interval analysis.  This navigation seems
+more efficient than all that ARTS nonsense (navigating only half the vertical
+steps), naturally runs under integer addition and bit-shifting in a Bresenham-
+type way BUT WITHOUT the concept of a global driving axis, and being
+completely immune to division by zero requires no exception handling.
+I called the SMART method (Spatial Measures for Accelerated Ray Tracing) -
+perhaps my jocularity has back-fired & no-ones taking me seriously.
+I can ray-trace 20,000+ triangles with two light sources & shadows at 512x512
+in under 8 minutes on a Sun SparcStation - in fact (outrageous claim time)
+SMART has been observed to achieve constant time ray tracing INDEPENDENT
+of object count.  Each ray simply navigates a few empty voxels, whose
+number is independent of the global object count, until reaching the first
+non-empty voxel where generally only one object need be intersected &
+accepted as the nearest struck.  For example, I rendered a single torus in
+7 mins 23 secs and 80 tori in 7 mins 20 secs.  This is all AFTER constructing
+the octtree - O(N) but very efficient with interval analysis.  Interval
+analysis allows one to decompose right down to the surface of a primitive or
+CSG object (none of this bounding box nonsense propounded in RTNews a couple
+of years back).  You'll be able to see some of the pictures of the Octtrees in
+my thesis - at a fine resolution they look great!
+<P>
+[...]
+<P>
+I think the work of Adrian Bowyer & John Woodwark at Bath would interest you -
+they're attacking things from a CAD/CAM angle (Adrian is a Mechanical
+Engineer) - email `<A HREF="mailto:ab@uk.ac.bath.maths">ab@uk.ac.bath.maths</A>'.  Another pocket of isolated English
+ray-tracing is established at Leeds university (which I only stumbled across
+recently).  They also have a CAD/CAM bent, & are particularly into multi-
+processors.  If you're interested, email Professor Peter Dew at
+`<A HREF="mailto:dew@uk.ac.leeds.dcs">dew@uk.ac.leeds.dcs</A>'.  A Dr Stuart Green also did some multi-processor work
+(using your SPD data base) at Bristol University, but has now moved out to
+industry & I don't have his new email address.  I've recently moved to
+Edinburgh to take advantage of a 420 Meiko transputer surface - there's quite
+a lot of knowledge in ray tracing accumulating here (Fractal planets etc).
+<P>
+...  Arvo & Kirk's formation of candidate lists for their 5D ray tracing
+efficiency scheme?  I'm not a great fan of this I'm afraid - the old problem,
+too much over-approximation for concave objects.  Consider a hoop with large
+major radius, small minor radius (e.g. bicycle tyre tube).  A view frustrum
+can easily intersect the hoops bounding box by passing through the hoop's
+central hole WITHOUT striking the tyre anywhere!
+<P>
+    Lazy Oct-tree construction is the one for me, with nice tight
+decompositions right down to object surfaces, allowing rays to pass through
+the centre of such hoops whilst ignoring them, (or indeed lazy Hex-tree
+construction for animated scenes...), and reduced storage & construction
+costs.  It's a bit difficult to convey the efficiency of the scheme without
+recourse to a black board, but the long and the short of it is that most rays
+missing all objects end up querying none (hoorah!)  whilst those hitting an
+object end up querying only that (ie just one) object.  One can't do much
+better than that on a ray by ray basis, and I gave up on ray coherence ages
+ago (not that it's not got great potential, but I got awful headaches trying
+to work out the action of a complex CSG object e.g. reflective engine block
+on a single incoming pyramid of rays, never mind refraction - perhaps you've
+got further ...  ?).  Oh, and you get free adaptive anti-aliasing with
+octtrees ..
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+Barcelona Workshop Summary,
+</A></FONT>
+by Arjan Kok (<A HREF="mailto:arjan@duticg.tudelft.nl">arjan@duticg.tudelft.nl</A>)
+</H4>
+[There were many interesting papers at this workshop.  What follows is
+excerpted from Arjan's summary, focusing on those papers directly concerned
+with classical ray tracing (e.g.  not including Monte Carlo methods, two-pass
+methods, etc).  The finished papers will be available from Springer-Verlag in
+book form some time next year.]
+<P>
+Summaries of papers presented at the second Eurographics Workshop on Rendering
+Barcelona, Spain, 13-15 May 1991
+<P>
+<PRE>
+Gregory Ward (<A HREF="mailto:greg@lesosun1.epfl.CH">greg@lesosun1.epfl.CH</A>)
+Adaptive Shadow Testing for Ray Tracing
+</PRE>
+<P>
+Method for reducing the number of shadow rays for scenes with a large number
+of light sources.  The sources are sorted on their contribution, and only for
+the most important sources rays are cast.  The influence of the other sources
+is estimated statistically.  Tests are done with different tolerances
+(threshold to determine whether sources are important) and certainties (rate
+of accuracy).  The method gives good reduction and is able to find the most
+important shadows because it selects contrast as criterion.
+<P>
+<PRE>
+Christophe Schlick (<A HREF="mailto:schlick@geocub.greco_prg.FR">schlick@geocub.greco_prg.FR</A>)
+An Adaptive Sampling Technique for Multidimensional Integration by Ray-
+Tracing
+</PRE>
+<P>
+Describes a sampling method that includes the following characteristics:
+adaptivity, irregularity, complete stratification, importance sampling and
+uncorrelation.  It allows a fast reconstruction.  Implementation is done using
+look-up tables.
+<P>
+J.P. Jessel, M. Paulin, R. Caubet
+An Extended Radiosity Using Parallel Ray-Traced Specular Transfers
+<P>
+Describes a parallel extended radiosity method.  The method is implemented on
+a parallel architecture dedicated to ray-tracing (based on transputers).
+<P>
+Veysi Isler, Cevdet Aykanat, Bulent Ozguc (<A HREF="mailto:isler@TRBILUN.BITNET">isler@TRBILUN.BITNET</A>)
+Subdivision of 3D Space Based on the Graph Partitioning for Parallel Ray
+Tracing
+<P>
+Describes a heuristic algorithm to subdivide the 3D space by converting the
+problem into a graph partitioning problem.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art8">
+Book Announcement,
+</A></FONT>
+from Stuart Green
+</H4>
+[This is Stuart's thesis, further refined for publication.  To see if you
+might be interested in it, look at:  Stuart A. Green & D.J. Paddon,
+"Exploiting Coherence for Multiprocessor Ray Tracing," IEEE Computer Graphics
+and Applications, vol 9, no 6, p. 12-26, Nov. 1989. - EAH]
+<P>
+Green, Stuart. "Parallel Processing for Computer Graphics", 1991,
+in the series "Research Monographs in Parallel and Distributed Computing".
+<P>
+MIT Press, Cambridge, Massachusetts, 02142.  ISSN 0953-7767,
+ISBN 0-262-57087-4.
+<P>
+Pitman Publishing, 12-14 Slaidburn Crescent, Southport PR9 9YF.
+ISBN 0-273-08834-3.
+<P>
+I don't have the US$ price, but in the UK it costs 27.95 Sterling.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art9">
+Spiral Scene Generator,
+</A></FONT>
+by Tom Wilson
+</H4>
+[This is a simple SPD-like scene generator, creating a 3D spiral loop]
+<P>
+There are two loops:  one which creates SIZE levels and the other that creates
+2^SIZE balls on each level.  The balls on each level almost form a circle.
+the entire structure makes a spiral.  The thing I am most displeased with is
+the texture ("f" line).  I created it so that a scene would have a very
+nonuniform distribution of objects.
+<P>
+<PRE>
+#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+#define PI 3.1415926
+#define DEFAULTSIZE 10
+</PRE>
+<P>
+<PRE>
+main(argc,argv)
+  int argc;
+  char *argv[];
+{double r, x, y, z, frac, angle, tmp, invs2;
+ int s, s2, w, SIZE, col;
+</PRE>
+<P>
+<PRE>
+ if (argc &gt; 1)
+   sscanf(argv[1],"%d",&SIZE);
+ else SIZE = DEFAULTSIZE;
+ s2 = (int) pow(2.0,(double)SIZE);
+ x = (double) SIZE / 2.0;
+ printf("v\nfrom 40 20 -40\n");
+ printf("at 0 0 0\n");
+ printf("up 0 1 0\nangle 45\nhither 1\nresolution 512 512\n");
+ printf("b 0 0 0.3\n");
+ printf("l 90 90 0\n");
+ printf("l 0 90 -90\n");
+ printf("f 0.3 0.3 0.3 0.5 0.5 3 0 0\n");
+ printf("p 4\n");
+ printf("50 0 50\n");
+ printf("50 0 -50\n");
+ printf("-50 0 -50\n");
+ printf("-50 0 50\n");
+ for (s = col = 0; s &lt; SIZE; s++)
+  {s2 = (int) pow(2.0,(double) s);
+   for (w = 0; w &lt; s2; w++)
+    {frac = (double)w / (double)s2;
+     r = (double)s + frac;
+     angle = 2.0 * PI * frac;
+     x = 2*r*cos(angle);
+     z = 2*r*sin(angle);
+     tmp = (double)(SIZE - s) + (double)(s2 - w - 1) / (double)s2;
+     y = tmp*tmp*tmp / (double)(SIZE*SIZE);
+     col = (col + 1) & 7;
+     printf("f %d %d %d 0.8 0.2 3 0 0\n",(col&4)>0,(col&2)>0,col&1);
+     printf("s %g %g %g %g\n",x,y,z,2.0/(double)(s*s+1));
+    }
+  }
+}
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art10">
+An Announcement From The 'Paper Bank' Project,
+</A></FONT>
+ by Juhana Kouhia (<A HREF="mailto:jk87377@tut.fi">jk87377@tut.fi</A>)
+</H4>
+The following new paper is available from <A HREF="ftp://nic.funet.fi/pub/graphics/papers/papers/">nic.funet.fi</A> [128.214.6.100] from
+the directory pub/graphics/papers/papers.
+<P>
+<PRE>
+Eric A. Haines and John R. Wallace
+Shaft Culling for Efficient Ray-Traced Radiosity
+May 1991, Barcelona
+File: hain91.ps.Z   [about 70 kBytes]
+</PRE>
+<P>
+If anonymous FTP is not available to you I will mail it if requested.
+<P>
+Please contact me for a full list of the papers.
+<P>
+[We have recently sent Juhana the last version of our paper (with thinko's
+removed) and so you might want to get this improved version.  The new version
+is called "Shaft Culling for Efficient Ray-Cast Radiosity".  It's a nice
+little algorithm for finding what objects potentially block light between any
+two given boxes in space.  Similar in some ways to Arvo & Kirk 5D but with
+hierarchy, it has some interesting potential uses and generally speeds up
+hierarchical bounding volume ray tracers.  - EAH]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art10a">
+Radiance 1.4 via FTP,
+</A></FONT>
+by Greg Ward
+</H4>
+Radiance 1.4 is now available via tape distribution or anonymous ftp (for the
+first time).  Rather than including compiled executables as I have in the
+previous releases, only the source code and a global make script is provided
+that should work on most platforms.  Please let me know if you have any
+trouble with it.  I have also taken out the example images and the conference
+room model in order to trim back the distribution.  I hope to include these
+files in other anonymous ftp directories as suggested by Robert Amor since
+there seems to be general agreement that this is a good idea.
+<P>
+To pick up release 1.4 from anonymous ftp, connect to <A HREF="ftp://hobbes.lbl.gov/pub/">hobbes.lbl.gov</A>
+(128.3.12.38) with ftp using the "anonymous" account and enter your e-mail
+address as the password.  Everything is in the directory pub, and the main
+distribution is called "Radiance1R4.tar.Z".  This file is about 3.5 Megabytes,
+so please do your transfers in binary mode the first time!  Also, you will
+probably experience less network traffic in the morning, when most computer
+scientists are asleep.
+<P>
+________
+<P>
+Information on Models, Test Environments, etc for Radiance:
+<P>
+I've just set up an anonymous ftp archive site at <A HREF="ftp://hobbes.lbl.gov">hobbes.lbl.gov</A> (128.3.12.38)
+for sharing Radiance models and programs.  In addition to the standard source
+distribution, this archive contains the following:
+<P>
+pub/generators  - Programs for generating specialized objects & shapes
+pub/libraries   - Libraries of patterns, textures, fonts, etc.
+pub/mac         - MacIntosh applications and utilities (for Radiance)
+pub/models      - Complete Radiance scene descriptions
+pub/objects     - Objects for including in Radiance scenes
+pub/programs    - Miscellaneous programs and utilities
+pub/tests       - Test scenes for validating global illumination programs
+pub/translators - CAD file translators and image format converters
+<P>
+For those of you who I haven't dragged aside and told already, Radiance is
+free ray tracing software for lighting simulation and rendering that does a
+lot of neat stuff and tries very hard to do it accurately.
+<P>
+If you are interested in picking up or leaving off some nice environment
+models, this is a good place to do it.  Most of the scene descriptions are in
+Radiance format, but writing a translator shouldn't be too much work, and I'm
+willing to offer whatever help I can.
+<P>
+If you are working on your own radiosity or ray tracing program and want to
+compare results, please check out the pub/tests directory.  There is not much
+there now, but with your help we can make this archive into a valuable
+resource for researchers in global illumination.
+<P>
+Please send any questions or comments to <A HREF="mailto:greg@hobbes.lbl.gov">greg@hobbes.lbl.gov</A>.
+<P>
+________
+<P>
+I finally finished putting together a library of objects from the various
+models I've created for Radiance.  It is in pub/objects/gjward.tar.Z.  I hope
+people find it useful.  It took me quite some time to get the my miscellany
+into a usable form.
+<P>
+If you have objects you are willing to submit, please take a look at the way
+this initial library is set up first.
+<P>
+________
+<P>
+&gt;From Paul D. Bourke (<A HREF="mailto:pdbourke@ccu1.aukuni.ac.nz">pdbourke@ccu1.aukuni.ac.nz</A>) [130.216.1.5]<BR>
+<P>
+The public domain modeller Vision-3D for the Mac II family is about to
+support Radiance data files as an export option. This has already been
+done but the copy on our FTP site hasn't yet been updated (I want to put
+some more features in the next release) If anyone is interested however
+the current version of Vision-3D with Radiance file export can be made
+available.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art11">
+Proceedings of Graphics Interface '91 Availability,
+</A></FONT>
+by Irene Gargantini
+</H4>
+<PRE>
+In the USA: Morgan Kaufmann Publishers
+Order Fulfillment Center
+P.O. Box 50490
+Palo Alto, Ca 94303 USA, phone (415) 965 4081
+</PRE>
+<P>
+The proceedings should be available by now, and they can take your order in
+advance.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art12">
+NFF Previewers,
+</A></FONT>
+by Bernie Kirby, Patrick Flynn, Mike Gigante, Eric Haines
+</H4>
+&gt;From Bernie Kirby (<A HREF="mailto:bernie@eric.ecr.mu.oz">bernie@eric.ecr.mu.oz</A>):<BR>
+<P>
+There is an NFF previewer available for anonymous FTP on <A HREF="ftp://gondwana.ecr.mu.oz.au">gondwana.ecr.mu.oz.au</A>
+[128.250.1.63] pub/preview.c.  It uses the vogle library which is also
+available as pub/vogle.tar.Z
+<P>
+&gt;From Patrick Flynn (<A HREF="mailto:flynn@cse.nd.edu">flynn@cse.nd.edu</A>):<BR>
+<P>
+If anyone on this side of the pond wants the preview.c program, it's now
+available for anonymous FTP from <A HREF="ftp://shillelagh.cse.nd.edu">shillelagh.cse.nd.edu</A> (129.74.9.7).  You can
+get the VOGLE library from uunet.  I tried the previewer; it does what I need.
+<P>
+&gt;From Mike Gigante (<A HREF="mailto:mg@godzilla.cgl.rmit.oz.au">mg@godzilla.cgl.rmit.oz.au</A>):<BR>
+<P>
+There is a NFF previewer for Silicon Graphics workstations available on
+<A HREF="ftp://godzilla.cgl.rmit.oz.au">godzilla.cgl.rmit.oz.au</A> (131.170.14.2).  Make sure you grab the readme file
+also.  It uses the hardware lighting and Zbuffer on the SGI machines to give a
+very fast preview.
+<P>
+&gt;From Eric Haines:<BR>
+<P>
+I also have two previewers for NFF files which work on HP workstations (one
+is static, the other uses the mouse for rotating & viewing the object).  I
+can send them to anyone who wants them (no FTP right now).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art13">
+RayTracker Demos Available,
+</A></FONT>
+by Jari Kahkonen
+</H4>
+    My Swedish friend Haakan Andersson sent me some RayTracker animation-
+demos and now they are ftp'able from <A HREF="ftp://tolsun.oulu.fi">tolsun.oulu.fi</A> [128.214.5.6].  You need
+PC with VGA to run these animations.
+<P>
+  Because I'm sure that raytracer-fans have lotsa questions about RayTracker,
+after they have seen these animations, please mail all questions to the
+author, i.e. to Haakan Andersson, zap@lage.lysator.liu.se.  If you have
+problems with animations (they don't unpack etc...)  flame or hate-mail me...
+<P>
+  You can find animations from /pub/rayscene/zap, though it has nothing to do
+with Rayscene.  /pub/rayscene/anim.PC contains raytraced animations made with
+Rayscene and DKBtracer (my animations...).  /pub/rayscene/anim.AMIGA contains
+raytraced animations for Amiga made with Rayscene and DKBTracer (animations by
+Panu Hassi).
+<P>
+  Animations are packed with Lharc 2.05.  All animations are self-extracting
+archives (= .exe-files).  So, "run" them and they will unpack themselves.  For
+examples:  If you have "car.exe"-animation, just type "car".  Animation-arc-
+hives includes short README.TXT and animation (.fli).  If you want to give
+these animations to your friends, *do not* separate these parts.  Give .exe,
+since README.TXT contains contact-information to Haakan Andersson.  Also,
+every animation has little text for contact address.  (except "mesh", I didn't
+wanna "spoil" it...it moves so smoothly...:).  Remember to set "type binary"
+when downloading files...
+<P>
+  These animations need Autodesk Animation Player, and if you don't have it,
+you can pick it from /pub/rayscene/anim.PC.  That directory contains my demos
+made with Rayscene.  Filename is "aaplay.exe".
+<P>
+  Animations run faster if you are running them from RAM-disk.  If you have
+mouse it's easier to control aaplay.exe.  Adjust animation speed to your
+machine.
+<P>
+  Some animations are not full-screen because of their original size.
+<P>
+  Little description of animations:
+<P>
+BIKE.FLI: Fly-by over a bike in a brick basement.
+<P>
+HP-RIP2.FLI:  The 'famous' one of a Camshaft emerging from its own drawing.
+Created for the 'Mechslide' demo video, available from Emt Inc in USA.  The
+name 'HP-RIP' comes from the fact that the 'idea' of a camshaft came from
+Hewlett-Packard's well known raytraced 'Camshaft on bed of ravioli' by Eric
+Haines, a friend of mine.
+<P>
+ART.FLI:  Fly-by over a pen, a few bolts, a drawing and a book placed on a
+wooden table under a green metal table lamp.
+<P>
+BLAHBLAH.FLI:  Here's a (relatively) new one:  Demo of 1.55 Beta's
+transparent, animated texturemaps, using Autodesks 'BOSSTALK'.  Even funnier
+is to use animated bump-maps.  To see them, watch out for 'Spaceman Spiff' at
+a theatre near you.
+<P>
+BOING.FLI:  Newer version of BOUNCE.  A Red, bouncing chrome sphere on top of
+a texture map from Imagetects(tm).  Rendered and Animated in RayTracker 1.4
+Beta.
+<P>
+BOUNCE.FLI:  Very very simple animated bouncing ball.  The first RayTracker
+animation EVER!
+<P>
+CAR.FLI:  Looking at a red car in sunset.  Image Rendered and Animated in
+RayTracker 0.6 Beta.  Model built in AutoCAD R10 by:  Bertil Heden, Autodesk,
+Sweden.  Thanks, Bert!
+<P>
+MESH.FLI:  Fly-round a bowling pin of glass and a bowling ball on a plate
+suspended in space.  New effect in this version of RayTracker is the ability
+create a feel of space via 'space mapping' a background to the universe.
+<P>
+ALARMCLK.FLI:  An image of an alarmclock, a matchbox, a table, and a wooden
+table lamp.  Suddenly, without warning, we fly past the clock and up the lamp.
+Why?  Beats me.
+<P>
+________
+<P>
+Tracey Bernath (<A HREF="mailto:tmbernath@tiger.waterloo.edu">tmbernath@tiger.waterloo.edu</A>) notes:
+<P>
+I recently uploaded the raytraced animations from <A HREF="ftp://tolsun.oulu.fi">tolsun.oulu.fi</A> to
+<A HREF="ftp://wuarchive.wustl.edu">wuarchive.wustl.edu</A> to try and cut down the trans-ocean net travel.  I can't
+upload to SIMTEL because we have a lousy connection, and I always get the
+usual "Too many anonymous users, Try Again" 8-}
+<P>
+in /pub/zap are the raytraced and animated images, some are really good, some,
+well...  in /pub/raytracker are the original animations, including aaplay.lzh
+(I don't know if aaplay.exe works, but I know the aaplay.lzh does )
+<P>
+Enjoy!
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art14">
+RayTracker Info,
+</A></FONT>
+by Zap Andersson
+</H4>
+[Though a commercial product, I thought I would include this info, since the
+FLI demos used this software to generate them.  Also, the interactive features
+are of interest.  I received a demo copy to review, and it seemed pretty nice
+(though I didn't do any serious rendering with my no-math-coprocessor 386).]
+<P>
+<PRE>
+Current version (1.71)
+Date: 24 april 1991
+</PRE>
+<P>
+RayTracker is a commercial raytracing program, especially created to render
+geometries from the well-known CAD software AutoCAD.  RayTracker reads models
+in the AutoCAD DXF format, or in Autodesk 3D Studio 'ASCII' format.
+<P>
+RayTracker runs on MS-DOS PC computers, with a math co-processor, but porting
+to other platforms (mainly Sparc, Amiga and Mac) are being considered.  It
+utilizes Expanded (EMS) memory if it is found in the system.
+<P>
+RayTracker has a graphical user interface (GUI) with dialog boxes, pull-down
+menus, and a built in hypertext help-system.  It runs in two modes, a
+graphical mode (which requires an EGA/VGA display) and a text mode fore those
+lacking graphics.  On a VGA you may also see the image as it is being
+rendered.  You may view the finished image with a supplied program on your
+VGA, Super-VGA or on your CAD display, if it has an AutoSHADE compatible real
+mode ADI driver with version 4.0 or higher and at least 256 colors.
+<P>
+Materials are easily assigned to objects by simply loading them from the
+provided material library, containing many useful materials.  You may also
+create your own materials by setting parameters for color, ambient, diffuse
+and specular reflection, mirroring, transparency, index of refraction, trans-
+lucency, shadow-casting and many many other things.
+<P>
+The mapping functions in RayTracker use a very generalized model of a map.  A
+'map' can be any number of patterns, mixed or overlaid, placed on different
+parts of one single surface, or repeated all over.  Each pattern can be both a
+bitmapped graphic image (GIF, Targa 16/24/32, Animator CEL, Animator FLI and
+Amiga IFF format is accepted), or one of the built in mathematically defined
+functions (wood, marble, random noise, wavy, checkered etc.).
+<P>
+Each 'map' can be applied in many ways:
+<P>
+* Texture map - Changing the color of the surface.  This is the only thing
+                that more primitive renderers, such as 'Big D' can do.
+                Certain parts of a texturemap can also have a transparent
+                color allowing one single surface to depict a complex object
+                such as a tree or a person as a 'coulisse'.  Naturally, the
+                shadow has the contour of the tree or person also.
+<P>
+* Bump map    - The 'brightness' at each spot in the map guides the surface
+                'altitude', allowing you to create dented, scraped, wrinkled,
+                engraved or in any other minor surface deviation.
+<P>
+* Mix map     - Allows you to mix between two totally different surface
+                descriptions on one surface, such as a checkered pattern where
+                some squares are of red glass and others of wood.
+<P>
+* Reflect. map- Allows you to simulate reflections without the increased
+                rendering time using true mirroring.  Curved objects looks
+                just as convincing with a reflection map.  You may also add
+                amusing effects, such as 'window reflections' like in the film
+                'Tin Toy' from Pixar.
+<P>
+Aside from this, a map can also be applied as the 'slide' in a slide projector
+light source, or as the screen fore- or background.
+<P>
+Lightsources include point sources, directed, spotlights and slide-
+projectors.  Light falloff can be none, linear or quadratic.  All types of
+lights can cast shadows of two types:  Raytraced shadows, that are sharp and
+accurate but requires one extra step in the ray tracing algo- rithm, and
+shadows using a "shadow map", that can have 'fuzzy edges' and work very
+quickly.
+<P>
+To ease the production of images, RayTracker renders every 16:th pixel first,
+then every 8:th and so on, allowing you to quickly determine if there is
+something wrong with the light, or a material.  You may also create 'test
+renderings' on parts of your model by simply marking two points on the initial
+wireframe.
+<P>
+Three modes are available, Quick Track, ignoring shadows and reflections,
+Medium Track, accounting for shadows, but not reflection and refraction, and
+finally Ray Track, performing the full raytracing calculation.
+<P>
+RayTracker can generate walkthrough animations from just a small set of 'key'
+views, using a 7 dimensional spline interpolation technique.  The images can
+be automatically concatenated to an Animator compatible FLI file.
+<P>
+The output format from RayTracker is GIF or Targa 16/24/32 (with alpha channel
+in the 32 bit format) in any resolution (up to your diskspace limit).  A
+conversion utility is also provided to convert a Targa file to a Amiga HAM
+format.
+<P>
+RayTracker is *NOT* a PD or ShareWare program, it is a commercial product,
+available from the addresses supplied below.  If you have any technical
+questions about its capabilities, you can contact me, the program author on
+email address:
+<P>
+<PRE>
+    <A HREF="mailto:zap@lysator.liu.se">zap@lysator.liu.se</A>
+</PRE>
+<P>
+....or you can send ordinary mail to the LAST (Scandinavian) address listed
+below, and attach my name: Hakan 'Zap' Andersson
+<P>
+<PRE>
+U.S.A.                  Europe:             Scandinavia:
+=================       =================   ===================
+EMT Inc.  #250          EMT Ltd.            EMT Ab
+199 N. Commercial st.   PO Box 103          Box 40
+Bellingham, WA          Rickmansworth       S-178 21 Ekeroe
+98255 USA               Herts WD3 5RF       SWEDEN
+                        U.K.
+Phone:
+(USA)-206 647 2426     (UK)-923 285 496     (SW)-756 320 20
+Fax:
+(USA)-206 647 2890     (UK)-923 285 496     (SW)-756 346 50
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

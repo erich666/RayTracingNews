@@ -1,0 +1,2042 @@
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+                        "Light Makes Right"
+
+                          December 2, 1997
+                        Volume 10, Number 3
+
+Compiled by Eric Haines, erich@acm.org, http://www.acm.org/tog/editors/erich/
+All contents are copyright (c) 1997, all rights reserved by the
+	individual authors
+Archive locations:
+	HTML http://www.acm.org/tog/resources/RTNews/html/index.html
+	text version at http://www.acm.org/tog/resources/RTNews/text/
+
+Contents:
+	Introduction
+	New People
+	Ray Tracing Roundup
+	Two New Graphics Books plus One, by Eric Haines
+	Ray Classification for Animation, by Matt Quail
+	Raytracker Tricks, by Hakan "Zap" Andersson
+	Even Faster Crossings Test, by Philip Brown
+	Additional Notes on Nested Grids, by Kris Klimaszewski, Andrew Woo,
+		Frederic Cazals, and Eric Haines
+	Recursive Grids and Ray Bounding Box Comments and Timings, by
+		Andrew Woo
+	CD-ROM: The Internet Raytracing Competition, Year One,
+		review by Eric Haines
+	Plucker Coordinates, by Jeff Erickson
+	Errors of Commission and Omission, by Eric Haines
+	Cyrus-Beck as a Ray/Polygon Tester, by David Rogers
+	Mirror Reflectivity, by Greg W. Larson
+	Testing a Matrix for Uniform Scaling, by Charles Iliya Krempeaux and
+		Eduardo Marreiros
+	Declassified CIA BRDFs now available, by Greg Ward Larson
+	Lifting the Monkey's Paw Curse, by Jeff Goldsmith
+	Eccentricity Effects in Blobs, by Alfonso Hermida
+
+-------------------------------------------------------------------------------
+
+Introduction
+
+While looking over Matt Quail's thesis I noticed an interesting page in which
+the number of references in the ray tracing bibliography
+(http://www.acm.org/tog/resources/bib/) is shown as a function of the year.
+This graph is fairly revealing: 1990 is when the number of references peaked.
+I just noticed this week that his graph is from the collection of computer
+science bibliographies (http://liinwww.ira.uka.de/bibliography/index.html).
+The ray tracing reference graph is at:
+http://liinwww.ira.uka.de/bibliography/Graphics/ray.html. Other interesting
+graphs include the radiosity bibliography (which peaks at 1994) and the
+comprehensive computer graphics reference listing maintained by SIGGRAPH
+(which peaks at 1983 but has other, lower peaks at 1991 and 1995). Ian Ashdown
+(who maintains the radiosity bibliography) thinks that the quality of work in
+radiosity research is still going up. This should be the case (new work is
+judged against the old), but it is interesting to see that in some rough
+measure the rate of work in these areas has declined.
+
+Even though we're no longer living in the golden age, there is still a lot
+to learn and master. One of the inspirations for this issue was the
+conversation with Kris Klimaszewski, Andrew Woo, and Frederic Cazals. The
+techniques used by each seem effective, and I hope someone will formally
+compare the three someday. There is also an article by Zap Andersson about
+the various techniques used in his Raytracker rendering engine, including
+tricks to avoid overexposure, for palette selection on the fly, and for
+antialiasing textures. Matt Quail gives a quick summary of his thesis findings
+on extending 5D ray classification to animation. Alfonso Hermida presents some
+interesting ways to modify blobby potential fields. There are also a number of
+other useful techniques explained (e.g. Plucker coordinates), as well as
+short reviews of new books and CD-ROMs. Finally, don't miss the CIA's BRDFs.
+
+As the on-line editor of ACM TOG I finally made a personal web page,
+http://www.acm.org/tog/editors/erich/, as much for myself as for anyone else -
+it has links to a number of my papers online, links which I usually have to
+dig up. At the bottom of my page are some different rendering experiments
+which might be of interest. Holly Rushmeier, Editor-in-Chief of ACM TOG, also
+now has a web page, http://www.acm.org/tog/editors/hollyr/, with links to her
+papers available online. Her pages caused me to burn a good hour surfing some
+of her co-authors' personal pages, which had some fascinating links.
+
+-------------------------------------------------------------------------------
+
+New People
+
+Andrei Sherstyuk
+Department of Computer Science
+Monash University
+Clayton, Victoria 3168
+Australia
+ash@bruce.cs.monash.edu.au
+http://www.cs.monash.edu.au/~ash
+
+My research interests are: general ray-tracing, modeling/rendering implicit
+surfaces, convolution surfaces and new methods in ray/surface interactions.
+
+I have written a ray-tracer that is faster than POV-ray and almost as fast as
+Rayshade. It allows modeling, rendering and animation of implicit surfaces
+based on skeleton design, ala Jules Bloomenthal's convolution surfaces.
+Samples of my work, including papers, pictures and animations may be found at
+my home page. I am a Ph.D. student, finishing some time 1998.
+
+-------------------------------------------------------------------------------
+
+Ray Tracing Roundup
+
+As usual, I have added the more interesting new free software packages and
+tools to ACM TOG's software links site, http://www.acm.org/tog/Software.html.
+For example, links to a new visualization toolkit and to radiosity test
+scenes are at the TOG site. Below are sites which did not belong there.
+
+------------
+
+Graphics Interface '97 Papers
+
+Electronic copies of all the papers from GI '97 are available from the
+conference's web page:
+
+        http://www.dgp.toronto.edu/gi/gi97/home.html
+
+Hardcopies of the proceedings may be purchased from Morgan-Kaufmann
+Publishers. Their web page's URL is the following:
+
+        http://www.mkp.com/
+
+- A. T. Campbell <atc@arlut.utexas.edu>
+
+------------
+
+Fast, Minimum Storage Ray-Triangle Intersection
+
+This paper by Tomas Moeller and Ben Trumbore was recently published in the
+"journal of graphics tools" http://jgt.akpeters.com/. The abstract, code and
+statistics (but not the algorithm description) is available online at:
+
+	http://jgt.akpeters.com/papers/MollerTrumbore97/
+
+I think this is an important paper. The intersection method is comparable to
+other more traditional methods, with the important advantage that the
+triangle's normal does not have to be stored in order to efficiently compute
+the intersection.
+
+------------
+
+Near Real Time RT on a Pentium
+
+A fast (1-2 fps on a Pentium 90) ray trace demo with reflections and shadows
+on curved surfaces can be found at:
+
+	ftp://ftp.cdrom.com/.24/demos/demos/1997/j/jlantani.zip
+
+It was faster than expected.
+
+- Eric Haines
+
+------------
+
+Quadric Java Raytracer
+
+I have a neat applet for newbies to Java and / or raytracing. I've written a
+Java applet that allows web users to interactively render all of the Quadric
+Surfaces - and my home planet - from any perspective, set by using a custom
+built, mouse & keyboard responsive, integrated cylindrical and spherical
+coordinate system graphical user interface:
+
+	http://www.frontiernet.net/~imaging/raytracing.html
+
+"Imaging the Imagined:  Raytracing tips from da Vinci and me." Raytracing and
+computer imaging: the math, theory and practice (10+ pages):
+
+	http://www.frontiernet.net/~imaging/rt_how.html
+
+[Notable as the first use of a supermodel to help explain ray tracing. -EAH]
+
+- Paul Flavin <imaging@frontiernet.net>
+
+------------
+
+65535 Dimensional Ray Tracer
+
+I've written some ray-tracing code and am looking for some feedback. I
+haven't written any sort of interface, so I can't post an .exe yet, but
+please let me know what you think of the concept.
+
+Basically, I've written the most gimmick-laden ray-tracer I have ever seen.
+Gimmicks include:
+
+ - Objects may be up to 65535-dimensional (really)
+
+ - The screen may be defined parametrically in up to 65535-dimensions
+
+ - It has a very primitive particle system, however, view-rays are bent by
+   a particle's gravity
+
+At the moment, it doesn't do color or textures and only polynomial objects
+are allowed (stuff like cylinders don't generalize to 65535 dimensions too
+well).
+
+Basically, I was wondering if anyone would be interested in the finished
+result. First indications are that it will be *very* tricky to use, and let's
+face it, pretty much useless. The idea was so cool that I had to do it anyway.
+
+- Mike Ferenduros <m.ferenduros@btinternet.com>
+
+------------
+
+There's a lot of software out there on FTP sites which, because it's FTP,
+does not get caught by web search engines. There is a search engine
+specifically for FTP:
+
+	http://ftpsearch.unit.no/ftpsearch
+
+(There are U.S. sites which also run this engine, but with annoying ad
+banners.)
+
+------------
+
+UNC Polygon Manipulation Packages
+
+RAPID - Robust and Accurate Polygon Interference Detection: this is a free
+C++ package available for non-commercial use, available from:
+
+	http://www.cs.unc.edu/~geom/OBB/OBBT.html
+
+There is also a paper on OBB-Trees, the data structure on which the software
+is based. Related to this package is V_COLLIDE; see:
+
+	http://www.cs.unc.edu/~geom/V_COLLIDE/
+
+for more information. Key features of the package include application to all
+polygonal models, support of dynamic addition and deletion of objects from an
+environment and fast overlap tests and incremental computation.
+
+There is also a package for automatic simplification of polygonal models:
+
+	http://www.cs.unc.edu/~geom/envelope.html
+
+and also an improved fast polygon triangulator based on Seidel's algorithm:
+
+	http://www.cs.unc.edu/~dm/CODE/GEM/chapter.html
+
+This triangulator appeared in Graphics Gems V; since then the authors have
+improved the code so that it handles holes - a significant addition. (I do
+not know if the code is robust enough to handle coincident edges).
+
+----
+
+Mesh decimation, Delaunay triangulation, and similar software is available at
+http://miles.cnuce.cnr.it/cg/swOnTheWeb.html
+
+----
+
+CGAL, the Computational Geometry Algorithms Library, is written in C++ and is
+available free of charge under mild conditions. It is the result of an
+ESPRIT project conducted by seven leading research groups in computational
+geometry. It is at:
+
+	http://www.cs.ruu.nl/CGAL/
+
+- Remco Veltkamp <remcov@cs.ruu.nl>
+
+[This library contains a large number of standard computational geometry
+algorithms, such as convex hull, Delaunay triangulation, etc. - EAH]
+
+------------
+
+Flying Text rendered as GIF animations by POV-Ray while you wait, for free:
+
+	http://www.lucidimages.com/spin.html
+
+- Richard C. Church
+
+[animated GIFs are to 1997 as textured backgrounds are to 1996 and large
+image maps are to 1995 - too slow for us modem-bound mortals, used too much,
+and generally not a good idea. That said, this site's a cute idea and I
+enjoyed it. Make your own eye-candy easily and free. -EAH]
+
+------------
+
+MAC POV-Ray Resources
+by Shawn Fumo <shawn.fumo@the-spa.com>
+
+Here are some places that you can find more information:
+
+----
+
+Macintosh POV-Ray Resources
+http://home.pages.de/~mac-pov-resources/
+
+This page has a good amount of information, but unfortunately some of it is
+outdated (such as Mondfarilo being out now, etc).
+
+----
+
+POV-Ray Mac OS Information
+http://ourworld.compuserve.com/homepages/povraymac/
+
+This is an official page which is done by one of the POV-Ray Team members. A
+lot of good information here.
+
+----
+
+Shawn Fumo's POV-Ray Utilities List:
+http://www.the-spa.com/shawn.fumo/povutils/
+
+This one is my listing. It is IMHO one of the more complete listings of
+utilities for any platform. They are sorted by topic, and not platform, but
+if you do a search for MAC, you should be able to find the entries. It can
+also usually be found posted in this very group.
+
+Another thing to remember is that all of the ones listed as Include Files can
+be used on any platform. There may not be a whole lot of binary utilities for
+the MAC, but the include files are your ticket into utility heaven. =)
+
+----
+
+the PILE
+http://user.baden-online.de/~mbachman/pile/pile_eng.htm
+
+No discussion of Include Files can be made without mentioning the PILE! When
+it comes to include files, this site surpasses all others (including my own!).
+
+----
+
+Gautam N. Lad's POV-Ray Page
+http://www.interlog.com/~gautam/povpage.html
+
+You may also be able to find something of interest here. He has a
+comprehensive listing of a lot of different utilities, general links, and
+include files.
+
+------------
+
+Thanks to David C. Browne <dbrowne@kbsi-aus.com> a WIN32 port of rayshade is
+now available for ftp at:
+
+	ftp://gil.physik.rwth-aachen.de/pub/rayshade/win32/rs406w32.zip
+
+- Christoph Kukulies <kuku@gilberto.physik.RWTH-Aachen.DE>
+
+------------
+
+A reflectance model visualizer is available in SGI executable form and C++
+source code form at
+
+        http://www.cs.cmu.edu/~ph/src/illum/
+
+The program should be portable to other machines that support the Xforms user
+interface library and X windows without too much difficulty.
+
+This program is a fairly general viewer for bidirectional reflectance
+distribution functions (BRDF's). It was written by some students and myself
+in a graduate course in global illumination that I taught in Fall 1996.
+
+The program implements the following reflectance models:
+    Phong
+    Cook-Torrance
+    Oren-Nayar
+    He et al.
+
+I demonstrated the program at the Eurographics Workshop on Rendering in St.
+Etienne, France, and there was enough interest that I decided to release it
+more generally.
+
+enjoy!
+
+- Paul Heckbert <ph@cs.cmu.edu>
+
+[There is another BRDF viewer at
+http://www-graphics.stanford.edu/~smr/brdf/bv/ which works on SGI/IRIX and
+i386/Linux, and GNU & Mesa source code. -EAH]
+
+------------
+
+The RenderPark renderer currently offers:
+
+- Galerkin radiosity (both gathering and shooting) with (or without)
+  hierarchical refinement, higher order approximations, clustering,
+  view-importance, ...
+- stochastic ray radiosity
+- ray-casting, classic and stochastic ray-tracing
+
+It is known to compile and run fine on a SUN Sparcstation (with LEO graphics
+hardware and the Nth Portable GL), under Linux (with Mesa, a free OpenGL like
+graphics library) and on a number of SGI machines (with OpenGL).
+
+You can retrieve the source code and example scene files (MGF format) from
+the URL:
+
+	http://www.cs.kuleuven.ac.be/cwis/research/graphics/RENDERPARK/
+
+- Philippe Bekaert <Philippe.Bekaert@cs.kuleuven.ac.be>
+
+------------
+
+Quaternions
+
+	ftp://ftp.netcom.com/pub/hb/hbaker/quaternion/
+
+There is all sorts of information there about using quaternions.
+
+- Pat Fleckenstein <pat@csh.rit.edu>
+
+------------
+
+There are extensive statistics for comparisons using SPD scenes for the
+GX/GENERIC, FTPOV, and POV ray tracers at:
+
+	http://www.rz.tu-ilmenau.de/~juhu/gx.html
+
+[A hybrid algorithm of Hybrid VistaBuffer/BSP/LightBuffer wins out as the
+fastest scheme of those tested, beating ABVH and BSP. -EAH]
+
+There is also an article here about generating near-optimal BSP trees for ray
+tracing, reminiscent of some of K.R. Subramanian's work. Finally, there is a
+draft of a paper on the work at:
+
+	http://www.rz.tu-ilmenau.de/~juhu/Papers/IWK/IWK.html
+-EAH]
+
+- Juhu <juhu@rz.tu-ilmenau.de>
+
+------------
+
+Errata for "Principles of Digital Image Synthesis" is available at:
+
+	http://www.research.microsoft.com/research/graphics/glassner/work/
+		projects/pdis/errata.htm
+
+------------
+
+Terrain Forge, at:
+
+	http://www.geocities.com/SiliconValley/Park/7425/
+
+is a heightfield generator written for Windows 95. It exports to POV-Ray and
+other formats.
+
+------------
+
+There is a walking motion library by Theresa Willis for POV-Ray at:
+
+	http://www.win.or.jp/~kom/indexe.html
+
+(as well as some other tidbits). Theresa's site is:
+
+	http://www.jbarchuk.com/twillis/
+
+Guy Rauscher is working on the next generation of Theresa's program, called
+the Character Animation System. More information can be found at the
+following site:
+
+	http://www.geocities.com/capecanaveral/7999
+
+[there is also a fun little flag-waving include file for POV-Ray].
+
+- Shawn Fumo <shawn.fumo@the-spa.com>
+
+------------
+
+Real Time Stuff
+
+Here's yet another free Wintel 3D engine:
+
+	http://www.geocities.com/SiliconValley/Way/7233/index.html
+
+by Chong Jiayi. I haven't a clue if it's any good, but the page is certainly
+nice enough.
+
+And here are some little fire and water demos:
+
+	http://www.cs.tut.fi/~kroimela/fire.html
+
+by Kimmo Roimela.
+
+------------
+
+Parallel Graphics Library
+
+The initial public release of the PGL graphics library is now available for
+downloading at <http://www.icase.edu/~tom/PGL/>.
+
+PGL is a parallel polygon rendering package designed for use in SPMD-style
+parallel applications running on distributed memory architectures. It
+exploits the power of the parallel platform to perform rendering operations
+in place, enabling applications to generate live visual output without having
+to move large data sets across the network for subsequent post-processing. PGL
+includes a core set of 3D graphics routines which provide modeling,
+rendering, and display operations, and auxiliary components which support
+higher-level graphics and visualization functions, image transport, and user
+interaction.
+
+- Tom Crockett <tom@icase.edu>
+
+------------
+
+Genesis 3D is available at:
+
+	http://www.silicond.demon.co.uk/
+
+It is a surface modeler that does lathe objects, sweeps along paths, and
+booleans. For Windows 95, and it's free.
+
+------------
+
+The FLIRT (Faster than LIght Ray Tracer) by Wolfgang Stuerzlinger
+is available at:
+
+	http://www.cs.unc.edu/~stuerzl/software.html
+
+for those of you collecting ray tracers. Documentation's in German. This site
+also has some other graphics code - discontinuity mesher, constrained
+Delaunay triangulator, and other tidbits.
+
+------------
+
+"An Empirical Comparison of Radiosity Algorithms" is available at:
+
+	http://www.cs.cmu.edu/~radiosity/emprad-tr.html
+
+Some of our conclusions:
+
+   * Wavelet radiosity without clustering and matrix radiosity are memory hogs.
+     (esp. matrix radiosity and higher order wavelets; HR not so bad)
+     This was previously known; our results show how bad they are.
+
+   * Visibility handling in wavelet radiosity algorithms is poor,
+     consequently higher order wavelets are not currently practical.
+
+   * Progressive radiosity with substructuring is often a better choice
+     than wavelet radiosity.
+
+- Paul Heckbert <ph@cs.cmu.edu>
+
+------------
+
+3D BSP Trees
+
+I have made a 3D BSP compiler and there are some pages about algorithms for
+3D BSP:
+
+	http://www.ce.unipr.it/~tommesa/jaluit.html
+
+The best FAQ about BSP is:
+
+	http://www.qualia.com/bspfaq/
+
+- Andrea Marchini <marchini@ulisse.cedi.unipr.it>
+
+[and don't forget the BSP software in Graphics Gems V by Norman Chin - I've
+never used it, but heard it works well. -EAH]
+
+------------
+
+Mathematic URL Grab-Bag
+
+[passed on by Paul Flavin <imaging@frontiernet.net> - EAH]
+
+http://forum.swarthmore.edu/~steve/steve/mathgraphics.html - a ton of links
+mathematics and graphics related resources.
+
+http://euclid.math.fsu.edu/Science/Software.html - mathematical software
+index.
+
+http://www-sci.lib.uci.edu/HSG/RefCalculators.html - 5000+ different
+calculator programs, on just an amazing array of areas. Aztec date
+calculator, Honeymoon calculator, direction to Mecca calculator, you name it.
+
+-------------------------------------------------------------------------------
+
+Two New Graphics Books plus One, by Eric Haines
+
+Two noteworthy graphics texts have come out recently. One is "An Introduction
+to Implicit Surfaces", edited by Jules Bloomenthal, Morgan-Kaufmann Press
+(http://www.mkp.com/books_catalog/1-55860-233-X.asp). This is another book
+which began as a SIGGRAPH course and, like other books from course, is the
+first in-depth book on modeling with and rendering implicit surfaces.
+Chapters are by experts in both research and commercial spheres. If you want
+to know about blobbies, marching cubes, and much more, you now have a great
+single place to start. Note that the M-K web site URL above has a full table
+of contents and errata link for the book.
+
+For some interesting variants on potential functions for implicit surfaces,
+see Alfonso Hermida's article in this issue. Also see the "New People"
+section for someone doing implicit surface ray tracing work - I enjoyed the
+"implicit seafood" images at Andrei's web site.
+
+The second book is David Rogers' "Procedural Elements for Computer Graphics,
+2nd edition", WCB/McGraw-Hill. This volume is almost twice as long as the
+first edition. There are many minor additions and clarifications, and major
+new sections on ray tracing, color quantization, radiosity, texturing, and
+color reproduction. This book is worth having if you need practical advice
+and pseudocode for common graphics algorithms, be it drawing an ellipse or
+making an octree. This book gives you the tools which you will use again and
+again (or, like me, reinvent because you did not read the book carefully the
+first time - more on that later). Like any book with a lot of solid
+information, there are bound to be a few minor bugs (more on that later,
+too). But, from my brief skimming of it, this book looks like a well-crafted
+work.
+
+Another book in the pipeline is "Rendering with Radiance:  The Art and
+Science of Lighting Visualization" accompanied by a CD-ROM, which should be
+available from Morgan-Kaufmann (http://www.mkp.com) by early 1998. It is
+authored by Greg Ward Larson and Rob Shakespeare. Radiance
+(http://radsite.lbl.gov/radiance/HOME.html) is an excellent free physically
+based rendering system which has been developed for more than a decade now.
+The book will cover the uses of Radiance and include individual application
+chapters by a number of users of the system.
+
+-------------------------------------------------------------------------------
+
+Ray Classification for Animation, by Matt Quail <matthewq@auslabs.lucent.com>
+
+[Matt compared and contrasted the 5D ray classification method extended to do
+ray traced animation with Glassner's space-time method (IEEE CG&A, March
+'88). - EAH]
+
+I finished my thesis and had some interesting results:
+
+o Modeling animation transformations robustly is a lot harder than
+  just normal transformations, and these difficulties play havoc with
+  the theory, design and implementation of a animating raytracer. For
+  instance, the maths behind finding a "sets-of-slabs" bounding volume
+  for an arbitrarily animated object is pretty hairy.
+
+o Ray classification (as expected/hoped?) extended quite nicely to 4D
+  space-time. How did this compare with Glassner's space-time method?
+  Well, my method had better rendering times than his for my test scenes,
+  but I'm only calling these preliminary results for the following reasons:
+
+  - My implementation of Glassner's method was spending an extraordinary amount
+    of time pre-processing. I think this is for 2 reasons; 1) maybe my
+    implementation isn't as efficient as it could be, 2) Ray classification
+    uses lazy evaluation. The good news is that Glassner's method could be done
+    using lazy evaluation also.
+
+  - Neither the implementation of my method or Glassner's was completely bug
+    free, there was some erroneous artifacts in the scenes generated.
+
+  - The most complex scene I tested it with would be only on the low side of
+    "medium" complexity.
+
+  - My rendering system only currently supports spheres, polygons and point
+    light sources (no texture mapping), and those simple types cause plenty of
+    theory problem in 4D. A rendering system that supported more appropriate
+    types (patches, blah blah) is *DEFINITELY* needed if you are going to be
+    looking at the efficiency of ray tracing to produce *photo-realistic*
+    animations (photo-realism is what we are after with ray tracing, anyway).
+    It is simply not enough to just use spheres and polygons.
+
+o The salient points of my space-time ray classification scheme are:
+
+  - lazy evaluation of the hierarchy
+
+  - prune parts of the hierarchy that will never be used again, like those that
+    belong solely to previous frames (this gains us big memory savings for ray
+    classifications, which has big memory problems to start with)
+
+  - some other speed up that I can't remember (it's still early yet)
+
+The interesting thing is, Glassner's technique could use these things as well.
+
+So, is my method better than Glassner's? We can't really tell yet.
+
+In regards to my testing scenes, I came up with a few, that had varying
+characteristics; you can see these anims (in .fli format) at:
+
+	ftp://ftp.mpce.mq.edu.au/pub/comp/src/960008.quail/anims.tar.gz
+
+My actual thesis is at:
+
+	ftp://ftp.mpce.mq.edu.au/pub/comp/techreports/960008.quail.ps.Z
+
+The source code is at:
+
+	ftp://ftp.mpce.mq.edu.au/pub/comp/src/960008.quail/
+
+-------------------------------------------------------------------------------
+
+Raytracker Tricks, by Hakan "Zap" Andersson <zap@lysator.liu.se>
+
+Features in Raytracker (a ray tracer written for rendering CAD models)
+include raising the diffuse cosine to a power less than 1, and non-linear
+addition of light intensities, and luminosity based brightness correction
+instead of RGB.
+
+The "diffuse cosine power factor": you can accurately render the moon, if you
+like. :-) When you start playing with it, you'll quickly notice, that LOTS of
+things look less plastic when you start fooling with that parameter! It's not
+just the moon who has this quality, that's for sure. (Wood looks better, for
+instance).
+
+Non-linear addition of light intensities: That started as a request from one
+of the two people who ever bought Raytracker while it was commercial.... his
+company made booths for exhibitions... routinely scattered with TONS of
+spotlights. His problem - to get light levels right. Either everything was
+too dark, and the lit areas of the spotlights were okay... or everything was
+okay, and the spotlight-lit areas was burned out.
+
+The problem is, that if you tested things in real life, with actual
+spotlights and brought out an actual camera and snapped a photo, then sure,
+you MIGHT have gotten the same (or similar) results. But f*ck the camera,
+stand there and use your EYES. The eye is highly nonlinear, and has an
+AMAZING adaptability to light levels. You don't perceive the dark areas to be
+as dark as "they really are", or the light areas to be as light as "they
+really are". You perceive a smaller difference.
+
+So, what I did, is that I created a brightness correction scheme.
+
+Basically, I had a SPLINE that I set up in a cfg file, which defined what the
+output value should be for a given input value. I think the default spline
+went like this:
+
+  In  Out
+  0.0 0.0
+  0.7 0.5
+  1.0 0.8
+  2.0 0.9
+  3.0 1.0
+
+That means, that for an input value of 0, you got 0 out. For input of 0.7,
+you got 0.5 out, etc.
+
+The problem was, where to apply this curve?
+
+In the first generation of the code, it was applied to everything before it
+went to the screen - which gave the whole thing a much broader "brightness
+dynamics range", i.e. lighting equations could output values in the range 0 -
+3 without burning out the display.
+
+The problem was, applying the curve to RGB individually had bad effects on
+the saturation of the screen. (Everything became more white).
+
+So I fixed this by, instead of calculating on RGB, summing up RGB to
+intensity (using factors 0.4, 0.5, 0.1 or somesuch), then I pushed that
+"brightness" through the equation, and multiplied all RGB with the new
+brightness divided by the old brightness.
+
+Anyway, the end result looked a bit dull - because of the nonlinearity of the
+shading. Sometimes it had interesting effects, and it might help the
+problem.... but sometimes it didn't.
+
+So, I made a different approach.
+
+Instead of applying this color correction at the end of everything, where it
+just squashed up the luminosity dynamic range of the output - I applied it at
+the root of the problem - the lights.
+
+So, when I summed up my light, I applied the correction there instead.
+
+Now things get tricky to explain... you see, the Raytracker shading model is
+a bit strange....
+
+For each light, I calculate two "types" of light. The "light to be
+multiplied" with the surface color (i.e. the diffuse light, e.g. Ka + Kd) and
+the "light to be added" to the the surface regardless of its color - i.e. the
+specular light. (This isn't 100% true, since Raytracker also has a
+specular-color-affected-by-surface-color-factor, which, when it is 1, the
+specular reflection is calculated into the "light to be multiplied" (i.e.
+gets the surfaces color), but when it is zero, the specular light is put in
+the "light to be added" (i.e. gets the lights color), and when it's 0.5 the
+specular light is divided fifty-fifty into these two types of light).
+
+Anyway, to get a long story long, once I had calculated these two "kinds" of
+light, both were affected by my color correction curve. Then, the final
+intensity at the point was calculated as:
+
+ C = (color_at_point * light_to_be_multiplied) + light_to_be_added
+
+where color_at_point is the material's color at that point (e.g. texture
+color or whatever).
+
+Anyway, this is pure fudge cola all of it - but the end result works, and
+works well. You can spray many lights on an object, and instead of getting
+burned out, it just gets "bright". If you set up the spline to end with
+output value 1.0 (as the default above did), then no matter how much light
+you spray on a point, it'll never be brighter than 1.0 times its surface
+color PLUS any specular on top of that... (so it's still possible to get
+burnouts due to specular reflections - but that just looks cool. Burn outs
+due to diffuse just looks stupid))
+
+On the fly 256 color palette selection [I asked about this, it worked pretty
+well, the palette would be biased on the fly to the ray trace being
+generated. - EAH]: Duh, that's just trivial. It just collects colors that
+deviates so-and-so much, until the palette is full. When it's full, it
+increases the "so-and-so" value, applies the same calculation to itself (i.e.
+colors within the palette closer than so-and-so becomes the same color),
+remaps the display, and continues.
+
+The advantage of this method is, that there is no stupid histogram made. (I
+dunno why histograms are even used for color quantization. In what way does
+the fact that a color is used often or not have to do with the usefulness of
+it in the palette? Stupid. A single blue pixel in a sea of red and yellow
+shades would get lost with that method. But with a pure difference method, it
+won't. Some of the reds and yellows would be set to the same color, but so
+what? Frankly, if the histogram should be used, it should have the inverse
+use - the more often a color is used, the less use does it have in the
+palette.... :-) )
+
+Antialiasing: Another interesting aspect of Raytracker is its antialiasing -
+it uses a hashing method, so it only antialiases on object boundaries. No
+extra rays shot for texture differences. (The textures are filtered by
+calculating the area covered by the pixel, using a simple algorithm of the
+'size' of a pixel at the screen multiplied with the Z value (increasing
+'into' the screen and being 1.0 at it). This gives us the 'flat' coverage
+when the texture is hit dead on. Now, divide this by the cosine between the
+eye ray and the normal, and you have the (approximate) coverage in texture
+area of that pixel.)
+
+(That's how Raytracker does it. A more detailed method is to calculate the
+texture's X and Y directions, and instead of dividing the total area by
+cosine with the surface normal, divide by the sine of the angle from the eye
+ray to the texture X axis to find out how large area in texture X space to
+average, and divide by the sine of the angle to the texture Y axis to see how
+large area in the Y axis to average. That would be more accurate.)
+
+Anyway, there is one problem with the hashing method in Raytracker - and that
+is rapidly changing surface normals (my method won't antialias under these
+conditions, since the surface itself doesn't change). So I have invented a
+much better method, that I haven't implemented.
+
+Think like this: A plain old stupid ray tracer antialiasing just compares the
+color of this and the neighbor pixels. If they changed by "more than such and
+such", then supersample.
+
+[This is a fairly important problem: textures are usually best rendered by
+using mipmaps or summed area tables or similar, better than point sampling
+with a set of rays. However, traditional "difference between sample colors
+means shoot more rays" methods ignore this method and foolishly supersample
+such pixels. A better method is to shade without the texture and do the color
+comparisons to see if more sampling is needed - this picks up edges and
+highlights. Also, generally only one texture sample should be generated and
+shared by the samples in the pixel, IMHO. -EAH]
+
+But - if the texture is already filtered, then what is it that must change
+"more than such and such" for the pixel to need to be supersampled? The
+answer is "lighting"!
+
+And since Raytracker already calculates the "light to be added" and "light to
+be multiplied" as I mentioned above, before actually multiplying with the
+texture color, well, the 'perfect' antialiasing would be a test if the light
+levels for the 'to be added' and 'to be multiplied' lights had changed more
+than such-and-such since last pixels, and if so, supersample!
+
+-------------------------------------------------------------------------------
+
+Even Faster Crossings Test, by Philip Brown <phil@mitre.org>
+
+[The Crossings Test is about the fastest point-in-polygon test, when no
+precomputes are done. This is the test where a ray is sent from the test
+point along the X axis and the number of polygon edges crossed is found. It's
+been beaten to death in RTNv5n3, RTNv7n2, and Graphics Gems IV (code at
+http://www.acm.org/tog/GraphicsGems/). There have also been slight
+improvements to the algorithm, such as turning the divide into a
+multiplication (see the Gems IV code for CrossingsMultiply online; it's not
+in the book). Phil found another little speed-up to the Crossings test, if
+you allow doing a precompute on the polygon and are willing to store more
+information with it. For him it's worth it - he works with the FAA doing
+flight data analysis, looking at millions of flight positions each day. - EAH]
+
+I've played around with ways to speed up the point in polygon test from the
+comp.graphics.algorithms FAQ and I found another 10x speedup by
+precalculating the slopes of all the edges and keeping them with the polygon
+object. Since I'll be reusing this part (x2-x1 / y2-y1) of the equation
+multiple times, I don't mind the extra space required and since I have a
+finite set of polygons (sectors), I don't really have to worry about
+long-term space usage.
+
+-------------------------------------------------------------------------------
+
+Additional Notes on Nested Grids, by Kris Klimaszewski <kriskk@sprynet.com>,
+	Andrew Woo <awoo@aw.sgi.com>,
+	Frederic Cazals <Frederic.Cazals@inria.fr> and Eric Haines
+
+[Kris Klimaszewski and Tom Sederberg's paper on various improvements and
+variants on nested grids was interesting to me, so I wrote Kris for
+additional information in February 1997. Andrew Woo at Alias is an expert in
+the field of ray tracing and efficiency schemes, and he quickly joined into
+the discussion. Here is an edited version of these conversations. You will
+have to read Kris' paper to fully follow the thread. I think nested grids is
+currently about the best efficiency scheme for ray tracing. Note that octrees
+are just a special case of nested grids (i.e. you nest grids of size 2x2x2),
+and nested grids tend to beat octrees because the set up costs for traversing
+the grid is amortized over more cells. However, among Woo, Klimaszewski and
+Cazals, I certainly cannot say which is the best variation (I'd personally go
+with Woo, mostly because I understand it the best). This might be a nice
+little student term project - I hope someone will pick up on this topic and
+formally compare these schemes. Unfortunately, I think I'm becoming more and
+more convinced of the idea that Kris expresses, that at a certain point the
+fastest efficiency scheme is scene dependent. That said, I think that there
+is still work to be done to find the best overall contenders. - EAH]
+
+Eric writes:
+
+As far as the new algorithm itself, I was curious about the upper levels of
+the hierarchy. I was wondering about what sort of number of children there
+were after creating the bounding volume hierarchy using Goldsmith & Salmon
+and then merging using your rules. If I understand it correctly, you put
+grids at all the nodes of the hierarchy. It seems like you could get trees
+where each node has only a few children at the upper levels, in which case
+using a grid at such levels might not gain much (i.e. if at a node there are
+only two bounding box children, just intersect these boxes directly instead
+of making a 2x2x2 grid at this node).
+
+Kris replies:
+
+Good point! Unfortunately, I cannot give you a clear and sure answer - the
+grid research ended in the summer of 1994 (the sparse sampling scheme
+predated it by at least a year); things are somewhat rusty in my memory. I
+believe, the upper levels in some of the test scenes and some other I tried
+indeed had only a few children. The difference (in the resulting rendering
+time) between two bounding boxes and a 2x2x2 grid at the top was negligible.
+The regular grid IS efficient :-) Moreover, I played with both rounding-up
+and truncating when computing the formulas for the number of voxels.
+(Truncation would not allow "your" bounding boxes to be converted into
+grids). The round-up formula, even when used indiscriminately on all the
+levels of the hierarchy seemed to give better results probably due to the
+more "liberal" voxelization at the lower, more crowded levels where it is
+desirable. The difference was not large, however. The entire algorithm
+appeared to be more sensitive to the way I was merging the bounding boxes.
+This is part of a more general question: as you know, the entire problem of
+tracing rays in complex scenes tends to be a matter of statistics. Some
+improvements may be taken advantage of too seldom, detrimental factors may
+come into play infrequently, etc. This is why theoretical predictions often
+fail. For example, my experience was that even with the best known
+ray-triangle intersector, bounding boxes applied to every triangle in large
+and completely and fairly uniformly triangulated scenes still some time
+savings could be made. If my memory serves, 11-23% in the case of scenes I
+tried. Another example is the 3DDDA: before its implementation, Fujimoto was
+convinced that the octree would always be faster than the regular grid.
+
+
+Andrew Woo writes:
+
+When I read your article, the first thought that came to my mind was
+Frederic, George and Claude's paper in Eurographics 95 (reference 13). Their
+"hierarchy of uniform grids" is similar to what you call adaptive grids, that
+you should do a comparison in some fashion.
+
+I've dabbled with heterogeneous grids a bit myself. Got decent results in a
+GI 92 paper. And your subvoxel grid's ray-bounding box idea (p.46) was very
+clearly illustrated in Snyder + Barr's paper.
+
+I'm a bit disappointed at your evaluation of Jevans + Wyvill's accelerator -
+it was treated as a side-thing that might be helpful. His recursive voxels
+can stand alone as an intersection culler, it might be interesting if you did
+a comparison of your technique against the Jevans technique. At Alias, we've
+implemented the Jevans technique + Snyder's ray bounding boxes, and it's
+pretty fast.
+
+When we get huge databases to render, we find that the Jevans technique may
+be better or worse than yours:
+
+- Jevans does no scene analysis -> constructs more subvoxels on the fly as it
+  needs it. This has a big advantage in the raytrace the football inside a
+  complicated football stadium scene. Then the on-the-fly only spends time on
+  where things are raytraced. Both yours + Cazal's technique requires more
+  preprocessing time. Good and bad, depending on the scene...
+
+- One thing that is obvious about using the Jevans scheme is that traversal
+  cost is still high, and that's usually our most computationally expensive
+  part of the raytracer. How's yours in relationship to the rest of your
+  raytracer?
+
+One final point: comparing your technique against a uniform voxel scheme is
+disappointing. Yes, it sounds good when you can say it's 50 times faster...
+When I played with Snyder's bounding boxes, that alone gave me huge magnitude
+of improvement over uniform voxels. All I'm saying is that you're comparing
+against a clearly primitive interesection culler. Comparison against
+something like Jevan's technique might be an interesting start.
+
+
+Chris replies:
+
+Thanks for your comments. All of them are appreciated.
+
+[in response to the mention of Cazals Eurographics paper:]
+
+Although this will sound defensive, a bit of history is needed here. I wish I
+could call myself a rendering dude, but I am not one anymore and this matters
+here. My adaptive grid research ended in the summer of 1994. The dissertation
+was published through UMI in December of the same year and a portion of it
+was submitted as an article to CG&A soon after that. My contact with the
+state-of-the-art in ray tracing ended at that point. Although it is
+embarrassing, I admit, I have not read the Eurographics 95 paper you refer us
+to and even do not know if that paper is the same we mention in our article
+at the end of the "Future directions" section. The name seems to be
+different. Since the dissertation was out there before Eurographics '95, one
+may regret George did not compare his grids with mine - I am aware of at
+least two companies that managed to incorporate my algorithm into their
+products before Eurographics '95.
+
+[in response to the GI 92 references and Snyder & Barr:]
+
+I tried to get as conscientious survey of previous work as possible. Among
+the 130 references in my thesis there are three relevant papers of yours, but
+the GI 92 paper is something I simply have not come across or found
+referenced by others. (My university had only one issue of GI proceedings and
+to get Jevan's paper I had to resort to an inter-library loan.) Honestly, my
+assumption was "heterogeneous grids are so simple and obvious that every one
+is using them, but no one is either brave enough or bothers to make a deal
+out of it in public."
+
+Regarding Snyder & Barr's paper, it is my recollection and understanding that
+the authors came up with the subvoxel bounding box, not a subvoxel grid. Our
+paper introduces the latter and calls the box and other classic Snyder &
+Barr's improvements "standard." Besides, S & B clearly say that their grid
+hierarchy was built manually, while we create it automatically - a step
+forward, I hope. Moreover, our article states up front that it is merely
+"filling gaps and expanding upon" the work done by the giants on whose
+shoulders I (Kris) was trying to treacherously stand. I assure you, "Give
+credit where credit is due" is one of the first things Dr. Sederberg teaches
+and demands from his students.
+
+[on Jevans & Wyvill's work:]
+
+Certainly it was not our intention to disregard anybody's work, including
+Jevans'. You are right, his technique is very powerful. You may have noticed
+I mention near the end of the paper doubling the speed of the algorithm. I
+have never finished that work, but some aspects of Jevans' concept played a
+certain role in it. However, at that time, Yagel's Raster Ray Tracer was the
+last word on the acceleration techniques and this is why I chose it over
+Jevans' scheme, or any other for that matter.
+
+Also, it may be of some interest to you that the Japanese ray tracing company
+I worked for earlier evaluated Jevan's algorithm (which they dubbed N-tree).
+The results were mixed. The algorithm performed really well with some scenes,
+while with others it would lose to the SEAD-based solution we were using
+then. The conclusion was that both algorithms were clearly scene-dependent
+and the company kept looking for alternative solutions.
+
+I read an internal document in 1990 or 1991 - the company systematically
+evaluated newly published algorithms regularly, "N-tree" was just one of
+them. The findings were quite often different from what we read in articles.
+Mainly, I think, because our scenes were usually dramatically different from
+those presented in the papers. I think Akira Fujimoto, as I am referring to
+his company, would be the best source of information, although I'm sure he
+will blast me for divulging any info about the matter. It is relevant, I
+think, to say that this unusual man gave up the "glory of publishing" his
+ideas for the sake of his company. He had come up with several solutions
+years before the world got to know them by the names of others. When I
+mentioned to Eric "the best known ray-triangle intersector," I meant
+something that is faster than Badouel's algorithm and existed at least two
+years earlier in our production code, Fujimoto's ingeniously simple idea.
+When I said that my sparse sampling was earlier than Kenji Mase's method, I
+did not brag. Long before Mase's paper appeared, Akira's firm had a - perhaps
+a little crude, yet fairly efficient - pixel interpolator in its ray tracer.
+In conclusion, I cannot predict if Akira will be willing to share information
+he's always considered sensitive, but you may try.
+(Iint_jom@fujimoto.integra.co.jp)
+
+Speaking of comparisons: to the best of my knowledge, even before all of the
+acceleration techniques were implemented, the same program we present in the
+paper was tested by Evans & Sutherland against a number of commercial ray
+tracers. Dr. Sederberg may know better, but it seems to me that Alias and/or
+Wavefront, as well as the Japanese company I mentioned earlier, were among
+the contestants because they were referred to as "leading ray tracing
+companies," or something to that effect. The Car scene shown in the paper was
+one of the benchmarks. As a result, E&S chose our program. As you can see,
+the value of any comparisons, even those conducted independently, may be
+limited.
+
+I would have been more inquisitive concerning the E&S comparisons if I had
+known what algorithms were in the tested ray tracers. I apologize for my
+ignorance, but your information about the algorithm Alias|Wavefront is
+actually using is a sort of revelation to me (In the places I worked before,
+this was considered a trade secret). I am not qualified to comment on the
+results of the E&S tests. They surprised me, to say the truth. But - if
+interested - you should be able to obtain more information from E&S itself or
+Pro-E, Parametric Technologies, which later bought the program along with
+E&S's CDRS division. (Which of the two, the program or the division, were
+more important to the buyer, remains a matter of speculation :-)
+
+Traversal time: originally I intended to use a concept of a "wall street,"
+not to get rich, but to create a modified SEAD, non-hierarchical organization
+in which rays would travel from wall to wall using Osterhout's corner
+stitching technique (Corner stitching had actually been used earlier by
+Arnaldi). The profiling I did on my code showed that traversal should not be
+the prime target to attack and eventually I gave up the idea.
+
+I do not believe there is "the best (fastest and producing quality pictures)
+ray tracing algorithm." There is always, however, "the best RT algorithm" for
+a particular scene. So, I think, you are right: it is conceivable that my
+algorithm may lose to another algorithm and vice versa. This is why we wrote
+"we do not consider the new method as the fastest ray-tracing scene
+decomposition possible." The right answer would be to cleverly choose on the
+fly from a number of algorithms depending on the complexity of the scene
+("Complexity" is of course understood here not as merely the number of
+objects, primitives, etc.). But so far, all the attempts to do so - at least
+those I know of - looked good in theory, but failed in practice.
+
+[on comparing to a uniform voxel scheme:]
+
+Looking good was not my objective.
+
+I played with Snyder's bounding boxes (as opposed to subvoxel grids) before I
+had adaptive grids too, quite a bit. Alas, the improvements were rather small
+- never more than a few dozen percent, 30+at best. I also tried the dynamic
+bounding box, that is, one that shrinks after an intersection is found. (Also
+Snyder's idea.) The improvement with respect to the "static box" was
+practically none. If my memory serves, the boxes increased memory usage
+significantly since I created them during preprocessing, but I may be wrong.
+This is not to say that Snyder's idea is bad. Once more we deal with scene
+dependence here. I was using a fine subdivision of the regular grid, which
+was giving me consistently better timings than coarser voxelizations. On the
+average, the distribution of the primitives in the voxels was more or less
+even, the primitives were relatively small. Snyder's ray boxes could not do
+much good; in too many voxels they were too large. I tried both triangulated
+and non-triangulated scenes. Still the improvement was not impressive, mildly
+speaking. In the adaptive grid scheme, the matter looks differently.
+Typically, we begin with much larger voxels and uneven object distribution.
+This sets a better stage for ray boxes and, consequently, for subvoxel grids.
+
+Why just regular grid? Again, there were more recent developments in the
+fields at the time and I was eager to pitch my ray tracer against them.
+Secondly, in my view, the lack of a common basis on which various techniques
+might be compared is a major problem the field has struggled with. Eric's
+Standard Procedural Databases was a step in the right direction, but it
+addressed only one aspect of the issue. This is not an excuse, but I think
+you will agree that there are many papers that failed to compare their
+results with anybody's. There are even articles that propose solutions
+without actually implementing them (palm of victory without work?). Examples
+on demand.
+
+I chose the regular grid for two reasons. First, because it is one of the
+best known and easy to implement acceleration techniques, on which many tried
+to improve. This, I hoped, would make comparisons with numerous papers
+straightforward.
+
+Second, I wanted to make sure that the implementation of the algorithm
+against which I was to test my method (or methods - the paper treats only
+some of them) was best possible. For someone who comes from the school where
+3DDDA originated (Akira Fujimoto was my mentor for many years) and the
+regular grid and its optimization tricks were practically a staple, the
+choice was quite obvious (Among others, Fujimoto's disciples were required to
+use "A Proposal for a Hybrid Voxel Traversal Approach" by A. Woo in lieu of
+our normal "makura's," Japanese wooden pillows, so that even our dreams be
+properly stimulated).
+
+As to the cost of intersections, I was advised that some companies in Japan
+dealing in lighting simulation for interior design use lighting equations
+(computed in physical units) that are so complex that ray-object intersection
+calculations do not dominate rendering time anymore [People at Pixar appear
+to agree with this statement. -EAH]. Intersection culling dudes - call me so,
+please! - may be squabbling over a dead duck these days.
+
+
+[what follow are some interesting bits from back and forth discussions. -EAH]
+
+Andrew writes:
+
+Telling you we use the Jevans technique is no big deal - it's a published
+algorithm after all.
+
+Kris replies:
+
+Right, but any information about what you actually have inside your ray
+tracer (or any product for that matter) gives your competitor an edge. This
+is how many Japanese companies tend to think at least.
+
+Andrew replies:
+
+Not so in most companies. In SoftImage's raytracer, they even try and
+educate users on what 5d subdivision involves and how to optimize for them.
+Don't need to do much guessing there.
+
+In our raytracer, user parameters include subdivision recursive level, voxel
+resolutions, etc. Not much of a secret :-)
+
+----
+
+Andrew writes:
+
+What is your portion of time spent on traversal vs ray-triangle intersections?
+
+Kris replies:
+
+Your interest in the ratio makes me uneasy: I hate thinking I missed an
+opportunity to make the program even faster.
+
+Andrew replies:
+
+I'm getting more and more interested in this, as I'm very surprised by this
+statistic every time I benchmark scenes.
+
+[I agree: when I've benchmarked I generally find traversal takes say 60% of
+the time and actual intersection testing takes say 20% or less (the rest is
+shading and bookkeeping). It seems contradictory, so much time spent passing
+the ray on and so little actually testing objects. But then, the whole point
+of an efficiency scheme is to avoid testing objects; it's the overall time
+that is to be minimized. -EAH]
+
+----
+
+Frederic Cazals joins in a week or two later:
+
+Hi everybody,
+
+So it goes: Eric forwarded me a couple of emails related to the chat you have
+been involved into about RT speed-ups, and since I have been interested in
+this topic in the last 3 years --- with a 16 months break because of my
+national service, here are my $.02.
+
+Before discussing the main points raised in Kris's email to Andrew let me
+define the following bibliography:
+
+----
+
+[0] Goldsmith and Salmon IEEE CG&A, 7(5), 1987
+
+[1] Jevans and Wyvill GI'89 paper
+
+[2] Filtering, Clustering and Hierarchy construction:
+    a New Solution for Ray-Tracing Complex Scenes,
+    F. Cazals and G. Drettakis and C. Puech, Eurographics'95,
+    at http://pauillac.inria.fr/algo/cazals/xfc_research.html
+
+[3] Kris's recent paper in IEEE CG&A
+
+[4] Bucket-like space partitioning data structures
+    with applications to ray-tracing,
+    F. Cazals, C. Puech,
+    13th ACM Symposium on Computational Geometry, 1997
+    at http://pauillac.inria.fr/algo/cazals/xfc_research.html
+
+[5] F. Cazals,
+    Combinatorial properties of one-dimensional arrangements
+    Experimental Mathematics, 6(1), 1997
+    at http://pauillac.inria.fr/algo/cazals/xfc_research.html
+
+----
+
+
+1. About [2], [3] and [4]
+-------------------------
+
+[2] and [3] were clearly developed independently and I think it was almost
+impossible for each party to be aware of the other one early 95. The goal
+pursued is exactly the same and the resulting hierarchies are slightly
+different since the grids of [3] are nested - please correct me if I am wrong
+- while the ones of [2] are not so.
+
+The ways the hierarchies are built are very different: - [2] proceeds by:
+           (1) grouping the objects by homogeneous size
+           (2) finding subgroups of neighbors - the so-called clusters,
+               within these groups
+           (3) building a hierarchy from the clusters' grids
+
+- [3] proceeds by:
+           (1) building a hierarchy of bounding boxes as in [0]
+           (2) merging neighbor boxes containing dense sets of objects
+           (3) gridding the so formed volumes in a heterogeneous fashion
+           (4) replacing some crowded voxels by sub-voxels grids as in [1]
+
+It would be very interesting to test [2,4] against [3], and this can
+indirectly be done by just comparing [3] to recursive grids - see point 2.
+just below. But even more interesting from my point of view would be to get
+precise statistics describing how the hierarchy of [3] is organized and works:
+
+	- depth
+	- distribution of the number of items per voxel per level
+	- distribution of the number of intersection tests per level
+	...
+
+All these statistics are precisely defined in [4] and I think they should
+provide enough insights to make the solutions even better or to understand
+why some optimum has been reached.
+
+Also, I think an intuitive explanation of why the 'serendipitous discovery'
+of page 44 in [3] works, is given in section 5 of [4]. The long version of
+[4] also contains some negative results I got with heterogeneous griddings
+based on overlap numbers defined in [5].
+
+
+2. About Jevan's work and reference DS new solutions should be tested against
+-----------------------------------------------------------------------------
+
+As mentioned in the conclusion of [1], the question that remains open is to
+come up with:
+
+	a method for determining the optimal resolution and tree depth
+	for a given scene
+
+Jevan's contribution is important, but subdividing a grid containing n
+objects into alpha*n voxels, with alpha being some positive constant sounds
+as much important to me - please correct me if I am wrong, but the first time
+I saw this criterion is in E. Jansen's note in RTNews 5(1) 1992. Jevan's
+recursive DS [data structure] with this criterion is what we use to call a
+recursive grid - well, I think!
+
+And so, I believe that the reference DS every new solution should be tested
+against is a recursive grid and not a uniform one. This is especially easy
+since once one has a uniform grid, implementing a recursive one is
+straightforward: as an example, the .h and .C of my recGrid are jut 46 and
+102 lines of C++ code!
+
+
+3. Intersection time and traversal time
+---------------------------------------
+
+Andrew's question:
+
+	What is your portion of time spent on traversal vs ray-triangle
+	intersections?
+
+is very interesting. In our implementation which relies on OORT, the polygons
+are not necessarily triangles or squares - even if more than 95are so for
+the test models of [2,4]. As a consequence - note that this observation is
+sufficient but not necessary since one may proceed in the same way for
+triangles only, the ray-polygon intersection test is as follows:
+
+ t1. if the ray and the polygon are coplanar => return
+     else compute the intersection point p between the ray and the
+	 polygon plane
+ t2. if p does not belong to the polygon 2D bounding box => return
+ t3. compute the crossing number and conclude
+
+of course test t3 is more expensive than t1 or t2. As pointed out in [4], the
+exit point of this algorithm depends of the 'coarseness' of the DS the
+ray-polygon intersection test is called through, which has an integral
+geometry explanation.
+
+This is just to say that in our implementation the average call cost of the
+ray-polygon test varies within a non negligible factor - 7 or so in the worst
+case, which makes impossible writing something like:
+
+     t_r = t_t + n_i * t_0
+
+with t_r the total rendering time
+     t_t the traversal time
+     n_i the number of intersection tests
+     t_0 the cost of an intersection test
+
+because the higher the number of intersections, the lower t_0, and
+vice-versa.
+
+
+4. A point about N-trees
+------------------------
+
+this is not of major importance, but it should be pointed out that in the
+theory of one-dimensional search and sort data structures, N-trees refer to
+the work of Marku Tamminen. see e.g.
+
+	M. Tamminen, Analysis of N-Trees,
+	Information Processing Letter, 1983, vol. 16
+
+unlike Jevan's DS, the point here is that the branching factor of a node is
+not constant.
+
+--------
+
+After looking over this article just before this issue went out, Kris writes:
+
+Regarding the discussion of superiority of one spatial enumeration scheme
+over another, last summer I had a an interesting conversation with an
+employee at Evans & Sutherland. He told me that in 1993 or 1994 (I don't
+remember) they compared 15 best ray tracers they could find. The first, crude
+version of adaptive grids and Fujimoto's physically accurate commercial ray
+tracer were among them. It stuck in my memory that it took over 67 hours to
+render the test image - Car, shown in my paper - using Fujimoto's program.
+According to my article, Car was ray traced with adaptive grids at standard
+resolution in 75 secs. From what I know, none of the other programs came even
+close to adaptive grids. The employee asked me what accounted for such a big
+difference in speed and practically none in image quality. I could only
+speculate as I did not know what acceleration techniques the competing
+packages utilized. I am not suggesting you should put this info into the
+article, but am mentioning the fact as a yet another indicator that adaptive
+regular grid approaches (be it mine or Jevans', or Cazals') may be superior
+to other known methods.
+
+Last, I would like to stress the fact that using the regular grid as a
+standard against which new space subdivision algorithms are compared
+resembles the concept of your procedural database. Probably both (the regular
+grid and database) are not what we deal with in the so-called real world, but
+being easy to use or implement, they became de facto standards. Similarly,
+many years after the 1 MFLOP VAX machine became a museum piece, it served the
+useful purpose of an informally, but commonly, approved basis for measuring
+the performance of computers that were ages away as far as sophistication,
+architecture, storage capacity and speed were concerned. While I certainly
+understand Andrew's concern, I would call for "declaring" the regular grid
+the "VAX of spatial enumeration techniques."
+
+-------------------------------------------------------------------------------
+
+Recursive Grids and Ray Bounding Box Comments and Timings, by Andrew Woo
+	<awoo@aw.sgi.com>
+
+I started a bit of a discussion with Eric Haines and Kris Klimaszewski, after
+having read Kris + Tom Sederberg's CG&A paper on adaptive grids for
+raytracing acceleration. Several items that might interest the general
+RTNews reader include:
+
+    - In our raytracer, we employ the Jevans+Wyvill (GI 89) recursive
+      grids technique, with the Snyder+Barr ray bounding box. Usually,
+      the traversal cost is most significant in our timings. However,
+      Kris says this is not so in his implementation. We use the
+      floating-point traversal scheme introduced, in parallel, by
+      Pearce+Wyvill (MSc thesis 86), Snyder+Barr (Siggraph 87) ,
+      Amanatides+Woo (Europgraphics 87). I'd like to hear from other
+      experiences of their traversal costs (relative to the costs of
+      other parts of their raytracer) in their implementations of some
+      form of recursive/adaptive grids.
+
+      By traversal cost, I mean the entire process of initializing
+      the ray for traversal, traversal from one voxel to the next, and
+      resetting back to the next subgrid that the ray came out of.
+
+    - I had concerns about raytracing acceleration papers comparing their
+      results against the straight-forward, uniform grid. I felt this was
+      not a good relative benchmark. Comparing against Jevans+Wyvill might
+      have been more suitable in this particular case. But I suggested a
+      simpler variation to compare Kris' results against - which is the
+      Snyder+Barr (Siggraph 87) ray-bounding box idea on top of the uniform
+      grid. It still surprises me how well this simple optimization does,
+      as compared to the raw uniform grid. I also suggested some minor
+      improvements in my GI 92 paper, for the REALLY interested reader
+      (who wants to be bored).
+
+      Here are some sample benchmarks. The database used is from Eric
+      Haines' procedural database. Most of this was benchmarked in 1988
+      on a SUN 3/280 with fpa. If I had data on 20x20x20 (which I don't),
+      that will even be better, as it's the n**(1/3) rule.
+
+
+      Sphere Flakes:
+
+      Grid Resolution     #objects      Uniform       Ray Bounding Box
+      ------------------------------------------------------------------
+      40x40x40            7382          391 mins      163 mins
+      50x50x50            7382          270 mins      142 mins
+      60x60x60            7382          220 mins      138 mins
+      70x70x70            7382          199 mins      133 mins
+
+      Note that at a pretty high grid resolution of 40x40x40, we got
+      close to twice the speedup. Also check out the #intersections
+      needed for testing.
+
+      Grid Resolution      Uniform        Ray Bounding Box
+      -------------------------------------------------------
+      40x40x40             128566950      3858198
+      50x50x50              89045372      3662689
+      60x60x60              68387039      4816035
+      70x70x70              55492658      4152675
+
+
+      I also tried this against the tetrahedron and rings model. The
+      results showed ray bounding boxes to be slower, because the model
+      was so uniformly distributed. Then I played with determining when
+      ray bounding boxes should be used or not, on a per voxel basis,
+      then again I got good improvements in performance. The heuristic
+      is very simple: if the ray's bounding box is above 750f the
+      volume of the voxel, skip the ray bounding box test, because the
+      ray bounding box is so huge that its culling is likely useless.
+
+-------------------------------------------------------------------------------
+
+CD-ROM: The Internet Raytracing Competition, Year One, review by Eric Haines
+
+When all is said and done, the whole point of most computer graphics research
+is about images. The Internet Raytracing Competition has been around since
+1994, collecting images created by hobbyists, artists, researchers and others
+and putting them on the web to be judged by their peers. It should be noted
+that entries to the IRTC do not have to be rendered by POV-Ray, nor by any
+ray tracer at all, in fact; commercial rendering packages are fine. Their
+site is http://www.irtc.org/.
+
+The entries and results for the first "official" year, May 1996 to April
+1997, are now available on a CD-ROM from Hallam Oaks,
+http://www.aussie.org/products/. Profits from the CD's help fund the
+continued existence of the IRTC and POV-Ray (http://www.povray.org/) web
+sites.
+
+The CD-ROM itself is painless to use. Pop it in, and autoplay starts your web
+browser and you begin on an index page. While most of the disk is filled with
+contest entries, there are also a few other goodies, like version 3.02 of
+POV-Ray (binaries for many platforms, source, documentation) and a museum
+tour movie which runs a few minutes. There are also short (auto-)biographies
+of some of the competition winners.
+
+The main thrust is, of course, the entries themselves. You can view all
+entries or just the winners. There are about 1000 images from the
+competitions and of these, about 500 come with ZIP archives containing the
+entire scene's data. So not only can you see the images, you can also
+recreate them, play with them, and learn from them. I found the creators'
+notes on how they made the scenes the most interesting part of the package.
+For example, it is almost painful to read that a classroom scene with three
+detailed (blobby) children was modeled entirely by hand.
+
+The images themselves: me, I've seen a lot of synthetic mirror reflections
+and too sharp shadows in my life so I'm probably jaded. The winners are
+generally worthwhile, usually because of the elaborate modeling and materials
+work and sometimes because of the scene's concept or layout. I would put most
+of them in the "Ripley's Believe it or Not" category - not great art, not
+particularly photorealistic, but amazing to contemplate that many of the
+scenes were done for the love of it in spare time with free software and a
+lot of talent and a lot more sweat. Amazing and inspiring, seeing all this
+time and energy and spent cycles in one place.
+
+All in all, this is a pleasant CD-ROM. Most of the content can be found on
+the web, but for most people, accessing the images off of this CD-ROM will be
+much faster and more dependable, not to mention more portable. If you do any
+non-trivial rendering with POV-Ray, or just want to have a collection of fun
+images to look at and show others, it's worth getting.
+
+-------------------------------------------------------------------------------
+
+Plucker Coordinates, by Jeff Erickson <jeffe@cs.duke.edu>
+
+[thanks to Mike Kelleghan for retrieving this from the aether for me. -EAH]
+
+The best explanation of Plucker coordinates I've seen is in Jorge Stolfi's
+book "Oriented Projective Geometry" (Academic Press, 1991). I'll try to give
+a sketch here, but you should really check out Stolfi's book if you want to
+learn about these things.
+
+Plucker coordinates are an incredibly useful way of specifying lines and rays
+in 3-dimensional space by six-dimensional vectors. Suppose L is the oriented
+line passing through two points with homogeneous coordinates [a,b,c,d] and
+[w,x,y,z] -- or with standard Cartesian coordinates (b/a,c/a,d/a) and
+(x/w,y/w,z/w) -- in that order. Then the Plucker coordinates of L are
+
+    [a*x-b*w, a*y-c*w, b*y-c*x, a*z-d*w, b*z-d*x, c*z-d*y].
+
+Plucker coordinates are homogeneous -- multiplying all six coordinates by any
+real number gives you new Plucker coordinates for the same line. Also, not
+every set of six numbers is the Plucker coordinates of a line. Plucker
+coordinates [L1, L2, L3, L4, L5, L6] always satisfy the following equation:
+
+    L1*L6 - L2*L5 + L3*L4 = 0.
+
+Two oriented lines L and M can interact in three different ways: L might
+intersect M, L might go clockwise around M, or L might go counterclockwise
+around M. Here are some examples:
+
+         |M              |M              |M
+    L    |          L    |          L    |
+    -----+----->    ----------->    -----|----->
+         |               |               |
+             V               V               V
+     intersect    counterclockwise   clockwise
+         |M              |M              |M
+    L    |          L    |          L    |
+    <----+-----     <----|------    <-----------
+         |               |               |
+             V               V               V
+
+The first and second rows are just different views of the same lines, once
+from the "front" and once from the "back". Here's what they might look like
+if you look straight down line M (shown here as a dot).
+
+    L                                ---------->
+    -----o---->     L    o           L    o
+                    ---------->
+     intersect    counterclockwise    clockwise
+
+
+The Plucker coordinates of L and M give you a quick way to test which of the
+three it is.
+
+    cw:   L1*M6 - L2*M5 + L3*M4 + L4*M3 - L5*M2 + L6*M1 < 0
+    ccw:  L1*M6 - L2*M5 + L3*M4 + L4*M3 - L5*M2 + L6*M1 > 0
+    thru: L1*M6 - L2*M5 + L3*M4 + L4*M3 - L5*M2 + L6*M1 = 0
+
+So why is this useful?  Well, suppose you want to test if a ray intersects a
+triangle in 3-space. One way to do this is to represent the ray and the
+edges of the triangle with Plucker coordinates. The ray hits the triangle if
+and only if it hits one of the triangle's edges, or it's "clockwise" from all
+three edges, or it's "counterclockwise" from all three edges. For example...
+
+             /^     ...in this picture, the ray
+           /  |     is oriented counterclockwise
+    --------- | -->     from all three edges, so it
+       /      |     must intersect the triangle.
+      L------->     (The L is an arrowhead!)
+
+So if you use Plucker coordinates, ray shooting tests like this take only
+about ten lines of code.
+
+-------------------------------------------------------------------------------
+
+Errors of Commission and Omission, by Eric Haines
+
+(A random title, but it does cover these two bits of errata fairly well.)
+
+I will start with a minor but important error in Dr. Rogers' new "Procedural
+Elements for Computer Graphics, 2nd edition", WCB/McGraw-Hill. We discussed
+this topic back and forth, and while I pressed my arguments hard, I did not
+continue to nag about it and it slipped into the book. The errata is from
+page 551 on, and has to do with the ray tracing illumination model. The
+problem is that the distance along reflection and refraction rays is used to
+attenuate these rays' contributions. Specifically, the intensity of the ray's
+contribution is divided by the length of the ray - this is incorrect. It is
+an educated error (physics says that light from a source drops off with the
+distance squared, for example), but is not a good simulation of what actually
+happens in the real world. Note that the illumination model presented does
+not attenuate eye ray contributions, these are left as is.
+
+The error does have a logic to it, in that shadow rays generated from
+surfaces can get attenuated (if desired) by a function related to the
+distance to the light source, so why shouldn't reflection rays? [To digress a
+bit, this reminds me of an interesting erroneous algorithm someone starting
+out in ray tracing told me: they would not simply ignore the light if the
+surface was in shadow, but rather would attenuate the light's effect based
+upon the distance the shadow ray went before it hit the occluder. This idea
+is interesting! I've never tried it out, and you do have to modify good ray
+tracers to return the first (not just any) object hit by the shadow ray. But
+think about it: as an occluder gets further away from the object being
+occluded, more light appears in the shadow - this is sort of a poor man's
+radiosity effect, and has a rationale. Surfaces which are close together
+usually minimize the amount of light which bounces into the area between
+them. There are cases where this algorithm is nonsense (two occluders, one
+large and then one small while moving from the light, would give a darker
+shadow where the smaller occluder casts a shadow), but it's an interesting
+idea.]
+
+There are also cases in which the contribution from reflections or
+refractions (or from the eye) are attenuated, e.g. atmospheric effects,
+absorption due to the glass, etc (and these are usually handled using
+exponential drop-offs, not divisions by the distance). Nonetheless, always
+dividing by the distance is incorrect, it does not happen in reality. The
+simplest counterexample is a mirror. You look directly at something far away.
+You now turn around and look into a hand mirror at the same scene. It may dim
+a little bit simply due to the fact that the mirror is not 100% reflective.
+However, it does not dim due to the distance (not any more than it does
+looking at the scene directly with the eye). The ultimate case is a reflector
+telescope (which normally has almost perfect mirrors): the light from the
+stars (point sources) or moon (area source) reaches the eye from mirror
+reflections, and the mirror does not dim the perception of the stars just
+because the stars were reflected and not seen directly. The eye itself works
+by refraction, and the refracted rays coming in through the lens are not
+dimmed by the distance just because they are refracted vs. pinhole-camera
+type eyes where no lens is present.
+
+On to other errors. The error of omission is one of my own, and I came to
+know about it when I was writing Dr. Rogers about the bug above. I realized
+that Cyrus-Beck 3D clipping is almost exactly what I was doing in my article
+in Graphics Gems II about ray/convex-polyhedron intersection testing (which
+is a variant on Kay/Kajiya slab testing). Kay & Kajiya properly note that
+their slabs method is similar in spirit to Cyrus-Beck. I never followed up
+this reference and so did not fully comprehend how closely related these
+were, and how my own ray intersection method was essentially identical to
+Cyrus-Beck. What is the quote about those who do not study history are doomed
+to repeat it? I guess I am in good company: Rogers makes a case in his book
+how Liang-Barsky 2D clipping (1984) is a special case of the Cyrus-Beck
+algorithm (1978), showing how the flowcharts and steps of the two algorithms
+interrelate. Evidently Liang and Barsky did not know of Cyrus-Beck, another
+case of history repeating itself. Rogers thorough treatment in his book of
+all the variants of 2D and 3D clipping algorithms leaves no excuse for anyone
+to reinvent any of these basic algorithms again.
+
+-------------------------------------------------------------------------------
+
+Cyrus-Beck as a Ray/Polygon Tester, by David Rogers
+
+[Another little tidbit that dropped out of our conversations. -EAH]
+
+Actually, there is a neat way of doing a ray polygon intersection with
+Cyrus-Beck clipping. A containment test is not required. Just consider the
+polygon as two opposite pointing faces of a 3-D polyhedron and use the 3-D
+C&B.
+
+[For example, consider a triangle to be a five sided polyhedron, with two
+faces (one in each direction) on the triangle's plane and three faces forming
+the edges, with each face perpendicular (though not required) to the plane.
+Interesting scheme! I would suspect the traditional "hit the plane, test the
+point" method of ray tracing a triangle might be faster, but I won't swear to
+it; this new method gives a tight single loop of code, testing the ray
+against each plane in turn (with two planes sharing results). Whatever the
+case, Rogers' method is definitely more elegant. For another elegant recent
+solution to this problem, see Moeller and Trumbore's paper in the "journal of
+graphics tools"; abstract, code and statistics (but not the algorithm
+description) at: http://jgt.akpeters.com/papers/MollerTrumbore97/ -EAH]
+
+-------------------------------------------------------------------------------
+
+Mirror Reflectivity, by Greg W. Larson <gregl@sgi.com>
+
+[Due to the interesting discussions with Dr. Rogers, I asked Gregory Ward
+Larson (the computer artist formerly known as Greg Ward) the actual
+reflectivity for a typical mirror. -EAH]
+
+A front surface mirror can be as high as 99reflectance, though I haven't
+measured any lately. Reflectances this high are also reported by some makers
+of aluminized plastic reflectors used in light fixtures, and they do indeed
+achieve this when new. Dust diminishes this value by 5-15, unfortunately.
+
+A typical bathroom mirror has a reflectance of around 90when it's clean,
+due mostly to internal absorption of the glass itself. The actual RGB
+reflectance of the mirror in our bathroom is:
+
+	0.916 0.938 0.858
+
+-------------------------------------------------------------------------------
+
+Testing a Matrix for Uniform Scaling, by Charles Iliya Krempeaux and
+	Eduardo Marreiros
+
+[This is one of those common operations I tend to forget and have to look up
+- putting it here means there's now a place to look. Knowing that a
+transformation uniformly scales (and does not invert, i.e. does not make the
+object go through the looking glass) can be handy. For example, such objects
+can be rapidly illuminated when using hidden surface techniques. This is done
+by applying the inverse of their matrix to the light sources instead of
+transforming the object's vertices to world space (non-uniform scaled objects
+cannot correctly use this trick). A few years ago a certain company wanted to
+patent this technique - I only hope their attempt failed. - EAH]
+
+
+Eduardo Marreiros <emarreiros@mail.telepac.pt> writes:
+
+I'm interested in finding a QUICK and LINEAR way to determine if some 4x4
+matrix produces a transformation in which all 3 scale factors are equal. I
+mean, if some object is to be transformed, it will not be deformed. An object
+will be grown/shrunk by the same amount in all 3 axes.
+
+
+Charles Iliya Krempeaux <ckrempea@sfu.ca> replies:
+
+One way to do it is...
+
+Having:
+
+    | a11  a12  a13  a14 |
+    | a21  a22  a23  a24 |
+    | a31  a32  a33  a34 |
+    |  0    0    0    1  |
+
+Check that the upper-left 3x3 sub-matrix matrix-multiplied with its transpose
+gives you a matrix of the form:
+
+          |k    0    0|
+          |0    k    0|
+          |0    0    k|
+
+This makes sure that the upper-left 3x3 sub-matrix is orthogonal - and nicely
+ignores scaling but not spatial inversions so...
+
+Then make sure that:
+
+                    | a11  a12  a13|
+     determinant(   | a21  a22  a23|  )    is positive
+                    | a31  a32  a33|
+
+This makes sure that you don't invert your space/coordinate-system.
+
+
+Peter-Pike Sloan <ppsloan@lal.cs.utah.edu> notes:
+
+If you test that:
+
+      (a11)^2 + (a21)^2 + (a31)^2 =
+      (a12)^2 + (a22)^2 + (a32)^2 =
+      (a13)^2 + (a23)^2 + (a33)^2
+
+and that:
+
+      a11*a12 + a21*a22 + a31*a32 = 0
+      a11*a13 + a21*a23 + a31*a33 = 0
+      a12*a13 + a22*a23 + a32*a33 = 0
+
+then the matrix is orthogonal and its axes are all the same length.
+
+[The first set of equations checks the length of the axes (to determine that
+the scales are all the same), the second set that the axes are mutually
+perpendicular. These tests are equivalent to doing the transpose
+multiplication test, without wasting time duplicating dot product tests. The
+determinant test is still needed to determine whether inversion occurs. So
+you may be able to get away without doing all these tests, depending on what
+your system allows. Tolerances are also obviously important. - EAH]
+
+-------------------------------------------------------------------------------
+
+Declassified CIA BRDFs now available, by Greg Ward Larson
+
+[From minutes of the global illumination meeting at SIGGRAPH '97.]
+
+Bob Lipman (also of NIST) talked about a newly available database of BRDFs
+for various common materials, collected by the CIA for use in analyzing
+satellite images. Recently declassified (and simultaneously defunded), the
+NEF database (obviously stands for "Nonconventional Exploitation Factors")
+contains hundreds (?) of exterior finishes and natural materials,
+characterized by full spectral reflectance models and measurements. It was
+meticulously created by the National Imaging and Mapping Agency, and
+represents a huge effort. I strongly recommend to anyone interested in
+material reflectance data that they go check it out. For more information,
+see the following web sites:
+
+        http://ciks.cbt.nist.gov/appearance/
+        http://ciks.cbt.nist.gov/nef/
+
+[The first page has some good links to BRDF related work elsewhere.] The
+interface to the database currently runs only under Solaris, and Bob is
+looking to create a simpler interface to access the data under other systems,
+as well as seeing if the current interface can be ported. (His initial
+attempts to do so failed for unknown reasons.) [Looking at the pages, also
+SGI/IRIX and IBM/AIX versions are now available.]
+
+Bob Lipman is at <robert.lipman@nist.gov>, (301) 975-3829.
+
+-------------------------------------------------------------------------------
+
+Lifting the Monkey's Paw Curse, by Jeff Goldsmith
+	<Jeffrey.M.Goldsmith@jpl.nasa.gov>
+
+[This is one way to lift the Monkey's Paw Curse (RTNv10n2). Ken Turkowski (I
+believe) suggested squishing the texture individually for each triangle in
+the cone, but Jeff's solution is more simpler and general: it does not need
+to know the amount of tessellation in advance. However, if you do not allow
+manipulation of the texture itself, the curse is still a problem for
+designers using texture coordinates on surfaces. -EAH]
+
+I am doing gobs of coordinate transformation stuff, and the "Curse of the
+Monkey Paw" intrigued me. Your example is really only 2D. Imagine looking
+down at the top of the cone and projecting everything into a plane. Lo and
+behold, you have a polar projection of the texture. Is it possible to design
+a set of triangles such that the transformation you want is achieved?  I
+don't know. But, if you transform the texture first via something simple,
+it's easy, although you lose a little information. Filter the texture so
+that it compresses linearly as you travel vertically. That is, convert the
+texture you have into a triangular texture by compressing the data near the
+tip to a point, then linearly out towards the base. I'm not sure if this
+will work perfectly with texture mapping hardware; there is probably some
+constant or two to deal with, but the general idea of applying a filter seems
+like it might do the trick. I haven't thought it through completely, and I
+imagine "linearly" and "triangle" are errors, but the basic idea is to
+transform the original texture so that the triangles forming the cone map
+into the texture appropriately.
+
+How general is this?  Fairly so, it seems. This will work somewhat for
+spheres, too, if you cut them in half at the equator. Will it work for all
+point singularities? Probably not.
+
+The prefiltering actually does make some sort of sense for cones. There's
+less surface area near the tip (as there is in a polar projection of a plane)
+than at the base, so there really is less information in a sense in the
+texture to be applied there. More importantly, consider the reverse problem:
+you have a texture on a "cone" and want to draw it onto a rectangle. You cut
+the polar projection radially then stretch out the pole, converting what was
+really once a triangle into a rectangle. To do the reverse, it seems obvious
+to convert a rectangle into a triangle. Since you only have locally linear
+texture lookup, a little bit of tinkering will need to be done, but for small
+triangles, a linear approximation will probably suffice.
+
+-------------------------------------------------------------------------------
+
+Eccentricity Effects in Blobs, by Alfonso Hermida
+	<ahermida@mscmail.gsfc.nasa.gov>
+
+Some years ago I asked myself if there was a way to make isosurfaces a little
+more versatile or at least be able to tweak them somewhat since the objects
+used were always too symmetric. To understand how I modified the method,
+let's take a look at how it's normally done, using an ellipsoid as our test
+case (I'm writing all the steps for those who are not familiar with the
+details).
+
+[Personally, I would use a sphere and just apply a non-uniform scaling matrix
+to my equation results; I need a transformation matrix to move the object
+away from the origin anyway. - EAH]
+
+1) Take an ellipsoid with radii A, B and C in the axes X,Y and Z
+respectively. The equation for an ellipsoid located at the origin is
+
+	X^2 / A^2 + Y^2 / B^2 + Z^2 / C^2 = 1
+
+
+2) Let the center of the ellipsoid be defined by a 3D vertex named Q, which
+for simplicity is actually the origin <0,0,0> (we can always use a
+transformation matrix later to move this point).
+
+
+3) An arbitrary test point anywhere inside or on the surface of the ellipsoid
+will be named P. Our goal is to compute the potential at this point.
+
+
+4) Construct a vector V such that V = P (trivial, but we'll modify this
+definition later). We can define a ray V * t, e.g. it generates the set of
+points P' = V * t, where t is a parameter, t >= 0
+
+	at t = 0: P' = Q = <0,0,0>
+	at t = 1: P' = P
+
+
+5) Now, let M be the point where the ray V * t intersects the ellipsoid, at
+t = tm
+
+	so M = V * tm = P * tm
+
+
+6) The potential of the blob at any point P can then be calculated as
+
+	Potential = S * ( 1 - (r/R)^2 )^2
+
+	where S =  maximum strength of the blob (scalar) at the center
+	      r =  mag (P)
+	      R =  mag (M)
+
+
+7) To solve for the potential of point P we need to find the ratio r/R which
+in turn depends on the intersection point M:
+
+	using 	X^2 / A^2  +  Y^2 / B^2  +  Z^2 / C^2  =  1
+	and 	M = P * tm
+
+	let 	M have the components  <Mx, My, Mz>
+		P have the components  <Px, Py, Pz>
+
+so substituting everything into the ellipsoid equation:
+
+        (Px * tm)^2 / A^2  +  (Py * tm)^2 / B^2  +  (Pz * tm)^2 / C^2  = 1
+
+
+Now solve the previous equation for "tm" and find M using M = P * tm. This
+gives you the intersection point M.
+
+
+8) Since you know have the points M, P and the strength value S, solve for
+"r" and "R" and use equation (6) to find the potential value of point P.
+
+
+9) If we repeat this for a number of points inside and on the surface of the
+ellipsoid and use a marching cubes algorithm, we can build the surface by
+polygonizing it. This entails calculating potential values of points located
+in a 3D grid in space and selecting points in space where the value of the
+potential is near some arbitrary threshold value. These points are then used
+to polygonize the surface.
+
+
+Modifying the Previous Steps
+
+In the previous steps the origin of the ellipsoid is used as the starting
+point for the ray V * t. Now, say that the origin for generating our V
+vector is some defined point E.
+
+Why am I doing this?  I want the surface of the ellipsoid to be the
+"physical" boundary or limit of the implicit surface...that is, when E = Q
+(center of ellipsoid), then the implicit surface generated with the algorithm
+will be similar to that of the ellipsoid....BUT, when E is not equal to Q we
+should have some interesting surface that will be enclosed by the ellipsoid
+boundary surface but may or may not be similar in shape to it.
+
+Using E as the start of the vector V, let's see how the equations change:
+
+	ellipsoid: X^2 / A^2  + Y^2 / B^2  +  Z^2 / C^2  =  1
+	vector V = P - E
+	ray equation: P' = E + V * t
+
+	then M = E + V * t = E + (P - E) * tm
+
+	Potential = S * (1 - (r/R)^2 )^2
+
+where S is now the maximum strength of the blob at point E (before, it used
+to be at center of ellipsoid).
+
+	r = mag (P - E)
+	R = mag (M - E)
+
+
+Substituting M = E + (P - E) * tm into the ellipsoid equation:
+
+	let D = P - E
+
+	(Ex + Dx * tm )^2 / A^2  +
+	(Ey + Dy * tm )^2 / B^2  +
+	(Ez + Dz * tm )^2 / C^2  = 1
+
+and rearranging
+
+	(Dx^2/A^2 + Dy^2/B^2 + Dz^2/C^2)  * tm^2  +
+	2 * (Ex*Dx/A^2 + Ey*Dy/B^2 + Ez*Dz/C^2) * tm  +
+	Ex^2/A^2  + Ey^2/B^2  + Ez^2/C^2  = 1
+
+This one is a tad more complex than the other one. Now solve the previous
+equation for "tm" (select the positive value) and find M using:
+
+	M = E + (P - E) * tm
+
+Since we know points M, P, E, and the strength value S, solve for "r" and "R"
+and use equation (6) to find the potential value of test point P.
+
+If this new style ellipsoid is rendered as an implicit surface at a potential
+of 0 it won't look a bit different than a standard ellipsoid. Where it gets
+interesting is when the surfaces at potentials greater than 0 are used, and
+when such ellipsoids are blended with other primitives. The isosurfaces
+radiate out from point E instead of the geometric center of the shape.
+
+If you try this out you'll see that we have now broken the symmetry of the
+potential value. If you plot the change of potential across one of the axes,
+in the standard method, the peak of the potential distribution was located at
+the origin, now with the new method, the potential has a peak, offset at a
+distance equal to mag(E - Q).
+
+I gave you a straightforward example of the new method by using a simple
+object such as an ellipsoid. What about other shapes?  Well, how about a
+cylinder?  Researchers such as Jules Bloomenthal have used implicit cylinders
+to do blobs. One of the approaches is to use the perpendicular distance
+between a line segment and the test point P to be equal to a value "d". This
+creates a cylinder with capped (i.e. hemispherical) ends of radius "d" - a
+cheese log. If we were to break the symmetry we would have to go beyond
+using a new point E to be the center of the cylinder - we would have to
+create a new line segment (with the same or different length) that would be
+translated and rotated relative to the cylinder's original line segment. Now,
+the method would be to calculate the perpendicular distance between the NEW
+line segment and the test point P. The point M would be the intersection
+point of a vector (that is perpendicular to the new line segment and passes
+thru point P) and the surface of the cylinder (as defined by the original
+line segment).
+
+We can go now one step further:  in the case of the cylinder, instead of
+creating a new line segment and moving it inside the cylinder's surface use a
+spline instead. This would make the implicit shape more complex and
+interesting. The method stays the same but now we have to calculate the
+distance between the spline and the point P.
+
+Here's yet another idea. So far, I have suggested moving the "center" point
+of the ellipsoid somewhere else and moving the line segment that defines the
+cylinder somewhere else also. This modifies the vector's V origin. How about
+using a point instead of a line segment in the cylinder? that is, the
+boundary surface is the cylinder, but the vector V is calculated as if the
+original shape was an ellipsoid....hmmm. Also, it would be interesting to
+check out weird surface boundaries such as superquadrics with points, line
+segments or splines to break the symmetry!
+
+If you think this method only applies to blobs, here's another idea. In 1994
+I talked a few times over the phone with Paul Borrel at the IBM T.J. Watson
+Research Center. He had written a paper about a deformation method they
+named SCODEF. His method used something similar to what I described in
+detail in the first section of this article, but he uses SCODEF to perform
+deformations rather than to do implicit surfaces. I was able to modify his
+equations and implement the eccentricity effects as described in this article
+with no difficulty.
+
+NOTE: Paul Borrel's paper is "Simple Constrained Deformations for Geometric
+Modeling and Interactive Design", Paul Borrel and Ari Rappoport, ACM Trans.
+on Graphics, Vol 13, #2, 1994, pp. 137-155.
+
+-------------------------------------------------------------------------------
+END OF RTNEWS

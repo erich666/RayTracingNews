@@ -1,0 +1,1464 @@
+<!-- html version of Volume 8, Number 3 : Wed Aug  2 17:19:06 EDT 1995 -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 8, Number 3</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT> 
+<P><I>"Light Makes Right"</I> 
+<P><FONT size=+1>August 2, 1995</FONT> 
+<P><FONT size=+1>Volume 8, Number 3</FONT> 
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1995, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://princeton.edu/pub/Graphics/RTNews/">
+princeton.edu:/pub/Graphics/RTNews</A>,
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/ray/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction
+</A></LI>
+<LI><A HREF="#art2">
+Contest: Name that Area Ratio
+</A></LI>
+<LI><A HREF="#art3">
+Ray Tracing Roundup
+</A></LI>
+<LI><A HREF="#art4">
+On-Line Computer Science Bibliography Collection,
+</A></LI>
+by Alf-Christian Achilles
+<LI><A HREF="#art5">
+Comments on RTNv8n1,
+</A></LI>
+by Alexander Enzmann
+<LI><A HREF="#art6">
+Dore' Now Free, and Dore' Mailing List,
+</A></LI>
+by Len Wanger
+<LI><A HREF="#art7">
+Fooling Around,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art8">
+Beware of VIDEA!
+</A></LI>
+by W. Purgathofer, E. Groeller, M. Feda
+<LI><A HREF="#art9">
+Still More on Optical Ray Tracing,
+</A></LI>
+by Dan Reiley
+<LI><A HREF="#art10">
+Raytracing and 3D Studio,
+</A></LI>
+by Michael Adams and Brian Hoffman
+<LI><A HREF="#art11">
+Testing SIPP versus Raytracers under DOS,
+</A></LI>
+by Alexander Enzmann
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction
+</A></FONT>
+</H4>
+First off, the Ray Tracing Roundtable will meet yet again at SIGGRAPH:
+<P>
+<PRE>
+        Thursday, 5:15 pm (the room opens at 5) to 6:45
+        Westin Bonaventure (the HQ hotel), in the San Fernando room
+</PRE>
+<P>
+The timing and place are such that you can catch it while moseying from the
+convention center (where things wrap up around 5 pm) to the papers/panels
+reception at 7 pm (about 2 blocks walk from the Westin).
+<P>
+The Roundtable is where anyone interested in ray tracing to gather and connect
+names with faces.  There are usually around 50 people who show up, we go
+around the room and say names and what we're up to nowadays, then break up and
+schmooze.  The gathering started as a way for researchers to talk about ideas.
+It has evolved into a general gathering for anyone interested in 3D rendering
+to meet like minded souls.
+<P>
+____
+<P>
+OK, so I've been trying to ignore the net and whatnot and get some Real Work
+(tm) done, but people keep coming out with some amazing things.  Not too many
+new free ray tracers of note, but Chris Cason's POV ray tracing CD is finally
+out.  The Graphics Gems V code is available online, beating the book's
+publication by a few months.  There's now a
+<A HREF="#mesa">
+free OpenGL implementation</A>
+for
+Unix boxes and MS Windows, and the
+<A HREF="#art6">
+Dore'
+</A>
+object oriented library has been made
+available for free [see <A HREF="rtnews2a.html#art2">RTNews2</A>].
+SGI provides a free parser for reading and
+traversing
+<A HREF="#vrml">
+VRML
+</A>
+(and there are three or more free/beta viewers out there right
+now).  Glassner's magnum opus (so far), _Digital Image Synthesis_, is finally
+out [briefly reviewed back in <A HREF="rtnv7n3.html#art3">RTNv7n3</A>].
+<P>
+In other news, ACM Transactions on Graphics has a new Editor in Chief, Andrew
+Glassner.  He and I have been working on WWW pages for ACM TOG, and the basics
+are finally ready:  check out <A HREF="http://www.acm.org/pubs/tog/">http://www.acm.org/pubs/tog/</A> .  I consider the
+most significant page the Reviewing Guidelines, as here Andrew gives a sense
+of where he wants to see TOG go, and it's significantly different than the
+current public perception; please read it if you do research (and even if you
+don't).  There are other pages of interest, such as the Editors page, where
+you can put names to faces for a number of graphics researchers; there are
+also links to what they are researching.  I spent a fair amount of time on the
+Resources links, which point to software and other data of particular interest
+to researchers.  I tried to limit my choices to significant tools and sites
+and pointers to other links of interest.  I have also tried to avoid
+duplication of previous efforts, such as material already in computer graphics
+related FAQs.  There is definitely a 3D and ray tracing bias to some of these
+pages; I look to you all to point out other resources you consider significant
+and worth adding.
+<P>
+I am also helping cobble up some WWW pages for my company.  You might want to
+check out <A HREF="http://www.eye.com/">http://www.eye.com/</A> sometime; I plan on having my own homepage
+someday, with pointers to where to access the most recent version of materials
+I have on the net (papers, SPD package, RT News archives, etc) - in the
+meantime check out "Freebies".  Buy a few thousand dollars worth of products
+when you visit, please.
+<P>
+____
+<P>
+Best WWW graphics site I've seen this year:
+<P>
+<PRE>
+        <A HREF="http://ftp.std.com/homepages/stevec/NTA/intro.html">http://ftp.std.com/homepages/stevec/NTA/intro.html</A>
+</PRE>
+<P>
+____
+<P>
+Quote for the issue:
+<P>
+"Digital technology is the universal solvent of intellectual property rights."
+        - Copyright 1995, Tom Parmenter
+<P>
+Tom writes:
+<blockquote>
+        The "universal solvent" quote I picked up from a speech by "an
+        Apple fellow" in 1988.  It conformed to a long-held conviction of
+        mine, so I polished it and adopted it, that is, appropriated it.
+        Putting it next to a probably bogus copyright claim is my twist.
+</blockquote>
+<P>
+and I continue the tradition by ripping it out of his e-mag, _Desperado_.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+Contest: Name that Area Ratio
+</A></FONT>
+</H4>
+So, you know how to find if a circle and hyperbola intersect, you know how to
+compute the area of a polygon, and you know how to find the convex hull of a
+set of points.  Now's your chance to win a free CD ROM for learning all that
+stuff.
+<P>
+Take a crack at this problem:  given the set of all arbitrary triangles (i.e.
+3 random dots, anywhere on a 2D plane) and a 2D bounding box around each, what
+is the average ratio of the area covered by the triangle vs.  the box?  The
+answer is actually a useful thing to know, if you're trying to design an
+optimal point-in-polygon test and you know the point is inside the bounding
+box.  I'll be interested in your answer and how you got to it.  The prize for
+the best (decided in some arbitrary fashion) correct answer:  a copy of Chris
+Cason's POV ray tracing CD ROM (see the Roundup) or a copy of one of Syndesis'
+CD ROMs (kindly donated by John Foust) (see
+<A HREF="rtnv6n2.html#art8">RTNv6n2</A>,
+<A HREF="rtnv6n3.html#art14">RTNv6n3</A>,
+and <A HREF="rtnv8n1.html#art10">RTNv8n1</A>).
+<P>
+I'd also be interested in the answer to the same question for four arbitrary
+points on a plane and the average area of the polygon vs. the box area.  For
+maximal bonus points (redeemable for plastic spiders at video arcades around
+the country) what's this ratio for four arbitrary points which form a polygon
+which doesn't overlap (i.e.  doesn't make an hourglass shape)?  Finally, what
+about the set of all convex four pointed polygons?  I haven't a clue what the
+answers are to these four-point questions, but would be interested to know
+them.  Answers backed by theory are best, but having your PC churn out the
+answer by doing a bazillion iterations and averaging the results is OK, too
+(aka Monte Carlo).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Ray Tracing Roundup
+</A></FONT>
+</H4>
+Chris Cason's POV-Ray CD ROM is out, called "Raytrace!  The Official POV-Ray
+CDROM" from Walnut Creek.  Check <A HREF="http://www.cdrom.com/titles/pov.html">http://www.cdrom.com/titles/pov.html</A> for
+information.  For all of those who feel that mining the net for material and
+selling it for Filthy Lucre is Wrong, I have some bad news:  the CD's contents
+is available for free via <A HREF="ftp://www.povray.org/pub/povray">ftp://www.povray.org/pub/povray</A> .  Have fun
+downloading 500+ Megs...
+<P>
+I hope to review this CD in a future issue (or better yet would like to get a
+review from someone else, perhaps you [holographic hand pointing at you here]).
+<P>
+________
+<P>
+The code distribution for _Graphics Gems V_, ed. Alan Paeth, Academic Press,
+1995 is available on-line at:
+<P>
+        <A HREF="ftp://ftp.princeton.edu/pub/Graphics/GraphicsGems/GemsV">ftp://ftp.princeton.edu/pub/Graphics/GraphicsGems/GemsV</A>
+and
+        <A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/GraphicsGems/GemsV">ftp://ftp-graphics.stanford.edu/pub/Graphics/GraphicsGems/GemsV</A>
+<P>
+As usual, if you find any errata, let me know as I'm the archivist for the
+on-line Gems code.
+<P>
+The book is not out yet (it'll be at SIGGRAPH 95).  Also, this *is* the last
+in the Graphics Gems series; there are ideas floating around of other possible
+books, but I know of nothing definite.
+<P>
+________
+<P>
+Avalon Moved
+<P>
+Viewpoint Datalabs has taken over the management of the Avalon site, which
+contains many free 3D models and related software.  They appear to be cleaning
+up the structure and adding a nice WWW layer.  Check it out at:
+<P>
+<PRE>
+        <A HREF="http://www.datalabs.com/avalon.html">http://www.datalabs.com/avalon.html</A>
+</PRE>
+<P>
+________
+<P>
+<A HREF="http://www.seas.gwu.edu/seas/eecs/Research/Graphics/ProcTexCourse/">http://www.seas.gwu.edu/seas/eecs/Research/Graphics/ProcTexCourse/</A> is the web
+page for my class.
+<P>
+[If you like procedural textures (or even if you don't), check this out!
+Also, it has an all-important link to the history of textures WWW pages, which
+all computer graphicists should study carefully.  - EAH]
+<P>
+-- Ken Musgrave (<A HREF="mailto:musgrave@seas.gwu.edu">musgrave@seas.gwu.edu</A>)
+<P>
+________
+<P>
+For an undergrad class I'm teaching, I wrote up some notes on ray-polygon and
+ray-quadric intersection testing.  They can be found at the URL
+<P>
+<PRE>
+    <A HREF="http://www.cs.cmu.edu/afs/cs/project/anim-ph/463.95/pub/www/notes.toc.html">http://www.cs.cmu.edu/afs/cs/project/anim-ph/463.95/pub/www/notes.toc.html</A>
+</PRE>
+<P>
+on the World Wide Web, in both Postscript and Latex forms.  This five-page
+document focuses primarily on intersection of rays with convex polygons.  I've
+described a method there that is easier to implement (though probably slightly
+slower) than the standard approach of projecting to 2-D.
+<P>
+The other notes in this collection are:
+<P>
+<PRE>
+1. Raster Images
+2. Point Processing of Images
+3. Image Filtering
+4. Warping and Morphing
+5. Aliasing
+6. Antialiasing and Related Issues
+7. Discrete Fourier Transforms and the Fast Fourier Transform (FFT) Algorithm
+8. Image Compression
+9. Glossary of Signal Processing Terms
+10. Visibility and Ray Casting
+11. Ray-Polygon and Ray-Quadric Intersection Testing
+12. Painter's & Z-Buffer Algorithms and Polygon Rendering
+13. Spatial Subdivision
+14. Light and Color
+15. Reflection and Transmission
+16. Recursive Ray Tracing
+17. Texture Mapping
+18. Global Illumination and Radiosity
+19. Review of Rendering
+</PRE>
+<P>
+<PRE>
+Notes #10 discusses the generation of rays through a given
+pixel given only the screen coordinates of the pixel and the 4x4
+world space to screen space transformation matrix, but no camera parameters
+-- something I don't recall seeing published elsewhere.
+</PRE>
+<P>
+-- Paul Heckbert (<A HREF="mailto:ph@cs.cmu.edu">ph@cs.cmu.edu</A>)
+<P>
+________
+<P>
+Global illumination researchers should find this site of interest:
+<P>
+<A HREF="http://safran.imag.fr/Membres/Francois.Sillion/globillum.html">http://safran.imag.fr/Membres/Francois.Sillion/globillum.html</A>
+<P>
+-- Francois Sillion (Francois.Sillion@imag.fr)
+<P>
+________
+<P>
+I added a partial postscript version of my master's thesis to my home page.
+[an excellent primer on various aspects of texture mapping.  Other papers
+and software are here, too. -EAH]
+<P>
+If you go to my home page,
+    <A HREF="http://www.cs.cmu.edu:8001/afs/cs/user/ph/www/heckbert.html">http://www.cs.cmu.edu:8001/afs/cs/user/ph/www/heckbert.html</A>
+<P>
+you'll find that in my papers list I've just now put in links to the UC
+Berkeley versions, and also, at the end of my papers list, I've got a link to
+the top level UC Berkeley tech reports collection.
+<P>
+If you want to poke around a bit, try the "list of individuals..." link at
+the bottom of my home page for pointers to a few other interesting people and
+places.
+<P>
+-- Paul Heckbert (<A HREF="mailto:ph@cs.cmu.edu">ph@cs.cmu.edu</A>)
+<P>
+________
+<P>
+[In response to the question "does anyone know where I can get a mesh of
+a person?"]
+<P>
+This is more data than you probably wanted, but I thought I would mention that
+the complete data for the male "Visible Human" (as seen at Vol. Vis. '94) is
+now available -- this includes CAT, MRI and cryosections at 1 millimeter
+intervals.  The URL
+<P>
+<PRE>
+        <A HREF="http://www.nlm.nih.gov/extramural_research.dir/visible_human.html">http://www.nlm.nih.gov/extramural_research.dir/visible_human.html</A>
+</PRE>
+<P>
+has a complete description of the data and how to get it.  You need to fill
+out forms about what you are going to do with the data -- for example whether
+you are going to develop a commercial product.  I don't think you have to pay
+anything unless you want them to send you data on tape.  They also have a few
+sample images.
+<P>
+-- Holly E Rushmeier (<A HREF="mailto:holly@cam.nist.gov">holly@cam.nist.gov</A>)
+<P>
+________
+<P>
+3D Graphics Programming in Windows, by Philip Taylor Jr., Addison-Wesley,
+1994, comes with disk, isbn: 0-201-60882-0, 877 pages, $49.95 US
+<P>
+An interesting book:  if you're interested in writing 3D related programs for
+MS Windows, this is a good place to start.  He describes how to make a 3D
+modeler, a vector rendering library, a ray tracer, and many other design
+elements.  The bias is towards pure Windows code (I prefer Visual C++), but
+this is a minor part of the presentation; the elements presented are generally
+applicable to any Windows environment program and, to a lesser extent,
+interactive graphics programming in general.  Contact Phil Taylor
+(<A HREF="mailto:philt@kaleida.com">philt@kaleida.com</A>) for more info.
+<P>
+________
+<P>
+A demonstration version of the HELIOS Radiosity Renderer for MS-Windows 3.1
+is now available from <A HREF="ftp://avalon1.viewpoint.com/avalon/misc/helios2a.zip">ftp://avalon1.viewpoint.com/avalon/misc/helios2a.zip</A> .
+This program is an authorized version of the HELIOS radiosity renderer
+presented in the book:
+<blockquote>
+    Ashdown, I. Radiosity: A Programmer's Perspective. New York, NY: John
+    Wiley & Sons, Inc.
+</blockquote>
+Further details are provided in the accompanying ASCII text file:
+<blockquote>
+    <A HREF="ftp://avalon1.viewpoint.com/avalon/misc/helios2a.txt">ftp://avalon1.viewpoint.com/avalon/misc/helios2a.txt</A>
+</blockquote>
+Have fun!
+<P>
+-- Ian Ashdown (<A HREF="mailto:Ledalite@mindlink.bc.ca">Ledalite@mindlink.bc.ca</A>)
+<P>
+________
+<P>
+For those of you interested in rendering participating media, you might want
+to check out
+<P>
+<PRE>
+    <A HREF="http://www.sandia.gov/html/frame/NSFFinal_with_graphics_1.html">http://www.sandia.gov/html/frame/NSFFinal_with_graphics_1.html</A>
+</PRE>
+<P>
+which is
+<P>
+"The Use of High-Performance Computing to Solve Participating Media Radiative
+Heat Transfer Problems - Results of an NSF Workshop"
+<P>
+-- Holly Rushmeier (<A HREF="mailto:holly@cam.nist.gov">holly@cam.nist.gov</A>)
+<P>
+________
+<P>
+I think taxonomies are a useful guide for people who want to use an existing
+method for their application.  I'm prejudiced, but I think a useful taxonomy
+has been developed in the NIST Guide to Available Mathematical software
+(<A HREF="http://gams.nist.gov/">http://gams.nist.gov/</A>).  It helps people sift through all the various
+software repositories and find code that will solve their problem.
+<P>
+-- Holly Rushmeier (<A HREF="mailto:holly@cam.nist.gov">holly@cam.nist.gov</A>)
+<P>
+________
+<P>
+<A NAME="vrml">
+VRML
+<P>
+This is the newest hot scene description language for describing 3D models
+for transmission on the WWW.  There's been a lot of hype, but hey it's a lot
+more interesting than client/server models or all that other computer goop out
+there.  SGI has provided a free C++ parser, qvlib, to read VRML and traverse
+the database.  There are a number of free VRML browsers out there, some
+are commercial betas, others are just free.
+<P>
+I personally rely on two WWW pages for info on VRML:
+<P>
+An excellent nexus for pointers to just about every VRML resource is:
+<P>
+<PRE>
+        <A HREF="http://www.sdsc.edu/vrml/">http://www.sdsc.edu/vrml/</A>
+</PRE>
+<P>
+The FAQ is maintained by Jan Hardenbergh (<A HREF="mailto:jch@nell.oki.com">jch@nell.oki.com</A>):
+<P>
+<PRE>
+        <A HREF="http://www.oki.com/vrml/VRML_FAQ.html">http://www.oki.com/vrml/VRML_FAQ.html</A>
+</PRE>
+<P>
+There is also a mailing list (actually, a few), which generate much much mail;
+see the FAQ for details.
+<P>
+My fave VRML model is on the:
+<P>
+<PRE>
+        <A HREF="http://hyperreal.com/~mpesce/samhain.wrl">http://hyperreal.com/~mpesce/samhain.wrl</A>
+</PRE>
+<P>
+site, go to "The space is HERE!".  It's by Mark Pesce, one of the driving
+forces behind VRML (he's at <A HREF="http://hyperreal.com/~mpesce/">http://hyperreal.com/~mpesce/</A> if you want the
+bigger picture).  It's cruiseable on a Windows machine, and it's a great model
+to show to your grandmother to confirm that all those things she read about
+the net in _Time_ *are* true.
+<P>
+________
+<P>
+3D File Converter
+<P>
+A pretty dang good 3D file converter by Keith Rule for MS Windows can be had
+from:
+<P>
+<PRE>
+        <A HREF="http://skexix.europa.com/~keithr/">http://skexix.europa.com/~keithr/</A>
+</PRE>
+<P>
+It started out as a program to convert into POV-Ray format files (Keith
+also write a good POV-Ray zine), but now does conversion for quite a few
+formats, including subsets of DXF, 3DS, OBJ, NFF, raw, and now VRML.
+<P>
+________
+<P>
+<A NAME="mesa">
+MESA
+</A>
+<P>
+Mesa is an OpenGL-like (read: essentially OpenGL but missing a very small bit
+of functionality, and getting closer by the day) package by Brian Paul
+(<A HREF="mailto:brianp@ssec.wisc.edu">brianp@ssec.wisc.edu</A>) which is free, provides source code, and runs on Unix
+boxes and now MS Windows, the Mac, and the Amiga (!).  Of course, it does not
+take advantage of any native graphics accelerators, so you won't want to use
+it on your Reality Engine, but for the rest of us it's a cheap alternative.
+For example, one university uses it on a number of their educational machines,
+saving them licensing costs.  The site:
+<P>
+<PRE>
+        <A HREF="http://www.ssec.wisc.edu/~brianp/Mesa.html">http://www.ssec.wisc.edu/~brianp/Mesa.html</A>
+</PRE>
+<P>
+From what I have seen on the mailing list, its rendering speed compares
+favorably with other commercial software-only implementations, and in some
+cases has features that the commercial products do not (e.g. double buffering).
+<P>
+To subscribe to the Mesa mailing list, send the following message to the
+address <A HREF="mailto:listserv@iqm.unicamp.br">listserv@iqm.unicamp.br</A>
+<P>
+<PRE>
+        subs mesa &lt;your name&gt;
+        set mesa mail ack
+</PRE>
+<P>
+For example:
+<P>
+<PRE>
+        subs mesa Brian Paul
+        set mesa mail ack
+</PRE>
+<P>
+____
+<P>
+If you need the advantages of a name brand, Evans and Sutherland is releasing
+a version of their OpenGL library on Linux for something like $79.  Write
+<A HREF="mailto:wstout@es.com">wstout@es.com</A> for information.  The version was evidently made with time
+donated by E&S employees (!?).
+<P>
+____
+<P>
+[or if you're more of a GL fan, there's this, which I don't know anything
+about. -EAH]
+<P>
+I have been writing a GL library on the side for the last few years.  It is
+now available for beta testing from:
+<P>
+<PRE>
+   <A HREF="http://www.nas.nasa.gov/">http://www.nas.nasa.gov/</A>
+</PRE>
+<P>
+and go to "Software" and hit "libglto".
+<P>
+Be aware that this library is currently under some restrictions.  It belongs
+to the United States government and hence is not in the public domain.  It is
+only available to sites in the US and the recipients must agree to certain
+restrictions.  This is all explained on the WWW page.
+<P>
+This library currently implements approximately 269 GL commands and drives any
+generic X display.  It has been tested on SGIs, Suns, IBMs, HPs and PCs.  All
+these machines were running some flavor of UNIX.
+<P>
+[and one serious caveat:]
+<P>
+The "zbuffer" is not a true zbuffer, I merely sort the polygons.  It would be
+a trivial matter to add real zbuffering, but there would be a performance
+penalty.
+<P>
+<PRE>
+-- David C. Yip (<A HREF="mailto:dyip@nas.nasa.gov">dyip@nas.nasa.gov</A>),
+        business card <A HREF="http://www.nas.nasa.gov/~dyip">http://www.nas.nasa.gov/~dyip</A>
+</PRE>
+<P>
+________
+<P>
+The Tessellation Times is an excellent free weekly e-zine by Columbine, Inc,
+the people who make _3D Artist_ magazine
+[see <A HREF="rtnv7n1.html#art4">RTNv7n1</A>].  You can view it from
+<blockquote>
+        <A HREF="http://www.3dartist.com/tess/tessmain.htm">http://www.3dartist.com/tess/tessmain.htm</A><BR>
+or<BR>
+        <A HREF="http://www.lightside.com/~dani/">http://www.lightside.com/~dani/</A> (an excellent site in general)
+</blockquote>
+or send a message to <A HREF="ftp://tess@3dartist.com">tess@3dartist.com</A> stating simply "subscribe".
+<P>
+________
+<P>
+The Daily Spectrum: Morph's Outpost Interactive Media News is a daily (!)
+e-zine of multimedia news.  There are usually a few articles each week of
+interest to people involved commercial computer graphics.  Get it at
+<P>
+<PRE>
+<A HREF="http://www.mecklerweb.com:80/netday/morph/daily.htm">http://www.mecklerweb.com:80/netday/morph/daily.htm</A><BR>
+<A HREF="http://www.macromedia.com/Industry/hot.industry.news.html">http://www.macromedia.com/Industry/hot.industry.news.html</A><BR>
+<A HREF="http://www.lightside.com/3dsite/cgi/publications/daily-spectrum/index.html">http://www.lightside.com/3dsite/cgi/publications/daily-spectrum/index.html</A>
+</PRE>
+<P>
+________
+<P>
+Another WWW site of interest
+<P>
+http://aloha.com/~sharky (CG links, Imagine related stuff, many other pointers) [now a dead link, 7/28/97]
+<P>
+________
+<P>
+You can now reach my BBS, The Graphics Alternative, via Telnet at
+<A HREF="telnet://tgax.com">telnet://tgax.com</A>
+<P>
+-- Adam Shiffman (<A HREF="mailto:adams@ccnet.com">adams@ccnet.com</A>)
+<P>
+________
+<P>
+To all who've visited the Rendering Plant BBS and found the connection poor,
+I've added a new line.  So far, the new line seems to be pretty excellent.
+Drop me a line if you have any trouble with the bbs.
+<P>
+The new number is 816-525-8362. It's a 14.4 modem
+<P>
+The old line is 816-525-5614. It's a 28.8.
+<P>
+[Jim has a large collection of 3D Studio meshes and other material, much of
+it not available elsewhere on the net. -EAH]
+<P>
+-- Jim Lammers (<A HREF="mailto:trinity@tyrell.net">trinity@tyrell.net</A>)
+<P>
+________
+<P>
+My entire BBS is available as well as a couple of CD's worth of stuff.  Only 2
+users allowed to FTP at a time.  Sorry, I just don't have the bandwidth to
+allow tons of users to FTP all at the same time.
+<P>
+FTP to <A HREF="ftp://graphics.rent.com">ftp://graphics.rent.com</A>
+or WWW to <A HREF="http://graphics.rent.com">http://graphics.rent.com</A>
+<P>
+-- Bob Lindabury (<A HREF="mailto:bobl@graphics.rent.com">bobl@graphics.rent.com</A>)
+<P>
+________
+<P>
+Mail me if you want a comprehensive list of 3D books and references with
+reviews.  [See <A HREF="rtnv7n4.html#art21">RTNv7n4</A> for an early version
+of this list.  It's become quite
+extensive and now covers many more books; the text file is 1300 lines long.
+Check it out.  -EAH]
+<P>
+-- Brian Hook (<A HREF="mailto:bwh@netcom2.netcom.com">bwh@netcom2.netcom.com</A>)
+<P>
+________
+<P>
+WWW pages for SIRDS are at <A HREF="http://h2.ph.man.ac.uk/gareth/sirds.html">http://h2.ph.man.ac.uk/gareth/sirds.html</A>.
+<P>
+-- Peter Chang (<A HREF="mailto:peterc@a3.ph.man.ac.uk">peterc@a3.ph.man.ac.uk</A>)
+<P>
+________
+<P>
+Geomview, Interactive View For 3-D Geometric Objects
+<P>
+The Geometry Center announces the availability of release 1.5 of Geomview.
+Geomview is an interactive viewer for 3-D geometric objects.  It allows users
+to view and manipulate these objects via the mouse, the keyboard, and through
+an interpreted command language.  This release includes versions for SGI
+(using GL graphics), NeXTStep (requires NeXTStep version 3.0 or higher), and
+generic Xlib graphics.  Precompiled binaries are available for SGI, NeXT
+(m68k/intel/hppa), Sun4, HP, Linux, IBM RS/6000 and DEC Alpha platforms.  The
+source code is also available.  These distributions are all in
+<A HREF="ftp://ftp.geom.umn.edu/pub/software/geomview">ftp://ftp.geom.umn.edu/pub/software/geomview</A> For more details, and for a list
+of changes since previous releases of Geomview, see the README file in that
+same directory.
+<P>
+Geomview is part of an effort at the Geometry Center to provide interactive 3D
+graphics which is well-suited for mathematics visualization.  In addition,
+Geomview is extensible and can serve as a general-purpose tool.  Its
+functionality can be extended in an almost unlimited fashion by external
+modules or programs.
+<P>
+<PRE>
+For more information, go to URL:
+        <A HREF="http://www.geom.umn.edu/software/download/geomview.html">http://www.geom.umn.edu/software/download/geomview.html</A>
+</PRE>
+<P>
+[I lost the author of this notice. -EAH]
+<P>
+________
+<P>
+3D Studio Related
+<P>
+To become a member of the 3D Studio mailing list you must send a mail message
+to the address:
+<P>
+<PRE>
+        <A HREF="mailto:majordomo@autodesk.com">majordomo@autodesk.com</A>
+</PRE>
+<P>
+In the body of the message enter:
+<P>
+subscribe 3dstudio
+<P>
+____
+<P>
+I have found some sites of interest:
+<P>
+<PRE>
+3D studio:
+<A HREF="http://homepage.eznet.net./~frac/3ds.html">http://homepage.eznet.net./~frac/3ds.html</A>
+<A HREF="http://www.halcyon.com/asllc/3dstudio.html">http://www.halcyon.com/asllc/3dstudio.html</A>
+<A HREF="ftp://ftp.mcs.com/mcsnet.users/bcleach/3dstudio">ftp://ftp.mcs.com/mcsnet.users/bcleach/3dstudio</A>
+<A HREF="ftp://www.pp.orst.edu/">ftp://www.pp.orst.edu/</A>
+<A HREF="ftp://ftp.csn.net/Schreiber/">ftp://ftp.csn.net/Schreiber/</A>              - Schreiber Instruments (IPAS)
+</PRE>
+<P>
+<PRE>
+Other:
+<A HREF="http://delphi.beckman.uiuc.edu:80/softimage/">http://delphi.beckman.uiuc.edu:80/softimage/</A>
+<A HREF="http://wavefront.wti.com">http://wavefront.wti.com</A>
+</PRE>
+<P>
+-- Jonni Berckhan (via marcus.almqvist@p5.panacea.ct.se)
+<P>
+____
+<P>
+&gt;In what site (ftp), could I find example meshes for 3D-Studio?<BR>
+<P>
+Try anonymous ftp at
+<A HREF="ftp://129.131.1.225">129.131.1.225</A>.
+There is 3D geometry there in various
+formats, including DXF.  It's the UCLA Visualization Center.
+<P>
+- Colin de Vries (<A HREF="mailto:colinv@microsoft.com">colinv@microsoft.com</A>)
+<P>
+____
+<P>
+Hmm, if you haven't noticed yet, I have a 3D Studio page at:
+<A HREF="http://ksc.au.ac.th:8000/3ds.html">http://ksc.au.ac.th:8000/3ds.html</A>
+[wups, stale link, left in in case it reappears. -EAH]
+<P>
+Mostly things I snarfed off here or off other places on the net, if you have a
+web page with 3ds related stuff on it, let me know and I can put a link in.
+<P>
+-- FRiC (<A HREF="mailto:frac@ksc.au.ac.th">frac@ksc.au.ac.th</A>)
+<P>
+________
+<P>
+I'd just like to let you know that there is a user mailing-list for trueSpace.
+<P>
+<PRE>
+        mail <A HREF="mailto:truespace-request@cs.uregina.ca">truespace-request@cs.uregina.ca</A>
+        help
+</PRE>
+<P>
+to get information about subscribing.
+<P>
+Net sites for TrueSpace related materials include:
+<P>
+<PRE>
+        <A HREF="ftp://ftp.netnet.net/pub/mirrors/truespace">ftp://ftp.netnet.net/pub/mirrors/truespace</A>
+        <A HREF="http://www.netnet.net/users/truespace">http://www.netnet.net/users/truespace</A>
+</PRE>
+<P>
+-- Shane Davison (<A HREF="mailto:daviso@cs.uregina.ca">daviso@cs.uregina.ca</A>)
+<P>
+________
+<P>
+Some of our students have been using Lightscape here at UCLA.  There has been
+some nice stuff done with this software; you can see for yourself - point your
+web browser to <A HREF="http://www.gsaup.ucla.edu/">http://www.gsaup.ucla.edu/</A> and I did a test mpeg movie of a
+student Lightscape animation at my site:  <A HREF="http://www.vizlab.ucla.edu/">http://www.vizlab.ucla.edu/</A> .
+<P>
+-- Lance Barker (<A HREF="mailto:lance@VIZLAB.UCLA.EDU">lance@VIZLAB.UCLA.EDU</A>)
+<P>
+________
+<P>
+LIBTIFF mailing list
+<P>
+[Libtiff is an excellent TIFF read/write library, with full source and no
+"copyleft" restrictions or suchlike.  -EAH]
+<P>
+To join the mailing list, do:
+<P>
+<PRE>
+        mail <A HREF="mailto:tiff-request@sgi.com">tiff-request@sgi.com</A>
+        subscribe
+</PRE>
+<P>
+-- Sam Leffler (<A HREF="mailto:sam@cthulhu.engr.sgi.com">sam@cthulhu.engr.sgi.com</A>)
+<P>
+________
+<P>
+I just found a mailing list where people exchange ideas about Photoshop.
+<A HREF="mailto:photshop@bgu.edu">photshop@bgu.edu</A>.
+<P>
+You have to send your e-mail to: <A HREF="mailto:listproc2@bgu.edu">listproc2@bgu.edu</A><BR>
+Body text should be: subscribe photshop first_name last_name
+<P>
+-- Francois Pilon (<A HREF="mailto:FRANCOIS@mksinfo.qc.ca">FRANCOIS@mksinfo.qc.ca</A>)
+<P>
+____
+<P>
+Photoshop-related anonymous ftp sites:
+<P>
+<A HREF="ftp://ftp.netcom.com/pub/HSC/Kais_Power_Tips">ftp://ftp.netcom.com/pub/HSC/Kais_Power_Tips</A> - Kai's Power Tips & Tricks
+<P>
+<A HREF="ftp://export.acs.cmu.edu/pub/PSarch">ftp://export.acs.cmu.edu/pub/PSarch</A> - Kai's Power Tips & Tricks,
+        misc. shareware plug-ins, demos, etc.
+<P>
+<A HREF="ftp://uxa.ecn.bgu.edu/pub/archive/photshop">ftp://uxa.ecn.bgu.edu/pub/archive/photshop</A> and
+<A HREF="ftp://uxa.ecn.bgu.edu/Photoshop-Files">ftp://uxa.ecn.bgu.edu/Photoshop-Files</A> - Misc. shareware plug-ins, demos, etc.
+<P>
+<A HREF="ftp://ftp.adobe.com/pub/hsc">ftp://ftp.adobe.com/pub/hsc</A> - Adobe files & info
+<P>
+________
+<P>
+I've set up a temporary FTP server for VFD.ZIP:
+<P>
+<PRE>
+        <A HREF="ftp://www.bi.umist.ac.uk/graphics/vfd/vfd.zip">ftp://www.bi.umist.ac.uk/graphics/vfd/vfd.zip</A>
+</PRE>
+<P>
+This will create FLI / AVI / MPEG from many types of images.
+<P>
+-- Simon Oliver (Simon.Oliver@umist.ac.uk)
+<P>
+________
+<P>
+Fli as screen saver for Windows 3.1?
+<P>
+&gt; Is there a way to use flics as screensaver for windows, preferably a<BR>
+&gt; shareware program or something ?<BR>
+<P>
+Niklas Mellegard (<A HREF="mailto:niklas@ida.his.se">niklas@ida.his.se</A>) writes:
+<P>
+I got a tip from someone (I seem to have deleted that mail, but thanx anyway)
+to download a file called vuesav22.zip, but it turned out only to show *.bmp
+*.jpg & *.gif.  BUT by coincidence I came across a file called mrphss.zip
+(Morphics Screen Saver) which did just the job.  I believe I found it on
+<A HREF="ftp://ftp.luth.se/pub/msdos/win3/desktop">
+ftp.luth.se/pub/msdos/win3/desktop
+</A>
+or something like that.  I had however
+some trouble getting it to start, it's a long story but I finally succeed.  If
+anyone have trouble, just send my a mail and I'll tell you about it.
+<P>
+John Rankin (<A HREF="mailto:jrankin@titan.ds.boeing.com">jrankin@titan.ds.boeing.com</A>) writes:
+<P>
+Check on CI$ for a shareware pkg called SSFLIC.ZIP from a Dutch Co called NT
+Systems.  Written by Bert Steenbeeke.  We went thru the search for a "clean"
+pkg last Autumn and saw most of the half-baked offerings before finding the
+above!  It's *so* much more elegant and easy to install.  It uses AAplay.DLL
+and two other small files - 182k in all - a mere drop in Wdoze terms and the
+best feature is it's idiot-proof instl....  a real necessity for the OS.  If
+you can't find it drop a note.  Bert wants $35.00 to register!
+<P>
+________
+<P>
+For those with ATI graphics cards, ATI drivers can be had via FTP from
+ftp://atitech.ca , also ATI has a website:<A HREF="http://www.atitech.ca">http://www.atitech.ca</A> .
+<P>
+-- Joe Feldman (<A HREF="mailto:joef@IslandNet.com">joef@IslandNet.com</A>)
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+On-Line Computer Science Bibliography Collection,
+</A></FONT>
+by Alf-Christian Achilles (<A HREF="mailto:achilles@ira.uka.de">achilles@ira.uka.de</A>)
+</H4>
+[This is such an excellent resource it deserves its own article.  You can
+search many different bibliographies, including various computer graphics
+bibliographies, from here.  It's now mirrored by many locations around the
+world - check the site for more info.  -EAH]
+<P>
+I maintain a computer science bibliography collection at
+<P>
+<PRE>
+        <A HREF="http://www.ira.uka.de/ftp/ira/bibliography/index.html">http://www.ira.uka.de/ftp/ira/bibliography/index.html</A>
+</PRE>
+<P>
+that consists of about 600 mirrored bibliographies that have been converted to
+a standardized BibTeX layout.  It contains about 330,000 references to
+conference papers, journal articles and technical reports in various areas of
+computer science.  The bibliography collection is mirrored all over the world
+and at two WWW sites alone the number of daily accesses exceeds 2000.  The
+references contained in the bibliographies are also searchable at three sites
+with four different search interfaces.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Comments on RTNv8n1,
+</A></FONT>
+by Alexander Enzmann (<A HREF="mailto:Alexander_Enzmann@star9gate.mitre.org">Alexander_Enzmann@star9gate.mitre.org</A>)
+</H4>
+On displacement mapping and ray tracing:
+<P>
+Larry Gritz stated, "On the other hand, you can't get true displacements with
+BMRT (or any ray tracer)".  I'm not sure I completely agree here.  Polyray
+does displacements of surfaces by splitting them into triangles and then
+moving vertices.  These triangles can be rendered with raytracing, zbuffer
+rendering, or ASCII output (of triangle vertices).
+<P>
+Is this "true" displacement?  Perhaps not, but if you instruct Polyray to dice
+the prims up fine enough, you really can't see the difference.  The cost is
+the storage and preprocessing of a big bag of triangles.  Even bucket oriented
+renderer like Photorealistic RenderMan has to dice its prims into polygons,
+and will have occasions where many are active at once, it just doesn't have to
+have them for the entire world (to account for off-screen reflections, etc.)
+<P>
+The other comment I have is on your discussion on scanline rendering, "Also,
+as far as CSG - forget it trying to get the polygonal version of a CSG
+model...".  I agree with what I think you were saying, however there is a
+solution that doesn't require a complete b-rep description of your CSG model.
+<P>
+The approach I took in Polyray to rendering CSG during scanline rendering is
+to do the CSG in image space.  As each pixel is generated, you use the
+interpolated world (or object) coordinates as a parameter to the normal CSG
+inside/outside routines.  The result is pretty good, and can usually be made
+as good as you want by subdividing prims more finely.  The two major
+drawbacks:  you are doing CSG evaluations on parts of a prim that will never
+appear on the screen, and you don't have a nice polygonal model that can be
+exported to something else.
+<P>
+____
+<P>
+Eric Haines replied:
+<P>
+Interesting:  so what happens exactly when I, say, subtract a sphere from the
+corner of a cube?  I render the cube and indeed the points in the sphere
+disappear.  I then render, what, the inside of the sphere and test its points
+for inclusion within the cube, right?  Hmmm, so you basically have to make
+sure you do the CSG inside/outside test but making sure you don't use the
+object itself being rendered to affect the inside/outside determination,
+right?  Good one, I like it!  Probably not the fastest thing on two wheels,
+but it beats some of the various multi-buffer schemes I've seen for both
+memory and simplicity.  In (what I call) multi-buffer, you render all the CSG
+objects in a model and then sort out the details at each pixel by checking the
+set of valid spans for that pixel and finding the closest point - cuts down on
+in/out tests (there are none), but a nasty thing to program and manage memory.
+<P>
+____
+<P>
+Alexander replies:
+<P>
+You just render the sphere.  Since I'm not doing backface culling, I only need
+one routine to turn the sphere into polys.  The only time I look at the normal
+is for shading.
+<P>
+I know perfectly well that culling speeds things up, however I'd rather know
+about both sides of an object.  That way if you chop a hole in a primitive
+(clipping rather than CSG difference) you see the back wall rather than having
+a total hole.
+<P>
+&gt;&gt; but making sure you don't use the object itself being rendered to<BR>
+&gt;&gt; affect the inside/outside<BR>
+<P>
+Turns out that's pretty easy.  Each object has a pointer to the CSG tree it is
+sitting in.  As you render an object you do inside/outside by walking up the
+tree.  Since you know which branch you came from, you can avoid doing
+comparisons against yourself.
+<P>
+&gt;&gt; Probably not the fastest thing on two wheels,<BR>
+<P>
+Nope, but then I was more concerned with making it work than making it go as
+fast as possible.  I've got a renderer that can produce consistent images
+using either raytracing or scanline rendering for a huge variety of
+primitives.  I'll leave the superfast polygon rendering to the commercial
+folks.  [I don't even have tables for doing sin/cos, always found more
+interesting things to work on.]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Dore' Now Free,
+</A></FONT>
+and Dore' Mailing List, by Len Wanger (<A HREF="mailto:wanger@intsim.com">wanger@intsim.com</A>)
+</H4>
+Recently Kubota Graphics Corporation contributed the Dore' 3D graphics
+library to the public domain. I have started a new mailing list for
+Dore related issues.
+<P>
+The list is called "dore", and has been installed on UCSD's automated
+listserver. The purpose of the list is to be a focal point for Dore
+community and to be a forum for Dore related questions, bug reports,
+patches, extensions, etc.
+<P>
+To subscribe send a mail message to <A HREF="mailto:listserv@sdsc.edu">listserv@sdsc.edu</A>.
+<P>
+With the command line:  "ADD dore"
+<P>
+For those who are unfamiliar with Dore, the package is commercial quality
+(having been a commercial product for several years) and has support for
+traditional polygonal rendering as well as ray tracing and radiosity.
+<P>
+Current archive sites with dore 6.0 are:
+<P>
+<PRE>
+sites:
+        <A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/packages/dore">ftp://wuarchive.wustl.edu/graphics/graphics/packages/dore</A>
+        <A HREF="ftp://ftp.netcom.com/pub/do/dore">ftp://ftp.netcom.com/pub/do/dore</A>
+        <A HREF="ftp://sunsite.unc.edu">ftp://sunsite.unc.edu</A> ?
+        <A HREF="ftp://ftp.cdrom.com">ftp://ftp.cdrom.com</A> ?
+</PRE>
+<P>
+<PRE>
+files:
+        pdore-6.0.tar.Z
+        pdore_note.txt
+</PRE>
+<P>
+____
+<P>
+<PRE>
+Abstract of Package (submitted to sunsite)
+===================
+</PRE>
+<P>
+Title:             Dore' API (Dynamic Object Rendering Environment)
+Version:           6.0
+Description:       Dore' is a powerful 3D graphics subroutine library.
+                   It provides a comprehensive set of tools for creating
+                   graphics applications. It is also easy to use, portable,
+                   and extendable. This version has interfaces/drivers to
+                   X11, PEX, IrisGL, OpenGL, Postscript and more. It has
+                   been ported onto most unix systems, including Linux and
+                   FreeBSD. It has also been ported to Windows NT 3.5.
+Author(s):         The key authors and contributors from a long list of
+                   illustrious but evanescent computer companies are listed
+                   below:
+<P>
+<PRE>
+                     - Companies -
+                    Dana Computer
+                    Ardent Computer
+                    Stardent Computer
+                    Kubota Pacific Computer Inc.
+                    Kubota Graphics Corporation
+</PRE>
+<P>
+<PRE>
+                     - Key Authors/Contributors -
+                    Michael Kaplan
+                    Mark Patrick
+                    Bruce Borden
+                    Kevin Weiler
+                    Dan McLachlan
+                    Helga Thorvaldsdottir
+                    Carolyn Houle
+                    Lori Whippler
+</PRE>
+<P>
+<PRE>
+Maintained-by:
+Maintained-at:     <A HREF="ftp://sunsite.unc.edu">sunsite.unc.edu</A>, <A HREF="ftp://ftp.cdrom.com">ftp.cdrom.com</A>
+Platforms:         SunOS, OSF/1, Irix, Linux, FreeBSD, Windows NT
+Copying-Policy:    Public Domain
+Keywords:          Dore', 2D & 3D Graphics API, 3D Graphics subroutine library
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+Fooling Around,
+</A></FONT>
+by Eric Haines
+</H4>
+[Nico Tenoutasse wrote asking what sort of things are worth exploring in the
+field of ray tracing.  Part of my reply follows.  Nothing brilliant here, but
+I do feel strongly that more goofing off could pay back with interesting
+imagery, optical illusions, etc.]
+<P>
+In the rendering/animation front, there's a lot to explore with non-real
+rendering:  serious stuff like "make the image look like it was hand-drawn and
+shaded, automatically" and silly stuff like "what does it look like if I put a
+totally wacky shading model in place?"  Or what can be done when you ray trace
+and barely hit an object - make it partially transparent there, or change its
+color, or maybe you make it black there and everything then looks like a
+cartoon, or...?  Who knows?  We need more people to goof off with shading
+models and intersection methods and so on - mostly a waste of time, but there
+are probably some interesting methods, so far undiscovered, that can be done
+by varying our assumptions.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art8">
+Beware of VIDEA!
+</A></FONT>
+by W. Purgathofer
+<A HREF="mailto:wpu@stellaris.cg.tuwien.ac.at">
+(wpu@stellaris.cg.tuwien.ac.at)</A>,
+E. Groeller, M. Feda
+</H4>
+[I won't reprint the whole text here, the short version is that the authors
+submitted the following abstracts to a conference.  I'm reprinting the first
+two abstracts here because they're pretty amusing (two additional generally
+silly abstracts are in the original).  Check
+<A HREF="http://www.cg.tuwien.ac.at/~wp/videa.html">http://www.cg.tuwien.ac.at/~wp/videa.html</A> for the whole story.  -EAH]
+<P>
+The submitted abstracts
+<P>
+We decided to write more than one crazy abstract to make sure that an
+acceptance cannot be interpreted as accident and so we tried different
+types of weird papers proposals. The first of four abstracts we produced
+was simply a completely irrelevant topic, namely how to create footprints
+on the walls of public rooms. It includes several statements that every
+reviewer must recognize as joke. The complete text is given in abstract 1.
+<P>
+<B>Extended abstract 1:</B><BR>
+----<BR>
+<B>The Footprint Function for
+the Realistic Texturing of Public Room Walls</B><BR>
+<P>
+<I>Abstract</I><BR>
+Today's radiosity methods are able to produce nearly perfect light
+distributions for interior rooms. Unrealistic appearance now mainly is due
+to missing texturing of the walls. One important feature of public room
+walls are footprints in the lower areas. This paper presents a set of
+simple functions to easily generate a class of footprint textures for such
+applications. Different randomization techniques ensure the realistic
+appearance of the results. This technique is of increasing importance for
+the visualization of architectural objects in the future.
+Keywords
+realism, rendering, textures, footprints
+<P>
+<I>Introduction</I><BR>
+Today's radiosity methods are able to produce nearly perfect light
+distributions of interior rooms. Unrealistic appearance now mainly is due
+to missing texturing of the walls. One important feature of public room
+walls are footprints in the lower areas.
+<P>
+<I>The Footprint Function</I><BR>
+The basic footprint function is a combination of trivial, i.e. easy to
+implement, parametric functions. The footprint is divided into a ball and a
+heel which can have independent sole textures. The sizes are chosen such
+that a simulation of shoe sizes 35 to 42 for women profiles and 39 to 46
+for men profiles is performed.
+<P>
+<I>Randomization Techniques</I><BR>
+Distribution techniques will be presented that ensure that the lower part
+of the wall contains significantly more footprints than the higher parts.
+Especially, no footprints must occur above a certain threshold height, due
+to physiological limitations of the human being. Additionally, random
+functions will take care that most footprints remain incomplete and vary in
+color and shape.
+<P>
+<I>Results</I><BR>
+Preliminary investigations are encouraging. As we have not implemented the
+new method yet, there are no concrete results, yet. The final paper might
+include images.
+<P>
+<I>Conclusion</I><BR>
+A footprint function for the realistic imaging of walls is presented.
+Details of all functions are given to ensure an easy implementation for the
+reader.
+<P>
+<I>References</I><BR>
+to be included in the final paper.<BR>
+----<BR>
+(end extended abstract 1)<BR>
+<P>
+The second abstract describes a correct method which makes no sense at all,
+that is how to render interior rooms without light. Obviously, the
+resulting image will be completely black. This was written as in abstract
+2.
+<P>
+<B>Extended abstract 2:</B><BR>
+----<BR>
+<I>Efficient Radiosity for Daylight Simulation in Closed Environments</I><BR>
+<P>
+<I>Introduction</I><BR>
+Radiosity is a useful tool for architects and lighting engineers to
+simulate illumination in the interior of buildings. Unfortunately, the
+computation time for radiosity is very high. However, radiosity algorithms
+can take advantage of special scene properties of specific classes of
+environments. Exploiting the additional information about the scene
+structure of a particular class can decrease the computation time
+significantly. The aim of this paper is to speed up the radiosity
+computation for the class of closed environments without artificial light
+sources.
+<P>
+<I>Two Restrictions on the Scene Structure</I><BR>
+The first restriction on the scene is that it is closed. The reason for
+this restriction is the fact that radiosity is based upon the energy
+conservation principle, that means that at any time the amount of emitted
+energy equals the amount of absorbed energy plus the amount of energy
+leaving the scene. In closed scenes no energy leaves the scene, thus
+simplifying the radiosity computation. However, this restriction does not
+impose problems, because radiosity is mostly used for interior scenes.
+The second restriction is that only daylight can be considered. Radiosity
+algorithms solve a set of equations, where the radiosities of patches are
+the unknowns and the emissions are the constant terms. In conventional
+radiosity all patches are allowed to emit light, i.e. to be an artificial
+light source. If we assume that no patch has emission, we only have to
+consider daylight. This allows the use of very efficient solution methods
+known in numerical mathematics for the set of equations. The second
+restriction does not limit the range of applications too much as well,
+because in most cases architects are interested in visualizing their design
+with daylight conditions.
+<P>
+<I>Mathematical Foundation of the New Method</I><BR>
+Details will be described in the final paper.<BR>
+<P>
+<I>Benefits</I><BR>
+The new method reduces the computation time of both the radiosity
+evaluation and of image generation. Images can be generated at interactive
+rates even for very complex scenes, making the method suitable for
+walk-throughs and VR-applications. Since numerical techniques are mainly
+replaced by analytical formulas, no aliasing effects appear.
+<P>
+<I>Conclusion and Future Work</I><BR>
+The development of radiosity algorithms for special classes of scenes is a
+promising field of future research. Such algorithms are significantly
+faster and possibly more accurate than non-specialized algorithms.<BR>
+----<BR>
+(end extended abstract 2)<BR>
+<P>
+These first two productions have at least a little bit the structure of a
+scientific paper abstract. What we also wanted to try was, if VIDEA would
+accept its own text as abstract. So we copied the complete introduction
+from the "Call for Papers" and gave this abstract the title of the
+conference. Minor changes were only made like changing the word
+"conference" to "paper". The result is given in abstract 3.
+<P>
+[see site <A HREF="http://www.cg.tuwien.ac.at/~wp/videa.html">http://www.cg.tuwien.ac.at/~wp/videa.html</A> for abstract]
+<P>
+Last but not least we decided to produce an abstract without any content,
+just complete nonsense. So we took a dictionary of information processing
+words and selected randomly some 40 phrases from there and joined them
+together to a fantastically technical sounding text. The given reference
+is, of course, the utilized dictionary! We had much fun with abstract 4.
+<P>
+[see site <A HREF="http://www.cg.tuwien.ac.at/~wp/videa.html">http://www.cg.tuwien.ac.at/~wp/videa.html</A> for abstract]
+<P>
+Results<BR>
+All abstracts were sent to the conference in November 1994 and on January
+14th, 1995 we received the results. All four abstract have been "reviewed
+and provisionally accepted"!
+<P>
+[More follows; also, in case you've seen only this posting (which got passed
+around far and wide--I received about 7 copies from different people), there
+is a response from the conference organizers and a reply by W. Purgathofer et
+al. -EAH]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art9">
+Still More on Optical Ray Tracing,
+</A></FONT>
+by Dan Reiley (<A HREF="mailto:primo@moontarz.nuance.com">primo@moontarz.nuance.com</A>)
+</H4>
+&gt;I am looking for a shareware program to do some ray tracing of a<BR>
+&gt;polychromatic laser beam passing through an optical system consisting of a<BR>
+&gt;few lenses of different geometries.  Any help would be greatly appreciated.<BR>
+<P>
+Based on the shareware and low-budget raytracing software I have seen, you are
+better off using the y-nu raytracing chart.
+<P>
+Both the programs and the y-nu take a few hours to learn.  Both have output
+that is at least a little bit cryptic the first time it is seen.  Howver, if
+you use the y-nu you will learn something universal; with the program you will
+learn something particular to that program.  The y-nu raytracing chart can be
+set up easily in a spreadsheet like Excel.  It is essentially an adaptation of
+the matrix method for paraxial raytracing, with simple equations for what
+happens to a ray's height between optical surfaces and what happens to its
+slope at optical surfaces.  By tracing two rays (usually the chief ray and the
+marginal ray) the system can be well- characterized.
+<P>
+I learned the y-nu raytracing chart from Modern Optical Engineering by Donald
+O'Shea, which has a clear and self-contained chapter on it.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art10">
+Raytracing and 3D Studio,
+</A></FONT>
+by Michael Adams (<A HREF="mailto:msadams@netcom.com">msadams@netcom.com</A>) and Brian Hoffman (<A HREF="mailto:bhoffman@mail.valverde.edu">bhoffman@mail.valverde.edu</A>)
+</H4>
+3D Studio needs a raytracer.
+<P>
+Now I have heard the arguments that raytracers are too slow, and I agree they
+are for most animations.  For stills, however, they can make good sense.  You
+simply cannot get the realistic reflections that a raytracer produces with 3D
+Studio's reflection mapping.  That is not to say that 3D Studio's rendering
+engine is bad.  In fact, it is excellent.
+<P>
+I ran some tests over the weekend with POVRAY 2.2 (ftp <A HREF="ftp://alfred.ccs.carleton.ca">alfred.ccs.carleton.ca</A>
+in the /pub/raytrace/POV-RAY directory).  There is a utility to convert 3D
+Studio 3DS files to POV files (from
+<A HREF="ftp://avalon1.viewpoint.com/avalon/utils/converters/3dspov18.zip">ftp://avalon1.viewpoint.com/avalon/utils/converters/3dspov18.zip</A>).  It is not
+perfect.  It will not convert textures, and I ran into some bugs with certain
+models.  It did work well enough to convince me that a raytracer can enhance
+certain scenes considerably.  Here is what I found:
+<P>
+1) Raytracing at the highest quality setting is about 7 times slower than 3D
+Studio's metal shading with shadows and reflections turned on.
+<P>
+2) Raytracing improves scenes with many highly reflecting surfaces.
+<P>
+3) Raytracing can add a lot of detail to a scene through its calculations of
+reflections and refractions with no additional work by the model builder.
+<P>
+4) The 3D Studio renderer output looked as good as the raytracer output with
+scenes with few reflective surfaces, or by virtue of geometry, had single
+level reflections.  That, to me, says a lot about the high quality of 3D
+Studio's rendering engine.
+<P>
+5) Some scenes had surprising results with the raytracer, because we are not
+use to seeing them, such as multilevel reflections of shadows.  Yes, it is
+more realistic, and therefore, you have to be a little more "realistic" with
+reflectivity settings for materials.
+<P>
+I also did a non-scientific test with a friend by asking her which images she
+liked better, the 3D Studio rendered images, or the POV raytraced images.  I
+took identical models and rendered them with both systems.  She knows nothing
+about computer graphics.  Invariably, the raytraced images were preferred.
+Her comments were "there is more to them".  Presumably, this means she saw
+more reflection nuances in the raytraced images.
+<P>
+In conclusion, the speed of the raytracer is slow, but not so slow that I
+would not use it for final output of stills.  We all have time when our
+computers are sitting idly doing nothing (POVRAY also lets you interrupt
+rendering part way and resume it later).
+<P>
+____
+<P>
+Brian Hoffman (<A HREF="mailto:bhoffman@mail.valverde.edu">bhoffman@mail.valverde.edu</A>) comments:
+<P>
+The argument that raytracing is too slow to use for animation is not always
+correct.  It's important to remember that raytracing is not an all-or-nothing
+proposition.  First, the only things in a scene that are candidates for
+raytracing are reflective objects, objects with refractive transparency, and
+shadows.  These elements may take up only a small portion of a given scene.
+Secondly, you may not need to raytrace every reflective object, every
+transparent object, or every shadow in a scene.
+<P>
+That's why I like the approach Lightwave uses.  First you have separate global
+toggles for enabling/disabling raytracing for reflection, refraction, and
+shadows.  In addition there are also local per surface and per light controls.
+If you select a reflection map for a reflective surface, then that surface's
+reflections will not be raytraced.  If you do not select a reflection map, the
+reflections will be raytraced.  Similarly, refraction for a surface with
+transparency will only be raytraced if an index of refraction other than 1.0
+is assigned to it.  The shadow types for spotlights can be set to be
+raytraced, shadow mapped, or none.
+<P>
+These features allow you to mix raytraced methods with mapping methods in the
+same scene.  You can have a glass ball with mapped reflection, raytraced
+refraction, and raytraced shadows.  Another glass object might have traced
+reflection, non-refractive transparency, and shadow-mapped shadows.  And so on.
+<P>
+With selective application of raytracing to limited parts of a scene, it is
+sometimes possible to get an increase in realism without paying a huge penalty
+in rendering time.  (Of course, it is possible to really explode your
+rendering times.  Example:  A close view of a glass sphere with raytraced
+refraction, and raytraced reflections for the exterior AND interior surfaces.
+Inner surface raytraced reflections combined with raytraced refraction causes
+rendering times to go through the roof.  I've learned to raytrace only
+exterior surface reflections in these situations.)
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art11">
+Testing SIPP versus Raytracers under DOS,
+</A></FONT>
+by Alexander Enzmann (<A HREF="mailto:Alexander_Enzmann@star9gate.mitre.org">Alexander_Enzmann@star9gate.mitre.org</A>)
+</H4>
+This describes a somewhat informal testing of the SIPP rendering library
+versus a beta version of the Polyray v1.8 (DOS based) renderer.  The image
+used for the purposes of this test was the level 2 sphereflake from Eric
+Haines' SPD library.
+<P>
+If you are really interested in benchmarks of various raytracers, Eric Haines
+has published them in Ray Tracing News on various occasions.  This is simply
+an evaluation of how a scanline renderer compares to a renderer that
+implements both zbuffer rendering and raytracing.  (Polyray is in the middle
+of the pack as far as speed of Share/Freeware raytracers goes.  I've got
+numbers if anyone cares.)
+<P>
+In order to have the images at least somewhat resemble each other, a custom
+shader was written for the SIPP file that does a simple horizon based color
+change.  If the Z component of the reflection of the view direction about the
+normal was above 0 then the sky color was used, else the ground color.  This
+gives a first order approximation to reflections.  The actual code for the
+shader is given below (along with the corresponding one used for Polyray when
+performing zbuffer renderering).
+<P>
+I can make available an image that shows the result of each of the six runs
+shown below if people want it.
+<P>
+Without shadows:
+<P>
+<PRE>
+    SIPP 3.1       Polyray v1.8/    Polyray v1.8/
+                   ZBuffer          raytrace
+    ---------------------------------------------
+       29.0          62.1             61.0
+</PRE>
+<P>
+With shadows:
+<P>
+<PRE>
+    SIPP 3.1       Polyray v1.8     Polyray v1.8       Polyray v1.8
+                   ZBuffer &        Zbuffer & ray      Raytracing only
+                   Shadowmaps       traced shadows
+    ------------------------------------------------------------------
+       52.9         159.3            118.2              128.2
+</PRE>
+<P>
+For this particular test case, my conclusions are:
+<P>
+<OL>
+   <LI>SIPP is faster but really hogs memory.
+   <LI>Raytracing isn't all that slow compared to scanline
+      rendering.  A 4x difference between SIPP without shadows
+      and Polyray with recursive raytracing is pretty reasonable.
+   <LI>Polyray's zbuffer renderer is wasting a lot of time shading
+      pixels more than once.
+   <LI>Polyray is also wasting quite a bit of time generating
+      shadow maps, writing them to disc, then reading them
+      back in.
+   <LI>With a little effort, scanline rendering can give good results.
+      However, with even less effort a raytracer gives much better
+      results.
+</OL>
+<P>
+Other notes:
+<P>
+Sphereflake is kinda nasty to a polygon renderer due to the large number of
+polygons required for a smooth looking sphere.  Tetra or Gears might have been
+a better choice.  (Any takers?)
+<P>
+SIPP consistently clipped the ground polygon one pixel short of the right and
+bottom edges of the image, leaving two lines with the color of the background.
+<P>
+256x256 shadow maps look pretty crummy.  By upping them to 512x512 and running
+in a DOS box under Windows to get Virtual memory (remember I'm using a 4Mb
+machine), they were improved but still had noticable artifacts.  This had a
+severe impact on runtime with all the swapping going on.
+<P>
+The sizes for each sphere in SIPP were:  30 for the big ball, 15 for the next
+level, and 6 for the smallest balls.  SIPP appears to use a standard lat/long
+tessellation of the spheres.  (The "size" in these cases refers to the number
+of subdivisions around the equator.  It's a parameter to SIPP when you create
+a sphere.  The change in # of sides was necessary so I wouldn't run out of
+memory from too many polygons.  It also is a hack at adaptive subdivision
+based on screen size.)
+<P>
+Both the SIPP library and Polyray v1.8 were compiled with the Watcom 10.0 C
+compiler for D0S 32 bit protected mode.  The machine used was a 486DX/33 with
+4Mb of RAM.
+<P>
+SIPP images were renderered at 257x257 and rescaled to 256x256.  This is the
+standard filter/corner mode of antialiasing specified in the SPD benchmarks.
+An external program was used to rescale the SIPP image since it has only
+supersampling.  Shadowmaps were generated at 256x256, also due to memory
+limitations.
+<P>
+Lights were turned into spot lights in order to support the generation of
+shadowmaps.  Since Polyray uses square lights when a depth map is used, a spot
+light function was defined to make them match the ones used in SIPP.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

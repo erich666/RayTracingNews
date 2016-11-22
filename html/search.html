@@ -1,0 +1,104 @@
+<HTML>
+<HEAD>
+<TITLE>Ray Tracing News Search Engine</TITLE>
+<META NAME="description" CONTENT="Try out our internal search engine 
+	for the fastest way to find what you're looking for!">
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#CE0000" ALINK="#000000" VLINK="#880000">
+<H1>Ray Tracing News Searcher</H1>
+<BR>
+<CENTER>
+<FORM METHOD=GET ACTION="search.cgi" NAME="SearchForm">
+<B>Match 
+<SELECT NAME="Range">
+<OPTION VALUE="All">All Terms
+<OPTION VALUE="Any">Any Term
+</SELECT>
+and show results 
+<SELECT NAME="Format">
+<OPTION VALUE="Standard">in Standard Form
+<OPTION VALUE="Compact">in Compact Form
+</SELECT>
+</B><BR>
+<INPUT NAME="Terms" SIZE=50 MAXLENGTH=800 VALUE="">
+<INPUT TYPE=submit VALUE="Submit">
+<SCRIPT LANGUAGE="JavaScript">
+<!-- Script Hiding...
+document.SearchForm.Terms.focus();
+// End Hiding -->
+</SCRIPT>
+</FORM>
+</CENTER>
+
+<BR>
+
+<H2>Search Help</H2>
+
+<BLOCKQUOTE>
+To find information about a topic, simply type in a few keywords. 
+The more detailed your query, the more relevant your results.<BR>
+
+<BR>Our search engine also comes with some advanced capabilities 
+to help you find exactly what you're looking for. These capabilities 
+are best shown with a few examples:<BR>
+
+<DL>
+<FORM>
+<DT><INPUT SIZE=40 TYPE=TEXT NAME="1" VALUE="+CGI +scripting"><BR>Translated: <I>require CGI, require scripting</I></DT>
+<DD>Finds "CGI Scripting", "CGI scripting", and "scripting of type CGI".<BR>
+Does not find the lowercase "cgi scripting", nor the abbreviated "CGI script".<BR><BR></DD>
+
+<DT><INPUT SIZE=40 TYPE=TEXT NAME="1" VALUE="-CGI +scripts"><BR>Translated: <I>forbid CGI, require scripts</I></DT>
+<DD>Finds "Perl scripts", "Hollywood scripts", and lowercase "cgi scripts".<BR>
+Does not find "CGI definitions" nor "CGI scripts".<BR><BR></DD>
+
+<DT><INPUT SIZE=40 TYPE=TEXT NAME="1" VALUE="or CGI and scripts"><BR>Translated: <I>prefer CGI, require scripts</I></DT>
+<DD>Finds "Perl scripts", "CGI scripts", and "CGI Scripts".<BR>
+Documents with both terms appear higher in the list.<BR><BR></DD>
+
+<DT><INPUT SIZE=40 TYPE=TEXT NAME="1" VALUE="&quot;CGI scripts&quot;"><BR>Translated: <I>require the phrase "CGI scripts"</I></DT>
+<DD>Finds "CGI scripts".<BR>
+Does not find "CGI Scripts" nor "scripts of type CGI".<BR><BR></DD>
+
+<DT><INPUT SIZE=40 TYPE=TEXT NAME="1" VALUE="and cgi and script*"><BR>Translated: <I>require cgi (case insensitive), require words starting with "script"</I></DT>
+<DD>Finds "CGI scripts", "cgi scripting", "Cgi scripter".<BR>
+The asterisk is a wildcard representing any four or fewer characters.<BR><BR></DD>
+
+<DT><INPUT SIZE=40 TYPE=TEXT NAME="1" VALUE="not planet and Venus and pictures or images"><BR>
+Translated: <I>require Venus (case sensitive), require pictures, forbid planet, prefer images</I></DT>
+<DD>First lists "pictures and images of Venus", then "Venus pictures".<BR>
+Does not list lowercase "venus picture", nor forbidden "picture of planet Venus".<BR><BR></DD>
+
+<DT><INPUT SIZE=40 TYPE=TEXT NAME="1" VALUE="Where is the *frog*?"><BR>
+Translated: <I>ignores common words like where, is, and the - requires words containing "frog"</I></DT>
+<DD>Finds "frog", "frogleg", and "bullfrog".<BR>
+To suppress the ignore feature, use quotes, as in "Where is the *frog*?".<BR><BR></DD>
+</FORM>
+</DL>
+
+<BR>Note on case sensitivity - only words or phrases containing an 
+upper case character will be treated as case sensitive. 
+
+<BR>
+A search on 
+"usa" will match "Usa", 
+"USA", and "usA", while the term "USA" 
+matches only its uppercase version.<BR>
+
+<BR>The asterisk is a powerful search tool, but has some limitations. It 
+cannot span words - that is, the query "powerfu*earch" would not match the 
+first sentence of this paragraph - and it can represent at most four letters 
+or numbers. To avoid overly broad searches, the asterisk can only be used 
+in words or phrases which have at least three alpha-numeric characters. 
+A search for "th*" would be ignored.</BLOCKQUOTE>
+
+<BR><H5 ALIGN=CENTER>
+<A HREF="index.html">Ray Tracing News Guide Page</A>
+<HR SIZE=1 NOSHADE WIDTH=50%>
+The Xavatoria Search Engine is Copyright 1997  by
+<A HREF="http://www.xav.com">Fluid Dynamics</A>.<BR>
+Visit the 
+<A HREF="http://www.xav.com/scripts/search">Search Page</A>
+for help files and most recent version.</H5></BODY></HTML>
+<TITLE>Intermediate Search Pro</TITLE>

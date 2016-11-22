@@ -1,0 +1,2273 @@
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+                        "Light Makes Right"
+
+                          July 11, 1998
+                        Volume 11, Number 1
+
+Compiled by Eric Haines, erich@acm.org, http://www.acm.org/tog/editors/erich/
+All contents are copyright (c) 1998, all rights reserved by the
+        individual authors
+Archive locations:
+        HTML http://www.acm.org/tog/resources/RTNews/html/index.html
+        text version at http://www.acm.org/tog/resources/RTNews/text/
+
+Contents:
+        Introduction
+        Ray Tracing Roundup
+        Pluecker Coordinate Tutorial, by Ken Shoemake
+        A Short Note on Kalra and Barr's Algorithm, by Andrei Sherstyuk
+        Origins of Point In Polygon, Take 10..., by Neil Stewart
+        Info on REYES Algorithm, by Robert Speranza and Tom Duff
+        Polygon Shrinking, by Dave Rusin and Jeff Erickson
+        Correcting Normals on "Flipped" Polygons, by Kev, Duncan Colvin,
+                Steve Baker, John Nagle, Dennis Jiang, Alejo Hausner, and
+                Eric Haines
+        What's Mesa? by Brian Paul
+        Multithreading Mesa, by John Stone
+        Recent Ray Tracing European Conference Papers
+        Attenuation in Water, by Bretton Wade and Ian Ashdown
+
+-------------------------------------------------------------------------------
+
+Introduction
+
+First, the Ray Tracing Roundtable (which is essentially a schmooze-fest for
+graphics programmers) will be on Thursday at SIGGRAPH at the Peabody Hotel
+(across the street from the convention center) in Bayhill Rooms I & II from
+6:15 to 7:45 pm. This is the dead time between when papers and panels end and
+when the reception starts. Usual about 50 people gather, introduce
+themselves, then break up and talk until time's up.
+
+An extremely cool idea was implemented at the Java One conference this year
+[thanks to John Foust for passing on a report about it]. The Java Rings given
+to attendees each held a microprocessor which ran a Java VM.  Here's a quote
+from http://java.sun.com/features/1998/03/rings.html (go there for images and
+more info):
+
+"Another applet on the ring calculated pixel values for a 3x3 tile that would
+contribute to a large fractal image being computed by Java Rings throughout
+the show. Each time an attendee would snap a ring into a reader, the
+calculated pixel values would be loaded onto a server collecting tiles to
+form a kind of fractal "quilt." The corresponding host application on the
+server would display the aggregate image throughout the conference, allowing
+people to watch the fractal grow."
+
+I know another graphics application that's extremely parallelizable and the
+code can fit on a business card... It would be a challenge to see if there's
+enough room on a ring for ray tracing a procedural model. Really, for each
+ring, 9 pixels of a fractal image were probably computed in less than a
+second. A nice compact and complex database would be an interesting
+application. 4K *bits* of memory is not a lot, but it would be fun to try.
+There are 20 million of these processors deployed by the manufacturer (many
+on the ears of cows and whatnot). "Yep, this barn here produces 5000 gallons
+and traces 10 million rays a day..."
+
+On another front, one of the more interesting sites I've come across is
+http://www.cut-the-knot.com. It's a pleasant collection of mathematical
+recreations with java applets helping to explain various phenomena and
+theorems. I particularly love the shapes of constant width page:
+
+http://www.cut-the-knot.com/do_you_know/cwidth.html
+
+Java with a purpose, used instructively and non-obtrusively.
+
+This issue has a bias towards geometric operations. I'm privileged to present
+Ken Shoemake's tutorial on Pluecker coordinates (not available anywhere
+else). There is also material on shrinking polygons and correcting surface
+normals. This issue also contains a huge roundup of links to resources. Some
+amazing things are in there, one of my favorites being the Hungarian model
+converter that almost no one's heard of, but that converts 90+ file formats.
+
+In the next issue there will be a lot of interesting tidbits from various
+people, including new SPD timings. In terms of just plain speed, Sami Perttu
+tried Rayshade 4.0 with lots of tuned compiler options in gcc and Linux 2.0
+and rendered the Sphereflake in 79 seconds on a 200 MHz Pentium.  John Stone
+has been designing and implementing a parallel processing ray tracer that is
+extremely fast.  He told me Sphereflake on a 4 processor DEC Alpha ran in 4.5
+seconds.  And on a 50 processor SGI Origin2000 at NCSA it ran in 1.5 seconds.
+The previous record (that I'm aware of) was 16 seconds, set by the AT&T Pixel
+Machine in 1988.  I'm not sure what to be more amazed by, John's time (I
+recall back when it took me hours to render Sphereflake) or Sami's (a Pentium
+is one fifth the speed of the Pixel Machine at less than one hundredth the
+price). "If cars were computers, they'd now get 10,000 miles a gallon, go 6,000
+miles per hour, and cost $5" and all that (of course, they'd also inexplicably
+blow up once a year, killing all occupants).
+
+-------------------------------------------------------------------------------
+
+Ray Tracing Roundup
+
+There are way too many links here, partly because there are way too many cool
+resources on line, partly because I've been collecting these for about a year
+without catching up and writing them up here. Happy wading.
+
+--------
+
+SIGGRAPH '98 Papers
+
+With the help of Tim Rowley, I've gathered a lot of links on the electronic
+versions of the papers that will be presented at SIGGRAPH this year. They are
+available at:
+
+http://www-imagis.imag.fr/Membres/Fredo.Durand/Book/sig98.html
+
+Not all papers are available at the moment, if you know a link I have
+forgotten or missed, please let me know.
+
+By the way, these are part of my collection of computer graphics links where
+you can find web pages of researchers, labs, conferences, image galleries,
+code, etc.
+
+http://www-imagis.imag.fr/~Fredo.Durand/book.html
+
+- Fredo Durand <Fredo.Durand@imag.fr>
+
+[There are a great many links here, well worth a look. Especially useful is
+the list of researchers and their homepages. -EAH]
+
+--------
+
+Algorithms, Come Get Your Algorithms...
+
+Bookmark this site - it's pretty cool when you're thinking about solving a
+problem with software.
+
+http://www.cs.sunysb.edu/~algorith/
+
+The author of the site - Steven Skiena - has a book The Algorithm Design
+Manual that I bought down at the UW bookstore.  It's great to page through
+when you're noodling on a problem and trying to break it down and see if
+other's have solved it in an efficient way.  It's the first good book I've
+seen devoted to a practical application of over 75 classic algorithms (vs.
+the mathematical analysis and proof of correctness of algorithms).
+
+The book comes with a CD that contains an entire HTML version of the book
+completely hyperlinked for cross-references and searchable.  The CD also has
+over 30 hours of audio lectures in real-audio format complete with HTML
+lecture notes for an entire semester course on algorithms.  The author did
+this for a course at SUNY and tossed it in.
+
+[snippet passed on by John Foust <jjf@viewpoint.com>. -EAH]
+
+--------
+
+Numerical Recipes
+
+The book _Numerical Recipes_ is now online at http://www.nr.com in Postscript
+and PDF forms. Figures seem to be missing from the PDF files I've looked at,
+but you can't beat the price. In a reverse of normal practice, the text is
+free for viewing but the code must be purchased.
+
+For a critique of the material presented in Numerical Recipes, see:
+
+http://math.jpl.nasa.gov/nr/nr.html
+
+Some of the users comments I know to be dated, for example the HEAPSORT bug I
+reported years ago and was fixed in the 1994 edition. But, it's still good to
+be aware that the methods given in Numerical Recipes are not the final word.
+
+----
+
+_Rendering with Radiance_ book
+
+Greg Ward Larson and Rob Shakespeare (publisher: Morgan Kaufmann) have
+written a detailed and well-produced book on the use and algorithms behind
+the Radiance rendering system (http://radsite.lbl.gov/radiance/).  Code,
+examples, documentation and more are included on a CD-ROM in the book.  In
+case you hadn't heard, Radiance is an amazing free software system for
+physically accurate lighting design.  The book starts with tutorials, then
+discusses different sorts of applications (lighting analysis, daylight
+simulation, stage lighting, etc.) and ends with 120 pages on calculation
+methods.  These last chapters cover the system in much more depth than Greg
+Ward's original SIGGRAPH '88 paper, as well as discuss possible errors,
+extensions, and other developments since that time.  The Table of Contents is
+available at:
+
+http://www.mkp.com/books_catalog/1-55860-499-5.asp
+
+----
+
+The Geometry Toolbox
+
+Authored by Gerald Farin and Dianne Hansford (A.K. Peters, Ltd.), this book
+looks to be useful for teaching analytic geometry for computer graphics. What
+is appealing to me is the copious use of illustrations to build an intuition
+about what the various operations actually do. Two sample chapters, along
+with the table of contents and index, are available online at:
+
+http://eros.cagd.eas.asu.edu/~farin/gbook/gbook.html
+
+This is a book I am definitely getting at SIGGRAPH. How can you turn down a
+book with a section called "Eigen Things"?  Seriously, skimming the sample
+chapters, it looks to be a good combination of solid equations and
+explanatory text and illustrations, perfect for computer graphics programmers.
+
+----
+
+CRC Handbook of Discrete and Computational Geometry
+
+This book, released in July 1997, is edited by Jacob Goodman and Joseph
+O'Rourke (who is the FAQ maintainer and frequent contributor to
+comp.graphics.algorithms). For an overview and sense of topics covered, see:
+
+http://www.crcpress.com/cgi-bin/SoftCart.exe/catalog/8524.HTM?E+storecrc
+
+If you already have the book, the errata listing is at:
+
+http://cs.smith.edu/~orourke/books/errata.html
+
+----
+
+Error in Advanced Animation and Rendering Techniques
+
+Page 90 of AART by Alan and Mark Watt, has an errror [verified by others -EAH]:
+
+B0(u) = (1+u)cubed / 6
+
+should actually read:
+
+B0(u) = (1-u)cubed / 6
+
+I have the proof if anyone cares.
+
+- Chris Anthony <jsc@lds.co.uk>
+
+--------
+
+Links to links to links to...
+
+http://www.iro.umontreal.ca/~ratib/code/redirect.cgi?Goto=cg.htm - a nice
+collection of computer graphics research related links, especially papers.
+
+http://mambo.ucsc.edu/psl/cg.html - you have probably seen this wonderful
+site already, a collection of links to computer graphics research centers.
+Less known, there is also a set of links specifically for facial animation
+research: http://mambo.ucsc.edu/psl/fan.html
+
+http://www.3dlinks.com/ - Ultimate 3D Links, mostly for users of computer
+graphics (vs. programmers)
+
+http://3dup.com - a searcher for links specifically for 3D graphics. The
+babelfished press release said, "We know accurately what the graphic artist
+need and unfortunately, we cannot get rid of our bugging creative ideas". We
+all know how that is. Anyway, easy to type, and worth a try.
+
+http://home3.swipnet.se/~w-34077/dev/index.htm - a page for plug-in
+developers, with links to interesting code bits such as combustion and
+particle effects.
+
+http://www2.inetdirect.net/~hastings/art.html#Utilities - lots of links for
+users of various free graphics software packages.
+
+http://dns.uncor.edu/links/siterepo.htm - an incredibly thorough collection
+of links to free software and code on the web.
+
+http://dns.uncor.edu/links/siteos.htm - the thorough collection, grouped by
+operating system. CP/M lives!
+
+[thanks to Dan Hastings <hastings@inetdirect.net> for these last three. -EAH]
+
+--------
+
+Kris Klimaszewski's Accelerated Ray Tracer
+
+This ray tracing acceleration scheme was discussed by Kris and others in
+RTNv10n3. For test images, run times, and more, see his page at:
+
+http://home.sprynet.com/sprynet/kriskk/RayTrace.htm
+
+--------
+
+Rayshade on Linux and Windows98
+
+I have an unofficial Linux port of Rayshade.  I have tested it under
+Linux(gcc) and Windows98(msvc++).  It works under both of those platforms,
+but I am not certain that it will function under the platforms on which it
+has traditionally been used.
+
+The majority of the porting effort was converting the old-style 'Configure'
+script to the newer style gnu 'configure' script generated by 'autoconf'.  If
+you are interested in it, I would appreciate feedback as to whether or not it
+still works under the platforms on which it was traditionally used.
+
+You may find the ports at the following location:
+
+http://www.primenet.com/~jarney/rayshade
+
+- Jonathan S. Arney <jarney@primenet.com>
+
+--------
+
+Laser
+
+Laser is a Scheme-like 3D scene language, with a VR browser and ray tracer
+working with it.  Interesting to see a networked ray tracer available for
+work online:
+
+http://web.mit.edu/lbw/www/laser/laser.html
+
+--------
+
+Ray Traced Evolution
+
+L-Systems software with a ray tracer and an ability to export to POV-Ray and
+NFF formats, among others. It's at:
+
+http://www.rz.tu-ilmenau.de/~juhu/GX/RTEvol/
+
+--------
+
+An interesting Java project (sorry, no code) is located at:
+
+http://www.cs.brown.edu/people/jks/thesis.html
+
+It's a ray tracer with fast lighting editing, reminiscent of Sequin's work.
+
+There's also an interesting summary of what Pixar teaches at their technical
+director's course:
+
+http://www.cs.brown.edu/people/jks/pixar/pixar.html
+
+--------
+
+History of Computer Graphics
+
+A medium-sized history of computer graphics starts at:
+
+http://www.disney.com/DisneyVideos/ToyStory/about/history/_1960s.htm
+
+It'll take maybe a half-hour to read through, and you'll be better informed
+for it.  There's a stress on the film industry in the history, and any time
+something to do with Disney or Pixar appears it's in bold, but it's
+nonetheless worthwhile reading.
+
+--------
+
+The free ray tracing bibliography at http://www.acm.org/tog/resources/bib/
+has been updated.  A searchable version of this bibliography is located at:
+
+http://liinwww.ira.uka.de/bibliography/Graphics/ray.html
+
+--------
+
+Usenet Clippings and Links
+
+If you read USENET you often find articles worth saving around. I've kept a
+bunch of these from the comp.graphics.* newsgroups over the years. When I hit
+some new topic I need to know about, it's worth grepping around this pile of
+files for tidbits.
+
+Steve Hollasch is more organized than I am in this. He has created a sort of
+"best of comp.graphics.*" index, of posts and other material he feels are
+worth keeping available. It's huge, at:
+
+http://research.microsoft.com/~hollasch/cgnotes/
+
+----
+
+Graphics Tutorials and Code
+
+There are many great documents and code bits at David Eberly's site,
+http://www.cs.unc.edu/~eberly/. It's an impressive collection of material.
+Boris Kogan <bkogan@j51.com> comments:
+
+"On his site you will find a ps file describing spline and quaternion
+calculus in gruesome detail. Above that for the coder in you he also provides
+a rather well implemented (if not complete) set of source files demonstrating
+the technique. I say not complete because Dave chose not to deal with
+rotations>360 degrees, and constraints are not covered at all. But these are
+minor points which can easily be overcome."
+
+----
+
+Franklin's Tutorials
+
+Long-time contributor to the field of computer graphics Wm. Randolph Franklin
+has a number of tutorials on line at:
+
+http://www.ecse.rpi.edu/Homepages/wrf/geom/top.html
+
+There's a near-ultimate (this problem's never done) page on my favorite,
+point in polygon, as well as tutorials on 3D (and 4D) rotations, and some
+other common FAQs.
+
+----
+
+Tutorials on bump mapping, NURBS, particle systems, and many other topics are
+on-line at:
+
+http://www.cs.wpi.edu/~matt/courses/cs563/
+
+under the "Presentations" section. These pages are presentations given by
+students taking an advanced computer graphics course (so don't expect expert
+information, but the tutorials seemed sound enough).
+
+----
+
+Tutorials on all sorts of computer graphics related subjects are also
+available at:
+
+http://www.scs.ryerson.ca/~h2jang/gfx_c.html
+
+The tutorials are a little pedantic and don't give enough context for my
+tastes, but the breadth of topics covered is impressive and there are
+reasonable links and paper references in the articles.
+
+----
+
+A more hands-on set of tutorials on various effects and algorithms
+(particularly for games programming) can be found at:
+
+http://www.users.globalnet.co.uk/~tomh/
+
+----
+
+All sorts of tutorials, algorithms, and other material is available at Paul
+Bourke's site:
+
+http://www.mhri.edu.au/~pdb/
+
+I particularly liked his online explanations of analytical geometry
+operations:
+
+http://www.mhri.edu.au/~pdb/geometry/
+
+----
+
+An interactive (Java-based) tutorial from Brown University on color
+perception is at:
+
+http://www.cs.brown.edu/research/graphics/research/illus/spectrum/
+
+----
+
+A wavelets tutorial, based for the most part on the wavelets course given at
+SIGGRAPH 96, is available at:
+
+http://www.cs.wpi.edu/~matt/courses/cs563/talks/Wavelet_Presentation/
+
+----
+
+A nicely illustrated pair of tutorials on compositing for video and other
+applications are at:
+
+http://www.tjfx.demon.co.uk/part_one.html
+http://www.tjfx.demon.co.uk/part_two.html
+
+----
+
+A large number of tutorials for beginning users of 3D computer graphics
+software (especially for web designers) are located at:
+
+http://www.webreference.com/3d/
+
+----
+
+Other resources can be found in the education area at SIGGRAPH's site:
+
+http://www.education.siggraph.org/docs/C_and_I.htm
+
+--------
+
+Schools for 3D graphics
+
+http://www.pixar.com/jobsite/list-of-schools.html has a good list of
+post-secondary options for both technical directors and animators.
+
+Tom Duff <td@pixar.com>
+
+--------
+
+Chris Hecker's homepage
+
+Is at:
+
+http://www.d6.com/users/checker/
+
+There are worthwhile articles and tutorials here. There is quite a lot on
+physical simulation of rigid body dynamics, and a good series of articles on
+practical perspective texture mapping on the PC. The PC compilers articles I
+found particularly interesting.
+
+--------
+
+Quake 3 Lighting and Shading Techniques
+
+There are two nicely done articles on the various multitexture shading
+methods used in the upcoming Quake 3 program at:
+
+http://www.bigpanda.com/trinity/
+
+--------
+
+Funding
+
+If you have a project that you think might benefit the members of SIGGRAPH,
+you might be able to get funding for it:
+
+http://www.siggraph.org/othercom/special-projects/
+
+--------
+
+For those who are interested, my thesis is now available online:
+
+Robust Monte Carlo Methods for Light Transport Simulation, Eric Veach, Ph.D.
+dissertation, Stanford University, December 1997
+
+http://graphics.stanford.edu/papers/veach_thesis/
+
+It describes techniques such as Metropolis light transport, multiple
+importance sampling, and bidirectional path tracing in more detail than in
+the corresponding papers.  It also includes quite a bit of new material,
+including studies of:
+
+  - the inherent limitations of unbiased Monte Carlo methods
+  - new variance reduction techniques
+  - the history of reciprocity principles and important exceptions to them
+  - the derivation of a new reciprocity principle that applies to materials
+    that transmit as well as reflect light  [i.e. BTDF's as well as BRDF's]
+
+You can find the abstract and table of contents on the web page, as well as
+Postscript and PDF versions of the thesis.
+
+- Eric Veach <ericv@graphics.stanford.edu>
+
+--------
+
+Radiance related papers
+
+Many papers relevant to Radiance, radiosity, and ray tracing are now
+available online at:
+
+http://radsite.lbl.gov/radiance/papers/
+
+These include:
+
+The RADIANCE simulation software in the architecture teaching context, by
+        Raphael Compagnon
+A Visibility Matching Tone Reproduction Operator for High Dynamic Range Scenes
+        (LBNL Report 39882)
+Making Global Illumination User-Friendly (1995 Eurographics Workshop on
+        Rendering)
+The RADIANCE Lighting Simulation and Rendering System (SIGGRAPH '94)
+Energy Preserving Non-Linear Filters (SIGGRAPH '94)
+Measuring and Modeling Anisotropic Reflection (SIGGRAPH '92)
+Irradiance Gradients (1992 Eurographics Workshop on Rendering)
+Adaptive Shadow Testing for Ray Tracing (1991 Eurographics Workshop on
+        Rendering)
+A Ray Tracing Solution for Diffuse Interreflection (SIGGRAPH '88)
+
+--------
+
+Vienna University of Technology papers
+
+A number of technical reports concerning ray tracing are available online:
+
+http://www.cg.tuwien.ac.at/research/TR/95/TR-186-2-95-06Abstract.html -
+Ray Tracing with Extended Cameras, by Helwig Loeffelmann, Eduard Groeller
+
+http://www.cg.tuwien.ac.at/research/TR/95/TR-186-2-95-05Abstract.html -
+A Distortion Camera for Ray Tracing, by Pietro Acquisto, Eduard Groeller
+
+See http://www.cg.tuwien.ac.at/research/TR/ for a full list of papers
+available online.
+
+--------
+
+New Perspectives
+
+It's cheering to know that old papers in hard to obtain proceedings can
+sometimes be found on the web. For example, the paper "New Perspectives for
+Image Synthesis," originally published in Compugraphics '92, is on the first
+author's web page (no images, though):
+
+http://www.emse.fr/~mbeig/
+
+It discusses different types of perspective transformations used in art which
+can become part of a ray tracer. That is, it truly *is* about new
+perspectives, it's not some fluffy, "what is new in the field (in other
+words, what am I doing)?" paper.
+
+--------
+
+My old Master's thesis (from 1992) has made it to the Web:
+
+http://www.graphics.cornell.edu/~westin/
+
+Also available are:
+ * '92 SIGGRAPH paper (full text and images)
+ * Images from the paper, thesis, and SIGGRAPH talk
+ * Microgeometry for a Gaussian rough surface, used in the paper and the thesis
+
+- Stephen Westin <westin@graphics.cornell.edu>
+
+--------
+
+3D Site newsletter
+
+http://www.3dsite.com/n/sites/3dsite/newsletter/
+
+----
+
+The Rendering Times
+
+An ezine for users of POV-Ray and Topas:
+
+http://www.spake.org/rtimes/
+
+----
+
+Wavelet Digest
+
+http://www.wavelet.org/wavelet/ - be over there now.
+
+--------
+
+New Journal
+
+The International Journal of High Performance Computer Graphics, Multimedia
+and Visualisation has been announced. For details see:
+
+http://www.bath.ac.uk/~maxhpcg/
+
+--------
+
+Near Real Time RT on a Pentium, part II
+
+In RTNv10n3:
+> A fast (1-2 fps on a Pentium 90) ray trace demo with reflections and
+> shadows on curved surfaces can be found at:
+>        ftp://ftp.cdrom.com/pub/demos/demos/1997/j/jlantani.zip
+>It was faster than expected.
+
+At demoscene there are more attempts at realtime raytracing.
+
+For example:
+
+ftp://ftp.cdrom.com/pub/demos/demos/1995/c/chrome.zip - my work
+ftp://ftp.cdrom.com/pub/demos/demos/1996/c/chrome2.zip - my work
+ftp://ftp.cdrom.com/pub/demos/demos/1996/i/ign_desp.zip
+ftp://ftp.cdrom.com/pub/demos/demos/1996/m/mfx_tgr2.zip
+ftp://ftp.cdrom.com/pub/demos/demos/1997/m/mfx_gma.zip
+ftp://ftp.cdrom.com/pub/demos/demos/1997/s/sk-iflic.zip
+
+- Tamas Kaproncai <tomcat@rs1.szif.hu>
+
+--------
+
+POVRay Webring
+
+POVRay Ring is a group of sites dedicated to POVRay: image galleries, file
+archives, tutorials, "howto's", project info, source code patches and more,
+but always related in some way or another to POVRay. Currently there are over
+75 sites, and more to come, so if you are looking for something about POVRay,
+you should check the ring, maybe it is there (faster than other ways of
+searching). If you have a page that meet the requirements, it is really easy
+to join (and free), fill out a form and put some HTML code in the page. To
+keep the sites joined we use the services of WebRing.
+
+The POVRay Webring homepage is:
+
+http://www.webring.org/cgi-bin/webring?home&ring=povrayring
+
+The ring is administered by Guillermo S. Romero <famrom@ran.es> The Webring
+system can be reached at http://www.webring.org/
+
+- Guillermo S. Romero <famrom@ran.es>
+
+[To see an index of the POVRay web ring, visit
+http://www.webring.org/cgi-bin/webring?ring=povrayring;list ]
+
+----
+
+There are many other rings relating to computer graphics. Visit
+http://www.webring.org/ and look under computers and graphics.
+
+--------
+
+Helios on Unix
+
+Dr. Ugur Gudukbay (gudukbay@CS.Bilkent.Edu.TR) and his students at the
+Department of Computer Engineering and Information Science, Bilkent
+University (Ankara, Turkey) have kindly ported my hopelessly Windows-centric
+Helios Radiosity Renderer to the UNIX operating environment.
+
+If anyone is looking for C++ source code for a basic but effective
+progressive radiosity renderer, you can download helios_tar.tar from:
+
+http://www.cs.bilkent.edu.tr/~gudukbay/home.html
+
+- Ian Ashdown <byheart@direct.ca>
+
+--------
+
+Radiosity & VRML
+
+http://www.tisny.com/vrml/eai/radiosity/
+
+- Jason Key <jasonk@eye.com>
+
+[Pretty wild: run radiosity solutions over the web and see the output as
+VRML. It takes awhile to load the page; if you stop it early, go to the
+bottom of the page for the link to run the radiosity Java applet. -EAH]
+
+--------
+
+Howell Book online
+
+I just found that Jack Howell's "Catalog of Radiation Heat Transfer
+Configuration Factors" is now on line (it used to be only in a book that you
+could only find in some Engineering libraries).
+
+It's at:
+
+http://sage.me.utexas.edu/~howell/
+
+Section C is not completely filled in, so perhaps it is still a work in
+progress. At least now everyone can have access to infamous cow factors:
+
+http://sage.me.utexas.edu/~howell/sectionb/b-63.html
+
+- Holly Rushmeier <holly@watson.ibm.com>
+
+--------
+
+[In response to a query for wavelet radiosity on triangular meshes:] Philippe
+Bekaert and I have adapted wavelet radiosity to triangular meshes. (I think
+there are also some triangular coefficients listed in Peter Schroeder's
+thesis.)
+
+I have a technical note online at:
+
+http://www.cs.cmu.edu/~radiosity/notes/note-coeffs.[ps|pdf]
+
+which discusses wavelet radiosity operations in a matrix-oriented setting,
+lists the necessary coefficients for these operations, and gives some
+examples of how to use them. It includes coefficients for the M[2-3], F[2-3]
+bases for both quadrilaterals and triangles.
+
+You may also want to download Philippe et. al's RenderPark and/or my 'rad'
+radiosity program and try looking at the code. They can be found at:
+
+http://www.cs.kuleuven.ac.be/cwis/research/graphics/RENDERPARK
+http://www.cs.cmu.edu/~radiosity/dist
+
+- Andrew Willmott <a.willmott@cs.cmu.edu>
+
+--------
+
+We have full hemispherical BRDF data for blue latex paint available at our
+web site:
+
+http://www.graphics.cornell.edu/online/measurements/
+
+The data were measured by Sing Foo, and we used them in our Siggraph'97 paper
+"Non-Linear Approximation of Reflectance Functions". I've just added some
+graphs of the function in the plane of incidence, to give a first impression
+of its shape. It's an interesting start for experiments.
+
+- Eric Lafortune <eric@graphics.cornell.edu>
+
+--------
+
+1998 Lightscape Image Contest
+
+Some more breathtaking radiosity magic from Lightscape users. These are all
+new and it's well worth the while to have look.
+
+http://www.lightscape.com/Contest98/
+
+- Jason Key <jasonkey@mindspring.com>
+
+[I usually don't list commercial sites, but these are downright amazing. The
+winner's reality vs. rendering comparison is great. - EAH]
+
+--------
+
+The Visualization Toolkit
+
+The code from the book _The Visualization Toolkit, An Object-Oriented
+Approach To 3D Graphics_ is available online at:
+
+http://nswt.tuwien.ac.at/htdocs/vtk/
+
+It's free, and looks impressive. If anyone has had experience with this
+system, please send a review.
+
+--------
+
+SPD for Mac
+
+The Standard Procedural Databases software is available for the Mac at:
+
+http://www.geocities.com/SiliconValley/Horizon/4977/macspd.html
+
+due to the efforts of Eduard Schwan.
+
+--------
+
+Clouds
+
+Some gorgeous computer generated clouds can be seen at:
+
+http://www.seas.gwu.edu/student/sylee/cloud.html
+
+--------
+
+Gamma Correction
+
+A place for all your gamma correction needs:
+
+http://www.cgsd.com/papers/gamma.html
+
+Some interesting tutorials, links, and more. One of the better links is to
+the site by Charles Poynton (who has organized a color management course at
+SIGGRAPH this year):
+
+http://www.inforamp.net/~poynton/Poynton-colour.html
+
+--------
+
+Encyclopedia of Graphics File Formats book updates
+
+O'Reilly's update page (which has new chapters for the second edition, i.e.
+has new formats which have come out):
+
+http://www.ora.com/centers/gff/index.htm
+
+The FAQ (by one of the authors) on file formats is at:
+
+http://www.ora.com/centers/gff/gff-faq/index.htm
+
+--------
+
+File Formats Galore
+
+A huge collection of file format documentation is available at:
+
+http://www.wotsit.org/
+
+I've seen other file format collections, but this one is by far the most
+wide-ranging, including the usual 2D and 3D formats, movie formats, plus
+formats for spreadsheets, sound, printers, and all sorts of others.
+Unfortunately, there are no links to converters or code, just documentation.
+
+For just 3D file formats, you might want to try:
+
+http://www.octobernet.com/~brian/graphics/3D.formats.html
+
+It hasn't been updated in a few years, but it's pretty comprehensive.
+
+--------
+
+Metastream
+
+A new streaming 3D file format for the web is at:
+
+http://www.metastream.com/
+
+Impressive demos; the models are way smaller than the same models saved as
+VRML (which still suffers from the lack of a binary file format). It will be
+interesting to see if this new format takes off, whether it competes with or
+complements VRML and also Microsoft's Chrome initiative.
+
+--------
+
+Free Polygon Tessellators, take 2
+
+In RTNv10n2 I summarized a number of free tessellator resources out there. At
+that time I commented that Narkhede & Manocha's tessellator did not handle
+holes. Now the code has been improved to do so, according to their web page.
+Find their explanation and code at:
+
+http://www.cs.unc.edu/~dm/CODE/GEM/chapter.html
+
+--------
+
+gpc
+
+Someday we will run out of TIA's (three initial acronyms). Before that
+happens, gpc is a generic polygon clipper library, clipping anything against
+anything. The gpc polygon clipper handles degenerate cases cleanly:
+
+  * difference, union and intersection supported
+  * all polygons may have holes, multiple contours, self-intersect etc.
+  * no clockwise/anticlockwise vertex ordering required
+  * gives contour vertex or tristrip output
+
+Find the source and impressive examples at:
+
+http://www.cs.man.ac.uk/aig/staff/alan/software/
+
+There are also links there to other polygon clippers.
+
+--------
+
+Lib3d
+
+Lib3d is a high performance 3d C++ library distributed under the GNU Library
+General Public License.
+
+Lib3d implements sub-affine texture mapping, Gouraud shading and Z-buffer
+rasterization, with support for 8, 16 and 32 bit depths.
+
+Lib3d has been developed under Linux, and has been tested with DOS, Solaris
+and OSF/1 on Dec alphas.
+
+Performance is a major design goal for Lib3d. Compared to other free
+renderers, Lib3d is about 3.5 times faster than TAGL v22, many times faster
+than Mesa, and perhaps half as fast as a good commercial renderer.
+
+Location: http://www.ozemail.com.au/~keithw/
+
+----
+
+CIDLib
+
+A free C++ class library for Windows NT. Includes an object oriented
+extensible ray tracer and fractal generation engine as part of it. It's at:
+
+http://www.charmedquark.com/
+
+--------
+
+Alice
+
+Alice is a 3D Interactive Graphics Authoring/Programming Environment. The
+goal of Alice is to make it easy for novice programmers to develop
+interesting 3D environments and to explore the new medium of interactive 3D
+graphics. It runs on Windows 95 and Windows NT 4.0 with Direct3D.
+
+Location: http://alice.cs.cmu.edu/
+
+----
+
+AC3D
+
+AC3D is a free modeller which works on various flavors of Unix, and exports
+to VRML, RenderMan, POV-Ray, and other formats. Get it at:
+
+http://www.comp.lancs.ac.uk/computing/users/andy/ac3d.html
+
+Also available at this site is 3DC, a free DOS 3D model converter (sorry, no
+source) by Zoltan Karpati of Hungary which converts to and from a huge number
+of formats. The quality of the conversion is nothing spectacular, but the
+format list is impressive (92 different file types!).
+
+----
+
+Breeze Designer
+
+A free modeler for POV-Ray, for Windows 95 and NT. While primarily for
+POV-Ray, it also exports to VRML, RenderMan, DXF, and PolyRay formats:
+
+http://www.imagos.fl.net.au/
+
+----
+
+Moonlight Creator
+
+A free modeler, with source available, for Windows 95/NT (uses OpenGL) and
+Linux. Has NURBS and object/polygon/vertex editing, imports DXF, OFF, and 3DS
+ASC, and exports DXF, Rayshade, POV-Ray, RIB, and VRML 1 & 2. Supports True
+Type fonts. Does not support textures yet. Does radiosity lighting and
+raytraced rendering:
+
+http://www.cybersociety.com/moonlight/
+
+----
+
+bCAD
+
+a DOS modeler, free, sounds quite stable, includes a ray tracer in it.
+Imports and exports 3DS ASC and Sense 8 NFF. Check out the rave review at
+"The Unofficial bCAD appreciation page":
+
+http://www.wooldale.demon.co.uk/bcad.htm
+
+----
+
+FORM
+
+This is an IBM Windows/DOS program for doing Latham-like L-systems, exports
+direct to image files or to VRML, DXF, POV-Ray, VIVID, and PLG:
+
+http://www.netlink.co.uk/~snaffle/form/form.html
+
+The language looks a bit intimidating to learn, but the program's pretty
+accessible: just start up WFORM ("WFORM -res2" is better on faster machines,
+more screen space), open a .FRM file from the SHAPES or OTHERS directories,
+and hit "Go!". If the shape looks interesting, go to "MutateMode!" and hit
+"Go!" again. The shape is used to produce 3 offspring, a la Todd and Latham.
+Double click on an offspring (or the parent again), and you get more
+offspring from that. I *think* if you set the Mutation Settings under File to
+a lower value you get less variation. Pretty fun and quick to start using.
+
+To actually save your creation you seem to have to do a little two-step: save
+it out as filename.frm, then run "FORM -vrml filename.frm" and the file
+temp.wrl is output. Drop this in your browser and there it is.
+
+Some images from FORM are at:
+
+http://www.netlink.co.uk/~snaffle/form/formgall.html
+
+--------
+
+CAD Model Viewer
+
+Most free model viewers are concerned with polygonal based surfaces for
+rendering applications. So, it is nice to see a new free viewer come out for
+CAD related formats, such as IGES, SolidWorks, ISO G-Code (whatever that is),
+as well as CAD surface description file types such as STL and VRML. See:
+
+http://www.actify.com/3DView/3DView.html
+
+--------
+
+Implicit & Parametric Surfaces for POV-Ray
+
+If you want to add these to POV-Ray, go now to:
+
+http://atrey.karlin.mff.cuni.cz/~0rfelyus/povray.html
+
+--------
+
+3D Implicit Function Viewer
+
+A free demo version of an implicit function viewer is available at:
+
+http://mathware.com/html/cyclone.html
+
+If you play with implicit functions at all, it's worth a look.
+
+--------
+
+L-Parser Front End
+
+On a related note, LSys32 is a graphical shell to the L-Parser program at:
+
+http://www.mindspring.com/~chlichti/html/lsys32.html
+
+--------
+
+LOD for VRML
+
+There is an interesting application called LODestar at:
+
+http://www.cg.tuwien.ac.at/research/vr/lodestar/
+
+It works only on VRML 1.0 files, but has some nice features. It cleans up the
+original VRML file (eliminating duplicate data), and has the ability to
+generate lower polygon count level of detail versions of the model. If you
+combine this utility with Keith Rule's Crossroads 3D file translator at
+http://www.europa.com/~keithr/ (which reads and writes VRML 1.0), you have a
+nice poor-man's polygonal model simplifier for any format that Crossroads can
+write (which is quite a few at this point).
+
+--------
+
+Free Java 3D vecmath library
+
+An unofficial, free implementation of the Java 3D API vecmath library is
+available at:
+
+http://www.esm.co.jp/java/vecmath/
+
+----
+
+The code for _Computer Graphics for Java Programmers_ can be downloaded from:
+
+http://home.wxs.nl/~ammeraal/grjava.htm
+
+--------
+
+Macbeth photo mosaic program
+
+Macbeth is a Unix based program (with source) which uses small images as
+pixels for making large images. A little bit hard to describe - see the
+examples on his page to know what it is:
+
+http://kunst.uib.no/~stig/Macbeth/
+
+--------
+
+gd
+
+gd is a graphics library which is handy for drawing vectors, regions, text,
+and compositing other images into a GIF. It's free, with source:
+
+http://www.boutell.com/gd/
+
+The most tantalizing thing about version 1.3 is that the GIF compresser,
+called miGIF, appears to both get around the LZW patent and is also
+efficient. It basically is a run length encoder (which is not patentable)
+which uses the LZW's table to store runs. Such an encoder is ideal for 'gd'
+because it generates images which typically have solid color areas. I
+wouldn't bet the house that miGIF is patent free (nightmares of saying, "Your
+honor, LZW works likes this..." come to mind), it takes a court to "prove"
+this, but technically it looks like it is.
+
+--------
+
+Lens Flare
+
+Everyone's favorite special effect, there's some free source code at
+http://www.geocities.com/SiliconValley/Campus/4128/Lensflare.html to do it.
+
+--------
+
+Free Textures
+
+Five years ago free textures were pretty rare; now they're fairly common. Now
+the trick is separating the wheat from the chaff. Some fairly nice and
+pleasantly organized free textures are available at:
+
+http://axem2.simplenet.com/heading.htm
+
+An old site with a large number of tiling (and non-tiling) textures is at:
+
+http://www.mhri.edu.au/~pdb/texture/
+
+A little care should be taken with redistributing these textures, as some are
+possibly copyright protected.
+
+--------
+
+Grafica Obscura
+
+If you have not visited this site lately, do so:
+
+http://www.sgi.com/grafica/index.html
+
+I particularly enjoyed "Synthetic Lighting for Photography":
+
+http://www.sgi.com/grafica/synth/index.html
+
+Explore on your own, there's something for everyone.
+
+--------
+
+Midpoint Algorithm
+
+On the fast midpoint line drawing algorithm and its application to texture
+mapping:
+
+http://www.oiri.demon.co.uk/texmap/texmap.htm
+
+--------
+
+This is definitely off the topic, but I find it so amazing that I must
+mention it. This site is for a computer game company that has gone under but
+which decided, as a last act, to release the complete source and art for its
+last release, an action game using Direct3D:
+
+http://www.47-tek.com/source.htm
+
+While I'm on the topic of games, for a true nostalgia trip visit:
+
+http://www.davesclassics.com/
+
+a labor of love or something, devoted to PC emulators of old arcade machines
+and defunct platforms.
+
+--------
+
+Inexplicable, and worth a quick look:
+
+http://www2.sva.edu/studio96/soojeong/
+
+-------------------------------------------------------------------------------
+
+Pluecker Coordinate Tutorial, by Ken Shoemake <ks@emanon.net>
+
+Pluecker 3D line coordinates are concise and efficient for numerous chores.
+Dot products and cross products reveal their geometry, without the need for
+determinants. For the impatient (and aren't we all a little?), results come
+first, then explanations.
+
+On notation: Frequently 3D graphics uses a 3-tuple, (x,y,z), without concern
+for whether it represents a vector or a point. When being more careful, (U:0)
+will be the homogeneous coordinates of vector U, with U = (Ux,Uy,Uz), and
+(P:1) -- or (P:w) -- the homogeneous coordinates of point P, with P =
+(Px,Py,Pz). The origin is then (O:1), with O = (0,0,0), and subtracting it
+from a point creates a vector. The cross product PxQ is the 3-tuple
+(PyQz-PzQy,PzQx-PxQz,PxQy-PyQx), and the dot product U.V is the number
+UxVx+UyVy+UzVz. A direction is a vector with length ignored. A plane has
+equation ax+by+cz+dw = 0, or D.P+dw = 0, so its coordinates are [a:b:c:d], or
+[D:d], with D = (a,b,c) perpendicular to the plane. Planes [D:0] contain the
+origin. Colon (":") rather than comma (",") proclaims homogeneity.
+
+Here are common Pluecker 3D line computations collected in one place. All
+lines are ordinary Euclidean lines, not projective oddities like lines at
+infinity.
+
+  @ L = {U:V}, with 3-tuples U and V, with U.V = 0, and with U non-null.
+
+  @ L = {P-Q:PxQ}, for P and Q distinct points on L, and line is directed Q->P.
+  @ L = {U:UxQ}, for U the direction of L and Q a point on L.
+  @ L = {qP-pQ:PxQ}, for (P:p) and (Q:q) distinct homogeneous points on L.
+  @ L = {ExF:fE-eF}, for [E:e] and [F:f] distinct planes containing L.
+
+  @ {U1:V1} =? s{U2:V2} tests if L1 = {U1:V1} equals L2 = {U2:V2}.
+  @ s > 0 if L1 and L2 have same orientation.
+
+  @ (V.V)/(U.U) is the minimum squared distance of L from the origin.
+  @ (VxU:U.U) is the point of L closest to the origin.
+  @ [UxV:V.V] is the plane through L perpendicular to its origin plane, for
+        non-null V.
+
+  @ (VxN-Un:U.N) is the point where L intersects plane [N:n] not parallel to L.
+  @ [UxP-Vw:V.P] is the plane containing L and point (P:w) not on L.
+  @ [UxN:V.N] is the plane containing L and direction N not parallel to L.
+
+  Let N, N1, N2 be unit vectors along the coordinate axes, with U.N non-zero.
+
+  @ (VxN:U.N) is a point on L if N is not perpendicular to U.
+  @ U and this point both satisfy a plane equation [E:e] if the plane
+        contains L.
+  @ Represent L as U and this point to transform by non-perspective
+        homogeneous matrix.
+  @ Represent L as two points to transform by perspective homogeneous matrix.
+
+  @ [UxN1:V.N1] and [UxN2:V.N2] are distinct planes containing L.
+  @ P satisfies both these plane equations if L contains P.
+
+  @ Pnt(t) = (VxU+tU:U.U) parameterizes points on L.
+  @ Pln(t) = (1-t^2)[UxN1:V.N1]+2t[UxN2:V.N2] parameterizes planes through L.
+
+  @ U1.V2 + U2.V1 =? 0 tests if L1 = {U1:V1} and L2 = {U2:V2} are coplanar
+        (intersect).
+  @ Sum positive if right-handed screw takes one into the other; negative
+        if left-handed.
+  @ U1xU2 =? 0 tests if lines are parallel.
+  Let N be a unit vector along a coordinate axis, with (U1xU2).N non-zero.
+  @ ((V1.N)U2-(V2.N)U1-(V1.U2)N:(U1xU2).N) is the point of intersection, if
+        any.
+
+  @ [U1xU2:V1.U2] is the common plane for non-parallel lines.
+  Let N, N1, N2 be unit vectors along the coordinate axes, with U1.N non-zero.
+  @ [(U1.N)V2-(U2.N)V1:(V1xV2).N] is the common plane for parallel distinct
+        lines.
+  @ [U1xN1:V1.N1] is the common plane for equal lines through origin.
+
+Here are two related tricks, a lagniappe, as they say in New Orleans.
+
+  Let P be the point (x,y,z).
+  @ [(-1,0,0):x] and [(0,-1,0):y] and [(0,0,-1):z] are independent planes
+        through P.
+
+  Let [E:e] be a plane and N, N1, and N2 unit coordinate axis vectors with
+        E.N non-null.
+  @ Point (-eN:E.N) and distinct direction vectors ExN1 and ExN2 lie in the
+        plane.
+
+Note: E.U = 0 if U is a direction vector in plane [E:e]. If P is in the
+plane, so is P+U.
+
+Warning: In reality, line intersections, parallelism, and various other
+alignments have vanishingly small probability. Small perturbations destroy
+them, and so numerical tests may need the robustness of error bounds.
+
+Now we pause a minute to let the cookbook crowd rush off to write code. The
+overachievers may want to drift off to prove everything for themselves. All
+gone? Then the rest of us can try to build a little intuition, so as to
+understand the results.
+
+The standard determinant definition of Pluecker 3D line coordinates takes two
+distinct points on line L, call them P and Q, written homogeneously in two
+columns as follows:
+  [Px Qx] row x
+  [Py Qy] row y
+  [Pz Qz] row z
+  [Pw Qw] row w
+Make all possible determinants of pairs of rows. Only six combinations are
+independent; these are the Pluecker coordinates. See geometry yet? Probably
+not. But set the w's to 1, and look again.
+
+Rows x and w (in that order) give Px-Qx. Also rows y and w give Py-Qy, and
+rows z and w give Pz-Qz. So define U = P-Q. That's half the Pluecker
+coordinates. Rows y and z give PyQz-PzQy. Hmm, look familiar? Sure enough,
+rows z and x, and rows x and y, also give cross product components. So we
+define V = PxQ as the other half of the Pluecker coordinates. Using L = {U:V}
+= {P-Q:PxQ} we can think geometrically, not algebraically.
+
+  Example: P = (2,3,7), Q = (2,1,0). Then L = {U:V} = {0:2:7:-7:14:-4}.
+
+We just use familiar properties of dot products and cross products. The dot
+product of any two vectors A and B is 0 just when they are perpendicular, and
+the cross product of A and B is a vector that always is perpendicular to both
+A and B (or is null). The squared length of A is A.A, and A.B = B.A. In
+contrast, AxB = -BxA, implying AxA = (0,0,0). Thus AxB nulls any component of
+B parallel to A, and rotates the rest of B 90 degrees. When A and B are
+perpendicular and of unit length, this implies Bx(AxB) = A = (BxA)xB. Both
+dot and cross products distribute over sums and scales, so A.(aB1+bB2) =
+a(A.B1)+b(A.B2) and (aA1+bA2)xB = a(A1xB)+b(A2xB), for example.
+
+Now clearly U = P-Q gives the direction of the line; and V = PxQ (if it's
+non-null) is perpendicular to the plane through P, Q, and the origin. Less
+obviously, the colon is there because moving P and/or Q scales U and V
+together. Think about it. We know P = U+Q, with U some multiple of a fixed
+unit vector. But then V = PxQ = (U+Q)xQ = UxQ, so moving P clearly scales V
+the same as U. All variation in Q also comes from adding multiples of U to
+the point T where a vector from the origin meets the line perpendicularly; in
+other words Q = sU+T. But that means V = UxQ = Ux(sU+T) = UxT, and T is a
+fixed point of L that does not depend on P or Q. So if either P or Q moves,
+the length of U changes, and with it the length of V, by the same scale
+factor. Clearly we can also generate coordinates directly from a ray
+representation, (U,Q), a direction and a point. We know that U is the
+direction of L, which we can normalize; then the length of V gives the
+minimum distance from L to the origin, ||T||, and so (T.T) = (V.V)/(U.U).
+
+  Example. P = (2,3,7), Q = (2,-1,-7). Then {U:V} = {0:4:14:-14:28:-8}.
+           Squared distance from origin is 261/53.
+  Example. U = (2,1,0), Q = (2,1,0). Then {U:V} = {2:1:0:0:0:0}.
+           Squared distance from origin is 0.
+
+Since a line is uniquely determined by its direction and its vector
+displacement from the origin, there is a one to one correspondence between
+lines and Pluecker coordinates. Lines in 3D have four degrees of freedom, but
+the {U:V} pair has six numbers. Obviously homogeneity accounts for one
+freedom. The second comes from the fact that U.V = 0, so not all pairs are
+valid lines. Nevertheless, two lines are distinct if and only if their
+Pluecker coordinates are linearly independent. That is, the test for equality
+is like that for points given as homogeneous coordinates.
+
+  Example. {0:2:7:-7:14:-4} is the same line as {0:4:14:-14:28:-8}.
+  Example. {0:2:7:-7:14:-4} is not the same line as {2:1:0:0:0:0}.
+
+Now still thinking geometrically, look at dual coordinates, defined from two
+plane equations of the form ax+by+cz+dw = 0, namely E.P + e = 0 and F.P + f =
+0. We know that as vectors E and F are perpendicular to their respective
+planes. Clearly ExF, being perpendicular to both, must be the direction of L,
+their intersection. Any point P on L satisfies both equations, and also
+satisfies the linear combination (fE-eF).P = 0. Thus the vector fE-eF defines
+a plane through the origin that contains L. So miraculously, it turns out
+that {U:V} = {ExF:fE-eF}. Assuming neither defining plane passes through the
+origin, we can normalize so e and f are 1, and the duality is {P-Q:PxQ} =
+{ExF:E-F}.
+
+  Example. [E:e] = [1:0:0:-2] and [F:f] = [0:7:-2:-7]. Then {U:V} =
+        {0:2:7:-7:14:-4}.
+
+The striking similarity of the point and plane definitions tell us Pluecker
+3D line coordinates precisely balance these extremes. Many computational
+benefits accrue. Also, many questions come in dual pairs, with the answers
+for one obtained by swapping U and V in the answers for the other.
+
+We know, for example, that [V:0] is an origin plane through L (if V is not
+null), and that (U:0) is a vector in the direction of L, each unique. The
+point T = (VxU:U.U) of L is perpendicular to (U:0), meaning T.U = 0, because
+V = UxT, so VxU = (U.U)T. Dually, the plane [UxV:V.V] through L is
+perpendicular to plane [V:0].
+
+  Example. {U:V} = {0:2:7:-7:14:-4}. Then T = (-106:49:14:53) is point
+        closest to origin.
+            Plane perpendicular to [V:0] is [106:-49:-14:261].
+
+What point do L and a given plane [N:n] have in common? Consider first an
+origin plane, [N:0]. It meets the [V:0] plane in a line of points (VxN:w),
+and to meet the [UxV:V.V] plane w must satisfy w(V.V) = (VxU).(VxN) =
+(V.V)(U.N). Therefore the common point is (VxN:U.N) when n is 0, or
+(VxN-nU:U.N) in general. Dually, the plane that L has in common with a given
+point (P:w) is [UxP-wV:V.P]. For a vector (N:0), this is [UxN:V.N].
+
+  Example. {U:V} = {0:2:7:-7:14:-4} and [N:n] = [0:0:1:0]. Intersection is
+        (14:7:0:7).
+           [N:n] = [0:0:1:-7]. Intersection is (14:21:49:7).
+           (P:w) = (2:0:0:1). Common plane is [7:0:0:-14].
+           (N:0) = (1:1:1:0). Common plane is [-5:7:-2:3].
+
+These are important results, so let's take it again more slowly. The vector
+(VxN:0) is perpendicular to both V and N, as is any scalar multiple,
+(VxN:0)/w. Since [N:0] and [V:0] both contain the origin, (O:1), they also
+contain point O + VxN/w, which scales by w to give (VxN:w) in homogeneous
+form. Now a point (P:w) lies in plane [UxV:V.V] if it satisfies the equation
+(UxV).P+(V.V)w = 0. Noting UxV = -VxU, this is w(V.V) = (VxU).P.
+Substituting, the point we want satisfies w(V.V) = (VxU).(VxN). We deduce w =
+U.N by showing (VxU).(VxN) = (V.V)(U.N). The cross product with V rotates and
+scales plane [V:0], which contains U, and nulls any component of N parallel
+to V. Since the latter contributes nothing to the dot product with U, we have
+our desired result. If V is null, (VxN:U.N) is still a point of intersection,
+the origin. However when the line and plane are parallel, they either
+intersect everywhere or nowhere, and the formula fails.
+
+From these few formulae we can produce a number of other useful results. To
+transform a line by a matrix without perspective, we first convert the line
+to (direction,point) form, transform that pair, then convert the result back
+to Pluecker form. For this and other reasons we want the quickest way to find
+a point on L = {U:V}. For example, this also gives the necessary data to
+determine if L lies in a given plane. Notice that we can easily generate
+more, using U. (This is necessary to apply transforms with perspective, which
+require a pair of points.) But (VxN:U.N) gives points on L, and choosing N
+cleverly will avoid multiplies. Merely find a non-zero component of U, and
+let N be a unit vector in that direction.
+
+  Example. {U:V} = {0:2:7:-7:14:-4}. Take N = (0,1,0), giving point
+        (4:0:-7:2) on line.
+            Plane [1:0:0:1] does not contain the point, so it does not
+                contain the line.
+            It does contain direction [0:2:7:0], so is parallel to the line.
+
+To test if a point P is on L, we should use two independent plane equations.
+The obvious idea is to dualize what we just did using [V:0] and [UxN:V.N],
+with N a unit vector in the direction of a non-zero component of V. Yet this
+may fail. We always have a non-null U, but lines through the origin give a
+null V. Still, we can work with what we have. Let N, N1, and N2 be unit
+vectors for the three coordinate axes, with N in the direction of a non-zero
+component of, not V, but U. Then N1 and N2 give two suitable planes,
+[UxN1:V.N1] and [UxN2:V.N2].
+
+  Example. {U:V} = {2:1:0:0:0:0}. Take N = (1,0,0), N1 = (0,1,0), N2 = (0,0,1),
+        giving planes [0:0:2:0] and [1:-2:0:0] through line.
+            Point (2:3:0:1) lies only in the second plane, so is not on the
+                line.
+
+Every point on L is a weighted sum of (U:0) and (VxU:U.U), so a parametric
+equation for all points on L is Pnt(t) = (VxU+tU:U.U). Dually, a parametric
+form for planes through L is Pln(t) = (1-t^2)[UxN1:V.N1]+2t[UxN2:V.N2], a
+weighted combination of the two planes we learned how to generate a moment
+ago. This latter pair of weights, 1-t^2 and 2t, is perhaps overly elaborate,
+but chosen as points on a rationally parameterized circle (x:y:w) =
+(1-t^2:2t:1+t^2). Any way to get all possible ratios of weights will do.
+
+  Example. {U:V} = {0:2:7:-7:14:-4}. Pnt(t) = (-106:49+2t:14+7t:53).
+  Example. {U:V} = {2:1:0:0:0:0}. Pln(t) = [2t:-4t:2(1-t^2):0].
+
+If two lines intersect, they are coplanar. This latter condition we can test
+as follows. Suppose L1 = {U1:V1} and L2 = {U2:V2}. The common plane
+containing both L1 and U2 is [U1xU2:V1.U2], while that containing L2 and U1
+is [U2xU1:V2.U1]. Since U1xU2 = -U2xU1, coplanarity demands U1.V2 + U2.V1 =
+0. When the two lines are parallel, U1 and U2 give the same direction and the
+plane formulae are invalid, yet the test still works.
+
+If we want a formula for a common plane even so, we can try a linear
+combination of V1 and V2 for the normal, since both are perpendicular to the
+common direction. Find a non-zero component of U1, and let N be a unit vector
+in that direction; then if V1 and V2 are not both null, use
+[(U1.N)V2-(U2.N)V1:(V1xV2).N]. Otherwise L1 and L2 are not only parallel, but
+identical, and pass through the origin; generate a plane for L1 using the
+standard method. Perhaps the reader can devise a uniform method for
+generating a common plane, however small perturbations generally have large
+consequences for this situation.
+
+We cannot hope to find a point of intersection for parallel lines, but
+otherwise a suitable formula is actually the dual,
+((V1.N)U2-(V2.N)U1-(V1.U2)N:(U1xU2).N), where N is a unit axis vector
+independent of U1 and U2. This is less computation than its size suggests. It
+can be derived as the plane through L2 in the direction N, [U2xN:V2.N],
+intersected with L1, (V1x(U2xN)-U1(V2.N):U1.(U2xN)), followed by two cross
+product identities, Ax(BxC) = (A.C)B-(A.B)C, and A.(BxC) = (AxB).C. When
+neither V1 nor V2 is null, the far simpler formula [V1xV2:U1.V2] will
+suffice; it is the dual of the common plane [U1xU2:V1.U2].
+
+  Example. L1 = {0:2:7:-7:14:-4} and L2 = {2:1:0:0:0:0} are coplanar.
+            Lines are not parallel.
+            Common plane is [-7:14:-4:0].
+            Taking N = (1,0,0), intersection point is (-14:-7:0:-7).
+
+Tempting as this geometric development is, it conceals the generality of the
+algebra. Pluecker 3D line coordinates are only one special case (albeit a
+very useful one) of Grassmann coordinates.
+
+Using Grassmann coordinates we can uniformly manage points, lines, planes,
+and such (generically, flats) in spaces of any dimension. We can generate
+them, intersect them, and so on, with simple equations. There are fewer
+special cases, such as lines given by two points versus point and direction.
+Three planes through a point or three points on a plane (in 3D) use the same
+algebra as two planes through a line.
+
+Two solid references are Stolfi's doctoral dissertation at Stanford (and
+later book), and Hodge and Pedoe's classic multi-volume text, _Methods of
+Algebraic Geometry_, available in paperback from Cambridge.
+
+In 3D, Pluecker line coordinates can be extended to wrenches and twists,
+known as screw coordinates. These cleverly employ all six degrees of freedom
+to describe forces and motions. The results have proved useful for kinematic
+investigations, as described for example in Mason and Salisbury, _Robot Hands
+and the Mechanics of Manipulation_, MIT.
+
+-------------------------------------------------------------------------------
+
+A Short Note on Kalra and Barr's Algorithm, by Andrei Sherstyuk
+        <ash@cs.monash.edu.au>
+
+This message is intended for folks who might be interested in implementing
+this algorithm. The algorithm was published as "Guaranteed Ray Intersection
+with Implicit Surfaces", in SIGGRAPH '89 proceedings, pp. 297-306.
+
+Kalra and Barr's algorithm has been around for almost 10 years and gained a
+good reputation among implicitly-minded ray-tracing people. Still, I could
+not find a public-domain ray-tracer that implemented this algorithm. So I had
+to write it from scratch.
+
+En route, I found a typo in the math appendix of the paper, apparently
+introduced during typesetting.  In the paper, there is a brief description
+how to compute L and G for Gaussian potentials, aka Blinn's blobs:
+
+    f(r) = B exp {-A r^2},
+
+where r^2 is a squared distance to the center of the blob. (page 305).
+
+I did not check the computations of L (the Lipschitz constant for the
+functions itself). However, computations of G must be corrected in the
+following way: the 2nd directional derivative h(t) is given as:
+
+    h = -2.0*AB*exp(-A*r2)*(k1 - A*(k2 + t*k1)*(k2 + t*k1));
+
+The correct expression is:
+
+    h = -2.0*AB*exp(-A*r2)*(k1 - 2.0*A*(k2 + t*k1)*(k2 + t*k1));
+                                 ^^^
+
+The result of this typo is that the G-values for each blob come out smaller
+than they really are. This may cause the algorithm to underestimate the rate
+of change of the field function and start closing on the root in the interval
+where the function is NOT monotonic.
+
+In principle, this could cause divergence (if Newton's method is used) or the
+first intersection may be missed (if regular falsi is used, which may
+converge to the second root).
+
+In practice, with all datasets that I tried this bug does not surface. The
+reason is the following: the collective G-value for a sum of several blobs is
+calculated as a sum of G-values computed for individuals blobs. This is a
+very conservative result.  In a way, the algorithm is very self-protective
+and always sets the safety limits basing on the worst-case behavior of the
+collective field function, which in practice (almost) never happens.
+Therefore, a little loosening of G only helps the speed at the expense of
+safety.
+
+However, since so much math is involved already, it makes sense to do it by
+the rules, which makes the algorithm absolutely reliable.
+
+To finish, the plot of h(t) (Figure 21) should be viewed upside-down. This
+minor inconvenience is not really important for the algorithm, but also
+should be corrected to obtain peace of mind after all these troubles.
+
+-------------------------------------------------------------------------------
+
+Origins of Point In Polygon, Take 10..., by Neil Stewart
+        <stewart@iro.umontreal.ca>
+
+[Chris Schoeneman tracked the origin of the point in polygon algorithm back to
+1962, see RTNv4n1. However, the solution to the problem dates much further
+back. Neil Stewart wrote this in some correspondence. -EAH]
+
+Taking the parity of the number of crossings of a fixed direction, as a
+definition of the winding number is attributed to Poincare in the book:
+
+A Combinatorial Introduction to Topology. Michael Henle. Freeman and Company,
+1979.
+
+From page 49:
+
+"Here is an alternative method for computing the winding number, suggested by
+Poincare himself. Instead of keeping track of the vector V(P) as P traverses
+the path 'gamma', we watch just one particular direction of our choosing and
+record only the times that the vector P points in that direction.  If the
+vector V(P) passes through the direction going counterclockwise, we count
+plus one; if it passes through the direction going clockwise, we count minus
+one; and we count zero if the vector only comes up to our chosen direction
+and then retreates [sic] back the way it came. For the distinguished
+direction we choose due north."
+
+
+[Neil is working on an algorithm similar to the one in Section 2 of the paper
+"Ray Tracing Trimmed Rational Surface Patches", by Nishita, Sederberg, and
+Kakimoto, Computer Graphics (24), No. 4, Aug. 1990, 337-345. The clever bit
+of these curve algorithms is the use of convex hulls around the curves. For
+example, with a test ray pointing north, if you know that your test point is
+south of the convex hull and you know that one endpoint of the curve is west
+of the ray and one is east, then you know the ray crosses the curve an odd
+number of times. This is all you need for an inside-outside test - you do not
+have to compute the actual intersection. Similarly, if both endpoints of a
+curve are to one side of the ray, you know the ray hits the curve an even
+number of times. -EAH]
+
+-------------------------------------------------------------------------------
+
+Info on REYES Algorithm, by Robert Speranza and Tom Duff <td@pixar.com>
+
+Robert Speranza wrote on comp.graphics.rendering.renderman:
+
+Basically, the REYES algorithm involves taking the rendering geometry and
+dicing up into micropolygons that are less than one pixel in size in screen
+space and then shading them.  Once they are all shaded (which usually
+involves sampling their midpoints because they are so small that they are at
+the Nyquist limit for the display device), a filter is applied to antialias
+the resulting values into the pixels you see in the final image.  This is
+performed for each scan line which is why PRMan does not raytrace.  This
+technique does not mix well with raytracing since micropolygons are discarded
+as each scanline is rendered.
+
+----
+
+Tom Duff replied:
+
+Almost.
+
+A better (certainly more long-winded) summary might be:
+
+1) Divide the screen into smallish (typically 4x4 or 16x16 pixel)
+   rectangular buckets.  (Bucketing is done just for
+   memory saving & is not essential to the algorithm.)
+
+2) Read geometry into the bucket list.  An important feature of Reyes
+   is that the geometry it renders need not be just polygons, but can
+   also be higher-order curved surfaces like quadrics, NURBS and Catmull-Clark
+   subdivision surfaces.  Each primitive is stored with the first bucket
+   to be processed in which it appears (actually, *might*
+   appear, based on bounds that could be too conservative.)
+
+3) Loop through the buckets, examining all the geometric primitives.
+   Primitives that fail a screen-space flatness test are subdivided
+   and the pieces rebucketed.  Those passing the test are diced into grids
+   of micropolygons, which are shaded.  The intent is that micropolygons be
+   so small that their shape is not discernable in the final image.  Typically
+   this means that their edges are about 1/2 the pixel spacing.  The shading
+   system is fully programmable, and interprets shaders in a SIMD manner,
+   running on all points in the grid simultaneously.  The three important
+   features of this scheme are that interpreter overhead is amortized over
+   many micropolygons, that values of all variables and interpreter
+   temporaries are available at all points on the grid, allowing the
+   interpreter to provide spatial derivatives of arbitrary quantities,
+   and that shaders have the ability to alter geometry, since no hidden-surface
+   decisions have been made yet.  Derivatives give a straightforward way to
+   compute surface normals, and to estimate sampling rates for anti-aliasing.
+   Contrary to Speranza (above) micropolygons are not sampled at their
+   midpoints.  Rather, color is computed at vertices, with the intent that it
+   be Gouraud-interpolated across micropolygons.
+
+4) After shading, break grids apart into individual micropolygons,
+   which are hidden using a Z-buffer algorithm.  The Z-buffer samples
+   are randomly jittered in space, time and lens position to allow
+   anti-aliasing, motion blur and depth-of-field blur.  To handle transparent
+   surfaces, each sample has a list of visible micropolygons.  After
+   all micropolygons have been sampled, those that overlap other buckets
+   are forwarded to the appropriate bucket lists.  Transparent values in
+   the Z-buffer sample lists are collapsed to single pixel values by
+   compositing, and the final sample values are filtered to produce pixel
+   values.
+
+I'm not sure why you say that Reyes is incompatible with ray tracing. All
+that is required is to make a copy of the input geometry in a geometric
+search structure when its read, and trace rays when a shader requires it.
+PRMan doesn't ray trace because we don't see a demand for it, not because it's
+hard to do - it's not.
+
+[Thanks to Andy Gibson <gibsona@jedi.nwnet.co.uk> for passing this on. -EAH]
+
+-------------------------------------------------------------------------------
+
+Polygon Shrinking, by Dave Rusin <rusin@vesuvius.math.niu.edu> and
+        Jeff Erickson <jeffe@cs.duke.edu>
+
+[This is a fairly useful topic, as a common modeling operation is to take an
+outline and expand it while moving it along a path. For example, beveled
+letters are done using this operation. From what I've seen, most programs
+usually do give self-intersecting output. This usually doesn't matter - about
+the only case I recall where I ever saw some problems was with one of the
+Microsoft Wingdings hand glyphs. -EAH]
+
+<bpangtay@ci.sat.tx.us> wrote on sci.math:
+>Given a polygon defined in 2-D space as a series vertices (cartesian
+>coordinates). How do I define a new polygon which is equal to the original
+>polygon plus a buffer of a specified width around perimeter of the polygon?
+
+What do you want for an answer when, say, the polygon is a triangle? I can
+describe another triangle whose sides are parallel to the original triangle's
+sides but are a perpendicular distance 'd' away; but the new one's vertices
+are further than 'd' units away from the original -- is that OK?
+
+Getting the new edges is trivial: every line in the plane may be written in
+the form  a x + b y = c  for a unique unit vector (a,b) pointing to the
+outside of the polygon. The line parallel to this but  d  units out is given
+by  a x + b y = c + d.
+
+>I need it in a formula that can easily be reproduced in a program. Thanks for
+>your help.
+
+Given the ordered list  P0, P1, ..., Pn = P0  of points traversing the
+polygon counterclockwise, compute in turn
+        the vector  (r,s) = P_(i+1) - P_i
+        the outward normal (s,-r)
+        the unit outward normal (a,b)
+        the new-line  L_i: a x + b y = (a x_i + b y_i) + d
+        the intersection Q_i with the previous new-line  L_(i-1)
+for each  i. These points  Q_i  are the vertices of your new polygon (in what
+I assume is the preferred format for specifying a polygon).
+
+Note that you said "easily", not "efficiently" or "stably". If I did this for
+a living I'd probably write a real algorithm, not just a naive translation of
+mathematics into code :-)  In particular, for nonconvex polygons, you have to
+watch out for self-intersections etc.
+
+If you really need the set of points which are a perpendicular distance away
+from the original polygon, you need to replace the corners of the new polygon
+with circular arcs. This new curve is the _envelope_ of the original one; see
+e.g.
+
+http://www.math.niu.edu/~rusin/known-math/index/14HXX.html
+
+----
+
+Jeff Erickson <jeffe@cs.duke.edu> writes:
+
+In particular, for nonconvex polygons, you have to watch out for
+self-intersections etc. and this is hard!  Programs that compute offset
+polygons, like Adobe Illustrator, simply punt and give you self-intersecting
+output.
+
+Even defining exactly what the offset polygon should look like is nontrivial
+if the original polygon is nonconvex.  The "correct definition", in my
+opinion, is the result of growing the offset polygon outward from the
+original polygon.  Whenever an offset vertex runs into an offset edge, split
+the offset polygon into two pieces at the point of collision and continue.
+Whenever an offset edges shrinks down to a point, delete it, create a new
+offset vertex, and continue.
+
+The fastest practical algorithm for computing offset polygons runs in O(n^2)
+time where n is the number of edges in the original polygon. Perhaps counter
+to intuition, you can do slightly better if most of the vertices of the
+polygon are CONCAVE.  The time bound becomes O(n log n + nr), where r is the
+number of CONVEX vertices.  If the polygon is totally convex, you can compute
+any offset polygon in linear time using exactly the algorithm Dave described.
+
+For details, see the following web pages:
+        http://www.cs.duke.edu/~jeffe/open/skeleton.html
+        http://www.cs.duke.edu/~jeffe/pubs/cycles.html
+        http://www.iicm.edu/jucs_1_12/a_novel_type_of
+
+> If you really need the set of points which are a perpendicular
+> distance away from the original polygon, you need to replace the
+> corners of the new polygon with circular arcs.
+
+This is not the right way to think about it, since you have to know what the
+polygon is first.  Rounded offset curves are MUCH easier to compute than
+mitered offset polygons.  See Martin Held's research web page for a good
+description of offset curves and how to compute them efficiently:
+
+http://www.cosy.sbg.ac.at/~held/projects/voronoi_2d/voronoi.html
+
+-------------------------------------------------------------------------------
+
+Correcting Normals on "Flipped" Polygons, by Kev <shkwav@globalnet.co.uk>,
+        Duncan Colvin <duncan@cads.ac.uk>, Steve Baker <sbaker@link.com>,
+        John Nagle <nagle@netcom.com>, Dennis Jiang <jiang@nortel.ca>,
+        Alejo Hausner <ah@cs.princeton.edu>, and Eric Haines
+
+[I've edited and merged some of the USENET replies, trying to leave intact a
+sense of the problems which emerged from various solutions. -EAH]
+
+Kev writes on comp.graphics.algorithms:
+
+I'm in the process of writing a 3D object viewer in OpenGL (which is the
+easiest/nicest 3D API I've every used I might add) - the problem I'm having
+is this:
+
+The 3D program which uses the object format I'm displaying renders everything
+as double-sided polygons - however, OpenGL doesn't! When I attempt to render
+these polygons in OpenGL some of them will always appear facing the wrong way
+- i.e. the model looks like it has holes it in. I know this is happening as I
+can spin the model round and see the reversed polygons through holes in the
+other side!
+
+So... does anyone know how I can fix this? I had an idea of "doubling up"
+each polygon, i.e. create two polygons for each polygon in the mesh and
+reverse the normal for the second copy - this would work but makes the model
+twice as large (and slower to draw!). Does anyone know of a fix in OpenGL for
+this or an algorithm to correct flipped normals in solid models (I know it
+can be done as programs like Lightwave/Rhino have a feature which can do
+exactly that!).
+
+----
+
+Duncan Colvin <duncan@cads.ac.uk> replies:
+
+I think I know what you're on about.  I have to import a mesh from a POV file
+into my program.  The problem is that POV is a raytracer and doesn't care
+about triangle winding.  This means I have to rewind the mesh once it has
+been loaded into my program.  I have an algorithm that works (although I'm
+sure there is far better), which I've implemented in my CTriMesh class so
+that meshes can rewind themselves.  Although I deal only with triangles which
+makes things a lot easier, I think the same algorithm could be used in your
+case also.
+
+Anyway, I will now *attempt* to describe the algorithm (If y'all know of
+anything better, let me know)...
+
+NOTE: works only for non-self-intersecting objects.
+
+- Choosing the first polygon in the object and find out if it is facing the
+right way.  This is done by:
+
+        - Calculating the surface normal of the polygon and treating it
+        as an infinite vector starting from the center point of the polygon.
+
+        - Then check this vector against all the other polygons
+        to see how many it intersects.
+
+        - If there are an odd number of intersections, then the polygon is
+        not facing the right way, so rewind it.
+
+- Now you have one polygon that is correct it is simple to find the others. I
+base the next bit around the fact that if two polygons are both facing the
+same way (having the same winding, e.g. counterclockwise), their shared edges
+must have opposite direction vectors.
+
++----->-----+  +--->---+
+|           |  |       |
+/\         \/  /\      \/
+|           |  |       |
++-----<-----+  +---<---+
+
+I've separated the two polygons, but you can see the edge they would both
+share.
+
+With this in mind it is a case of recursing through the polygons and
+rewinding them all, so as they satisfy the above rule.
+
+----
+
+Steve Baker <sbaker@link.com> comments on Duncan's method of finding the
+"seed" polygon that is supposed to face outwards:
+
+This wouldn't work for an object that described (say) the inside of a room.
+This might be as simple as an inside-out cube (i.e. a cube with all the faces
+pointing inwards). Your code would see exactly one intersection (which is an
+odd number) and turn the room into a normal outward facing cube.
+
+I don't think there is any way to distinguish between a cube and a 'room' and
+automatically do the right thing.
+
+Also, your trick only works (as far as it does work) for objects without
+holes in their surfaces (i.e. solids).
+
+----
+
+John Nagle <nagle@netcom.com> comments:
+
+Holes aren't a problem, but other mesh defects, like isolated faces and
+duplicate edges will cause some faces not to be corrected. And a Moebius
+strip or Klein bottle will hang the algorithm, so you have to detect
+examining the same face twice.  My point is that you have to protect the
+algorithm against failure to terminate.  This requires some extra bookkeeping.
+
+This algorithm is O(N).
+
+Counting surface crossings is a very expensive way to solve this problem;
+it's O(N^2).  You also have all the usual problems with ambiguous cases where
+the normal crosses very near an edge or vertex.
+
+There is the view from inside/view from outside problem, as you point out.
+For self-intersecting surfaces, it's even worse; you could be inside one
+region but not all of them.
+
+This is a classic problem, and one often solved badly.  For example, the
+"cleanup" function in Softimage doesn't do it very well.
+
+----
+
+Duncan Colvin <duncan@cads.ac.uk> replies:
+
+O(N^2)? Only if you used that method to correct every polygon. You only need
+to correct the first polygon.  Please correct me if I am wrong.
+
+----
+
+Steve Baker <sbaker@link.com> replies:
+
+I think the problem of not knowing whether the object is intended to be
+viewed from the inside or from the outside is enough to show that the entire
+premise of trying to find an algorithm to do this is bogus. The data must be
+*created* with the correct face orientation or you are screwed.
+
+----
+
+Dennis Jiang <jiang@nortel.ca> comments:
+
+Your algorithm only works for manifold geometry. For non-manifold solids with
+bad normals such as two cubes touching each other at a single vertex or a
+solid with holes, it will not work.
+
+I think Duncan's first step, i.e., ray casting for finding or forcing a
+correct face normal is most general. The second half of his algorithm is not
+general, though. I used the ray casting to correct bad normals for
+arbitrarily complex solids, using a BSP tree to speed up the search for
+intersections.
+
+If you know your solids to be manifold, Duncan's method should work
+reasonably quickly.
+
+BTW, I am talking about correcting bad normals of a closed solid with or
+without holes, manifold or non-manifold. Not for open meshes.
+
+----
+
+Alejo Hausner <ah@cs.princeton.edu> comments:
+
+This is a problem in mesh fixup.  If you have connectivity information, then
+the method proposed by Duncan Colvin, which makes sure that one polygon is
+oriented outwards, then propagates that information to its neighbours, should
+work.
+
+But if you don't know which polygons are adjacent to which others, the
+problem is harder.  There is one approach which will work in such cases,
+assuming objects don't share faces:
+
+It's an idea by T.M. Murali and Tom Funkhouser.  The idea is to throw the
+polygons into a BSP tree, which subdivides space into convex cells, and then
+to figure out which of those cells are solid, and which ones are empty.  Once
+you know which cells are solid, you can unambiguously orient the polygons on
+its boundary.
+
+Each cell is assigned a "solidity" value (-1 if empty, +1 if solid, in
+between if we're not sure).  Unbounded cells are known to be empty. Each cell
+votes on its neighbour.  Suppose cell A and cell B are neighbours, and A has
+solidity "x".  If the two cells are separated by a polygon, then A votes that
+B has solidity -x.  If there is no separating polygon, A votes that B has
+solidity x (same as A).  If there is a partial polygon separating the two
+cells, A's vote depends on how much of the boundary is occluded, the vote
+being somewhere between -x and +x, depending on the fraction of the boundary
+taken up by the polygon.
+
+The sum of the votes is a linear equation, relating one cell's solidity to
+the solidities of its neighbours.  All the votes together give a system of
+linear equations, with the solidities as the unknowns.  The rest is (sparse)
+matrix numerical analysis.
+
+This method also corrects for numerical errors and non-coincident vertices,
+all without user-adjustable error tolerances.
+
+For all the details, check out Funkhouser's page:
+
+   http://www.cs.princeton.edu/~funk/modeling.html
+
+----
+
+Kev reveals the boring answer:
+
+William R. Bishop and several other people (cheers!) wrote:
+
+Try turning off "backface culling"; this should make the polys re-appear, but
+may increase your draw-time.
+
+----
+
+Eric Haines comments (not on Usenet, just here):
+
+A few years ago I spent a lot of time working on just this problem. Duncan
+gives the basic principle (edges of opposite directions) and two basic parts
+of the problem: establishing a "seed" polygon which all other polygons orient
+themselves to, and then traversing the connecting polygons and flipping face
+orientation as needed. As far as establishing a face which points outwards, I
+used Gavin Bell's method, discussed in RTNv7n5. I will go over this method
+here, and also discuss some of the problems encountered when using it. My own
+goal was to determine whether a mesh could be properly oriented. If it could
+not, for whatever reason, then I would note that the mesh could not use
+culling when displaying it (the user could override this setting).
+
+Using something like a BSP tree to sort the polygons and so establish
+connectivity is one approach. Personally, I went for coding simplicity and
+used the qsort sorter to find matching edges. Each edge for each polygon had
+an edge record made for it, pointing back to what polygon it was from. The
+edge record also included pointers to the two vertices it was made from and a
+flag as to whether it was flipped or not.
+
+Here's the technique for using qsort: first, within the edge record the two
+vertices saved are always ordered such that the first vertex is "before" the
+second. Basically, the X's of the two endpoints are compared and the point
+with the lower value is saved first. In case of a tie, the Y's, then the Z's
+are used.
+
+Then, all the vertices can be sorted by giving qsort a simple routine to
+compare each edge for a "before" condition. This test involves doing the
+"before" test for the first vertices; if identical, then the second two
+vertices are compared.  At the end of the sort, the edges are in order, and
+identical edges are next to each other in the list.
+
+This algorithm was probably overkill - I didn't want a sorted list so much as
+just wanting the clusters of identical edges. To me this meant I wanted to
+use a hashing scheme, where the six coordinate values of the edge's two
+vertices would be used in the hashing function. For some reason my attempt at
+hashing code never really bought me much more speed in practice, though. My
+feeling is that a BSP scheme would also be costly - involved to code, and the
+BSP gives much more information than is needed for the problem (all we need
+are edge matches, we don't care about edge proximity).
+
+Anyway, once you have the matching edges, you can build up links from each
+polygon to its neighbors. This process will give you one or more continuous
+meshes (where all the polygons are connected). You then properly orient the
+polygons in each continuous mesh so that they all face the same direction,
+using the edge rule Duncan gave (it doesn't matter which direction, just as
+long as they are all consistent - we'll correct the direction in a minute).
+John Nagle is correct in that you do need a little bookkeeping to keep track
+of what faces you've checked. Gory details follow, skip to the next paragraph
+if you don't care. I personally just used a stack and a flag for each
+polygon: grab any polygon as a seed, flag it as done, flip its neighboring
+polygons (those sharing an edge) as needed, flag each as done, and then put
+each on a stack. Pop the stack, and if a neighbor is unflagged as tested then
+flip the neighbor and flag it and push it in turn. When the stack is empty
+then all connecting polygons have been visited and oriented.
+
+This orientation process is sometimes easier said than done: some cruddy
+models out there have edges which are shared by, say, three polygons, making
+it impossible to determine locally (i.e. without looking at the mesh as a
+whole) which orientation all three faces should have. This is not a
+theoretical problem: there's an old DXF head file out there which has ears
+that attach in just this way to the head, giving edges shared by three faces.
+Nonetheless, almost all models have all edges shared by at most two polygons.
+Note that if you detect any edge in a continuous mesh that belongs to only
+one polygon, you then do not have a solid (manifold, essentially) surface. If
+a surface is not solid, you're now definitely playing the odds when it comes
+to trying to guess the surface's proper orientation; more on that after the
+final step.
+
+The final step is finding which way to orient each continuous mesh. If the
+object is solid, Gavin's method works great: you take the centroid of the
+bounding box around the mesh (note that the point does not have to be inside
+the solid for the following to work) and compute the volume defined this
+point and each individual polygon in the mesh, preserving the sign of the
+volume of each.  Summed together, these volumes will give a total volume
+which is positive or negative. If it's negative, reverse the sense of all of
+the faces in the mesh.  You're done.
+
+Well, there are a few things to worry about. As Steve Baker points out, your
+model could actually be a room, in which case you're in trouble, getting
+exactly the wrong answer. In theory this is true, there's no perfect
+algorithm, but in practice what it means is that you should provide the user
+with the ability to override the algorithm determined face culling settings
+(e.g. turn off culling - probably a good idea for a room, so you can see it
+from the outside - or reverse the face orientations as a whole). Alternately,
+for this special case, you could use the viewpoint and test it against the
+solid - if a test ray hits a backface as the closest hit, then the solid is a
+room and so should be reversed.
+
+Pathological self-intersecting objects (which are a pain to detect and
+extremely rare in the real world of CG [I've never seen one]) don't have a
+right answer as far as being single sided goes, but Gavin's test will ensure
+that the surface with the most volume enclosed faces outwards.
+
+Another problem occurs if you apply your algorithm to meshes which are not
+solid (and which are the majority of models you'll find out there, as most
+are not made on a solids modeling system). If, for instance, you have two
+separate continuous meshes representing a box, with one mesh being the lid,
+you will run into problems if the lid turns out to be concave, for example.
+In this case the centroid of the lid will truly be outside it and, because
+the lid is not solid, a "solid" will be formed between the centroid and the
+lid's polygons which will cause the lid to face inwards. There are many other
+surfaces which will fool the algorithm; for example, a flat lid with thin
+raised letters will also raise the centroid above the lid and create more
+volume to be computed outside the lid.
+
+One solution to this problem is to take the volume of both meshes with
+respect to the centroid of the box enclosing both, and ensure both have a
+positive volume. However, this won't work in many cases: you have to know
+beforehand that the two meshes make up the same solid object. Another
+possibility is that you may not have to do the volume test at all if the
+polygon vertices have their own vertex normals - these can be used to give a
+sense of which part is the outside (if they can be trusted).
+
+Alejo Hausner's answer is interesting; has anyone had experience with using
+Funkhouser's solution?
+
+-------------------------------------------------------------------------------
+
+What's Mesa? by Brian Paul <brianp@ra.avid.com>
+
+[Mesa's not a ray tracer, and I've covered it before in the RTN, but it bears
+mentioning again. It's grown considerably since the last time I saw it, and
+the fact that it has 3Dfx support and multi-threading is pretty great. -EAH]
+
+Mesa is a free implementation of the OpenGL API which runs on Unix, Windows
+95/NT, Macintosh, and most other computers.
+
+Version 2.6 was released in February.  The most exciting new development has
+been 3-D hardware support- specifically, support for the 3Dfx Voodoo hardware
+on Linux and Windows.  Performance depends the CPU and other factors but up
+to several hundred thousand 3-D textured triangles can be drawn per second.
+Not bad for a free graphics library and a sub-$200 graphics card!
+
+Version 3.0 of Mesa is in development.  It will feature an implementation of
+the pending OpenGL 1.2 specification (perhaps the first "to market"). Also,
+version 3.0 will feature the multi-texture extension which supports
+simultaneous application of multiple texture maps.  The new 3Dfx Voodoo2
+chipset supports this feature.
+
+Perhaps those most enthusiastic about Mesa's 3Dfx support have been gamers.
+ID Software has released versions of Quake (I and II) for Linux with 3Dfx
+support.  Several other 3Dfx/Linux games are now available and more are in
+development.
+
+Other Mesa developments in progress include further hardware support,
+multi-threading, and X server integration.
+
+For more information about Mesa see http://www.ssec.wisc.edu/~brianp/Mesa.html
+
+-------------------------------------------------------------------------------
+
+Multithreading Mesa, by John Stone <johns@ultra2.cs.umr.edu>
+
+Christoph Poliwoda and I have been working on adding multithreading features
+to Mesa, which allow an OpenGL programmer to safely use multiple threads,
+each thread potentially performing OpenGL operations in its own active
+rendering context.  The work we've completed so far has added thread-safety
+features for Unix platforms using POSIX threads and Unix International (aka
+Sun) threads.
+
+With threads, a programmer may render to multiple OpenGL contexts
+simultaneously, potentially offering a gain in performance, when run on
+multiprocessor machines.
+
+Through the use of "sort last" style depth compositing operations, rendering
+of exceedingly complex depth buffered scenes can easily be accelerated.
+Other potential uses involve rendering to multiple windows concurrently, with
+potential performance improvements on multiprocessor systems.
+
+Since the multithreading work is still in the early stages, the full range of
+potential applications hasn't been explored yet.  As we make progress adding
+thread safety to more of the Mesa drivers, we should be able to further
+explore the potential uses of multithreaded OpenGL rendering, providing demos
+of multithreading tricks that work well, in future releases of Mesa.
+
+-------------------------------------------------------------------------------
+
+Recent Ray Tracing European Conference Papers
+
+Here are some ray tracing references from recent conferences in Europe:
+
+Proceedings of WSCG'98, the 6th International Conference in Central Europe on
+Computer Graphics and Visualization'98, February 1998
+
+[Thanks to Dr. Andrea Sanna <sanna@polito.it> for passing these on.]
+
+%A M. Krajecki
+%A Z. Habbas
+%A F. Herrmann
+%A Y. Gardan
+%T A Performance Tool Prediction for Parallel Ray Tracing P 200-207 K
+parallel algorithm, MIMD application.
+
+%A A. Lukaszewski
+%A A. Formella
+%T Fast Penumbra Calculation in Ray Tracing
+%P 238-245
+%K shadow computation, stochastic ray tracing, bounding volumes.
+
+[The Lukaszewski paper is interesting (the others are probably interesting,
+too, but I have not seen them). Say you are using stochastic ray tracing for
+shadows, shooting a large number of shadow rays at a light disk. This is
+obviously expensive, as many rays are shot for each shadow test.  The
+author's idea is to "explode" the original objects in a scene with respect to
+the area light. If the exploded object is hit by a ray traveling to the
+center of the light, then that object must be tested against the bundle of
+rays; but, if missed then that object can be ignored entirely for the entire
+bundle. This results in great savings, as there are many samples which are
+fully illuminated by the area light and these can be quickly categorized as
+such. Only samples which are in the penumbra or umbra have to have the whole
+bundle shot. The authors also consider imploding the objects - if a test ray
+hits such an object it means that the sample is fully in the umbra. -EAH]
+
+
+%A A. Sanna
+%A P. Montuschi
+%T An Efficient Algorithm for Ray Casting of CSG Animation Frames P 323-330
+%K animation rendering, bounding box computation, CSG.
+
+%A P. Wonka
+%A M. Gervautz
+%T Ray Tracing of Non-linear Fractals
+%P 424-430
+%K nonlinear fractals, CSG-pL-systems, natural phenomena.
+
+%A J. Zaninetti
+%A B. Peroche
+%T A Vector Model for Global Illumination in Ray Tracing P 448-455 K global
+illumination, shading.
+
+You can find other information at: http://wscg.zcu.cz/wscg98/wscg98.htm
+
+--------
+
+At http://www.cg.tuwien.ac.at/conferences/EGRWS98/ is the site for the 9th
+Eurographics Workshop on Rendering. The workshop schedule shows what papers
+were presented. These papers eventually get published in a Springer Verlag
+book; if you want a copy of a paper before that, find the author.
+
+The two ray tracing related papers:
+
+%A Leif P. Kobbelt
+%A Katja Daubert
+%A Hans-Peter Seidel
+%T Ray Tracing of Subdivision Surfaces
+
+%A Laszlo Szirmay-Kalos
+%A Werner Purgathofer
+%T Global Ray-bundle Tracing with Hardware Acceleration J Ninth Eurographics
+Workshop on Rendering
+
+[Thanks to Phil Dutre <phil@graphics.cornell.edu> for the URL. -EAH]
+
+--------
+
+The Second Eurographics Workshop on Parallel Graphics and Visualisation will
+be held in September. The web site is http://www.irisa.fr/caps/workshop/.
+Some papers from it:
+
+%A Greg Ward Larson
+%T The Holodeck: A Parallel Ray-caching Rendering System
+
+%A E. Reinhard
+%A A.J.F. Kok
+%A A. Chalmers
+%T Cost Distribution Prediction for Parallel Ray Tracing
+
+%A J-C. Nebel
+%T A New Parallel Algorithm rovided by a Numerical Model
+
+%A T.A. Davis
+%A E.W. Davis
+%T A Parallel Frame Coherence Algorithm For Ray Traced Animations
+
+-------------------------------------------------------------------------------
+
+Attenuation in Water, by Bretton Wade <bwade@sgi.com> and
+        Ian Ashdown <iashdown@ledalite.com>
+
+Bretton Wade writes:
+
+I'm seeking information about attenuation of light in seawater. Does anybody
+have any pointers? I'm not really interested in scattering due to particles
+in suspension, only clean, clear water.
+
+Ian Ashdown replies:
+
+There is some basic information in Chapter 28, "Underwater Lighting" of the
+IES Lighting Handbook, Eighth Edition. It includes a discussion of the
+absorption coefficient (which is wavelength-dependent), plus scattering
+information.
+
+The chapter includes 17 references, although these should be sufficient:
+
+Lankes, L. R. 1970. "Optics and the Physical Parameters of the Sea," Opt.
+Spectra 4(5):42-49.
+
+Smith, R. C., and K. S. Baker. 1981. "Optical Properties of the Clearest
+Natural Waters (200-800 nm)," Applied Optics 20(2):177-184.
+
+Duntley, S. Q. 1963. "Light in the Sea," J. Optical Society of America
+53(2):214-233.
+
+Austin, R. W. 1970. "Assessing Underwater Visibility," Opt. Spectra
+4(5):34-39.
+
+Kinney, J. A., S. M. Luria and D. O. Weitzman. 1967. "Visibility of Colors
+Underwater," J. Optical Society of America 57(6):802-809.
+
+------------------------------------------------------------------------------- END OF RTNEWS

@@ -1,0 +1,2949 @@
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+                        "Light Makes Right"
+
+                           March 1, 1991
+                        Volume 4, Number 1
+
+Compiled by Eric Haines, 3D/Eye Inc, 2359 Triphammer Rd, Ithaca, NY 14850
+    erich@acm.org or uupsi!eye!erich
+All contents are US copyright (c) 1991 by the individual authors
+Archive locations: anonymous FTP at weedeater.math.yale.edu [130.132.23.17],
+	/pub/RTNews, and others.
+UUCP archive access: write Kory Hamzeh (quad.com!avatar!kory) for info.
+
+Contents:
+    Introduction
+    New People, Address Changes, etc
+    Ray Tracing Abstract Collection, by Tom Wilson
+    Report on Lausanne Hardware Workshop, by Erik Jansen
+    New Version of SPD Now Available, by Eric Haines
+    Teapot Timings, by John Spackman
+    The Very First Point in Polygon Publication, by Chris Schoeneman
+    The Acne Problem, by Christophe Schlick
+    Shirley Thesis Available via Anonymous FTP, by Pete Shirley
+    Some Thoughts On Anti-aliasing, by Zap Anderssen, Eric Haines
+    New VORT Release, and the VORT Chess Set, by Eric H. Echnida, David Hook
+    Best (or at least Better) of RT News, by Tom Wilson
+    At Long Last, Rayshade v4.0 is Available for Beta-testing, by Craig Kolb
+    Parallel Ray Tracer, by Kory Hamzeh, Mike Muuss, Richard Webb
+    Distributed DKB, by Jonas Yngvesson
+    Quadrangle Tessellation, by Christophe Schlick
+    New Release of Radiance Software & Bug Fixes, by Greg Ward
+    Radiance Timings on a Stardent, by Eric Ost
+    RTSYSTEM Fast Ray Tracer, by Patrick Aalto
+    DKBTrace Beta Available, by David Buck
+    "Computer Graphics" 2nd Edition Corrections, Software, etc by Brown Emailer
+    Papers which are currently available from the Net via anon. FTP, J. Kouhia
+    ======== USENET cullings follow ========
+    Ray-Cylinder Intersection Tutorial, by Mark VandeWettering
+    C++ Fractal and Ray Tracing Book, by Fractalman
+    Ray/Spline Intersection Reference, by Spencer Thomas
+    Superquadric Intersection, by Rick Speer, Michael B. Carter
+    Comments on Interval Arithmetic, by Mark VandeWettering, Don Mitchell
+    Platonic Solids, by Alan Paeth
+    Moon Problems, by Ken Musgrave et al
+    Ken gave another problem with rendering the moon:
+    Shadow Testing Simplification, by Tom Wilson
+    SIMD Parallel Ray Tracing, by George Kyriazis, Rick Speer
+    Rayscene Animator, by Jari K{hk|nen [sic]
+    SIPP 2.0 3d Rendering Package, by Jonas Yngvesson and Inge Wallin
+    3DDDA Comments, by John Spackman
+    Radiosity Implementation Available via FTP, by Sumant
+    Dirt, by Paul Crowley
+    Thomson Digital Images University Donation Program, by Michael Takayama
+    A Brief Summary of Ray Tracing Related Stuff, Angus Y. Montgomery
+
+-------------------------------------------------------------------------------
+
+Introduction
+
+Well, it's been awhile.  I've essentially fallen off the face of the earth,
+with too much to do.  So, it's time to throw something together during compile
+& link time (pity my new machine does is much faster - it makes it harder to
+get out an issue).  As usual, the comp.graphics version does not have all the
+comp.graphics cullings.  If you want the full issue, pull it in via FTP from
+weedeater.math.yale.edu or any other site which carries it.
+
+My big fun for the week has been looking at my head:  I finally received my
+head database from the Visual Computing Group (415-688-7315) after getting my
+head scanned in by their Cyberware scanner at SIGGRAPH.  Quite a bargain:
+around $40 for a 256x512 mesh of my head.  There are lots of bad points in my
+database:  the top of my head is missing and my hair has a natty dredlock
+look, but still it's pretty amazing, and a little data interpolation here and
+there cleans up the dropout data points.
+
+The data comes in a cylindrical coordinate system format, and VSG provides
+source code for a number of programs and utilities to convert the data in
+various ways.  I've heard Spencer Thomas has rendered his face as an unrolled
+cylinder, i.e. a height field.  So, have others out there played with these
+data sets much?  Anybody want to trade heads?
+
+-------------------------------------------------------------------------------
+
+New People, Change of Addresses, etc
+
+--------
+
+Michael Cohen's email address is now mcohen@cs.utah.edu
+
+Jim Arvo's email address is now arvo@graphics.cornell.edu
+
+Peter Miller's email address is now pmiller@pdact.pd.necisa.oz.au
+
+--------
+
+Brian Corrie, University of Victoria, Victoria, B.C.
+
+I am back from my trip down under, and have a new account here
+at UVic.
+
+My new address is bcorrie@csr.uvic.ca
+
+One new area of interest.  I like the idea of the shading language provided by
+the RenderMan Interface.  Do you know of anyone doing work in this area?  I
+want to make a shader compiler, along with a shader library that has some of
+the pixar functions (noise..etc), that will compile a shader description into
+a linkable module that a renderer can link to at compile time.  Kind of a half
+way step between interpreting the shader description and hard coding the
+shader into the renderer itself.  If I set up some binding rules then any
+renderer that follows those rules will be able to link to any shader compiled
+with the shader compiler.  We can then pass around shader descriptions between
+users.  What do you think?
+
+--------
+
+# Patrick Flynn - geometry (solid and image), algorithmics, computer vision
+# Department of Computer Science and Engineering
+# University of Notre Dame
+# Notre Dame, Indiana 46556
+# (219) 239-8375
+alias patrick_flynn flynn@cse.nd.edu
+
+My interest in ray tracing was an itch that I couldn't scratch during 1989 and
+much of 1990, while I was dissertating.  I'm presently mapping subproblems
+(like rendering) in model-based computer vision onto parallel architectures,
+and developing a graphics course for seniors and grad students, with future
+(unfocused) plans for an ongoing research program in graphics.
+
+--------
+
+# Jean-Philippe Thirion - coherency, interval arithmetic, data structure
+# I.N.R.I.A.
+# Domaine de Voluceau - Rocquencourt
+# B.P. 105 - 78153 LE CHESNAY CEDEX
+# FRANCE
+# (33 1) 39 63 52 79
+alias thirion thirion@bora.inria.fr
+
+	I worked from 1986 to 1990 for a PHD thesis at the L.I.E.N.S., Paris,
+France, with Pr Claude Puech.  First about data structures and hidden part
+removal problems, then about the uses of coherency in order to improve ray
+tracing.  This work have lead to a PHD thesis about object space and ray
+coherency for ray tracing (in french), and two research reports (in English):
+
+- Tries, data structure based on binary representation for ray tracing
+- Interval arithmetic for high resolution ray tracing
+
+	The first report have been published in Eurographics' 90.  I am
+writing now a third report about some enumeration problems on binary space
+partitioning trees.
+
+--------
+
+Christophe Schlick
+LaBRI
+351, Cours de la Liberation
+33405 TALENCE CEDEX --- FRANCE
+Email: schlick@geocub.greco-prog.fr
+
+I am currently working on my PhD thesis on "Realistic Image Synthesis".  It
+will include some classic topics as ray-tracing, radiosity, hydrid methods,
+antialising and parallelization of those techniques.
+
+--------
+
+# Henry Kaufman
+# Brown University graphics group
+alias	henry_kaufman	hek@cs.brown.edu
+
+I worked on an ARTS ray tracer (with the SEADS) data structure.  Since the
+details of their algorithm were not well described in their paper (in my
+opinion), I had to figure out most of the algorithm myself.  The part I found
+interesting was "scan converting" my quadric surface primitives into the SEADS
+voxels.  I tried to implement Bresenham style scan converters, which turned
+out to be fairly efficient.  I just thought I'd mention it, even though you
+are probably already familiar with the algorithms involved.
+
+--------
+
+# Nick Holliman - parallelism, CSG, spatial subdivision, ray tracing.
+# School of Computer Studies,
+# University of Leeds,
+# Woodhouse Lane,
+# Leeds, West Yorkshire, LS2 9JT.
+# ENGLAND
+# (0532) 335446
+email: nick@uk.ac.leeds.dcs
+
+I have just completed my PhD at Leeds and currently have an IBM research
+fellowship at Leeds, working with the IBM UK Scientific Centre, Winchester.
+
+My PhD work was the development of a parallel CSG ray tracer.  This takes a
+CSG model and creates a distributed octree using a parallel algorithm.  It can
+then ray trace the distributed octree and uses caching to avoid replicating
+all the data on each processor.  The system scales well making good use of up
+128 T800 transputers (as many as I could find in one place) handling models of
+up to 20,000 CSG primitives.  We have recently extended this to support
+parallel incremental update algorithms, so given a small change to the CSG
+model the system updates the distributed octree and then updates the region of
+image affected by the change.  Current work is looking at increasing the model
+size, improving the scalability and porting the system to other parallel
+machines.
+
+I would be keen to hear from anyone working on similar parallel algorithms and
+if anyone is interested they are welcome to a copy of my thesis.
+
+--------
+
+Ning Zhang
+
+I have written a Radiosity package and both input and output are based on the
+NFF file format.  Have you considered to have a similar benchmarking package
+for comparing different Radiosity software and hardware?  I think that would
+be an interesting subject.  [Any volunteers? - EAH]
+
+----- Self description -----
+# Ning Zhang - Radiosity, Raytracing, Image Compression
+# School of Electrical Engineering
+# The University of Sydney
+# NSW 2006, Australia
+# + 61 (02) 692 2962
+alias ning_zhang nzhang@ee.su.oz.au
+
+I have been in Germany for two year as a visiting scientist at the Computer
+Graphics Center (ZGDV), Darmstadt.  There I developed a Radiosity/Raytracing/
+FastZBuffer package running on many platforms, including 386PC.  Recently I
+came to Australia as a visiting fellow at the Univ.  of Sydney.
+
+Email: nzhang@ee.su.OZ.AU
+       (In Germany, zhang@agd.fhg.de or zhang@zgdvda.uucp)
+
+--------
+
+Craig McNaughton
+
+Interests - CSG, Animation, higher dimension, distortions
+
+Address -
+C/- Computer Science Department
+University of Otago
+PO Box 56
+Dunedin
+New Zealand
+ph (+64) 3 4798488
+
+I'm in the Graphics Research Group at Otago University, currently doing a
+Masters.  My main project at the moment is a general 4D CSG ray tracer, and
+with luck, that will soon be extended to nD.  Other current work include
+getting the most out of 8 bit displays, and character animation with CSG
+systems.
+
+--------
+
+# David B. Wecker - Author of DBW_Render, DIDDLY and other rendering tools
+# Digital Equipment Corporation
+# 1175 Chapel Hills Drive, CXN1/2
+# Colorado Springs, CO  80920-3952
+# (719) 260-2794
+alias	david_wecker	wecker@child.enet.dec.com
+
+If people want the current version of DBW (V2.0) for their Amiga, they should
+contact:
+
+	William T. Baldridge
+	2650 Sherwood Lane
+	Pueblo, CO   81005
+	    (BIX: WBALDRIDGE)
+
+--------
+
+David Tonnesen
+Dept. of Computer Science
+University of Toronto
+Toronto, Ontario  M5S 1A4
+(416) 978-6986 and 978-6619
+
+research: modeling and rendering
+
+e-mail:  davet@dgp.toronto.edu   (UUCP/CSNET/ARPANET)
+	 davet@dgp.utoronto      (BITNET)
+
+I am a Ph.D. student at the University of Toronto and interested in a variety
+of graphic topics including ray tracing.  Other areas I am interested in
+include models of deformable models, global illumination models, models of
+natural phenomena, physically based modeling, etc...  Basically modeling and
+rendering.
+
+--------
+
+Jim Rose, Visualization Research Asst.
+Visualization Research Group
+Utah Supercomputing Institute
+rose@graph.usi.utah.edu
+
+--------
+
+Bruce Kahn - general concepts, portable packages, microcomputer based pkgs.
+Data General Corp.
+4400 Computer Dr.
+MS D112
+Westboro MA 01580
+(508) 870-6488
+bkahn@archive.webo.dg.com
+
+-------------------------------------------------------------------------------
+
+Ray Tracing Abstract Collection, by Tom Wilson (wilson@cs.ucf.edu)
+
+[Tom has done the graphics community a great service in making available (for
+free) all the ray tracing abstracts from articles he's collected.  If you run
+into a ray tracing article title which sounds interesting, you should check
+here first to see if it's really what you want before wasting time tracking it
+down. --EAH]
+
+The next release of the collection of ray tracing abstracts are ready.  I've
+put them in several ftp sites (listed below).  To get it, do the following:
+get rtabs.shar.1.91.Z using binary mode.  Uncompress it.  Unshar it (sh
+rtabs.1.91).  Then read READ.ME.  If you have any problems, send me e-mail.
+The abstracts can be converted to two forms:  Latex (preferred) or troff -me.
+The filters I've included may help you write your own if you need something
+else.  I received no feedback concerning problems, so evidently it works for
+those who tried it.
+
+USA Sites:
+weedeater.math.yale.edu (130.132.23.17) in directory pub/Papers
+   Craig Kolb <craig@weedeater.math.yale.edu>
+karazm.math.uh.edu (132.170.108.2) in directory pub/Graphics
+   J. Eric Townsend <jet@karazm.math.uh.edu>
+iear.arts.rpi.edu (128.113.6.10) in directory pub/graphics/ray
+   George Kyriazis <kyriazis@iear.arts.rpi.edu>
+
+Australia Site:
+gondwana.ecr.mu.oz.au (128.250.1.63) in directory pub/rtabs
+   Bernie Kirby <bernie@ecr.mu.oz.au>
+
+Finland Site:
+maeglin.mt.luth.se (130.240.0.25) in directory graphics/raytracing/Doc
+   Sven-Ove Westberg <sow@cad.luth.se>
+
+Tom Wilson
+Center for Parallel Computation
+University of Central Florida
+P.O. Box 25000
+Orlando, FL 32816-0362
+wilson@cs.ucf.edu
+
+--------
+
+Juhana Kouhia notes:
+
+I have converted RT abstract to Postscript format - it's available from
+nic.funet.fi pub/graphics/papers directory as wils90.1.ps.Z.
+
+-------------------------------------------------------------------------------
+
+Report on Lausanne Hardware Workshop, by Erik Jansen
+
+There was a Hardware Workshop on the 2nd and 3rd of September in Lausanne.
+Three papers on ray tracing are worth mentioning:
+
+%A M-P Hebert
+%A M.J. McNeill
+%A B. Shah
+%A R.L. Grimsdale
+%A P.F. Lister
+%T MARTI, A Multi-processor Architecture for Ray Tracing Images
+
+%A D. Badouel
+%A T. Priol
+%T An Efficient Parallel Ray Tracing Scheme for Highly Parallel Architectures
+
+%A Li-Sheng Shen
+%A E. Deprettere
+%A P. Dewilde
+%T A new space partitioning Technique to Support a Highly Pipelined
+%T Architecture for the Radiosity Method
+
+The first paper discussed a load distribution based on an image space
+partitioning.  Additionally the scene was stored in an octree type of space
+subdivision of which the first (top) n levels were duplicated over the
+processors and stored in their local cache.  The other levels of the database
+were communicated when needed.  Their figures (testpicture "gears") showed
+that a local cache of 1/8 to 1/4 of the size of the total database is
+sufficient to avoid communication bottle-necks.  It was not clear from the
+presentation whether these results also hold for more complex scenes.
+
+The second paper discussed a virtual memory scheme that distributed the data
+base over the processors in a way that 'ray coherence' is maintained as much
+as possible.  The left-over memory at the processors is used as a cache.
+
+The third paper discussed a ray coherence scheme that was based on a
+subdivision of a ray frustrum in sectors and a comparison of a probablistic
+and deterministic method to determine the width (angle) of the sectors.
+
+These papers will be published by Springer in "Advances in Computer Graphics
+Hardware", vol. V. (ed. R. Grimsdale and A. Kaufman).
+
+--------------------------------------------------------------------------
+
+New Version of SPD Now Available, by Eric Haines
+
+Version 3.0 of the Standard Procedural Databases is out.  The major addition
+is the teapot database.  Other changes include being able to input a size
+factor on the command line, changing mountain.c to mount.c (for IBM users),
+and many changes and new statistics in the README file.
+
+The teapot database is essentially that published in IEEE CG&A in Jan. 1987.
+A checkerboard has been added underneath it to give it something to reflect &
+cast a shadow upon.  The checkerboard also reflects the subdivision amount of
+the teapot patches, e.g. a 7x7 checkerboard means that each patch is
+subdivided to 7x7x2 triangles.  Degenerate (e.g. no area, 0 length normal)
+polygons are either removed or corrected by the program.  The bottom of the
+teapot can optionally be removed.
+
+The images for these databases and other information about them can be found
+in "A Proposal for Standard Graphics Environments," IEEE Computer Graphics and
+Applications, vol. 7, no. 11, November 1987, pp. 3-5.  See IEEE CG&A, vol. 8,
+no. 1, January 1988, p. 18 for the correct image of the tree database
+(the only difference is that the sky is blue, not orange).  The teapot
+database was added later, and consists of a shiny teapot on a shiny
+checkerboard.
+
+The SPD package is available via anonymous FTP from:
+
+	weedeater.math.yale.edu [130.132.23.17]
+	irisa.fr [131.254.2.3]
+
+among others.  For those without FTP access, write to the netlib automatic
+mailer:  research!netlib and netlib@ornl.gov are the sites.  Send a one line
+message "send index" for more information, or "send haines from graphics" for
+the latest version of the SPD package.
+
+-------------------------------------------------------------------------------
+
+Teapot Timings, by John Spackman
+
+	I enclose some timing figures for the SPD `teapot', ray-traced at
+various degrees of tessellation.  All images were rendered at 512x512 with two
+light sources.  The models were triangulated at a pre-processing stage to
+support smooth shading with barycentric co-ordinates.  I'm not sure whether
+all other conditions were as documented in SPD, but the output looks right!
+
+	The host machine was a SUN SPARCStation IPC.
+
+-------------------------------------------------------------------
+SIZE FACTOR	# TRIANGLES	OCTTREE CONSTRUCTION	RAY-TRACING
+				(SECS)			(SECS)
+-------------------------------------------------------------------
+1		58		9.4			841.4
+
+2		248		18.5			832.2
+
+3		570     	25.8			837.2
+
+4		1024		35.7			844.8
+
+5		1610		40.8			859.9
+
+6		2328		50.4			864.2
+
+7		3178		56.6			878.8
+
+8		4160		66.5			900.7 (<-- 15 minutes)
+
+9		5274		74.0			911.2
+
+10		6520		81.6			922.7
+
+11		7898		88.7			937.4
+
+12		9408		95.0			954.7
+
+-------------------------------------------------------------------------------
+
+The Very First Point in Polygon Publication, by Chris Schoeneman
+	(nujy@vax5.ccs.cornell.edu)
+
+   A few months ago there was a discussion on point in polygon algorithms
+(again), and one netter suggested perturbing vertices to avoid special cases
+(using the Jordan curve theorem).  This led me to the solution I eventually
+found that you had already made.
+
+   Anyway, I just found the same solution in CACM, Aug.  1962, p.  434, and I
+thought you might be interested to know.
+
+   The algorithm as given has an error in the if statement.  It should
+read:
+   if (y<=y[i] ...
+not
+   if (y<y[i] ....
+
+The author, M. Shimrat, doesn't check the horizontal bounds of the edge to
+trivially accept or reject the intersection, but this, of course, isn't the
+key to the solution.
+
+So much for the patent. :-)
+
+-------------------------------------------------------------------------------
+
+The Acne Problem, by Christophe Schlick (schlick@geocub.greco-prog.fr)
+
+
+What is Ray-Tracer Acne (RTA) ?
+-----------------------------
+
+As defined by Eric Haines in an early Ray-Tracing News, RTA is those black
+dots that appear sometimes on a ray-traced image.  RTA can result from two
+different phenomena:
+
+Case 1:  When a ray intersects a surface S, some floating round-off can bring
+the intersected point P inside the surface (Figure 1).  So, when a reflected
+ray or a light ray is shoot from P, it will intersect S and P will be in
+shadow.
+
+A common solution to this problem is to let some tolerance (T) for the inter-
+section test:  when an intersection point M is found, the distance D between
+the origin of the ray and M is computed, and compared to T, the point is
+rejected if D < T.  The problem with that method is that T is an absolute
+value, coded in the source code and sometimes not adapted for a specific
+scene.  A solution could be to scale T by the global diameter of the scene but
+there will still be some scene for which it wouldn't work (for instance, a
+scene will very big and very small sphere).
+
+
+Case 2:  This case can only appear when rendering an object composed of
+polygons with interpolated normal vectors (Phong's method).  This pathological
+case was first described by Snyder & Barr at the SIGGRAPH 87 conference.  When
+a ray intersects a point P, the normal vector Np is interpolated from the
+vertices normals thanks to the barycentric coordinates (Figure 2).  Thus a
+reflected ray or a light ray shot from P according to Np (direction Out in
+Figure 2) can intersect another facet (Q on Figure 2).
+
+Here the tolerance solution doesn't work because Q can be arbitrarily far from
+P (it depends on the surface curvature and the size of facets).  Thus Snyder &
+Barr proposed to move P from the surface along Np by a certain distance D, and
+to consider the new point P' as the intersection point from which other rays
+are shot.  Again, D is hard-coded and there would be some scenes for which D
+is too high or too low.
+
+			      Out
+Out       In           Na       \      Nb
+  \       /             \        \     /
+   \     /               \        \Q  /     Np
+-------------- S          \--------*-/    _/
+     \ /                   A        B\  _/
+      *                               \/___________ In
+      P                               P\
+				        \______Nc
+				        C
+  Figure 1                  Figure 2
+
+
+The solution I propose is easy to implement, and robust whatever the scene.
+If you examine Figure 1 and 2, you can see that, in the two case the error
+comes from a sideness problem:  a ray that is assumed to be outside S finds an
+intersection that is inside S.  In a ray-tracer, you are always carrying (in
+the ray structure) a pointer to the media through which the ray is currently
+traveling --- that pointer is needed for refraction.  So when intersecting a
+surface, you always know the current media.  When you find a ray intersecting
+a surface by the inside (negative cosine), the only thing to do is to test the
+current media with the media inside the surface (checking the pointers).  If
+the two medias are different, there is a sideness problem and the point must
+be rejected.  That leads clearly to the following algorithm:
+
+When a ray R traveling through a media M, with a directing [e.g. reflecting]
+vector V hits a point P with a normal vector N on a surface S do
+
+Begin
+
+ Compute Cos = -N.V (the cosine between the ray direction and normal vector)
+
+ If Cos > 0					/* R outside S */
+
+   then no problem
+
+   else						/* R inside S */
+
+     if M != S then reject the point		/* Sideness error */
+	       else no problem
+
+End
+
+
+The cost of that method is a dot product between V and N.  For reflection
+rays, that dot product has to be done in the shading phase, so if you store
+the result of the cosine in the ray structure, there will no extra cost.  But
+for light rays, the dot product is an extra cost.  Compared to Snyder & Barr's
+method, the cost is lower because moving a point along a normal vector needs a
+linear combination (3 additions, 3 multiplications).  For non-polygonalized
+surfaces, the tolerance method is cheaper, but isn't robust.
+
+Well, make your choice. And let me know your comments (and flames !)
+
+--------
+
+>From Eric Haines:
+
+    Note that a third source of acne is from bump mapping - essentially it's
+the same problem as in case 2, but this problem of the reflection ray passing
+through the object can then happen to any object, not just polygons with a
+normal per vertex.
+
+    Personally, I solve this problem by doing the check Christophe recommends,
+i.e. check the dot product of the normal and the reflection ray.  If the
+reflection ray is bad, I solve this by adding some portion of the normal to
+the reflection ray which puts the ray above the tangent plane at that point.
+This can result in the reflections getting a bit squished on these bad pixels,
+but this is much better than seeing black acne pixels.
+
+    Christophe's solution of rejecting intersections if the media does not
+match is fine if you have well-behaved users, but our system assumes the user
+can do whatever foolish thing he wants with surface definitions (my favorites
+are us allowing different indices of refraction and different transmission
+colors for front and back faces).
+
+    How do the rest of you solve this problem?
+
+-------------------------------------------------------------------------------
+
+Shirley Thesis Available via Anonymous FTP, by Pete Shirley
+
+I have put a postscript copy of my thesis "Physically Based Lighting
+Calculations for Computer Graphics" on anon ftp on cica.cica.indiana.edu
+(129.79.20.22).  I have broken the thing into several files and compressed
+them.  Each file, when uncompressed, should be a stand-alone postscript file.
+The whole thing is about 180 pages long, so please don't kill any trees if you
+don't really want it!
+
+WARNING:  The thesis files have many postscript figures in it.  It is a real
+printer hog.  Please be thoughtful about printing and storing the thing.
+
+I have also put several 24 bit ppm image files in compressed form.  Don't
+forget to set ftp in "binary" mode.
+
+If you want this thesis and cannot get/print these files, please don't ask me
+for alternate formats until after Dec. 15th.  Thanks.  It will also be
+available as a U of Illinois tr (I don't know when).
+
+The directory is pub/Thesis/Shirley.
+
+Pete Shirley
+Indiana U
+shirley@cs.indiana.edu
+"I didn't say it was good, just long!"
+
+[This thesis is, among other things, a great survey of most every rendering
+technique to date.  "wine.ppm.Z" is an excellent image, even with the week+ of
+computation.  - EAH]
+
+Thesis files:
+
+ch1ch2.ps.Z      (125K)  Title page, etc.
+			 Chapter 1  Introduction
+			 Chapter 2  Basic Optics
+ch3ch4.ps.Z      (105K)  Chapter 3  Global Illumination Problem Formulation
+			 Chapter 4  Surface Reflection Models
+ch5a.ps.Z        (221K)
+ch5b.ps.Z        (247K)  Chapter 5  Image Space Solution Methods
+ch6a.ps.Z        (261K)
+ch6b.ps.Z        (250K)  Chapter 6  Zonal Solution Methods
+ch7ch8ch9.ps.Z   (123K)  Chapter 7  Extensions to Basic Methods
+			 Chapter 8  Implementation
+			 Chapter 9  Conclusion
+app.ps.Z          (44K)  Appendices
+bib.ps.Z          (30K)  Bibliography
+
+
+Picture files (ppm format, Makefile, seeppm.c  viewing on SGI Iris.)
+
+bump.ppm.Z (1.3M)   1024 by 768  camera effects, bump map, indirect lighting.
+gal.ppm.Z  (1.2M)   1024 by 768  solid textures, indirect lighting
+dense.ppm.Z (.2M)    512 by 384  dense media(8 volume zones for indirect light)
+sparse.ppm.Z (1.2M) 1024 by 768  sparse "   "   "
+turb.ppm.Z (.3M)     512 by 384  uneven " " " "
+lamp.ppm.Z (.8M)    1024 by 768  diffuse transmission, indirect lighting
+wine.ppm.Z (1.1M)   1024 by 768  fresnel reflection, bw ray tracing
+
+-------------------------------------------------------------------------------
+
+Some Thoughts On Anti-aliasing, by Zap Anderssen, Eric Haines
+
+>From Zap:
+
+About Anti-aliasing:  The "standard" way of doing adaptive anti-a (refered to
+as AA from now on, I'm lazy) is to check the color of last pixel and pixel
+above or similar, and subdivide if they differ more than "this-n-that" from
+eachother.  Although you remember that I said once you should check what
+OBJECT you hit (i.e. ignoring the color) and use that as subdiv criteria, and
+you posted a mild flame that it wouldn't work on things like a patch mesh
+since we spend useless time at all edges that are same all the same....
+
+Well, since I think that all anti-aliasing for texturemapping should be done
+in the texture mapping functions (for which I have a nasty trick involving the
+angle to the normal vector of the surf and distance to screen e.t.c.) you
+should only need extra rays at object edges.
+
+But consider, what makes a surface change color abruptly? It's one of three
+things:
+
+* Shadow hits
+* Texture map changes color
+* Normal veccy moves a lot.
+
+Ok, so here is my idea:  You don't save the COLOR for last pixel, but the
+normal vector.  When this deviates more than this_n_that, you supersample.
+Then you say "hey, sucker that doesn't work!  Edges may be at different levels
+or so but still have the same normal veccy" and to that I say, sure thang,
+multiply the normal vector with the distance to the eye, and use that for a
+criteria?  Well, we lose the AA on the shadows, regrettably, but we get
+another nice criteria....  Just a stupid idea, I know there are flaws, like
+what happens if this Red surface is adjoining a blue one (i.e. color diff in
+geometry rather than texture map?)  This shouldn't be allowed ;-)
+
+Seriously, there must be ways to fix this?  I NEVER liked the idea of AA'ing
+on the color diffs, since texturemaps may introduce heavy diffs even if no
+extra rays are really needed....
+
+Any Commentos?
+
+--------
+
+	Oddly, I was just writing up my views on anti-aliasing yesterday,
+though for different reasons.  I agree, it would be nice to avoid subdivision
+on texture mapped guys.  Let's see, we have aliasing due to:
+
+edges of objects
+shadow boundaries
+rapidly changing reflections/refractions or highlights
+texture maps
+
+So, we could do something like separate out these various factors and do tests
+on each.  The trick is that there's interaction between these things (shadows
+and texture maps' effects get multiplied together:  rapidly changing textures
+in the dark don't matter) and that separating these out gives some weird
+problems (say I say "if contributions absolute values vary by more than 10%",
+and then I find that my highlight varies 5%, my reflection varies 7% and my
+shadow varies %4, should I antialias?  If yes, then why did I bother to
+compute these fractional contributions.  If no, then the color really is
+varying a lot and should be supersampled).  One advantage of separating stuff
+out is for texture maps sampled with area methods (e.g. mipmapping) - if the
+surface change ratio is separate from all the other ratios, then we could
+simply say "ignore the surface change ratio" if we hit an area-sampled
+textured object.
+
+I don't have a good answer (yet?), but am interested to hear your ideas.
+Using the normal is interesting, but it feels a bit removed from the problem:
+on my "balls" (sphereflake) database, the normals change rapidly for the tiny
+spheres, but say all the spheres just reflected things (no diffuse, no
+highlights).  Much of the spheres' reflections is the background color, which
+doesn't change at all.  So super-samples which merely also hit the background
+in this case don't add anything, just waste time.  By checking how much the
+reflection color changed, instead, we could shoot less rays.
+
+Variance on something like the normal might be worth tracking, as you point
+out, but what if you're, say, viewing a surface which is in shadow?  The
+normal varies, but the shading doesn't (no light), so you waste effort.
+Another interesting problem is anti-aliasing bump maps:  do you really want to
+do much blending, which would then smooth out the bumps?
+
+-------------------------------------------------------------------------------
+
+New VORT Release, and the VORT Chess Set, by Eric H. Echnida, David Hook
+
+
+Eric H. Echidna (echidna@munnari.oz.au) writes:
+
+Vort 2.0 is now 'officially' available from the following sites:
+
+gondwana.ecr.mu.oz.au [128.250.1.63] pub/vort.tar.Z
+munnari.oz.au [128.250.1.21] pub/graphics/vort.tar.Z
+uunet.uu.net [192.48.96.2] graphics/vogle/vort.tar.Z
+ (uucp access as well ~ftp/graphics/vogle/vort.tar.Z
+
+draci.cs.uow.edu.au [130.130.64.3] netlib/vort/*
+
+Australian ACSnet sites may use fetchfile:
+	fetchfile -dgondwana.ecr.mu.oz pub/vort.tar.Z
+
+or obtain it from the Australian Netlib at draci.cs.uow.oz
+
+==================
+
+VORT - a very ordinary rendering tool-kit. Version 2.0
+
+VORT is a collection of tools and a library for the generation and
+manipulation of images.  It includes a ray tracer, pixel library, and
+utilities for doing gamma correction, median cuts, etc...
+
+The current distribution is described as follows:
+
+art	- a ray tracer for doing algebraic surfaces and CSG models. Art
+	supports the following primitives: polygons, offfiles, rings, disks,
+	torii, superquadrics, spheres, ellipsoids, boxes, cones, cylinders,
+	and algebraic surfaces. Tile patterns can be mapped onto all of the
+	above except algebraics, boxes, and offfiles. The following textures
+	are supported, bumpy, wave, marble, wood, ripple, fuzzy, stucco,
+	spotted, granite, and colorblend. The ray tracer uses an
+	acceleration technique based on the spatial kd-tree.
+
+tools	- some utilities for fiddling around with image files, and converting
+	between various formats. These include tools for converting nff files
+	to art format, and vort files to ppm format (and ppm to vort).
+
+docs	- various bits of doco on the tools
+
+lib	- the pixel library files - this has only been developed to the
+	point needed to read and write display files.
+
+old	- this contains a program for converting image files from 1.0
+	format to 1.1.
+
+sun	- a set of display programs for a sun workstation.
+
+X11	- a set of display programs for a 256 color X machine.
+
+iris	- a display program for an Iris workstation.
+
+pc	- a set of display programs for a PC with VGA Extended Graphics.
+
+movies	- some C programs for generating some sample animations.
+
+tutes	- some C programs for generating some animations that demonstrate
+	the texturing.
+
+text3d 	- some C routines that read in the hershey fonts provided with VOGLE
+	and use them to generate 3d text. Example input files are provided.
+
+--------
+
+	There are several scenes and output images from the raytracer `art'
+available on gondwana.ecr.mu.oz.au [128.250.1.63] in the directory pub/images.
+These images are 8 bit sun rasterfiles and can be converted to other formats
+using (for example) pbmplus.
+
+	There are also some simple 36 frame movies in the directories
+pub/movies/* .  These files are in VORT format and can be displayed with the
+movie programs that come with VORT or can be converted to another format using
+the vorttoppm program that comes with VORT.
+
+--------
+
+[Another package available & of interest:]
+
+VOGLE 1.2 fixes some bugs and includes some speed ups from previous versions
+of VOGLE.  Specifically, all matrix stack manipulations are now 'done in
+place' to save time.
+
+VOGLE stands for "Very Ordinary Graphics Learning Environment".
+
+VOGLE is a device portable 3D graphics library that is loosely based on the
+Silicon Graphics Iris GL.  VOGLE also supports 3D software text in the form of
+Hershey vector fonts.
+
+--------
+
+David Hook notes:
+
+> 'vort' package includes a chess set (it's the same one as the set at DEC).
+
+There is a better chess set in pub/chess20.tar.Z on gondwana.ecr.mu.oz.au
+(128.250.1.63) in the anonymous ftp area.  These pieces were also done by the
+same person (Randy Brown) who did the ones that are in VORT, but they are much
+more detailed.
+
+--------------------------------------------------------------------------
+
+Best (or at least Better) of RT News, by Tom Wilson
+
+I've scrunched all of the 1988 RTNews.  I thought I would post to the net to
+see if anyone else would want it.  What I've removed is:  names/addresses,
+product reviews, reports on tracer bugs/fixes, and anything else that is
+"out-dated."  I've taken this approach since these programs probably no longer
+have the bugs and errors.  I don't know if many people are going to want the
+scrunched versions, but I just wanted basic RT info to print and save.  Some
+of the issues weren't scrunched much (mainly the first few), but some are
+about 1/3 the size (90,000 => 30,000 bytes).
+
+Tom
+wilson@cs.ucf.edu
+
+-------------------------------------------------------------------------------
+
+At Long Last, Rayshade v4.0 is Available for Beta-testing, by Craig Kolb
+	(kolb@yale.edu)
+
+The distribution is available by anonymous ftp from weedeater.math.yale.edu
+(130.132.23.17) in pub/rayshade.4.0 as either "rayshade.4.0.tar.Z" or the 16
+compressed tar files in the subdirectory "kits@0".
+
+Please direct comments, questions, configuration files, source code, and the
+like to rayshade@weedeater.math.yale.edu.  If you get semi-serious about using
+rayshade, drop us a line and we'll add you to our mailing list.
+
+Thanks to everybody who contributed to this and previous versions of rayshade,
+and to those of you who are willing to provide feedback on this Beta release.
+
+>From the README file:
+------
+This is the Beta release of rayshade version 4.0, a ray tracing program.
+Rayshade reads a multi-line ASCII file describing a scene to be rendered
+and produces a Utah Raster Toolkit "RLE" format file containing the
+ray traced image.
+
+Rayshade features:
+
+	Eleven primitives (blob, box, cone, cylinder, height field,
+	plane, polygon, sphere, torus, flat- and Phong-shaded triangle)
+
+	Aggregate objects
+
+	Constructive solid geometry
+
+	Point, directional, extended, spot, and quadrilateral light sources
+
+	Solid procedural texturing, bump mapping, and
+		2D "image" texture mapping
+
+	Antialiasing through adaptive supersampling or "jittered" sampling
+
+	Arbitrary linear transformations on objects and texture/bump maps.
+
+	Use of uniform spatial subdivision or hierarchy of bounding
+		volumes to speed rendering
+
+	Options to facilitate rendering of stereo pairs
+
+This is Really and Truly a Beta release:  No patches will be issued to upgrade
+from this distribution and the 'official' release.  The documentation is
+spotty, and there is no proper 'man' page.
+
+There are many differences between rayshade versions 3.0 and 4.0.  In
+particular, the input syntax has changed.  Input files created for version 3.0
+must be converted to version 4.0 syntax using the provided conversion utility
+(rsconvert).
+
+Rayshade v4.0 Beta has been tested on several different UNIX-based computers,
+including:  SGI 4D, IBM RS6000, Sun Sparcstation 1, Sun 3/160, DECstation,
+Apollo DN10000.  If your machine has a C compiler, enough memory (at least
+2Mb), and runs something resembling UNIX, rayshade should be fairly easy to
+port.
+
+[...]
+
+It is hoped that the 'official' release will include a library that provides a
+C interface to the various ray tracing libraries.  While there is currently no
+documentation for the libraries, it should be easy for you to add your own
+primitives, textures, aggregates, and light sources by looking at the code and
+sending mail if you get stuck.
+
+It is also hoped that the modular nature of the primitive, aggregate, texture,
+and light source libraries will make it possible for people to write their own
+code and to "swap" objects, textures, and the like over the net.  The object
+interfaces are far from perfect, but it is hoped that they provide a
+reasonable balance between modularity and speed.
+
+Additional rayshade goodies are available via anonymous ftp from
+weedeater.math.yale.edu (130.132.23.17) in pub/rayshade.4.0.  If you have
+contributions of new objects, textures, input files, configuration files, or
+images to make, feel free to send us email or to drop off a copy via ftp in
+the "incoming" directory on weedeater.
+
+-------------------------------------------------------------------------------
+
+Parallel Ray Tracer, by Kory Hamzeh, Mike Muuss, Richard Webb
+
+Parallel Raytracer Available, Kory Hamzeh (kory@avatar.avatar.com)
+
+I wrote a parallel raytracer (named 'prt') a while back with the following
+features:
+
+	- Runs on multiple heterogeneous machines networked together
+	  using TCP/IP.
+	- Crude load balancing.
+	- Primitives:
+		- Polygons
+		- Spheres
+		- Hallow Sphere
+		- Cones
+		- Cylinders
+		- A object that can be expressed in a quadratic form
+		- Rings
+	- Shading:
+		- Gourard
+		- Phong
+		- Whitted
+	- Rendering:
+		- Simple: one ray per pixel
+		- Stochastic sampling (jitter)
+	- Instances of objects.
+	- Input format:
+		- An extension of nff. I have written a filter which
+		  will convert NFF files to prt format.
+	- Output format:
+		- MTV format (24 bit).
+
+Note that prt is a parallel raytracer which spawns off children over multiple
+machines to distribute the work.  I have only used it on five Sun
+Sparcstations and have gotten excellent performance.  I'm not aware of any
+other public domain parallel raytracers other than VM_pRay (which, I believe,
+runs only on a specific platform).
+
+--------
+
+Prt version 1.01 is now available from the following sites via
+anonymous ftp:
+
+apple.apple.com in /pub/ArchiveVol2/prt
+iear.arts.rpi.edu in pub/graphics/ray/prt
+
+If you have a copy of version 1.0, I would recommend that you get a copy of
+the newer one.  I will *not* post it again in alt.sources.  If you can't ftp
+it, send me mail and I will mail you a copy.
+
+Version 1.01 had some minor bugs fixed and I included some info that I had
+forgotten to put in the first set of docs.
+
+--------
+
+Michael John Muuss (mike@BRL.MIL) writes:
+
+>       [ lots of good stuff about BRL-CAD deleted ]
+>
+> While not "super sophisticated", the load balancing algorithm is
+> non-trivial.  It assigns pixel blocks of variable size.  Three
+> assignments are outstanding to each worker at any time, to
+> pipeline against network delay.  New assignment size is tuned,
+> based upon measured past performance (weighted average with variable
+> weighting, depending on circumstances).
+
+and Kory responds:
+
+Prt's load balancing is not as sophisticated as BRL-CAD's.  Prt simply
+multiplexes the scanlines across the different machines.  The slowest machine
+on the network will be the bottle neck.
+
+When I get a chance, I would like to use the same techniques used in BRL-CAD.
+I think that it is the best load balancing for a raytracer.
+
+--------
+
+Timings of PRT, by Richard Webb
+
+Here is a snippet of a bug report I sent off to kory@avatar.com regarding his
+"prt1.01" parallel ray tracer.  Note that I ran these test on your NFF SPD
+version 2.4.  I'll grab v3.0 and re-run if you think it will make any
+difference.  I ran the test on a network of 25 Sun4's (both SparcStation1's
+and 1+'s as well as a Solbourne and a few SunServers).  Some machines finished
+in about 1/2 of the elapsed time.  The time is as reported by the PRT program.
+
+ TEST     | TIME (mm:ss)
+----------+--------------
+ balls    | 10:32
+ gears    | 16:49
+ mountain |  9:27
+ rings    | 13:05
+ tetra    |  0:59
+ tree     |  4:05
+
+It would be nice to have some texturing capability in NFF, but then I guess
+that is somewhat too sophisticated for a "Neutral" format.  The SIPP2.0 image
+"isy90" marble teapot on a granite base looks very good except there are no
+shadows.  I hope someday we will have fast Renderman parallel "cookers"
+generating nice compressed video sequences.
+
+-------------------------------------------------------------------------------
+
+Distributed DKB, by Jonas Yngvesson
+
+DDKB (distributed dkb) has the same primitives, shading and input format as
+DKB (for obvious reasons).  This includes very nice support for solid
+texturing.
+
+Antialiasing differs slightly.  DKB uses an adaptive jittered supersampling,
+but in DDKB, each server only has access to one scanline at a time.  This
+means adaption is done in the x-direction only.
+
+>	- Output format:
+>		- MTV format (24 bit).
+
+Here I have used a mix between the MTV-format an the QRT-format used in DKB.
+An MTV-header is followed by the scanlines in QRT-format.  Each line tagged
+with its line number (this is because the lines are stored in the order they
+are finished by the servers and must be sorted before display).
+
+>Note that prt is a parallel raytracer which spawns off children over
+>multiple machines to distribute the work. I have only used it on five
+>Sun Sparcstations and have gotten excellent performance. I'm not aware
+>of any other public domain parallel raytracers other than VM_pRay
+>(which, I believe, runs only on a specific platform).
+
+Yeah!  We have tried DDKB running on 55 sparcstations (then we ran out of file
+descriptors, perhaps we should use UDP instead of TCP).  Pretty good
+performance indeed.  Unfortunately DKB is not a terribly fast tracer in itself
+and I have no time to hack around in it.
+
+I'm not very willing so send this thing out though.  Partly because it is
+still only a hack, and partly because I have not contacted David Buck and
+asked what he thinks about the whole thing.
+
+jonas-y@isy.liu.se
+...!uunet!isy.liu.se!jonas-y
+University of Linkoping, Sweden
+
+-------------------------------------------------------------------------------
+
+Quadrangle Tessellation, by Christophe Schlick
+
+Why I believe that a quadrangle tessellation is better than a triangle one.
+---------------------------------------------------------------------------
+
+Tessellating objects using triangles has become a very popular method in the
+ray-tracing world, at least since the classical paper of Snyder & Barr (SIG
+87) The classical idea is to start from a parametric surface f(u,v) and
+regularly sample the two parameters u and v.  That gives a mesh composed of
+quadrangles ABCD where A = f(u, v), B = f(u+du, v), C = f(u+du, v+dv) and D =
+f(u, v+dv).  Then the only thing to do is to cut the quadrangle into two
+triangles ABC, CDA for instance.
+
+
+		    D ------------- C
+		     |           _/\
+		     |         _/   \
+		     |       _/      \
+		     |     _/         \
+		     |   _/            \
+		     | _/               \
+		     |/                  \
+		    A -------------------- B
+
+
+
+Using triangles instead of quadrangles has one main advantage:  speed Indeed,
+computing the intersection between a ray and a triangle, and getting the
+barycentric coordinates (needed for interpolation) is simply a linear system
+of two equations.  An optimized algorithm would only take very few floating
+point operations (about 8 multiplications after the ray/plane intersection)
+
+
+But, using triangles instead of quadrangles has also several drawbacks:
+
+First, there a two solutions to decompose a quadrangle into two triangles.
+There is no absolute choice, and results will be very different when you take
+ABC-CDA instead of DAB-BCD (especially if the curvature of the surface is
+high).
+
+But the main drawback of triangles is that the isoparametrics (u constant or v
+constant) are not preserved (see figure).  Thus every texture mapping (or
+radiosity reading, if you use a radiosity first pass in your system) will be
+deformed.
+
+
+       u=0   u=.5   u=1                   u=0   u=.5   u=1
+      D ------------- C                   D ------------- C
+	|      \      \                    |      |    _/\
+	|      {       \                   |      |  _/   \
+	|       \       \                  |      |_/      \
+	|       {        \                 |     _/         \
+	|        \        \                |   _/  \         \
+	|        {         \               | _/     \         \
+	|         \         \              |/        \         \
+       A -------------------- B          A -------------------- B
+       u=0      u=.5        u=1           u=0       u=.5       u=1
+
+	  Isoparametric u=.5 using 1 quadrangle and 2 triangles
+	 "Three is bad, four is good" Dustin Hoffman (in RainMan)
+
+
+But there is a drawback using quadrangles instead of triangles:  speed Indeed,
+computing the intersection and getting the (u,v) parameters of the
+intersection point consists in solving a non-linear system of equations.  And
+there is a square root.  Yerk!  (see Haines' chapter in "Introduction to Ray
+Tracing")
+
+Fortunately the square root can be avoided in many cases!  Tessellating
+classical scenes will create a lot of very symphatic quadrangles:  squares,
+rectangles, parallelograms and trapezoids.  For instance, tessellating a
+surface of revolution (or more generally a surface created by sweeping a curve
+around an axis, according to another curve) will create only trapezoids.
+
+For squares, rectangles and parallelograms, (u,v) are given by a linear
+system.  For trapezoids, (u,v) are given by a system of one linear equation
+and one non- linear equation.  For all that cases, finding directly the
+intersection between the ray and ONE quadrangle is LESS COSTLY than finding
+the intersection between the ray and TWO triangles.
+
+Another advantage of dealing with quadrangles vs triangles is the memory cost.
+There are less primitives to create, to store, to transform, to put in
+voxels...
+
+Finally, never forget that for shadow rays, (u,v) are not needed.  Thus using
+a simple intersection test (Jordan test) will be faster, for the same result.
+
+--------
+
+reply from Eric Haines:
+
+	Just to be a devil's advocate, I thought I'd bring up some problems
+with quadrilaterals versus triangles.  I personally like quadrilaterals,
+especially because of the strange shading artifacts from triangles.  However,
+we sometimes use triangles, such as in the situation where the quad mesh gives
+quadrilaterals that are not totally planar (i.e. the four points don't lie in
+a single plane).  This is ill-defined, and so we must triangulate.
+
+	A more important time for triangulation is in animation.  If you use
+Gouraud interpolation for shading your primitives, triangles are rotation
+invariant, while quadrilaterals are not.  As such, if you make a film of some
+object made of quadrilaterals rotating, you can see the quadrilateral shades
+change over time.
+
+--------
+
+Christophe's reply:
+
+	Well, non planar quadrilaterals surely can be a problem.  But when
+rendering a scene there are so much approximations that are made (on the
+illumination model, on the shading technique, on the normal vector
+computation, ...)  So, why should it not be allowed to do some approximation
+about the geometry and replace a non planar polygon by a planar one?
+
+	The method I use is the following.  When sampling your object along
+the u and v coordinates, test about the "planarity" of the quadrangle.  One
+technique could be to compute the solid angle subtended by the 4 vertex normal
+vectors.  Another technique could be to compute the max distance from a vertex
+to the "approximation plane" (AC x BD).  When the solid angle or the max
+distance is greater than a given tolerance, then subdivide the quadrangle
+(quadtree-like scheme) until the tolerance is reached.  Of course, every one
+knows that patch cracking (as defined by Catmull) should occur.  But
+practically I you insure that two adjacent quadrangles are at neighboring
+levels in the quadtree, cracking can not be visually detected.  (I used that
+trick intuitively though I saw recently a paper on it, can't remember
+where...)
+
+	Concerning Gouraud shading, rotation invariance of triangles vs
+quadrangles is not due to the number of vertex but to the fact that Gouraud
+shading use an interpolation in screen space.  I should avoid like the plague
+every method that interpolates in screen space!  Effects are well known:
+perspective distorsion, rotation dependence, and so on...  I really think that
+screen space Gouraud & Phong shading would disappear soon, and be replaced by
+their equivalent object space shading.
+
+	I haven't seen papers about that fact, but I'm sure that sure
+techniques are already in use.  The idea is to use a dicing technique (as in
+the Reyes rendering system) to create micro-quadrangles by sampling a
+quadrangle along u and v coordinates.  The number of samples of the u
+coordinate is proportional to the length of AB and CD edges (similarly for v
+with BC and DA edges) The only thing to do is then to visit every micro-quad
+vertex (double loop over u and v), interpolate incrementally either x, y, z,
+r, g, b (Gouraud) or x, y, z, nx, ny, nz (Phong) and average samples that fall
+in the same pixel.
+
+	The technique isn't more complicate as screen space interpolation, and
+can be hardware coded as well (incremental scheme with integer arithmetic) The
+ONLY advantage is Gouraud and Phong today, is that they are hardware coded so
+outperforming every software algorithm.  But it is perhaps time for chip
+designer to realize that there are other --- and better --- shading methods
+that support hardware implementation as well!  For instance, when will we see
+a chip that does incremental voxel traversal for ray tracing ?
+
+--------
+
+Eric's reply:
+
+	Interesting comments!  We do similar things with non-planar
+quadrilaterals, that is, we find if something is not flat by checking its
+tolerance from some ideal plane for it.  If the tolerance is noticeable, we
+take special measures.
+
+	I agree that it would be nice if Gouraud shading was replaced with
+something else.  Renderman micro-facets is certainly one way to go.  The trick
+is, what if you are dealing with a surface that (a) does not have a natural
+parameterization (that is, [u,v] values are not attached to it) or (b) the
+surface has 5 or more vertices?  It's not all that clear how to combine the
+various vertex samples to get a proper shade.  The problem is admittedly
+ill-defined, but some answers look better than others.  Doing a full weighted
+average depending on the distance to all vertices from a given point on the
+surface has been proposed, but this takes forever for complex polygons.
+
+	A voxel walker might be a nice hardware addition someday, but I think
+the main problem with it is that it's very special purpose.  Most hardware
+manufacturers don't want to make highly specialized chips if the market is
+small.  Someday I suspect things will get fast enough that ray tracing becomes
+popular because it's fairly quick to do - at this point, paradoxically, we'll
+probably see specialized hardware that makes ray tracing much faster still.
+However, right now I see companies like AT&T Pixel Machines getting little
+business for their ray tracers - everyone likes the images, but few seem to
+want to get involved making them for real!
+
+-------------------------------------------------------------------------------
+
+New Release of Radiance Software & Bug Fixes, by Greg Ward (gjward@lbl.gov)
+
+I have just put together a new release of Radiance, 1.3.  In addition to the
+IES luminaire translator included separately on some tapes, 1.3 contains
+several improvements, including faster runtimes for oconv with instances, a
+driver for NeWS (and thus SGI's window system), better memory use on some
+machines, fisheye views, and a translator for Architrion.  I plan to release
+more CAD translators, specifically one for DXF, in the near future.
+
+The new tar file takes up over 36 Mbytes, because it includes compiled
+versions for Sun-3, Sun-4, IRIS, DECstation and MacIntosh (running A/UX 2.0),
+so you will need to send a large tape to get a copy.  (Of course, you do not
+need to load the binaries on your machine if you don't want them.)  As before,
+full C source code is provided for all programs.
+
+Send your tapes to:
+
+	Greg Ward
+	Lighting Systems Research
+	Lawrence Berkeley Laboratory
+	1 Cyclotron Rd., 90-3111
+	Berkeley, CA  94720
+
+--------
+
+Thanks to an astute user, I have learned of a rather serious bug in the IES
+luminaire data translator, ies2rad.  It involves the improper conversion of
+type B photometry, and some types of asymmetric fixtures.
+
+Anyone who is currently using this program, or plans to use it in the future,
+is advised to get the corrected source from me directly.
+
+-------------------------------------------------------------------------------
+
+Radiance Timings on a Stardent, by Eric Ost (emo@ogre.cica.indiana.edu)
+
+Here is the most recent set of timings which resulted from running the
+Radiance batch ray-tracer on tuna.  Note that each rpict.* is a different
+instance of the ray-tracer.  The differences are
+
+name		compiled with
+rpict.noO -- 	no optimizations selected
+rpict.01  --    -O1, common sub-expression, etc., optimizations performed
+rpict.O2  --    -O2, vectorization optimizations performed
+rpict.O3  --    -O3, parallelization optimizations performed
+
+Command:
+  rpict.X -vp 52.5 6 58 -vd .05 -.6 -.8 -vu 0 1 0 -vh 35 -vv 35 \
+	  -av .1 .1 .1 -x 1000 -y 1000 scene.oct > scene.raw
+
+System: Stardent Titan-3000
+	4 25MhZ R3000 processors
+	32 Mb main memory
+	file input read from NFS mounted file-system
+	file output written to a local-disk file-system
+
+timing batch ray tracer rpict.noO
+real     4:14.1
+user     4:04.1
+sys         8.5
+timing batch ray tracer rpict.O1
+real     4:14.4
+user     4:04.4
+sys         8.1
+timing batch ray tracer rpict.O2
+real     4:27.1
+user     4:18.2
+sys         6.8
+timing batch ray tracer rpict.O3
+real     4:15.4
+user    16:37.5
+sys        17.6
+
+Simply optimized code does not seem to have much advantage over unoptimized
+code.  Vectorization appears to slow things down, but running on all 4
+processors seems to recover nearly all of the real-time performance that was
+lost.  The fact that all of these results (per-processor) are fairly close
+probably indicates that to obtain significant benefits from
+vectorization/parallelization modification of the implementation itself is
+required.  A run-time subroutine/loop histogram obtained using 'prof' has
+indicated several instances where in-lining code sequences may improve
+performance; though, exactly how much improvement will be obtained remains to
+be seen.
+
+--------
+
+Further information from Eric Ost:
+
+Subject: Misc. Radiance 1.3 benchmarks
+
+Program: rpict, version 1.3,
+Date: February 22, 1991
+
+This benchmark involves the example 1000x1000 picture described in
+../ray/examples/textures as rendered from the associated makefile,
+../ray/examples/textures/Makefile.
+
+-----------------------------------------------------------------------------
+				      (all times are in seconds)
+System                                  Real    User    System
+-----------------------------------------------------------------------------
+Sun-4/330 (ogre)                      10:27.9  8:10.5       8.5
+SGI Personal Iris (pico)              5:41.0  5:26.5       1.6
+-IBM RS6000 model 320 (off-site)      4:19.2  4:13.9       0.3
++Stardent Titan-3000 (tuna)     l     4:13.9  4:04.3       7.8
+-IBM RS6000 model 540 (off-site)      2:50.3  2:45.2       0.2
+*Stardent Titan-3000 (tuna)           1:52.2  1:45.7       4.8
+-----------------------------------------------------------------------------
+Legend:
++[Note: The entire image was rendered on 1 processor]
+*[Note: Each processor renders 1/4 image, so this is the MAX of all timings.
+	The -x, -y, -vv, and -vh parameters were adjusted accordingly.]
+-[Note: The IBM timings were performed by our IBM representative off-site.]
+
+
+System Configurations:
+
+Architecture          Operating System           RAM    Processor      #
+-----------------------------------------------------------------------------
+Sun-4/330             SunOS Release 4.0.3_CG9    24 MB  20 MhZ SPARC  (1)
+SGI Personal Iris     IRIX System V Release 3.2  16 MB  20 MhZ R3000  (1)
+Stardent Titan-3000   Unix System V Release 3.0  32 MB  25 MhZ R3000  (4)
+IBM RS6000 model 320  Unix System V Release ?    16 MB  20 MhZ RS6000 (1)
+IBM RS6000 model 540  Unix System V Release ?    ?? MB  30 MhZ RS6000 (1)
+-----------------------------------------------------------------------------
+
+I would be happy to answer any questions pertaining to these timings.  In no
+way am I suggesting that these timings are the best possible for a given
+architecture; rather, they were the ones I obtained and may or may not be
+repeatable at another site.  No special fine-tuning was done either to the
+system or to Radiance before performing these timings.  Each system was
+relatively quiescent and therefore had a minimal load average.
+
+-------------------------------------------------------------------------------
+
+RTSYSTEM Fast Ray Tracer, by Patrick Aalto
+
+The initial post:
+
+I just finished a small demo I have been working on a couple of months.  It
+performs real-time ray-tracing and shading (a sort of mixture of them both) on
+an IBM PC-compatible computer with VGA graphics.  I find it pretty impressive
+(although the environment is pretty simple:  It has a planet, a moon and a
+sun).  It runs at 70 frames/second on my 80386/20 Mhz machine.
+
+--------
+
+This RTSYSTEM (Ray-Traced System) is a small demo that uses my new superfast
+raytracing algorithms.  It works on register-compatible VGA cards only, using
+the non-standard 320x400x256 screen mode.  This mode is highly suitable for
+animation, since it features two separate video pages and lots of colors.
+Nearly all common VGA-cards work quite well in this mode.
+
+This demo shows a moon orbiting a planet.  The viewer is on a distant moon of
+the planet, and is looking 'up' towards the planet and the other moon.  A
+distant sun can also be seen from time to time.  It is very easy to run this
+demo; just type RTSYSTEM and it starts to run.  After a second or two, a green
+number will appear on the bottom- right corner of the screen.  This number
+tells you how many frames per second your computer is fast enough to draw.  I
+programmed this demo such, that it will just run at the maximum 70
+frames/second on my 80386/20 Mhz computer.  A slow VGA-card or a slower CPU
+will not reach 70 frames/second, but even a 33 Mhz 80486 - machine will not
+run faster than 70 frames/second, since this is the fastest hardware refresh
+rate of a VGA display at this resolution.  To quit the demo, just press the
+ESC key.
+
+The method of rendering shaded objects usually requires a lot of computation,
+since the correct color value has to be computed separately for every single
+screen pixel.  The color value of a certain pixel depends on the amount of
+light (and it's color) this pixel transmits towards the eye of a viewer.
+Since each pixel represents some small portion of some physical object in the
+3D image space, the transmitted light can be calculated based on the
+properties of this physical object.
+
+When light hits a smooth surface, a portion of it is reflected, and the rest
+is transmitted into the object (if the object is even slightly transparent).
+The direction of the reflected light is given by the Law of Reflection:  the
+angle of the reflection direction r, is equal to the angle of incidence , and
+will be in the same plane as the incident vector v and a surface normal vector
+N.  Vector r can be determined using vector arithmetics:
+
+      r = v + 2Ncos = v - 2N(vN)
+
+To calculate a dot product of two vectors requires normally 9 multiplications,
+1 division and 1 square root.  All this for every pixel in the object!!  (The
+planet in the middle of the screen has nearly 2800 pixels, by the way.)  This
+demo uses a highly sophisticated technique to calculate the color of a certain
+pixel with only one table lookup and one addition per pixel!  Everything is
+also done using only integer values (16 and 32 bit), obviously.
+
+Other new techniques in this demo include a 3D-modification of a well-known
+Bresenham's circle algorithm to calculate all the X, Y and Z values of a ball
+using only integer additions.  (The standard method uses the ball equation
+X+Y+Z=R, from which the values for Z-coordinates, for instance, can be
+determined if all the other values are known.  This includes a square root and
+3 multiplications per every (X,Y) pair.)
+
+Still another new technique is to apply trigonometrics to the 'ray-sphere
+intersection' problem.  This does not reduce the needed computations very
+much, but gives correct results with much smaller intermediate results (VERY
+important when dealing with only integer resolution).
+
+It is interesting to note that even a standard 386 machine with a VGA-card can
+perform simplified ray-tracing in realtime.  All it takes is some
+optimizations on the algorithms used.
+
+An interesting thing is the optical effect called 'Mach band effect'.  If you
+look closely at the planet surface, you will notice all sorts of different
+patterns on it, which change rapidly as the sun moves.  These patterns are
+merely an optical illusion, caused by the way the retina of our eyes function.
+Since there are only 64 different shades of grey (from black to white)
+available on a VGA display, the eye is sensitive enough to register the small
+change between two neighboring pixels, thus creating a 'pattern' on the
+screen.
+
+Studying this demo you can also find out what 'anti-aliasing' means.  Look at
+the edge of the planet when it is fully lit.  You will easily see the
+'jaggies'.  The planet edge does not appear to be smoothly round, but rather
+can easily be seen to be just a collection of pixels.  Now, look at the
+day/night border on the planet.  You will not see such jaggies here.  This is
+because this borderline is 'anti-aliased'.  The transition from complete black
+to complete white is gradual, and thus the eye can not detect individual
+pixels.
+
+My new game LineWars II will use some of these superfast rendering techniques.
+It will come out sometime this year, I hope...
+
+
+      Patrick Aalto
+
+Contact:
+
+Internet:    ap@tukki.jyu.fi    (account about to expire soon..)
+	    tkp72@jytko.jyu.fi
+
+--------
+
+I've been told that the demo I mentioned earlier can be found at
+chyde.uwasa.fi (sorry, don't have the IP number here now) in the directory
+PC/demo.
+
+[This one caused a lot of traffic on the net.  It's a cute demo, though there
+aren't all that many rays traced, and a lot of tricks are done to avoid them.
+I think this is just fine:  why trace rays when you don't need to?  But it
+definitely got people excited when Patrick claimed "real time ray tracing".
+--EAH]
+
+-------------------------------------------------------------------------------
+
+DKBTrace Beta Available, by David Buck (dbuck@ccs.carleton.ca)
+
+I've placed a new version of DKBTrace onto alfred.ccs.carleton.ca
+(134.117.1.1) for beta testing - and for those who just can't wait :-).  The
+source files and data files for DKBTrace version 2.10 can be obtained by
+anonymous ftp from the above site.  They are in directory
+pub/dkbtrace/dkb2.10.  No executables are available at this time.
+
+Abstract:
+
+DKBTrace is a freely-distributable raytrace program that renders quadric
+shapes, CSG (Constructive Solid Geometry), and a handful of other primitive
+shapes.  Shadows, reflection, refraction, and transparency are also supported.
+DKBTrace also allows you to define complex an interesting solid textures such
+as wood, marble, "bozo", etc.  The texturing facility has been greatly
+enhanced in version 2.10.
+
+NOTE:  The data files for version 2.10 are NOT completely compatible with
+       previous versions.  Old data files must be modified to run on the
+       new raytracer.
+
+Please report any problems or questions to me at dbuck@ccs.carleton.ca.
+
+I'm also starting up three mailing lists for people interested in the
+following aspects of DKBTrace:
+
+   - General Questions and Problems with DKBTrace
+   - Porting DKBTrace to various platforms
+   - Writing a graphical user interface for DKBTrace
+      (note: I don't intend to write a graphical user interface, but
+	     several people have expressed an interest, so I thought I
+	     should at least maintain a mailing list for these people
+	     so they can keep in touch).
+
+If you want to be added to any (or all) of these mailing lists, please send me
+an EMail message indicating which mailing lists you're interested in.
+
+The final release of version 2.10 should be in one or two weeks.  I will post
+another announcement at that time.
+
+-------------------------------------------------------------------------------
+
+"Computer Graphics" 2nd Edition Corrections, Software, etc by the Brown
+	Automatic Mailer
+
+
+Your e-mail addressed to
+		graphtext@cs.brown.edu
+has been handled by an automatic "server" program that generated this response.
+This server provides several services for readers of
+	"Computer Graphics: Principles and Practice", 2nd edition
+		by Foley, van Dam, Feiner, and Hughes
+			(Addison-Wesley, 1990)
+				ISBN 0-201-12110-7
+
+There are several distinct "services" you can obtain from this server, each
+identified by a unique keyword.  To obtain the service, mail a message to
+graphtext@cs.brown.edu containing the keyword (and only the keyword) in the
+"Subject:"  line.  Only one service can be obtained per message.
+
+Here are the services currently available, with the appropriate "Subject:"
+lines shown:
+
+--------
+Subject: Help
+
+	The server sends you this helpful message in response.
+	If the server program seems to be broken somehow, send mail to
+		Dave Sklar (dfs@cs.brown.edu)
+--------
+Subject: Get-Text-Bug-List
+
+	Use this service to obtain a list of known "bugs" in the text.
+--------
+Subject: Report-Text-Bug
+
+	Use this service to report a bug in the text.  The body of your
+	message should give the page and line number of the bug, and if
+	possible, indicate the necessary correction to be made.
+
+	Please check the "text-bug-list" before submitting a bug report so you
+	don't submit a duplicate bug report.
+
+	Please don't submit a bug report unless you are sure that there is
+	a bug in the text; this service is not for raising questions.
+--------
+Subject: Get-Text-Algorithms
+
+	Use this service to get instructions on how to obtain electronic
+	copies of many of the major algorithms (all in Pascal) presented
+	in the textbook.
+--------
+Subject: Software-Distribution
+
+	Use this service to get instructions on how to obtain SRGP and SPHIGS,
+	the software packages described in chapters 2 and 7.
+	These include information on all three versions:
+		1) UNIX/X11  (available via ftp)
+		2) Macintosh (available via ftp, except Pascal via floppy)
+		3) IBM-PC and compatibles (available via floppy)
+--------
+Subject: Get-Software-Bug-List
+
+	Use this service to obtain a list of known "bugs" in SRGP/SPHIGS.
+	This list does not include omissions and bugs that are
+	documented in the SRGP/SPHIGS reference manuals.
+--------
+Subject: Report-Software-Bug
+
+	Use this service to report a bug in the software or in the doc
+	associated with the software.  If you can present a code fragment
+	that isolates the bug, all the better.
+--------
+
+At a later date, we will support services for the sharing of exercises
+produced by instructors using the text, and for the submission of suggestions
+for improvement of the text in later revisions.
+
+-------------------------------------------------------------------------------
+
+Papers which are currently available from the Net via anonymous FTP, J. Kouhia
+--------------------------------------------------------------------
+Last update January 28, 1991
+
+Updates and mails to
+Juhana Kouhia
+kouhia@nic.funet.fi [128.214.6.100]
+
+Put the new papers to
+nic.funet.fi [128.214.6.100]
+pub/graphics/papers/Incoming
+
+
+%K KYRI90
+%A George Kyriazis
+%T A Study on Architectural Approaches for High Performance Graphics Systems
+%I Rensselaer Design Research Center, Technical Report No: 90041
+%D September 1990
+%O weedeater.math.yale.edu [128.113.6.10]  pub/Papers/kyri90.ps.Z
+%O nic.funet.fi [128.214.6.100]  pub/graphics/papers/kyri90.ps.Z
+
+%K MUSG88
+%A F. Kenton Musgrave
+%T Grid Tracing: Fast Ray Tracing For Height Fields
+%J Research Report YALEU/DCS/RR-639
+%D July, 1988
+%O weedeater.math.yale.edu [128.113.6.10]  pub/Papers/musg88.ms.Z
+%O nic.funet.fi [128.214.6.100]  pub/graphics/papers/musg88.ps.Z
+
+%K MUSG89a
+%A F. Kenton Musgrave
+%T Prisms and Rainbows: a Dispersion Model for Computer Graphics
+%J Proceedings of the Graphics Interface '89 - Vision Interface '89
+%I Canadian Information Processing Society
+%C Toronto, Ontario
+%P 227-234
+%D June, 1989
+%O weedeater.math.yale.edu [128.113.6.10]  pub/Papers/musg89a.ms.Z
+%O nic.funet.fi [128.214.6.100]  pub/graphics/papers/musg89a.ps.Z
+
+%K MUSG89b
+%A F. Kenton Musgrave
+%A Craig E. Kolb
+%A Robert S. Mace
+%T The Synthesis and Rendering of Eroded Fractal Terrains
+%J Computer Graphics
+(SIGGRAPH '89 Proceedings)
+%V 23
+%N 3
+%D July 1989
+%P 41-50
+%Z info on efficiently ray tracing height fields
+%K fractal, height fields
+%O weedeater.math.yale.edu [128.113.6.10]  pub/Papers/musg89b.ms.Z
+%O nic.funet.fi [128.214.6.100]  pub/graphics/papers/musg89b.ps.Z
+
+%K MUUS??
+%A M. J. Muuss
+%T Excerpts from "Workstations, Networking, Distributed Graphics, and Parallel Processing"
+%I BRL Internal Publication  (???)
+%D ?????
+%O freedom.graphics.cornell.edu [128.84.247.85] pub/RTNews/Muuss.parallel.Z
+%O nic.funet.fi [128.214.6.100]  pub/graphics/papers/Muuss.parallel.ps.Z
+
+%K MUUS??
+%A M. J. Muuss
+%A C. M. Kennedy
+%T The BRL-CAD Benchmark Test
+%I BRL Internal Publication  (???)
+%D ?????
+%O freedom.graphics.cornell.edu [128.84.247.85] pub/RTNews/Muuss.benchmark.Z
+%O nic.funet.fi [128.214.6.100]  pub/graphics/papers/Muuss.benchmark.ps.Z
+
+%K SHIR90a
+%A Peter Shirley
+%T Physically Based Lighting Calculations for Computer Graphics
+%I Thesis
+%D November 1990
+%O weedeater.math.yale.edu [128.113.6.10]  pub/Papers/shir90a/
+%O nic.funet.fi [128.214.6.100]  pub/graphics/shirley/
+
+%K SHIR90b
+%A Peter Shirley
+%T Monte Carlo Method
+%I Appendix from the SHIR90a
+%D November 1990
+%O nic.funet.fi [128.214.6.100]  pub/graphics/papers/shir90b.ps.Z
+
+%K WILS91
+%A Tom Wilson
+%T Ray Tracing Abstracts Survey
+%D January 1991
+%O weedeater.math.yale.edu [128.113.6.10]  pub/Papers/wils91.1.shar.Z
+%O nic.funet.fi [128.214.6.100]  pub/graphics/papers/wils91.1.ps.Z
+
+======== USENET cullings follow ===============================================
+
+Ray-Cylinder Intersection Tutorial, by Mark VandeWettering
+
+>I am trying to do ray tracing of light through a
+>cylinder coming at different angle to the axis
+>of the cylinder.  Could some one give me some
+>pointers?
+
+Ray cylinder intersection is (conceptually) just as easy as hitting a sphere.
+Most of the problems come from clipping the cylinder so it isn't infinite.  I
+can think of several ways to do this, but first let me mention that you should
+consult Introduction to Ray Tracing edited by Andrew Glassner.  Articles by
+Pat Hanrahan and Eric Haines go over most of this stuff.
+
+
+It's easiest to imagine a unit cylinder formed by rotating the line x = 1 in
+the xy plane about the y axis.  The formula for this cylinder is x^2 + z^2 =
+1.  If your ray is of the form P + t D, with P and D three tuples, you can
+insert the components into the original formula and come up with:
+
+	(px + t dx)^2 + (pz + t dz)^2 - 1 = 0
+
+or	px^2 + 2 t dx px + (t dx)^2 + pz^2 + 2 t dz pz + (t dz)^2
+
+or	(px^2 + pz^2) + 2 t (dx px + dz pz) + t^2 (dx^2 + dz^2)
+
+which you can then solve using the quadratic formula.  If there are no roots,
+then there is no intersection.  If there are roots, then these give two t
+values along the ray.  Figure out those points using P + t D.  Now, clipping.
+We wanted to have a finite cylinder, say within the cube two units on a side
+centered at the origin.  Well, gosh, ignore any intersections that occur
+outside this box.  Then take the closest one.
+
+Now, to intersect with an arbitrary cylinder, work up a world transformation
+matrix that transforms points into the objects coordinate system.  Transform
+the ray origin and direction, and voila.  You do need to be careful to rescale
+t appropriately, but it's really not all that hard.
+
+You might instead want to implement general quadrics as a primitive, or choose
+any one of a number of different ways of doing the above.  Homogeneous
+coordinates might make this simpler actually....  Hmmm....  And there is a
+geometric argument that can also be used to derive algorithms like this.
+
+Think about it.  It shouldn't be that difficult.
+
+-------------------------------------------------------------------------------
+
+C++ Fractal and Ray Tracing Book, by Fractalman
+
+There's a very nice book called 'Fractal Programming and Ray Tracing with
+C++'by Roger T.  Stevens and published by M&T Books.  The book comes with a
+disk of sample programs for Zortech C++ but can be modified to be used with
+Turbo C++.  The text is very easy to understand and you only need some
+rudimentary knowledge of C and computer graphics.
+
+-------------------------------------------------------------------------------
+
+Ray/Spline Intersection Reference, by Spencer Thomas
+
+>Can someone please tell me where I can find an algorithm for
+>finding the intersection of a ray and a Bezier and/or B-Spline
+>patch.
+
+You might look at
+
+Lischinski and Gonczarowski, "Improved techniques for ray tracing parametric
+surfaces," Visual Computer, Vol 6, No 3, June 1990, pp 134-152.
+
+Besides having an interesting technique, they refer to most of the other
+relevant work.
+
+-------------------------------------------------------------------------------
+
+Superquadric Intersection, by Rick Speer, Michael B. Carter
+
+Here's some material that may be of assistance. The following paper-
+
+  "An Introduction to Ray Tracing", by Roman Kuchkuda, pp. 1039-60 in
+  Theoretical Foundations of Computer Graphics and CAD, R. A. Earnshaw,
+  Ed., Springer-Verlag, 1988.
+
+is a good introduction to the tracing of superquadrics.  In addition to the
+usual overview material it gives actual source code, in C.
+
+This paper-
+
+  "Robust Ray Tracing with Interval Arithmetic", by Don Mitchell, pp.
+  68-74 in the Proceedings of Graphics Interface '90, Canadian Infor-
+  mation Processing Society (Toronto), 1990.
+
+focuses in particular on root-finding when intersecting a ray with an implicit
+surface.  Mathematical and pictorial examples of tracing super- quadrics are
+given, along with data on the time-cost of intersections (when run on a
+SPARCstation).  There's also some discussion of using the method for CSG.
+
+Finally, this thesis-
+
+  "Implementation of a Ray-Tracing Algorithm for Rendering Superquadric
+  Solids", Bruce Edwards, Masters Thesis and Technical Report TR-82018,
+  Rensselaer Polytechnic Institute (Troy, NY), December 1982.
+
+probably goes into more detail than either of the papers mentioned above.
+
+[Actually, it doesn't:  there's one page on intersecting superquadrics, which
+says something like "use Newton's Method" and gives a reference number, which
+turns out to be a "private conversation with Alan Barr".  --EAH]
+
+--------
+
+>From Michael B. Carter:
+
+     I was just digging through my literature and finally came up with the
+reference that was stuck in the back of my mind.  I cannot vouch for the speed
+of this method, but here's the ref.
+
+Kalra, Devendra, and Alan H. Barr, "Guaranteed Ray Intersections with
+Implicit Surfaces," Computer Graphics, Vol. 23, No. 3, July 1989.
+
+This method uses Lipschitz conditions to intersect ANY implicit surface.  It
+always finds the closest (or subsequent) intersection points -- even in badly
+behaved functions.  There are also some really neat pictures of blended
+objects in the paper.
+
+-------------------------------------------------------------------------------
+
+Comments on Interval Arithmetic, by Mark VandeWettering, Don Mitchell
+
+First some comments by Mark:
+
+>>  "Robust Ray Tracing with Interval Arithmetic", by Don Mitchell, pp.
+>>  68-74 in the Proceedings of Graphics Interface '90, Canadian Infor-
+>>  mation Processing Society (Toronto), 1990. [Rick Speer]
+>
+>    Interesting paper, though I admit to not having tried its method yet.
+>Looks like a great general method for superquadrics and whole families of
+>surfaces.  My favorite paper of this proceedings. [Eric Haines]
+
+Very interesting paper, but I believe that the convergence of the method is
+quite slow, even slower than bisection.  I coded up a version of it for the
+MTV raytracer, and was testing it out when it was clear it was converging VERY
+slowly.  If anyone has some hints, or wants to discuss this further, send me
+some email.
+
+The reason I was interested in this scheme is that it would allow you to trace
+non-linear rays (rays could be generalized to space curves) which would allow
+more generic transformations of objects (ala Al Barr).
+
+You can use geometrical properties of the superquadric to figure out
+intersections.  There can be at most two intersections in any octant of the
+superquad, so a primitive method would be to handle each octant separately and
+then use some favorite numerical method (Newtons or bisection) to home in on
+the roots.
+
+--------
+
+Don Mitchell responds:
+
+The interval-arithmetic algorithm is a root-isolation algorithm.  It gets used
+in combination with root-refinement (something much faster than bisection and
+much safer than Newton's method, hopefully).  The speed of convergence depends
+a lot on how you are refining intersections.  If you are just performing the
+interval algorithm until it converges to a root, that would be very slow and
+not really a proper application of the method.
+
+For a benchmark image containing a number of 4th degree algebraic surfaces,
+the interval method was about three times slower than a specialized polynomial
+solver (e.g., Sturm sequences).  Its hard to compare its run time on
+transcendental surfaces, since I don't know any other way except Kalra's
+Lipschitz method (described in SIGGRAPH 89).  I think interval arithmetic is
+more straightforward than the Lipschitz methods, particularly for surfaces
+with singular gradients (like concave superquadrics).  It does not require an
+off-line human calculation to derive Lipschitz conditions.
+
+There are also a lot of improvements that I didn't mention (or implemented
+later).  For example, there are faster interval multiply algorithms than the
+one I gave.  You can do the root isolation algorithm with (F, dF/dt) instead
+of (F, grad F).  There are also ways of using the derivative intervals to
+narrow the function intervals with the mean-value theorem.
+
+Like a lot of techniques, there is a long journey between theory and
+implementation.
+
+-------------------------------------------------------------------------------
+
+Platonic Solids, by Alan Paeth
+
+Coordinates for these and for their four-dimensional analogs were published by
+HSM Coxeter, first in 1948 in _Regular Polytopes_, pg. 52-53 (Methuen, London)
+and again in subsequent revisions; any/all are highly recommended reading. The
+table for (quasi) regular 3D polyhedra is transcribed below. I've posted this a
+few times already; perhaps a "frequently asked" entry is in order.
+
+
+			PLATONIC SOLIDS
+		(regular and quasi-regular variety,
+		Kepler-Poinset star solids omitted)
+
+The orientations minimize the number of distinct coordinates, thereby revealing
+both symmetry groups and embedding (eg, tetrahedron in cube in dodecahedron).
+Consequently, the latter is depicted resting on an edge (Z taken as up/down).
+
+    SOLID            VERTEX COORDINATES
+    -----------      ----------------------------------
+    Tetrahedron      (  1,  1,  1), (  1, -1, -1), ( -1,  1, -1), ( -1, -1,  1)
+    Cube             (+-1,+-1,+-1)
+    Octahedron       (+-1,  0,  0), (  0,+-1,  0), (  0,  0,+-1)
+    Cubeoctahedron   (  0,+-1,+-1), (+-1,  0,+-1), (+-1,+-1,  0)
+    Icosahedron      (  0,+-p,+-1), (+-1,  0,+-p), (+-p,+-1,  0)
+    Dodecahedron     (  0,+-i,+-p), (+-p,  0,+-i), (+-i,+-p,  0), (+-1,+-1,+-1)
+    Icosidodecahedron(+-2,  0,  0), (  0,+-2,  0), (  0,  0,+-2), ...
+		     (+-p,+-i,+-1), (+-1,+-p,+-i), (+-i,+-1,+-p)
+
+    with golden mean: p = (sqrt(5)+1)/2; i = (sqrt(5)-1)/2 = 1/p = p-1
+
+--------
+
+The poster wanted a circumscribing (unit) sphere. Just pick a vertex and
+calculate its length (to the origin) and you have R, that sphere's radius.
+Normalize (divide all coordinates by R) and the solids are contained by a
+unit sphere.
+
+    Alan Paeth
+    Computer Graphics Laboratory
+    University of Waterloo
+
+-------------------------------------------------------------------------------
+
+Moon Problems, by Ken Musgrave et al
+
+>  Am I correct in a vague memory I seem to have, that the (Earth's) moon is
+>supposedly a near-ideal Lambertian reflector?
+>
+>  There's something fishy here, methinks.
+
+The moon is not lambertian.  If it were, then a full moon would be bright at
+the center of the disk, and fade into black at the edges.  Instead, a full
+moon is a fairly uniformly colored disk.  If you assume the lambertian surface
+has a scattering probability kcos(theta), you might guess that the moon is
+just k (scatters in all directions above the surface with equal
+probabilities).  I think this will work for a simple model.
+
+pete
+
+
+PS-- I saw some angular reflectance curves in some book I can't find.  I think
+it was a heat transfer text.  The actual function was pretty funky.
+
+--------
+
+Alain Fournier responds:
+
+As this is one of my favorite trick question about reflection, I'll bite.
+Consider the moon when full (that is the sun -the light source- is in the same
+direction as the observer -the eye.  It is pretty obvious that it appears
+essentially as a disk, that is the reflected light is about of same luminance
+all over the visible part of the moon (I ignore the effect of the surface
+details such as the maria).  That shows that it is neither a specular
+reflector (the center would be a lot brighter than the periphery, nor a
+diffuse reflector (the center would be somewhat brighter than the periphery
+(try this on your favorite renderer, a perfectly diffuse white sphere
+illuminated from the direction of the eye).  So what's going on.  Well, as
+most of the computer graphics types (us) ignore, the world is not all between
+totally diffuse and totally specular, there are surfaces outside of this.  In
+the case of the moon, it so happens that a Phong model (using the expression
+loosely) with an exponent of 0.5 for the cosine of the angle normal/light
+gives the right appearance of a disk at full moon.  I can find exact
+references back in my office, if anybody is interested.  Credit where credit
+is due:  Bob Woodham, of UBC, first pointed that out to me, and has worked on
+the subject of models for the surface reflectance of the moon (and other
+objects in the solar system).
+
+--------
+
+Doug McDonald replies:
+
+Remember that the moon has hills and valleys.  The hills near the terminator
+are what one sees, and the actual surface is seen at an angle much less than
+90 degrees.  The actual surface itself is sort of Lambertian.  At least when I
+actually examined some small (~5 cm) size pieces of the Moon in a lab they
+looked rather Lambertian.  On the spot reports agree.
+
+The word "fractal" comes to mind.
+
+--------
+
+Paul Heckbert writes:
+
+As others have mentioned, the moon and other dusty surfaces are not
+Lambertian.  Blinn, in the paper cited below, says they follow the
+Hapke-Irvine illumination model more closely.
+
+%A James F. Blinn
+%T Light Reflection Functions for Simulation of Clouds and Dusty Surfaces
+%J Computer Graphics
+(SIGGRAPH '82 Proceedings)
+%V 16
+%N 3
+%D July 1982
+%P 21-29
+%K shading
+%Z Hapke-Irvine illumination model
+
+-------------------------------------
+
+Ken gave another problem with rendering the moon:
+
+>  A very wide-angle view of a scene (i.e., a landscape), with a sphere
+>(i.e., a moon) in an extreme corner of the image, sports one very distorted
+>sphere in the image, when rendered using the standard virtual-screen model
+>for ray tracing.  (See the cover of Jan. '89 IEEE CG&A for an example.)
+>
+>  Seems that this is a version of the sphere-to-plane mapping problem, and
+>therefore inadmissible to a non-distorting solution.
+>
+>  Can anyone out there prove this conjecture right or wrong, or demonstrate
+>some nice workaround?
+>
+
+   Yes, this distortion is due to sphere-to-plane mapping.  Actually, the
+volume defined by the rays joining every point on the sphere to the center of
+projection will be a cone.  Now an intersection of this cone with a plane will
+invariably result in an ellipse.  So EVERY sphere, should look like an
+ellipsoid in a ray-traced image which uses this model.  But the distortion is
+prominent only for spheres located in extreme corner of the scene.
+
+   I also encountered the same problem and would be interested in any method
+or projection-model which circumvents this problem.  If the pin-hole camera
+model is not a good model for the human eye-brain system then is there any
+other model which is more accurate?
+
+Dilip Khandekar
+
+--------
+
+A solution I can see is to have each pixel, instead of having a calculated
+position on a viewing plane, have each instead with a calculated horizontal
+and vertical angle from the center.  Knowing the angles, one can easily
+construct a vector of the appropriate angles to represent this pixel's ray.  I
+have not actually implemented this, but it is obvious that this would work, as
+when a conventional method is used and the viewing plane is located far from
+the eye point, the near-spherical approximation of the plane is good enough to
+remove most any distortion.  The reason why a conventional camera does well is
+due to the same phenomenon -- it takes a spherical "bunch" of rays and maps
+them to the film plane.  If I ever get my present thesis out of the way, I
+will attempt to implement this in my version of DBW_Render.
+
+Prem Subrahmanyam
+
+[If I understand this correctly, the idea is doing equal angle spacing of
+rays, instead of equal increments on the image plane.  I gave this suggestion
+to Ken, then quickly tried it out & found it lacking, as it distorts straight
+lines into curves and I forget what else.  See the next entry. --EAH]
+
+--------
+
+This rings a bell in my mind, since I once by mistake in my raytracer did a
+purely 'angular' perspective model, i.e. the x axis of the display was really
+the angle of the ray in the ground plane, and the 'y' coordinate was the angle
+from that plane...  the image looked....  different....  well, anybody
+implemented some kind of 'different' perspective model?  Ideally, you would
+hook up the user's face to the screen via a telescopic pole, and pull it via
+pneumatic cylinders to the correct viewing distance, and the rendering
+equation should of course not project onto a plane, but onto a slightly curved
+ditto (i.e. a computer monitor).  Now we would hear no more whining about
+perspective distorsion....  ;-)
+
+No, seriously, anybody tried twiddling with it?  I did (by mistake) in my
+tracer but, well....  nah, not good...  And the problem is, also, that these
+twiddlings are only easy to do in raytracers, since linear-things (polygon's
+and such) may get non-linear sides when you twiddle (har har for you
+Z-buffalos ;-)
+
+Zap Anderssen
+
+--------
+
+You might like to experiment with mimicking the distorting effect of camera
+lenses.  Lenses which behave like renderers are very expensive, and are called
+something like `flat-plane lenses' (surprise).  Ordinary lenses exhibit
+distortion (it's called that in optics books).  Positive distortion makes flat
+squares look like pillowcases, negative makes them look weird.  A way to model
+positive distortion is to move points in the picture closer to the center.  A
+point that starts off at (r, theta) on the image plane in polar co-ordinates
+would move to (r', theta) where, in two popular approximations:  r' = r (1 - C
+* r * r) r' = r * cos (C * r) for appropriate (small) constants C.  Of course,
+I was working with images.  In a ray-tracer, you would distort the directions
+of the rays by using the inverse transformation to splay the rays from the
+camera outwards.
+
+NO guarantees that it will fix the problem, but it is not a million miles away
+from this discussion....
+
+Ian D. Kemmish
+
+--------
+
+If the distorsion is too large, look for conformal mappings.  A conformal
+mapping would transform _small_ circles to circles.  The most general
+conformal mapping from the sphere to the plane is a stereographic projection
+followed by an analytic transformation of the complex plane.  Read the Shaum
+book on complex variables, do all the problems and start tinkering :-).
+
+Pierre Asselin,  R&D, Applied Magnetics Corp.
+
+--------
+
+Pictures generated with a standard perspective camera model only look "normal"
+if the viewing angle used during rendering matches the angle at which you view
+the picture.  If you use a horizontal view angle of theta during perspective
+rendering, and view the pictures on a monitor of width w, then if you view the
+screen at a distance of d = w/2*cot(theta/2), the picture will not look
+distorted.  Here's a little table for a w=14" screen:
+
+				     telephoto     about normal     wide angle
+
+    view angle (degrees), theta	    :   10		50		90
+
+    recommended viewing distance, d :   80"		15"		7"
+
+The same argument applies in photography:  shoot a photograph with a standard
+(50mm focal length) lens, print it at 8x10" size, say, and it will look pretty
+normal when viewed at a distance of about one foot.  If you shoot a picture
+with a wide angle lens (24mm, say) and print it at 8x10, you will perceive
+"perspective distortion" if you view it at a distance of a foot, but it will
+look much less distorted if you hold it close to your face, so that your
+viewing angle matches the view angle captured by the lens.
+
+The argument also applies in projection of movies and slides:  there is only
+one point in a movie theater from which a viewer will see the same image as
+that seen by the camera (i.e. same angle of view).  Theater geometry and the
+lenses used for shooting and projection are usually chosen to put that "ideal
+viewer position" near the middle of the theater, I imagine.  Assuming perfect
+filming and projection and one eye closed, viewers at this ideal position will
+not see any distortion artifacts of the projection -- that is, they will not
+be able to tell the difference between a projected film and a window into a
+3-D scene.  Viewers not at the ideal viewing position, such as those in the
+first row, will see the familiar artifacts of perspective "distortion" that
+will easily allow them to distinguish between a projected image and a real 3-D
+scene.
+
+Another interesting observation about projections is that you can project onto
+ANY shape screen you like (planar, spherical, cube corner, curtain, human
+torso, ...) and there will be no artifacts of the projection if the
+projection lens matches the shooting lens, the viewer is right at the
+projector, and the surfaces are properly finished.
+
+---
+
+Related question:  is there a formula relating camera lens focal length and
+angle of view?  (I would guess that such a relationship would not be
+theoretical, but would be based on practicalities, and would vary from
+manufacturer to manufacturer)
+
+Paul Heckbert
+
+--------
+
+In reply to Paul Heckbert:
+
+Focal length and angular field are independent.  For example, you can have a
+50mm focal length lens which is a "standard" lens for 35mm photography, or a
+50mm wide angle lens for a larger film format.  There are some applications
+(enlarging?)  where it is sometimes recommended to use a wide angle lens from
+a larger film format in place of a standard lens to assure better field
+uniformity.
+
+For a family of lenses designed for a given film size, then of course there
+will be a relationship between focal length and field of view, since economics
+dictate that the field of view should be no larger than necessary.  Note that
+the field does not have a sharply defined size, but that the intensity drops
+off continuously at the margins of the field (vignetting).
+
+Jeff Mulligan
+
+--------
+
+In response to Paul's related question:
+
+The relationship is fairly straightforward as I understand it.  Think pyramid
+where the width and length of the base are defined by the image dimensions and
+the height is given by the focal length.  The formula for the angle is simply:
+
+	angle = 2 * atan(film_size/2 / focal_length)
+
+For 35mm film, whose image dimensions are 34mm by 23mm (approx.), the view
+angles for a standard 50mm lens are 37.6 by 25.9 degrees.
+
+Greg Ward
+
+--------
+
+If Ken is rendering an outdoor picture at night with the moon in it, then it
+is probably a very wide angle picture, and you are absolutely correct that the
+answer is "stick you face closer to the screen and it will look ok."
+
+You state:
+
+>there is only one point in a movie theater from which a viewer will see the
+>same image as that seen by the camera (i.e. same angle of view).  Theater
+>geometry and the lenses used for shooting and projection are usually
+>chosen to put that "ideal viewer position" near the middle of the
+>theater, I imagine.
+
+You don't have to imagine.  You are exactly right.  I remember this from
+filmmaking books I read in high school.  A 35mm movie camera uses 50mm lenses
+as the "normal" lens.  A 35mm film projector uses a 100mm lens so the picture
+looks right when you are seated half way between the projector and the screen.
+(I don't remember the numbers for "Panavision" or other wide screen systems.)
+Use of telephoto or wide angle lenses in the camera produces some distortion
+to the viewer at the center of the theater.
+
+This is something very important to film directors.  All films are done this
+way.  They understand it.  I have never heard this issue mentioned in the
+context of computer graphics.  Maybe no one knows this?
+
+As to your question:
+
+>is there a formula relating camera lens focal length and angle of view?
+
+Such a formula is simple, if the lens has no distortion, and the size and
+shape of the film is known.  Where distortion is distortion in the strict
+optical aberration sense.  Any optical system is subject to several
+aberrations to varying degrees.  These are:
+
+spherical abberation
+coma
+astigmatism
+curvature of field
+distortion
+longitudinal chromatic aberration
+lateral chromatic aberration
+
+Distortion is non-uniform magnification across the field of view.
+Magnification usually varies slightly as the angle off the optical axis
+varies.  This gives rise to "barrel" (negative) or "pincushion" (positive)
+distortion.  Named, for what the image of a square looks like when subjected
+to said distortion.
+
+For camera lenses, you can safely assume the distortion is very small except
+for wide angle lenses (which is probably the case you were interested in).  I
+expect that lens manufacturers would be reluctant to release the actual
+numbers describing their lens's performance, since most people couldn't tell
+the difference anyway.
+
+For a lens focused at infinity and flat film,
+fov = 2 * atan ( film_width / ( 2 * focal_length ) )
+
+The only difference between a distortionless lens and an ideal pinhole camera
+with respect to field of view is that if the lens is focused at a finite
+distance, replace focal_length in the above formula with:  1/(1/focal_length -
+1/object_distance) which is the lens to image (film) distance.
+
+Chuck Grant
+
+--------
+
+>Related question: is there a formula relating camera lens
+>focal length and angle of view?
+
+The way this is done for a rectilinear lens (everything one ever encounters
+short of optics with high distortions or a fisheye) is based on the size of
+the image formed.  In an "ideal" lens -- a pin-hole is a nice first
+approximation -- the field is as large as you want -- the negative or film
+holder or other physical limitation defines the "field stop".  In a more
+complex lens the diameter of some internal element might serve to define the
+field stop -- a 50mm lens for a 35mm SLR would probably not be able to produce
+a ~250 mm image circle if mounted on a large format camera's lens board.  If
+if could it would make a tremendous wide angle!
+
+If the linear field F is given, then you can use the dimensionless relation:
+
+		 2 tan(A/2) = F/EFL
+
+to solve for angular field A or effective focal length.
+
+This says (for instance) that a conventional SLR with 43 mm film diagonal (35
+mm film is 24 mm x 36 mm; hypot(24,36)~=43) will cover a reasonable, mildly
+wide-angle 53 degree (diagonally) angular field with a 43 mm lens installed.
+
+Alan Paeth
+
+--------
+
+So using the (theoretical! yay!) relation
+
+	angle = 2 * atan(film_size/2 / focal_length)
+
+with 35mm film format, which I'm taking to be 34mm wide by 24mm high (Greg
+Ward's numbers; Alan Paeth's numbers differ slightly:  24x36), we get the
+following correspondence for some common lens focal lengths:
+
+	focal length (mm)	24	35	50	80	200
+
+	horizontal angle (deg)	70.6	51.8	37.6	24.0	9.72
+
+	vertical angle (deg)	51.2	36.4	25.9	16.4	6.58
+
+Paul Heckbert
+
+-------------------------------------------------------------------------------
+
+Shadow Testing Simplification, by Tom Wilson
+
+Out of nowhere, I have come up with a new (?) speedup (?) technique for
+shadow testing in ray tracing.  I don't have the kind of code necessary to
+test it.  It is kind of the inverse of a bounding volume:
+
+Consider an expensive-to-intersect object (and for this example, a convex
+solid.  I'll generalize later).  Now typically a bounding volume tells you
+when a ray misses the object or parts of the objects (for hierarchies).
+Eventually you have to intersect the object itself (I'm assuming the object
+hasn't been broken down into polygons or whatever).  Now what would be good is
+a volume that, if intersected, would tell you the object is hit without
+intersecting the object at all (of course it won't always work).  Suppose for
+this example we have a bloboid sphere or a megafaced convex polyhedron and we
+put a sphere inside the object such that the entire sphere is enclosed in the
+real object.  Now if a ray hits the sphere, it definitely hits the object.  If
+the ray misses the sphere, it may still hit the object somewhere between the
+bounding volume and the "inner tube" volume.  Now this scheme is ideal for
+shadow testing, since where the object is hit by the ray is usually
+irrelevant.  A "normal" ray needs the intersection point, so this scheme may
+not help much (I don't know).
+
+  :::::::::::::            An ugly (and pretty bad) 2D example:
+ :       000   :
+:      00   00  :          0's define the sphere inside the object :'s
+:     0       *--:
+:    0         0 -:--
+ :   0         0  :  ----
+  :   0       0  :       ----<   Shadow ray that hits at *
+   ::: 00   00  :
+      :::000   :
+	 ::::::
+
+The object could really be any type of object (not just convex) provided a
+sufficient inner tube volume can be constructed.  It's really the same problem
+as the bounding volume:  the better the bounding volume (inner tube) the more
+rays that are culled as misses (hits).
+
+Is it feasible?  I don't know.  I don't have any complicated-objects code in
+my tracer, so I can't test yet (without writing the code first obviously).
+Perhaps someone who has the type of setup necessary can incorporate this and
+find out (for that matter, has anyone already done it?).  If it's a good
+scheme, maybe I should change my thesis 8-) (I really just wanted to get into
+the next issue of the RT News).  Please give some feedback.
+
+--------
+
+Reply from Mark VandeWettering:
+
+My guess is that while this would work, it is not necessarily a good thing to
+do.  Whether it is an actual speedup is basically a result of how often you
+hit the internal bound versus how often you hit the object.  As a crude guess,
+we might imagine that the probability of hitting an object is roughly
+proportional to its surface area.  Further suppose that our complex object has
+surface area = A, and for the sake of argument, spherical.  As a typical
+example of our inner bound, lets assume it is a sphere as well, but with
+radius 10% smaller.  (This seems pretty tight, I bet you could not do much
+better for real objects).
+
+If the object has unit radius, its surface area is 4*Pi.  Our "unbounding
+sphere" has surface area .81 * 4 * Pi.  So, we can assume for this argument
+that 81% of all rays that penetrate the object will penetrate the inner
+volume.
+
+Examining the costs:
+
+	81% of the time: we just intersect the cheap volume
+	19% of the time: we need to intersect BOTH volumes to determine
+			 whether or not the object intersects the ray.
+
+
+To generalize: let
+
+	C(cheap) be the cost of intersecting the cheap volume
+	C(object) be the cost of intersecting the real object
+	p be the probability of a ray which hits the object hitting the
+	  inner cheap bounding volume.
+
+Then, this scheme is a potential speedup if
+
+	p C(cheap) + (1-p) * (C(cheap) + C(object)) < C(object)
+
+Is this a speedup?  I dunno.  One scene in Eric Haines' SPD data base includes
+a large gear with 144 edges.  The polygon intersection routine I use is linear
+in the number of edges for a polygon.  The majority of rays fall within a disc
+which probably accounts for 90% or more of the total area of the face.  I am
+pretty sure that a scheme like you suggest would be useful for this case.
+
+But in general?  I dunno.  It really depends on the probability p.  For
+most objects, my guess is you might be able to get p = 0.5, which would make
+the inequality something like
+	C(cheap) + 0.5 * C(object) < C(object)
+or
+	C(cheap) < 0.5 * C(object)
+
+which actually does seem to make it attractive.
+
+In general, if the ratio of C(cheap)/C(object) = r, then we can solve for
+the percentage of inner bounding volumes we need to make this scheme profitable.
+
+p C(cheap) + (1-p) C(cheap) + (1-p) C(object) < C(object)
+
+p C(cheap) + C(cheap) - p C(cheap) + C(object) - p C(object) < C(object)
+
+C(cheap) + C(object) - p C(object) < C(object)
+
+- p C(object) < -C (cheap)
+
+p > r
+
+What this means, if the ratio of speed from cheap to expensive is 1/10, then
+we need to have probability greater than 10% to achieve a speedup.
+
+Hmmm.  This probably bears looking into.  Any comments?
+
+--------
+
+John Gregor comments:
+
+Well, to add another data point, the Wavefront software has both a "trace
+object" and a "shadow object" associated with each object being rendered.
+
+The trace object is the object used in reflections.  Usually, these objects
+are left undefined, or point to a lower complexity, but similarly shaped,
+object.  Since shadows and objects appearing as reflections are typically
+small and are there to provide visual cues and since Wavefront's running time
+is decidedly non-linear to number of polygons in the scene, this is a win.
+
+Also, you can achieve some neat tricks using this.  You can have an object
+cast a shadow from a completely different object (e.g. a kitten casting a
+lion's shadow) or appearing as something else in mirrors.  Using the same
+object with a different offset or scale can lead to some pretty neat effects
+occasionally also.
+
+--------
+
+Rick Speer writes:
+
+I'd like to add my $0.02 and note that W.  R.  Franklin examined this idea in
+a non-raytracing but similar context in the following paper-
+
+  "3D Geometric Databases using Hierarchies of Inscribing Boxes", pp.  173-80
+  in Proceedings of "CMCCS '81" (this is what the Canadian conference now
+  known as 'Graphics Interface' used to be called; these volumes are available
+  from the Canadian Information Processing Society, Toronto, if anyone's
+  interested).
+
+To be more specific, let me quote a bit from the paper's abstract-
+
+  "Hierarchical tree structured databases are an efficient way of representing
+   scenes with elaborate detail of varying scales.  Storing a circumscribing
+   box around each object is a well known method of testing whether the object
+   intersects or obstructs any other objects.  This paper proposes another
+   aid:  an inscribing box.  The inbox is a polyhedron that is completely
+   contained in the ob- ject.  It should be as large as is easy to
+   determine...  The inbox speeds up visibility tests [in the following
+   way:...  ] [He concludes,] By combining inboxes and circumboxes, it is
+   possible to calculate the visible surfaces of a hierarchical scene in time
+   linear in the visible complexity of the scene..."
+
+In his followup message, Mark goes on to note that this issue really needs to
+be studied on test scenes using a probabilistic analysis.  I hope it wouldn't
+be too immodest of me to note that such an analysis appears in the paper,
+
+  "A Theoretical and Empirical Analysis of Coherent Ray-tracing",
+  L. R. Speer, T. DeRose and B. Barsky, pp. 11-25 in the Proceed-
+  ings of Graphics Interface '85, CIPS, Toronto, 1985.
+
+-------------------------------------------------------------------------------
+
+SIMD Parallel Ray Tracing, by George Kyriazis, Rick Speer
+
+In article <9308@mirsa.inria.fr> kjartan@puce.inria.fr (Kjartan Emilson) writes:
+>
+>Does anybody have an algorithm for a massively parallel raytracer,
+>which could for example run on a Connection Machine, i.e a machine
+>with a 'single instruction - many data' architecture ?
+>
+
+The ray-tracing algorithm is usually parallelized ray-at-a-time, which makes
+it suitable for MIMD machines.  If you want to run it on an SIMD you have a
+problem, since you have to advance all rays at the same time, then filter out
+which rays do not need a second reflection, and trace the second level, etc.
+
+I believe that Scott Whitman (at uiuc?) has written a ray-tracer for a SIMD
+machine.  I don't remember any details.  Pick up the SIGGraph proceedings for
+either '88 or '89 (don't remember which one) on ray-tracing or parallel
+computer architectures for computer graphics and you are going to see his name
+there.
+
+--------
+
+Rick Speer writes:
+
+A fair amount of literature is beginning to appear on this subject.
+The references below should get you started.
+
+  "3D Image Synthesis on the Connection Machine", Franklin C. Crow,
+  Gary Demos, Jim Hardy, John McLaughlin and Karl Sims, pp. 254-69
+  in Parallel Processing for Computer Vision and Display, P. M. Dew,
+  T. R. Heywood and R. A. Earnshaw, Eds., Addison-Wesley, 1989.
+
+  "Ray Tracing on a Connection Machine", H. C. Delaney, pp. 659-67
+  in the Proceedings of the 1988 International Conference on Super-
+  computing, ACM, July, 1988.
+
+  "Ray-tracing Parallelization on a SIMD/SPMD Machine", PhD. Thesis,
+  Marie-Claire Forgue, Laboratoire de Signaux et Systemes, Universite
+  de Nice, Nice, France, September, 1988.
+
+  "Distributed Ray Tracing Using an SIMD Processor Array", A N. S.
+  Williams, B. F. Buxton and H. Buxton, pp. 703-25 in Theoretical
+  Foundations of Computer Graphics and CAD, R. A. Earnshaw, Ed.,
+  Springer-Verlag, 1988.
+
+-------------------------------------------------------------------------------
+
+Rayscene Animator, by Jari K{hk|nen [sic]
+
+  Thanks to all people who voted for Rayscene.  It's now available from
+tolsun.oulu.fi.  Version is 1.3, which the first published version of Rayscene
+so docs are not perfect.  But we are working on it...
+
+  The stuff is in directory /pub/rayscene.  Directory also contains two ani-
+mations for PC and animation player (Autodesk Animator AAPLAY.EXE).  Those
+animations were made with Rayscene and DKB-raytracer.  Enjoy.  Also stuff for
+Amiga should be available soon.
+
+  More information from hole@rieska.oulu.fi or oldfox@rieska.oulu.fi
+
+--------
+
+  There are a few animation demos, made with the "Rayscene" animation utility
+FTPable from tolsun.oulu.fi (128.214.5.6) in the directory
+/pub/rayscene/anim.PC (for "Autodesk Animator" on the PC) and in
+/pub/rayscene/anim.amiga (for "Movie" on the Amiga).  Here is a short
+description of the animation files:
+
+PC-stuff:
+aaplay.lzh    Autodesk Animator animation player, freely distributable
+rdice.lzh     One mirrored die rounding over chess board
+2dice.lzh     Two dice ...
+movdice.lzh   same as above, but viewpoint moves
+bouncing.lzh  Mirrored ball bouncing over chess board
+2balls.lzh    Two mirrored, color-changing balls moving over wavy surface.
+	      Animation data files created with Rayscene's soon-released utili-
+	      ty, "Sin". Data file and array file by Panu Hassi. This animation
+	      (Amiga version) can also be found from anim.amiga
+	      NOTE: When Sin is released with Rayscene version 1.31, datafile
+	      and arrayfile are included (and explained too.)
+vortdemo.lzh  Combination of three different animations:cylinder, mech and
+	      Chess. These animations are usually distributed with VORT-tracer.
+	      NOTE: No Rayscene used. Just for fun...and there seems to be a
+	      request for raytraced animations...
+
+
+Amiga:
+
+ At the moment, only 2balls is available. There's going to be more...
+
+ Rayscene was released only a few weeks ago, so there are going to be more
+animations here.  Email me for more information.
+
+NOTICE:  Rayscene is now available from iear.arts.rpi.edu also.  (Directory
+/pub/graphics/ray/rayscene).  Animations are available only from tolsun...
+
+P.S. DKBTracer was used for rendering.
+
+-------------------------------------------------------------------------------
+
+SIPP 2.0 3d Rendering Package, by Jonas Yngvesson and Inge Wallin
+
+We just posted the source code to sipp 2.0 in comp.sources.misc.  It may be a
+while before it appears due to moderation, though.  Here is an excerpt from
+the README file:
+
+*******************************************************************
+	     sipp 2.0  --  3d rendering package
+
+	     by         Jonas Yngvesson   jonas-y@isy.liu.se
+			Inge Wallin       ingwa@isy.liu.se
+
+	     Linkoping Institute of Technology
+	     Sweden
+*******************************************************************
+
+This is the beta-test release of version 2.0 of SIPP, the SImple Polygon
+Processor.  SIPP is a library for creating 3-dimensional scenes and rendering
+them using a scan-line z-buffer algorithm.  A scene is built up of objects
+which can be transformed with rotation, translation and scaling.  The objects
+form hierarchies where each object can have arbitrarily many subobjects and
+subsurfaces.  A surface is a number of connected polygons which are rendered
+with Phong interpolation of the surface normals.
+
+The library has an internal database for the objects that is to be rendered.
+Objects can be installed in, and removed from, this database at any time.
+
+The library also provides 3-dimensional texture mapping with automatic
+interpolation of texture coordinates.  Simple anti-aliasing is performed
+through double oversampling.  A scene can be illuminated by an arbitrary
+number of light sources.  A basic shading algorithm is provided with the
+library, but the user can also use his own shading algorithms for each surface
+to produce special effects.  Images are produced in the Portable Pixmap format
+(ppm) for which many utilities exist.
+
+-------------------------------------------------------------------------------
+
+3DDDA Comments, by John Spackman
+
+3d-dda's are prone to many special cases, especially when line slopes approach
+zero (so the the inverse line slope, generally used as the increment a la
+ARTS) approaches infinity.
+
+A more numerically stable & hence more robust generalization of Bresenham's
+algorithm to 3D, which navigates ALL the voxels intersected by the ray is
+described in
+
+	`Scene Decompositions for Accelerated Ray Tracing', John Spackman,
+	PhD Thesis The University of Bath, UK, 1990. Available as Bath Computer
+	Science Technical Report 90/33
+
+Copies can be ordered from Angela Coburn at JANET:  `amc@uk.ac.bath.maths' or
+ARPA:  `amc%maths.bath.ac.uk@nsfnet-relay.ac.uk'.  Any surface mail should be
+addressed to:-
+
+	Angla Coburn
+	Mathematical Sciences
+	The University of Bath
+	Claverton Down
+	Bath
+	AVON
+	BA2 7AY
+	UK
+
+However, uniform spatial division is generally wasteful in memory costs, being
+non-adaptive.  I prefer octtrees - the above thesis describes an incremental
+ray navigation of octtrees & techniques for octtree construction (& indeed for
+building Uniform grids).  - `My way's better than everyone elses' :-)
+
+-------------------------------------------------------------------------------
+
+Radiosity Implementation Available via FTP, by Sumant (sumant@shakti.ernet.in)
+
+I have carried out some Radiosity implementations as part of the investigation
+into light equilibrium based rendering methods for my doctoral work.  To test
+the implementation, I have used a very simplified scene modeler, BOX.  BOX
+supports only box as the modeling primitive and translation and scaling as the
+modeling transformation.
+
+I am looking for some good planar surface model data.  Interested netters may
+please send me data with the data format.  I will try to provide the input
+interface for the sent data formats.
+
+The implementation is available at our FTP site (pub/Rad.0.1.tar.Z at
+sbs.ncst.ernet.in ip# 144.16.1.21).  In case of any difficulty in getting from
+the FTP site, please send me mail on sumant@shakti.ernet.in.  I will send the
+UUENCODED compressed tar file.
+
+The system has been tested both on SUN and VAX is expected to run on any UNIX
+platform.
+
+Further, I invite comments and suggestions from the interested users.
+
+
+sumant(sumant@shakti.ernet.in)
+national centre for software technology,bombay,india
+
+-------------------------------------------------------------------------------
+
+Dirt, by Paul Crowley
+
+I've been thinking about this one, and dirt is a nightmare of the first order.
+No, I'm not talking about my personal hygiene...
+
+I was in the kitchen (this _does_ have CG content, bear with me) and I thought
+"Wouldn't this be a nice interesting scene to try and render.  The reflection
+of the marble back wall against the taps, the kettle, the shadows from the
+fluorescent strip lights, the cups...  fun".
+
+Then I looked at the dirt.  It was a pretty clean kitchen, as kitchens go.
+There was no mould on the plates, as there is in the kitchen at home (it's my
+flatmates fault.  I eat out now as a survival precaution).  But, for example,
+there was a whole _variety_ of crumbs on the floor.  Breadcrumbs, little bits
+of onion peel, poppy seeds, a discarded match...  anyone looking for
+photorealism would have to come up with a description of each of these.  Or
+the dirt on the iron - you couldn't just throw some "turbulence" function at
+this or fractals because the dirt on irons isn't uniform - you'd have to go
+into the physics of how dirt forms on irons.  I'm not sure if that physics is
+even fully understood.  There were little pencil marks on the cupboard doors
+where the carpenters marked them - if you had been rendering it, would you
+have remembered those?  A dribble of water down one side of a cup.  A blue
+stain on the carpet whose cause is a mystery to me.
+
+The trouble with dirt is that it's a result of the history of those objects,
+and not a static thing.  That chip in the sideboard is in _that_ position
+because your flatmate was trying to get a cold sausage out of the fridge, but
+she was blind drunk and accidentally drove a waterpipe into it while heading
+for the ground at high speed.  You going to write a simulation of that?  Will
+you remember to include the little bit of sweater that got caught in the chip
+last Tuesday?
+
+Photorealism is _really_ hard.
+
+\/ o\ Paul Crowley aipdc@uk.ac.ed.castle
+/\__/ Trust me, I know what I'm doing.
+
+-------------------------------------------------------------------------------
+
+Thomson Digital Images University Donation Program, by Michael Takayama
+	(tak@tce.com)
+
+Thomson Digital Images (TDI) America is offering a special donation program to
+qualified educational facilities in the U.S.  and Canada interested in 3D
+computer graphics/animation for Industrial Design, Scientific Visualization,
+and Animation.  TDI Explore v2.3 software is a high-end workstation-based
+package including sophisticated 3D modeling, animation, and rendering
+capabilities.  Some features of the software include NURBS modeling, inverse-
+kinematics animation, particle-system animation, interactive 3D texture
+editing, fast scan-line rendering and ray-tracing.  TDI is a world leader in
+the high-end 3D graphics/animation market with an installed base of more than
+450 systems.
+
+*******************************************************************************
+
+			  UNIVERSITY DONATION PROGRAM
+			  ---------------------------
+
+If you have ever thought about working with 3D, now is the time.  TDI America
+will donate the EXPLORE software to universities and colleges in the United
+States and Canada to give students access to the newest developments in the
+world of 3D computer animation and graphics.
+
+There are certain criteria which must be adhered to in order for a college/
+university to be a successful candidate for this program:
+
+	1.  EXPLORE must be used for research or educational projects.
+
+	2.  The software must be made available to a minimum of 10 students
+	    per year.
+
+	3.  The software must not be used for commercial purposes without
+	    the express written permission of TDI America.
+
+	4.  The school must appoint one person who will act as the direct
+	    contact with TDI America.
+
+	5.  A software maintenance agreement and a software license agreement
+	    must be signed and returned to TDI America.
+
+Because our university donation program provides software free of charge, the
+only costs involved are for maintenance (which includes a one year warranty,
+telephone support and free upgrades) and training.
+
+TDI runs on the full range of Silicon Graphics workstations and the IBM RISC
+6000.  The Silicon Graphics hardware can be ordered from TDI at our
+educational discount prices for your convenience.
+
+To demonstrate your interest in our university donation program, please send
+me a letter indicating your intended use of the software, what workstation(s)
+you have or would like to purchase, and your time frame.  I will be happy to
+put together a price proposal for you, to arrange for a demo, and to discuss
+with you the applications of our software for your school.
+
+I look forward to speaking with you about EXPLORE and our donation program.
+
+Sincerely,
+
+Karen Lazar
+Director, University Donation Program
+TDI America
+
+*******************************************************************************
+
+For more information, contact:
+
+		   Karen Lazar
+		   Director, University Donation Program
+		   TDI America
+		   1270 Avenue of the Americas
+		   Suite 508
+		   New York, NY 10020
+		   TEL:  212/247-1950
+		   FAX:  212/247-1957
+
+*******************************************************************************
+Michael Takayama                                      email:  tak@tce.com
+Technical Support Manager
+TDI America
+
+--------
+
+>Great initiative. Any ideas to make the donation valid outside USA and Canada,
+>like making it worldwide? Whom should I contact to get this information?
+
+TDI America has made this donation offer available only to educational
+facilities in the United States and Canada.  For those of you located
+elsewhere in North or South America, you can ask if the program can be made
+available to you.
+
+Contact:	Karen Lazar [etc...]
+
+For those of you located in Europe, you can try contacting the TDI home office
+in Paris, France.  I believe that they have a similar program available in
+Europe.
+
+Contact:	Thomson Digital Image
+		22 rue Hegesippe-Moreau
+		75018 Paris
+		FRANCE
+		TEL:  33-1-43-87-58-58
+		FAX:  33-1-43-87-61-11
+
+-------------------------------------------------------------------------------
+
+A Brief Summary of Ray Tracing Related Stuff, Angus Y. Montgomery
+    (angus@godzilla.cgl.rmit.oz.au)
+
+I have found (been given/know of) these raytracers (rt's), 3d object file
+formats, and object file databases (db's).  If you know of other non-trivial
+rt's available please let me know asap.
+
+NOTE:  before madly ftp-ing in these rt's and stuff, check out eric
+(erich@acm.org) haines' rt-related ftp site list for a site near _you_.  his
+list is fairly comprehensive and up to date, and is what i used to find most
+of the following.
+
+
+x : before the source means that it is a duplicate of the most
+   up-to-date i have downloaded.
+xx : dated compared to another.
+* this is the _source_ site - the rt from there couldn't be any fresher
+
+rt : (a.k.a and de-acronymation) my source.
+
+
+   >>>rts(ftp and by request):
+art : (a rt, VORT) *|munnari.oz.au
+brl : (ballistic research lab) more info at hanauma.stanford.edu
+dbw : (dist render, distpro, d.b.wecker) hanauma.stanford.edu x|munnari.oz.au
+drt : (distance rt, rayman) iear.arts.rpi.edu
+dkb : (d.k.buck) iear.arts.rpi.edu 2.01 (or .10 ?) xx|cs.uoregon.edu (*alfred)
+mtv : x|iear.arts.rpi.edu *|cs.uoregon.edu uses nff
+ohta : iear.arts.rpi.edu xx|cs.uoregon.edu
+pray : (vm_pray) cs.uoregon.edu (*irisa)
+prt : (parallel) from comp.graphics/Kory Hamzeh
+qrt : (quik) iear.arts.rpi.edu xx|cs.uoregon.edu
+rad : from Ning Zhang.
+radiance : from Greg Ward
+ray : ucsd.edu v3.0 runs off nff :is this an earlier mtv?
+rayshade  : xx|iear.arts.rpi.edu cs.uoregon.edu v3.0 (*weedeater)
+rpi : (Kyriazis, pxm, vmpxm, gk aargh!) do differ, but in essence the same
+   *|iear.arts.rpi.edu v2.0 x|cs.uoregon.edu xx|ucsd.edu
+
+
+   >>>object databases:
+NFF : (neutral file format) gondwana.ecr.mu.oz.au
+OFF : (object file format) gondwana.ecr.mu.oz.au
+poly : polyhedra db
+spd v3 : (standard procedural db) cs.uoregon.edu produces NFF
+
+
+   >>>other formats:
+AutoCAD : cad $
+GDS things file : (thf) cad
+IGES : (initial graphics exchange standard)
+architron : (arch) cad
+imagine : amiga $
+irender : (slp) sgi $
+renderman : pixar's
+rtk : (rt kernel) $
+turbo silver : amiga $
+videoscape3D : amiga
+
+
+   >>>(not what i wanted : trivial or limited)
+fritz
+good
+micro : (uray, DBW_uray) a smaller version of dbw
+mini : (paul)
+mintrace : (shortest)
+nonfinished
+obfus
+ps
+   >>>(not rts)
+rayscene
+wave
+
+-------------------------------------------------------------------------------
+END OF RTNEWS

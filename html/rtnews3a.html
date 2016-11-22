@@ -1,0 +1,981 @@
+<!-- html version of Volume 1, Number 6 :  -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 1, Number 6</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>April 6, 1988</FONT>
+<P><FONT size=+1>Volume 1, Number 6</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1988, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+RT News,
+Hardcopy Form,
+</A></LI>
+by Andrew Glassner
+<LI><A HREF="#art2">
+New People
+</A></LI>
+<LI><A HREF="#art3">
+Question for the Day,
+</A></LI>
+by Rod Bogart
+<LI><A HREF="#art4">
+Re: Linear-time Voxel Walking for BSP,
+</A></LI>
+by Erik Jansen
+<LI><A HREF="#art5">
+Some Thoughts on the Theory of RT Efficiency,
+</A></LI>
+by Jim Arvo
+<LI><A HREF="#art6">
+Automatic Creation of Object Hierarchies for Ray Tracing,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art7">
+Best of USENET
+</A></LI>
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+RT News, Hardcopy Form,
+</A></FONT>
+by Andrew Glassner
+</H4>
+I was surprised that there are still some folks on the softcopy list
+not on the hardcopy list.  On the next mailing, please ask anyone on
+the electronic list who isn't getting the hardcopy (but wants to) to
+drop me a line, electronically (<A HREF="mailto:glassner@cs.unc.edu">glassner@cs.unc.edu</A>) or physically
+at the Department of Computer Science, UNC-CH, Chapel Hill, NC 27599-3175.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+New People
+</A></FONT>
+</H4>
+from: Cary Scofield
+<P>
+    Please add my name to the Ray Tracing News mailing list. You can
+use the same address(es) you use for Jim Arvo or Olin Lathrop or the
+one I give you below.  I really enjoy reading RTN -- very enlightening
+stuff!
+<P>
+Thanks,
+<P>
+<PRE>
+        Cary Scofield
+        Apollo Computer Inc.
+        270 Billerica Rd.
+        Chelmsford MA 01824
+</PRE>
+<P>
+<PRE>
+        apollo!scofield@eddie.mit.edu
+</PRE>
+<P>
+&gt; Could you please write up a paragraph about yourself which I<BR>
+&gt; could include next issue as an introduction?<BR>
+<P>
+I don't know that there is much about myself worth talking about, but here
+goes ...
+<P>
+I've been working off-and-on with 3D graphics applications and systems
+for about 9 years ... started at Apollo 4 1/2 years ago ... been
+working on  Apollo's 3dGMR and Raytracer packages ... presently in
+part-time pursuit of an MS in Systems Engineering at Boston Univ. ...
+my prevailing interests nowadays are in finding and developing a
+suitable software architecture for an image sythesis system that is
+network-distributable and user-extensible.
+<P>
+<PRE>
+                                        - Cary Scofield
+</PRE>
+<P>
+_______
+<P>
+from: John Chapman
+<P>
+[John is presently doing grad. work in computer graphics]
+<P>
+Yes I'd like to be on the list - getting the back issues would be great,
+thanks!  The most stable email address for me is:
+ ...!ubc-cs!fornax!sfu_cmpt!chapman
+although this may change shortly nothing sent to it will be lost.
+Fastest response address for short notes is still ...fornax!bby-bc!john
+<P>
+________
+<P>
+from: Eric Haines
+<P>
+Michael Cohen has also been added to the list.  He should be well known to
+anyone who has read anything about radiosity, and has also done work in
+ray tracing (his latest efforts with John Wallace resulting in an algorithm
+for combining radiosity and ray tracing [Siggraph '87, last article]).  In
+1983 we both entered the Program of Computer Graphics at Cornell, and after
+graduation he stayed on as a professor.  Embarrassingly enough, I thought
+that he was on the RT News mailing list (most of the PCG staff are) - anyway,
+he's been added:
+<P>
+<PRE>
+        <A HREF="mailto:cohen@squid.tn.cornell.edu">cohen@squid.tn.cornell.edu</A>
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Question for the Day,
+</A></FONT>
+by Rod Bogart
+</H4>
+I actually do have a ray tracing question.  There has been mucho
+noise on the net about "point in poly".  Around here, we raytrace
+triangles.  So, what is the fastest reliable way to intersect a
+ray with a triangle and also get back barycentric coordinates?
+<P>
+We subdivide our B-spline patches into a hierarchy of bounding
+volumes with triangles at the leaves.  We preprocess the triangles
+by calculating a matrix to aid the intersection process.  The problem
+is, the matrix must be inverted, and doesn't always cooperate (this
+usually fails for triangles nearly aligned with a coordinate plane).
+Is there a favorite way of storing a triangle (instead of our failing
+matrix) so that the intersection returns barycentric coordinates
+(r,s,t) all 0 to 1?
+<P>
+You don't need to bother the rest of the RT gang, if you have solution
+of which you are confident.
+<P>
+<PRE>
+Thanks,
+RGB
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Re: Linear-time Voxel Walking for BSP,
+</A></FONT>
+by Erik Jansen
+</H4>
+<I><A HREF="rtnews2d.html#art5">
+previous discussion of topic</A></I>
+<P>
+I have some experience with the 'recursive' ray traversal (as I called it)
+described by Jim Arvo. The first implementation dates from fall'83 (as
+mentioned in the previous RT news). I presented the idea during the
+workshop 'Data structures for raster graphics' (June 1985) and I compared
+it there with the 'sequential' traversal and did the suggestion that both
+methods can also be applied to a hierarchical box structure. See:
+<P>
+<PRE>
+  F.W. Jansen, 'Data structures for ray tracing',
+  In: 'Data structures for raster graphics', Proceedings workshop,
+  Kessener, L.R.A, Peters, F.J., Lierop, M.L.P. van, eds., 57-73,
+  Eurographics Seminars, Springer Verlag, 1986.
+</PRE>
+<P>
+In my thesis 'Solid modeling with faceted primitives', (Sept. 1987) it is
+discussed on the pages 63-66.
+I agree that these sources are rather obscure and not known to people
+(let say) outside the Netherlands. Here follows a summary of the pages of
+my thesis:
+<P>
+The (sequential) ray tracing algorithm for the (BSP) cell structure
+proceeds by local access. First the intersection of the ray with the total
+structure is calculated, then the cells are stepwise traversed by calculating
+the intersection of the ray with the cell planes and determining which cell
+is traversed next. The spatial index (directory) is used to access the data
+in the cell. (..).
+The index in the directory is found by an address computation on the
+coordinates of a query point (for all points within a cell, the address
+computation function gives the same index value) (This is the EXCELL
+directory method see Tamminen Siggraph'83). A similar method is described
+in [Fujimoto et al., 1986] for traversing an octree space subdivision: a
+neighbour finding technique on the basis of octree indexes. Both methods
+are better than the method described in [Glassner, 1984], which classifies
+each point by descending the complete octree.
+(..)
+Another method is feasible: a tree traversal method for the cell structure.
+This method uses a cell structure that is created by a binary subdivision.
+This recursive ray traversal method intersects the cell structure and
+recursively subdivides the ray and proceeds with the partitioning (collection
+of cells) first intersected. If the ray interval only intersects a single
+cell then the data in that cell is tested for intersection with the ray.
+(..)
+Both algorithms have been implemented but no clear differences in
+performance could be found: the average number of cells traversed for
+each ray is more than two or three, which would be beneficial for the
+sequential traversal, but it is not large enough to justify the initial
+cost of the recursive ray traversal. (..).
+(..)
+The total processing time for the ray tracing breaks down into the following
+components: cell traversal, intersection and shading.
+Their contributions are depicted in fig.(..), which shows that the intersection
+is still the major time-consuming activity.
+The constant time performance is confirmed by the results of fig. (..).
+Unfortunately, the constant time is constantly very high. (sigh)
+<P>
+So far my thesis and exactly what was predicted by Jim. In some test examples
+(for instance a simple set up with five elementary volumes (a few thousand
+polygons)) the average number of cells traversed was about 5.
+<P>
+The original idea was not to eliminate the number of internal nodes that
+are traversed (because I use the EXCELL indexing method) but to avoid the
+cell plane intersections. First I calculate the intersection of the ray with
+the six bounding planes of the world box. I put xmin, xmax, ymin, ymax, zmin
+and zmax on a stack and I half each time the ray segment for x, y and z
+alternatively. Further, while subdividing the ray I also half the directory
+index range of the EXCELL directory (this requires another filling of the
+directory than in the original method) and when the range contains only
+one index then the leaf level has been reached and the ray intersection
+with the cell data can be done. (If this is unclear I can give a more
+elaborated explanation next time).
+It will be clear that I can not use with my method arbitrary partitioning
+planes.
+<P>
+An important point is the actual coding. My implementation was in Pascal
+and I can imagine much better programs than I can write.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Some Thoughts on the Theory of RT Efficiency,
+</A></FONT>
+by Jim Arvo
+</H4>
+[Jim is writing the course notes on efficiency for the "Introduction to
+Ray Tracing" course at this year's Siggraph.  He sent this on to me
+and mentioned I could pass them on to all.  Enjoy! - EAH]
+<P>
+    Yes, I did receive the latest RT news with my octree stuff in it.  By
+    the way, it occured to me that you mentioned something about walking up
+    an octree to find the nearest common ancestor between a voxel and its
+    neighbor.  Olin and I have been discussing this, and I'm quite sure that
+    it's equivalent to the algorithm I described (but it's NOT immediately
+    obvious).  The important fact is that neighboring voxels in an octree
+    have a common ancestor which is two steps up (on average) regardless of
+    the depth of the octree.  This is what gets rid of the log N factor.
+<P>
+    With respect to "A Characterization of Ten Ray Tracing Efficiency
+    Algorithms", I'm hoping that my section of the course notes will
+    take a good first step toward filling this need.  There's obviously an
+    infinite amount of work to be done here, especially considering that
+    ray tracing is on very shaky theoretical grounds as it stands.
+    Not that we have any doubts that it works!  We just can't say
+    anything very convincing about how good our optimizations are at
+    this point.  We clearly have to do some of the things you suggested
+    in your last message, or possibly go back to square one and try to
+    create a formal "ray tracing calculus" which we can actually prove
+    things about.  And, of course, I agree totally that we need to get a
+    good handle on the strengths of the various techniques in order for
+    something like annealing to have any chance at all.
+<P>
+    By the way, while writing the course notes I realized that there is a
+    nice connection between the light buffer, the "ray coherence theorem"
+    [Ohta/Maekawa 87], and ray classification.  If you start with a
+    "direction cube" (like the hemicube of radiosity) and cross it with
+    (i.e. form the cartesian product with) different "sets", you get the
+    central abstractions which these algorithms are based upon.  Like so:
+<P>
+<PRE>
+    light buffer  -----  ray coherence theorem  -----  ray classification
+</PRE>
+<P>
+<PRE>
+     directions              directions                    directions
+         x                        x                            x
+       points                 "objects"                     "space"
+</PRE>
+<P>
+    This is a very simple observation, but I think it makes the different
+    uses of direction easier to visualize, and certainly easier to explain.
+    All three use sorted object lists associated (directly or indirectly)
+    with "cells" of a subdivided direction cube.  I think these three
+    algorithms form a nice well-rounded section on "directional techniques."
+<P>
+    Well, back to the salt mine...
+<P>
+<PRE>
+                                                                   -- Jim
+</PRE>
+<P>
+________more
+<P>
+    I want to get your opinion concerning the correspondence between
+    the light buffer, the "ray coherence" algorithm, and ray classification
+    which I mentioned previously.  In particular, I have the following
+    chart which I'd like to include in my section of the course notes and,
+    since the light buffer is your baby, I'd like you to tell me
+<P>
+<PRE>
+        1) If I've represented it fairly
+</PRE>
+<P>
+<PRE>
+        2) If there are other criteria which you think might
+           be helpful to add to the chart
+</PRE>
+<P>
+    Here is the chart (which is actually just a figure in the context of
+    a more detailed discussion):
+<P>
+<PRE>
+                    Light Buffer     Ray Coherence      Ray Classification
+                    ------------     -------------      ------------------
+</PRE>
+<P>
+<PRE>
+    Directions      Points            Objects           Space
+    crossed with    (representing     (including        (bounding the
+    ------------    light sources)    light sources)    environment)
+</PRE>
+<P>
+<PRE>
+    Applied to      shadowing rays    all rays          all rays
+    ----------
+</PRE>
+<P>
+<PRE>
+    Type of         polygonal         unrestricted      unrestricted
+    environment   (can be extended)
+    -----------
+</PRE>
+<P>
+<PRE>
+    When data
+    structure       preprocessing     preprocessing     lazily during
+    is built                                            ray tracing
+    ---------
+</PRE>
+<P>
+<PRE>
+    Direction       uniform           uniform           adaptive
+    subdivision                                         via quadtree
+    -----------
+</PRE>
+<P>
+<PRE>
+    Construction    modified          "coherence        "object class-
+    of item list    polygon ras-      theorem" applied  ification" using
+    ------------    terization        to all pairs of   hierarchy of
+                                      objects           beams
+</PRE>
+<P>
+<PRE>
+    Parameters      number of         number of         max tree depth,
+    ----------      direction         direction         max item list size,
+                    cells             cells             truncation size, etc.
+</PRE>
+<P>
+<PRE>
+    Item list       constant time     constant time     Traversal of 2D or
+    Lookup                                              5D hierarchy and
+    ---------                                           caching.
+</PRE>
+<P>
+    Also, have you given any thought to adaptive subdivision or lazy
+    evaluation?  Are there other interesting extensions that you'd care
+    to mention?
+<P>
+    [I still haven't replied - soon! (tonight, if I can help it)]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Automatic Creation of Object Hierarchies for Ray Tracing,
+</A></FONT>
+by Eric Haines
+</H4>
+<I><A HREF="rtnews2c.html#art2">
+previous discussion of topic</A></I>
+<P>
+This document is an explanation of the ideas presented by Goldsmith and Salmon
+in their May '87 paper in IEEE CG&A.  Some changes to their algorithm have been
+made for additional efficiency during ray tracing (though additional cost for
+the preprocess).
+<P>
+The problem is that you are given a list of objects and wish to create a near
+optimal hierarchy of bounding volumes to contain these objects.  The basic idea
+is to create the tree as we go, adding each node at whatever location seems
+most optimal.  To avoid searching through the whole tree, we work from the top
+down and figure out which child branch is most worth looking at.
+<P>
+<PRE>
+The Algorithm
+-------------
+</PRE>
+<P>
+As G&S note, the form of the tree created is order dependent.  One good
+method of ensuring a better tree is to shuffle the order of the list.  This can
+be done by:
+<P>
+<PRE>
+        given a list of objects OBJ[1..N],
+        for I = 1 to N {
+            R = random integer from 1 to N
+            swap OBJ[I] and OBJ[R]
+        }
+</PRE>
+<P>
+Given the list of N objects, form bounding boxes for each and calculate the
+area.  The area of the bounding box enclosing an object is proportional to:
+<P>
+<PRE>
+        Probability of hit == P = X*(Y+Z)+Y*Z
+</PRE>
+<P>
+and this is all we need to calculate, since we're using these areas relative
+to one another.
+<P>
+The first object is considered as a root node of a tree structure, simply:
+<P>
+<PRE>
+        {OBJ[1]}                Tree #1 - the initial tree
+</PRE>
+<P>
+and the other nodes are added to this tree one by one in optimal places.
+<P>
+<PRE>
+Node Placement
+--------------
+</PRE>
+<P>
+Start with the second node and look at the root of the tree.  The root will
+be either an object or a bounding volume (well, for the second node it will
+be an object, after that it'll be a bounding volume.  We're presenting this
+algorithm in this fashion because this section will be used recursively
+throughout the root's children).
+<P>
+Root node is an object: In this case, the new object (call it OBJ[2]) will form
+a binary tree with the root node, as follows.
+<P>
+<PRE>
+                {BV[1]}         Tree #2 - adding an object to tree #1
+                   |                      (First Method)
+        +----------+----------+
+        |                     |
+    {OBJ[1]}              {OBJ[2]}
+</PRE>
+<P>
+A bounding volume was created which contains both objects, and the bounding
+volume became the root node.
+<P>
+Root node is a bounding volume: In this case, three different possible paths
+can be taken when adding a new object to the tree.
+<P>
+The first is simply to add a binary tree structure as above, with one child
+being the old root and the other child being the new object.  For example,
+adding a new object (OBJ[3]) in this fashion to tree #2 above yields:
+<P>
+<PRE>
+                           {BV[2]}      Tree #3 - Adding object #3 to tree #2
+                              |                   (First Method)
+                   +----------+----------+
+                   |                     |
+                {BV[1]}              {OBJ[3]}
+                   |
+        +----------+----------+
+        |                     |
+    {OBJ[1]}              {OBJ[2]}
+</PRE>
+<P>
+Again a new bounding volume has been created and made the root node.
+<P>
+The second method for adding to a bounding volume root node is to simply
+add the new object as a new child (leaf) node:
+<P>
+<PRE>
+                {BV[1']}        Tree #4 - adding an object to tree #1
+                   |                      (Second Method)
+        +----------+----------+---------------------+
+        |                     |                     |
+    {OBJ[1]}              {OBJ[2]}              {OBJ[3]}
+</PRE>
+<P>
+Note that the bounding volume root node may increase in size.  This new
+bounding volume is noted as BV[1'] to note this possible change.
+<P>
+The third method is to not add the new object as a sibling or a child of
+the root, but rather to add it as a grandchild, great-grandchild or lower.
+In this case, some child is picked as the most efficient to accomodate the new
+object.  This child then acts like the root node above and the new object is
+added in the same fashion, by choosing one of the three methods (or, if it is
+a leaf node, automatically selecting the first method).  The next section deals
+with deciding which method is the most efficient.
+<P>
+<PRE>
+Selection Process
+-----------------
+</PRE>
+<P>
+The goal behind creating the tree is to minimize the average number of
+intersection tests which must be performed.  By looking at the extra costs
+added by adding an object at various points we can select the least expensive
+option.
+<P>
+The costs are based on the area of the objects, which represents the
+probability of the objects being hit by a ray.  The scheme is to test what
+the additional cost is for method one and for method two and record which is
+better.  This cost is termed the "local best cost".  For the root node this
+cost is also saved as the "best cost", and the method and item are also saved.
+Then method three is used, selecting the child thought to be most efficient for
+adding the new object.  An "inheritance cost" is calculated for method three,
+which is passed on to the child.  This cost is essentially the expense to the
+parents of adding the object to the tree.  It occurs only when the parent
+bounding volume must increase in size to accomodate the new object.  The term
+"inheritance cost" will mean the cost addition calculated at the level, which
+is the sum of the "parent inheritance cost", inherited from above, and the
+"local inheritance cost", the extra cost due to this level.
+<P>
+The child selected is then checked for its cost using methods one and two.  If
+the local best cost plus the parent inheritance cost is better than the best
+cost of earlier parents, the best cost, method, and location are updated.  We
+now check method three to look for an efficient child of this child.  If the
+inheritance cost (which will be the sum of the local inheritance cost found at
+this level plus the parent inheritance cost from earlier) is greater than the
+best cost, method three does not have to be pursued further on down the tree.
+This halting is valid because no matter where the node would be added further
+down the tree, the cost will never be better than the best cost.
+<P>
+Otherwise, this whole procedure continues recursively on down the tree until
+method three can no longer be performed, i.e. the inheritance cost is higher
+than the best cost or the selected testing node is an object (leaf) node.  At
+this point, whichever node has been chosen as the best node is modified by
+method one or two.  Note that method three is not a true modification, but
+rather is just a recursive mechanism, pushing the testing by methods one and
+two down the tree.  After performing the changes to the tree structure, the
+parent boxes are increased in volume (if need be) to accomodate the new
+object.
+<P>
+<PRE>
+Efficiency Criteria
+-------------------
+</PRE>
+<P>
+Well, we've been talking in a vacuum up to now about how to calculate the
+average number of ray intersections performed for a tree.  We perform the same
+calculations as G&S to determine the average--see that article for a
+good explanation.  We also take their advice and not worry about the probability
+of hitting the root node, and so multiply our probability equation by the
+proportional volume of the root node.  The practical effect is that this avoids
+a number of pointless divisions, since we just want to calculate relative
+costs of adding the object to the structure and don't really want the actual
+average ray/tree intersection value.
+<P>
+The cost for method one: what happens here is that a bounding volume is
+created and its two children are the original test node and the new object.
+We will use trees #1 and #2 to derive the cost calculations.  The initial
+probability cost of hitting OBJ[1] are simply:
+<P>
+<PRE>
+        old cost = 1
+</PRE>
+<P>
+This is the because the topmost node is always tested.
+<P>
+The new probability cost is the cost of hitting the bounding volume and
+intersecting the two objects inside the bounding volume.  Essentially:
+<P>
+<PRE>
+        new cost = 1 + 2 * P(BV[1])
+</PRE>
+<P>
+This formula can be interpreted as follows.  One ray intersection is done to
+intersect the bounding volume.  If this volume is hit, two more ray intersection
+tests must be done to check the two objects contained within.  From these two
+equations we can calculate the difference, which is:
+<P>
+<PRE>
+        cost difference = 2 * P(BV[1])
+</PRE>
+<P>
+The cost for method two: what happens here is that the new object is added to
+the existing bounding volume.  Using trees #2 and #4 for demonstration, the old
+cost is:
+<P>
+<PRE>
+        old cost = 1 + k * P(BV[1])
+</PRE>
+<P>
+where k is the number of children (in our example, it's 2).  The new cost is:
+<P>
+<PRE>
+        new cost = 1 + (k+1) * P(BV[1'])
+</PRE>
+<P>
+with P(BV[1']) being the new area of the bounding volume.  The difference is:
+<P>
+<PRE>
+        cost difference = ( P(BV[1']) - P(BV[1]) ) * k + P(BV[1'])
+</PRE>
+<P>
+The inheritance cost for method three: the cost incurred will be the difference
+between intersecting children times the old parent's area and intersecting
+children times the new parent's volume.  The old cost is:
+<P>
+<PRE>
+        old cost = 1 + k * P(BV[1])
+</PRE>
+<P>
+The number of children is the same for the new cost (i.e. the new object will
+be added on down the line by method one or two, which always ends up with one
+root node), so the only thing that can change is the volume:
+<P>
+<PRE>
+        new cost = 1 + k * P(BV[1'])
+</PRE>
+<P>
+The difference:
+<P>
+<PRE>
+        cost difference = ( P(BV[1']) - P(BV[1]) ) * k
+</PRE>
+<P>
+With these criteria in hand, we can now actually try the method out.
+<P>
+<PRE>
+Example
+-------
+</PRE>
+<P>
+There are four tiles of a checkerboard to be ray traced, which, after
+shuffling, are as shown:
+<P>
+<PRE>
+        +---+---+
+        | 1 | 3 |
+        +---+---+
+        | 4 |
+        +---+
+        | 2 |
+        +---+
+</PRE>
+<P>
+We start with a tree consisting of tile #1, with area 1.
+<P>
+Adding tile #2, we automatically come up with a tree:
+<P>
+<PRE>
+                BV* (area 3)
+                 |
+        +--------+----------+
+        |                   |
+        1 (area 1)          2 (area 1)
+</PRE>
+<P>
+Note: BV* means the new BV being added, BV' means an old BV possibly increasing
+in size.
+<P>
+Looking at tile #3, we try out method one:
+<P>
+<PRE>
+                           BV* (area 6)
+                            |
+                 +----------+----------+
+                 |                     |
+                BV (area 3)            3 (area 1)
+                 |
+        +--------+----------+
+        |                   |
+        1 (area 1)          2 (area 1)
+</PRE>
+<P>
+The cost difference is simply 2 times the new BV area, i.e. 12.
+<P>
+We also look at the cost of method 2:
+<P>
+<PRE>
+                           BV' (area 6)
+                            |
+        +-------------------+---------------------+
+        |                   |                     |
+        1 (area 1)          2 (area 1)            3 (area 1)
+</PRE>
+<P>
+The cost is (new area - old area) * 2 children + new area = (6-3)*2 + 6 = 12.
+Since this is the same as method one, either method one or method 2 can be
+selected, with the best cost being 12.
+<P>
+Method 3 is now applied, looking at each child and using methods one and two
+on them.  The inheritance cost is (new area - old area) * 2 children =
+(6-3)*2 = 6.  Each child is an object (leaf) node, so only method one can be
+used.  Trying this on object 1:
+<P>
+<PRE>
+                           BV' (area 6)
+                            |                   inheritance = 6
+                 +----------+----------+
+                 |                     |
+                BV* (area 2)           2 (area 1)
+                 |
+        +--------+----------+
+        |                   |
+        1 (area 1)          3 (area 1)
+</PRE>
+<P>
+The local cost is 2 * new area, i.e. 4.  The cost including the inheritance
+is 4 + 6 = 10, which is lower than our earlier best cost of 12, so performing
+method one on object 1 is now the best solution.
+<P>
+Trying method 1 on object 2 we get:
+<P>
+<PRE>
+                           BV' (area 6)
+                            |                   inheritance = 6
+                 +----------+----------+
+                 |                     |
+                 1 (area 1)           BV* (area 6)
+                                       |
+                            +----------+----------+
+                            |                     |
+                            2 (area 1)            3 (area 1)
+</PRE>
+<P>
+The increase in cost is 2 * new area, i.e. 12.  This plus the inheritance of
+6 is 18, which is certainly horrible (as we would expect).  So, we end out
+with the best solution being replacing the node for object 1 with a BV which
+contains objects 1 and 3, shown earlier.
+<P>
+For object 4, we again test method one:
+<P>
+<PRE>
+                                      BV* (area 6)
+                                       |
+                            +----------+----------+
+                            |                     |
+                           BV (area 6)            4 (area 1)
+                            |
+                 +----------+----------+
+                 |                     |
+                BV (area 2)            2 (area 1)
+                 |
+        +--------+----------+
+        |                   |
+        1 (area 1)          3 (area 1)
+</PRE>
+<P>
+The local cost is 2 * new area, i.e. 12.  Trying out method two:
+<P>
+<PRE>
+                                      BV (area 6)
+                                       |
+                 +---------------------+---------------------+
+                 |                     |                     |
+                BV (area 2)            2 (area 1)            4 (area 1)
+                 |
+        +--------+----------+
+        |                   |
+        1 (area 1)          3 (area 1)
+</PRE>
+<P>
+The cost is (new area - old area) * 2 children + new area = (6-6)*2 + 6 = 6.
+This is the better of the two methods, so method two applied to the root is
+noted as the best cost of 6.
+<P>
+Method 3 is now applied, looking at each child and using methods one and two
+on them.  The inheritance cost is (new area - old area) * 2 children =
+(6-6)*2 = 0.  The first child is the BV containing objects 1 and 3, so we try
+method 1:
+<P>
+<PRE>
+                                      BV (area 6)
+                                       |                inheritance = 0
+                            +----------+----------+
+                            |                     |
+                           BV* (area 4)           2 (area 1)
+                            |
+                 +----------+----------+
+                 |                     |
+                BV (area 2)            4 (area 1)
+                 |
+        +--------+----------+
+        |                   |
+        1 (area 1)          3 (area 1)
+</PRE>
+<P>
+The cost is 2 * new area + inheritance = 8, which is not better than our
+previous best cost of 6.  Method two yields:
+<P>
+<PRE>
+                                        BV (area 6)
+                                         |              inheritance = 0
+                              +----------+----------+
+                              |                     |
+                             BV' (area 4)           2 (area 1)
+                              |
+        +---------------------+---------------------+
+        |                     |                     |
+        1 (area 1)            3 (area 1)            4 (area 1)
+</PRE>
+<P>
+The cost is (new area - old area) * 2 children + new area = (4-2)*2 + 4 = 8,
+which, plus the inheritance cost of 0, is not better than our previous best
+cost of 6.
+<P>
+Now we try method one on the second node of the tree, i.e. object 2:
+<P>
+<PRE>
+                                     BV (area 6)
+                                      |
+                 +--------------------+--------------------+
+                 |                                         |
+                BV (area 2)                               BV* (area 2)
+                 |                                         |
+        +--------+----------+                   +----------+----------+
+        |                   |                   |                     |
+        1 (area 1)          3 (area 1)          2 (area 1)            4 (area 1)
+</PRE>
+<P>
+Again, the cost is 2 * new area + inheritance = 2 * 2 + 0 = 4.  This beats
+our best cost of 6, so this is the optimal insertion for object 4 so far.
+Since this cost is also better than the best cost of 8 for the first child,
+this branch is the best child to pursue further on down (though we can't go
+further).  This means that we do not have to try methods one for object 4 on
+the first child's children (objects 1 and 3).  Confused?  Well, that's life.
+Try examples of your own to see how the algorithm works.
+<P>
+<PRE>
+Improvements
+------------
+</PRE>
+<P>
+G&S say they check which child node will be tested further by which has
+the smallest increase in area when the new object is added to it.  In case of
+ties (which occur mostly when the area doesn't increase at all), they give a
+few possible sub-criteria for choosing.  However, by the logic of bounding
+volumes, the real test that should be done is to pick the bounding volume which
+gives the best result when methods one and two are applied to it.
+<P>
+To prove this by example, imagine a bounding volume containing two other
+bounding volumes, one huge (say it has 50% of the area of its parent) and one
+tiny (say it's 1%).  Let's say an object is inserted which would not increase
+the size of the 50% BV but would triple the size of the 1% BV to 3%.  By
+Goldsmith's criterion we must pick the 50% BV to insert the object into.  Now
+if we intersect the root node we will hit the 50% BV half the time, and so must
+then do the other object intersection half the time.  If instead we had picked
+the 3% BV, this would be hit 3% of the time, meaning that we would have to do
+the object test only 3% of the time.  In both cases we had to test each BV, but
+it was smarter of us to put the object in the smaller BV in order to avoid
+testing.  This case will be caught by testing the increases for methods one and
+two for the BV's.  Method one for the larger would yield 50%*2 and method two
+50%*1, giving 50% as the best cost.  For the tiny BV, method one yields
+3%*2 = 6% and method two (3%-1%)*2 + 3% = 7%, giving 6% as the best cost,
+obviously much better.  Even though we have increased the chance of having to
+open the smaller box, it's still cheaper to do this than to add the object to
+a box which is much more likely to be hit.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+Best of USENET
+</A></FONT>
+</H4>
+<PRE>
+From: <A HREF="mailto:cyrus@hi.unm.edu">cyrus@hi.unm.edu</A> (Tait Cyrus)
+Newsgroups: comp.graphics
+Subject: images
+Organization: U. of New Mexico, Albuquerque
+</PRE>
+<P>
+It seems that once a month someone asks where they can get
+ahold of some images to play with.  Well, for those of you
+looking for images to "play" with, I have some images
+available that you can have.  They are available via
+anonymous ftp on <A HREF="ftp://hc.dspo.gov">hc.dspo.gov</A> (26.1.0.90).  The images are
+in pub/images.  There are two directories 'old' and 'new'.
+Both contain images as well as a README.  The README's
+describe the sizes of the images and basically what the
+images are of.  Because of disk space constraints, all of the
+images are compressed.  All of the images, but one, are
+grey scale.  The other is an image of a mandrill in color.
+Three files make up the madrill, one for green, red and
+blue.
+<P>
+Currently there are 20 images.  As time goes on this number
+will be increasing (I hope), so if you are interested in
+images, you might want to check once a month or so to see
+if there are any new ones.
+<P>
+If you have any images which you would like to make available,
+please let me know.  I would like to put them with the ones
+I currently have (kind of like a repository).
+<P>
+More:
+<P>
+Several people have asked me for some more details concerning the images
+I have made available on <A HREF="ftp://hc.dspo.gov">hc.dspo.gov</A> (26.1.0.90).  Again, the images
+are available via anonymous ftp and are in /pub/images.  There are 2
+directories, 'new' and 'old' which contain the 20 or so images.
+Both have README's which describe the images and the sizes of the images.
+<P>
+The images are compressed, the README's are NOT.  If your system does
+not have uncompress (you might check with your system manager first
+to make sure) I have put the source for compress/uncompress in /pub
+of the same machine.
+<P>
+The images are all grey scale, except for mandrill.  The grey
+scale images are such that each pixel is represented by one
+byte (value of 0 = black, 255 = white).
+<P>
+Hope this helps any of you who were confused or were having troubles.
+<P>
+&gt;From: <A HREF="mailto:todd@utah-cs.UUCP">todd@utah-cs.UUCP</A> (Todd Elvins)<BR>
+Newsgroups: comp.graphics<BR>
+Subject: New model of an espresso maker<BR>
+Organization: University of Utah CS Dept<BR>
+<P>
+I have installed a file called 'espresso.polys' on the ftp directory
+at <A HREF="ftp://cs.utah.edu">cs.utah.edu</A>
+<P>
+It is a model of one of those aluminum italian made espresso makers.
+<P>
+<PRE>
+T. Todd Elvins  IFSR
+({ucbvax,ihnp4,decvax}!utah-cs!todd, <A HREF="mailto:todd@cs.utah.edu">todd@cs.utah.edu</A>)
+"Eat, drink, and be merry, for tomorrow you might be in Utah."
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

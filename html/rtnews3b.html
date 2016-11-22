@@ -1,0 +1,446 @@
+<!-- html version of Volume 1, Number 7 :  -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 1, Number 7</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>June 20, 1988</FONT>
+<P><FONT size=+1>Volume 1, Number 7</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1988, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction
+</A></LI>
+<LI><A HREF="#art2">
+New People and Addresses
+</A></LI>
+<LI><A HREF="#art3">
+Non-article on RenderMan and Dore',
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art4">
+Ray Tracing Bibliography Update,
+</A></LI>
+by Paul Heckbert and Eric Haines
+<LI><A HREF="#art5">
+Commercial Ray Tracing Software,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art6">
+Benchmarks,
+</A></LI>
+by Jeff Goldsmith
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction
+</A></FONT>
+</H4>
+So, I've regained the desire to type again a mere month after the SIGGRAPH
+course notes deadlines.  Not much in the queue, but I thought I'd pass on what
+little there is.  The most interesting developments which affect ray tracing
+are the release of the RenderMan (tm) interface by Pixar and the publication
+of Ardent's Dore' (tm) Programmer's Guide and Reference Manual.
+<P>
+Andrew Glassner's hardcopy "RT News" is coming out soon - if you're not on the
+mailing list, write him.
+<P>
+SIGGRAPH Ray Tracers Roundtable:  in case you don't know, this is an informal
+get-together during SIGGRAPH where we talk about ray tracing techniques and
+trends.  Personally, I'd like to aim for about the same time as last year:
+Thursday, sometime after 5 pm (with people then hitting the technical reception
+for food afterwards).  Same as last year, we'll leave notes at the message
+center to all subscribers as to exactly where and when.  If you're not planning
+to attend SIGGRAPH, please save me some note-writing effort by telling me.
+Otherwise, see you there.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+New People and Addresses
+</A></FONT>
+</H4>
+Paul Heckbert's summer address (at Xerox PARC):
+<P>
+<PRE>
+        heckbert.pa@xerox.com
+</PRE>
+<P>
+Mail will still (slowly but surely) reach Paul at his old Berkeley address.
+<P>
+<PRE>
+# David Lister
+# Data General Corp.
+# 62 T. W. Alexander Drive
+# Research Triangle Park, NC   27709
+# (919) 248-6223
+alias   david_lister    hpfcrs!hpfcla!hplabs!<A HREF="mailto:lister@dg-rtp.dg.com">lister@dg-rtp.dg.com</A>
+</PRE>
+<P>
+From David:
+<P>
+I have been working on Ray Tracing since 1984 while I was a graduate
+student at The Ohio State University.  I am still working on my thesis
+for my MSEE on parallelism and algorithm improvements for Ray Tracing.
+My areas of Ray Tracing interest include the following:
+<P>
+1). algorithm efficency
+2). simulation of natural phenomenon (optical characteristics of materials)
+<P>
+and,
+<P>
+3). parallelism.
+<P>
+David Lister
+<P>
+<PRE>
+# Pete Segal
+# AT&T Pixel Machines
+# Room 4K-208
+# Crawfords Corner Road
+# Holmdel, NJ  07733
+# (201)-949-1244
+alias   pete_segal      hpfcrs!hpfcla!ihnp4!homxc!pixels!pls
+</PRE>
+<P>
+From Pete:
+<P>
+   I'm not real big on introductions, but here goes...
+<P>
+   I was born the son of a poor black sharecropper... wait, wrong story....
+<P>
+   I started in the Computer graphics lab at RPI in 1979, got my Master's
+in '82 and came to Bell Labs doing graphics for CAD systems.  I moved to
+Pixel Machines in early 1987 and have been working there since.  I am
+interested in 3d rendering and animation, and I am currently working on
+the Ray tracing library for the Pixel Machine, RAYlib.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Non-article on RenderMan and Dore',
+</A></FONT>
+by Eric Haines
+</H4>
+What follows is a non-review of RenderMan and Dore'.  If you've been looking
+for a chance to contribute to the RT News, here's your chance - I'm not
+planning on reviewing either of these in depth, but would love to hear others'
+opinions (even anonymous ones) of these packages.
+<P>
+I just received a copy of Pixar's "RenderMan" interface.  To quote the
+preface:
+<P>
+<PRE>
+        The RenderMan interface is designed so that the information needed to
+        specify a photorealistic image can be passed to different rendering
+        programs compactly and efficiently. ... In order to achieve this,
+        the interface does not specify how a picture is rendered, but instead
+        what picture is desired. ... The RenderMan interface is a collection
+        of procedures to transfer the description of a scene to the rendering
+        program.
+</PRE>
+<P>
+The interface for the ray tracer is wonderfully short, as it is simply another
+command in Pixar's shading language.  I include it here in full:
+<P>
+18.4.5 RAY TRACING
+<P>
+color trace( point R )
+<P>
+<PRE>
+        "trace" returns the incident light falling on a surface in a given
+        direction R.  If a particular implementation does not support ray
+        tracing, and cannot compute the incident light arriving from an
+        arbitrary direction, trace will return 0 (black).
+</PRE>
+<P>
+That's it.  I don't see any way this command can support shadowing or
+filtering, but I haven't read through the document carefully (Pixar seems
+to want to go with their "Shadow Depth Maps" instead - SIGGRAPH 87 paper).
+<P>
+Anyway, this interface is "endorsed" by Apollo, DEC, Stellar, Ardent, and
+Sun, so it seems to be a happening something.  I'm not sure what "endorsement"
+means, exactly, but one thing it means is that you should probably check it out.
+<P>
+Dore':  well, I received the two preliminary manuals yesterday.  As such,
+about all I can commit myself to is: "nice packaging - very artsy binders".
+Reviews, please?
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Ray Tracing Bibliography Update,
+</A></FONT>
+by Paul Heckbert and Eric Haines
+</H4>
+Paul Heckbert's "Ray Tracing Bibliography" has been updated for May, 1988.
+It will appear in the next issue of the hardcopy "Ray Tracing News" and in the
+SIGGRAPH '88 "Introduction to Ray Tracing" course notes.  If you would like to
+see it before then, or would just like to have an electronic version on hand,
+please write Eric Haines and I'll mail you the latest version.  Also, if you
+do get a copy, please tell us of any errata or addenda you may have for it.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Commercial Ray Tracing Software,
+</A></FONT>
+by Eric Haines
+</H4>
+I'm collecting information for the "Consumer's and Developer's Guide to Image
+Synthesis" course at SIGGRAPH this year - namely, companies selling ray tracers.
+The bare bones info is at the end of this issue.  I'm in the midst of ordering
+manuals, but that's about as far as I'm going.  So, I would like to hear from
+anyone who knows anything about these packages.  I will keep all reviews
+confidential, unless you explicitly state otherwise.
+<P>
+Below is a partial list of groups (in alphabetical order) offering ray tracing
+packages.  If you know of any others, please clue me in (I'm particular
+ignorant when it comes to software for animators & advertising, such as
+Wavefront.  For now, I have left them off the list below).  The "Contact"
+section first lists the person who I have dealt with, followed by the official
+contact address and/or phone number.  I believe the only company that won't
+have representation on the floor at SIGGRAPH is Ray Tracing Corp (though UCS
+probably will, in some form).  Oh, just to dispell rumors, "Numerical Designs
+Ltd", Turner Whitted's company, is not planning on announcing a ray tracer
+by SIGGRAPH 88.  Instead, they are marketing a package based on using pipes
+and filters for rendering (beyond this, I do not know...).
+<P>
+AT&T, Pixel Machines "RAYlib".  Available only on the Pixel Machine.
+<P>
+<PRE>
+        Cost: ???, manuals available realsoonnow.
+</PRE>
+<P>
+<PRE>
+        Contact: Ken Krause, 201-563-2274.
+                 AT&T Pixel Machines
+                 1-800-544-0097
+</PRE>
+<P>
+Ardent, "Dore'".  Available on Ardent's Titan superworkstation.  Source
+        available in C, portable to other machines.
+<P>
+<PRE>
+        Cost: $250 for universities, research sites.  $15000/$5000 per year
+        for commercial sites.  Binary license $200 per copy.  Programmer's
+        Guide and Reference Manual preliminary versions are $25 each.
+</PRE>
+<P>
+<PRE>
+        Contact: Ardent Computer Corporation,
+                 880 West Maude Avenue,
+                 Sunnyvale, CA  94086
+                 408-732-0400
+</PRE>
+<P>
+Hewlett Packard.  Add-on to their existing "Starbase" graphics package,
+        which will also include radiosity software.  Announced at NCGA 1988.
+        Available with the TurboSRX come the end of the year (?).
+<P>
+<PRE>
+        Cost: ???
+</PRE>
+<P>
+<PRE>
+        Contact: Hewlett Packard Co.
+                 1-800-752-0900, Ext. 782A
+</PRE>
+<P>
+Integra (via Mitsubishi, via Enimax), "Turbo Beam Tracing".  Available on IBM
+        PC/AT or compatible le<P>
+<PRE>
+        Cost: ??? (will be shown at SIGGRAPH)
+</PRE>
+<P>
+<PRE>
+        Contact: Gregory Szewczyk
+                 Enimax International Inc.
+                 113 Martin Grove Road
+                 Etobicoke, Ontario M9B 4K7
+                 CANADA
+                 416-234-9120
+</PRE>
+<P>
+Ray Tracing Corp, "TRACER" and "TRACER PC".  Source available in FORTRAN 77.
+        "TRACER" runs on Cray, VAX, and many Unix-based systems.  "TRACER PC"
+        is for the IBM PC, 640K memory, 20 Mb hard disk, math co-processor,
+        and Targa or Number Nine card.  "TRACER PC" includes a modeler.
+<P>
+<PRE>
+        Cost: $3000 for source and first year of updates.  Manual for $25.
+</PRE>
+<P>
+<PRE>
+        Contact: Mark Franklin
+                 Ray Tracing Corporation
+                 2516 Via Tejon, Suite 316
+                 Palos Verdes Estates, CA  90274
+                 213-373-0520
+</PRE>
+<P>
+United Computer Systems, Inc, "Ray Tracer".  Available on Apollo, IBM, and
+        Mac.  Evidentally selling well on Mac and IBM: 4x sales than Apollo
+        sales since intro post-SIGGRAPH '87.  It turns out that this product
+        is actually made by Ray Tracing Corp.
+<P>
+<PRE>
+        Cost: ???, manual available for $25.
+</PRE>
+<P>
+<PRE>
+        Contact: Alan Brown (at TMAC (sp?)), 213-475-1067
+                 United Computer Systems, Inc
+                 Graphics Development Group
+                 10564 Progress Way
+                 Cypress, CA  90630
+                 714-220-2931
+</PRE>
+<P>
+Wavefront Technologies, Inc, "3-D Dynamic Imaging System".  Their system has
+        "production speed ray tracing" as a feature.
+<P>
+<PRE>
+        Cost: ???
+</PRE>
+<P>
+<PRE>
+        Contact: Wavefront Technologies
+                 530 East Montecito Street
+                 Santa Barbara, CA  93103
+                 (805)-962-8117
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Benchmarks,
+</A></FONT>
+by Jeff Goldsmith
+</H4>
+[This recently appeared in the email newsletter on scientific visualization
+that Jeff Goldsmith has been editing.  If you're interested in subscribing
+and contributing to the SciVi discussion group, contact him at:
+<A HREF="mailto:jeff@hamlet.caltech.edu">jeff@hamlet.caltech.edu</A> .  I thought it of interest because of the bounding
+box intersector statistics. - EAH]
+<P>
+I did an interesting micro-project this winter/spring.  We were
+interested in porting some programs to PCs and/or Workstations, so
+I compared the performance of a few chunks of graphics code on a bunch
+of machines.  The code was supposed to represent some of the typical
+cpu and I/O intensive things that graphics programs tend to do.
+<P>
+<PRE>
+The benchmarks are:
+        Faults: randomly accesses a huge array (>16 Megabytes)
+                (I know--not huge to you Cray users, but it is
+                to PCs)  Obviously, tests virtual memory usage.
+        Shade: typical shading routine.  Tests floating point
+                very strongly.
+        Bbox: highly optimized bounding box intersection routine
+                for a ray tracer.  (actually, this one has become
+                somewhat unoptimized for the testing, but you get
+                the idea)  Was intended to test floating point
+                performance and if-then-else branching.  Actually,
+                tests floating point and caching.
+        Clear: sequentially clears a large memory array.  Tests
+                compiler, MIPS, and memory usage.
+        Sub: calls an empty subroutine repeatedly.  Tests MIPS.
+        Fread: formatted reads and writes.  Tests I/O speed, floating
+                point performance and MIPS.
+        Uread: binary reads and writes.  Tests raw I/O speed.
+</PRE>
+<P>
+<PRE>
+Machine faults  shade   bbox    clear   sub     fread   uread
+------- ------  -----   ----    -----   ---     -----   -----
+VAX780  12.5    16.9    12.3    11.8    19.3    17.4    23.2
+uVAX II 22.2    18.5    15.6    12.9    18.9    24.0    29.1
+HP320   *       10      45      4       8       5       6
+HP350   4       5       28      3       4       3       4
+Sun 3/1 *       9       34      4       6       5       5
+Sun 3/2 *       9       48      3       3       2       4
+Sun 386 *       9.5     16      2       5       3       1
+Mac II  *       31.3    44.3    *       4.3     13      5.3
+PC/AT   *       70      180     *       39      17      6
+PS 2/80 *       9.4     49.7    *       11.1    11.4    7.3
+Compaq  ~       ~       ~       ~       19.0    13.1    5.5
+Iris    *       30      59      4       5       15      3
+IrisFPA *       11      13      4       5       6       3
+</PRE>
+<P>
+<PRE>
+All entries are in seconds to run specified benchmark.
+* indicates that operating system not set up to allow
+   program to run.
+~ indicates benchmark not attempted.
+</PRE>
+<P>
+<PRE>
+The machines tested:
+        VAX780: Vax 11/780 with FPA and 32 Mbytes memory
+        uVAX II:  Microvax II, VMS, 16 Mbytes memory
+        HP320: Unix
+        HP350: SRX, Unix, 32 Mbytes memory
+        Sun 3/1: Sun 3/160, 68881 co-processor
+        Sun 3/2: Sun 3/260, 68881 co-processor
+        Sun 386: Sun 386i/250, 80386/80387, Unix
+        Mac II: MPW, 68881
+        PC/AT: Xenix, 80287
+        PS 2/80: OS2, 80387 co-processor
+        Compaq: Compaq 386, Unix, no coprocessor
+        Iris: SGI IRIS 3030 without FPA
+        IrisFPA: SGI IRIS 3030 with FPA
+        (Iris 3130 performance was identical to 3030.)
+</PRE>
+<P>
+What did I learn from all this?  One thing is obvious: if a
+FPA is available for your machine and you can afford it (they
+are usually cheap) buy it even if you don't do alot of floating
+point.  It affects all sorts of performance characteristics.
+Another important point: it is not possible to evaluated computer
+performance as one number.  Different computers do different things
+well.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

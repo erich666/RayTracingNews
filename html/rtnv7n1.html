@@ -1,0 +1,1998 @@
+<!-- html version of Volume 7, Number 1 :  -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 7, Number 1</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>February 2, 1994</FONT>
+<P><FONT size=+1>Volume 7, Number 1</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1993,1994, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction
+</A></LI>
+<LI><A HREF="#art2">
+Quick Book Reviews,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art3">
+Ray Tracing Roundup
+</A></LI>
+<LI><A HREF="#art4">
+3D Artist Magazine Information,
+</A></LI>
+by Tim Riley
+<LI><A HREF="#art5">
+Updated Graphics CD-ROM from Knowledge Media,
+</A></LI>
+by Paul A. Benson
+<LI><A HREF="#art6">
+The Desert Isle List,
+</A></LI>
+by Amanda Osborne
+<LI><A HREF="#art7">
+Raytrace Utilities List for DOS (and Windows),
+</A></LI>
+by Amanda Osborne
+<LI><A HREF="#art8">
+Brief Reviews of a Bunch of Useful PC Stuff,
+</A></LI>
+by Tim Lister
+<LI><A HREF="#art9">
+Tree and Plant Image Generation,
+</A></LI>
+by Phil Drinkwater and Jason Weber
+<LI><A HREF="#art10">
+POV-Ray 2.0 Released,
+</A></LI>
+by Dave Buck
+<LI><A HREF="#art11">
+JPEG Texture Maps,
+</A></LI>
+by Petri Nordlund
+<LI><A HREF="#art12">
+ArchiCAD Model Translator,
+</A></LI>
+and other notes, by Paul D. Bourke
+<LI><A HREF="#art13">
+New Radiance Version Available,
+</A></LI>
+by Greg Ward
+<LI><A HREF="#art14">
+Previewer Program for Radiance,
+</A></LI>
+by Greg Ward
+<LI><A HREF="#art15">
+IRIT Solid Modeller Version 4.0,
+</A></LI>
+by Gershon Elber
+<LI><A HREF="#art16">
+Object-Oriented Graphics: GOOD 0.50,
+</A></LI>
+by Ekkehard Beier
+<LI><A HREF="#art17">
+GFX News,
+</A></LI>
+by Eric Hsiao
+<LI><A HREF="#art18">
+New Wavefront Listserv,
+</A></LI>
+by George H. Otto
+<LI><A HREF="#art19">
+Optimized POV 2.0 version,
+</A></LI>
+by Peter K. Campbell
+<LI><A HREF="#art20">
+Errata for "Adventures in Ray Tracing",
+</A></LI>
+by Alfonso Hermida
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction
+</A></FONT>
+</H4>
+In celebration of Ground Hog's day, we're having a special two-for-one sale.
+This issue is dedicated to personal computer related resources for ray tracer
+users.  It includes information and reviews for the latest releases of various
+free packages, book recommendations, and other assorted articles.  The other
+issue (v7n2) is more for researchers and programmers.  There was enough
+accumulated stuff that I decided to try splitting things along these lines.
+Let me know if the split was worthwhile.
+<P>
+This issue has a lot of access information:  3D Artist is a great resource
+for users, the Knowledge Media CD-ROM sounds worthwhile and is certainly
+cheap, there are a lot of new reference books out, etc.  I have also been
+collecting and soliciting users' opinions (you think I have time to actually
+use any of this software?) of packages out there; I'm particularly appreciative
+of Ms. Osborne's quick response with her useful summaries.  One resource which
+is in the other issue (v7n2) but is worth mentioning here is Nicholas Wilt's
+_Object-Oriented Ray Tracing in C++_ book, as he's made the code for the
+class libraries available.  Though it's more a programmer's book than a user's,
+it's also useful as a tool for learning C++.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+Quick Book Reviews,
+</A></FONT>
+by Eric Haines
+</H4>
+There have been quite a few trade paperbacks which have come out in the past
+year or so on ray tracing.  Some of these have been reviewed in these pages
+(screens?) already.  The good news is that these books are getting better and
+better in quality.  The bad news is that in many cases the authors have already
+updated their software so that the books are already dated.
+<P>
+_Practical Ray Tracing in C_, Craig Lindley, John Wiley & Sons, ISBN
+0-471-57301-9, 1992, $49.95, comes with software:  This one is quite old as
+ray tracing books go (two years!).  Here's the table of contents:
+<P>
+<PRE>
+        1. Background Information
+        2. Introduction to Ray-Tracing Theory
+        3. A First Ray-Tracer Program
+        4. Color Quantization and Display of Image Data
+        5. Graphics File Formats and Functions
+        6. DKBTrace and the Image Development Process
+        7. Basic Ray-Tracing Techniques
+        8. Intermediate Ray-Tracing Techniques
+        9. Image Model Discussions
+        Further Reading/Glossary/The Companion Disks/RGB Color Tables
+</PRE>
+<P>
+As you can see, this book is based on the DKBTrace software, which has been
+superceded by POV 1.0 and 2.0.  The book has what you need to get going, and
+deals with all the side issues like image file formats, VGA & VESA,
+quantization, etc.  Actually, there's quite a lot about these topics:  40%
+the book goes towards them.  Modeling is not discussed much, which is fine
+(the book checks in at 506 pages as it is).  The code per page ratio (i.e. how
+much code listing there is in the book, a very common practice in these trade
+paperbacks) is a relatively low 35  The text about ray tracing deals with
+the theory of ray tracing and also acts as a user's manual for DKBTrace.
+All in all it's not a bad book, but I can't get excited about it.  If you
+want to use a ray tracer, get the book by Wells and Young on POV.  If you want
+to understand or write a ray tracer, get Wilt's book.
+<P>
+____
+<P>
+_Ray Tracing Creations_, Drew Wells and Chris Young, The Waite Group,
+ISBN 1-878739-27-1, 1993, $39.95 (includes disk)
+<P>
+You should get this book if you are a serious user of the POV ray tracer.
+Yes, it's a little dated now that POV 2.0 is out; yes, you might already know
+POV 1.0 backwards and forwards - still get it.  It's a 573 page user &
+reference manual for POV which puts a lot of commercial software documentation
+to shame.  Since it's a user's manual, there are no "pages and pages" of code
+sections throughout most of the text (they did kill a few extra trees in
+Appendix A, though, listing 65 pages of include files).  Input language
+examples are kept short and sweet throughout, never more than the lines
+you need.
+<P>
+The first part of the book is a user's manual which, after getting you through
+the basics, then gets you using POV to try things out.  The last part is a
+reference manual for the input language.  What makes this book so wonderful
+is the use of images, figures, and layout.  There are elaborate POV images at
+the beginning of each chapter, but what most impressed me was the lavish use
+of images to illustrate techniques, concepts, and effects.  POV images are
+used in many cases, but not slavishly so; artist's renderings are used when
+appropriate.  There are pretty pictures on the back fold-out cover, but the
+plates are color renderings of the grayscale reference section images.  About
+the only criticism I can make is the darkness of many of the example grayscale
+images.  All in all, this is a great manual.  I particularly enjoyed Mitch
+Waite's publisher's note, showing how he got sucked into playing with the ray
+tracer.
+<P>
+____
+<P>
+_Adventures in Ray Tracing_, Alfonso Hermida, Que Corp., ISBN 1-56529-555-2,
+1993, $27.95 (includes disk).  Let's start off with the table of contents:
+<P>
+<PRE>
+        1. Introduction to Ray Tracing
+        2. Your First Ray-Traced Image
+        3. Using Polyray
+        4. Lights, Colors, and Textures
+        5. Constructive Solid Geometry
+        6. Additional Features
+        7. Using a 3-D Modeler (POVCAD)
+        8. Animation
+</PRE>
+<P>
+If you want to get someone a single book for playing with a ray tracer,
+consider this one (they'll need an IBM clone with Windows).  It covers Polyray,
+Alexander Enzmann's ray tracer, along with POVCAD.  Polyray is almost something
+of a testbed for POV, with some features in Polyray eventually migrating into
+POV.  POVCAD is one of the better modelers for Polyray and POV.  The two
+together make for a pleasant combination.  Right now the code that comes with
+it is pretty up-to-date:  POVCAD has been updated once since the book's
+release, and Polyray is still the same for now.
+<P>
+The information and layout of this book are good, with illustrations and
+renderings of equal quality to those in the Wells & Young book.  There are
+a few oddities in wording in Polyray (e.g. a "directional light" to Polyray
+means a light that does not cast a shadow; this term is used in most other
+renderers to mean a light at infinity, or maybe a spotlight), but otherwise
+it seems to be a fine renderer.  There are some errors in the text, and
+Alfonso kindly contributed his errata list to this issue (the last article).
+The animation section is a bit short for my tastes, but does get you started.
+But, if you're interested in animation, then...
+<P>
+____
+<P>
+_Making Movies on Your PC_, David K. Mason and Alexander Enzmann, The Waite
+Group, ISBN 1-878739-41-7, 1993, $34.95 (with disks).
+<P>
+<PRE>
+Table of contents:
+        1. Introduction (concepts, tools on the disk, ...)
+        2. Getting Your Feet Wet (running the software)
+        3. Making a Movie in Eight Steps
+        4. Advanced Techniques
+        5. Movie-Making Tools (heart of the book: Polyray, DTA, SP, DMorf)
+        6. The Movie Pages (a series of complete animations)
+</PRE>
+<P>
+This book stresses animation, obviously.  Its approach is to teach you to use
+a variety of shareware tools to do it:  Polyray, Dave's Targa Animator (which
+converts a series of Targa images into a flic file), SP (a spline path
+generator program), and DMorf (a 2D image morpher).  It's a pleasantly short
+book, weighing in at 210 pages.  The layout is of good quality, with ample
+illustrations.  There are a few tiny images which are hard to discern, but
+nothing too terrible.
+<P>
+This book is not meant to be a guide for programmers or students, it's meant
+for some serious playing around.  If you already understand the tools listed,
+you probably won't gain much from this book (which I guess could be said of
+any of the books above).  But if you're starting out and would like to
+understand a bit more about how and why these tools work, consider getting
+this one.  You don't necessarily have to design a movie from scratch, either:
+there are nine movie scripts provided which you can modify to your heart's
+content.
+<P>
+There's also a contest for best animation which is... over!  Oh, well; I'll be
+interested to see the results (judging is at the end of March).
+<P>
+____
+<P>
+_Tricks of the Graphics Gurus_, Dick Oliver, Scott Anderson, James McCord,
+Spyro Gumas, Bob Zigon, SAMS Publishing, 1993, $49.95.
+<P>
+This is a monster, coming in at 894 pages, two disks, and 3D glasses.  Polyray
+is used on the ray tracing front, and lots of other graphics programs are
+covered (as I recall:  morphing, fractals, image processing, etc etc etc).
+It was certainly a, ummm, heavy book.  I wasn't incredibly impressed paging
+through it, there seemed to be a lot of techniques thrown around but not
+used particularly well.  However, this is based on looking at it for a few
+minutes at Electronics Boutique with a sales drone hovering about, so take
+this gut reaction with a grain of salt or three.
+<P>
+____
+<P>
+_Object-Oriented Ray Tracing in C++_, Nicholas Wilt, John Wiley & Sons,
+ISBN 0471 304 158, 1993, $36.95:  See the next issue (coming out minutes
+after this issue) for information on this one, and where to get the code on
+the net.  It's a programmer's book, and is pretty good for what it is.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Ray Tracing Roundup
+</A></FONT>
+</H4>
+Lparser is an interesting-looking program to explore L-systems.  The software
+takes in an L-system definition and creates output files in a variety of
+formats, including POV.  There is also a viewer to get a rough idea of the
+results.  The authors draw heavily on the wonderful book "The Algorithmic
+Beauty of Plants".  Unfortunately, my system does not have enough memory to
+run lparser, and there's no source code provided, so I can only admire some of
+the images produced with it.  Pretty impressive stuff:  trees, various
+creatures, procedural objects, etc.  It also includes a mutation facility, so
+that you can evolve creatures a la Latham's work (though probably not render
+them half so beautifully).  Check out issue #12 of "3D Artist" magazine (see
+elsewhere in this issue) for a more in-depth review and images.  Find the
+latest lparser (lparser2.zip, which does POV 2.0 output) on
+<A HREF="ftp://weedeater.math.yale.edu/incoming">weedeater.math.yale.edu</A> in /incoming (and hopefully elsewhere, but I didn't
+see it at oldenburg).
+<P>
+(Eric Haines)
+<P>
+____
+<P>
+Coprocessor speed
+<P>
+I have followed everyone's suggestions and purchased a math coprocessor.  Here
+were the results [of running POV on a scene, not sure which - EAH]:
+<P>
+<PRE>
+        386DX/33MHz w/out 387: 29hours, 54 minutes, 49 seconds
+        386DX/33MHz w 387: 1hour, 47minutes, 32seconds
+</PRE>
+<P>
+Definitely a huge time saver!!  It's neat having my 386/387 outperform a 486SX
+(which took over 12 hours to render).  At any rate, if you're having any
+trouble with rendering times -- an investment in a coprocessor is VERY
+RECOMMENDED!!!
+<P>
+(John Warren, <A HREF="mailto:jwarren@silver.ucs.indiana.edu">jwarren@silver.ucs.indiana.edu</A>)
+<P>
+____
+<P>
+New Pv3D Available
+<P>
+Ludovic Lecointe has released a new version of Pv3D to coincide with the new
+release of Persistence of Vision, v.2.00.  The new release is *not* complete,
+coming in under the version number of 1.91.  However, preliminary testing has
+shown that it is certainly PoV v.2.00 compliant, including flat image/texture
+mapping and height fields.
+<P>
+Availability has been confirmed at the following source:
+<P>
+The Graphics Alternative BBS +1 510 524 2780
+<P>
+PV3D modeler Version B1.91 For POVRAY 2.0 and VIVID 2.00 Graphics interface
+(GUI) with mouse.  Many function are modified since the last version!!!
+Includes:  3D animation function 3D visualisation with camera / look_at
+Vectoriel object structure.  XMS Support POV primitives support, Blob
+structure Height Field Shape, Mapping Texture Bumping Function, GIF viewer
+VIVID 2.00 primitives support External Textures Library (POV/VIVID) Dynamic
+Rotate Move Scale (R-M-S) NEW!  Support Groupe and Object Library CSG,
+Constructive Solide Geometry Direct generation of POV-RAY 2.0 files Direct
+generation of VIVID 2.0 files And more.and more ..., Splines, ...Smooth and
+Patch TXT shapes POV / VIVID
+<P>
+I talked with Ludovic on 10-11 and we discussed various future improvements,
+including the documentation.  =] I am hoping he has the opportunity to work on
+the new lighting improvements that PoV v.2.00 has brought to the fore.
+<P>
+In conclusion I have to admit that I did not expect to see a new release so
+quickly.  I did know that Dave Mason sent him an "early" copy of PoV, so
+perhaps that helped.  Regardless, it is here, so let's just get on with it! =]
+<P>
+David Anjo (<A HREF="mailto:david.anjo@canrem.com">david.anjo@canrem.com</A>)
+<P>
+____
+<P>
+POVCAD 2.0c for Windows ready!
+<P>
+Hi!  POVCAD 2.0c for Windows now supports POV 1,2 and Polyray 1.6.  It's
+AVAILABLE NOW from my BBS (301)725-9080 in Maryland USA.  [It should be at
+oldenburg by now - EAH]
+<P>
+(Alfonso Hermida, <A HREF="mailto:afanh@stdvax.gsfc.nasa.gov">afanh@stdvax.gsfc.nasa.gov</A>)
+<P>
+____
+<P>
+PV3D vs. Moray vs. ...
+<P>
+Francisco J. Diaz (<A HREF="mailto:as789@cleveland.Freenet.Edu">as789@cleveland.Freenet.Edu</A>) wrote:
+<P>
+: And wich one is better: MORAY or PV3D? I'm checking both out to see which
+: one I'll stay with. Thanks!
+<P>
+Actually both have advantages and disadvantages, I find that I need both of
+them most of the time.  Also check out povcad2c somewhere on the net.  More
+than likely you will keep all three.  I like Moray's features and the way it
+handles CSG, bounding boxes, texture editing, bezier patches, and the surfaces
+of rotation, extrusion and conic rotation.  But it has many shortfalls, a
+limited number of primitives and the copy feature is a drag.  PV3D v100 is
+more flexible in this area but it too has many good features and drags too.
+Same can be said for POVCAD.
+<P>
+BUT!  don't get me wrong, the guys who are working on this stuff are doing an
+unbelievable and great job.  I say get all three, and if you have the space on
+your disk, keep all of them, and don't forget to register if you can afford it
+:-) ehhh he he he.  errmm caugh caugh.
+<P>
+(Ford Prefect [gee, I wonder if that name's real], <A HREF="mailto:ara@wam.umd.edu">ara@wam.umd.edu</A>)
+<P>
+____
+<P>
+My personal opinion is that I like Moray better than POVCAD or PV3d (also on
+oldenburg) -- POVCAD seems a bit clunky to me, and PV3d has the worst
+documentation in the world (the program's okay, but the docs are in broken
+English inexpertly translated from French)) which makes the program hard to
+use.  Perhaps the next version of PV3d will be better, but I really like
+Moray.  (Get more memory!)
+<P>
+(Gavin S. Patton, <A HREF="mailto:mirth@genesis.MCS.COM">mirth@genesis.MCS.COM</A>)
+<P>
+____
+<P>
+Fonts for POV
+<P>
+A while ago I wrote a program DXF2TRI that converts polygons in a DXF file
+to raw triangle data. The reason for this was to let me import any TrueType
+font into POV in the following manner:
+        1.      Using CorelDraw, generate the desired text and export to
+                a DXF file. All lines are converted to POLYLINES in the
+                process.
+        2.      Run DXF2TRI on the DXF file, resulting in a raw triangle file.
+        3.      Run RAW2POV on the RAW file.
+You will wind up with an INC file with bounding surfaces (which was a bonus
+when working with POV1.0; it's not that big of a deal with POV2.0) courtesy
+of RAW2POV.
+<P>
+DXF2TRI has the option of extruding the shapes (while it was originally
+designed for fonts, it will work on any shapes you can generate in Corel) to a
+depth of 1.0, which can then be scaled as desired.  It will also generate a
+back surface if needed.  It does not support bevelling.  It should be usable
+with any vector drawing package that exports DXF files and converts all lines
+to POLYLINES.  DXF2TRI does not recognize any other entities.
+<P>
+I believe DXF2TRI (as well as RAW2POV) can be found at:  <A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/">wuarchive.wustl.edu</A>:
+/graphics/graphics/mirrors/ftp.informatik.uni-oldenburg.de/pub/dkbtrace and in
+the util or uploads|incoming directories.  The ZIP file contains the
+executable, source code, directions on use and a sample JPEG image.
+<P>
+The alternative is to generate a B&W bitmapped image (GIF, TGA or IFF) of the
+desired text and then use it as a height-map on a surface.  The drawbacks are
+limits on the bitmap's resolution and the resultant non-coherence of the
+extruded edges.
+<P>
+Tim Riley (<A HREF="mailto:TRILEY@its.bldrdoc.gov">TRILEY@its.bldrdoc.gov</A>)
+<P>
+____
+<P>
+POV in IEEE CG&A
+<P>
+There is an article in IEEE Computer Graphics and Applications called
+"Mike Miller's Many Hats", v. 14, n. 1, Jan. 1994, p. 4-6.  It discusses
+his work, tools he uses and showcases a number of his images.
+<P>
+(Eric Haines)
+<P>
+________
+<P>
+Syndesis for PC
+<P>
+&gt;InterChange Plus from Syndesis currently converts between all those format<BR>
+&gt;and more, except for pov. It runs on the Amiga. Contact Syndesis at:<BR>
+&gt;(414) 674-5200<BR>
+<P>
+I talked to Syndesis recently, and they will also be coming out with PC
+version.  Maybe late this month or sometime next month.
+<P>
+They say that they will also have a Softimage module in the future as well.
+<P>
+(Techs Avery, <A HREF="mailto:tksavery@netcom.com">tksavery@netcom.com</A>)
+<P>
+________
+<P>
+Rayshade Animation Language
+<P>
+I developed a simple language for producing animations in conjunction with
+rayshade three or four years ago.  It is very similiar to using script to
+generate lots of frames but it is (I believe) easier to coordinate events and
+it takes care of the linear interpolation.  It does *not* blur the motion (the
+tool was developed before rayshade had this capability).
+<P>
+It is available by anonymous ftp in /pub/sass on acs.cps.msu.edu.
+<P>
+Let me know if you are using it because I will begin work a major new release
+real soon now (and I'll let you know when it is ready).
+<P>
+(Ron Sass, <A HREF="mailto:sass@cps.msu.edu">sass@cps.msu.edu</A>)
+<P>
+________
+<P>
+<A HREF="ftp://avalon.chinalake.navy.mil">avalon.chinalake.navy.mil</A> [129.131.44.11] (the 3D model archive)
+...its IP is now 129.131.1.225.  Everything else is the same.
+<P>
+(Francisco X DeJesus, <A HREF="mailto:dejesus@archimedes.chinalake.navy.mil">dejesus@archimedes.chinalake.navy.mil</A>)
+<P>
+________
+<P>
+I've written a raytracer (available from <A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/rayce/">wuarchive.wustl.edu</A>,
+graphics/graphics/ray/rayce/).  [More than this I do not know...  -EAH]
+<P>
+(Han-Wen Nienhuys, <A HREF="mailto:hanwen@stack.urc.tue.nl">hanwen@stack.urc.tue.nl</A>)
+<P>
+________
+<P>
+RTrace and Ray Tracing Races
+<P>
+I have added a BV hierarchy generator similar to Goldsmith/Salmon to RTrace
+8.3.2 (new option c0) and did some tuning in the BV intersection code (beta
+version 8.3.3).
+<P>
+[results deleted]
+<P>
+RTrace 8.3.3 seems faster in all scenes (83-2029972284n balls and 87-2029972284n tetra).  The
+GS-like BV's in some cases are worst (balls and tree), but in the sphere test
+it is much faster!  I still haven't understood why this happens, but there
+must be an explanation.
+<P>
+(Antonio Costa, <A HREF="mailto:acc@asterix.inescn.pt">acc@asterix.inescn.pt</A>)
+<P>
+____
+<P>
+RTrace & Radiosity
+<P>
+The "lightR" radiosity program from Bernard Kwok (<A HREF="mailto:ae140@freenet.carleton.ca">ae140@freenet.carleton.ca</A>)
+is now available to run in a PC with DOS DJGPP GO32 extender.
+<P>
+You can ftp a working version with some scenes and utils at <A HREF="ftp://asterix.inescn.pt/pub/LightR/PC-386/">asterix.inescn.pt</A>
+[192.35.246.17] in directory pub/LightR/PC-386
+<P>
+The source code is in pub/LightR/PC-386/src
+<P>
+I found the program very interesting and it helped me to learn a lot about
+Radiosity (a rendering algorithm).
+<P>
+I have also adapted its output to the RTrace ray tracer so that nice images
+could be produced:
+<P>
+<PRE>
+             lightr          scn2sff         rtrace
+   PAT, VW ----------&gt; SCN ----------&gt; SFF ----------&gt; PIC PPM
+</PRE>
+<P>
+I included minimal docs and specs, but I intend to improve this area in the
+future...  Please feel free to contact me.
+<P>
+RTrace code (for PC's) is in pub/RTrace/PC-386
+<P>
+(Antonio Costa, <A HREF="mailto:acc@asterix.inescn.pt">acc@asterix.inescn.pt</A>)
+<P>
+________
+<P>
+VISION 3D, version 1.7, by Eduard Schwan (<A HREF="mailto:71513.2161@compuserve.com">71513.2161@compuserve.com</A>)
+<P>
+Yes, it is here, straight from New Zealand!
+<P>
+Vision3d (CIS:GO GraphDev:LIB 6-RayTrace Sources:Vis3d.sea) is a Macintosh 3-D
+CAD modeller, which outputs POV-Ray 2.0 syntax!  It is a Shareware polygon
+facet modeller (i.e.  no primitives, just lots of triangles), but it has lathe
+and extrusion capability, and some interesting effects.  It can export to
+Super3D, Radiance, RayShade, Renderman, POV-Ray 2.0, and DXF.  The archive
+contains both an FPU and non-FPU version of the program.  I'm only the
+messenger (and the person who asked the author to support POV-Ray.)  If you
+have comments, kudos, or questions, please drop the author a note.  Paul
+Bourke is not on CIS, but he can be reached through the internet gateway,
+using this CompuServe e-mail address:
+<P>
+<PRE>
+  INTERNET:<A HREF="mailto:pdbourke@ccu1.auckland.ac.nz">pdbourke@ccu1.auckland.ac.nz</A>
+</PRE>
+<P>
+For the internet-lopers out there with ftp access, the Vision3D archive can
+also be retrieved from:
+  <A HREF="ftp://hobbes.lbl.gov/pub/mac/">hobbes.lbl.gov</A>
+in the
+  pub/mac
+directory, along with a fractal terrain & plant & L-System generator as well.
+If enough people send him mail (and a shareware fee) he might add primitive
+support for POV-Ray, and other features too.
+<P>
+________
+<P>
+SPD 3.1 Enhanced for RenderMan RIB Output, by Philipp Slusallek
+        (<A HREF="mailto:slusallek@informatik.uni-erlangen.de">slusallek@informatik.uni-erlangen.de</A>)
+<P>
+The last few days I have extended the SPD package (Version 3.1) to support
+RenderMan RIB output.
+<P>
+Please note that the RIB output has not been verified against the Pixar
+RenderMan software, but only with our own.  So there might still be bugs that
+our software does not yet check.
+<P>
+I hope you still maintain the SPD package (it's really nice for comparing
+renderers) and can include that stuff for the next release.
+<P>
+[I hope to integrate this into the enhanced SPD package soon - I thought I
+would announce it now, write me if you're desperate for the code.  -EAH]
+<P>
+________
+<P>
+Polyray Update Soon
+<P>
+[As of 1/27/94] Polyray v1.7 is now in beta test.  Expected release is one to
+two months.  I've got a lot of doc cleanup - the last full set of docs was for
+v1.5.
+<P>
+New features include:  TrueType style glyphs (with a converter), NURBS,
+displacement surfaces in either scan conversion or raytracing, greatly
+improved antialiasing, and bumpmapping.
+<P>
+There's been a massive internal overhaul of the code, so I've been spending
+lots of time squashing new bugs in addition to old ones that have been hanging
+around.
+<P>
+(Alexander Enzmann, <A HREF="mailto:70323.2461@CompuServe.COM">70323.2461@CompuServe.COM</A>)
+<P>
+________
+<P>
+VIVID 3.0?
+<P>
+I'm still working on the docs for 3.0.  Due to my total love of writing docs
+this is an extremely slow process.  :-) Please note that my email address has
+changed.  That's another reason for my lack of time to finish 3.0.
+<P>
+(Stephen Coy, <A HREF="mailto:scoy@microsoft.com">scoy@microsoft.com</A>)
+<P>
+________
+<P>
+Imagine 2.0 Sites?
+<P>
+There are many objects, textures, and attributes for Imagine on Aminet (try
+<A HREF="ftp://ftp.luth.se">ftp.luth.se</A>, as that might be your closest site), not sure which machine
+you're running it on, but there might be some problems with using these files
+on the IBM version, stuff on Aminet is for the Amiga :)  Be aware that
+Imagine2.9 (alias 3.0) uses a different format for attributes (not sure about
+objects or textures, I wish they used some kind of compression on the objects)
+than previous versions, and aren't compatible.
+<P>
+(Steve, <A HREF="mailto:link@u.washington.edu">link@u.washington.edu</A>)
+<P>
+________
+<P>
+On-Line L-system, Fractal, Fuzzy Logic & CA Tutorial
+<P>
+Using xmosaic and world wide web, you can have access to an online tutorial on
+l-system, fractals, fuzzy logic and cellular automata.  The url is
+<A HREF="http://life.anu.edu.au/complex_systems/complex.html">http://life.anu.edu.au/complex_systems/complex.html</A>.
+<P>
+The main entry point is <A HREF="http://life.anu.edu.au/">http://life.anu.edu.au/</A> from the Australian National
+University Bioinformatics.
+<P>
+(Laurent Moccozet, <A HREF="mailto:moccozet@cui.unige.ch">moccozet@cui.unige.ch</A>)
+<P>
+________
+<P>
+The New Graphics BBS
+<P>
+Call The NEW Graphics BBS at 908/469-0049, All lines 14400 Baud, 24 hours a
+day, every day!
+<P>
+Featuring:
+<P>
+<PRE>
+   o    A graphics specific system for those of you interested in such things
+        as 3D, objects, image processing, animation, MPEG, JPEG, GIF images,
+        graphics mailing lists, file formats, clip-art and the latest in
+        public domain graphics programs!
+
+   o    Knowledge Media "Graphics 1" CD-ROM containing over 450 megs of
+        graphics applications and information available for transfer to your
+        system.  The 645 megabyte "MultiMedia" CD will be online shortly!
+
+   o    Graphics specific mailing lists such as Imagine 3D, Rayshade 3D Studio
+        POV Ray and Lightwave 3D mailing lists aliased to easy to read forums
+        which you can join and read.  Many more to come!
+
+   o    Newsfeeds from USENET that include topics such as graphics...
+</PRE>
+<P>
+(by Bob Lindabury, <A HREF="mailto:bobl@bobsbox.rent.com">bobl@bobsbox.rent.com</A>)
+<P>
+________
+<P>
+The Graphics Emporium BBS
+<P>
+This BBS is dedicated to the graphics professional and hobbyist to exchange
+information, ideas and techniques for Computer Y Graphics.  It is not
+dedicated to any single system, as the Administrator has resources for Amiga /
+Macintosh / IBM and other platforms as well.  Information exchange is the key,
+and File sharing is as welcome as eMail.  So, share your latest 3-D models and
+2-D renderings and also get the latest files and techniques - there are no
+ratios.  Just a sharing of creativity.
+<P>
+Located in Redondo Beach, California:   (310) 374-8805
+<P>
+<PRE>
+(Morph's Outpost on the Digital Frontier,
+<A HREF="mailto:Emporium_Admin0raphics_Emporium@morph.uu.holonet.net">Emporium_Admin0raphics_Emporium@morph.uu.holonet.net</A>)
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+3D Artist Magazine Information,
+</A></FONT>
+by Tim Riley (<A HREF="mailto:TRILEY@its.bldrdoc.gov">TRILEY@its.bldrdoc.gov</A>)
+</H4>
+3D Artist was originally a newsletter and occasionally appeared in electronic
+form on various BBSs and the net.  It is now a full-fledged magazine, and I
+have seen no electronic echo of it recently.  I subscribe to it and can
+recommend it as a source of info on various ray-tracing and rendering
+programs, both free/shareware and commercial, utilities and techniques.
+<P>
+____
+<P>
+I promised information on 3D Artist last week, so here it is (note: I am
+merely a subscriber and have no other connections to the magazine):
+<P>
+3D Artist is a magazine that specializes in desktop 3D graphics.  It doesn't
+appear to come out at a fixed schedule but as numbered issues.  It's full of
+articles on share/freeware, commercial packages, how-to, reviews and ads.  In
+fact, it's so full, it's sometimes not immediately obvious which illustra-
+tions/photos are associated with which articles.  It would give a layout de-
+signer or graphic artist a stroke and would be a good candidate for a make-
+over in Publish magazine.  But information is of prime importance and it's
+full of good info and decent illustrations.
+<P>
+The newest issue is #12 which I received last week and it contains 34 pages
+with articles on:
+<PRE>
+        *       Lparser (review)
+        *       Siggraph '93
+        *       MacroModel (first look)
+        *       Imagine-Detailor (review)
+        *       Photoshop 2.5 (first look)
+        *       Hi-color flic's packages (review)
+        *       3D-Studio rel. 3 (first look)
+        *       Visual Link (review)
+        *       Animation Commander (review)
+        *       AccuRender Chrome & Glass (how-to)
+        *       Lighting (how-to)
+        *       Playmation stereo pairs (how-to)
+        *       Moving the Topas camera (how-to)
+        *       MIDI online
+        *       Imagine (how-to)
+        *       Miscellaneous tricks & tips
+        *       Various press releases, notes, calendar, addresses & phone
+                numbers, classified ads.
+</PRE>
+<P>
+Subscription info:
+<P>
+<PRE>
+                 Surface Mail    First Class           Air Mail
+                ---------------  -----------  -------------------------
+                US  CA/ME OTHER  US   OTHER   CA/ME  W.HEMI  EUR  OTHER
+12 issues       $29  $41   $46   $44   $51     $44    $55    $68   $81
+ 6 issues       $16  $23   $26   $25   $28     $25    $30    $37   $43
+</PRE>
+<P>
+It's not cheap and it's tightly packed, but I find it useful.  I think they
+will sell single issues to let you get an idea (the cover price is US$3.50).
+The address is:
+<PRE>
+        3D Artist
+        P.O. Box 4787
+        Santa Fe, NM 87502-4787 USA
+        Voice: (505)-982-3532
+        FAX:   (505)-820-6929
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Updated Graphics CD-ROM from Knowledge Media,
+</A></FONT>
+by Paul A. Benson (<A HREF="mailto:pbenson@ecst.csuchico.edu">pbenson@ecst.csuchico.edu</A>)
+</H4>
+Graphics 1 CD-ROM by Knowledge Media has been updated.  This disc is now
+available.  The first 100 to order will receive a 20  0iscount.
+<P>
+The price is 19.95 plus Shipping and handling. ( Regular price 24.95)
+<P>
+This CD-ROM contains 426 Megabytes, 16,000 files.  An extensive collection
+popular public domain, shareware, and freeware graphics programs and tools,
+along with sample data files.  A resource for all those interested in graphics
+and multimedia.
+<P>
+        A partial list of applications includes( a full directory listing is
+more than 500 pages) these programs:
+<P>
+<PRE>
+Converters ( 21 Amiga, 10 IBM, 4 MAC)
+Object Modeling Applications
+Ray Tracing Programs
+Fractal software ( 7 Amiga, 5 IBM)
+Drawing Programs ( 2 Amiga )
+Paint Programs ( 2 Amiga, 2 IBM, 3 MAC)
+Image Editors
+Image Manipulation Software
+Geometric Manipulation Applications
+Plotters
+Rendering Applications ( 1 IBM, 2 Unix))
+Image Viewers ( 28 Amiga, 9 Atari, 26 IBM, 12 MAC, 15 Unix)
+Raster Toolkits
+Format descriptions ( 37 )
+Compression Packages ( JPEG, GIF, TIFF etc.)
+Screen Capture ( 2 Amiga, 3 MSDOS, 7 Windows 3.1)
+Mapping Applications ( 2 Amiga, 1 IBM)
+Animation Players ( 8 Amiga, 1 Windows 3.1)
+PHIGS Tool Kit
+Gem Graphic Functions [??? Graphics Gems code ???-EAH]
+</PRE>
+<P>
+Some examples of media for use with these applications
+<P>
+<PRE>
+Images (4 BLM, 2 GIF, 20 JPEG, 1 Landsat, 14 NASA)
+Objects ( 138 OFF and 8 NFF)
+Movies ( 1 Amiga, 1 MPEG)
+</PRE>
+<P>
+Knowledge Media's Resource CD-ROMs are MULTI-PLATFORM compatible.  They have
+been recorded in the generic ISO 9660 standard file format.
+<P>
+Ask Knowledge Media about shipping & handling & whatnot:
+<P>
+<PRE>
+        Voice:          1-800-78-CDROM
+        Fax:            1-916-872-7487
+        E-mail          <A HREF="mailto:pbenson@ecst.csuchico.edu">pbenson@ecst.csuchico.edu</A>
+        Compuserve      73167,1312
+</PRE>
+<P>
+<PRE>
+        mail:           Knowledge Media
+                        436 Nunneley Rd, Suite B
+                        Paradise, CA 95969
+</PRE>
+<P>
+A complete catalog of Knowledge Media's cd-roms may be ftp'ed from:
+        <A HREF="ftp://ftp.cdrom.com:cdrom/know_med/catalog.txt">ftp.cdrom.com:cdrom/know_med/catalog.txt</A>
+<P>
+<PRE>
+        or send email request to:
+        <A HREF="mailto:pbenson@ecst.csuchico.edu">pbenson@ecst.csuchico.edu</A>
+</PRE>
+<P>
+[Note that Bob Lindabury's "New Graphics BBS" has this CD available online;
+see elsewhere in this issue for his announcement. -EAH]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+The Desert Isle List,
+</A></FONT>
+by Amanda Osborne (<A HREF="mailto:alo@northshore.ecosoft.com">alo@northshore.ecosoft.com</A>)
+</H4>
+A lot more biased and arbitrary than the list below, the Desert Isle List is
+the programs that I go back to time and again:  the ones that *never* leave my
+hard drive.  For object translation I use 3DS2POV quite a bit; things have
+gotten better and better with this program over the last couple of years.  I
+wish it still supported 3D ascii files, but that's a minor quibble.  Also a
+minor quibble is the desire to have RAW2POV support Rayshade output.  I've
+been wanting to spend some serious time with Rayshade and already spend a lot
+of time fooling with object creation, so it would be nice, but...  As it is,
+the program does the best job I've seen of smoothing out those rough edges.
+CTDS230 is another program that I've been using for a long time.  I'm still
+finding new uses for it.  Many programs support CDTS output, but I've also
+sketched things out on paper and come up with my own coordinate file.  I think
+just about *any* rounded shape can be made with this program.
+<P>
+There are just a couple more programs on this list.  Too much fun to ignore, I
+go back to LISS151 whenever I'm stuck for inspiration and have been pushing
+too hard.  An early version of Lissajou helped me create my first real trace
+and I still discover the occasional new pattern that I have to do *something*
+with.  Because it helped me so much I always recommend this to someone who is
+new to tracing.
+<P>
+Finally, a fairly new suite of programs that I find myself never growing tired
+of:  LPARSER and LVIEWER.  I use Lviewer all the time.  It's fast and has
+never choked on an object file no matter how big or crappy the object might
+be.  It is also the only way I have to view .3DS files (count me amongst the
+legions of wannabes too poor to take the plunge and buy 3D Studio).  I must
+say, the l-system language read by Lparser isn't the easiest chore I've taken
+on learning, but it's both sparse and extremely powerful.  Gravity (tropism)
+is supported in version 2.  And, though I still wish I understood it better
+than I do, this program has provided me with hours of useful exploration.  I
+had better throw in a small caveat here:  Lparser is a computationally heavy
+program.  There is no way to tell it is still chewing on what you've given it
+except by the changing recursive level (and sometimes it takes a looong time
+for that level to change).  Once, I took an early mutation l-system file and
+attempted to output to DXF (3D faces).  Many hours later I discovered, to my
+horror, that I had a 17 meg DXF file and 0 bytes left on that drive.  I named
+it kudzo and tried to get any other program to acknowledge it but no dice.  It
+was the last time I ever set the recursive level to 14, let me tell you.
+<P>
+Anyway, Eric asked me to give separating the wheat from the chaff a try and
+this is it.  I'd like to add that many other programs are extremely valuable
+in their own right and still others are excellent for beginners (ie, folks who
+aren't hooked yet...).  I'd like to give a blanket "thank you" to all the
+talented and generous programmers who place their programs on line so that
+everyone can benefit from them.
+<P>
+________
+<P>
+Raytrace Utilities List for DOS (and Windows), by Amanda Osborne
+        (<A HREF="mailto:alo@northshore.ecosoft.com">alo@northshore.ecosoft.com</A>)
+<P>
+[An up-to-date alphabetical list of modeling and rendering software the author
+has run across.  Many should be available on oldenburg and mirror sites. -EAH]
+<P>
+<PRE>
+--3--
+3DSPOV16.ZIP -- Reads 3d studio ascii files. Writes out to Raw, Povray 1
+and Vivid. (1992, Anger & Bowermaster)
+3DSPOV18.ZIP -- Reads 3d studio mesh files. Writes out to Raw, Povray
+(1 & 2), Vivid and Polyray. (1993, Anger & Bowermaster)
+3D2POV18.ZIP -- Converts .3D2 files to Povray (1 & 2), Vivid or Raw output.
+(1993, Anger)
+<P>
+--A--
+ACCEL.ZIP -- Animation utility for DKB 2.12. (1991, Trindle)
+ANIMK05G.ARJ -- Animation utility for Povray 1 and Vivid. (1992, Taylor)
+AWKANI.ZIP -- AWK script to output Povray animation data. (1992, Farmer)
+<P>
+--B--
+BACKMAP.ZIP -- Qbasic program to create a graduated color map from two user
+defined colors. The map file created is compatible with Fractint and Vivid.
+(1993, Smith)
+BOXER1.ZIP -- Object generator for Povray 1 (makes things like bathroom
+tiles and such based upon user input). (1993, Miller)
+BRANCH1.ZIP -- Tree creator for Povray 1. (1992, Weller)
+<P>
+--C--
+CHAIN11.ZIP -- Generates interlocking chain links for Povray 1.0. (1992,
+Koehler)
+CHEM2DKB.ZIP -- Reads molecular models and writes DKB format. (1991, Farmer)
+CHEM2V.ZIP -- A modified version of Chem2DKB, this program reads molecular
+model files from the PD program Chemical and writes out a Vivid 1.0 datafile.
+(1992, Cox)
+CLAY02.ZIP -- Free form modeller; several file formats are supported. (1993,
+Hermida)
+CM100.ZIP -- CircleMaster utility for working with quadric spheres and
+ellipsoids; writes output to Povray 1.0. (1992, Brown)
+CMAP11.ZIP -- Interactive color map creator for Povray. (1993, Lutz &
+Kretzschmar)
+COIL2.ZIP -- Creates coiled objects for Povray 1.0. (1992, Kirby)
+COIL2V.ZIP -- Creates coiled objects for Vivid 2. (1992, Kirby & Cox)
+CREND15.ZIP -- Interactive texture modifier for Povray (0.5 & 1.0).
+(1992, Lutz & Kretzschmar)
+CTDS230.ZIP -- Connects a series of xyz dot coordinates. Though this may not
+sound like much, this is an extremely helpful utility. Supports Povray, Vivid
+and Polyray. (1993, Brown)
+<P>
+--D--
+DIAMOND2.ZIP -- Generates diamond shapes for Povray 1. (1993, Koehler &
+van den Bos)
+DNA09.ZIP -- Interesting modern sculpture "dna strands" are created from
+user input. Outputs cleanly (no tweaking necessary) to Povray 2.x.
+(1993, Bryerton)
+DUST01.ZIP -- Simple particle generator, with output to Vivid, Polyray and
+Povray. (1993, Mussetter)
+DXF2POV.ZIP -- DXF to Povray 1 conversion program. (1992, Collins, Wells,
+Farmer & Gibeson)
+DXF2RAW2.ZIP -- DXF to Raw conversion program. (1992, Coy, Barber, Daigle
+& Shiffman)
+DXF2V22.ZIP -- DXF to Vivid conversion program. (1992, Coy, Barber, Daigle
+& Shiffman)
+DXF3DS.ZIP -- DXF to 3DS conversion program. (1991, Yost/Autodesk)
+<P>
+--F--
+FONT2DAT.ZIP -- Version 1.2 is a Qbasic program that takes a font file and
+writes an include file for Povray 1.0. (1992, Koehler & Clark)
+FORM.ZIP -- All sorts of shapes can be generated with this program. Form
+files consist of both shapes and commands (like twistx and bend) and output
+may be Povray 1, 2 or .plg. Interesting program, complementary to LPARSER.
+(1993, Rowbottom)
+FOUNT04.ZIP -- Fountain particle generator, with bounce. The program creates
+a user-defined number of files in Vivid, Povray (1 & 2) or Polyray and has a
+good variety of fields to set. Some tweaking involved. (1993, Mussetter)
+FRC2POV.ZIP -- This program reads a mandelbrot parameter file from Fractint
+and creates a corresponding Povray 2.x mandel texture file. (1994, Grossman)
+FRGEN14.ZIP -- Fractal Landscape (and other shapes too) Generator. Though
+the program supports Vivid and Povray 1 & 2 directly, by selecting raw
+output you can smooth triangles out with RAW2POV to create nice hills and
+dales. (1993, Anger)
+FS11.ZIP -- Fonts to Shapes: Windows program that creates Povray 1.0 files
+from True Type fonts. Unregistered users don't have access to the entire
+alphabet. (1993, Peterson, $15.00 shareware)
+FWHEEL1.ZIP -- Straightforward and unique animation utility for Vivid and
+Povray 2.x. (1993, Brown, $5 shareware)
+<P>
+--G--
+GEAR13.ZIP -- Generates gears for Povray 1.0. (1992, Koehler)
+GLOB10.ZIP -- Rounded object generator for Vivid. (1993, Sherman)
+GTR.ZIP -- General Triangle Reader. Strips away raytrace specific syntax,
+writing raw triangular data. (1992, Bowermaster)
+<P>
+--H--
+HYPE100.ZIP -- Utility for working with hyperboloids of one sheet; writes
+output to Povray 1.0. (1992, Brown)
+<P>
+--L--
+LAND.ZIP -- Fractal landscape generator, with output to RAW and Povray 1.0.
+(1992, Stanely)
+LISS151.ARJ -- Lissajou pattern generator with many (CTDS, Raw, Povray 1 &
+Vivid) output formats supported. (1992, Caba & Farmer)
+LPARSER2.ZIP -- L-system creator and mutator. This program is particularly
+strong in the creation of organic looking forms. Many data files are
+included with the program, which can be edited or mutated to interesting
+effect. The language of l-systems is not intuitive but the results can be
+truly stunning. The l-system file that is read into the program can be
+outputted to DXF (both R12 and 3D faces), Povray 2.x, RAW and Renderstar VOL.
+A couple of accessory files are included with the main program and are strong
+programs in their own right. LVIEWER, a favorite of mine, is a wire-frame
+viewer that reads .3DS, .RAW, Fractint .RAY, ARE-24 .POL and Lparser/
+Renderstar .VOL files. Rotation, zoom and pan the "camera" position, which
+can be saved to a file. This file can then be read into LV2POV. (1993, Lapre)
+LV2POVID -- Newer and more powerful than LV2POV, this program reads an
+lviewer info file and generates data files in Povray (1 & 2.x) and Vivid
+formats. The program's main strength lies in landscape generation. (1993,
+van der Mark)
+<P>
+--M--
+MESH01.ZIP -- This program modifies a flat triangular mesh in any of a variety
+of ways (arc, curl, dome and so on) and can output the resulting mesh to DXF,
+RAW, Povray 1.0 or Vivid. (1992, Flores)
+MORAY13.ZIP -- Povray 1 & 2.x object modeller and scene creator. Extremely
+powerful program, in part because of its wide support of Povray's primitive
+shapes. (1993, Lutz & Kretzschmar, $59 shareware)
+<P>
+--O--
+OBJ2ASC2.ZIP -- Wavefront object to 3d studio ascii converter. (1993, Knight)
+<P>
+--P--
+PDOTS03.ZIP -- Visual modeller of wormy shapes. It can read its own DOT files
+as well as CTDS and Worm files. It can also read spline path data from SP03,
+in which case it will write out a path file. Other output formats are Vivid,
+Polyray, RAW and CTDS. Very interesting. (1992, Mason)
+PLANT05.ZIP -- Fractal plant generator. Outputs supported are Povray (1 & 2),
+Polyray and CTDS (Connect the dots smoother). (1993, Bryerton)
+POLAR1.ZIP -- Pattern generator (circles, ovals and several others). Output
+can be fed into CTDS, among other uses. (1991, Hammerton)
+POVCAD3.ZIP -- Windows 3.1 program supporting input of DXF (3d faces) and
+Raw files. CAD modeller and scene generator for Povray (1 & 2) and Polyray.
+Quite a few primitives are supported. (1993, Hermida, $15.00 shareware)
+POVGEN11.ZIP -- A mouse-driven surface of revolution generator, with output
+to RAW and POV 1.0. (1993, Hermida, shareware)
+PREPOV05.ZIP -- An equation and formula solver for Povray 1.0. (1993, ?)
+PUDDLES.ZIP -- Creates batch files of raindrops using height fields. The
+files created can be rendered in Povray 1.0. (1992, Haveland)
+PV3D100.ZIP -- Object modeller and scene creator for Povray and Vivid. The
+last time I tried this out the documentation was still a bit strange but the
+program itself looked powerful, if not overly easy to use. (1993, Lecointe)
+PVMDL1.ZIP -- Object generator for DKB and Povray 1. (1992, Mikelson)
+<P>
+--R--
+RAW2PV18.ZIP -- Excellent utility that allows the user to adjust the level
+of smoothing to apply to raw data as it is translated to Povray (1 & 2.x),
+Polyray or Vivid 2. It can also add a camera and light to the scene, making
+things fairly easy for the novice user. (1993, Anger)
+RAWMRPH2.ZIP -- Morphs raw triangular data from one dataset into another.
+Though it's not real smooth, it's a cool idea, and a lot of fun to play
+with. (1993, Cox)
+RAYPACK.ZIP -- Hodgepodge of helpful Qbasic programs for use with Vivid. Some
+neat stuff here like hexagonal paving and stellated dodecahedron creation.
+(1993, Smith)
+RAYSCENE.ZIP -- Set of animation utilities, not raytracer specific.
+(1991, Jarik & Hassi)
+RAYL210.ZIP -- Helpful utility to convert uLathe (an object creator program
+for windows) files to RAW, Povray 1 & 2.x or Vivid 2 format. (1993, Koehler)
+RTAG21.ZIP -- Ray Tracing Animation Generator (not raytracer specific). A
+powerful program with its own language which supports, amongst other things,
+spline path generation. (1993, Sherrod, $20 shareware)
+<P>
+--S--
+SCULPT2D.ZIP -- Reads in Sculpt Animate 3D files and writes out to DKB.
+(1990, Buck and Collins)
+SHADE12.ZIP -- Generates lampshades for Povray 1.0. (1992, Koehler)
+SHELLGEN.ZIP -- Shell generator for Povray 1.0. (1991, Farmer)
+SMOOTH31.ZIP -- Building upon the original Sandpaper code, Smooth provides a
+means to calculate surface normals of raw triangular data. In addition, several
+small utilities (Center and Scale) are also provided. Though nicely supported
+and up-to-date, in version 3.0 at least, there seems to be some syntax errors
+in files outputted to Povray 2.x. The first version of this program also
+supported many other output formats (something I miss). (1993, Burton, $10
+shareware)
+SNDPPR2.ZIP -- Smooths out raw triangular data when outputting to NFF, Vivid,
+DKB, Povray 1.0 and Rayshade. (1992, Schoenborn, Coy & Cox)
+SP03.ZIP -- Spline paths for animations. Many output formats (Povray, Vivid,
+Polyray, 3DV, Wire 3D) and acceleration and deceleration are supported as
+well. (1992, Mason)
+SPHRCL11.ZIP -- Spherecal makes interesting shapes out of spheres based upon
+several options. Output to Vivid 2 or CTDS. (1992, Pettyjohn)
+SPINGEAR.ZIP -- Animation batch file generator for DKB. (1991, Farmer)
+SPIRAL22.ZIP -- 3D coordinate generator with output to CTDS and Vivid. (1992,
+Brown)
+SPRING12.ZIP -- Generates a series of data files to create a spring
+animation using Povray 1.0. (1992, Koehler)
+STAR.ZIP -- Starfield generator for Povray 1. (1992, Weller)
+STAR12.ZIP -- Generates 3D stars for Povray 1. (1992, Koehler)
+SUDS2.ZIP -- Random positioning of lots of spheres (or other objects) based
+on a variety of selections. (1994, Farmer, Wegner & Schwan)
+SWOOP01.ZIP -- Shape generator (twisted sweeps and extrusions) to RAW output
+which can be converted to your tracer of choice. (1992, Otwell)
+<P>
+--T--
+TCE20.ZIP -- The color editor for Povray 1. (1991, Farmer)
+TCEV20.ZIP -- The color editor for Vivid. (1991, Farmer)
+TDDD2ASC.ZIP -- TDDD (Imagine) to 3D studio ascii file converter.
+(1993, Knight)
+TEXMAKE2.ZIP -- Early version of a utility to assist in texture creation in
+Povray 2.x. (1993, Sigler)
+TGA2POV2.ZIP -- Converts targa files to Povray 1.0 objects. (1992, Steeves)
+TREEBAS.ZIP -- Qbasic program to make trees from l-systems. (1993, Storm &
+Audas)
+TTG12.ZIP -- Truman's Torus Generator for Povray 1.0. (1993, Brown)
+TWISTER.ZIP -- DKB utility to produce ribbon like figures. (1990, Wells)
+<P>
+--V--
+VIVTOOLS.ZIP -- A nice set of object generators for Vivid. (1992, Martina)
+VTEXT09.ZIP -- Letter generation tool for Vivid. (1991, Coy)
+VVFONT18.ZIP -- Borland .CHR fonts to Vivid, Povray or Polyray. Bevelling
+and domed letters are supported. (1992, Traylor, $5.00 shareware)
+<P>
+--W--
+WORM05.ZIP -- Object creator for wormy shapes. Reads Worm files and writes
+Worm, CTDS and Vivid output. (1992, Flores)
+WRM2RAY.ZIP -- Converts Worm files to Rayshade compatible output. (1992,
+Kirby)
+<P>
+--Z--
+ZOOM11.ZIP -- Interpolates steps between two positions for Povray 1.0.
+(1993, Brown)
+</PRE>
+<P>
+========
+<P>
+One program that doesn't really fit the list but that should be considered is
+SCULPTURA by Michael Gibson.  At $99.00, it is really a commercial program but
+there is a demo available (with save and rendering disabled).  Windows- based,
+this program seems very robust and supports several flavors of files for both
+input and output (it can read in more sorts of DXF files than any other
+program I've used, for instance).  Output to Vivid and Povray 1 are directly
+supported as well, but it's great strength lies in object creation and
+manipulation.  And it serves as an excellent way to get True Type fonts into
+your favorite tracing program.
+<P>
+I'm sure I've left some things off and made some factual blunders amongst what
+I did include.  Please let me know what the goofs are and I shall try to
+correct stuff and keep it up to date.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art8">
+Brief Reviews of a Bunch of Useful PC Stuff,
+</A></FONT>
+by Tim Lister (<A HREF="mailto:maxtal@extro.ucc.su.OZ.AU">maxtal@extro.ucc.su.OZ.AU</A>)
+</H4>
+[I disagree with one or two of the reviews here - povray 2.0 is lots faster
+for large scenes, povcad is worthwhile, etc.  But it's another view, and
+he hits many of the high points. - EAH]
+<P>
+I've just been putting together a bunch of raytracing stuff, and I've
+discovered:
+<P>
+<PRE>
+        povray          - povray 2.0, doesn't seem much faster than version
+                          1.0, but has _everything_ I want, including
+                          Constructive Solid Geometry & Fractal HeightFields
+
+        mray13          - moray 1.3, a decent modelling tool that makes v2.0
+                          files ... best of all, it's shareware.
+
+        pv3d            - another modeller, this is crippleware, and I don't
+                          have the money to invest in a complete version, so
+                          I can't tell you how good this is.
+
+        povcad          - requires VBRUN100.DLL, which I haven't installed
+                          yet, so I don't know its quality.  But, consider,
+                          Basic? Really? Do you write Basic? I know people
+                          who say great things about Visual Basic, but ...,
+                          who believes it?
+
+        dmorf           - Dave's Morphing package.  Seems good, uses splines
+                          for the image segments, produces .TGA files.
+
+        dta18e          - Dave's Targa animator, version 1.8e.  Makes movies
+                          in .FLI format, interpolates frames, etc.  Requires
+                          some of the DMORF stuff, so unpack it into your
+                          DMORF directory.  I also dumped a copy of AAPLAY.EXE
+                          into the DMORF directory to play my .FLIs.
+
+        piclab          - PICture LABoratory version 1.8.  A command line
+                          program that handles TGAs and GIFs.  Very fast,
+                          lots of features.
+
+        neopnt2a        - NEOPAINT version 2a.  Best paint program I could
+                          find that didn't cost $money.  Good for touch-ups
+                          of GIFs, change palette, etc., etc.
+
+        pspro2          - PAINT SHOP PRO II.  The only Windows package in this
+                          list so far.  Has good resizing, capture facilities,
+                          can batch change files, by type & path.
+
+    So what else is out there? Well ...
+
+        display         - image & FLI editor.  I haven't figured out that
+                          GO32.EXE shit yet.
+
+        image lab II    - this is HUGE and SLOW.  it seems to have a Smalltalk
+                          interpreter in the package, and my poor little
+                          386 DX 33 + maths copro, 4 meg memory, just can't
+                          cope.  Maybe when I get some $money, sigh.
+
+        pvquant         - a set of utilities in source code form only, seems
+                          nice, I'll report on this when I get round to it,
+                          unless some nice person does first.
+
+        rmorf           - another morphing package, produces .FLIs on request.
+                          However, doesn't use splines, so some transforms not
+                          easy to define.  I prefer DMORF to RMORF, but both
+                          are usable.
+</PRE>
+<P>
+I'm also chasing movie makers like MPEGXING and so on.  Plenty of players
+around, just not very many makers.  This area of R&D seems very volatile &
+will probably alter significantly in the near future.  Experts, please keep it
+coming!
+<P>
+N.B:  If you're looking for the stuff above, use the ARCHIE substring search
+to find a site near you.
+<P>
+<PRE>
+  E.G.; to find DMORF, type
+</PRE>
+<P>
+<PRE>
+        archie -sdmorf | more
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art9">
+Tree and Plant Image Generation,
+</A></FONT>
+by Phil Drinkwater (<A HREF="mailto:P.J.Drinkwater1@lut.ac.uk">P.J.Drinkwater1@lut.ac.uk</A>) and Jason Weber (jason@belvoir-arl-irisgt.army.mil)
+</H4>
+I am a final year student who has been writing a program (as part of my final
+year project) to produce realistic images of trees.  I posted some questions
+on this newsgroup a few months ago, and would like to thank everyone who
+helped me, because I have now finished the program, which runs on a PC.
+<P>
+The reason I am writing is that I have produced some trees and a plant and was
+wondering if anyone would be interested in viewing them and giving their
+opinions.  I have not seen the output from many other programs, so I have not
+really got anything to compare them to.
+<P>
+I have rendered images of a palm tree, a Christmas tree, a few branches, a
+willow, a few leafy trees and a plant (like a potted plant with dense
+foliage) called a 'tree of heaven'.  If anyone is interested in seeing them,
+they are available for anon FTP at <A HREF="ftp://princeton.edu/pub/trees/drinkwater/">princeton.edu</A> in the directory
+pub/trees/drinkwater.  They are in JPEG format.  If you have problems
+reading/getting them, write to me and I'll mail them to you.  If you receive
+them, send them to anyone you want to, to get their comments too.
+<P>
+Before you ask, the code is not available for release just yet.  I think it
+will probably be made public in the summer sometime.
+<P>
+____
+<P>
+Jason Weber replies:
+<P>
+I made a few small gif's of our trees and put them on our ftp so that anybody
+can take a look at 'em.
+<P>
+They're available via anonymous ftp at <A HREF="ftp://belvoir-arl-irisgt.army.mil/pub/viewtree/images/">belvoir-arl-irisgt.army.mil</A> in
+pub/viewtree/images .
+<P>
+I picked out a few interesting trees:
+<P>
+<PRE>
+aspen.gif       Quaking Aspen
+austrian.gif    Austrian Pine
+cactus.gif      Cactus
+cotton.gif      Eastern Cottonwood
+elm.gif         Rock Elm
+palm.gif        Queen Palm
+poplar.gif      Defoliated Lombardy Poplar
+sassa.gif       Sassafras
+tamarack.gif    Tamarack
+tupelo.gif      Black Tupelo (my favorite)
+</PRE>
+<P>
+They're only 256x340 so they should be pretty easy to display.  They lost a
+little in the gif conversion.
+<P>
+I haven't been able able to FTP out for the last couple days, so expect
+problems.  When you get a chance, download 'em and tell me what you think.
+<P>
+For those of you with SGI's, the runnable demo is at version 1.09 which
+fixes a memory bug.  If you couldn't run it before, you may want to try again.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art10">
+POV-Ray 2.0 Released,
+</A></FONT>
+by Dave Buck (<A HREF="mailto:dbuck@alfred.carleton.ca">dbuck@alfred.carleton.ca</A>)
+</H4>
+The POV-Ray team is proud to announce the release of POV-Ray 2.0.  This
+program is a freely distributable raytracer which runs on a large number of
+different platforms including IBM PC's, Macintosh, Amiga, VAX, many UNIX
+platforms, and is portable to a large number of other systems.
+<P>
+The distribution files for POV-Ray 2.0 are now available by anonymous FTP from
+<A HREF="ftp://alfred.ccs.carleton.ca/pub/pov-ray/">alfred.ccs.carleton.ca</A> (134.117.1.1) in the directory pub/pov-ray/POV-Ray2.0.
+These files should be appearing very shortly on <A HREF="ftp://wuarchive.wtl.edu/graphics/graphics/ray/pov-ray/">wuarchive.wtl.edu</A> in the
+directory
+        graphics/graphics/ray/pov-ray/POV-Ray2.0 and on
+        <A HREF="ftp://ftp.informatik.uni-oldenburg.de">ftp.informatik.uni-oldenburg.de</A> [134.106.1.9].
+<P>
+<PRE>
+Please forward questions and comments to Chris Young at
+<A HREF="mailto:76702.1655@compuserve.com">76702.1655@compuserve.com</A>.
+</PRE>
+<P>
+The remainder of this message contains a description of the changes in
+POV-Ray 2.0 from the older 1.0 release.  Enjoy.  We did.
+<P>
+<PRE>
+    What's New in POV-Ray 2.0
+    -------------------------
+    The following is not intended to be an all-inclusive list of every
+    new feature, but should give experienced users a pretty good guide
+    of what has been changed and what has been added.  Please refer to
+    POVRAY.DOC for details.
+
+    General:
+    -------
+  - Automatic bounding slabs for greatly enhanced rendering speed of
+    most scenes.
+  - Adding, subtracting, multiplying & dividing of floats & vectors.
+  - Clock global variable for external animation support.
+  - X, Y, and Z global vector constants.
+  - Improved antialiasing routine with new commandline options.
+
+    Commandline options:
+    -------------------
+  - Version switch for backwards compatibility.
+  - Starting/ending column/row switches for trace window.
+  - Relative/absolute values for trace window switches.
+  - Antialiasing jitter scale value and toggle.
+  - Number of antialiasing rays to shoot.
+  - Internal "clock" setting for animations.
+
+    Objects:
+    -------
+  - Soft penumbral shadows from extended area lights.
+  - Smoother Bezier patches.
+  - New simplified torus syntax.
+  - Heightfield water_level now uses range 0-1 instead of 0-255.
+  - Heightfields can now be clipped and used in CSG operations.
+  - Heightfields can be phong-shaded with the "smooth" option.
+  - New, improved finite cylinders, cones, and discs, with
+    optional "capping" of cones and cylinders.
+  - More versatile CSG unions have replaced the need for composites.
+  - CSG texturing has been made much more flexible.
+  - New "merge" removes internal boundaries between transparent
+    unioned objects.
+
+    Textures:
+    --------
+  - Hexagon pigment texture.
+  - Radial pigment texture.
+  - Mandelbrot pigment texture.
+  - Texture attributes grouped into 3 independently scalable groups:
+    pigment, normal, and finish.
+  - TIR (Total Internal Reflection) for more realistic refraction.
+  - Fractional Brownian Motion (fbm) turbulence controls.
+  - Turbulence can now be used independently with any pigment or normal
+    texture.
+  - Optional vector-style turbulence values.
+  - Background coloring.
+  - Color maps can now be declared.
+  - Frequency, phase keywords now available for use with color_maps.
+  - Filter keyword replaces "alpha", letting us reserve alpha for other
+    uses in the future.
+  - Less restrictive distribution policy.  See POVLEGAL.DOC for
+    details.
+
+    IBM PC Video:
+    ------------
+  - VESA 1.2 spec implemented for preview graphics in the IBM DOS version.
+    Gives VESA support in most 8/15/24 bit modes.
+    Should support: 1024 x 768 x 256 color palette
+                     800 x 600 x  15 bit high color
+                     640x4 480 x  24 bit true color
+  - Diamond 24X 15 and 24 bit mode support added.
+  - Preview reduced to fit selected video screen size if necessary.
+</PRE>
+<P>
+________
+<P>
+The POV-Ray 2.0 bug which has been plaguing many UNIX systems (especially Risc
+processors) and causing them to crash or to gobble up memory has been fixed.
+The problem was a compiler-specific "feature" involving structure copying.  A
+corrected version of the offending module has been placed on
+<A HREF="ftp://alfred.ccs.carleton.ca/pub/pov-ray/">alfred.ccs.carleton.ca</A> (134.117.1.1) as pub/pov-ray/POV-Ray2.0/objects.c.fix.
+<P>
+The tests I've performed on this system look promising.  If this patch fails
+to fix your problems, please let Chris Young know by EMail to
+<A HREF="mailto:76702.1655@compuserve.com">76702.1655@compuserve.com</A>.
+<P>
+________
+<P>
+POV-Ray 2.1 now available!
+<P>
+POV-Ray 2.1 has now been posted on CIS, probably on the carleton internet site
+too.  It is mostly a bugfix release, no new features, but much stabler than
+2.0.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art11">
+JPEG Texture Maps,
+</A></FONT>
+by Petri Nordlund (<A HREF="mailto:petrin@mits.mdata.fi">petrin@mits.mdata.fi</A>)
+</H4>
+If you need some good textures, then check out these files:
+<P>
+<PRE>
+ptindex.lha          gfx/3dobj  191K  Texture maps / index
+ptmisc.lha           gfx/3dobj  545K  Texture maps / miscellaneous
+ptorgani.lha         gfx/3dobj  213K  Texture maps / organic
+ptston1a.lha         gfx/3dobj  446K  Texture maps / stones 1a
+ptston1b.lha         gfx/3dobj  412K  Texture maps / stones 1b
+ptston2a.lha         gfx/3dobj  360K  Texture maps / stones 2a
+ptston2b.lha         gfx/3dobj  331K  Texture maps / stones 2b
+ptwood.lha           gfx/3dobj  218K  Texture maps / woods
+StonesWoods.lha      pix/misc   466K  24-bit JPEG stone and wood textures
+</PRE>
+<P>
+These textures were created on Amiga, so they have been archived with the LhA
+archiver.  Unix sources for LhA should be available at <A HREF="ftp://grind.isca.uiowa.du/unix/arc-progs/">grind.isca.uiowa.du</A>
+/unix/arc-progs/lha-1.00.tar.Z.
+<P>
+All textures are in JPEG format.  Stones and woods have been scanned from
+various sources and they contain some VERY good wood textures.  The others
+have been created with POV-Ray 1.0 on Amiga.
+<P>
+These files should be in any Aminet site, the directory is usually
+/pub/aminet, /pub/amiga or /pub/amiga/aminet.  In Wuarchive these files are in
+/pub/aminet/gfx/3dobj and /pub/aminet/pix/misc directories.
+<P>
+Here are some Aminet sites:
+<P>
+<PRE>
+Scandinavia  <A HREF="ftp://ftp.luth.se">ftp.luth.se</A>            130.240.16.3
+Germany      <A HREF="ftp://ftp.uni-kl.de">ftp.uni-kl.de</A>        131.246.9.95
+Germany      <A HREF="ftp://ftp.uni-erlangen.de">ftp.uni-erlangen.de</A>    131.188.1.43
+Germany      <A HREF="ftp://ftp.cs.tu-berlin.de">ftp.cs.tu-berlin.de</A>    130.149.17.7
+Germany      <A HREF="ftp://ftp.uni-paderborn.de">ftp.uni-paderborn.de</A>   131.234.2.32
+USA          <A HREF="ftp://wuarchive.wustl.edu">wuarchive.wustl.edu</A>    128.252.135.4
+USA          <A HREF="ftp://oes.orst.edu">oes.orst.edu</A>          128.193.124.2
+UK           <A HREF="ftp://src.doc.ic.acuk">src.doc.ic.acuk</A>            146.169.2.1
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art12">
+ArchiCAD Model Translator,
+</A></FONT>
+and other notes, by Paul D. Bourke (<A HREF="mailto:pdbourke@ccu1.aukuni.ac.nz">pdbourke@ccu1.aukuni.ac.nz</A>)
+</H4>
+- I would appreciate it if the next issue could contain a mention to a
+  translator proving very popular here that converts ArchiCAD models into
+  Radiance. ArchiCAD is a Architectural specific "intelligent" modelling
+  package on both Mac and PC. The translator does clever things with
+  materials so that the first rendering in radiance looks damn good, then
+  it only gets better as one plays with Radiance lighting and materials.
+  It is on my site as well as Greg Ward's.  The path for mine is
+        <A HREF="ftp://ccu1.aukuni.ac.nz/">ccu1.aukuni.ac.nz</A>: mirrors.architec/Translators
+  for Greg's it's
+        <A HREF="ftp://hobbes.lbl.gov/">hobbes.lbl.gov</A>: pub/translators
+<P>
+- There wes a mention of BitSurface for 3D text...not really appropriate I
+  feel.  BitSurface is a rather crude utility we played with here in an
+  attempt to create geometry of maori carvings (native population of NZ) It
+  takes a grey (gray in the US I think?)  scale bitmap and generates a surface
+  where the height is proportional to the grey level.
+<P>
+- There was a query on 3D trees and their generation, I have done some work on
+  this although I have had to put it aside for a while at the moment.  There
+  are however some Radiance trees on my FTP site generated with 3D L systems
+  by myself and with a preliminary particle type approach being worked on by
+  someone else here, and still others contributed from a commercial tree
+  generating package.  The models come with rendered examples.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art13">
+New Radiance Version Available,
+</A></FONT>
+by Greg Ward (<A HREF="mailto:greg@hobbes.lbl.gov">greg@hobbes.lbl.gov</A>)
+</H4>
+Radiance version 2.3 is now available for downloading by anonymous ftp from
+<A HREF="ftp://hobbes.lbl.gov">hobbes.lbl.gov</A> (128.3.12.38) in Berkeley, California and soon will be
+available from <A HREF="ftp://dasun2.epfl.ch">dasun2.epfl.ch</A> (128.178.62.2) in Lausanne, Switzerland.
+<P>
+If you do not have access to ftp, you may request the software on 60 Mbyte 1/4
+inch tape cartridge.  For a limited time, I will be providing free media (I
+have a lot of tapes I want to unload), so act fast with your request.
+<P>
+I have christened this version 2.3 because there were several 2.2 beta
+releases that got out (sometimes without my knowledge or permission), and I
+wanted to avoid confusion with these earlier, unofficial versions.  This
+release has been a long time coming because, as some of you know, the
+Department of Energy has been deciding how to "market" Radiance.  I think they
+finally gave up with this idea, which is why they are giving us back control
+over distribution.
+<P>
+Be aware that Radiance is copyrighted software, and we ask that you do not
+redistribute it without our permission.  If someone wants it, let them write
+to us or access one of the official ftp sites themselves.  We do encourage
+products based on Radiance, and ask that anyone who is interested in a
+developer's distribution license contact us.  We will be setting up a license
+fee structure that should be quite reasonable, probably a one-time flat charge
+for each new LBL release.
+<P>
+Radiance 2.3 has a couple of major enhancements over 2.1, and many minor
+changes.  One major addition is a new executive program called "rad" that
+automatically runs oconv, mkillum, rview, rpict and pfilt with sensible
+options to produce nice renderings.  Use of this program is documented in a
+new version of the Radiance tutorial (ray/doc/tutorial.1).  The other
+significant enhancement is the ability to render large and/or complex images
+in parallel over the network and/or on a multiprocessing platform.  The main
+program to look at for this is "rpiece".
+<P>
+Be sure to poke around in the /pub directory as well -- there are some
+interesting new documents in the /pub/doc subdirectory.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art14">
+Previewer Program for Radiance,
+</A></FONT>
+by Greg Ward (<A HREF="mailto:greg@hobbes.lbl.gov">greg@hobbes.lbl.gov</A>)
+</H4>
+Here is the announcement for a previewer program by Peter Apian-Bennewitz of
+the Fraunhofer Institute in Freburg, Germany.  It is most compatible with GL
+(SGI's graphics library) but can also work under X11 using the VOGL package as
+described below.
+<P>
+I have used this previewer myself, and it works quite well.  For ftp'ing
+convenience, I have placed a copy of the software in /pub/programs on
+<A HREF="ftp://hobbes.lbl.gov">hobbes.lbl.gov</A> (128.3.12.38).
+<P>
+README extract:
+<P>
+rshow is an interactive previewer for the RADIANCE synthetic image system.
+Conditions of use and copyrights notes are appended in this text.
+<P>
+<PRE>
+rshow is available from
+        <A HREF="ftp://ise.fhg.de">ise.fhg.de</A>       132.230.254.6
+</PRE>
+<P>
+rshow reads the scene input files (octrees in RADIANCE dialect) and displays
+them on a Silicon Graphics Workstation or a UNIX workstation running X11.
+rshow's main use is to check the scene geometry and to select a viewpoint,
+however interactive moving of instances and spline interpolation of a camera
+path are also supported.  Since rshow uses the original RADIANCE input
+subroutines, it is believed to be compatible with RADIANCE's rpict and rview.
+See FEATURES for details.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art15">
+IRIT Solid Modeller Version 4.0,
+</A></FONT>
+by Gershon Elber (<A HREF="mailto:gershon@cs.Technion.AC.IL">gershon@cs.Technion.AC.IL</A>)
+</H4>
+        IRIT 4.0 is now available.  IRIT 4.0 was fully tested on the following
+platforms.  Previous version were tested on other platforms and it is expected
+that IRIT will compile on them with minor or no revisions at all.
+<P>
+<PRE>
+* SGI4D  (IRIX 4.0.1).
+* SUN 4  (SunOS Release 4.1.2)
+* HP 730 (HPUX 8.07)
+* IBM PC (Window NT 3.1, OS2 2.x)
+</PRE>
+<P>
+        Many thanks should go to all the beta testers of this version.  In
+particular, I would like to thank Kriton Kyrimis who invested his time to not
+only test this program and improve the documentation, but also to port it to
+the Amiga environment.
+<P>
+        The distribution locations below have C sources as irit40s.*, images
+as irit40i.* and executables as irit40e.* when appropriate.
+<P>
+        You can (or will be able to as soon as they will be installed from the
+uploading directories) anonymous ftp IRIT 4.0 from the following locations:
+<P>
+* <A HREF="ftp://ftp.technion.ac.il/pub/supported/cs/graphics/">ftp.technion.ac.il</A> [132.68.1.10], directory pub/supported/cs/graphics
+  as irit40s.tar.Z. The is the new homeland for Irit.
+  (contact person <A HREF="mailto:gershon@cs.technion.ac.il">gershon@cs.technion.ac.il</A> (Gershon Elber)).
+<P>
+* <A HREF="ftp://ftp.uu.net/graphics/irit/">ftp.uu.net</A> [192.48.96.9], directory /graphics/irit, files irit40s.tar.Z
+  and irit40i.tar.
+<P>
+* <A HREF="ftp://gondwana.ecr.mu.oz.au/pub">gondwana.ecr.mu.oz.au</A> [128.250.1.63], directory /pub, files irit40s.tar.Z
+  and irit40i.tar. (contact person <A HREF="mailto:bernie@ecr.mu.oz.au">bernie@ecr.mu.oz.au</A> (Bernie Kirby)).
+<P>
+* <A HREF="ftp://ftp-os2.nmsu.edu/os2/2_x/graphics/">ftp-os2.nmsu.edu</A> [128.250.1.63] os2/2_x/graphics/irit40??.zip.
+  This has only the executables. Sources should be ftp'ed from one
+  of the unix places above.
+<P>
+* It is expected that Kriton Kyrimis (<A HREF="mailto:kyrimis@theseas.ntua.gr">kyrimis@theseas.ntua.gr</A>)
+  will upload the Amiga 68020/68881 executables to aminet. Please
+  contact him with Amiga specific questions.
+<P>
+* MSDOS is no longer supported in IRIT 4.0.
+<P>
+<PRE>
+Join IRIT mailing list:         <A HREF="mailto:gershon@cs.technion.ac.il">gershon@cs.technion.ac.il</A>
+Mailing list:                   <A HREF="mailto:irit-mail@cs.technion.ac.il">irit-mail@cs.technion.ac.il</A>
+Bug reports:                    <A HREF="mailto:irit-bugs@cs.technion.ac.il">irit-bugs@cs.technion.ac.il</A>
+</PRE>
+<P>
+[some of the new features:  new filters from and to various formats, many
+new commands, support for UV texturing, fixes, etc.]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art16">
+Object-Oriented Graphics: GOOD 0.50,
+</A></FONT>
+by Ekkehard Beier (<A HREF="mailto:Ekkehard.Beier@Prakinf.TU-Ilmenau.DE">Ekkehard.Beier@Prakinf.TU-Ilmenau.DE</A>) TU Ilmenau, Germany Faculty of Computer Science Department of Computer Graphics
+</H4>
+We want to announce the 0.50 Release of the GOOD project.  GOOD is an object
+oriented framework for graphical applications running under X Windows with
+special support to SGI GL, PHIGS, etc.
+<P>
+GOOD is free available with all sources.  Everybody is invited to use, modify
+and extend GOOD.  Its our aim to provide a public domain framework that should
+be helpful to other people.
+<P>
+GOOD consists of three essential parts
+<P>
+<PRE>
+        * The Tcl/C++ Raytracer/Shader YART
+        [YART was briefly described in <A HREF="rtnv6n3.html">RTNv6n3</A>]
+
+        * The Interactive Object Manipulator IOM
+        This is Tk based Application Builder for YART with support to
+        Spaceball, Mouse allowing real interactions and dialog boxes, tree
+        widget, class browser for non-direct interactions.
+
+        * The Module Application Framework MAF
+        This is a C++ classlib for dataflow-driven applications including
+        ipc, data transfer. Currently MAF is not available, 'cos
+        we are reimplementing the prototype.
+</PRE>
+<P>
+Additional there is a YART extension available, that implements a lot of stuff
+for scientific visualization, especially field simulations, streamlines, color
+mapping, etc.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art17">
+GFX News,
+</A></FONT>
+by Eric Hsiao (<A HREF="mailto:hsiaoe@brtph84f.bnr.ca">hsiaoe@brtph84f.bnr.ca</A>)
+</H4>
+GFX News, a new magazine with the emphasis on graphics and images (GraFiX).
+This debut e-mag comes from the same creators as GIF News, started back in
+November of 1988.  Now in 1994, the magazine is reborn as GFX News, bringing
+you computer news at the highest speed of the Super Information Highway.
+What sets this magazine apart from the run-of-the-mill ASCII text e-mags is
+the fact that this mag is all graphics.  Each page is eye-catching, colorful
+high-resolution graphics.  And GFX News is FUN to read!  The best part of
+course, it is absolutely FREE to you.  You can join the GFX News mailing list
+by sending your request and E-mail address to:
+    <A HREF="mailto:hsiaoe@rpi.edu">hsiaoe@rpi.edu</A>
+Or FTP to the official GFX News FTP site:
+    128.113.65.38   /pub/gfx-news
+<P>
+Get your copy today and you'll never want to read dull boring ASCII text mags
+again.  Unix X/PC/Macs/Amigas/other platform users are all welcome to read
+this magazine.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art18">
+New Wavefront Listserv,
+</A></FONT>
+by George H. Otto (<A HREF="mailto:gho@cac.psu.edu">gho@cac.psu.edu</A>)
+</H4>
+WAVEFR-L is a forum for the discussion of techniques, ideas, problems and
+solutions for users of graphics software from Wavefront Technologies, Santa
+Barbara, California.
+<P>
+Our hope is that WAVEFR-L will become an electronic "users group" for
+technical discussion and networking among users of software products from
+Wavefront; including The Advanced Visualizer, The Video Composer, Dynamation,
+Kinemation, Visualizer Paint and whatever else emerges on the horizon of new
+product offerings from Wavefront.
+<P>
+WAVEFR-L is not run by Wavefront Technologies.  We are an independent group of
+users, who hope to pool collective experience for the benefit of all.
+WAVEFR-L will be as successful as it's subscribers are active.  We hope you
+will use this forum to pose real-world questions and offer practical solutions
+for applying Wavefront software in any discipline.
+<P>
+To Subscribe to the WaveFront Listserv:
+<P>
+&gt;From VM:   tell listserv at psuvm subscribe wavefr-l &lt;your name&gt;<BR>
+&gt;From VMS:  send listserv at psuvm subscribe wavefr-l &lt;your name&gt;<BR>
+<P>
+For Unix: When using mail, your request(s) must be placed in the BODY of the
+          note, NOT the headers.  To play it safe, enclose your commands in //
+          JOB and // EOJ delimiters.  This will avoid problems of mail systems
+          that add some extra text before of after your message.  Send the
+          note to the Listserv machine and not to the list.  From the
+          Internet, send to <A HREF="mailto:LISTSERV@PSUVM.CAC.PSU.EDU">LISTSERV@PSUVM.CAC.PSU.EDU</A>.
+<P>
+<PRE>
+ example:  // JOB
+           subscribe wavefr-l &lt;yournamehere&gt;
+           // EOJ
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art19">
+Optimized POV 2.0 version,
+</A></FONT>
+by Peter K. Campbell (<A HREF="mailto:p.campbell@trl.oz.au">p.campbell@trl.oz.au</A>)
+</H4>
+[A hackerish article, but since I'm making this issue user oriented, I thought
+I would include it.  The POV developers have asked that executables of POV
+other than theirs not be distributed (so that they don't have to debug
+multiple versions), but of course that doesn't stop you from recompiling and
+using it yourself. -EAH]
+<P>
+<A HREF="mailto:as789@cleveland.Freenet.Edu">as789@cleveland.Freenet.Edu</A> (Francisco J. Diaz) writes:<BR>
+&gt;Does anyone has an optimized POV v2.0?  I just got the file<BR>
+&gt;POVFAST.ZIP and it was POV 1.0 fully optimized with WatCom C.<BR>
+&gt;The problem is that I don't have such compiler (By far the best<BR>
+&gt;one out there, but also the most expensive!) and would like to<BR>
+&gt;know if anyone has taken the time to do so work.  Thanks...<BR>
+<P>
+Well, the IBM version of POV 2 that the Ray group have released built with the
+Intel Code Builder is pretty well optimised already.
+<P>
+The best speed I've been able to get for any tracer is when I recompile things
+with djgpp, the port of GCC C/C++ to the IBM by DJ Delores (thanks, DJ).  I
+recompiled POV 1 with djgpp, and I sped it up by a factor of _four_ - eg one
+of the demo traces was taking 14 seconds on my 486 DX 2 66 MHz 20 Mb RAM
+machine (highly recommended for tracing ;-) with the djgpp version, and 48
+seconds with the ICB normal version.  (Others pretty much same improvement, I
+won't go into details.)
+<P>
+Now, when POV 2 came out the ICB normal version managed the same trace in only
+12 seconds, a significant improvement.  I recompiled it with djgpp, and it
+drops to 9.5 seconds - 20better, nothing to sneeze at, but nowhere near as
+much an improvement as before.
+<P>
+Now, this version of POV works fine with DOS, but djgpp has this liking for
+VCPI memory, whereas you get DPMI under Windows and OS/2.  However, Rainer
+Schnitker has developed a package called RSX that allows you to convert djgpp
+compiled programs so that they'll run under a DPMI server - most programs only
+require you to change the stub on the executables by using exe2aout to get the
+executable without the stub, and then bind Rainer's stub on the front of it.
+<P>
+With this package, and Rainer's help (thanks, Rainer), I have now got a
+running version of POV 2 that's 20 0.000000aster than the standard release, and runs
+under DOS, Windows, and OS/2.
+<P>
+There is, however, a catch.  We can't currently get the graphics to work in
+OS/2 (maybe Windows as well, have to check that) - Rainer thinks that although
+DOS & Windows handle requests for graphics under DPMI ok, OS/2 has a problem
+in that regard.  So, if you run the program in an OS/2 DOS session with
+display requested, then either OS/2 closes your session, or you get heaps of
+memory errors & dropped back on the command line.  (Not brilliant, but at
+least it doesn't crash your entire machine like messy-dos & windoze ;-).
+However, if you just do a trace with eg verbose output, then everything works
+fine.
+<P>
+Mind you, I've found that the VESA display modes don't work too well in OS/2
+with the standard program (although VGA is perfectly ok) - they have a bad
+habit of screwing up all your other screens while the trace is going on;
+probably something to do with bank switching on the graphics card, the Ray
+guys are having a look at this.
+<P>
+Now, if people think they'd like the 20peed increase and don't mind the
+lack of display capability in OS/2, then I can upload the djgpp compiled
+version to somewhere like carleton or informatik - I use the normal one myself
+when I want to see how the pictures turning out, and the djgpp version for
+traces of other people's data files, and my final ones.
+<P>
+However, I was hoping to wait until we could get a djgpp version which could
+do all the things the ICB version could, only quicker ;-).
+<P>
+Also, Rainer is having a word with a few people about graphics and DPMI, to
+see if he can get his package to handle it properly, or at least tell me what
+to do to get the graphics working - another reason I want it is for the djgpp
+compiled DISPLAY program, which is the best graphics displayer/converter for
+DOS I know of - both stills and animation handled, including 24 bit MPEG-1
+files (eg the ray-traced "Red's Nightmare" mpeg).  Seeing as it's djgpp it's
+very fast, but just won't work in OS/2.
+<P>
+In case you're wondering, I've also compiled POV 2 with EMX (will try gcc/2 on
+the weekend).  This has the advantage that you get one executable which will
+run in both a DOS and an OS/2 session.  However, it's about 80lower than
+the standard ICB version, and none of the standard graphics routines work.
+There is a VGA library for EMX which I might have a play with to see if I can
+get the VGA display mode working for OS/2 & DOS, but I don't think it's of all
+that much use; only if you want to run an actual OS/2 ray-tracer.  The speed
+might be able to be improved by taking advantage of threads or something, but
+I haven't done any coding in that area, so I won't be doing anything about
+that for a while.
+<P>
+If you have any thoughts on the DPMI graphics routines under OS/2, or know a
+bit about using hi-colour/true-colour graphics modes in DOS & WIN-OS/2 when
+your OS/2 desktop is only 256 colour and not having one of them with a screwed
+palette, I'd like to hear from you.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art20">
+Errata for "Adventures in Ray Tracing",
+</A></FONT>
+by Alfonso Hermida 1/26/94 published by QUE
+</H4>
+<PRE>
+This errata file is also in <A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/books/erratas/">wuarchive.wustl.edu</A>:
+        graphics/graphics/books/erratas/Adventures-In-*
+</PRE>
+<P>
+If you find additional errata or have any comments, please contact me at:
+CIS: 72114,2060 (also at the GraphDev forum)
+or (<A HREF="mailto:AFANH@STDVAX.GSFC.NASA.GOV">AFANH@STDVAX.GSFC.NASA.GOV</A>)
+Pi Squared BBS (301)725-9080, Maryland USA  14.4K bps, 24hrs
+<PRE>
+p.   3: Last line of item 1. should read
+        "A must-have for those of you who like to modify the sample files!
+<P>
+p.  11: Figure 1.5. Delete the <1 0 0> that appears to the right of the
+        x axis letter "x".
+<P>
+p.  18: Figure 1.12 is the TOP view
+<P>
+p.  21: The Extrusion direction arrow is missing...it should be pointing
+        in the positive Z direction.
+<P>
+p.  25: Figure 1.19 should read "Examples of Boolean Operations"
+        Also the operations are (top to bottom)
+                - Difference
+                + Union
+                * Intersection
+<P>
+p.  30: The statement C:\POLY>POLYRAY [PRESS ENTER]  assumes that you have
+        already executed the DOS command:   PROMPT $P $G
+<P>
+p.  31: The -a parameter causes degradation or a "blurring" effect on the
+        image.
+<P>
+p.  34: The repeated header "Miscellaneous" should be deleted, it
+        separates the -t n parameter from its description.
+<P>
+p.  75: Figure 3.8, the Minor radius is really half of what's being
+        shown. (remember...it's a radius!)
+<P>
+p.  76: Figure 3.9 shows a smooth triangle as a curved triangle.  The truth
+        is that it's still flat - only the normals are not parallel anymore
+        and they point as if the surface was curved....but on the other
+        hand I liked the idea of showing the triangle curved. :)
+<P>
+p. 103: Figure 3.18 is messed up! It should look like the background in
+        Figure 4.4.
+<P>
+p. 123: Figure 4.6, replace "Light Source" with "Incident Light". Also
+        "Scattered Light" should point to the transparent hemisphere.
+<P>
+p. 124: Figure 4.7, delete both "Light Source".
+        "Mirror Surface" and "Rough Surface" are pointing to the opposite
+        surface.  It should be the top surface.
+<P>
+p. 126: The label "Mirror" should be pointing to the top surface.
+        "Slightly Rough Surface" and "Extremely Rough Surface" are pointing
+        to the opposite surface.  It should be the top surface.
+<P>
+p. 141: There is an excellent utility called CMAPPER......
+        Change the word "Introduction" to "Where Can I Find Raytracing
+        Software? Section".
+<P>
+p. 175: Figure 5.5 has a white smear.  oops!
+<P>
+p. 186: fmod should read "fmod(fexper,fexper)". (the second fexper was
+        misplaced in the next line.
+<P>
+p. 220: Figure  7.8 is correct but mirrored.
+<P>
+p. 236: Figure 7.12 is correct but mirrored.
+<P>
+p. 254: Figure 7.19 is correct but mirrored.
+<P>
+p. 260: Figure 7.23 is correct but mirrored.
+<P>
+p. 263: Figure 7.24 is correct but mirrored.
+<P>
+p. 268: Figure 8.3 (b) and (c) were drawn messy.  Use your imagination :(
+<P>
+p. 269: Figure 8.4, the spheres should be eyes representing the observer.
+<P>
+p. 270: Figure 8.6, the Viewpoint "at" locations' arrow should be pointing
+        to the P1,P2,P3....P9 curve.
+<P>
+p. 271: Figure 8.7(a), the puck only moves in the XZ plane. The drawing
+        is incorrect or not clear.
+<P>
+p. 281: "Creating the Animation File", second sentence, replace the word
+        "Introduction" with "Where Can I Find Raytracing Software? Section".
+<P>
+p. 283: Figure 8.10 has some errors.  Difficult to explain with words.
+<P>
+QUICK REFERENCE:  Functions That Return Vectors:
+        The functions dnoise(P, fexper), reflect(vexper1, vexper2) and
+        brownian(vexper) are too close to other words, they should be
+        separate.
+</PRE>
+<P>
+<PRE>
+Inside the backcover:
+        The author of the ship in space image is Jerry THOMASTON not
+        THOMPSON.
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,863 @@
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+                        "Light Makes Right"
+
+                         January 24, 1996
+                        Volume 9, Number 2
+
+Compiled by Eric Haines, 3D/EYE Inc, 1050 Craft Road, Ithaca, NY 14850
+	erich@acm.org; opinions expressed are mine, not 3D/EYE's
+All contents are copyright (c) 1995, 1996, all rights reserved by the
+	individual authors (whoever they are)
+Archive locations:  anonymous FTP at
+	ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/,
+	ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/,
+	ftp://ftp.povray.org/pub/povray/Ray-Tracing-News/, and many others.
+	HTML http://www.povray.org/rtn/index.html,
+	HTML http://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/html/ and
+	HTML ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/html/index.html
+
+Contents:
+    Introduction
+    Advice to Authors, by Anonymae
+
+-------------------------------------------------------------------------------
+
+Introduction
+
+This is a special edition of the Ray Tracing News.  It contains no information
+on ray tracing or rendering.  If you may someday be an author, it contains
+information potentially worth hundreds or thousands of dollars (hopefully in
+your favor ;-> ).  More important, it gives you some sense of what the
+publishing process is like.  If you know of some of the pitfalls and headaches
+in advance you are better prepared to produce your work without any unpleasant
+surprises.
+
+A friend asked the going rate for author's royalties on a technical or trade
+paperback, so I asked some people what they received.  A few wrote back with
+extremely enlightening and fascinating comments.  I passed these notes on to
+other authors, and received yet more interesting reading back.  I have now
+edited all these comments down a bit, mostly taking out the names of authors
+and publishers and removing publisher-specific comments.  I have also avoided
+commenting on any text, even that which disagrees with commonly held views.  I
+hope this compendium is as educational and eye opening to you as it was to me.
+Thanks again to all who contributed.
+
+-------------------------------------------------------------------------------
+
+Advice to Authors, by Anonymae
+
+I would advise any writer seeking a book contract to contact the National
+Writers' Union or the American Society of Journalists and Authors and get
+someone to help with the contract negotiations (Both organizations have
+offices in New York, ASJA is at http://www.eskimo.com/~brucem/asja.htm and the
+NWU has an online forum in the Writers' Forum on America Online and is at
+http://www.igc.apc.org/nwu/index.html).  NWU has an entire group of volunteers
+ready to help writers with contracts - book, magazine, electronic rights, etc.
+The ASJA can offer similar help.  Yes, you will have to join, but compared to
+the money you're about to make, the membership is trivial.  And
+tax-deductible.  I used a lawyer, because at that time these advisory groups
+were not in place.  Next time, I will use them.
+
+NEVER EVER sign the first contract you get.  This goes for magazine articles,
+CD-ROMs, books, and anything else you care to mention.  The first contract you
+see will be tilted totally in favor of the organization which wrote it.  Don't
+be afraid to ask questions, cross things out, and tell people that you won't
+do...whatever.  Royalties are tricky; get somebody from NWU or ASJA to explain
+them to you.  Remember that whoever gets something down on paper first
+controls the agenda; since this is ALWAYS the publisher, don't be afraid to
+bring up things that aren't in the contract if you want them.  It never hurts
+to ask and you can always say no to something you don't want.  Don't be afraid
+to add things to the contract.  Don't worry when the editor says, "But nobody
+has ever asked for that before!"  So what, big deal, and who cares.  The
+secret is:  EVERY author who asks for that is the first, even if 10,000
+authors asked for it before you.
+
+I didn't understand all that was involved in writing a book with lots of
+graphics in it.  I didn't get any expense money for long-distance calls, nor
+did I think ahead to realize that maybe the artists might want money too (I
+was fortunate in that artists contributed freely to my book.  But I felt bad
+about not being able to pay them even a token amount).  I didn't even think
+about indexing until I realized that the book was going to need an index and I
+better create one.  Indexing, to put it bluntly, is a bitch.  Unless you are
+the kind of person who really enjoys minutiae, figure out a way to hire
+somebody to do it for you.  Another thing to keep in mind is that all your
+relatives and friends and everybody you interview and everybody who
+contributes images will ask for a free copy of the book.  Figure out a way to
+deal with this before it happens or you could have some awkward - and
+potentially expensive - moments.  In my opinion, artists who contribute images
+to a book do deserve a free copy, especially if you can't pay them in filthy
+lucre.  So plan for that up front.  Something else to consider is that, unless
+you are the world's expert on a topic, you are going to want content expert
+reviewers to look over your work and point out errors.  You'd better figure
+out how you're going to say thanks to them, too...just an acknowledgment, a
+lifetime membership at President and First Lady, a free book?  Whatever it is,
+figure it out early...before you've spent the advance.  Even better, do it
+before the contract is signed - a good time to ask for those extra free books
+you'll need.
+
+For first-time book writers:  writing a book is hard work.  Start as soon as
+your contract is signed and work like hell until it is finished.  Otherwise
+you will wind up begging your editor for extra time.  This is embarrassing at
+best.  At worst, you could lost part of your advance.
+
+Finally, once your contract is signed, no matter what squabbling went on
+beforehand, the editor and publisher are now your best buddies.  You are all
+in the same boat, all rowing to the same destination:  a successful book.  So
+once your signature is dry, treat the editor as your friend.  If you have a
+problem of any kind relating to the book, tell the editor immediately.  Don't
+wait until the last minute; if advised early, the editor may be able to help
+and can possibly do some re-scheduling.  If the editor has a request, answer
+it or explain immediately why you can't.  And if you need help, ask for it.
+The editor may not be able to help, but he sure can't if you don't ask.
+
+----
+
+Authors should consider that a book is more than just the words.  It includes
+the front cover, back cover, images, diagrams, page layout, chapter pages,
+table of contents, index, and so forth.  All of these require creative thought
+and take money and time to put together.  If you have specific creative ideas
+for any of these, then you should make sure your contract gives you the
+necessary control.
+
+As an example, in our book we failed to include creative control clauses in
+the contract.  The cover was designed and printed in a catalog before we had
+ever seen it.  In fact, it was only after the book had gone to press that we
+finally saw the cover.  By luck, it wasn't bad, but we wish we'd had control.
+
+In the same book, the color pages turned into a nightmare.  We wanted a
+particular set of images.  The publisher didn't like the esthetics of the
+images.  Since the book was a textbook, and the images explanatory in nature,
+not necessarily artistic, we felt the publisher was inappropriately editing
+our visual content.  One set of images the publisher disliked illustrated
+issues in the use of color in shading.  Obviously such images must be printed
+in color.  We lost.  The images were dropped from the book or only printed in
+black and white.  We are still furious, but without explicit control clauses
+in the contract, we had no power.
+
+Regarding text, we recommend that the text you deliver be as edited by you as
+possible.  Don't count on the publisher doing a super editing pass to pick up
+all your little mistakes.  They'll catch grammar problems, but generally not
+catch tone problems, pacing problems, incorrect figure references, wrong
+numeric values in equations or sample code, and so forth.  Don't assume it'll
+get fixed by them.  Do it yourself.  Despite our best efforts, our book
+includes embarrassing mistakes for which we only have ourselves to blame.
+
+Also regarding text, make sure you know the practical page limits imposed by
+the publisher.  Such page limits arise from binding types, printing costs, and
+appropriate retail price.  During writing of our book, our editor kept telling
+us to take as much space as we needed.  So we did, and wrote 1000+ manuscript
+pages, which sift down to about 800+ formatted book pages.  After turning in
+the manuscript, we were informed that 670 printed pages was the top they'd
+allow and we had to cut 150 pages from the book.  It was very painful.  If
+we'd understood the limits up front, we could have designed for them and saved
+a lot of wasted writing and editing time.
+
+Another word of advice is to deliver your manuscript on time.  While schedules
+always include slack, if you miss a deadline your publisher gains the upper
+hand.  They can cancel your contract (which they won't), but more importantly
+they now have a built-in excuse for not doing additional work you request.
+They'll say "We'd like to do that edit pass, but since you were late in
+delivering the manuscript, we're behind the schedule and in danger of missing
+the release date."  If you deliver on time, you are in a better position to
+ask for additional work.
+
+When choosing a publisher, we went to the experts:  the book retailers.  We
+traveled to a number of stores and asked their managers and book buyers what
+publishers they liked and why.  We discovered that some publishers do a bad
+job of marketing, others are unsupportive of their retailers, and still others
+have a reputation of producing poor books.  It doesn't matter how good your
+book is, if nobody knows about it or retailers are biased against your
+publisher, you're in a bad spot.  We chose our publisher by picking one with a
+good reputation among retailers.
+
+It's also important to note which publishers sell in to the stores where you
+want your book to be.  Low end consumer publishers won't have many books at
+university book stores.  High end publishers of professional texts won't have
+many books in neighborhood mall book stores.  We chose a publisher whose books
+consistently showed up in the appropriate stores.
+
+In our travels we also learned a bit about what makes a book sell.  Here are
+the basics:  (1) it must be thick, (2) it must have a colorful spine, (3) it
+must have lots of diagrams and examples (if it's a how-to book).  To catch the
+customer's eye, your book must be easy to spot.  To help this, you want the
+retailer to "face out" your book:  to turn it so that the cover faces the
+aisle instead of the spine.  This is only possible if your book is thick
+enough to stand on its own.  Thickness is also a psychological cue to the
+customer that convinces them that the book is complete and, therefore, the
+only book they need to buy.  A quick thumb through the pages of your book
+should show lots of examples and images so that the customer is further
+convinced your book is the definitive, helpful work on the topic.
+
+Things that make a book not sell:  spiral bindings and shrink-wrapped extras.
+Spiral bindings don't show the name of your book when the book is not faced
+out.  Without a visible and colorful spine label, customers don't see your
+product.  When books have shrink-wrapped extras, such as cheat cards, the
+shrink-wrapping prevents customers from thumbing through your book.  The
+wrapping also often breaks, which causes the retailer to take the incomplete
+book off the shelves, and again the customer doesn't see your product.  In our
+case, even though we wanted a textbook with a binding that would let it lay
+flat, and we wanted a cheat card, we chose to use a standard binding and omit
+the cheat card so that the book would sell better.
+
+To sum up our experiences, we advise authors to learn as much about the
+publishing business as possible before writing a book or signing a contract.
+The more you know, the better you are able to insure the right things are in
+your contract and the wrong things are not.  You are in a better position to
+optimize your writing time, argue for important book features, and produce a
+better, sellable product.
+
+----
+
+Do not sign the contract that the publisher puts in front of you.  They write
+the contract for themselves (this is a general rule of contract-writing, BTW).
+They make you sign away your firstborn child, pay you royalties that scale
+with book sales, etc.  DON'T DO IT.  Just act confident and knowledgeable and
+they will cross out obnoxious parts of the contract, like the option on your
+next book.  If they forget to cross it out, cross it out and initial it
+yourself when you send it back.  That is a counteroffer; if they sign, they
+have agreed to your terms.  If they are not willing to, well, there are
+numerous publishers in the field :-).
+
+They will also negotiate on percentages.  A lot of screw-you contracts give
+you 8.5% on the first 5,000 copies, 10% on the next 5,000, then 15% on the
+rest.  I got a straight 15% on two of my books, with various other provisions
+for things like translations into foreign languages.  Scaling royalties make a
+sick intuitive sense to the hapless author, since it appears that the
+publisher is minimizing the risk they are undertaking by publishing your book,
+i.e.  the publisher can "afford" to pay you the higher royalties once you have
+sold enough books.  This is horsepucky.  The publisher is undertaking a
+significant risk by publishing your book at all, it probably costs more than
+$100k for them to bring it to market, and screwing you on the percentages is
+just some profit for them.  They should be willing to forego the scaling
+royalties; if not, try taking the idea to another publisher.
+
+The percentages paid are on the money paid to the publisher for the book
+(about half the cover price).  If your book has a cover price of $40 and you
+are paid a 15% royalty, you make about $3 per book sold.  For my books I was
+paid $10k in advance, so the break-even was a couple thousand books.
+
+BTW, you have to pay estimated taxes on this income on a quarterly basis.
+The IRS gets really pissed off if you just pay them a big chunk of change in
+April.  Just something budding authors should keep in mind :-).
+
+Another BTW:  agents are a waste of money for this small stuff.  Don't bother.
+In contrast to fiction, agents are unneeded in technical publishing because
+there are so few viable authors (relatively speaking).  Not as many "talented
+amateurs" :-).
+
+----
+
+I found a lawyer who claimed to have experience with publisher contracts.
+His responses to my questions were a bit surprising to me, but also seemed
+reasonable once he explained the ideas behind the contract.
+
+The basic premise behind these contracts is that they are a partnership
+between the author an the publisher.  It is to their advantage to have a good
+relationship with the author (it means real dollars to them).
+
+He also mentioned that publishers often consider their contracts as
+proprietary information and they should be treated as confidential
+information.
+
+He also mentioned that the biggest area of risk for an author of a technical
+book was not from copyright violations or unscrupulous publishers but from
+your current employer.  He said that you should be very, very careful to make
+sure that you employer would have no case against you by making sure not to
+use any work equipment, time, or information in the development of a technical
+book.  It might also be a good idea to get explicit permission (a memo or
+letter) if you feel that there might be a problem otherwise.
+
+----
+
+I signed (unfortunately) the standard first time author contract with the
+publisher.  Which means they have both the rights to the next edition of this
+book and right-of-first-refusal on my next book (that is assuming I feel like
+going through this kind of slavery again, which being the troll that I am means
+probably - as long as I can find a topic I think I have something to say
+about).  I kinda find these rights more onerous than royalties, since I have
+been less than happy with the publisher.
+
+----
+
+A contract is a contract.  Both parties look out only for their own best
+interest.  If you want to make sure that you're getting a fair/good deal, get
+a lawyer; if you really want to be sure, get a GOOD lawyer.  If you're an
+inexperienced (meaning unpublished) author, you don't have much negotiating
+pull, so negotiate gently and/or carefully.  Ask lots of questions.  It never
+hurts when negotiating to ask for a better deal, and ask why the deal isn't
+better.
+
+----
+
+The single most important thing to remember when negotiating a book contract
+is that you are not dealing with a company.  Nobody deals with companies -
+they are a legal abstraction.  You always, and only, deal with individuals.
+This may sound obvious, but consider the ramifications.  No contract can cover
+every aspect of book production and distribution - it would be thicker than
+the phone book if it tried.  So you must rely on the integrity, honesty, and
+taste of the publisher and the people who work there to respect your work and
+treat it the way you want it to be treated.  You must trust your baby to their
+hands.  If you disagree, they hold the cards, and they'll do what they think
+best.  This will usually be what is best for them, and their catalog, and not
+what's best for you or your book.  Protect yourself by picking people
+carefully.
+
+This leads to the natural tension between a large publisher and a small one.
+A large publisher can offer you more of everything:  a bigger advance, more
+production money, more advertising, better distribution.  Remember that they
+can offer you this, but they don't have to deliver - they will only put
+resources into a project if they feel confident those resources will repay
+them.  Your book might get lots of attention in January, and be an orphan in
+March.  You are a small wheel in a big machine.  A small publisher can offer
+you personal assistance and dedicated service.  They can actually help you
+think about your book before and during writing.  They can work with you to
+direct it, tune it, and steer it to where it represents your very best work.
+They will offer you the opportunity to be closely involved in all aspects of
+production and marketing.
+
+Which way you go depends both on your style and the type of book you're
+writing.  If it's a mass-market book, then you probably will be fine with a
+big, impersonal house that will take your manuscript, chug it through the
+machine, and then sell it as far and wide as possible.  If you're writing
+something that is less general, and you care deeply about it, then a small
+house is your best bet for preserving what's special in your book.  If your
+work is between these extremes, you should sound out both big and small
+publishers.
+
+One more point is to consider is that although you work with people, you sign
+with a house.  If you sign a contract and the people at the company change,
+and your friendly supporters are replaced by idiots, you're stuck with the
+idiots, who can transform your work significantly on its way to the press, in
+ways that could never be spelled out in a contract.  Again you're back to
+trust.  Large publishers are like any large company:  they lay off people,
+promote them, move them around, and hire new people.  Small publishers are
+personal and intimate:  the boss picks a few people who share his or her
+sensibilities, and the people involved tend to be very stable.
+
+As an example of some of the many issues involved, let's work outside-in,
+beginning with the cover.
+
+Consider who controls the cover, finish, binding, jacket, images, and copy.
+Is your book softcover or hardback?  Perfect-bound?  Stitched in signatures or
+glued to a cardboard backing?  Is there a dust jacket?  If so, is the title
+(and author) embossed into the cover for when the jacket is inevitably ripped
+or lost?  If not, what kind of cover will it be?  What kind of finish?  Who
+selects the images for the front cover, approves the text, and the layout?
+Who writes the back-cover copy?  Will the back cover be used to promote your
+book or books, or other books in that publisher's catalog?  Will it have a
+biography of you?  Will the book have to "look" like other books in the
+publisher's catalog?  If you care about how your book looks, you'll want to
+have some kind of control.
+
+Who writes the index?  If it's you, what kind of format does it have to be in?
+(Have you considered just how bloody hard it is to write a good index?  It is
+very tough - boring, tedious, detail-oriented work).  If someone else prepares
+the index, who pays them?  Who chooses the indexer?  Who does the
+illustrations and figures?  Can you get them redrawn if the versions they
+prepare are no good?  Who makes the judgement call?
+
+Who does the layout?  What font?  What's the leading and spacing, how large
+are the margins, what runs on the headers and footers?  Is math handled in a
+special way?  How about code fragments?  Are index items in bold?  Or maybe
+glossary entries instead?  What kind of paper is used?  How thick is it?  What
+color?  Is it shiny or dull?  How opaque is the ink?  Does it bleed through
+the page?  Is the paper acid-free?
+
+And the list goes on, endlessly.  Every book has numerous nuances and special
+details that are unique with respect to all other books.  How they are handled
+will in large part determine how happy you are with the result.  Your job is
+to write the manuscript and create (or sketch) the figures.  Their job is
+everything else.  By the time you finish writing your book, you'll think of it
+as your baby.  You wouldn't just hand your baby to anyone to raise for you -
+you'd pick your child's guardians very, very carefully.  Do the same with your
+publisher.  Find someone you trust.  The key words here are trust, ethics, and
+experience.  All publishers know how to contract with a printer and how to
+market books.  The differences are in how they treat you, treat your
+manuscript during production, and care for it after it's finished and in the
+market.  You can't put that in a contract.
+
+----
+
+I'm only part way through the process, so I don't know all the ways I might
+yet be screwed.  I'm only a couple of weeks from delivering my finished
+manuscript (before publisher review), and I haven't gotten any sinking feeling
+yet.
+
+When I started, I took my book proposal around to a number of publishers.  I
+didn't like trusting the publisher's volume estimates to decide for myself
+whether writing the book would be profitable or not.  Since I have no way to
+judge volume on my own, I used the advance amount to judge the publisher's
+sincerity.  Signing the contract was delayed over six months from first
+contacting publishers because it took that long to get an agreement that
+seemed to make business sense.  Of the two publishers that were willing to
+give a reasonable advance, I picked the one that obviously had the larger
+marketing clout, since my book is for a wider audience, and a good marketing
+campaign should be real important to sales.
+
+The total pre-paid royalty amount (the amount I get even if they never sell a
+single copy) is $22,000, which is based on about 10,000 books (paid to my
+company, not me.  That gets around the tax problems).  That's enough money
+that I won't lose my shirt if that's all they sell.  So far I've spent about
+two man-months on the book, spread out over the last year.  I can easily see
+where my total effort could reach three man-months.  That means I would need
+to see a little over 13K books sold to declare it a gainful way to have spent
+my time.  I do mostly consulting, and writing a book supposedly helps
+business.  However, I have no way to quantify that, so I just look at the book
+on its own.
+
+The royalty amount is 15% of what the publisher gets.  I checked, and that's
+pretty standard, unless you're Steven King or someone like that.  Being a
+first time author, I didn't think there was any leverage to get more, besides,
+it seemed they were being reasonably straight with me.  The publisher once
+mentioned that they could give me 18% on anything beyond about 18K books (I
+don't remember the exact figure) in an effort to entice me.  They tried to
+forget about that later, but I wouldn't let them.  Of course, who knows if
+we'll ever get to 18K books.  I'm certainly not counting on it.
+
+There has been one hitch so far.  The publisher originally was willing to give
+me the advance up front.  Obviously that would be best for me economically,
+but I just felt uncomfortable getting a large sum of money before having
+actually done anything.  I would be liable to give it back if something went
+wrong.  Instead, I suggested that they pay me for reaching certain milestones.
+We finally agreed on what I'd get paid for delivering chunks of chapters.
+Unfortunately after the contract was signed and just as I was ready so send
+them my first milestone, the editor I was working with and had negotiated the
+contract with left.  I hadn't noticed or understood the significance of the
+word "accepted" relating to my the milestone releases so that I would get
+paid.  The assistant (the editor had left) sent the milestone stuff out for
+formal review.  This stuff was real rough.  I knew I wasn't finished with it.
+I was just making one rough pass through the book.  Of course, the reviewers
+complained about lots of stuff.  (I also wasn't real happy that people outside
+the publisher got to see the rough form.  Worse, I'll never even know who they
+were).  The assistant then took that to the lawyers who said they weren't
+accepting the milestone chapters, and refused to pay.  What a hassle.  They
+finally hired a new editor who has been trying to get me paid, but it looks
+like I'll get the first two milestone payments only a month before the rest of
+the money.
+
+So, as far as advice to budding authors?  Since I haven't completed the
+process, I'm hesitant to say much of anything.  However, I did find huge
+variations in the reactions to the book proposal from publisher to publisher.
+Some turned it down flat, while their direct competitors really wanted it (and
+were willing to say it in dollars).  So I guess the moral is shop around.
+Since my book is related to computer graphics, I contacted every publisher
+that showed up at SIGGRAPH, plus a few others that looked like plausible
+candidates.  I think that came out to 8-10 publishers.  Of those, one never
+even replied, and three more outright refused to pay any advance.  Eventually
+two were really interested.
+
+----
+
+I have written two books with two different publishers, the first only
+published in hardback, the second printed in hardback and simultaneously in
+paperback.  On the first book I received 10%; on the second I received 15% on
+the hard-cover version and 10% on the paper version.  On neither book did I
+negotiate the contract with the publisher:  I simply signed what they placed
+in front of me.  I only insisted that the paperback be cheap, and they
+complied.  On neither book did I receive any advance or expense money.  For
+both books I prepared my own index, and I strongly recommend that authors do
+this themselves, as only the author can do a really good job.
+
+Both of my books were typeset by the publisher.  Although typesetting your own
+book is a tremendous effort, I would recommend it, as the effort of ferreting
+out the errors the typesetters introduce eventually exceeds that of doing it
+yourself.
+
+My first book had a uninterested editor; my second has a superb editor.  This
+makes more difference than you might initially think, even well after the book
+is published.  I recommend asking a potential editor to give you the names of
+authors of books she or he has edited, and contacting those authors.  In my
+experience, the editor is more important than the publisher.
+
+----
+
+Probably the biggest decision to make is whether to write a book at all.  It
+is a BIG time sink, bigger than you think.  If you are planning on making a
+LOT of money on a technical book, forget it.  You will make some, but not a
+LOT (unless you write a textbook that becomes a standard).  That said, making
+a good arrangement with a publisher is important, if only for your own sanity,
+and to make sure you get your share.
+
+The way I figure it, the relationship is quite clear.  I want to create the
+best book possible, they want to make a lot of money.  In general, they only
+care about quality in so much as it helps sell books.  Understanding this
+helps.  This should help you realize that whatever contract they first put
+under your nose is heavily tilted in their favor.  Unless you love everything
+it says, change it.
+
+In my case, I got 15% of the first 3000 copies, 17% (3000-5000), and 20% after
+that.  This is higher than first offered but not by much.  I delivered camera
+ready postscript (including index) and got $3000 extra for the pain (and I
+mean pain) of doing this.
+
+If you are concerned about quality and, for example, want a right of rejection
+on how the cover looks, say so in writing up front.
+
+I also got shocked when they decided to release the book on CD ROM, and found
+out I had signed all my rights away to this.  They apparently did not owe me
+one cent of royalties for the CD sales.  They did me a "favor" and finally
+agreed to 5%.
+
+The bottom line is that I am not pissed about the arrangements.  I had full
+control of content, and it was my fault I did not read the contract well about
+the CD royalties.  Read the contract carefully, edit it at will, and then
+write a good book and feel lucky for every penny you get for having the
+opportunity to tell the world what you know.
+
+----
+
+My experience with my publisher has been reasonably good.  My royalty rates
+are 12% for the first 2500 book, 15% for the next 5000, and 18% thereafter.
+I thought that was reasonable and competitive with rates I heard from other
+publishers and authors.
+
+I think it is a good idea to establish price and distribution policy in
+advance.  Not having done so, I had an initial problem with the price of my
+book.  At first, the publisher set a price that was, in my opinion,
+outrageous.  Their price was so high that only libraries would have been able
+to afford it.  You don't have to have an MBA to figure out that overall sales
+(and profits) might increase if the book could be made affordable to the
+masses.  Anyway, with much haggling in the first month or two, the price
+dropped dramatically.
+
+I handed the publisher a camera-ready manuscript.  Although they could have
+assisted me on that, I found the do-it-yourself approach to be less
+error-prone.  Furthermore, there is some time saved in not having to review
+anyone else's typesetting/editing work but your own.  In any case, it can be
+used to increase your own royalty rate because you can make the case that
+their costs are lowered by your own typesetting work.  Most people now write
+publications with latex anyway, so it's not much added effort.
+
+The publisher reimbursed me promptly for my reproduction/copying expenses.
+They were also fast in printing the book.  It took less than four months from
+the time I gave them the camera-ready copy to the time the book was available
+for sale.  Having them meet a Siggraph deadline is good...
+
+----
+
+I have had one small monograph-style book published.  Typesetting & figures
+were done by me in Tex/Latex, and I gave the publisher camera-ready pages
+printed on a hi res (~1K dpi?) phototypesetter.  (Or did I just preview it on
+that, and give the publisher postscript?  I forget now.)  I wrote my own
+index, which was in some way the most painful part of the writing.  The
+publisher provided some proofreading.  I had no color plates.
+
+My relationship with the publisher was fine.  The only big snag from my view
+was the cover:  I didn't pursue my ideas actively and in the meantime they
+made up some cover art which was in my opinion very inappropriate (analogous
+to a picture of a steak on the cover of a vegetarian cookbook).  They claimed
+it was highly visible so would attract buyers and that they knew more about
+this sort of thing so I shouldn't argue.  I got a vague feeling that since
+they had already spent money on the artwork and didn't want to toss it.  I
+convinced them to take out the part that I found objectionable (the "steak").
+The result is a cover that I find unattractive but harmless.  Morals:  (a) if
+you care about the cover, make sure to insist on control up front; (b) if you
+think you don't care about the cover, think again, because there's no telling
+what monstrosities the publisher might come up with.
+
+Contractwise, their initial offer me was 5%.  I balked and they came back with
+5% for the first X copies sliding up to 10% for Y or more copies.  I took this
+to mean that they expected to sell X+epsilon copies, and accepted.  The book
+is a small enough thing that frankly, it didn't make much difference; the book
+wasn't written in order to make money.  Even if they gave me 50%, it wouldn't
+make my fortune, nor even be a reasonable hourly wage for the time put in.
+
+----
+
+I negotiated a sliding scale royalty at roughly 10%/20%.  If you've already
+worked with a publisher, you get a bit more room in the negotiation and you
+can get them to really talk about costs and risks (I did not do so well on my
+first book).  Also, if you are confident about the sales of your work you can
+often give up just a little on the first bit and get quite a bit on the
+back-end of the run.
+
+As far as production - face it, much of the stuff we publish has a very
+limited life because of how fast all the tools around us are changing.  The
+key for us was to get from the copy we gave to the publisher to an
+on-the-shelf book as quickly as possible (ours was about 6 weeks).  To get
+this to happen, you (the author) need to provide camera-ready copy to the
+publisher including index.  We did all of this on Word, and had a local
+typesetting house run the final copy on a high-res laser printing device (used
+to always be a lineotronic but there are a bunch of better high-res printers
+now).  We also supplied cover art (in electronic form).  The key here is to
+have an ongoing relationship with the publisher - have the publisher's
+production people review your templates EARLY in the process, get complex art
+or color art to them early, and run EARLY production tests through your
+typesetter - particularly to test fonts, figure line weights, and shading
+(things that come out of the hi-res typesetter are way different than what you
+see on the screen, and your publishers production people can tell you a lot
+about the differences there will be between the hi-res output and the final
+printed work).  If you do go the camera-ready route, negotiate a rate for your
+production (we did a per-page) from your publisher - you are saving them lots
+of time and money by doing the production.  Lastly, don't underestimate the
+headache of producing your own camera ready - it's long, hard, and you have to
+get it right - but in the end, you get your book looking the way you want and
+the publisher's production time is vastly reduced.
+
+----
+
+I signed the standard contract straight away.  I'm not sorry about that,
+despite the other guy's comments; I still feel like they've been relatively
+fair on money issues.  I got a little less than 10 grand to write it, and the
+sliding scale royalty thing that works out to about two bucks a book.  New
+authors should remember that the percentage quoted is based on the wholesale
+price of the book.  The only money thing that I thought was bit of a drag was
+the "reserve" clause:  they keep 25% of ALL of the royalties just in case they
+get returns.  Of course 25% is always much higher than the actual return rate,
+so perhaps 1/4 of all the money you would have got sits in an account until
+the book is discontinued and closed out.  Sounds like that'll be about 2 or 3
+years.
+
+The publisher will want the book IMMEDIATELY after you have signed the
+contract.  They feel like they paid for it, and "where is it?"  Therefore, if
+you feel strongly about a project, complete it, and then approach the
+publisher.  If you are good at desk top publishing, you can negotiate a far
+higher royalty for delivering a book that needs only to be printed and sold.
+In my case, the publisher wanted a book for which they had little more than a
+concept.  I was late from the beginning, and it added to the stress and made
+it hard to keep the quality up.
+
+As many authors say, it's more fun to 'have written' than it is to write.  I
+still would do it again, except for one thing - it takes all your time to do
+it right.  It'd kill my business to take the 3-5 month hiatus required to do a
+full book.  That brings all my sales momentum and networking results to a
+complete halt, and for months after the book is done you have to get all that
+going again.  If you do the math, there isn't enough money in it as it stands
+(even taking into account a better contract per your previous author's tips).
+And you really can't just write a book as you find time:  When you write books
+about software, time is critical - if you take too much time to finish, the
+next release of that software will make your manuscript obsolete before it
+hits the stores.  Besides, I don't know if I (or many other authors) would
+really make a lot of progress without some sort of real deadline...
+
+----
+
+A certain small publisher seemed quite interested in seeking me out to write a
+book, an opportunity I never thought would just drop in my lap.  Since I had
+never published anything before, their royalty percentage (under 8%) and
+advance (<$3,000) was a little low, but I was getting a chance to publish a
+book, so I didn't mind.  I changed a couple things on the initial contract,
+but nothing major.
+
+Their word processing templates were not completely thought out and after they
+found a few problems in them, they asked me to redo a couple of chapters with
+the new styles.  This was not too difficult, but it did give me a queasy
+feeling about their ad hoc in-house editing environment.  I was also surprised
+to find that, even though we used e-mail extensively to ship chapters,
+illustrations, and programs, they also insisted that all revisions be done
+only on paper printouts, instead of using change bars or colored text in the
+document files.  This meant that I not only e-mailed the chapters, but we were
+also FedExing bulky packages of paper, just like 100 years ago.
+
+The editor at one point undercounted the pages in the book, and advised me to
+go into more detail to fill out the book, even though my calculations said I
+was right on.  I did as I was told, and later the editor sheepishly admitted
+he forgot to add illustration space.  Now that we were way over, he asked if I
+could cut some chapters way back.  I stood my ground on this, saying it was
+impractical at this late date while still meeting the deadline...  the
+publisher graciously ate it, publishing a book that was 50% bigger than
+designed, for the same price.
+
+The project also included a CD-ROM full of programs, data and information,
+which the publisher and I jointly designed.  They also contracted several
+other people to add large chunks of content, and although it was a lot of
+additional work for me, it went quite smoothly.
+
+They had a technical editor go over the book, and he came back with one
+change...  now that I've tech-edited another computer book, I am very
+unimpressed with his (lack of) work.  They also contracted an outside Content
+Editor who was incredible, very thorough and she practically read my mind when
+suggesting changes that fit my style.
+
+As is the hallmark of this publisher, the final design and layout of the book
+was quite beautiful and I was very proud of the way it turned out.  Now, I
+will never again attempt writing a book on the side while juggling a full-time
+job, pregnant wife, and major house remodeling all at once...  and I will
+certainly ask for more money next time.  However, I am convinced that this
+writing/publishing experience turned out to be positive for two main reasons:
+(1) The small publisher was very interested in keeping me happy for future
+work, and (2) I was interested in publishing a book, not making money.
+
+----
+
+My first book experience was very enlightening and MUCH MUCH more work than I
+ever imagined.  My experience with the publisher was not as bad as some of the
+other responses to this inquiry.  The royalty rate I negotiated was 12% for
+the first 3000 books, 15% thereafter.  The major mistake I made was in
+agreeing to format the text into almost camera-ready copy using LaTeX macros
+supplied by the publisher.  I received a fee of $2000 for this.  It was not
+worth the money.  The macros were not complete, and I would never agree to
+this again.  There are 3 other pieces of advice that I have:
+
+1) Make sure you know where and how often the book will be advertised.  In the
+end, this is the main function of the publishing company.  They contract out
+the printing.  I was somewhat disappointed in the few ads that I saw for the
+book.
+
+2) If you work with co-authors, make sure you know how reliable they are and
+be ready for major work if you are acting as the editor for the project.
+
+3) Double or triple your initial estimate of the effort for the project.
+Writing is only a small portion of the job.  Editing, organizing, indexing,
+formatting, etc. takes up a large amount of time.
+
+----
+
+For about a year now publishers of every kind have been making attempts to
+grab all rights from authors.  The New York Times is one of the sorrier
+examples - for years and years, the Times' practice was to buy one-time rights
+to freelance articles.  Suddenly last year they announced a new policy of
+demanding all rights.  It's ignited protests across the writing community and
+many writers are refusing to write for the Times.  The reason this is a
+problem is that you just don't get paid enough for one newspaper article to be
+able to make a living writing them.  The writer's solution has always been to
+re-sell in non-competing markets.  Due to the electronic world's sudden
+imposition of deathless databases, repeat downloads, etc., publishers are now
+seeing opportunities to sell the same article over and over, whereas before
+they could only sell it once when the paper was published.  For some reason,
+many publishers seem to feel that the writers don't deserve any part of the
+profits.  This war has been going on for a year; it will continue.  The NWU
+and ASJA have brought suits against some publishers; but the real war (as in
+all wars) is being fought by the infantry on the ground:  the individual
+writer negotiating with the publisher.  It's hard telling the editor of a
+big-time publication that you aren't going to accept their contract.  The
+better-paying ones, where you're making thousands of dollars per article, are
+also the ones that have the worst contracts in terms of rights.
+
+As far as rights go:  rights can be split down to the quark level.  You name
+it; there is a right for it.  For example, I retained movie rights to my book.
+It is unlikely that anything will come of that, but I retained them.  It is
+possible a documentary could be made, you see, and then I would own those
+rights.  My publisher is now into CD-ROM publication, so they adamantly
+refused to allow me to keep those rights.  Then there are plain electronic
+rights:  databases, posting articles on Usenet.  Facts aren't copyrightable,
+of course:  arrangement of words IS copyrightable, in fact, is the main thing
+you copyright.  A posting on Usenet is copyrighted.  E-mail is copyrighted.
+If there was a means to present information using aluminum foil and earphones,
+that would be copyrightable.
+
+My point is that writers better pay attention to all the media in existence
+when reviewing contracts.  If the future is in electronic media, then it's
+important not to sign away all your rights to that future.
+
+----
+
+Some advice for authors?  I thought about this for a while, and decided that I
+have neither damnation nor praise for my publisher.  They sent me a reasonable
+contract, I signed it and sent them a manuscript, and they published it.  End
+of story.
+
+My advice is more personal.  Writing a 500-page technical book is an activity
+that should come with a Surgeon-General's warning:  "May cause serious health
+problems."  Take good care of yourself as you burn the midnight oil.
+
+Be forewarned that writing a good technical book is an all-consuming task.
+It will take over your life from the day you write those first few
+introductory words to the day you sign off on the final copyedited manuscript.
+It may be fairly described as inhumane (albeit self-inflicted) torture.
+
+There will be days of absolute despair and frustration.  You will want to
+cleave your computer with a large and heavy fire axe.  (Be sure to make a
+backup first, and remember to disconnect the power.)  Your family and friends
+may post "Warning:  Vicious Dog" signs in your immediate vicinity.
+
+But there will come -- eventually -- two days that you will savor for years
+afterwards.  On the first occasion, your editor will send you a copy of your
+book, hot off the press.  This is a wonderful experience.
+
+On the second occasion, you will see your book proudly sitting on the shelf in
+a bookstore.  This is ...  well, check with your doctor first.  The heart can
+only take so much adrenalin.  (And rest assured that your eyes do not deceive
+you; your book will indeed glow with its inner radiance.)
+
+Writing a good technical book is hard work, and you will be fortunate indeed
+if it sells more than a few thousand copies.  (Unless, of course, it has the
+words "sex" or "dummies" in the title.  Unfortunately, Dr. Ruth and IDG Books
+have already laid claim to "Sex for Dummies.")
+
+It used to be said that the ability to make tools separated us humans from the
+"lower" animals.  Today, I think that it is our innate desire to write books.
+But then, what other primate would be stupid enough to want to?
+
+----
+
+Problem:  Publishing companies get bought-out and merged regularly.  People in
+them shift around as well.  With publisher X my book was translated into
+German without my knowledge.  I learned about it on the net when someone
+emailed me a question about it.  I actually ordered copies of my book from a
+German bookstore I found on the net.  The bookstore gave me the email of the
+German publisher, I contacted him, and he told me that one of my other books
+had been translated too.  Publisher X was bought out by Publisher Y, then by
+Publisher Z - when I contacted Publisher Z, there was confusion as to what had
+been done before the chain of buyouts.  Publisher Z (in that they bought out
+Publisher X) assumed responsibility for Publisher X's actions, so they came
+clean, and I got my royalties.  I would have never known about the translation
+if someone had not emailed a question starting "I like you German translation
+of ..."  - I said "what German translation???"
+
+A similar event occurred when I learned about a CD ROM that my book was to be
+included on.  I found this information in a netnews newsgroup.  This did
+appear on my next royalty statement, but I found it awkward to read about it
+before being informed of it from my publisher.
+
+----
+
+random notes:
+
+I can get up to 20% royalties from my publishers, 12-15% for the first 2500
+copies, 20% after 5k-10k copies...usually with around $8k advance 50%
+front-loaded with a $2k grant for work-for-hires (helpers) and a $2k grant for
+formatting...7500 books is what they expect to sell if technical w/program
+source code...I usually sell in the 15k-60k copies range...they will let you
+promote your business in a book...
+
+First book...try for 12% royalties up to $5k copies, 15-18% thereafter...try
+to get 50% advance up-front, no less than 33%...
+
+Beware subsidiary rights clauses that allow them to take major portions of
+your book and place them in other books for a nominal fee...I have not been
+caught here, but I know someone who wrote an extremely successful internet
+book who did lose by this clause...
+
+Most publishers are relaxed if you are just a little late, they all get up
+tight (and rightly so) if you are much late...some publishers are extremely
+serious about deadlines and cost overruns...they are in publishing to turn
+books and money - so take their contracts very seriously, they WILL enforce
+what's in them...
+
+Be aware of the discounting schedules of the day...breaks around 55%/56% are
+important, as these are likely to be where a publisher says you get 1/2 your
+royalty rate...know the industry standard at the time...
+
+Publisher X has good distribution, but you are not likely to see a lot of the
+money made...Publisher Y's distribution is lame, because they don't have
+people hitting the streets reselling to stores that have sold out, so a book
+store or chain might place only one order (got to have those sales guys out
+there pushing more product through the distribution channels!); Publisher Z
+takes an aggressive approach with marketing and distribution, taking advantage
+of modern electronic means (internet, cds, etc.), but I don't have conclusive
+data on them yet...looks good so far, as far as getting them to make many
+press releases (very important for book/software sales)...
+
+In parts of contracts where they say "these sales will not increase the book
+count used to determine royalty rate" - you can usually talk them into
+counting 1/2 the rate (i.e. the sale of 2 books counts as 1 against the total
+needed to increase your royalty rate from 12% to 15% at 4000 copies, for
+example)...
+
+----
+
+The battle between publisher and author is eternal, and unlikely to be
+resolved.  But book publishers particularly (over software publishers) seem
+bent on exploitation.  It is really just a supply and demand issue, I think,
+so hating the publishers is probably not healthy:  just fight back.  Remember:
+it is just business.
+
+-------------------------------------------------------------------------------
+END OF RTNEWS

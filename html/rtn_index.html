@@ -1,0 +1,598 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<TITLE>Index to Ray Tracing News</TITLE>
+</HEAD>
+<BODY LINK="#0000ff" VLINK="#800080">
+
+<H1>Index to Ray Tracing News</H1>
+<P>The following is an index to some of the articles in <A HREF="http://www.acm.org/tog/resources/RTNews/html/index.html">Ray Tracing News</A>, an electronic newsletter edited by <A HREF="mailto:erich@acm.org">Eric Haines</A>. I created the index primarily to organize the articles from RTN devoted to the topic of spatial data structures for optimizing ray tracing, but I've also included some other articles that looked interesting to me. The index was created for <A HREF="http://www.cs.cmu.edu/afs/cs/project/classes-ph/860.96/pub/www/860.html">a course I'm teaching</A>. </P>
+<P>Each article is listed just once, with title, author(s), and in some cases, my summary or comments on the article in italics. I can't vouch for the accuracy of the information in these articles. RTN articles generally have quality somewhere between that of a SIGGRAPH paper and a comp.graphics.algorithms posting. But that's a wide range!</P>
+<P>Please let me know of errors or mis-categorizations you find here. <BR>
+- <A HREF="mailto:ph@cs.cmu.edu">Paul Heckbert</A> (and updated by <A HREF="mailto:erich@acm.org">Eric Haines</A>) </P>
+<P><HR></P>
+<B><P>Categories:</P>
+
+<UL>
+</B>
+<LI><A HREF="rtnvn2.html#realtime">Real-Time Ray Tracing</A> </LI>
+<LI><A HREF="#spatial">Spatial Data Structures for Optimizing Ray Tracing</A> </LI>
+<LI><A HREF="#optimizing">Optimizing Ray Tracing, General</A> </LI>
+<LI><A HREF="#intersection">Ray-Surface Intersection</A> </LI>
+<LI><A HREF="#general">Ray Tracing, General</A> </LI>
+<LI><A HREF="#softshadows">Soft Shadows</A> </LI>
+<LI><A HREF="#texture">Texture Mapping</A> </LI>
+<LI><A HREF="#antialiasing">Antialiasing</A> </LI>
+<LI><A HREF="#globillum">Radiosity and Global Illumination</A> </LI>
+<LI><A HREF="#modeling">Modeling</A> </LI>
+<LI><A HREF="#misc">Miscellaneous</A> </LI>
+<LI><A HREF="#books">Book Reviews</A> </LI>
+<LI><A HREF="#roundups">Ray Tracing Resource Roundups</A> </LI></UL>
+
+<P><HR></P>
+<H2><A NAME="realtime">Real-Time Ray Tracing</A></H2>
+<UL>
+<LI><A HREF="rtnv12n2.html#art3">
+The Ups and Downs of Multithreaded Ray Tracing and Optimization</A>, by
+John Stone, December 21, 1999
+<LI><A HREF="rtnv13n1.html#art5">
+Realtime Techniques for Ray Tracing</A>, by Ádám Nagy, Eric Haines,
+Russel Simmons, Paul Kahler, Factory, and Bruno Schödlbauer, July 16, 2000</LI>
+<LI><A HREF="rtnv15n1.html#art3">
+RealStorm: A Realtime Raytracing Engine</A>, by Michael Piepgras, October 21, 2002</LI>
+<LI><A HREF="rtnv18n1.html#art6">Real-Time GPU Spheres,</A> by John Stone, December 12, 2005</LI>
+<LI><A HREF="rtnv21n1.html#art8">NVIDIA Ray Tracing Demo,</A> by Steven Parker and David Luebke, November 8, 2008</LI>
+</UL>
+
+<P><HR></P>
+<H2><A NAME="spatial">Spatial Data Structures for Optimizing Ray Tracing</A></H2>
+
+<UL>
+<LI><A HREF="rtnv3n1.html#art9">Book Reviews on Hierarchical Data Structures of Hanan Samet,</A> by A. T. Campbell, III, January 2, 1990 </LI>
+<LI><A HREF="rtnv5n2.html#art7">Any Future for Efficiency Research?</A> by Eric Haines, August 26, 1992 </LI>
+<LI><A HREF="rtnv9n1.html#art7">3D Point Hashing,</A> by Steve Worley, January 18, 1996 </LI>
+<H3><LI>Grids (Uniform, Hierarchical, and Nonuniform)</LI></H3>
+
+<UL>
+<LI><A HREF="rtnv5n1.html#art6">Ideal Grid/Object Densities,</A> by Dan Gehlhaar, Marc Andreessen, July 10, 1992 </LI>
+<H4><LI>Uniform Grids</LI></H4>
+
+<UL>
+<LI><A HREF="rtnv4n1.html#art35">3DDDA Comments,</A> by John Spackman, March 1, 1991 <BR>
+<I>(uniform grid traversal)</I> </LI>
+<LI><A HREF="rtnv7n2.html#art6">Comparison of Ray Traversal Methods,</A> by Erik Jansen, February 2.01, 1994 <BR>
+<I>(results on grid method)</I> </LI>
+<LI><A HREF="rtnv7n2.html#art11">Fast Raytracing via SEADS,</A> by John Chapman and Wilfrid Lefer, February 2.01, 1994 <BR>
+<I>(grids and nested grids)</I> </LI>
+<LI><A HREF="rtnv10n3.html#art8">Additional Notes on Nested Grids,</A> by Kris Klimaszewski, Andrew Woo, Frederic Cazals, and Eric Haines, December 2, 1997 </LI>
+<LI><A HREF="rtnv10n3.html#art9">Recursive Grids and Ray Bounding Box Comments and Timings,</A> by Andrew Woo, December 2, 1997 </LI>
+<LI><A HREF="rtnv12n1.html#art3">Comparison of Hierarchical Grids,</A> by Vlastimil Havran and Filip Sixta, June 25, 1999 </LI>
+<LI><A HREF="rtnv12n1.html#art6">Quicker Grid Generation via Memory Allocation,</A> by Eric Haines, June 25, 1999 </LI>
+<LI><A HREF="rtnv15n1.html#art12">Objects per Grid Cell,</A> by Pete Shirley, October 21, 2002</LI>
+<LI><A HREF="rtnv23n1.html#art3">Marcos and Arnold,</A> by Eric Haines and Marcos Fajardo, July 20, 2010</LI>
+
+
+</UL>
+
+<H4><LI>Non-Uniform Grids</LI></H4>
+
+<UL>
+<LI><A HREF="rtnv5n1.html#art4">NuGrid results,</A> by Mike Gigante, July 10, 1992 <BR>
+<I>(nonuniform grids)</I> </LI>
+<LI><A HREF="rtnv5n2.html#art8">NuGrid Update,</A> by Mike Gigante, August 26, 1992 </LI></UL>
+</UL>
+
+<H3><LI>Adaptive Trees (Octrees, k-d, BSP)</LI></H3>
+
+<UL>
+<H4><LI>Octrees</LI></H4>
+
+<UL>
+<LI><A HREF="rtnews2b.html#art4">Response to the "teapot in a football stadium" Problem,</A> by Andrew Glassner, March 1, 1988 <BR>
+<I>(hybrid of octree &amp; bounding volume)</I> </LI>
+<LI><A HREF="rtnews2d.html#art5">Linear-time Voxel Walking for Octrees,</A> by Jim Arvo, March 26, 1988 <BR>
+<I>(nice article; see also similar ideas by Erik Jansen)</I> </LI>
+<LI><A HREF="rtnews9a.html#art6">Octree,</A> edited by Eric Haines, October 27, 1989 </LI>
+<LI><A HREF="rtnv8n2.html#art6">Octrees and Whatnot,</A> by Steve Worley and Eric Haines, May 16, 1995 <BR>
+<I>(best way to build octree hierarchy, also about HBV)</I> </LI>
+<LI><A HREF="rtnv10n2.html#art14">Octree Neighbor Finding,</A> by Andrew Glassner, Francois Sillion, and Paul Heckbert </LI>
+<LI><A HREF="rtnv12n1.html#art5">Octree Traversal and the Best Efficiency Scheme</A>, by Ben Hutchison, Eric Haines, Hanan Samet, and Erik Jansen </LI>
+<LI><A HREF="rtnv12n2.html#art4">A Summary of Octree Ray Traversal Algorithms</A>, by Vlastimil Havran, December 21, 1999</LI>
+<LI><A HREF="rtnv12n2.html#art5">Additional Octree Traversal Notes</A>, by John Spackman, Erik Jansen, and Joel Welling, December 21, 1999</LI>
+<LI><A HREF="rtnv14n1.html#art3">Octree Implementation and RTRT Speeds</A>, by Paul Kahler,
+Vlastimil Havran, Ingo Wald, John Stone, and Nick Chirkov, August 9, 2001</LI>
+<LI><A HREF="rtnv14n1.html#art4">Loose Octrees for Dynamic Raytracing</A>, by Eric Haines, August 9, 2001</LI>
+</UL>
+
+<H4><LI>Binary Space Partitioning (BSP) Trees</LI></H4>
+
+<UL>
+<LI><A HREF="rtnews3a.html#art4">Re: Linear-time Voxel Walking for BSP,</A> by Erik Jansen, April 6, 1988 <BR>
+<I>(good, see also Arvo's octree article above)</I> </LI>
+<LI><A HREF="rtnv5n1.html#art5">Recursive Ray Traversal,</A> by Erik Jansen and Wim de Leeuw, July 10, 1992 <BR>
+<I>(concludes that recursive traversal of BSP data structure is faster than incremental)</I> </LI>
+<LI><A HREF="rtnv5n2.html#art3">BSP Traversal Errata,</A> by Kelvin Sung, August 26, 1992 </LI>
+<LI><A HREF="rtnv17n1.html#art8">BSP Plane Cost Function Revisited,</A> by Eric Haines, May 11, 2004 </LI>
+<LI><A HREF="rtnv18n1.html#art9">K-d Tree Comments,</A> by Ingo Wald, Gordon Stoll, Vlastimil Havran, and Eric Haines, December 12, 2005</LI>
+</UL>
+
+</UL>
+
+<a name="hbv">
+<H3><LI>Hierarchical Bounding Volumes (HBV's, aka BVH's)</LI></H3></a> (also see <a href="bbi">Bounding Box Intersection</a>)
+
+<UL>
+<LI><A HREF="rtnews9a.html#art5">Bounding Volume Hierarchy,</A> edited by Eric Haines, October 27, 1989 </LI>
+<LI><A HREF="rtnews9a.html#art7">Bounding Box Intersection,</A> edited by Eric Haines, October 27, 1989 </LI>
+<LI><A HREF="rtnv5n1.html#art7">BVH Traversal Results,</A> by Nicholas Wilt, July 10, 1992 </LI>
+<LI><A HREF="rtnv6n1.html#art17">Bounding Volumes (Sphere vs. Box),</A> by Tom Wilson, January 27, 1993 </LI>
+<LI><A HREF="rtnv14n1.html#art7">Bounding Box Intersection via Origin Location</A>, by Eric Haines, August 9, 2001</LI>
+<LI><A HREF="rtnv19n1.html#art4">Ray-Box Sorting,</A> by Solomon Boulos and Eric Haines, September 30, 2006</LI>
+<LI><A HREF="rtnv19n1.html#art5">BVHs and Memory Coherence,</A> notes by Christer Ericson and Sung-Eui Yoon, September 30, 2006</LI>
+<LI><A HREF="rtnv20n1.html#art8">Pick-up Sticks and the Room of Dice,</A> by Eric Haines, May 19, 2007</LI>
+<LI><A HREF="rtnv21n1.html#art7">Bounding Volume Hierarchy Formation: Two New Ways,</A> by Eric Haines, November 8, 2008</LI>
+<LI><A HREF="rtnv23n1.html#art4">Sorted BVHs,</A> by Solomon Boulos and Eric Haines, July 20, 2010</LI>
+<LI><A HREF="rtnv23n1.html#art5">Branch Prediction for Ray Tracing,</A> by Eric Haines, July 20, 2010</LI>
+
+
+
+<H4><LI>Tight Bounding Spheres</LI></H4>
+
+<UL>
+<LI><A HREF="rtnews7b.html#art4">Minimum Bounding Sphere, continued,</A> by Jack Ritter, June 21, 1989 <BR>
+<I>(fast algorithm to find a near-optimal sphere around n points)</I> </LI>
+<LI><A HREF="rtnews8b.html#art4">Minimum Bounding Sphere Program,</A> by Marshall Levine, October 13, 1989 </LI>
+<LI><A HREF="rtnv3n1.html#art20">Solution to Smallest Sphere Enclosing a Set of Points,</A> by Tom Shermer, January 2, 1990 <BR>
+<I>(references to computational geometry papers that find smallest sphere)</I> </LI></UL>
+
+<H4><LI>Goldsmith/Salmon: Automatic Creation of Bounding Volume Hierarchies</LI></H4>
+
+<UL>
+<LI><A HREF="rtnews2c.html#art2">Goldsmith/Salmon Hierarchy Building,</A> by Jeff Goldsmith, March 8, 1988 </LI>
+<LI><A HREF="rtnews3a.html#art6">Automatic Creation of Object Hierarchies for Ray Tracing,</A> by Eric Haines, April 6, 1988 <BR>
+<I>(lengthy)</I> </LI>
+<LI><A HREF="rtnews5b.html#art8">Re: Goldsmith and Eyes,</A> by K.R.Subramanian, November 4, 1988 <BR>
+<I>(optimization for eye rays)</I> </LI>
+<LI><A HREF="rtnv3n2.html#art10">An Improvement to Goldsmith/Salmon,</A> by Jeff Goldsmith, March 20, 1990 </LI>
+<LI><A HREF="rtnv6n3.html#art9">Faster Bounding Volume Hierarchies,</A> by Brian Smits and Eric Haines, September 28, 1993 <BR>
+<I>(using randomization and multiple trials to find the best clustering, useful for both Goldsmith/Salmon and Kay/Kajiya)</I> </LI></UL>
+
+<H4><LI>Kay/Kajiya: Intersection of Slabs Method</LI></H4>
+
+<UL>
+<LI><A HREF="rtnews4b.html#art6">Sorting Unnecessary on Shadow Rays for Kay/Kajiya?</A> by Eric Haines and Mark VandeWettering, September 11, 1988 </LI>
+<LI><A HREF="rtnews5a.html#art4">More Comments on Kay/Kajiya,</A> by Jeff Goldsmith, Eric Haines, October 3, 1988 </LI>
+<LI><A HREF="rtnv3n1.html#art7">Question: Kay and Kajiya Slabs for Arbitrary Quadrics?</A> by Thomas C. Palmer, January 2, 1990 </LI>
+<LI><A HREF="rtnv3n4.html#art6">Convex Polyhedron Intersection via Kay &amp; Kajiya,</A> by Eric Haines, October 1, 1990 </LI>
+<LI><A HREF="rtnv20n1.html#art9">SIMD Ray/Box Intersection,</A> by Thierry Berger-Perrin, May 19, 2007</LI>
+<LI><A HREF="rtnv21n1.html#art9">Tactical Optimization of Ray/Box Intersection,</A> by Graham Fyffe, November 8, 2008</LI>
+</UL>
+</UL>
+
+<H3><LI>Other, Fancier Spatial Data Structures</LI></H3></UL>
+<DIR>
+<DIR>
+
+<P>Partial list: </P></DIR>
+</DIR>
+
+
+<UL>
+
+<UL>
+<LI><A HREF="rtnv5n2.html#art17">Constant Time Ray Tracing,</A> by Tom Wilson, Eric Haines, Brian Corrie, and Masataka Ohta, August 26, 1992 </LI>
+<LI><A HREF="rtnv10n3.html#art5">Ray Classification for Animation,</A> by Matt Quail </LI></UL>
+
+<H3><LI>Mailboxes and Other Miscellaneous Speedups for Spatial Data Structures</LI></H3>
+
+<UL>
+<LI><A HREF="rtnv3n2.html#art6">Avoiding Re-Intersection Testing,</A> by Eric Haines, March 20, 1990 <LI><A HREF="rtnv15n1.html#art6">
+Questions and Answers</A>, by Vlastimil Havran, October 21, 2002</LI>
+</UL>
+
+<H3><LI>Public Ray Tracing Software</LI></H3></UL>
+<DIR>
+<DIR>
+
+<P>Partial list: </P></DIR>
+</DIR>
+
+
+<UL>
+
+<UL>
+<LI><A HREF="rtnv4n1.html#art13">At Long Last, Rayshade v4.0 is Available for Beta-testing,</A> by Craig Kolb, March 1, 1991 </LI>
+<LI><A HREF="rtnv8n3.html#art3">POV-Ray,</A> August 2, 1995 </LI>
+<LI><A HREF="rtnv10n1.html#art11">Free Radiosity Renderer (inc. C++ source code),</A> by Ian Ashdown, January 27, 1997 </LI>
+<LI><A HREF="rtnv20n1.html#art7">POV-Ray News,</A> from Chris Cason and Eric Haines, May 19, 2007</LI>
+</UL>
+
+<H3><LI>Benchmarking Ray Tracers</LI></H3>
+
+<UL>
+<LI><A HREF="rtnv3n1.html#art10">Comparison of Kolb, Haines, and MTV Ray Tracers, Part I,</A> by Eric Haines, January 2, 1990 <BR>
+<I>(using grids, HBV)</I> </LI>
+<LI><A HREF="rtnv3n2.html#art9">Comments on Last Issue,</A> by Mark VandeWettering, March 20, 1990 </LI>
+<I>(MTV ray tracer switched to Goldsmith/Salmon)</I> </LI>
+<LI><A HREF="rtnv4n1.html#art5">New Version of SPD Now Available,</A> by Eric Haines, March 1, 1991 </LI>
+<I>("Standard Procedural Databases" for benchmarking ray tracers)</I> </LI>
+<LI><A HREF="rtnv6n2.html#art3">Ray Tracer Races, Round 2,</A> by Eric Haines, July 1, 1993 </LI>
+<LI><A HREF="rtnv6n3.html#art6">An Enhanced Standard Procedural Databases Package,</A> by Eric Haines, September 28, 1993 </LI>
+<LI><A HREF="rtnv6n3.html#art24">SPD Platform/Compiler Results,</A> by David Hook, September 28, 1993 </LI>
+<LI><A HREF="rtnv10n3.html#art9">Recursive Grids and Ray Bounding Box Comments and Timings,</A> by Andrew Woo, December 2, 1997 </LI>
+<LI><A HREF="rtnv13n1.html#art3">
+BART: A Benchmark for Animated Ray Tracing,</A>
+by Jonas Lext,
+Ulf Assarsson, and Tomas Moller, July 16, 2000</LI>
+<LI><A HREF="rtnv13n1.html#art4">
+Global Illumination Test Scenes,</A>
+by Brian Smits and
+Henrik Wann Jensen, July 16, 2000</LI>
+</UL>
+
+<H3><LI>Comparison of Spatial Data Structures and Ray Tracers</LI></H3>
+
+<UL>
+<LI><A HREF="rtnews7c.html#art2">Poll: What efficiency schemes have you used?</A>, August 29, 1989 </LI>
+<LI><A HREF="rtnv3n4.html#art21">Algorithm Order Discussion,</A> by Masataka Ohta, Pete Shirley, October 1, 1990 </LI>
+<I>(computational complexity)</I> </LI>
+<LI><A HREF="rtnv9n1.html#art8">5D vs. BSP and ABVH,</A> by Nguyen Duc Cuong, January 18, 1996 </LI>
+<LI><A HREF="rtnv12n1.html#art3">Comparison of Hierarchical Grids,</A> by Vlastimil Havran and Filip Sixta, June 25, 1999 </LI>
+<LI><A HREF="rtnv12n2.html#art4">A Summary of Octree Ray Traversal Algorithms</A>, by Vlastimil Havran, December 21, 1999</LI>
+</UL>
+
+</UL>
+
+<P><HR></P>
+<H2><A NAME="optimizing">Optimizing Ray Tracing, General</A></H2>
+
+<UL>
+<LI><A HREF="rtnews2d.html#art6">Efficiency Tricks,</A> by Eric Haines, March 26, 1988 </LI>
+<I>(little optimizations for ray tracing)</I> </LI>
+<LI><A HREF="rtnews9a.html#art4">Efficiency Schemes,</A> edited by Eric Haines, October 27, 1989 </LI>
+<I>(similar to the previous)</I> </LI>
+<LI><A HREF="rtnv6n2.html#art6">Comments on Various Ray Tracing Speedups,</A> by Andrew Woo, July 1, 1993 </LI>
+<LI><A HREF="rtnv10n1.html#art3">Faster Refraction Formula, and Transmission Color Filtering</A>, by Xavier Bec, January 21, 1997 </LI>
+<LI><A HREF="rtnv12n2.html#art6">Z-buffer and Raytracing</A>, by Sam Paik, December 21, 1999</LI>
+<LI><A HREF="rtnv12n2.html#art9">Importance for Ray Tracing</A>, by Per H. Christensen, December 21, 1999</LI>
+<LI><A HREF="rtnv13n1.html#art5">
+Realtime Techniques for Ray Tracing,</A>
+by Ádám Nagy, Eric Haines,
+Russel Simmons, Paul Kahler, Factory, and Bruno Schödlbauer, July 16, 2000</LI>
+<LI><A HREF="rtnv14n1.html#art5">
+Processor and Compiler Comparison as of August 2001</A>, by John Stone, August 9, 2001</LI>
+<LI><A HREF="rtnv15n1.html#art5">
+Array Good, Linked List Bad</A>, by Matt Pharr, October 21, 2002</LI>
+<LI><A HREF="rtnv18n1.html#art10">Processor Level Optimization Verification,</A>by Paul Kahler and Anonymous, December 12, 2005</LI>
+<LI><A HREF="rtnv19n1.html#art3">Notes on Efficient Ray Tracing,</A> by Solomon Boulos and Eric Haines, September 30, 2006</LI>
+</UL>
+
+<H3>Optimizing Shadow Testing</H3>
+
+<UL>
+<LI><A HREF="rtnv3n4.html#art8">A Suggestion for Speeding Up Shadow Testing Using Voxels,</A> by Andrew Pearce, October 1, 1990 </LI>
+<LI><A HREF="rtnv4n1.html#art31">Shadow Testing Simplification,</A> by Tom Wilson, March 1, 1991 </LI>
+<LI><A HREF="rtnv10n2.html#art17">Fast Shadow Testing Bibliography,</A> by Slawomir Kilanowski, June 26, 1997 </LI>
+<LI><A HREF="rtnv23n1.html#art4">Sorted BVHs,</A> by Solomon Boulos and Eric Haines, July 20, 2010</LI>
+<LI><A HREF="rtnv23n1.html#art6">How Often Do Shadow Rays Hit?</A> by Solomon Boulos, July 20, 2010</LI>
+</UL>
+
+<P><HR></P>
+<H2><A NAME="intersection">Ray-Surface Intersection</A></H2>
+
+<UL>
+
+<a name="bbi">
+<H3><LI>Bounding Box Intersection</LI></H3></a> (also see <a href="hbv">Hierarchical Bounding Volumes</a>)
+
+<UL>
+<LI><A HREF="rtnews9a.html#art7">Bounding Box Intersection,</A> edited by Eric Haines, October 27, 1989 </LI>
+<LI><A HREF="rtnv6n1.html#art17">Bounding Volumes (Sphere vs. Box),</A> by Tom Wilson, January 27, 1993 </LI>
+<LI><A HREF="rtnv14n1.html#art7">Bounding Box Intersection via Origin Location</A>, by Eric Haines, August 9, 2001</LI>
+<LI><A HREF="rtnv15n1.html#art4">
+Efficient Bounding Box Intersection</A>, by Brian Smits, October 21, 2002</LI>
+<LI><A HREF="rtnv19n1.html#art7">Ray/Box Intersection Optimization,</A> by Eric Haines, Solomon Boulos, and Pete Shirley, September 30, 2006</LI>
+<LI><A HREF="rtnv23n1.html#art7">More SSE Ray/box Code Optimization,</A> by Manny Ko, July 20, 2010</LI>
+</UL>
+
+<H3><LI>Polygons, Point-in-Polygon Testing</LI></H3>
+
+<UL>
+<LI><A HREF="rtnews5b.html#art3">Ray/Triangle Intersection with Barycentric Coordinates,</A> by Rod Bogart, Jeff Arenberg, November 4, 1988 </LI>
+<LI><A HREF="rtnv3n4.html#art22">Point in Polygon, One More Time...</A> by Mark Vandewettering, Eric Haines, Edward John Kalenda, Richard Parent, Sam Uselton, "Zap" Andersson, and Bruce Holloway, October 1, 1990 </LI>
+<LI><A HREF="rtnv3n4.html#art23">Quadrant Counting Polygon In/Out Testing,</A> by Craig Kolb, Ken McElvain, October 1, 1990 </LI>
+<LI><A HREF="rtnv5n3.html">Point in Polygon</A>, September 2, 1992 </LI>
+<LI><A HREF="rtnv6n1.html#art5">Bounding Areas for Ray/Polygon Intersection,</A> by Steve Worley and Eric Haines, January 27, 1993 </LI>
+<LI><A HREF="rtnv6n1.html#art6">Simple, Fast Triangle Intersection,</A> by Chris Green and Steve Worley, January 27, 1993 </LI>
+<LI><A HREF="rtnv6n2.html#art4">Simple, Fast Triangle Intersection, part II,</A> by John Spackman, July 1, 1993 </LI>
+<LI><A HREF="rtnv7n2.html#art18">Point in Polygon, the Quick Answer,</A> by Wm. Randolph Franklin and Eric Haines, February 2.01, 1994 </LI>
+<I>(short code)</I> </LI>
+<LI><A HREF="rtnv7n3.html#art18">A Storage Trick for 3D Polygons,</A> by Eric Haines, July 6, 1994 </LI>
+<I>(save 4 or 8 bytes per vertex)</I> </LI>
+<LI><A HREF="rtnv10n2.html#art11">Detecting Points on the Edge of a Polygon,</A> by Eric Haines, June 26, 1997 </LI>
+<LI><A HREF="rtnv10n2.html#art12">Rendering Unflat Polygons,</A> by Eric Haines, June 26, 1997 </LI>
+<LI><A HREF="rtnv10n3.html#art7">Even Faster Crossings Test,</A> by Philip Brown, December 2, 1997 </LI>
+<LI><A HREF="rtnv10n3.html#art13">Cyrus-Beck as a Ray/Polygon Tester,</A> by David Rogers, December 2, 1997 </LI>
+<LI><A HREF="rtnv11n1.html#art5">Origins of Point In Polygon, Take 10...,</A> by Neil Stewart, July 11, 1998 </LI>
+<LI><A HREF="rtnv13n1.html#art8">
+Intersecting a Ray and a Triangle with Plücker Coordinates,</A>
+by
+Ray Jones, July 16, 2000</LI>
+<LI><A HREF="rtnv17n1.html#art7">
+Faster Yet Point in Polygon Test?</A> by Stephen Bridgett</LI>
+</UL>
+
+<H3><LI>Tetrahedron Testing</LI></H3>
+
+<UL>
+<LI><A HREF="rtnv18n1.html#art8">
+Ray/Tetrahedron Intersection,</A>
+by Paul Kahler, December 12, 2005</LI>
+</UL>
+
+<H3><LI>Quadric Surfaces</LI></H3>
+
+<UL>
+<LI><A HREF="rtnews2c.html#art4">Primitive/Box Overlap Testing</A> by Ruud Waaj, Paul Heckbert, Andrew Glassner, March 8, 1988 </LI>
+<I>(which voxels should list a given primitive?)</I> </LI>
+<LI><A HREF="rtnews2d.html#art3">More Comments on Tight Fitting Octrees for Quadrics,</A> by Jeff Goldsmith, March 26, 1988 </LI>
+<LI><A HREF="rtnv3n2.html#art24">C Code for Intersecting Quadrics,</A> by Prem Subrahmanyam, March 20, 1990 </LI></UL>
+
+<H3><LI>Tori and Quartic Root-Finding</LI></H3>
+
+<UL>
+<LI><A HREF="rtnv3n1.html#art5">Quartic Roots and Tori</A>, January 2, 1990 </LI>
+<LI><A HREF="rtnv5n1.html#art11">Correct Roots for Torus Intersection,</A> by Haakan "Zap" Andersson, Joe Cychosz, July 10, 1992 </LI>
+<LI><A HREF="rtnv7n3.html#art8">Faster Ray-Torus Intersection,</A> by Eric Haines, July 6, 1994 </LI>
+</UL>
+
+<H3><LI>Parametric Surfaces (e.g. Bicubic Patches)</LI></H3>
+
+<UL>
+<LI><A HREF="rtnews1b.html#art4">Spline Surface Rendering, and What's Wrong with Octrees,</A> by Eric Haines, January 15, 1988 </LI>
+<I>(how to choose octree subdivision criteria for parametric surfaces)</I> </LI>
+<LI><A HREF="rtnews9a.html#art8">Spline Surface Intersection,</A> edited by Eric Haines, October 27, 1989 </LI>
+<LI><A HREF="rtnv3n3.html#art19">Ray with Bicubic Patch Intersection Problem,</A> Wayne Knapp, John Peterson, et al, July 13, 1990 </LI>
+<LI><A HREF="rtnv5n2.html#art9">Spline Patch Ray Intersection Routines,</A> by Sean Graves, August 26, 1992 </LI>
+<LI><A HREF="rtnv12n2.html#art7">Ray Tracing Procedural & Parametric Surfaces</A>, by Mark VandeWettering, Stephen Westin, and Matt Pharr, December 21, 1999</LI>
+</UL>
+
+<H3><LI>Implicit Surfaces</LI></H3>
+
+<UL>
+<LI><A HREF="rtnv11n1.html#art4">A Short Note on Kalra and Barr's Algorithm,</A> by Andrei Sherstyuk, July 11, 1998 </LI></UL>
+</UL>
+
+<P><HR></P>
+<H2><A NAME="general">Ray Tracing, General</A></H2>
+
+<UL>
+<LI><A HREF="rtnv6n1.html#art19">Ray Transformation,</A> by Kendall Bennett, January 27, 1993 </LI>
+<I>(generating eye rays)</I> </LI>
+<LI><A HREF="rtnv6n3.html#art7">Shadows from Refractive Objects,</A> by Steven Collins, September 28, 1993 </LI>
+<LI><A HREF="rtnv6n3.html#art8">Shadows Through Transmitters,</A> by Eric Haines, Greg Ward, Alexander Enzmann, Stephen Coy, and David Hook, September 28, 1993 </LI>
+<LI><A HREF="rtnv6n2.html#art11">Obfuscated Postscript Ray Tracer,</A> by Takashi Hayakawa, July 1, 1993 </LI>
+<I>(this is insane!)</I> </LI>
+<LI><A HREF="rtnv7n3.html#art21">Distribution Ray Tracing,</A> by Marc Levoy, July 6, 1994 </LI>
+<I>(email to Levoy's graphics class)</I> </LI>
+<LI><A HREF="rtnv9n1.html#art9">Interacting with Ray Traces,</A> by Bert Peers, January 18, 1996 </LI>
+<LI><A HREF="rtnv9n1.html#art12">Total Internal Reflection,</A> by Eric Haines, Greg Ward, and Chris Larson, January 18, 1996 </LI>
+<LI><A HREF="rtnv10n1.html#art8">Ray Tracing, What is it Good For?</A> by Arijan Siska, January 21, 1997 </LI>
+<LI><A HREF="rtnv10n1.html#art10">Progressive Ray Tracing and Fast Previews,</A> by Eric Haines, January 21, 1997 </LI>
+<LI><A HREF="rtnv10n2.html#art7">More on Rendering Bugs,</A> by Eric Haines, June 26, 1997 </LI>
+<LI><A HREF="rtnv10n3.html#art6">Raytracker Tricks,</A> by Hakan "Zap" Andersson, December 2, 1997 </LI>
+<LI><A HREF="rtnv10n3.html#art14">Mirror Reflectivity,</A> by Greg W. Larson, December 2, 1997 </LI>
+<LI><A HREF="rtnv11n1.html#art11">Recent Ray Tracing European Conference Papers,</A> July 11, 1998 </LI>
+<LI><A HREF="rtnv11n1.html#art12">Attenuation in Water,</A> by Bretton Wade and Ian Ashdown, July 11, 1998 </LI>
+<LI><A HREF="rtnv12n2.html#art8">Raytracing Gloss/Translucency</A>, by Peter Eastman, Matt Pharr, and Stephen Westin, December 21, 1999</LI>
+<LI><A HREF="rtnv13n1.html#art6">
+Fastest Way to Generate Eye Rays in Ray Tracing,</A>
+by Samuel Paik, July 16, 2000</LI>
+<LI><A HREF="rtnv13n1.html#art9">
+Volumetric Rendering,</A>
+by Paul Kahler, July 16, 2000</LI>
+<LI><A HREF="rtnv13n1.html#art10">
+Recent Papers,</A>
+summarized by Eric Haines and Vlastimil Havran, July 16, 2000</LI>
+<LI><A HREF="rtnv21n1.html#art5">Terminology for Ray Tracing,</A> by Peter Shirley, November 8, 2008</LI>
+</UL>
+
+<P><HR></P>
+<H2><A NAME="softshadows">Soft Shadows</A></H2>
+
+<UL>
+<LI><A HREF="rtnv3n1.html#art21">True Integration of Linear/Area Lights,</A> by Kevin Picott, January 2, 1990 </LI>
+<LI><A HREF="rtnv3n3.html#art18">Ray Tracing Penumbral Shadows,</A> Prem Subrahmanyam, July 13, 1990 </LI>
+<LI><A HREF="rtnv5n2.html#art20">Soft Shadow Ideas,</A> compiled by Derek Woolverton, August 26, 1992 </LI>
+<LI><A HREF="rtnv10n1.html#art9">Fast Soft Shadows,</A> by Steve Worley, January 21, 1997 </LI>
+<LI><A HREF="rtnv12n1.html#art4">Great Shadow Hack,</A>, summarized by Eric Haines, June 25, 1999 </LI>
+</UL>
+
+<P><HR></P>
+<H2><A NAME="texture">Texture Mapping</A></H2>
+
+<UL>
+<LI><A HREF="rtnews8b.html#art11">Projective Mapping Explanation,</A> by Ken "Turk" Turkowski, October 13, 1989 </LI>
+<LI><A HREF="rtnv3n2.html#art12">A Note on Texture Sampling,</A> by Eric Haines, March 20, 1990 </LI>
+<I>(texture filtering)</I> </LI>
+<LI><A HREF="rtnv9n1.html#art16">Getting Rid of the Divide,</A> by Frank Compagner and Bob Pendleton, January 18, 1996 </LI>
+<LI><A HREF="rtnv10n1.html#art7">Synthetic Textures and Genetic Algorithms,</A> by Steve Worley, January 21, 1997 </LI>
+<LI><A HREF="rtnv10n2.html#art8">The Curse of the Monkey's Paw,</A> by Eric Haines, June 26, 1997 </LI>
+<LI><A HREF="rtnv10n3.html#art17">Lifting the Monkey's Paw Curse,</A> by Jeff Goldsmith, December 2, 1997 </LI></UL>
+
+<P><HR></P>
+<H2><A NAME="antialiasing">Antialiasing</A></H2>
+
+<UL>
+<LI><A HREF="rtnv7n5.html#art12">Antialiasing Issues,</A> by Arijan Siska, October 13, 1994 </LI>
+<LI><A HREF="rtnv10n3.html#art6">Raytracker Tricks,</A> by Hakan "Zap" Andersson, December 2, 1997 </LI>
+</UL>
+
+<P><HR></P>
+<H2><A NAME="globillum">Radiosity and Global Illumination</A></H2>
+
+<UL>
+<LI><A HREF="rtnv3n4.html#art20">Radiosity via Ray Tracing,</A> by Pete Shirley, October 1, 1990 </LI>
+<LI><A HREF="rtnv7n3.html#art6">Simple Databases Available For Rendering (Global Illumination),</A> by Peter Shirley, July 6, 1994 </LI>
+<LI><A HREF="rtnv9n1.html#art10">Hierarchical Techniques for Glossy Global Illumination,</A> by Per Christensen, January 18, 1996 </LI>
+<LI><A HREF="rtnv10n2.html#art6">What's Wrong with Monte-Carlo Methods?</A> by Nguyen D.C. (JuHu), Pete Shirley, Stephen Westin, and Eric Veach, June 26, 1997 </LI>
+<LI><A HREF="rtnv10n2.html#art16">European Graphics Tour,</A> by Nelson Max, June 26, 1997 </LI>
+<LI><A HREF="rtnv10n3.html#art16">Declassified CIA BRDFs now available,</A> by Greg Ward Larson, December 2, 1997 </LI>
+<LI><A HREF="rtnv15n1.html#art8">13th Annual Eurographics Workshop on Rendering</A>, by Nelson L. Max, October 21, 2002 </LI>
+</UL>
+
+<P><HR></P>
+<H2><A NAME="modeling">Modeling</A></H2>
+
+<UL>
+<LI><A HREF="rtnv7n5.html#art16">Correcting Normal Direction,</A> by Gavin Bell, October 13, 1994 </LI>
+<LI><A HREF="rtnv10n3.html#art18">Eccentricity Effects in Blobs,</A> by Alfonso Hermida, December 2, 1997 </LI>
+<LI><A HREF="rtnv11n1.html#art7">Polygon Shrinking,</A> by Dave Rusin and Jeff Erickson, July 11, 1998 </LI>
+<LI><A HREF="rtnv11n1.html#art8">Correcting Normals on "Flipped" Polygons,</A> by Kev, Duncan Colvin, Steve Baker, John Nagle, Dennis Jiang, Alejo Hausner, and Eric Haines, July 11, 1998 </LI></UL>
+
+<P><HR></P>
+<H2><A NAME="misc">Miscellaneous</A></H2>
+
+<UL>
+<LI><A HREF="rtnv8n2.html#art16">Order of Rendering and Fast Texturing,</A> by Bruno Levy, Dan Piponi and Bernie Roehl, May 16, 1995 </LI>
+<I>(per pixel cost of Gouraud, Phong, texture mapping)</I> </LI>
+<LI><A HREF="rtnv10n1.html#art12">Cells and Portals Resources,</A> by Randy Stiles, January 27, 1997 </LI>
+<LI><A HREF="rtnv10n3.html#art11">Pl&uuml;cker Coordinates,</A> by Jeff Erickson, December 2, 1997 </LI>
+<LI><A HREF="rtnv10n3.html#art15">Testing a Matrix for Uniform Scaling,</A> by Charles Iliya Krempeaux and Eduardo Marreiros, December 2, 1997 </LI>
+<LI><A HREF="rtnv11n1.html#art3">Pl&uuml;cker Coordinate Tutorial,</A> by Ken Shoemake, July 11, 1998 </LI>
+<LI><A HREF="rtnv11n1.html#art6">Info on REYES Algorithm,</A> by Robert Speranza and Tom Duff, July 11, 1998 </LI>
+<LI><A HREF="rtnv11n1.html#art9">What's Mesa?</A> by Brian Paul, July 11, 1998 </LI>
+<LI><A HREF="rtnv11n1.html#art9">Multithreading Mesa,</A> by John Stone, July 11, 1998 </LI>
+<LI><A HREF="rtnv13n1.html#art7">On Transforming Planes,</A>
+by Steve Hollasch, July 16, 2000</LI>
+<LI><A HREF="rtnv14n1.html#art6">Triangles per Vertex</A>, by Eric Haines, August 9, 2001</LI>
+<LI><A HREF="rtnv15n1.html#art7">Scanline vs. Ray Tracing</A>, by Piero Foscari, Paul Kahler, and Matt Pharr, October 21, 2002</LI>
+<LI><A HREF="rtnv15n1.html#art10">A Simple Ray-Triangle Pl&uuml;cker Optimization</A>, by Jeffrey Mahovsky, October 21, 2002</LI>
+<LI><A HREF="rtnv15n1.html#art11">Recovering a Triangle's Surface Normal from the Pl&uuml;cker Coordinates of its Edges</A>,
+by Jeffrey Mahovsky, October 21, 2002</LI>
+<LI><A HREF="rtnv17n1.html#art3">OpenEXR and Radiance Floating Point Image File Formats,</A>
+by Simon Bunker,
+Steve Westin, and Greg Ward</LI>
+<LI><A HREF="rtnv17n1.html#art4">Raytraced Games,</A>
+by Greg Alt</LI>
+<LI><A HREF="rtnv17n1.html#art5">Randomly Sampling Bounding Volumes,</A>
+by Philipp Slusallek, Pete Shirley,
+Fredo Durand, and more</LI>
+<LI><A HREF="rtnv17n1.html#art6">Ray Tracing's Roots,</A>
+by Juan Rayces, Andrew Glassner, Jonathan Maxwell,
+Phil Dutre, and Chris Trendall</LI>
+<LI><A HREF="rtnv18n1.html#art4">
+More on Randomly Sampling Bounding Volumes,</A>
+by Mateu Sbert</LI>
+<LI><A HREF="rtnv18n1.html#art11">
+SIGGRAPH 2005 Report,</A>
+by Eric Haines</LI>
+<LI><A HREF="rtnv19n1.html#art4">"So long and thanks for all the fish...",</a>
+from Michael Ashikhmin, comments by Eric Haines, September 30, 2006</LI>
+<LI><A HREF="rtnv19n1.html#art4">SIGGRAPH 2006 Report,</A>
+by Eric Haines, September 30, 2006</LI>
+<LI><A HREF="rtnv20n1.html#art3">Puzzle: Plane Intersection with Spheres vs. Boxes,</A> by Eric Haines, May 19, 2007</LI>
+<LI><A HREF="rtnv20n1.html#art4">You Don't Know Jack,</A> from Nicolas Holzschuch and Jack Bresenham, May 19, 2007</LI>
+<LI><A HREF="rtnv20n1.html#art6">Rant about Free-ish Code,</A> by Eric Haines, May 19, 2007</LI>
+<LI><A HREF="rtnv20n1.html#art10">Random Numbers, Efficiency, and Other Things,</A> by John Stone, May 19, 2007</LI>
+<LI><A HREF="rtnv20n1.html#art11">Comments on Uniform Sampling and Cones,</A> by Andrew Kensler, May 19, 2007</LI>
+<LI><A HREF="rtnv21n1.html#art3">Puzzle Answer: Plane Intersection with Spheres vs. Boxes,</A> by Eric Haines, November 8, 2008</LI>
+<LI><A HREF="rtnv21n1.html#art4">Puzzle: Triangle/Bounding Box Ratio,</A> by Eric Haines, November 8, 2008</LI>
+<LI><A HREF="rtnv21n1.html#art10">Radians versus Degrees,</A> by Eric Haines, November 8, 2008</LI>
+<LI><A HREF="rtnv21n1.html#art11">Random Number Generators: Faster, Smaller, Randomer,</A> by Thatcher Ulrich and John Stone, November 8, 2008</LI>
+<LI><A HREF="rtnv21n1.html#art12">Subconscious Debugging,</A> by Ian Ashdown, November 8, 2008</LI>
+<LI><A HREF="rtnv23n1.html#art8">Puzzle Answer: Triangle/Bounding Box Ratio,</A> by Eric Haines, July 20, 2010</LI>
+</UL>
+
+<P><HR></P>
+<H2><A NAME="books">Book Reviews</A> (alphabetic)</H2>
+
+<UL>
+<LI><A HREF="rtnv9n2.html">Advice to Authors,</A> by Anonymae</LI>
+<I>(advice on writing a book)</I> </LI>
+<LI><A HREF="rtnv21n1.html#art6">Another Opinion of "Foundations of Multidimensional and Metric Data Structures",</A> by Bretton Wade, November 8, 2008</LI>
+<LI><A HREF="rtnv18n1.html#art3">Newish Books (2005),</A> by Eric Haines</LI>
+<LI><A HREF="rtnv12n2.html#art10">Good Computer Graphics Books</A>, by Brent McPherson<P></LI>
+
+</I><LI><A HREF="rtnv8n2.html#art13">3D Computer Animation, by John Vince</A> </LI>
+<LI><A HREF="rtnv10n1.html#art13">3D Graphic File Formats: A Programmers Reference, by Keith Rule</A> </LI>
+<LI><A HREF="rtnv10n1.html#art13">3D with HOOPS, by William Leier and Jim Merry</A> </LI>
+<LI><A HREF="rtnv6n2.html#art5">Advanced Rendering and Animation Techniques: Theory and Practice, by Alan and Mark Watt</A> </LI>
+<LI><A HREF="rtnv7n1.html#art2">Adventures in Ray Tracing, by Alfonso Hermida</A> </LI>
+<LI><A HREF="rtnv11n1.html#algorithmdesign">The Algorithm Design Manual, by Steven Skiena</A> </LI>
+<LI><A HREF="rtnv7n3.html#art3">Computational Geometry in C, by Joseph O'Rourke</A> </LI>
+<LI><A HREF="rtnv7n3.html#art3">Computer Graphics, by Don Hearn and Pauline Baker</A> </LI>
+<LI><A HREF="rtnv11n1.html#CRChandbook">CRC Handbook of Discrete and Computational Geometry, edited by Jacob Goodman and Joseph O'Rourke</A> </LI>
+<LI><A HREF="rtnv8n1.html#art12">Create Stereograms on Your PC, by Dan Richardson</A> </LI>
+<LI><A HREF="rtnv8n1.html#art19">Encyclopedia of Graphics File Formats, by James Murray &amp; William vanRyper</A> </LI>
+<LI><A HREF="rtnv20n1.html#art12">Foundations of Multidimensional and Metric Data Structures, by Hanan Samet</A>, May 19, 2007</LI>
+<LI><A HREF="rtnv11n1.html#geometrytoolbox">The Geometry Toolbox, by Gerald Farin and Dianne Hansford</A></LI>
+<LI><A HREF="rtnv10n1.html#art13">Graphical Treasures of the Internet, by Bridget Mintz</A> </LI>
+<LI><A HREF="rtnv7n3.html#art3">Graphics File Formats, by David Kay and John Levine</A> </LI>
+<LI><A HREF="rtnv7n3.html#art3">Graphics Gems IV, edited by Paul Heckbert</A> </LI>
+<LI><A HREF="rtnv10n1.html#art13">Graphics Programming with Direct3D, by Robert Glidden</A> </LI>
+<LI><A HREF="rtnv8n1.html#art12">Hidden Images: Making Random Dot Stereograms, by Bob Hankinson and Alfonso Hermida</A> </LI>
+<LI><A HREF="rtnv10n3.html#art4">An Introduction to Implicit Surfaces, edited by Jules Bloomenthal</A> </LI>
+<LI><A HREF="rtnv6n2.html#art5">An Introduction to Ray Tracing, edited by Andrew Glassner</A> </LI>
+<LI><A HREF="rtnv7n3.html#art3">The Inventor Mentor, by Josie Wernecke</A> </LI>
+<LI><A HREF="rtnv10n1.html#art13">Jim Blinn's Corner, by Jim Blinn</A> </LI>
+<LI><A HREF="rtnv7n1.html#art2">Making Movies on Your PC, by David Mason and Alexander Enzmann</A> </LI>
+<LI><A HREF="rtnv11n1.html#numericalrecipes">Numerical Recipes, by William Press et al.</A> </LI>
+<LI><A HREF="rtnv7n2.html#art4">Object-Oriented Ray Tracing in C++, by Nicholas Wilt</A> </LI>
+<LI><A HREF="rtnv6n2.html#art5">Photorealism and Ray Tracing in C, by Christopher Watkins, Stephen Coy, and Mark Finlay</A> </LI>
+<LI><A HREF="rtnv7n3.html#art3">Photorealistic Rendering in Computer Graphics, edited by Pere Brunet and Frederik Jansen</A> </LI>
+<LI><A HREF="rtnv7n1.html#art2">Practical Ray Tracing in C, by Craig Lindley</A> </LI>
+<LI><A HREF="rtnv10n3.html#art4">Procedural Elements for Computer Graphics, 2nd edition, by David Rogers</A> </LI>
+<LI><A HREF="rtnv7n3.html#art3">Principles of Digital Image Synthesis, by Andrew Glassner</A> </LI>
+<LI><A HREF="rtnv7n3.html#art3">Programming for Graphics Files in C and C++, by John Levine</A> </LI>
+<LI><A HREF="rtnv7n3.html#art3">Radiosity: A Programmer's Perspective, by Ian Ashdown</A> </LI>
+<LI><A HREF="rtnv7n3.html#art3">Radiosity and Global Illumination, by Francois Sillion and Claude Puech</A> </LI>
+<LI><A HREF="rtnv7n1.html#art2">Ray Tracing Creations, by Drew Wells and Chris Young</A> </LI>
+<LI><A HREF="rtnv20n1.html#art5">Ray Tracing from the Ground Up", by Kevin Suffern</A>, May 19, 2007</LI>
+<LI><A HREF="rtnv11n1.html#renderingwithradiance">Rendering with Radiance: The Art and Science of Lighting Visualization, Greg Ward Larson and Rob Shakespeare</A> </LI>
+<LI><A HREF="rtnv10n1.html#art13">Stereogram Programming Techniques, by Christopher Watkins &amp; Vincent Mallette</A> </LI>
+<LI><A HREF="rtnv7n3.html#art3">Texturing and Modeling: A Procedural Approach, edited by David Ebert</A> </LI>
+<LI><A HREF="rtnv7n1.html#art2">Tricks of the Graphics Gurus, by Dick Oliver, Scott Anderson, James McCord, Spyro Gumas, and Bob Zigon</A></LI></UL>
+
+<P><HR></P>
+<H2><A NAME="roundups">Ray Tracing Resource Roundups</A></H2>
+
+<UL>
+<LI><A HREF="rtnv23n1.html#art2">July 20, 2010</A> (and <A HREF="rtnv23n1.html#art9">blog roundup</a>)</LI>
+<LI><A HREF="rtnv21n1.html#art2">November 8, 2008</A> </LI>
+<LI><A HREF="rtnv20n1.html#art2">May 19, 2007</A> </LI>
+<LI><A HREF="rtnv19n1.html#art2">September 30, 2006</A> </LI>
+<LI><A HREF="rtnv18n1.html#art2">December 12, 2005</A> </LI>
+<LI><A HREF="rtnv17n1.html#art2">May 11, 2004</A> </LI>
+<LI><A HREF="rtnv15n1.html#art2">October 21, 2002</A> </LI>
+<LI><A HREF="rtnv14n1.html#art2">August 9, 2001</A> </LI>
+<LI><A HREF="rtnv13n1.html#art2">July 16, 2000</A> </LI>
+<LI><A HREF="rtnv12n2.html#art2">December 21, 1999</A> </LI>
+<LI><A HREF="rtnv12n1.html#art2">June 25, 1999</A> </LI>
+<LI><A HREF="rtnv11n1.html#art2">July 11, 1998</A> </LI>
+<LI><A HREF="rtnv10n3.html#art3">December 2, 1997</A> </LI>
+<LI><A HREF="rtnv10n2.html#art4">June 26, 1997</A> </LI>
+<LI><A HREF="rtnv10n1.html#art5">January 21, 1997</A> </LI>
+<LI><A HREF="rtnv9n1.html#art4">January 18, 1996</A> </LI>
+<LI><A HREF="rtnv8n3.html#art3">August 2, 1995</A> </LI>
+<LI><A HREF="rtnv8n2.html#art2">May 16, 1995</A> </LI>
+<LI><A HREF="rtnv8n1.html#art4">January 23, 1995</A> </LI>
+<LI><A HREF="rtnv7n5.html#art3">October 13, 1994</A> </LI>
+<LI><A HREF="rtnv7n4.html#art9">July 14, 1994</A> </LI>
+<LI><A HREF="rtnv7n3.html#art17">July 6, 1994</A> </LI>
+<LI><A HREF="rtnv7n2.html#art2">February 2.01, 1994</A> </LI>
+<LI><A HREF="rtnv7n1.html#art3">February 2, 1994</A> </LI>
+<LI><A HREF="rtnv6n3.html#art12">September 28, 1993</A> </LI>
+<LI><A HREF="rtnv6n2.html#art9">July 1, 1993</A> </LI>
+<LI><A HREF="rtnv6n1.html#art7">January 27, 1993</A> </LI>
+<LI><A HREF="rtnv5n2.html#art5">August 26, 1992</A> </LI>
+<LI><A HREF="rtnv5n1.html#art8">July 10, 1992</A> </LI></UL>
+
+<P><HR></P>
+<P>Index created by <A HREF="http://www.cs.cmu.edu/~ph">Paul Heckbert</A>, October 5, 1996 </P>
+<P>Updated by <A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A>, July 20, 2010</P></BODY>
+</HTML>
+
+
+
+

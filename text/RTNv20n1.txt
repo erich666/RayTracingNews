@@ -1,0 +1,1406 @@
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+                        "Light Makes Right"
+
+                            May 19, 2007
+                        Volume 20, Number 1
+
+Compiled by Eric Haines, erich@acm.org, http://www.acm.org/tog/editors/erich/
+All contents are copyright (c) 2007, all rights reserved by the
+        individual authors
+Archive locations:
+    HTML http://www.acm.org/tog/resources/RTNews/html/index.html
+    text version at http://www.acm.org/tog/resources/RTNews/text/
+
+Contents:
+    Introduction
+    Ray Tracing Roundup
+    Puzzle: Plane Intersection with Spheres vs. Boxes, by Eric Haines
+    You Don't Know Jack, from Nicolas Holzschuch and Jack Bresenham
+    New Book: "Ray Tracing from the Ground Up", preview by Eric Haines
+    Rant about Free-ish Code, by Eric Haines
+    POV-Ray News, from Chris Cason and Eric Haines
+    Pick-up Sticks and the Room of Dice, by Eric Haines
+    SIMD Ray/Box Intersection, by Thierry Berger-Perrin
+    Random Numbers, Efficiency, and Other Things, by John Stone
+    Comments on Uniform Sampling and Cones, by Andrew Kensler
+    Review of "Foundations of Multidimensional and Metric Data Structures",
+        by Eric Haines
+
+----------------------------------------------------------------------------
+
+Introduction
+
+So I'm back from I3D (papers links at
+http://myweb.hinet.net/home7/hks/Papers2007/i3d2007Papers.htm), which was a
+very good time. Small gatherings of researchers and practitioners (this one
+had about 90 people) are such a wonderful thing, in that everyone at the
+conference is someone with similar interests to yours. Start a conversation
+with the person next to you in the buffet line and you might find they have
+just the answer to the problem you've been chewing on. I was particularly
+pleased to meet Jacco Bikker and put a face to an email address. He was
+showing his super-fast ray tracer at the Posters session.
+
+There was one ray-tracing related paper at I3D: "Interactive k-D Tree GPU
+Raytracing". A hybrid RTRT (real-time ray tracer), using the traditional GPU
+strengths for eye rays and for computing shading. The contributions are in
+the area of traversing a k-D tree with a GPU; GPUs don't do stacks well, so
+there are some clever techniques to limit the stack size and to recover from
+stack overflow.
+
+Speaking of ray tracing, the second Symposium on Interactive Ray Tracing, aka
+RT07, will be September 10-12, 2007 at Ulm University, Germany. Papers due
+June 14, so get crackin': http://www.uni-ulm.de/rt07. Jacco Bikker will be
+the keynote speaker.
+
+On to the articles. I'm feeling that this issue sometimes comes off as a bit
+curmudgeonly, with my rant about "free for non-commercial use" and whatnot.
+Well, just be happy I'm not rambling on about software patents, sales loads
+on mutual funds, or other typical mainstream sources of evil. Free-ish
+software is hardly evil, it's just unamiable. Next issue I promise I'll keep
+my tinfoil hat on so the satellite mind-control rays won't make me so
+peevish.
+
+----------------------------------------------------------------------------
+
+Ray Tracing Roundup
+
+This is actually rather amazing. All presentations at SIGGRAPH 2003-2005
+on-line, for free, as Quicktime movies:
+
+    http://encore.siggraph.org
+
+A few of them also have PDFs for download or links for more information.
+
+----
+
+From Aaron Knoll:
+
+Normally my papers are sort of vis-centric, but I thought you might like our
+recent tech report... it basically shows how to ray trace any arbitrary
+implicit pretty interactively using very simple 2x2 coherent SSE packets.
+
+http://www.cs.utah.edu/~knolla/publications.html
+
+It's the top link there [well, now it's the second down. -EAH] -- there's
+also a video :)
+
+----
+
+Remember that first time you wrote a ray tracer (you haven't yet? Go do so!)
+and quickly added more code to get another cool image? Here's one person's
+account: http://www.superjer.com/pixelmachine/ - not a great read, but I
+appreciate the "one more bug to fix, one more feature to add" spirit.
+
+----
+
+So if you haven't written a ray tracer yet but would like to, Jacco Bikker
+(there's that name again) has a nice series of articles on the basics of
+coding up a ray tracer, see
+http://www.devmaster.net/articles/raytracing_series/part1.php
+
+----
+
+So what's the acceptance rate for various conferences? Now you know:
+http://vrlab.epfl.ch/~ulicny/statistics/
+
+----
+
+In RTNv18n1 Daniel Pohl's raytraced Quake 3 project got a quick mention here.
+Now he's doing Quake 4 ray-traced:
+http://www.theinquirer.net/default.aspx?article=36452
+
+----
+
+Back in RTNv18n1 I mentioned Farin and Hansford's new book, "Practical Linear
+Algebra". At the time their website wasn't quite working, now it is. Teaching
+materials (e.g. figures from their book) for this book are available at
+http://www.farinhansford.com/books/pla/pla-teaching.html. This site also
+contains additional chapters, such as a section on Principle Component
+Analysis. PCA is useful in graphics for finding tighter object-aligned (vs.
+axis aligned) bounding boxes.
+
+----
+
+An interesting something: http://www.redway3d.com/ - a commercial real-time
+ray tracer.
+
+----
+
+Last year the hot topic for RTRT was efficiency schemes for dealing with
+deformations and animation. Keenan Crane writes:
+
+There are a couple more papers contributing to this "year of dynamic scenes"
+- both of them work by updating bounding volume hierarchies with static
+topology:
+
+http://www.cs.utah.edu/~boulos/papers/togbvh.pdf
+http://graphics.cs.uiuc.edu/geomrt/
+
+Unlike the BIH stuff, this approach only makes sense for small deformations.
+
+----
+
+Recommendation from Andrew Glassner:
+
+Stock.xchng, http://www.sxc.hu/, has a huge collection of free stock photos.
+Their reuse rules are extremely liberal - basically, you can use the images
+in books, movies, etc., and about the only thing you can't do is sell or
+distribute the images themselves. See http://www.sxc.hu/forums/topic/12673
+for a summary of the rules. Nice! If a quarter million free photos is not
+enough, here are more sites: http://www.nooti.com/design/free-stockphotos.php
+
+----
+
+Fractal art has been around forever, but it has improved considerably. Free
+programs like Apophysis, http://www.apophysis.org/, has done wonderful things
+in some users' hands, e.g. http://intergalacticart.blogspot.com/, and Ultra
+Fractal, http://www.ultrafractal.com/, a commercial program, also has its
+adherents: http://csdl2.computer.org/comp/mags/cg/2007/03/g3004.pdf
+
+----
+
+Who says wireframe is unrealistic rendering?
+http://news.windingroad.com/etc/wonder-woman-your-car-is-ready%e2%80%a6/
+
+----
+
+In the same spirit, a lovely NPR hotel room:
+http://www.luise-berlin.com/en/rooms/306.htm
+
+----
+
+Arvo's box/sphere intersection test has been improved:
+http://jgt.akpeters.com/papers/LarssonEtAl07/. Surprising, to me, as Arvo's
+test seemed pretty minimal. But the early out is to simply add the radius to
+the box's bounds and test if the center of the sphere is inside this extended
+box. This "extended box" is an approximation of the object formed by "adding"
+a sphere and box together, the Minkowski sum (e.g.
+http://www.cs.sunysb.edu/~algorith/files/minkowski-sum.shtml). Minkowski sums
+get used a lot for other object/object collision tests, e.g. frustum culling.
+I guess no one really noticed it could even be used to improve this seemingly
+"simple" test. Nice!
+
+----
+
+Lightsprint Vision: Realtime radiosity for your renderer, at
+http://lightsprint.com/. They have a downloadable demo, which looks nice
+enough. Anyone know who they are or what they do?
+
+----
+
+Perhaps you saw the mirror made of wood at SIGGRAPH some years back. More
+projects by the same artist: http://www.smoothware.com/danny/index.html
+
+----
+
+Very peculiar way to generate the inverse square root, quite amazing:
+http://www.lomont.org/Math/Papers/2003/InvSqrt.pdf
+
+----
+
+Finally, a 3D printer for candy:
+http://www.evilmadscientist.com/article.php/candyfab - POV-Ray is used for
+generating the 2D slices the 3D sugar printer needs for fabrication.
+
+----
+
+Fundamental Research Challenges in Computer Graphics:
+
+http://www7.nationalacademies.org/CSTB/project_graphics_papers.html
+
+- white papers from many luminaries in the field. They date from around 2003,
+but are still worth a look.
+
+----
+
+You know you've been in graphics too long if...
+http://www.ahajokes.com/com097.html
+
+----
+
+Make something cool for your kids, or friend's kids, or SO, or yourself:
+http://www.thevideosense.com/video/A-Must-See-Optical-Illusion/ - the
+http://www.grand-illusions.com/opticalillusions/dragon_illusion/ page has a
+link
+http://www.grand-illusions.com/images/articles/opticalillusions/dragon_illusion/dragon.pdf
+for making your own.
+
+----
+
+Here are a bunch of links:
+
+http://www.sjbaker.org/teapot/index.html - history of the Newell teapot
+
+http://www.bertsimons.nl/album/projects/clone/index.html - papercraft heads
+through computer graphics.
+
+http://www.easyrgb.com/math.php - formulae for converting between many color
+spaces. There are other interesting bits on color here; explore!
+
+http://www.ilm.com/theshow/ - fun little "Pirates of the Caribbean 2" special
+effects site.
+
+http://www.spectrum.ieee.org/print/5049 - article by a member of the
+Microsoft text team, on their techniques for improving screen readability.
+
+http://www.innovationlab.net/sw22811.asp - computer screen made from concrete
+
+http://www.youtube.com/watch?v=Z2LUz2WVcek - display using falling water.
+After watching 20 seconds you're done, the rest is just repetitious.
+
+http://www.sciencemag.org/cgi/content/short/313/5794/1729 - pretty. Larger
+image here: http://rsp.math.brandeis.edu/3D-XplorMath/Surface/gallery.html,
+from this site: http://rsp.math.brandeis.edu/3D-XplorMath/, which provides a
+free Mac program for exploring such surfaces.
+
+http://newyorkdesign.hp.infoseek.co.jp/menu06.html - a perceptually tricky
+game - what's changing?
+
+http://www.google.com/patents - Google's patent searcher
+
+http://www.ks.uiuc.edu/Research/vmd/projects/ece498/ - interesting course,
+partly because it was co-taught by Dave Kirk, CTO of NVIDIA. Lectures
+downloadable from http://courses.ece.uiuc.edu/ece498/al/Syllabus.html.
+Lecture 18 is by John Stone, of Tachyon ray tracing fame, though it's not
+about ray tracing.
+
+http://www.xrez.com/boston_giga.html - super-high res Boston photo.
+http://www.docbert.org/ChicagoByNight - super-high res Chicago, with links to
+Sydney and Machu Picchu zoomables.
+
+http://www.flickr.com/photos/21815268@N00/123158595/ - the real world really
+is complex and hard to model...
+
+----
+
+And sometimes the URL is just not what it seems:
+http://www.rendermagazine.com/
+
+- from Neil Gatenby
+
+----------------------------------------------------------------------------
+
+Puzzle: Plane Intersection with Spheres vs. Boxes, by Eric Haines
+
+I've been poking at this puzzle for a bit, and I *think* I've solved it. That
+said, I won't swear I have, so I'm hoping someone will give a nice intuitive
+answer (that doesn't involve double integrals), like Han-Wen Nienhuys did for
+a similar puzzle in RTNv10n1.
+
+Problem: what is the relative probability of a random plane hitting a sphere
+of radius R vs. hitting a box with edge lengths of DxWxH? We know that the
+chance of a random *ray* hitting each is proportional to the surface area of
+each object (or any convex area, in fact). This is what gets called the
+Surface Area Heuristic, used for forming near-optimal kd-trees for ray
+tracing - see RTNv17n1. But what is the proportion for spheres vs. boxes when
+intersecting with a plane?
+
+I'll even solve the easy part of the puzzle for you, the relative probability
+of any box compared to any other box. It turns out that if you sum the edge
+lengths of each box, this is the proportional chance that a random plane will
+hit it. So a 1x1x1 box has a measure of 1+1+1=3, a 1x2x3 box a sum of
+1+2+3=6, so the second box is twice as likely to be hit by a random plane.
+This "sum of edges" measure is (misleadingly) called the "mean width" of the
+box. "Misleadingly" because it's not what I would think of as the mean width
+of anything. The "mean width" of a sphere is the sphere's diameter, but the
+"mean width" of a box is certainly not of the same scale. For example, a
+2x2x2 box has a measure of 2+2+2=6; a sphere of diameter 2 just fits in this
+box and has a mean width of 2 (its diameter); a sphere of diameter 2*sqrt(3)
+circumscribes the 2x2x2 box and has a mean width of 2*sqrt(3)=3.46. So the
+2x2x2 box must have a mean width between 2 and 3.46. So how does its measure
+of 6 relate to its true mean width, what's the scale factor? Prove it.
+Getting this scale factor then tells us how spheres' radii and boxes' edge
+sums relate.
+
+Possible hint: the Discrete Differential Geometry course given at SIGGRAPH
+deals with this type of measurement early on, see the course notes at
+http://ddg.cs.columbia.edu/, second chapter (and make sure to get the 2006
+version of the notes!). That said, I think there's a pretty easy way to solve
+this, but it *does* involve a double integral - I'm hoping one of you out
+there will have a nice intuitive answer & proof.
+
+Bonus question: what applications are there for computing the relative
+probability of plane/box or plane/sphere intersection? I have one in mind
+(I'll mention it next issue), but would love to know of others.
+
+----------------------------------------------------------------------------
+
+You Don't Know Jack, from Nicolas Holzschuch (Nicolas.Holzschuch@imag.fr) and
+Jack Bresenham
+
+[Sorry, the title's all mine, but I couldn't resist. Nicolas responded to the
+article in the previous RT News, RTNv19n1, about Michael Ashikhmin's (and my
+own) thoughts on the SIGGRAPH acceptance process. - EAH]
+
+Nicolas writes:
+
+From RTNv19n1:
+> Techniques such as Phong highlighting, environment mapping, and Gouraud
+interpolation could all have been rejected because they were just "tricks
+that look good" and not science.
+
+If you check a bibliography, you'll notice there is a twelve years hiatus
+between the publication of the Bresenham's algorithm for lines (published
+1965, submitted 1963, first presentation 1962), and the publication of
+Bresenham's algorithm for circles (CACM, 1977). Now, if you talk to Jack,
+he'll explain that it's not that it took him twelve years (or even fifteen)
+to get the idea for circles. After all, once you have the first idea, the
+second is an obvious extension [though the circle-drawing algorithm itself is
+not obvious. - EAH].
+
+No, the problem is that it took him twelve years to get the second paper
+accepted for publication. It kept being rejected as "there's no science in
+that", or "it's useless"... So it seems problems in getting new ideas
+accepted are not something new in Computer Science.
+
+I should credit those who told this story to me, Jean-Jacques Bourdin and
+Vincent Boyer. They are two guys (from the University of Paris) who worked on
+line drawing algorithms for quite some time. I remember at EG 99, in Milano,
+JJ Bourdin giving a talk that began with, "Today, I'm going to show you an
+algorithm twenty times faster than Bresenham's algorithm". He got the
+audience's full attention. :-) [Paper is at
+http://www.ai.univ-paris8.fr/~jj/Rech/SI/eg99.pdf - EAH]
+
+----
+
+[I contacted Jean-Jacques and Vincent about whether Nicolas remembered the
+details correctly. Vincent said "Jack confirmed this story after my PhD.
+thesis presentation", and provided a minor correction to the text above. I
+also attempted to contact Jack Bresenham, and, happily, he replied. The
+explanation is perhaps a bit long, but I found it worth including in full:
+the simple storyline is concise and dramatic, but reality is more nuanced.
+People get busy with other things, interest in a particular type of research
+wanes and waxes, and so on. Jack's tale also puts things in some sort of
+perspective: a two-year publication turnaround seems like nothing compared to
+14 years delay overall. - EAH]
+
+Jack writes:
+
+Yes, the story is essentially correct but wanders a slight bit from fully
+being factual. One outright rejection and almost a second rejection is
+correct; most of the long delay in successfully submitting the circle paper
+for publication was primarily my responsibility. ACM contributed only a
+couple of years delay once I finished the paper to their satisfaction.
+
+I did develop the circle algorithm in 1962 or 1963 just after the line
+algorithm. Both were done as an employee at IBM's San Jose development
+laboratory working in Dr. E. E. Lindstrom's computation laboratory. The IBM
+technical report TR_02.286 I have is dated 01-27-64 and was done in what then
+was IBM's General Products Division Development Laboratory, San Jose,
+California.
+
+My recollection is that the circle work was essentially complete, but not
+formally documented, and IBM 1401 code to drive the Calcomp plotter working
+in the latter part of 1962 around the time I returned to Stanford or early
+1963 shortly after I was again taking classes full time. Owing to personal
+matters, publication of a formal TR was delayed.
+
+The circle algorithm's publication history stretches over a long time. I
+proposed to submit it to the IBM Systems Journal in the early 1960s. I can
+not recall a specific date; it would certainly have been after the August
+1963 ACM national conference in Denver, which is where an IBM Systems Journal
+editor approached me to ask to publish the line drawing algorithm I presented
+at the conference. The circle paper was reviewed within IBM and one reviewer
+pointed out an error in my claim to minimize the difference between the true
+radius and the radius to each point of the digitized incremental circle when,
+in fact, I demonstrated that the algorithm minimized the difference between
+the square of the true radius and the square of the radius to each point of
+the digitized incremental circle. That is, I claimed an error metric of:
+     min: |R-r|
+when what I actually proved was
+     min: |R^2-r^2|.
+
+The period of time 1963-64 is a bit fuzzy for me and I am not sure whether
+the review was an internal one in the San Jose lab before it was submitted to
+the IBM Systems Journal or if it was an actual IBM SJ review; my recollection
+is that it was submitted and the reviewers were those from the SJ. Personal
+matters made it infeasible for me to spend time correcting the error metric
+so publication effectively terminated owing to my non-response. My guess is
+that original submission of the circle paper to the Systems Journal likely
+was in 1964 as I do recall when we spoke in Denver in August 1963, the editor
+told me the journal would as well be interested in the circle algorithm when
+written.
+
+Some years later, either late 1973 or early 1974, I chanced to read Mike
+Pitteway's BCS Computer Journal November 1967 article: "Algorithm for Drawing
+Ellipses or hyperbolae with a digital plotter". I'd not followed much of
+computer graphics for quite a while so was pleasantly surprised to read a
+reference to my line drawing article from 1965 and decided it might still be
+of interest to publish the circle algorithm as by then I'd worked out, as an
+avocational interest, what became the appendix of my February 1977
+incremental circle article in Communications of the ACM. I put together a new
+version of the paper and submitted it to the IBM Systems Journal. The IBM SJ
+editor responded that the journal no longer was interested in publishing such
+material. The SJ rejection is what my casual conversation remarks referred to
+in France at the University of Paris-8 dissertation defense.
+
+I submitted the circle paper to Communications of the ACM in June 1974. W. M.
+Newman had it reviewed, accepted it for publication subject to my changing a
+few things, then subsequently revised the acceptance saying he'd become aware
+of other circle algorithms and was sending it out for additional review. The
+others were not incremental digital circles and, as one would expect, the
+second set of reviewers pointed out the new context of digital circles for
+plotters & CRT raster displays and the paper was again accepted for
+publication.
+
+ACM was significantly far, far behind in publishing papers so the circle
+paper had at its conclusion when finally published February 1977 the
+publisher's note: "Received June 1974; revised September 1975" as was
+standard ACM practice. A final twist was that ACM editorship changed before
+publication when Jim Foley took over from William Newman. I probably
+mentioned in Paris, as the context was light and relaxed, that ACM also
+nearly rejected the paper and took the unusual step of having a full second
+panel of reviewers.
+
+In my keynote talk at the "11th International Conference in Central Europe on
+Computer Graphics, Visualization and Computer Vision 2003", I made more
+formal remarks with the intent of encouraging young computer scientists to
+never be discouraged by rejection or delay if they believe they have a
+worthwhile idea. A pdf copy of my remarks can be seen at:
+http://wscg.zcu.cz/wscg2003/Papers_2003/Bresenham.pdf
+
+----------------------------------------------------------------------------
+
+New Book: "Ray Tracing from the Ground Up", preview by Eric Haines
+
+I recall when I was a kid in sixth grade I got my hands on some book that was
+essentially presenting all grade-school and high-school mathematics in just
+one text. I read through the first parts, feeling quite smart that I knew all
+this stuff already. I hit a little more algebra than I was used to, but was
+able to slog on. Then I hit logarithms and was stopped dead - what's this
+bizarre concept? The text whipped through it so quickly that I couldn't get
+my head around it, and so the book lost me entirely.
+
+Many books for courses are just that, texts for the classroom. They cover
+each topic just enough to get the point across to most students, and assume a
+teacher is around to fill in the gaps and help along any other students who
+didn't quite understand the book. A reasonable assumption, certainly, but of
+necessity it means the text will skim over areas in order to cover every
+major topic in a field and so appear "complete".
+
+The book "Ray Tracing from the Ground Up", by Kevin Suffern, published by
+A.K. Peters, will be available at SIGGRAPH 2007. I've skimmed through most of
+the chapters (not as a paid editor, but rather just to comment), so can offer
+up an initial impression. This book has a perfect title for it. Theory and
+code snippets are blended to show how to make a classical or stochastic ray
+tracer from scratch. It assumes the reader has just about no knowledge of
+graphics and at most some understanding of calculus. Each chapter tackles
+some topic: perspective, reflection, intersection, etc. The text has many
+excellent figures and illustrative renderings, along with C++ code snippets
+that are explained when presented (vs. the often slap-dash nature of many
+code-laden books that present long, weakly commented listings that fill half
+the book). The book will come with a CD that includes a basic ray tracer, as
+well as code for generating various scenes (there's no scripting language
+front-end for the ray tracer).
+
+Overall, the book is somewhat "old school". With the exception of a few newer
+topics, e.g. ambient occlusion, most of the material presented dates back to
+the 80's and early 90's. But this is as it should be for a text of this sort:
+fundamentals are established and built upon, with the author doing his best
+to make sure the reader truly understands what is going on each step of the
+way, (hopefully) without the need of a teacher to fill in the gaps. Through
+examples and extensive illustrations the author attempts to build not only a
+basic understanding but present mental models and give some intuition as to
+what various equations and algorithms represent. For example, I've never seen
+a clearer explanation of the ray/box (slabs) intersection method - it's done
+as it deserves to be done, walking through the various types of hits and
+misses and showing (through excellent colored figures and ray-traced test
+images) how the algorithm actually works. This is not a text for researchers
+or advanced students, but truly for the novice, the hobbyist, the
+enthusiastic amateur.
+
+The style is informal and approachable, with the author normally speaking in
+the first person singular or plural, e.g. "I'll use the same representation
+for the BRDFs", "We need an expression for the primary rays". He assumes
+you're going to make a ray tracer, and he leads you through what you need to
+know and gets you coding it up. He points out variations and elaborations
+along the way. This approach is perfectly in the spirit of writing your own
+ray tracer, in which you normally have the drive of adding "just one more
+feature" that keeps you up until 5 AM. He even points out common pitfalls and
+ways to debug various features.
+
+The book is not without its limitations. The coverage of some topics
+sometimes ends a little too quickly for my tastes. For example, the basics of
+efficiency grid creation and traversal are presented, but simple efficiency
+improvements such as mailboxing are not mentioned. Admittedly, mailboxing is
+not useful for multiprocessor systems, but I think it's worth mentioning as a
+handy idea in general.
+
+As a test, I chose two terms, "radiance" and "Fresnel", and searched through
+the book to see how these are treated. The book does well with radiance, as
+it does a reasonable job defining the various types of radiometric units and
+draws the important connection between radiance and a sample ray. For Fresnel
+it mostly focuses on the Fresnel equation's effect on reflectance vs.
+transmittance as a function of angle. This is fairly important for a ray
+tracer, though the text rightly points out that it's often less noticeable
+than you might think. Where I find it important is for things like the
+surface of a pool or pond, where the effect of reflectance is low looking
+directly into the bottom while it increases as you look more towards the
+horizon.
+
+The book presents the technique of making the specular color match the
+diffuse color to give a metallic look, vs. using a white specular color for
+plastics. It would have been nice to note that the Fresnel equation also is
+important in how metal and plastic differ in appearance. The Fresnel
+reflection effect, where at grazing angles all surfaces approach becoming
+perfectly reflective, is briefly mentioned indirectly when shading models are
+discussed. The book is interesting in that it does a thorough job of
+reconciling the Phong shading model, which is not energy-conserving, by
+reformulating it properly as a BRDF. However, Phong is as complex a shading
+model as is presented in the book. And this makes perfect sense within the
+context of what the author is trying to do: the "80% of the way, good enough
+for a start" Phong shading model is presented and put into the proper
+theoretical context. The author gives brief explanations and a number of
+references to more elaborate shading models. The focus of the book is to get
+the reader to the 80% level in a wide range of areas, with pointers where to
+go for more information if an area is of particular interest.
+
+I could easily imagine this textbook being the basis for a basic or mid-level
+undergraduate computer graphics course. Such a course would necessarily
+ignore GPUs entirely, but the advantage would be in teaching first principles
+(light transport, BRDFs, sampling theory) and focusing on the scientific and
+mathematical concepts used in rendering as a whole. There are any number of
+areas that are not addressed by the book, such as tone mapping or BSP tree
+formation or procedural bump mapping. However, the basics are all there, and
+each teacher can elaborate on their own areas of interest. Those basics are
+carefully covered, with the proper theory and equations being presented
+without any dumbing down of the material. Questions and exercises are
+provided at the end of every chapter. The informative illustrations alone
+make the book worth purchasing by anyone planning on teaching or
+understanding more about the essentials of ray tracing.
+
+(A little) more information about the book can be found at
+http://www.akpeters.com/product.asp?ProdCode=2728.
+
+----------------------------------------------------------------------------
+
+Rant about Free-ish Code, by Eric Haines
+
+Recently someone asked what the license is for the code at the Graphics Gems
+Repository. There never was one in the books themselves, it was assumed you
+could use the code as you wished. After a bit of discussion, we came up with
+one. The summary of the Gems license (at http://www.graphicsgems.org/) is,
+"don't be a jerk, and remember that anything free comes with no guarantee".
+Me, I like to reuse code, and I work for a company. I pay careful attention
+to the licenses on the various pieces of source code out there, sometimes
+asking our legal department to read over a license and determine if it is
+acceptable. What bothers me a bit is the tendency for even the smallest
+algorithmic contribution to be labeled something like, "the code is academic
+in nature so is free for all non-commercial use".
+
+I'd like to pass on my perspective when I see this sort of "non-commercial
+use" notice. As a programmer for 30-odd years and a commercial developer for
+24 of those, I've never pursued getting a license for any of these smaller
+bits of software - instead I ignore them. I don't have a budget on-hand and
+it's not worth my time to negotiate a price for a small contribution; just
+getting reimbursed for buying a shareware utility can be a chore.
+
+I can understand how some content such as free music could easily be
+repackaged and sold as-is, and so a Creative Commons license
+(http://creativecommons.org/licenses/) that said "non-commercial only" has a
+logic to it for those items. But usually an algorithm is such a tiny part of
+a commercial application that there's little point in protecting such
+relatively small bits of code. As a commercial developer I can assure you
+I've never thought, "yes, I finally have a spline/line intersection algorithm
+in hand, at last I can accumulate a vast personal fortune!"
+
+So, please, unless your code size is large enough and comprehensive enough
+and robust enough that it makes sense as a separate standalone DLL (a thing
+which I *have* licensed), don't bother saying "not for commercial use etc."
+on it. It's more annoying than anything, and usually there's a similar piece
+of software (with more liberal licensing) somewhere else on the web. I've
+always honored licenses that say, "please give us credit," if that's your
+concern. If you've truly contributed something new and want recognition,
+instead consider submitting an article (and code, if you wish) to the
+"journal of graphics tools"; as a bonus, you become a known expert on the
+topic.
+
+If your goal is simply to hasten the collapse of the capitalist system by
+limiting reuse to non-commercial developers, good luck with that, let me know
+how it works out. Personally, I'd rather have you protest for more vacation
+days - hmmm, that could be an interesting licensing term: "by using this
+software, you have saved 3 days of development time, so must be given an
+additional vacation of this length by your company as payment". Or just go with
+the LGPL (http://www.gnu.org/copyleft/lgpl.html) and call it a day.
+
+I should note that all the code snippets in the Ray Tracing News are free
+only for *commercial* use; hobbyists and academics are not permitted to use
+them. So, how did that make you feel? Just kidding, of course - any code bits
+here are copyright by their original authors, but as far as I'm concerned are
+free for reuse, with bugs being Your Problem (though please let us know), and
+attribution to the original author being A Nice Thing. Oddly, I probably
+won't send lawyers after you if you don't do so. Which of course is the case
+with 99% of "free for non-commercial reuse", since any dishonest commercial
+developer could simply use the code anyway and no one would be the wiser.
+"When algorithms are outlawed, only outlaws will use algorithms".
+
+----------------------------------------------------------------------------
+
+POV-Ray News, from Chris Cason (team-coord-c4@povray.org) and Eric Haines
+
+Eric here:
+
+First, POV-Ray is officially the first ray tracer in orbit:
+http://www.oyonale.com/iss/english/makingof.htm
+
+POV-Ray 3.7 beta, http://www.povray.org/beta/, has two significant features:
+SMP (symmetric multiprocessing) support, which means it will use all the
+processors on a multicore machine, and BSP tree support, so that you can
+experiment with this scheme vs. bounding volume support.
+
+I got their code and experimented with tuning the BSP tree generator settings
+a fair bit, trying to find some optimal numbers for a range of scenes. What
+was interesting was how little the knobs I twiddled seems to affect overall
+performance. At the extremes I'd see a fall-off in speed, but for the most
+part the BSP trees formed all had about the same efficiency. That said, I did
+this tweaking last year, and there have been a number of improvements since
+then to their code, so perhaps things have changed. My take-away was that
+doing some sort of cost function was a win, but after this is in place the
+various weighting factors for the cost function were not all that critical.
+Which is a good thing, in my opinion, as it means the BSP tree is pretty
+robust and forgiving.
+
+There was also a scene dependence: sometimes the original BVH code would be
+faster, sometimes the BSP tree would. Unlike some of the highly optimized
+RTRT systems out there that render only triangles, POV-Ray is very much an
+object-oriented system. I think this flexibility gives it a different feel
+for efficiency tuning: sort of an all-terrain vehicle vs. a Formula One car.
+
+----
+
+[Chris kept sending me interesting tidbits on POV-Ray development, so I've
+glued together some of his correspondence. - EAH]
+
+From Chris:
+
+POV-Ray is now an official SPEC CPU2006 benchmark, see
+http://www.spec.org/cpu2006/Docs/453.povray.html. SPEC is a non-profit
+organization that creates standardized sets of benchmarks for testing
+computer systems.
+
+It appears POV is being used a lot for benchmarking the new multi-core CPU's,
+since as it turns out our SMP scaling is quite good. A few links in case
+you're interested:
+
+  http://www.hothardware.com/viewarticle.aspx?page=3&articleid=878&cid=1
+  http://www.anandtech.com/cpuchipsets/showdoc.aspx?i=2846&p=2
+  http://www.extremetech.com/article2/0,1697,2021830,00.asp
+  http://www.xbitlabs.com/articles/cpu/display/kentsfield-preview_6.html
+  http://www.legitreviews.com/article/396/3/
+  http://www.pcper.com/article.php?aid=303
+  http://www.hardwaresecrets.com/article/383/3
+
+I threw a little real-time-raytracing demo together using the beta for use at
+IDF, it turned out rather fun really. I modified our internal image class
+(which we use for, amongst other things, holding files that have been read
+from disk for use as image maps) to accept a live stream from a webcam. I
+image-mapped that onto the sky sphere and then set up an internal continuous
+render loop with a fixed scene (BSP gave us about 40% on that particular
+scene) and a moving camera that simulated an infinite zoom over a blobby
+mirrored landscape (think of zooming into a Menger sponge - it looks infinite
+but it's only about 20 frames repeated).
+
+The net result was fairly hypnotic, dunno why, but you could see a live view
+of yourself reflected in a strange landscape moving underneath, hard to
+describe (I had output turned off for speed). But it was interesting enough I
+will probably add the feature back in properly for folks to play with now
+that multi-core systems are getting affordable and are fast enough to
+experiment with RTR at viewable resolutions. FWIW I was getting about 7 FPS
+at 320x240 no AA on that scene using a four cores. (I also did a zoom into a
+mirrored menger, which was even more hypnotic, but a little too slow for the
+demo (4 FPS max).)
+
+----
+
+If you're interested in our RTR demo, here it is:
+
+  http://www.povray.org/beta/rtr/
+
+For best effect, run it on a machine that has a webcam (the image is mapped
+into the scene). Otherwise be sure to turn off 'use_vidcap' in the scene
+files.
+
+With four cores I get about 10-12 FPS with rtr-menger.pov at 320x240.
+
+Two POV-Ray RTR related benchmarking articles:
+
+  http://www.legitreviews.com/article/412/10/
+  http://www.legitreviews.com/article/412/19/
+
+----------------------------------------------------------------------------
+
+Pick-up Sticks and the Room of Dice, by Eric Haines
+
+The typical way to build a BVH is Kay & Kajiya's method, sorting along one
+axis, splitting in half, sorting the children cells' contents along the next
+axis, splitting in half, etc. All the objects in the cell go into one child
+or the other, based entirely on their centroid location compared to the
+splitting plane. The main alternative is Goldsmith & Salmon's approach of
+dropping objects into the existing hierarchy, letting them attach as makes
+sense at the time. However, this greedy algorithm is unappealing in that it
+feels like it's giving up knowledge we have of the scene as a whole. The fact
+that it works much better when the order of objects is randomized is logical,
+but seems a bit trusting to luck. Experimental evidence bears this out:
+Havran, Mahovsky, and others have found Goldsmith & Salmon to be inferior to
+top-down approaches (see Havran's technical report, "On Fast Construction of
+Spatial Hierarchies for Ray Tracing",
+http://domino.mpi-inf.mpg.de/internet/reports.nsf/NumberView/2006-4-004; a
+shorter version appears at the RT06 Symposium).
+
+Imagine a scene with three objects: say a room with two chairs in it, in
+opposite corners of the room. You want to make a bounding volume hierarchy
+for it in some form, with each object included only once inside the tree. In
+searching for a splitting plane, you find one that divides the two chairs,
+one from another. However, if you use the traditional method of putting
+objects in either one child or the other (and so not letting them attach
+separately to the parent node), the room itself must be included with one
+child or the other. So one child bounding box is as large as the parent
+bounding box! What good will such a child bounding box do? Intersecting it
+gives no additional new information, since you already know at that point
+that the parent bounding box is intersected.
+
+Imagine another scene, where you have a room containing 1023 dice. At each
+level of the BVH, the set of objects is split into two groups. For example,
+from the root parent node there are two children, one containing 512 dice,
+the other containing 511 dice and the room object itself. This second child
+has a bounding box the same size as the parent's. Now split that box into two
+children. Again, one child will have 255 dice and the room, so the same size
+bounding box again. This goes on all the way down to the leaf nodes, at which
+point the room finally is separate from all the dice; all the room's
+ancestors have the same bounding box, so are a waste to intersect. For our
+1023 dice room, there are then 9 of these child boxes, each a parent of the
+next, that must *always* be tested for intersection whenever a ray hits the
+scene's root bounding box, and never provide new information when
+intersected. A total waste.
+
+The problem is that the room itself must always get inserted in one child
+bounding volume or another. So in this case it seems entirely justified to
+have the room itself (or its bounding box) be one of the two children of the
+root node. Say we find a better split for a parent bounding box's objects by
+using surface area heuristics (SAH), like Goldsmith & Salmon use, but doing
+top-down processing. One idea to catch such big objects in the parent is to
+check the relative size of any objects "split" by (i.e. overlapping) this
+splitting plane. An object hit by this splitting plane could be either large
+or small. In our room with dice example, the room object is always hit by the
+splitting plane, and so is large. A die hit by the splitting plane is small.
+If you allow child bounding boxes to overlap a bit, any dice hit by the split
+plane could be instead placed inside one child box or the other without
+seriously increasing the surface area of the child box (i.e., without
+increasing the chance the child box is hit).
+
+For example, you might try a rule of checking if a "split" object would
+extend either new child bounding box to be, say, 10% larger in surface area
+than it would be without the "split" object. Any objects that could not fit
+in a slightly-expanded child bounding box could then be put in their own
+separate bounding box. *All* of the other objects (unsplit, or split but
+small) are then put in a separate bounding box, which is then divided
+normally, using the computed split plane. This preserves the binary tree
+structure of the hierarchy while also leaving larger objects in the levels of
+the tree closer to the root. Doing so allows the smaller objects to be
+efficiently bound by further bounding box subdivisions.
+
+                           Root
+             +--------------------------+
+    Large, Split Objects     Unsplit and Smaller Split Objects
+                          +--------------------------------------+
+             Objects Below Split Plane(*)      Objects Above Split Plane(*)
+
+(*) plus small split objects that can fit inside the child without increasing
+the bounding box too much.
+
+Havran et al. point out that Guenther and Gaede talk about the problem of
+different sized objects and that they propose putting such objects in the
+node itself as separate children, i.e. children of an internal node. This is
+qualitatively the same as (though probably faster than) using an unbalanced
+binary tree, really, as such a binary tree can "simulate" having more than
+two children for a parent by having an "extra" bounding box between, i.e.
+
+       A
+    +--+--+
+    B  C  D
+
+can be simulated by:
+
+       A
+    +-----+
+    B     E
+        +---+
+        C   D
+
+This is essentially what we're doing here, putting large objects in B and
+creating node E to perform the actual split of the smaller objects.
+
+This algorithm of checking if an object is too large and should be separated
+out early on works for the room of dice case: the room is noted as being
+quite large and is immediately made a child of the root node. It is always
+tested whenever the root node is intersected, which avoids wastefully
+intersecting 9 bounding boxes each ray.
+
+Another attribute that does not get used by most "split in the middle"
+strategies is the effect of the split on the resulting child bounding boxes.
+For example, imagine this is the data set, each "*" being an object:
+
+  +-------------------------------+
+  |***************A***B           |
+  |                               |
+  |                               |
+  |                   ************|
+  +-------------------------------+
+
+Evaluating this set of objects along the horizontal axis by a simple split
+cost function would cause a split to occur around point A. What we really
+would prefer is a split at point B, as the two children boxes will then
+tightly bound the two separate lines of objects. Adding code to track the
+total size of the bounding volumes formed by each split plane is less
+additional work than it might appear. You simply need a separate pass over
+the data, going from right to left and adding each object in turn, storing
+the right-side bounding box for each potential split plane. Then when you
+sweep from left to right you build up the left-side bounding box
+incrementally. At each split plane location then tested you will have the
+exact left-side bounding box of the objects left of the split, and can
+retrieve the exact right-side bounding box, so giving a much better estimate
+of how good a splitting plane would perform.
+
+My point is simply this: I believe the rules we have for forming bounding
+volume hierarchies are still somewhat weak and do not take full advantage of
+the fact that bounding volumes can overlap and can trim space in all three
+dimensions when splitting a set of objects in two. Splitting kd-trees
+optimally is well researched, with the surface area heuristic working quite
+well. (Though even then, theoretical and practical results can differ:
+Havran's thesis points out that in theory we should look at the log of the
+number of objects on each side of the splitting plane, since we're going to
+further subdivide this set of objects and so access it in a log(N) fashion.
+As Havran discovered, splitting works better in practice when weighted by the
+number of objects, not its log.) Splitting BVHs optimally, and deciding
+whether to allow inclusion of children at internal nodes (vs. leaf node boxes
+only), doesn't feel fully solved to me, or even solved just for today's
+current CPU architectures. The additional effect of the split along one axis
+and the fact that it often decreases the size of one or both child bounding
+boxes along the other two axes is also not accounted for in a simple split
+evaluation system.
+
+Here's an example of a scene, call it the pick-up sticks scene, in which
+splitting planes (or, for that matter, any other scheme I know) for forming
+BVH's will get the wrong answer:
+
+             |       |
+         |   |   |   |
+         |   |   |   |
+         |   |   |   |
+   ------+---+---+---+-------
+         |   |   |   |
+    -----+---+---+---+------
+         |   |   |   |
+   ------+---+---+---+-------
+         |   |   |   |
+    -----+---+---+---+------
+         |   |   |   |
+         |   |   |   |
+         |   |   |   |
+         |       |
+               P
+
+With each horizontal and vertical line representing a separate object, a
+"sort the centroids" splitting plane strategy might make a vertical split at
+location P, producing two child boxes with just about *the same* dimensions
+as the original parent box, because the horizontal objects' centroids force
+these objects into both boxes, forcing them to be larger. Surface areas can't
+really get used properly by sweeping a plane along either axis. The right
+answer is to group all the horizontal lines into one child box and all the
+verticals into the other box: both boxes overlap considerably, but both are
+smaller and lead to better subdivision further down the tree. How to figure
+this out, short of brute force exploration of all groups (for 8 objects a
+mere 2**7-1, 127 pairs of sets, in this case), is not clear to me.
+
+Last issue I pointed out a bunch of work by different research groups, all on
+the idea of BIH; see RTNv19n1. This research is an interesting hybrid of
+bounding volumes and kd-trees. Havran et al. call the structure spatial
+kd-trees (SKD-trees), first developed by Ooi et al. in 1987. Woop calls them
+bounded kd-trees (B-KD trees). Wald et al. call them AH-trees. I'm choosing
+BIH only because it's quick to type and looks quite different.
+
+Think about what a pair of child bounding volumes does on a single axis. A
+parent bounding box goes from point A to B on an axis:
+
+    A--------------------------B
+
+A pair of children in can cause up to four more planes to become relevant for
+testing rays. That is, each child has two planes for its own new bounding
+box, so four planes are added between A and B, inclusive:
+
+    A--------------------------B
+       | left |   | right |
+
+The left and right boxes could also overlap, of course:
+
+    A--------------------------B
+       |     left     |
+                |    right   |
+
+In actuality, at the first division the two children can add only two planes
+total, if the parent box tightly bounds its contents and if all objects are
+put into one child or the other. The left box must have its left plane be at
+"A", the right must have its right plane at "B" (again, they could overlap):
+
+    A--------------------------B
+    | left  |    |    right    |
+
+If this were not the case, then the original parent bounding box could have
+been smaller to begin with: why would it encompass space to the left of the
+left box, for example, if nothing was in that space? However, the four plane
+system does make more sense after a few levels of BIH, as nodes can be split
+on other axes such that the outer two planes have an effect.
+
+BIH and related work favor using this type of "two interior plane" approach
+for subdividing a scene. It's a fascinating hybrid approach, drawing on the
+strengths of kd-trees and bounding volumes. The split plane does not create
+duplicate pointers to the same (split) object, as it does with the kd-tree:
+split objects get put in the left or right child. What's clever about BIH is
+that it gets the benefit of bounding volumes by avoiding object duplication
+at the split and by tightly bounding each child if there are no objects that
+get split, ignoring the effect of how the bounding volumes shrink along the
+other two axes. One nice feature is that the amount of memory needed is known
+in advance, since no object is listed in more than one cell. This lack of
+duplication also means that BIH can work well for dynamic data in animated
+scenes, an important topic in real-time ray tracing. The traversal gets much
+of the benefit of kd-trees, with closest hits causing termination at some
+point, as there are just a few extra test cases involved. The children
+essentially inherit the left and right planes of the parent, so these do not
+need to be intersected again when each child is visited.
+
+However, after just one BIH division, it's quite possible to have empty space
+between parent and child. For example, say you have this scene:
+
+   +-------------+
+   |PPPP OOOOO   |
+   |PPPP OOOOO   |
+   |             |
+   |             |
+   |   QQQQQ  RRR|
+   |   QQQQQ  RRR|
+   +-------------+
+
+with four objects O, P, Q, R. You split along the vertical axis, forming two
+horizontal planes bounding the two groups:
+
+   +-------------+
+   |PPPP OOOOO   |
+   |PPPP OOOOO   |
+^-------------------^
+   |             |
+   |             |
+V-------------------V
+   |   QQQQQ  RRR|
+   |   QQQQQ  RRR|
+   +-------------+
+
+Now each child will benefit from a vertical split, P separated from O and Q
+from R. But there is blank space that is to the right of the O object, and to
+the left of the Q object, that is not trimmed away by the two-plane BIH
+approach:
+
+        < >
+   +----|-|--------+
+   |PPPP| |OOOOO   |
+   |PPPP| |OOOOO   |
+^-------------------^
+   |               |
+   |               |
+V-------------------V
+   |   QQQQQ|  |RRR|
+   |   QQQQQ|  |RRR|
+   +--------|--|---+
+            <  >
+
+Using four separate planes would help here, trimming away the empty space.
+Some research has been done with these, but overall the extra complication
+during testing seems to outweigh the benefits. Really, in the case above,
+only 3 planes for each child (not 4) give some benefit, so there seems to be
+a sort of "case by case basis" as to what is best.
+
+Just to give some counterpoint to the interest in this new type of algorithm,
+one critique I've heard of the BIH family of techniques is that it performs
+well on data where the triangles are about the same size, e.g. laser-scan
+data, but not very well when the triangle sizes differ. This in fact ties in
+with the pick-up sticks and the room of dice examples: the room itself is
+large compared to the dice. By allowing only leaf node bounding boxes (or BIH
+structures) to hold objects, the room essentially makes either the left or
+right segment in any split to be as large as the parent. I can imagine under
+these circumstances that larger objects cause the overall efficiency of the
+hierarchy to be weakened by the "room of dice" effect.
+
+It's obvious for any given ray tracer and scene there's an optimal BVH for
+it, one that runs the fastest. Finding this optimal BVH via brute force
+quickly becomes undoable for more than a few objects. The question I still
+have after all these years is, "What is the difference between this ideal
+optimal BVH and ones formed by the various algorithms used today?" Basically,
+are we close to optimal today with some particular formation and traversal
+algorithms? If not, how much more could be gained? How scene and data
+dependent are the current schemes? We've certainly learnt that grid
+efficiency schemes are good when the distribution of objects themselves is
+fairly isotropic (no clustering in a single cell, e.g. teapot in a stadium or
+even just high density of similar sized objects in one location). How does
+the distribution of object sizes affect bounding volume hierarchies and their
+efficiency? I suspect when objects are about the same size and orientation we
+do quite well achieving near-optimal BVHs. It's the pick-up sticks and room
+of dice scenes that can cause us problems.
+
+Data structures like skd-trees were originally developed for sets of points,
+not objects with volumes. When the objects are point-like (i.e. relatively
+small compared to the current bounding box being subdivided), skd-trees work
+quite well. Where the problem gets interesting is when objects do not follow
+this assumption. The pick-up sticks and room of dice cases could be shrugged
+off as pathological, but I have to disagree. Synthetic scenes will often have
+simple ground planes or other large pieces of geometry around the fringe.
+Objects like pipes are indeed long objects that extend a considerable
+distance in a single direction.
+
+Also, remember that this sort of problem can happen at any box in the
+hierarchy. 5 levels down you might run into miniature pick-up sticks or room
+with dice situations (or a hundred others; I've presented only two) that
+break the "point-like" assumption for your current bounding box. I've offered
+a possible direction for research to improve efficiency for the room of dice
+situation, but do not see any easy way to cope with the pick-up sticks scene
+efficiently at this point.
+
+----------------------------------------------------------------------------
+
+SIMD Ray/Box Intersection, by Thierry Berger-Perrin <tbptbp@gmail.com>
+
+I've coded a coherent BVH RTRT and naturally along the way I had to come up
+with a SSE friendly & robust ray/box intersection. It was later posted here,
+http://www.flipcode.com/cgi-bin/fcarticles.cgi?show=65014
+
+Abstract:
+
+In their excellent paper "A Cross-Platform Framework for Interactive Ray
+Tracing" (http://www.uni-koblenz.de/~cg/publikationen/cp_raytrace.pdf),
+Markus Geimer and Stefan Müller propose a branchless SIMD friendly variation
+of the slab test. It's extremely fast but there's a catch, under some
+conditions (say (box_min-pos) == 0 while inv_dir = inf) a NaN is produced and
+due to the way SSE min/max works, it ends up with a bogus result. Here's an
+attempt to fix that corner case while keeping things tight. It also works
+with flat voxels and take around 33 cycles on a good day (compared to the 17
+cycles of the original version), if you have a decent compiler (wink wink,
+nudge nudge).
+
+The code on my page is a bit ugly. The basic idea is to filter NaNs in a
+typical slab test made branchless with mere min[ss|ps]/max[ss|ps] due to the
+exotic Intel specific feature that says that for those instructions: "If a
+value in the second operand is an SNaN, that SNaN is returned unchanged to
+the destination (that is, a QNaN version of the SNaN is not returned). If
+only one value is a NaN (SNaN or QNaN) for this instruction, the second
+operand (source operand), either a NaN or a valid floating-point value, is
+written to the result." That's much faster than any of those ugly SSE
+conditional move sequences.
+
+The scalar version is sub-optimal, I haven't put much effort into it and
+given the nature of SSE it's a lost cause. But it works really nicely for
+packets (i.e. 4 rays vs 1 box, or 2 vs 1 with doubles).
+
+No, I don't have recent timing to back up my claims.
+
+I contacted Geimer & Müller about this fix, they took notice and produced an
+Altivec version but I've never seen it. On the other hand Syoyo Fujita has
+published such version http://lucille.atso-net.jp/blog/?p=14 which was
+further refined as:
+http://lucille.atso-net.jp/svn/angelina/simd/raybox_intersection/
+
+----------------------------------------------------------------------------
+
+Random Numbers, Efficiency, and Other Things, by John Stone
+(johns@ks.uiuc.edu)
+
+I've been working on Tachyon (http://jedi.ks.uiuc.edu/~johns/raytracer/)
+recently, adding various things like ambient occlusion lighting, texturing
+functions needed for molecular visualization, making the scene format more
+compact, and so on. One of the weaknesses of the previous versions of the
+code that became obvious while implementing ambient occlusion lighting
+relates to random number generation, proper seeding, and so on.
+
+For some time, I've been using a very fast (but statistically unsound) random
+number generator which I made thread-safe, and portable. It worked very well
+in most cases, but I started seeing various sampling artifacts when using
+large numbers of antialiasing samples, and particularly when also performing
+ambient occlusion lighting with a goodly number of samples. I suspected my
+RNG or at least my use of it, and indeed with some testing and using separate
+number streams for AO lighting, depth of field, and antialiasing samples I
+got better results.
+
+After these initial experiments, I began looking into recent papers on RNGs
+which evaluated them based on both performance and their statistical
+properties. I've been fascinated both by what I learned about the statistical
+performance of various RNGs, and also the speed of various implementations
+people have come up with.
+
+This is one of my favorite references thus far (see the paper PDF at the
+bottom of the page):
+
+  http://www.iro.umontreal.ca/~simardr/testu01/tu01.html
+
+I've also been harvesting various usenet snippets posted by George Marsaglia,
+who is the author of the "Diehard" RNG test suite:
+
+  http://www.stat.fsu.edu/pub/diehard/
+
+As one might guess, implementing and using the various published RNGs in
+practice puts a different light on them. One of the RNGs (Mersenne Twister)
+that is very popular for its combined statistical and computational
+performance characteristics when tested standalone ended up having a
+noticeably detrimental effect on performance when I tested it in actual use
+in Tachyon. This problem is presumably due to extra cache misses caused by
+references to an internal 624 element state vector used in the process of
+generating random numbers. For small test scenes, the MT RNG was faster than
+the others. When rendering large scenes where cache utilization really
+counts, MT lost as much performance relative to others as it had gained in
+the case of the small test scenes.
+
+Some of the other RNGs which are very fast in many evaluations I've seen lose
+much of their advantage by the time you make them thread safe. Some of the
+most efficient formulations I've seen are implemented as preprocessor macros
+which access global or static data, and so they don't translate well into a
+multithreaded world.
+
+After testing various RNGs for a couple of weeks now, I now see that there
+are even more avenues I haven't explored. There are RNGs specifically
+designed to generate floating point numbers, avoiding much of the usual
+integer arithmetic and taking pains to avoid integer to floating point
+conversions which are very slow on some platforms (e.g. pre-SSE x86).
+
+Here's a nice paper about RNG methods that directly generate floating point
+random number values, avoiding the speed hit:
+
+  www.doornik.com/research/randomdouble.pdf
+
+One of the other complications I've run into during testing is that when one
+runs a ray tracer or other code in parallel, and you want the different CPUs
+working with independent random number streams that aren't correlated with
+each other, you have to come up with a scheme to reliably seed the RNGs such
+that each CPU/thread/etc gets its own random number stream. In playing with
+the faster/simpler RNGs I know about, I discovered that some of them had big
+weaknesses in terms of the ease of seeding them arbitrarily. Some of them
+produce very bad streams with certain seeds, which showed up while testing my
+code on a machine with a large CPU count requiring a lot of independent
+streams. There are serious random number generation libraries out there that
+do all of this for you, but I'd previously hoped it wasn't so tricky to get
+it right. I'm now starting to think that it's not a coincidence that there
+are serious libraries for this purpose... :-) One of the libraries that some
+people using monte carlo methods seem to like is SPRNG:
+
+  http://sprng.cs.fsu.edu/
+
+I'm currently holding out for a simpler RNG that I can use without linking in
+significant extra library like SPRNG, but we'll see how it pans out.
+
+One "cheap sleazy hack" I've done was to use different RNGs for different
+parts of rendering code based on the quality and relative lack of correlation
+of the streams needed for different algorithms.
+
+All this has led me to wonder what RNGs other people in the rendering field
+have used, like, dislike, etc...
+
+----
+
+[I asked John whether float to long conversion was still a slow operation on
+CPUs, and how SSE gets around this problem. - EAH]
+
+Yes, apparently it remains problematic for the main x86 FPU due to the need
+to change the FPU control word, which causes a long pipeline stall. This page
+has a description of the problem, the new C99 'lrint' and 'lrintf' functions
+which are intended to address the problem, and benchmark results using gcc:
+
+  http://mega-nerd.com/FPcast/
+
+Intel added SSE instructions for integer truncation and other operations to
+improve performance. Agner Fog's web site has several useful performance
+optimization documents that contain detailed information on this. See page
+117 of the "Optimizing software in C++" PDF, the "Conversions between
+floating point numbers and integers" section.
+
+Also, see the "Optimizing subroutines in assembly language" PDF, section 17.5
+"Converting from floating point to integer (all processors)":
+
+  http://www.agner.org/optimize/
+
+While we're on these interesting subjects, here's another good read. This is
+an interesting page with fun low-level floating point tricks that Rick LaMont
+(RenderDotC) pointed out to me a while back:
+
+  http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm
+
+----------------------------------------------------------------------------
+
+Comments on Uniform Sampling and Cones, by Andrew Kensler (aek@cs.utah.edu)
+
+I wanted to mention a couple of things about the uniform sampling of the
+sphere in the recent issue:
+
+First, the final algorithm given by Pete appears as the answer to question
+6.08 in the comp.graphics.algorithm FAQ and seems to be based on the
+newsgroup post wmEgVDG00VUtMEhUwg@andrew.cmu.edu (reproduced at
+http://www.math.niu.edu/~rusin/known-math/96/sph.rand)
+
+Second, the algorithm can be easily modified to produce unit vectors uniform
+over the sphere and constrained to be within a cone near a given unit vector.
+If h is the cosine of the half-angle of the cone, then changing the cosT line
+to:
+
+    cosT = h + (1-h)*r
+
+will produce unit vectors constrained to be as close to the +Z axis as
+desired, depending on h. Then a simple change of basis will re-orient them as
+needed. The nice thing about this approach is that the cost is constant
+regardless of how tight the cone is. Setting h=-1 samples all directions
+uniformly over the sphere; h=0 samples over the hemisphere; h just below 1
+gives a very small, tight cone. I've used this to quickly implement simple
+glossy reflections with controllable fuzziness.
+
+----------------------------------------------------------------------------
+
+Review of "Foundations of Multidimensional and Metric Data Structures", by
+Eric Haines
+
+I received a review copy of Hanan Samet's "Foundations of Multidimensional
+and Metric Data Structures",
+http://www.amazon.com/Foundations-Multidimensional-Structures-Kaufmann-Graphics/dp/0123694469/realtimerenderin.
+This is a massive book: 1024 large glossy pages, it weighs in at 5-1/2
+pounds. It is also massive in the sheer amount of information presented, with
+2077 references. It is also suprisingly affordable at $59.95.
+
+I tested this book in a number of ways, since I don't have the time or energy
+to read it all. First I looked up spatial kd-trees (the new hot topic in ray
+tracing, see "BIH" elsewhere in this issue), and there were a few references
+scattered about, though with only a brief mention or explanation at each.
+With an average of two references per page, it's hard to do much more than a
+brief mention of most articles. The information presented was correct, but
+there was fairly little information on why spatial kd-trees might offer some
+benefit.
+
+My favorite odd data structure, the loose octree, was not in the index.
+However, Thatcher Ulrich's paper about it was in the references. About half
+of the references point to the sections in which the reference was
+mentioned, a feature I like and that should become standard in all books
+with references. Looking at these, I found Ulrich's structure was noted as a
+loose quadtree instead. The useful properties of the loose octree
+("instant" insertion and easy deletion) were alluded to in an exercise for
+the section but otherwise not mentioned. This data structure was contrasted
+with the MX-CIF quadtree, but to do so properly you had to flip between two
+sections more than 200 pages apart. This happened elsewhere in the book,
+sections will often reference other closely related sections that are far
+away. The approach of the book is to categorize all data structures into
+those dealing with point data, object-based and image-based image
+representations, intervals and small rectangles, and high-dimensional data.
+In practice there is a fair bit of overlap in these areas, hence the large
+jumps.
+
+My next test was to look up ray tracing in the index - very little there, two
+brief sentences in the book itself. There is also a reference keyword index
+in the book, with many articles related to ray tracing listed there. This
+index could be useful for literature searches on a particular topic (and I
+did find loose octree here, once I noticed this other index existed). That
+said, some of the references that I consider key to the field of ray tracing
+efficiency structures, e.g. Goldsmith & Salmon, Kay & Kajiya, or Arvo's
+summary chapter in "An Introduction to Ray Tracing", are not in the set of
+references. Other major topics also tend to be mentioned in passing, such as
+GIS. The focus of the book is the data structures themselves, the fields they
+are used in are often ancillary. This leads to a sometimes scattered mixing
+of papers using similar schemes in quite different areas.
+
+I flipped through the book reading snippets here and there. Numerous key data
+structures are described in detail, with variants covered. For example,
+classical kd-trees (used in 2D for point location) get over 40 pages of
+coverage, with many variants covered in other sections. I found the text to
+be concise, but sometimes too terse if you did not already understand the
+idea. For example, from page 2, a "trie" is:
+
+    a branching structure in which the value of each data item or key is
+    treated as a sequence of j characters, where each character has M
+    possible values. A node at depth k-1 (k>=1) in the trie represents an M-
+    way branch depending on the value of the kth character (i.e., it has M
+    possible values). Some (and at times all) of the data is stored in the
+    leaf nodes, and the shape of the trie is independent of the order in
+    which the data is processed.
+
+I'm good with the first sentence, pretty sure about the second, but then, I
+admit it, this explanation mostly lost me at the leaf nodes, and there was no
+figure or example in the book to illustrate the concept. Which may be
+something of an exception, since there is on average about one figure per
+page in this book. Reading about tries on Wikipedia
+(http://en.wikipedia.org/wiki/Trie) and looking at the example there cleared
+up what a "trie" is (though I dislike the Wikipedia's example that makes a
+trie look somewhat like a binary tree), as well as explaining where the name
+came from.
+
+This is perhaps an extreme example of how the book left me behind, many other
+parts of the book are not this opaque, but I found it disconcerting to hit
+such a snag on just the second page. I personally tend to best learn from a
+concrete example presented along with the abstract definition, so whenever
+these were lacking I felt in over my head.
+
+There are many exercises in the book, though it seems a bit of a stretch to
+use this book as a primary textbook as it's a bit *too* comprehensive; the
+exercises could be useful for providing ideas to instructors, however. As
+mentioned before, there is a fair bit of cross-referencing, which is good.
+Also worth mentioning is that there is also an author and credit index.
+
+This is in many ways an incredible work, it's astounding that one person
+could write it. It is a fine reference book for serious researchers of
+spatial data structures: if you want to find most or all of the work related
+to a particular 2D or 3D data structure, this book is the place to start for
+gathering references to read. If you are already well-versed in a particular
+data structure's uses and benefits, you may find the book's presentation
+useful for pointing out nuances or connections with other fields. Fields like
+computer graphics often gain from cross-pollination of ideas from other
+areas, so I can imagine a diligent reader gaining new insights into existing
+problems.
+
+The breadth of the book is amazing, skipping from polygon simplification to
+nearest neighbor to boundary representation to discrete Fourier transforms to
+Voronoi diagrams, to name but a few. However, it is this breadth that
+ultimately weakens this book for me as a source for casual learning. There is
+so much to cover that much of it is explained in a lean and clipped fashion.
+If you already understand the data structure and area being discussed, you'll
+be fine, but otherwise you might slog through and learn much of the "how" but
+miss out on the "why". The problem is that the book wants to be
+comprehensive, pulling in articles from everywhere, over all time periods
+(computer architectures and bottlenecks change, so some techniques become
+dated because of this evolution). These articles often come from disparate
+fields with different concerns, and there is little analysis of the strengths
+and weaknesses of all the various alternate schemes. Nor can there be, as
+this would make for a book at least twice the length or more. So, there is a
+tension in the book of wanting to teach about a data structure, while also
+wishing to be comprehensive across all related fields, while also knowing
+there's a page limit.
+
+It's a difficult book to just dip into: many sections build on previous
+sections, on down to sub-sections, e.g. Section 2.1.5.2.2. Without already
+knowing what was in the previous sections, it is usually difficult to skip
+around and sample much of the book; you have to start at major sections to
+know what is going on. Which is often true to some extent in many books, but
+this interconnectedness makes it a bit difficult to learn just the basics of
+a particular data structure. Most spatial data structures are separable
+entities, they can be explained without needing extensive background in other
+structures. This book is less of a reference than as an attempt to give a
+unified view of all these related data structures.
+
+My overall reaction is that if I want to learn about a particular area and
+spatial data structure, I would instead first seek out a book that is
+specifically about that field and so explains the data structure's use in
+that context. As it is, this book is a bit like 5 different books from 5
+different fields spliced together into one volume, with connections made
+between various sections along the way. You never quite know what the next
+section will bring.
+
+These are merely my own initial impressions, based on spending just a few
+hours with the book. In the final analysis, I recommend you check it out
+yourself and form your own opinion. There is more information about the book
+at http://www.cs.umd.edu/~hjs/quadtree.
+
+----------------------------------------------------------------------------
+END OF RTNEWS

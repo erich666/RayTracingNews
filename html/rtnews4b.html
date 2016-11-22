@@ -1,0 +1,1033 @@
+<!-- html version of Volume 1, Number 9 :  -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 1, Number 9</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>September 11, 1988</FONT>
+<P><FONT size=+1>Volume 1, Number 9</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1988, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Intro
+</A></LI>
+<LI><A HREF="#art2">
+Biographical Sketches, Old and New
+</A></LI>
+<LI><A HREF="#art3">
+The Continuing Saga of MTV's Raytracer,
+</A></LI>
+by Mark VandeWettering
+<LI><A HREF="#art4">
+Public Domain Ray Tracer Q & A,
+</A></LI>
+by Mark VandeWettering
+<LI><A HREF="#art5">
+Public Domain Ray Tracer Utilities,
+</A></LI>
+by Tom Vijlbrief
+<LI><A HREF="#art6">
+Sorting Unnecessary on Shadow Rays for Kay/Kajiya?
+</A></LI>
+by Eric Haines and Mark VandeWettering
+<LI><A HREF="#art7">
+Summary of Replies to Vectorizing Ray-Object Intersection Query,
+</A></LI>
+by Tom Palmer
+<LI><A HREF="#art8">
+The Ray Tracer I Wrote,
+</A></LI>
+by George Kyriazis
+<LI><A HREF="#art9">
+New Bitmaps Library Available,
+</A></LI>
+Jef Poskanzer
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Intro
+</A></FONT>
+</H4>
+    Let's see, there's Whitted's, VandeWettering's, Kyriazis', Ohta's,
+Hartman/Heckbert's, "Pearl" on the Amiga & Atari, and a whole slew of them by
+Heckbert and friends (the Minimal Ray Tracer contest on USENET) - we're now at
+the point where the number of public domain ray tracers cannot be counted on
+one hand (and that's even if you count all the minimal RTs from Paul Heckbert's
+contest as worth one).  If nothing else, this proves ray tracing's a pretty
+trivial algorithm in its simplest form.
+<P>
+    I had hoped to talk with Tim Kay about a project he proposed at the ray
+tracing roundtable at SIGGRAPH this year, but he's in New York until the 20th.
+The kernel of the idea that he proposed was setting up ftp space on one of the
+Caltech computers and letting people check in their test ray-tracers there.
+<P>
+    In the meantime this issue quickly filled up with biographical sketches
+and the winnowings of USENET, especially Mark VandeWettering's efforts.  His
+ray tracer looks fairly nice, doing much more than spheres - check it out!
+<P>
+-- Eric
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+Biographical Sketches, Old and New
+</A></FONT>
+</H4>
+# Ben Trumbore - photorealism, efficiency, interactive ray tracing<BR>
+# Cornell University Program of Computer Graphics staff
+<P>
+Greetings!  I am a candidate from the Reformed Radiosity party.  My campaign
+pledge:  I will not be satisfied until computer generated images are
+indistinguishable from photographs.  Like all right-thinking Americans, I
+believe ray tracing is the means to this end.  Better images at better
+runtimes!  And I strenuously deny allegations that I spend too much time
+working with stochastic textures - every modern life needs balance.  I foresee
+a world where interaction and ray tracing live in harmony, and I want you to
+be a part of that world.  Thank you!
+<P>
+______________
+<P>
+A few more new people have joined our ranks since last issue.
+<P>
+# Tom Palmer - applied ray tracing: realism & modeling for molecular graphics<BR>
+# National Cancer Institute<BR>
+# P.O. Box B  Bldg 430<BR>
+# Frederick, MD 21701<BR>
+# (301) 698-5797<BR>
+alias tom_palmer <A HREF="mailto:palmer@ncifcrf.gov">palmer@ncifcrf.gov</A><BR>
+<P>
+I'm currently interested in vectorizing ray-object intersection calculations.
+However, my primary interest is in applied ray tracing.  The wide variety of
+primitives and the realistic rendering make ray tracing an ideal (if slow)
+method for creating images of extremely complex molecular models.  I'm
+currently working with a (chemist) collaborator experimenting with visualizing
+electon density, electrostatic potential, molecular orbitals, etc. via ray
+tracing primitives.
+<P>
+A note from Tom Palmer:
+<P>
+Doug Turner has left UNC and is now with Apple in Cupertino doing ray casting
+and textures on their Cray.  I would guess his email address to be
+<A HREF="mailto:turner@apple.com">turner@apple.com</A>, but don't hold me to it.
+<P>
+______________
+<P>
+# Phillip Getto - Real-time radiant energy simulation :-), sampling,<BR>
+#                 object-oriented rendering, efficient intersections calcs.<BR>
+# CII 7309<BR>
+# Center for Interactive Computer Graphics<BR>
+# Rensselaer Polytechnic Institute<BR>
+# 110 8th St.<BR>
+# Troy, NY 12180-3590<BR>
+# (518) 276-6491<BR>
+alias   phil_getto      <A HREF="mailto:phil@yy.cicg.rpi.edu">phil@yy.cicg.rpi.edu</A><BR>
+<P>
+______________
+<P>
+# George Kyriazis - parallel ray-tracing<BR>
+# ECSE Dept., JEC,<BR>
+# R.P.I.,<BR>
+# Troy, NY 12180<BR>
+# e-mail: <A HREF="mailto:kyriazis@turing.cs.rpi.edu">kyriazis@turing.cs.rpi.edu</A><BR>
+#       <A HREF="mailto:kyriazis@yy.cicg.rpi.edu">kyriazis@yy.cicg.rpi.edu</A><BR>
+alias   george_kyriazis <A HREF="mailto:kyriazis@yy.cicg.rpi.edu">kyriazis@yy.cicg.rpi.edu</A><BR>
+<P>
+I will (pretty soon) be parallelizing a ray tracer to work with an AT&T Pixel
+Machine.  One of the problems there will be sharing pixels when doing
+anti-aliasing.  Stochastic sampling may be considered.  Also implementing
+algorithms for high hit/miss ratio in intersection calculations.
+<P>
+______________
+<P>
+# Stephen Spencer - accurate diffuse light calculation, antialiasing<BR>
+# The Ohio State University Advanced Computing Center for the Arts and Design<BR>
+# 1224 Kinnear Road<BR>
+# Columbus Ohio  43212<BR>
+# (614) 292-3416<BR>
+alias   stephen_spencer <A HREF="mailto:spencer@tut.cis.ohio-state.edu">spencer@tut.cis.ohio-state.edu</A><BR>
+<P>
+Currently employed by The Ohio State University Advanced Computing Center for
+the Arts and Design as a Graphics Research Specialist I designing graphics
+software for research and instructional use by students and staff working in
+computer animation and industrial design.  Graphics interests include ray-
+tracing (somewhat obviously) and radiosity, and improving the realism of
+computer-generated images in general.
+<P>
+______________
+<P>
+# Greg Turk - rendering equation & tracing from lights<BR>
+# UNC at Chapel Hill<BR>
+# P.O. Box 26<BR>
+# Chapel Hill, NC 27514<BR>
+# (919) 962-1918<BR>
+alias greg_turk <A HREF="mailto:turk@unc.cs.edu">turk@unc.cs.edu</A><BR>
+<P>
+I'm currently looking at ways to speed up collision detection for complex
+objects.  I'm betting that collision detection can be made fast enough to
+be useful for interactive graphics applications, and I plan to see how far
+I can get on Pixel-planes, my favorite one-of-a-kind graphics engine.
+<P>
+______________
+<P>
+# Roy Hall<BR>
+# Program of Computer Graphics<BR>
+# 120 Rand Hall<BR>
+# Cornell University<BR>
+# Ithaca, NY 14853<BR>
+# (607)255-6711<BR>
+alias   roy_hall        <A HREF="mailto:roy@wisdom.tn.cornell.edu">roy@wisdom.tn.cornell.edu</A><BR>
+<P>
+        I've been writing renderer's commercially for some time and have
+        been concentrating on efficiency and eas of use.  Recently I returned
+        to academics as faculty at Cornell.  I expect to be pursuing research
+        for a variety of rendering techniques, ray tracing being high on the
+        list.  Just finished a book "Illumination and Color in Computer
+        Generated Imagery" - pub. by Springer-Verlag - should be out Sept
+        or Oct.  In addition to graphics research I'm teaching architecture
+        classes in lighting and acoustics, and computer applications to
+        architecture.
+<P>
+______________
+<P>
+# Mark VandeWettering<BR>
+# Master's Student<BR>
+# University of Oregon Computer And Information Sciences<BR>
+# <A HREF="mailto:markv@cs.uoregon.edu">markv@cs.uoregon.edu</A><BR>
+alias   mark_vandewettering     <A HREF="mailto:markv@cs.uoregon.edu">markv@cs.uoregon.edu</A>
+<P>
+I am currently interested in most aspects of raytracing, radiosity and
+realistic image synthesis.  I am the author of a public domain raytracer
+that has been distributed via USENET and is available from me via e-mail
+and via anonymous ftp.  I am interested in developing a "library" of
+public domain code for doing image synthesis, and learning as much as I
+can in the mean time.
+<P>
+To download my raytracer, ftp to <A HREF="ftp://drizzle.cs.uoregon.edu">drizzle.cs.uoregon.edu</A> (128.223.4.1)
+and login as ftp, with your name as a password.  The README file in the
+pub directory can guide you further.
+<P>
+[by way of introduction, attached is Mark's reply to some of my comments about
+his ray tracer]
+<P>
+I would be pleased to see my raytracer compared to other raytracers.  I am not
+a "serious" graphics person, my Master's thesis work is in functional
+programming languages and parallelism, but I do seem to spend alot of my off
+hours trying to hack graphics stuff.
+<P>
+I chose Kajiya/Kay bounding volumes because they seemed much simpler than
+octree methods, and still offered good speed.
+<P>
+As for all your suggestions:
+<P>
+<PRE>
+        - The `t' option is not mentioned the `?' options list. [This option
+        prints out a `.' after each scan-line is computed]
+</PRE>
+<P>
+        Thanks, will include it.  I just hacked -t in to get some idea
+        of how fast the raytracer was...
+<P>
+<PRE>
+        - how does your implementation of Kay/Kajiya work?  That is, what
+          sorting algorithm is going on with insert/delete that ensures you
+          of getting the lowest key at the beginning of the list?  It's been
+          but 10 years since I last studied sorting algorithms, so I am
+          not up-to-date on what your scheme is all about (the powers of
+          two comparisons and swaps).
+</PRE>
+<P>
+        I use a simple heap implementation and use it as a priority
+        queue.  I forget which data structures book I hauled it out of,
+        but it isn't the most efficient in the world.  But then again,
+        when I profiled it, it wasn't in the "Top Ten Most Deadly" list
+        either, so I guess its okay for now.  The next release will try
+        to document it better.
+<P>
+<PRE>
+        - More comments throughout the code would be a plus.  If you spend an
+          hour or two now, you'll save us all a lot of time.  Most of the stuff
+          looks fairly straightforward, but stuff like the Kay queue sort
+          could use at least a reference as to where to go next.
+</PRE>
+<P>
+        Guilty as charged.  That is why I didn't try to post it to
+        comp.sources.unix.  The next release will be cleaned up,
+        commented, and have a better Makefile.
+<P>
+You comments on the lighting model are good, the lighting model needs to be
+reworked at least slightly, and probably a lot more than slightly.  I haven't
+got to it yet, but it is coming.
+<P>
+Compilation and link problems: I have a much more generic Makefile for it, but
+I accidently distributed my "totally hacked one".  The next release will
+probably be configurable to a wider variety of systems.
+<P>
+I have already received mail from a person at Tek Research Labs who is possibly
+thinking of adapting my raytracer to their new Motorola 88000 based workstation
+as a demo.  I said he could send me one if it sold any :-) I am glad to see my
+effort so warmly received, and treated with some level of enthusiasm.  Nobody
+has come back and said "Gosh, how stupid" so I will probably wish to extend
+some further effort to keep it up.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+The Continuing Saga of MTV's Raytracer,
+</A></FONT>
+by Mark VandeWettering
+</H4>
+I thought I would take the time to present a list of the software
+that I am making available via anonymous ftp.  All these things have
+been distributed via netnews over the past few years, so I dusted them
+off and made them available.
+<P>
+I encourage anyone who has some interesting programs to contribute to
+send me mail.  Unfortunately, I cannot allow people to upload directly,
+because our space is VERY tight here (the anonymous ftp login puts you
+in a subdirectory of mine, and I have a puny quota), but I would like to
+maintain a library of freely distributable source code for computer
+graphic applications.  I hope to have viewers for sun and X11 soon, as
+well as an imagen printer dump.  Anyone working on such things, write me
+if you would like to have your work distributed.
+<P>
+Anyway, here is the current contents of the directory ~/pub on
+<A HREF="ftp://drizzle.cs.uoregon.edu">drizzle.cs.uoregon.edu</A> (128.223.4.1):
+<P>
+-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut
+<P>
+This directory contains:
+<P>
+<PRE>
+        raytrace.shar           my raytracer as it was posted to usenet's
+                                comp.graphics group
+</PRE>
+<P>
+<PRE>
+        rpi-tracer.shar         A raytracer written by George Kyriazis,
+                                posted to comp.graphics.
+</PRE>
+<P>
+<PRE>
+        teapot.nff.Z            compressed nff file of the famous
+                                "teapot", as patches for the above
+                                raytracer.
+</PRE>
+<P>
+<PRE>
+        mini-ray.shar           The winner to paul heckbert's minimal
+                                raytracing contest.  Wow!  Fits on a
+                                screen, once it has been "raped".
+</PRE>
+<P>
+<PRE>
+        ohta-tracer.shar        A REALLY FAST spheres only raytracer.
+                                Was originally posted to comp.graphics.
+</PRE>
+<P>
+<PRE>
+        haines.shar             A slightly out of date version of Eric
+                                Haines' NFF Standard Procedural Database
+                                stuff.  I am working on getting the
+                                latest and greatest from netlib, but
+                                they seem to be slow.
+</PRE>
+<P>
+Any questions or bugs with this software can be send to <A HREF="mailto:markv@cs.uoregon.edu">markv@cs.uoregon.edu</A>.
+<P>
+Thank you,
+<P>
+Mark
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Public Domain Ray Tracer Q & A,
+</A></FONT>
+by Mark VandeWettering
+</H4>
+Reply-To: <A HREF="mailto:markv@drizzle.UUCP">markv@drizzle.UUCP</A> (Mark VandeWettering)
+Organization: University of Oregon, Computer Science, Eugene OR
+<P>
+[Mark's public domain RT was posted to USENET a week or two ago.  This is a
+note he posted to USENET just recently.]
+<P>
+First of all thanks to everyone who has expressed an interest in my raytracer.
+I wish to address some questions globally rather than to each individual.
+<P>
+Q:      The raytracer seems to work, but how do I display it on my XXX
+        brand workstation?
+<P>
+A:      Well, there are many answers to this.  We only have black and
+        white sun workstations here, so I have to display my images on
+        an ancient and probably quite rare Tek4115 graphics terminal
+        which has only 8 bitplanes.
+<P>
+        What I do is take the output of this raytracer, and pipe it
+        through a program to convert it to the Utah Raster Toolkit
+        format that we use here at the U of O.  We have several programs
+        to display these files on a wide variety of devices.  The utah
+        Raster Toolkit is available via anonymous FTP from <A HREF="ftp://cs.utah.edu">cs.utah.edu</A>,
+        or you can send them some amount of money, and they can make you
+        a tape (I don't have exact details here).
+<P>
+        The only problem with this is the guts of my conversion program
+        are not original, they consist of some code that Eugene Miya
+        posted to this group awhile ago (never write what you can beg,
+        borrow or steal!), and I would have to contact him before I
+        distributed said program.  Also you would have to get the Utah
+        Raster stuff as well.
+<P>
+        If I get enough mail to warrant posting this stuff, and if I can
+        verify it with Eugene Miya, I will post my programs.
+<P>
+        My advice:  Don't bother hacking pic.c too much.  Write a
+        program to display general raster images of an rgb bitmap to
+        whatever device you have on hand.  Use dithering if you want
+        black and white.  And then POST such programs, so that others
+        can use/improve them.
+<P>
+Q:      Where can I get Eric Haines' NFF package?
+<P>
+A:      Simple:  I will be reposting it right after this message.
+<P>
+Q:      Does anyone have any nifty NFF file objects to trace?
+<P>
+A:      Well, I just converted the teapot to NFF file format (using
+        faceted polygons) but it is pretty big.  If someone can suggest
+        an anonymous FTP site where I could put some of these, as well
+        as other revisions to my programs, I would make them available
+        from there.
+<P>
+Q:      What else am I working on?
+<P>
+        Well, I would like to add motion blur, and statistically
+        optimized anti-aliasing.  I added code so that you can specify
+        colors by name rather than by guessing colors.  Parametric
+        patches, tori, and surfaces of revolution would be nice to add
+        too. As soon as I feel the raytracer has been significantly
+        extended, I will repost.
+<P>
+Finally, a bug fix (courtesy of Cameron Elliot):
+<P>
+Your program will crash on some machines unless you do the following...
+(The buf array was too small.)
+<P>
+Modify screen.c:
+<P>
+<PRE>
+/* Was before cam...
+        [Ed:  Gadzooks, Mark can sure be stupid sometimes....]
+        curbuf = (Pixel *) malloc (xres * sizeof (Pixel)) + 1 ;
+        buf = (Pixel *) malloc (xres * sizeof (Pixel)) + 1;
+*/
+        curbuf = (Pixel *) malloc ((xres+1) * sizeof (Pixel)) ;
+        buf = (Pixel *) malloc ((xres+1) * sizeof (Pixel));
+</PRE>
+<P>
+---<BR>
+Cameron Elliott         Portable Cellular Communications<BR>
+Path: ...!uw-beaver!tikal!ptisea!cam
+<P>
+Thanks again for the bug fix, and the nice comments!
+<P>
+Keep the mail coming!
+<P>
+Mark VandeWettering
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Public Domain Ray Tracer Utilities,
+</A></FONT>
+by Tom Vijlbrief
+</H4>
+&gt;From: <A HREF="mailto:tom@tnosoes.UUCP">tom@tnosoes.UUCP</A> (Tom Vijlbrief)<BR>
+Newsgroups: comp.graphics<BR>
+Organization: TNO Institute for Perception, Soesterberg, The Netherlands<BR>
+<P>
+In article (<A HREF="mailto:2683@uoregon.uoregon.edu">2683@uoregon.uoregon.edu</A>) markv@drizzle.UUCP (Mark VandeWettering) writes:
+<P>
+&gt;       My advice:  Don't bother hacking pic.c too much.  Write a<BR>
+&gt;       program to display general raster images of an rgb bitmap to<BR>
+&gt;       whatever device you have on hand.  Use dithering if you want<BR>
+&gt;       black and white.  And then POST such programs, so that others<BR>
+&gt;       can use/improve them.<BR>
+<P>
+<PRE>
+This is a posting of two programs which convert the output
+of the raytracing program to Sun rasterfile format.
+</PRE>
+<P>
+Ray2sun maps to greyscale.
+<P>
+Cray2sun maps to color (3 bit red, 3 bit green and 2 bit blue)
+<P>
+The program Ray2sun works fine, but Cray2sun should be much smarter
+to produce better quality pictures.  (E.g. use dithering...)
+<P>
+Tom
+<P>
+<PRE>
+Tom Vijlbrief
+TNO Institute for Perception
+P.O. Box 23                             Phone: +31 34 63 62 77
+3769 DE  Soesterberg                    E-mail: tnosoes!<A HREF="mailto:tom@mcvax.cwi.nl">tom@mcvax.cwi.nl</A>
+The Netherlands                             or: uunet!mcvax!tnosoes!tom
+</PRE>
+<P>
+[Code is 200+ lines, so is left out.  Either check USENET or write Tom or
+me for the code. - Eric]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Sorting Unnecessary on Shadow Rays for Kay/Kajiya?
+</A></FONT>
+ by Eric Haines and Mark VandeWettering
+</H4>
+[What follows is a discussion (still ongoing - please do add your two cents)
+between Mark and I about the Kay/Kajiya efficiency scheme.  Mark uses
+Kay/Kajiya in his ray tracer for shadow rays, which I feel is superfluous.
+It's a minor point, as the sorting, as Mark points out, is usually not a
+killer as far as where the time is spent.  However, it was worth it to me
+as I found I misunderstood a part of the algorithm and found a better way
+(I think) to implement Kay/Kajiya than was originally presented.  Tim Kay:
+care to comment?]
+<P>
+Eric's first note:
+<P>
+- Note that Kay/Kajiya sorting is unnecessary for shadow rays.  This
+  is because you don't care about the closest object, but rather
+  whether any object blocks the light.  As soon as you get a shadow
+  test hit, you can skip the rest of the intersection test - you're
+  done.
+<P>
+________________
+<P>
+Mark's reply:
+<P>
+    Is this totally correct?  What we want to know is if there is a
+    shadow between the light source and the point we hit.  If we
+    sort the list, we can stop when we find the first item, but we
+    can also stop when the bounding volumes or the intersection are
+    greater than the distance to the shadow (the point isn't
+    shadowed)  Because the heap insertion/deletion routines take so
+    little time, it would seem that this would be a good
+    optimization.  But yes, I agree that some optimization of shadow
+    rays could be made.
+<P>
+________________
+<P>
+Eric's response:
+<P>
+The way a sorted list is created is to intersect a BV, get its distance, and
+put its children on the list using this distance as a key.  For shadowing, the
+distance to the light acts as the maximum cutoff from the start.  So, when a BV
+is intersected it is either beyond the light or not.  If beyond, its children
+are not put on the candidate list.  If not beyond, the children can be placed
+anywhere within the candidate list (since we want any intersection).
+Essentially, there should never be anything on the candidate list which is
+keyed as having a distance beyond the light.  Only when you actually test the
+candidate can you tell if it is beyond, at which point you throw it out.  So,
+there should never be a point where you can say "all these candidates are
+beyond the light", as such candidates should not be on the test list, no matter
+whether the list is sorted or not.  QED, the sorting is unneeded.  I should
+mention that Jeff Goldsmith also figured this out independently - has anyone
+else noticed that sorting is unnecessary for shadowing?
+<P>
+Kay/Kajiya is something of a Catch-22 (but a great method, nonetheless), since
+the sort key is the candidate's parent's distance, and what we really would
+like is to have the sort key be the candidate's distance.  To get this distance
+we intersect the candidate.  Now we have the distance (if any) we would have
+liked to used to sort the candidate, but it's too late: we've intersected the
+candidate and so taken it off the candidate list (possibly replacing it with
+its children).
+<P>
+However, there might actually be a slight gain in practice if the list is
+sorted by distance for shadow rays.  Say you have two bounding volumes, each
+with N objects.  If both BV's are intersected, and the further bounding volume
+contains the light, then it's probably worth intersecting the objects in the
+closer BV first.  This is because the further bounding volume probably contains
+objects which are beyond the light, while the closer one has objects more or
+less between the light and the test point.  I believe this gain is negated by
+the following counter-argument: what if the closer BV contains the intersection
+point, and the further does not contain the light or the intersection point?
+By the previous logic, we should intersect the further BV's children first.
+"Scene dependence" seems to be the key phrase here: are your shadowing objects
+closer to the intersection point (e.g. a board with a bunch of nails pounded
+into it seems worth testing the closer nails first), or closer to the light
+source (e.g. the light source has a lampshade).
+<P>
+In light (ho ho) of this, I maintain that Kay & Kajiya sorting is unnecessary
+for shadow rays.  However, there are certainly other interesting sorting
+strategies worth considering for shadow rays.  Some possibilities:
+<P>
+<PRE>
+  - Object complexity (i.e. if you have a choice, try intersecting the
+    sphere before trying the spline surface).
+  - Object size (big objects cast big shadows.  This idea actually
+    helps enhance "shadow caching", where the last object to shadow a
+    light is then tested first for the next shadow ray for that light.
+    A big object will have more shadow coherence and so will result
+    in less having to find another shadowing object.  Say a light is
+    blocked by both a sphere and a fine mesh of polygons.  The sphere
+    will have much more shadow coherence than each polygon, resulting
+    in many fewer misses).
+  - Function sorting.  I haven't thought about this much, but one might be
+    able to come up with a function which simulates the probability
+    that a given object will be intersected.  The function could be based
+    on the closest intersection distance, or the farthest, or some of each.
+    One possible theory:  BV's which neither overlap the light or the
+    intersection point have a higher probability of containing a shadowing
+    object, for the reasons given earlier.
+</PRE>
+<P>
+Anyway, just some thoughts. - Eric Haines
+<P>
+________________
+<P>
+Mark's response:
+<P>
+        > The way a sorted list is created is to intersect a BV, <BR>
+        > get its distance, and put its children on the list using <BR>
+        > this distance as a key.  <BR>
+<P>
+This isn't the way it is currently implemented in my raytracer, and
+glancing back at Kay/Kajiya, it seems contrary to their intent as well.
+If I intersect the parent volume, I intersect with the bounding volume
+of each of the children, and use THAT distance as the key for insertion.
+This does seem to require alot more bounding box intersections, but
+still has exactly the same number of ray/object intersections.
+<P>
+&gt; Kay/Kajiya is something of a Catch-22 (but a great method,<BR>
+&gt; nonetheless), since the sort key is the candidate's parent's distance,<BR>
+&gt; and what we really would like is to have the sort key be the<BR>
+&gt; candidate's distance.  To get this distance we intersect the<BR>
+&gt; candidate.  Now we have the distance (if any) we would have liked to<BR>
+&gt; used to sort the candidate, but it's too late: we've intersected the<BR>
+&gt; candidate and so taken it off the candidate list (possibly replacing it<BR>
+&gt; with its children).<BR>
+<P>
+I think that this argument falls in light of my correction above.  Each
+time an object is queued, it is keyed by the actual distance to its own
+bounding volume, not the distance to the parent.
+<P>
+My feeling is that if you add the proper cutoffs, that Kajiya/Kay
+testing for shadows is still just about the same cost as not bothering
+to sort.   I actually implemented early cutoffs within the framework of
+Kajiya/Kay BVs, and it only gave an improvement of 2% on average for the
+Standard Procedural Database objects.  This DOESN'T mean that it is
+correct, because I am uncertain just how "typical" the SPD stuff is, but
+it would seem to be that for certain objects, the gain is small.
+<P>
+________________
+<P>
+Eric's response:  Well, I made a semantic error.  Kay/Kajiya calls a
+"candidate" an object (real or BV) whose bounding volume has been hit and
+whose children have not been intersected.  So, you're right in that the
+algorithm does put an intersected BV on the list as a candidate, and not
+its children.  In practical terms this will mean less sorting: you only
+have to insert the intersected BV into the list, and not all its children
+(all of which have the same key).  My confusion arose from the fact that
+Kay/Kajiya puts a bounding volume around every object, which I don't (a simple
+triangle or a sphere is about the same to intersect than a bounding box, and
+a BV around a sphere (which is a BV, after all), seems excessive).
+<P>
+    Interestingly enough, looking over the original paper, I now have to agree
+with you:  sorting on shadow rays using their original algorithm makes sense.
+However, I have found that there is an inefficiency in the Kay/Kajiya algorithm
+as presented at SIGGRAPH (which I never noticed before):  in their figure 7,
+where they outline the algorithm, (page 275 of the SIGGRAPH '86 proceedings)
+it is stated, "if the ray hits the BV, insert the child into the heap".  Then
+when they get to the "while" loop they state that "while heap is non-empty and
+distance to top node &lt; t" the loop should be performed.  Seems to me that they
+are inserting children which could be immediately culled.  I believe a faster
+algorithm results from:
+<P>
+<PRE>
+        If the ray hits the bounding volume and distance &lt; t
+            Insert the child into the heap
+</PRE>
+<P>
+In other words, if the distance to the BV is greater than the present t (which
+is the closest intersection distance of a real object), its child can
+immediately be discarded (instead of inserting it into the heap).
+<P>
+    Using this slight modification of Kay/Kajiya now means that sorting is
+unnecessary.  In the original, it was worth checking the distance because
+objects which were beyond the present t distance (for shadowing, the distance to
+the light) were actually inserted on the heap.  By realizing that these
+children have no business on the heap (they're beyond the light, right?) and
+not inserting them in the first place, there is then no reason to sort what
+is then actually put on the heap.
+<P>
+[This is where things stand for now.  My original mistake of misreading Kay
+and Kajiya was partly due to my using a more efficient algorithm:  not adding to
+the heap if the child cannot possibly be hit.  I had never noticed that this
+was not how they wrote it up, as I assumed they would compare all intersections
+against the closest real intersection distance. - Eric]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+Summary of Replies to Vectorizing Ray-Object Intersection Query,
+</A></FONT>
+by Tom Palmer
+</H4>
+<PRE>
+From: <A HREF="mailto:palmer@ncifcrf.gov">palmer@ncifcrf.gov</A> (Thomas Palmer)
+Newsgroups: comp.graphics
+</PRE>
+<P>
+This is a summary of the replies I received to my query regarding
+vectorizing ray-object intersection calculations.
+<P>
+________________
+<P>
+&gt;From: stan!dodge!<A HREF="mailto:dave@boulder.Colorado.EDU">dave@boulder.Colorado.EDU</A> (Dave Plunkett)<BR>
+<P>
+   You might try any of:
+<P>
+<PRE>
+   "The Vectorization of a Ray Tracing Program for Image Generation",
+   with J.M. Cychosz and M.J. Bailey.
+   Cyber 200 Applications Seminar, NASA Goddard, October 1983.
+</PRE>
+<P>
+<PRE>
+   "Ray Tracing on a Cyber 205",
+   Conference Proceedings VIM-40,
+   San Francisco, CA, April 1984.
+</PRE>
+<P>
+<PRE>
+   "A Vectorized Ray Tracing Algorithm",
+   Masters Thesis,
+   Purdue University, West Lafayette, IN.  August 1984.
+</PRE>
+<P>
+<PRE>
+   "The Vectorization of a Ray Tracing Algorithm for Improved Execution Speed",
+   with M.J. Bailey.  IEEE Computer Graphics and Applications,
+   Vol. 5, No. 8, August 1985.
+</PRE>
+<P>
+   The last two of these are more readily accessible.  These papers describe my
+Master's research, a vectorized ray tracing algorithm for use on csg objects
+that was written using explicit vector syntax on the 205.  If you have any
+specific questions, I'd be glad to answer any that I can.
+<P>
+Dave Plunkett<BR>
+Solbourne Computer, Inc.<BR>
+Longmont, CO 80501<BR>
+(303) 772-3400<BR>
+...sun!stan!dave
+<P>
+________________
+<P>
+&gt;From: <A HREF="mailto:3ksnn64@ee.ecn.purdue.edu">3ksnn64@ee.ecn.purdue.edu</A> (Joe Cychosz)<BR>
+<P>
+I have developed a vectorized ray tracing package for the CYBER 205.  Part of
+the work is discussed in Plunkett's CG&A paper.  Nelson Max also had a paper on
+vectorized intersections of height fields used to produce Carlos' Island.  Saul
+Youseff at Florida State has also been doing some work using raytracing for
+collector plate design.
+<P>
+Both Plunkett and myself use a ray queue to collect rays, and then vectorize
+such that serveral rays are intersected with an object.  This approach does
+make it difficult to implement these accelerated ray traces such as Mike
+Kaplan's "Constant Time Ray Tracing".
+<P>
+I have a variation of Kaplan's approach that sub-divides the object space and
+uses bit operators to elliminate unnecessary intersection calculations.
+<P>
+Joe Cychosz
+<P>
+________________
+<P>
+&gt;From: mcvax!tokaido.irisa.fr!priol@uunet.UU.NET (Thierry Priol -- Equipe Hypercubes)<BR>
+<P>
+There are few works on vectorization of the ray-object intersection.  One of
+these works was done by Plunkett on a CDC-CYBER. The reference is:
+<P>
+[reference same as in Plunkett's note]
+<P>
+Personally, I work in ray-tracing on a parallel MIMD (hypercube iPSC/2)
+computer.
+<P>
+<PRE>
+Thierry PRIOL
+Institut de Recherche en Informatique et Systemes Aleatoires
+Campus de Beaulieu
+35042 RENNES CEDEX
+FRANCE
+e-mail : mcvax!inria!irisa!priol
+</PRE>
+<P>
+_____________________
+<P>
+&gt;From: <A HREF="mailto:mbc@a.cs.okstate.edu">mbc@a.cs.okstate.edu</A> (Michael Carter)<BR>
+<P>
+     The real problem in the inner ray tracing loop is not ray-object
+intersections, but ray-bounding volume intersections.  If you refer to the
+article by Kay and Kajiya from SIGGRAPH '86, they describe a method of breaking
+down the OBJECT space into a hierarchical data structure, and intersecting rays
+against simple bounding volumes constructed from sets of planes.  This method
+queries the objects in the order that they occur along the ray, therefore, NO
+SORTING IS NEEDED.  It takes at least three pairs of planes to completely
+enclose an object, therefore this intersection calculation could be done
+efficiently, in parallel (on perhaps more than one object at a time!)  on a
+vector machine.  Most of the time is spent in this ray-bounding volume
+intersection loop, and not in the ray-object intersection algorithms.
+<P>
+     I realize that this is not something that the C compiler can do
+on its own, but remember: no pain -- no gain.  (-:
+<P>
+<PRE>
+--
+Michael B. Carter
+Department of Electrical and Computer Engineering, Oklahoma State University
+UUCP:  {cbosgd, ea, ihnp4, isucs1, mcvax, pesnta, uokvax}!okstate!mbc
+ARPA:  mbc%okstate.csnet@csnet-relay.arpa
+</PRE>
+<P>
+[The statement "NO SORTING IS NEEDED" appears to be in error - sorting is an
+integral part of the Kay & Kajiya algorithm. - Eric H.]
+<P>
+________________
+<P>
+&gt;From: <A HREF="mailto:spencer@tut.cis.ohio-state.edu">spencer@tut.cis.ohio-state.edu</A> (Stephen Spencer)<BR>
+<P>
+[included in last issue]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art8">
+The Ray Tracer I Wrote,
+</A></FONT>
+by George Kyriazis
+</H4>
+<PRE>
+From: kyriazis@rpics (George Kyriazis)
+Newsgroups: comp.graphics
+Organization: RPI CS Dept.
+</PRE>
+<P>
+        Since I had too many requests for my ray tracer, I am posting it
+here [USENET].  Hope that will help people that can't get mail to me.  I finally
+had the source put so people can read it, but it's not definite that it'll
+stay where it is.  Right now it is on <A HREF="ftp://life.pawl.rpi.edu">life.pawl.rpi.edu</A> (128.113.10.2) in
+pub/ray.  Can you please comment back on it ?  Thanks.
+<P>
+So, here it is:
+<P>
+[Deleted here, again, as it's another 900+ lines of archive.  Check USENET,
+write George or me, or ftp it as above to get a copy.  What follows are
+excerpts from his README file.]
+<P>
+        Here is a simple ray tracing program developed here at RPI.  It
+incorporates shadows, reflections and refraction together with one
+non-directional light source.  The light source can diffuse on the surfaces
+and can also give specular reflections.  The illumination model used is
+by Phong.  The only objects supported right now are spheres, but the data
+structure can be easily expanded to incorporate more objects.
+<P>
+[...]
+<P>
+        The ray tracer is written so it can be easily understood (at least
+that version), and it is fully commented.  Nevertheless, probably it won't
+be understood by a newcomer.
+<P>
+[...]
+<P>
+        Can you please inform me with any bugs that the program might have
+or any features that you want the upcoming versions to have.  This software
+was written by me, and the subsequent version will probably by produced
+by other members of the RPI chapter of the ACM.
+                                                Good luck!
+<P>
+<PRE>
+        George Kyriazis
+        <A HREF="mailto:kyriazis@turing.cs.rpi.edu">kyriazis@turing.cs.rpi.edu</A>
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art9">
+New Bitmaps Library Available,
+</A></FONT>
+Jef Poskanzer
+</H4>
+Reply-To: Jef Poskanzer (<A HREF="mailto:jef@rtsg.ee.lbl.gov">jef@rtsg.ee.lbl.gov</A>)<BR>
+Organization: Paratheo-Anametamystikhood Of Eris Esoteric, Ada Lovelace Cabal
+<P>
+The third release of the Portable Bitmap package is ready for FTPing
+from expo.lcs.mit.edu:contrib/pbm.tar.Z.
+<P>
+<PRE>
+Answers to some frequently asked questions:
+ - The decimal address of expo is 18.30.0.212.
+ - Please avoid ftp'ing from <A HREF="ftp://expo.lcs.mit.edu">expo.lcs.mit.edu</A> in between the hours of
+   9am and 6pm east coast, USA time.
+ - There may be other places to FTP it from, but I don't know of them.
+   In particular, you can't FTP it from lbl-rtsg.  Don't even try.
+ - Don't forget to set binary mode when you do the FTP.
+ - Pbmtorast and rasttopbm depend on Sun's pixrect library, and will
+   compile only on suns.
+ - Currently there is no way to get the package other than FTP.  However,
+   if comp.sources.misc ever gets going again, perhaps PBM will get
+   distributed there.  (I have sent mail to the moderator about it, and
+   have received no reply.)
+</PRE>
+<P>
+Appended is the README for PBM.  It includes a list of the major enhancements
+in this version.
+---
+Jef
+<P>
+- - - - - - - - - -
+<P>
+<PRE>
+                       Portable Bitmap Toolkit
+                       Distribution of 31aug88
+                    Previous distribution 04apr88
+</PRE>
+<P>
+Included are a number of programs for converting various bitmap formats
+to and from a portable format; plus some tools for manipulating the
+portable bitmaps.
+<P>
+<PRE>
+Major changes since the previous distribution:
+    The pbm format now has a "magic number".
+    New conversion filters brushtopbm, giftopbm, pbmtolj, pbmtomacp,
+      pbmtoxwd, and pbmtox10wd.
+    Icontopbm converter has a better parser -- it knows to skip over
+      any extraneous comments at the beginning of the icon file.
+    Pbmtops generates a different PostScript wrapper program -- it should
+      handle huge bitmaps better.
+    Xwdtopbm now handles byte-swapping correctly.
+    Pbmmake takes a flag to specify the color of the new bitmap.
+    Pbmpaste now implements 'or', 'and', and 'xor' operations as well
+      as the default 'replace'.
+Plus various minor bug fixes and enhancements.
+</PRE>
+<P>
+Files in this distribution:
+<P>
+<PRE>
+    README              this
+    FORMATS             descriptions of the various bitmap formats
+    Makefile            guess
+</PRE>
+<P>
+<PRE>
+    brushtopbm.c        convert from Xerox doodle brushes to portable bitmap
+    cbmtopbm.c          convert from compact bitmap to portable bitmap
+    giftopbm.c          convert from GIF to portable bitmap
+    icontopbm.c         convert from Sun icon to portable bitmap
+    macptopbm.c         convert from MacPaint to portable bitmap
+    rasttopbm.c         convert from Sun raster to portable bitmap
+    xbmtopbm.c          convert from X10 or X11 bitmap to portable bitmap
+    xwdtopbm.c          convert from X10 or X11 window dump to portable bitmap
+    xxxtopbm.c          convert from UNKNOWN BITMAP to portable bitmap
+
+    pbmtoascii.c        convert from portable bitmap to ASCII graphic form
+    pbmtocbm.c          convert from portable bitmap to compact bitmap
+    pbmtoicon.c         convert from portable bitmap to Sun icon
+    pbmtolj.c           convert from portable bitmap to HP LaserJet
+    pbmtomacp.c         convert from portable bitmap to MacPaint
+    pbmtops.c           convert from portable bitmap to PostScript
+    pbmtoptx.c          convert from portable bitmap to Printronix
+    pbmtorast.c         convert from portable bitmap to Sun raster
+    pbmtoxbm.c          convert from portable bitmap to X11 bitmap
+    pbmtox10bm.c        convert from portable bitmap to X10 bitmap
+    pbmtoxwd.c          convert from portable bitmap to X11 window dump
+    pbmtox10wd.c        convert from portable bitmap to X10 window dump
+
+    pbmcatlr.c          concatenate portable bitmaps left to right
+    pbmcattb.c          concatenate portable bitmaps top to bottom
+    pbmcrop.c           crop a portable bitmap
+    pbmcut.c            cut a rectangle out of a portable bitmap
+    pbmenlarge.c        enlarge a portable bitmap N times
+    pbmfliplr.c         flip a portable bitmap left for right
+    pbmfliptb.c         flip a portable bitmap top for bottom
+    pbminvert.c         invert a portable bitmap
+    pbmmake.c           create a blank bitmap of a specified size
+    pbmpaste.c          paste a rectangle into a portable bitmap
+    pbmtrnspos.c        transpose a portable bitmap x for y
+
+    libpbm.c            a few utility routines
+    pbm.h               header file for libpbm
+    macp.h              definitions for MacPaint files
+    x10wd.h             definitions for X10 window dumps
+    x11wd.h             definitions for X11 window dumps
+    bmaliases           csh script to make aliases for converting formats
+    *.1                 manual entries for all of the tools
+    pbm.5               manual entry for the pbm format
+    bitreverse.h        useful include file
+</PRE>
+<P>
+Unpack the files, edit Makefile and change the options to suit,
+make, and enjoy!  Note that if you're not on a Sun, you won't be
+able to compile rasttopbm and pbmtorast.
+<P>
+I've tested this stuff under 4.2 BSD, 4.3 BSD, and System V rel 2,
+and on both Suns and Vaxen.  Nevertheless, I'm sure bugs remain.
+Feedback is welcome - send bug reports, enhancements, checks, money
+orders, etc. to the addresses below.
+<P>
+<PRE>
+    Jef Poskanzer
+    <A HREF="mailto:jef@rtsg.ee.lbl.gov">jef@rtsg.ee.lbl.gov</A>
+    {ucbvax, lll-crg, sun!pacbell, apple, hplabs}!well!pokey
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

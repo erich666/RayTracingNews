@@ -1,0 +1,1034 @@
+<!-- html version of Volume 1, Number 5 : Tue May  2 10:09:23 EDT 1995 -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 1, Number 5</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>March 26, 1988</FONT>
+<P><FONT size=+1>Volume 1, Number 5</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1988, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction
+</A></LI>
+<LI><A HREF="#art2">
+Some Mailing List Changes and Additions
+</A></LI>
+<LI><A HREF="#art3">
+More on Shadow Testing, Efficiency, etc.,
+</A></LI>
+by Jeff Goldsmith
+<LI><A HREF="#art4">
+More Comments on Tight Fitting Octrees for Quadrics,
+</A></LI>
+by Jeff Goldsmith
+<LI><A HREF="#art5">
+Linear-time Voxel Walking for Octrees,
+</A></LI>
+by Jim Arvo
+<LI><A HREF="#art6">
+Efficiency Tricks,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art7">
+A Rendering Trick and a Puzzle,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art8">
+USENET Roundup (PECG Errata),
+</A></LI>
+by David Rogers
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction
+</A></FONT>
+</H4>
+Well, NCGA was pretty uninspiring, as it rapidly becomes more and more PC
+oriented. It was great to see people, though, and nice to escape the Ithaca
+snow and rain.
+<P>
+As far as ray tracing goes, a few companies announced products.  The AT&T
+Pixel Machine now has two rendering packages, PICLIB and RAYLIB (these may
+be merged into one package someday - I would guess that separate development
+efforts caused the split [any comments, Leonard?]).  With the addition of some
+sort of VM capability, this machine becomes pretty astounding in its ray
+tracing performance (in case you didn't get to SIGGRAPH last year, they had
+a demo of moving by mouse a shiny ball on top of the mandrill texture map:
+about a frame per second ray trace on a small part of the screen).  HP
+announced its new graphics accelerator, the TurboSRX, and with it the eventual
+availability of a ray tracing and (the first!) radiosity package as an extension
+to their Starbase graphics library.  Ardent and their Dore' package were sadly
+missing.  Apollo was also noticeable for their non-appearance.  Sun TAAC was
+there, showing off some ray traced pictures but seemingly not planning to
+release a ray tracer (the salesman claiming that whoever bought a TAAC would
+simply write their own).  Stellar was there with their supercomputer
+workstation - interesting, but no ray-tracing in sight.  Anyone else note
+anything of ray-tracing (or other) interest?
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+Some Mailing List Changes and Additions
+</A></FONT>
+</H4>
+Changed address:
+<P>
+<PRE>
+# Roman Kuchkuda
+# Megatek
+alias   roman_kuchkuda \
+        hpfcrs!hpfcla!hplabs!ucbvax!ucsd!megatek!kuchkuda@rutgers.edu
+</PRE>
+<P>
+New people:
+<P>
+I saw Gray at NCGA and got his email address.  He worked on ray tracing at
+RPI and is at Cray:
+<P>
+<PRE>
+# Gray Lorig - volumetric data rendering, sci-vi, and parallel & vector
+#       architectures.
+# Cray Research, Inc.
+# 1333 Northland Drive
+# Mendota Heights, MN  55120
+# (612)-681-3645
+alias   gray_lorig      hpfcrs!hpfcla!hplabs!gray%rhea.CRAY.COM@uc.msc.umn.edu
+</PRE>
+<P>
+By way of introduction, this from Erik Jansen:
+<P>
+I visited the Helsinki University of Technology last week and found
+there a lot of ray tracing activities going on. They are even reviving
+their old EXCELL system (Markku Tamminen did a PhD work on a spatial
+index based on an adaptive binary space subdivision in '81-'82, I met
+him in '81 and '82 and we talked at these occasions about ray tracing
+and spatial subdivision. In his PhD thesis (1982) there is a ray tracing
+algorithm given for the EXCELL method (EXtendible CELL method).
+I decided to implement the algorithm for ray tracing polygon models.
+That implementation failed because I could only use our PDP-11 at that
+time and I could have about ten cells in internal memory - too less
+for effective coherence. The program spend 95% of its time on swapping.
+So far the history).
+I told them about the RT-news and they are very interested to receive
+it. I will mail them (Charles Woodward, Panu Rekola, e.o.) your address,
+so that they can introduce themselves to the others.
+<P>
+<PRE>
+#
+# Panu Rekola - spline intersection, illumination models, textures
+# Helsinki University of Technology
+# Laboratory of Information Processing Science
+# Room Y229A
+# SF-02150 Espoo
+# Finland
+#       <A HREF="mailto:pre@kiuas.hut.fi">pre@kiuas.hut.fi</A>  (or pre@hutcs.hut.fi)
+alias   panu_rekola     hpfcrs!hpfcla!hpda!uunet!mcvax!hutcs!pre
+</PRE>
+<P>
+Panu Rekola writes:
+<P>
+I just received a message from Erik Jansen (Delft) in which he told
+me that you take care of a mailing list called "Ray Tracing News".
+(I already sent a message to Andrew Glassner on the same topic because
+Erik told me to contact him when he visited us some weeks ago.)
+Now, I would like to join the discussion; I promise to ask no stupid
+questions. I have previously worked here in a CAD project (where I wrote
+my MSc thesis on FEM elements) and since about a year I have been
+responsible of our graphics. Even though my experience in the field is
+quite short I suppose I have learned a lot while all people want to see
+their models in color and with glass etc., visualization has been the
+bottleneck in our CAD projects.
+<P>
+As an introduction to the critical members of the mailing list you
+could tell that I am a filter who read unstandard input from the models
+created by other people, manipulates the data with the normal graphics
+methods, and outpus images. The special features of our ray tracer are
+the EXCELL spatial directory (which has been optimized for ray tracing
+during the last few weeks), a new B-spline (and Bezier) algorithm,
+methods to display BR models with curved surfaces (even blend surfaces,
+although this part yet unfinished). The system will be semi-commercially
+used in a couple of companies soon (e.g. car and tableware industry).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+More on Shadow Testing, Efficiency, etc.,
+</A></FONT>
+by Jeff Goldsmith
+</H4>
+(followup to <I><A HREF="rtnews2c.html#art3">Ohta/Goldsmith correspondence</A></I> :)
+<P>
+From Jeff Goldsmith:
+<P>
+Sorry I haven't responded sooner, but movie-making has taken
+up all my time recently.
+<P>
+With respect to pre-sorting, etc.  It is important to note
+that the preprocessing time must be MUCH smaller than the
+typical rendering time.  So far this has been true, and
+even more so for animation.
+<P>
+O(n) in my writing (explicitly in print) means linear in the
+number of objects in the scene.  Obviously, it is quite likely
+that the asymptotic time complexity (a.t.c.) of any ray tracing algorithm
+will be different for the number of rays.  Excluding ray coherence
+methods and hybrid z-buffer/ray tracing methods, the current
+a.t.c. is O(n) in the number of rays for ray tracing.  Actually, I
+think it is the same for these other methods because the hybrid
+methods just eliminate some of the rays from consideration and
+leave the rest to be just as hard and the coherence methods don't
+eliminate more than, say, 1/2 of the rays, I think.  In any event,
+for the a.t.c. to become sub-linear, there can be no such fraction,
+right?
+<P>
+About space tracing: I think that I said that finding the
+closest intersection is an O(log n) problem.  I agree, though,
+that that statement is not completely correct.  Bucket sort
+methods, for example, can reduce the a.t.c. below log n.  Also,
+global sort time (preprocessing) can distribute some of the
+computation across all rays, which can reduce the time complexity.
+What about the subdivide on the fly methods?  (e.g.:
+Arvo and Kirk)  How do they fit in the scheme of things?
+I think your evaluation of the space tracing methods is correct,
+though the space complexity becomes important here, too.  Also,
+given a "full" space (like Fujimoto's demos,) the time complexity
+is smaller.  That leads to the question, "What if the time complexity
+of an algorithm depends on its input data?" Standard procedure is
+to evaluate "worst case" complexity, but we are probably interested
+in "average case" or more likely, "typical case."  Also, it would
+be worthwhile and interesting to understand which algorithms do
+better with which type of data.  We need to quantify this answer
+when trying to find good hybrid schemes.  (The next generation?)
+<P>
+At SIGGRAPH '87 we had a round table and each answered the question,
+"what would you like to see happen to ray tracing in the next year."
+My choice was to see something proven about ray tracing.  It sounds
+like you are interested in that too.  Any takers?
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+More Comments on Tight Fitting Octrees for Quadrics,
+</A></FONT>
+by Jeff Goldsmith
+</H4>
+{followup to Ruud Waij's question last issue}
+<P>
+<I><A HREF="rtnews2c.html#art4">
+previous discussion of topic</A></I>
+<P>
+    With respect to the conversation about octree testing, I've only
+done one try at that.  I just tested 9 points against the implicit
+representation of the surface.  (8 corners and the middle.)  I didn't
+use it for ray tracing (I even forget what for) but I suspect that
+antialiasing will hide most errors generated that way.
+<P>
+    Jim Blinn came up with a clever way to do edges and minima/
+maxima of quadric surfaces using (surprise) homogeneous coordinates.
+I don't think there ever was a real paper out of it, but he published
+a tutorial paper in the Siggraph '84 tutorial notes on "The Mathematics
+of Computer Graphics."  That technique works for any quadric surface
+(cylinders aren't bounded, though) under any homogeneous transform
+(including perspective!)  He also talks about how to render these
+things using his method.  I tried it; it works great and is
+incredibly fast.  I didn't implement many of his optimizations and
+can draw a texture mapped cylinder (no end caps) that fills the
+screen (512x512) on a VAX 780 in under a minute.
+<P>
+    As to how this applies to ray tracing, he gives a method for
+finding the silhouette of a quadric as well as minima and maxima.
+It allows for easy use of forward differencing, so should be fast
+enough to "render" quadrics into an octree.
+<P>
+    Bob Conley did a volume-oriented ray tracer for his thesis.
+I don't remember the details, but there'll be a long note about
+it that I'll pass on.  He mentions that his code can do index
+of refraction varying over position.  He uses a grid technique
+similar to Fujimoto's.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Linear-time Voxel Walking for Octrees,
+</A></FONT>
+by Jim Arvo
+</H4>
+    Just when you thought we had moved from octrees on to other things...
+This just occurred to me yesterday. (Actually, that was several days ago.
+This mail got bounced back to me twice now.  More e-mail gremlins I guess.)
+<P>
+<B>Linear-time Voxel Walking for Octrees</B>
+<P>
+Here is a new way to attack the problem of "voxel walking" in octrees (at
+least I think it's new).  By voxel walking I mean identifying the successive
+voxels along the path of a ray.  This is more for theoretical interest than
+anything else, though the algorithm described below may actually be
+practical in some situations.  I make no claims about the practicality,
+however, and stick to theoretical time complexity for the most part.
+<P>
+For this discussion assume that we have recursively subdivided a cubical
+volume of space into a collection of equal-sized voxels using a BSP tree
+ -- i.e. each level imposes a single axis-orthogonal partitioning plane.
+The algorithm is much easier to describe using BSP trees, and from the point
+of view of computational complexity, there is basically no difference
+between BSP trees and octrees.  Also, assuming that the subdivision has been
+carried out to uniform depth throughout simplifies the discussion, but is by
+no means a prerequisite.  This would defeat the whole purpose because we all
+know how to efficiently walk the voxels along a ray in the context of
+uniform subdivision -- i.e. use a 3DDDA.
+<P>
+Assuming that the leaf nodes form an NxNxN array of voxels, any given ray
+will pierce at most O(N) voxels.  The actual bound is something like 3N,
+but the point is that it's linear in N.  Now, suppose that we use a
+"re-traversal" technique to move from one voxel to the next along the ray.
+That is, we create a point that is guaranteed to lie within the next voxel
+and then traverse the hierarchy from the root node until we find the leaf
+node, or voxel, containing this point.  This requires O( log N ) operations.
+In real life this is quite insignificant, but here we are talking about the
+actual time complexity.  Therefore, in the worst case situation of following
+a ray through O( N ) voxels, the "re-traversal" scheme requires O( N log N )
+operations just to do the "voxel walking."  Assuming that there is an upper
+bound on the number of objects in any voxel (i.e. independent of N), this
+is also the worst case time complexity for intersecting a ray with the
+environment.
+<P>
+In this note I propose a new "voxel walking" algorithm for octrees (call it
+the "partitioning" algorithm for now) which has a worst case time complexity
+of O( N ) under the conditions outlined above.  In the best case of finding
+a hit "right away" (after O(1) voxels), both "re-traversal" and
+"partitioning" have a time complexity of O( log N ).  That is:
+<P>
+<PRE>
+                    BEST CASE: O(1) voxels    WORST CASE: O(N) voxels
+                    searched before a hit.    searched before a hit.
+                  +---------------------------------------------------+
+                  |                                                   |
+  Re-traveral     |     O( log N )               O( N Log N )         |
+                  |                                                   |
+  Partitioning    |     O( log N )               O( N )               |
+                  |                                                   |
+                  +---------------------------------------------------+
+</PRE>
+<P>
+The new algorithm proceeds by recursively partitioning the ray into little
+line segments which intersect the leaf voxels.  The top-down nature of the
+recursive search ensures that partition nodes are only considered ONCE PER
+RAY.  In addition, the voxels will be visited in the correct order, thereby
+retaining the O( log N ) best case behavior.
+<P>
+Below is a pseudo code description of the "partitioning" algorithm.  It is
+the routine for intersecting a ray with an environment which has been
+subdivided using a BSP tree.  Little things like checking to make sure
+the intersection is within the appropriate interval have been omitted.
+The input arguments to this routine are:
+<P>
+<PRE>
+    Node : A BSP tree node which comes in two flavors -- a partition node
+           or a leaf node.  A partition node defines a plane and points to
+           two child nodes which further partition the "positive" and
+           "negative" half-spaces.  A leaf node points to a list of
+           candidate objects.
+</PRE>
+<P>
+<PRE>
+    P    : The ray origin.  Actually, think of this as an endpoint of a 3D
+           line segment, since we are constraining the "ray" to be of finite
+           length.
+</PRE>
+<P>
+<PRE>
+    D    : A unit vector indicating the ray direction.
+</PRE>
+<P>
+<PRE>
+    len  : The length of the "ray" -- or, more appropriately, the line
+           segment.  This is measured from the origin, P, along the
+           direction vector, D.
+</PRE>
+<P>
+The function "Intersect" is initially passed the root node of the BSP tree,
+the origin and direction of the ray, and a length, "len", indicating the
+maximum distance to intersections which are to be considered.  This starts
+out being the distance to the far end of the original bounding cube.
+<P>
+==============================================
+<P>
+FUNCTION Intersect( Node, P, D, len ) RETURNING "results of intersection"
+<P>
+<PRE>
+    IF Node is NIL THEN RETURN( "no intersection" )
+</PRE>
+<P>
+<PRE>
+    IF Node is a leaf THEN BEGIN
+</PRE>
+<P>
+<PRE>
+        intersect ray (P,D) with objects in the candidate list
+</PRE>
+<P>
+<PRE>
+        RETURN( "the closest resulting intersection" )
+</PRE>
+<P>
+<PRE>
+        END IF
+</PRE>
+<P>
+<PRE>
+    dist := signed distance along ray (P,D) to plane defined by Node
+</PRE>
+<P>
+<PRE>
+    near := child of Node in half-space which contains P
+</PRE>
+<P>
+<PRE>
+    IF 0 &lt; dist &lt; len THEN BEGIN  /* the interval intersects the plane */
+</PRE>
+<P>
+<PRE>
+        hit_data := Intersect( near, P, D, dist )
+</PRE>
+<P>
+<PRE>
+        IF hit_data &lt;&gt; "no intersection" THEN RETURN( hit_data )
+</PRE>
+<P>
+<PRE>
+        Q := P + dist * D   /* 3D coords of point of intersection */
+</PRE>
+<P>
+<PRE>
+        far := child of Node in half-space which does NOT contain P
+</PRE>
+<P>
+<PRE>
+        RETURN( Intersect( far, Q, D, len - dist ) )
+</PRE>
+<P>
+<PRE>
+        END IF
+</PRE>
+<P>
+<PRE>
+    ELSE RETURN( Intersect( near, P, D, len ) )
+</PRE>
+<P>
+<PRE>
+    END
+</PRE>
+<P>
+=========================================================
+<P>
+As the BSP tree is traversed, the line segments are chopped up by the
+partitioning nodes.  The "shrinking" of the line segments is critical to
+ensure that only relevent branches of the tree will be traversed.
+<P>
+The actual encodings of the intersection data, the partitioning planes, and
+the nodes of the tree are all irrelevant to this discussion.  These are
+"constant time" details.  Granted, they become exceedingly important when
+considering whether the algorithm is really practical.  Let's save this
+for later.
+<P>
+A naive (and incorrect) proof of the claim that the time complexity of this
+algorithm is O(N) would go something like this:
+<P>
+<PRE>
+    The voxel walking that we perform on behalf of a single ray is really
+    just a search of a binary tree with voxels at the leaves.  Since each
+    node is only processed once, and since a binary tree with k leaves has
+    k - 1 internal nodes, the total number of nodes which are processed in
+    the entire operation must be of the same order as the number of leaves.
+    We know that there are O( N ) leaves.  Therefore, the time complexity
+    is O( N ).
+</PRE>
+<P>
+But wait!  The tree that we search is not truly binary since many of the
+internal nodes have one NIL branch.  This happens when we discover that the
+entire current line segment is on one side of a partitioning plane and we
+prune off the branch on the other side.  This is essential because there
+are really N**3 leaves and we need to discard branches leading to all but
+O( N ) of them.  Thus, k leaves does not imply that there are only k - 1
+internal nodes.  The quention is, "Can there be more than O( k ) internal
+nodes?".
+<P>
+Suppose we were to pick N random voxels from the N**3 possible choices, then
+walk up the BSP tree marking all the nodes in the tree which eventually lead
+to these N leaves.  Let's call this the subtree "generated" by the original
+N voxels.  Clearly this is a tree and it's uniquely determined by the leaves.
+A very simple argument shows that the generated subtree can have as many as
+2 * ( N - 1 ) * log N nodes.  This puts us right back where we started from,
+with a time complexity of O( N log N ), even if we visit these nodes only
+once.  This makes sense, because the "re-traversal" method, which is also
+O( N log N ), treats the nodes as though they were unrelated.  That is, it
+does not take advantage of the fact that paths leading to neighboring
+voxels are likely to be almost identical, diverging only very near the
+leaves.  Therefore, if the "partitioning" scheme really does visit only
+O( N ) nodes, it does so because the voxels along a ray are far from random.
+It must implicitly take advantage of the fact that the voxels are much more
+likely to be brothers than distant cousins.
+<P>
+This is in fact the case.  To prove it I found that all I needed to assume
+about the voxels was connectedness -- provided I made some assumptions
+about the "niceness" of the BSP tree.  To give a careful proof of this is
+very tedious, so I'll just outline the strategy (which I *think* is
+correct).  But first let's define a couple of convenient terms:
+<P>
+1)  Two voxels are "connected" (actually "26-connected") if they meet at a
+    face, an edge, or a corner.  We will say that a collection of voxels is
+    connected if there is a path of connected voxels between any two of them.
+<P>
+2)  A "regular" BSP tree is one in which each axis-orthogonal partition
+    divides the parent volume in half, and the partitions cycle: X, Y, Z, X,
+    Y, Z, etc. (Actually, we can weaken both of these requirements
+    considerably and still make the proof work.  If we're dealing with
+    "standard" octrees, the regularity is automatic.)
+<P>
+Here is a sequence of little theorems which leads to the main result:
+<P>
+<PRE>
+    THEOREM 1:  A ray pierces O(N) voxels.
+</PRE>
+<P>
+<PRE>
+    THEOREM 2:  The voxels pierced by a ray form a connected set.
+</PRE>
+<P>
+<PRE>
+    THEOREM 3:  Given a collection of voxels defined by a "regular" BSP
+                tree, any connected subset of K voxels generates a unique
+                subtree with O( K ) nodes.
+</PRE>
+<P>
+<PRE>
+    THEOREM 4:  The "partitioning" algorithm visits exactly the nodes of
+                the subtree generated by the voxels pierced by a ray.
+                Furthermore, each of these nodes is visited exaclty once
+                per ray.
+</PRE>
+<P>
+<PRE>
+    THEOREM 5:  The "partitioning" algorithm has a worst case complexity
+                of O( N ) for walking the voxels pierced by a ray.
+</PRE>
+<P>
+Theorems 1 and 2 are trivial.  With the exception of the "uniqueness" part,
+theorem 3 is a little tricky to prove.  I found that if I completely removed
+either of the "regularity" properties of the BSP tree (as opposed to just
+weakening them), I could construct a counterexample.  I think that
+theorem 3 is true as stated, but I don't like my "proof" yet.  I'm looking
+for an easy and intuitive proof.  Theorem 4 is not hard to prove at all.
+All the facts become fairly clear if you see what the algorithm is doing.
+Finally, theorem 5, the main result, follows immediately from theorems 1
+through 4.
+<P>
+SOME PRACTICAL MATTERS:
+<P>
+Since log N is typically going to be very small -- bounded by 10, say --
+this whole discussion may be purely academic.  However, just for the heck
+of it, I'll mention some things which could make this a (maybe)
+competative algorithm for real-life situations (in as much as ray tracing
+can ever be considered to be "real life").
+<P>
+First of all, it would probably be advisable to avoid recursive procedure
+calls in the "inner loop" of a voxel walker.  This means maintaining an
+explicit stack.  At the very least one should "longjump" out of the
+recursion once an intersection is found.
+<P>
+The calculation of "dist" is very simple for axis-orthogonal planes,
+consisting of a subtract and a multiply (assuming that the reciprocals of
+the direction components are computed once up front, before the recursion
+begins).
+<P>
+A nice thing which falls out for free is that arbitrary partitioning
+planes can be used if desired.  The only penalty is a more costly distance
+calculation.  The rest of the algorithm works without modification.  There
+may be some situations in which this extra cost is justified.
+<P>
+Sigh.  This turned out to be much longer than I had planned...
+<P>
+&gt;&gt;&gt;&gt;&gt;&gt; A followup message:<BR>
+<P>
+Here is a slightly improved version of the algorithm in my previous mail.
+It turns out that you never need to explicitly compute the points of
+intersection with the partitioning planes.  This makes it a little more
+attractive.
+<P>
+<PRE>
+                                                                 -- Jim
+</PRE>
+<P>
+FUNCTION BSP_Intersect( Ray, Node, min, max ) RETURNING "intersection results"
+<P>
+BEGIN
+<P>
+<PRE>
+    IF Node is NIL THEN RETURN( "no intersection" )
+</PRE>
+<P>
+<PRE>
+    IF Node is a leaf THEN BEGIN  /* Do the real intersection checking */
+</PRE>
+<P>
+<PRE>
+        intersect Ray with each object in the candidate
+        list discarding those farther away than "max."
+</PRE>
+<P>
+<PRE>
+        RETURN( "the closest resulting intersection" )
+</PRE>
+<P>
+<PRE>
+        END IF
+</PRE>
+<P>
+<PRE>
+    dist := signed distance along Ray to plane defined by Node
+</PRE>
+<P>
+<PRE>
+    near := child of Node for half-space containing the origin of Ray
+</PRE>
+<P>
+<PRE>
+    far  := the "other" child of Node -- i.e. not equal to near.
+</PRE>
+<P>
+<PRE>
+    IF dist &gt; max OR dist &lt; 0 THEN  /* Whole interval is on near side. */
+</PRE>
+<P>
+<PRE>
+        RETURN( BSP_Intersect( Ray, near, min, max ) )
+</PRE>
+<P>
+<PRE>
+    ELSE IF dist &lt; min THEN  /* Whole interval is on far side. */
+</PRE>
+<P>
+<PRE>
+        RETURN( BSP_Intersect( Ray, far , min, max ) )
+</PRE>
+<P>
+<PRE>
+    ELSE BEGIN  /* the interval intersects the plane */
+</PRE>
+<P>
+<PRE>
+        hit_data := BSP_Intersect( Ray, near, min, dist ) /* Test near side */
+</PRE>
+<P>
+<PRE>
+        IF hit_data indicates that there was a hit THEN RETURN( hit_data )
+</PRE>
+<P>
+<PRE>
+        RETURN( BSP_Intersect( Ray, far, dist, max ) )  /* Test far side. */
+</PRE>
+<P>
+<PRE>
+        END IF
+</PRE>
+<P>
+<PRE>
+    END
+</PRE>
+<P>
+<I><A HREF="rtnews1b.html#art6">
+related previous discussion of topic</A></I>
+<P>
+<I><A HREF="rtnews3a.html#art4">
+more discussion of topic</A></I>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Efficiency Tricks,
+</A></FONT>
+by Eric Haines
+</H4>
+Some people turn out to be on the e-mail mailing list but not the hardcopy
+list for the RT News.  In case you don't get the RT News in hardcopy form, I'm
+including the Efficiency Tricks article & the puzzle from it in this issue.
+<P>
+________
+<P>
+Given a ray-tracer which has some basic efficiency scheme in use, how can we
+make it faster?  Some of my tricks are below - what are yours?
+<P>
+[HBV stands for Hierarchical Bounding Volumes]
+<P>
+Speed-up #1:  [HBV and probably Octree] Keep track of the closest intersection
+distance.  Whenever a primitive (i.e. something that exists - not a bounding
+volume) is hit, keep its distance as the maximum distance to search.  During
+further intersection testing use this distance to cut short the intersection
+calculations.
+<P>
+Speed-up #2:  [HBV and possibly Octree] When building the ray tree, keep the
+ray-tree around which was previously built.  For each ray-tree node, intersect
+the object in the old ray tree, then proceed to intersect the new ray tree.
+By intersecting the old object first you can usually obtain a maximum distance
+immediately, which can then be used to aid Speed-up #1.
+<P>
+Speed-up #3:  When shadow testing, keep the opaque object (if any) which
+shadowed each light for each ray-tree node.  Try these objects immediately
+during the next shadow testing at that ray-tree node.  Odds are that whatever
+shadowed your last intersection point will shadow again.  If the object is hit
+you can immediately stop testing because the light is not seen.
+<P>
+Speed-up #4:  When shadow testing, save transparent objects for later
+intersection.  Only if no opaque object is hit should the transparent objects
+be tested.
+<P>
+Speed-up #5:  Don't calculate the normal for each intersection.  Get the
+normal only after all intersection calculations are done and the closest object
+for each node is know: after all, each ray can have only one intersection point
+and one normal.  (Saving intermediate results is recommended for some
+intersection calculations.)
+<P>
+Speed-up #6:  [HBV only] When shooting rays from a surface (e.g. reflection,
+refraction, or shadow rays), get the initial list of objects to intersect
+from the bounding volume hierarchy.  For example, a ray beginning on a sphere
+must hit the sphere's bounding volume, so include all other objects in this
+bounding volume in the immediate test list.  The bounding volume which
+is the father of the sphere's bounding volume must also automatically be hit,
+and its other sons should automatically be added to the test list, and so on
+up the object tree.  Note also that this list can be calculated once for any
+object, and so could be created and kept around under a least-recently-used
+storage scheme.
+<P>
+<I><A HREF="rtnews9a.html#art2">
+more discussion of topic</A></I>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+A Rendering Trick and a Puzzle,
+</A></FONT>
+by Eric Haines
+</H4>
+One common trick is to put a light at the eye to do better ambient lighting.
+Normally if a surface is lit by only ambient light, its shading is pretty
+crummy.  For example, a non-reflective cube totally in shadow will have all of
+its faces shaded the exact same shade - very unrealistic.  The light at the eye
+gives the cube definition.  Note that a light at the eye does not need shadow
+testing - wherever the eye can see, the light can see, and vice versa.
+<P>
+The puzzle:  Actually, I lied.  This technique can cause a subtle error.  Do you
+know what shading error the above technique would cause? [hint: assume the Hall
+model is used for shading].
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art8">
+USENET Roundup (PECG Errata),
+</A></FONT>
+by David Rogers
+</H4>
+Other than a hilarious set of messages begun when Paul Heckbert's Jell-O (TM)
+article was posted to USENET, and the perennial question "How do I find if a
+point is inside a polygon?", not much of interest.  However, I did get a copy
+of the errata in _Procedural Elements for Computer Graphics_ from David Rogers.
+<P>
+I updated my edition (the Second) with these corrections, which was generally
+a time drain: my advice is to keep the errata sheets in this edition, checking
+them only if you are planning to use an algorithm.  However, the third edition
+corrections are mercifully short.
+<P>
+____
+<P>
+From: "David F. Rogers" &lt;rochester!harvard!USNA.MIL!dfr@cornell.UUCP&gt;
+From:     David F. Rogers  (<A HREF="mailto:dfr@USNA.MIL">dfr@USNA.MIL</A>)
+Subject:  PECG correction
+Date:     Thu, 10 Mar 88 13:21:11 EST
+<P>
+<PRE>
+Correction list for PECG  2/26/86
+David F. Rogers
+</PRE>
+<P>
+There have been 3 printings of this book to date.
+The 3rd printing occurred in approximately March 85.
+<P>
+To see if you have the 3rd printing look on page 386,
+3rd line down and see if the word magenta is spelled
+correctly.  If it is, you have the 3rd printing. If not, then
+you have the 2nd or 1st printing.
+<P>
+To see if you have the 2nd printing look on page 90.  If
+the 15th printed line in the algorithm is
+<P>
+<PRE>
+  while Pixel(x,y) &lt;&gt; Boundary value
+</PRE>
+<P>
+you have the 2nd printing.  If not you have the 1st printing.
+<P>
+Please send any additional corrections to me at
+<P>
+<PRE>
+Professor David F. Rogers
+Aerospace Engineering Department
+United States Naval Academy
+Annapolis, Maryland 21402
+</PRE>
+<P>
+<PRE>
+uucp:decvax!brl-bmd!usna!dfr
+arpa:dfr@usna
+</PRE>
+<P>
+_____________________________________________________________
+<P>
+Known corrections to the third printing:
+<P>
+<PRE>
+Page    Para./Eq.       Line    Was             Should be
+<P>
+72      2               11      (5,5)           (5,1)
+82      1 example       4       (8,5)           delete
+100     5th equation            upper limit on integral should be 2
+                                vice 1
+143     Fig. 3-14               yes branch of t &lt; 0 and t &gt; 1 decision blocks
+                                should extend down to Exit-line invisible
+144     Cyrus-Beck
+        algorithm       7       then 3          then 4
+                        11      then 3          then 4
+
+145     Table 3-7       1       value for w
+                                [2 1]           [-2 1]
+
+147     1st eq.         23      V sub e sub x j V sub e sub y j
+</PRE>
+<P>
+______________________________________________________________
+<P>
+Known corrections to the second printing:  (above plus)
+<P>
+text:
+<P>
+<PRE>
+19      2               5       Britian         Britain
+36      Eq. 3           10      replace 2nd + with =
+47      4               6       delta' &gt; 0      delta'&lt; = 0
+82      1               6       set             complement
+99      1               6       multipled       multiplied
+100     1               6       Fig. 2-50a      Fig. 2-57a
+100     1               8       Fig. 2-50b      Fig. 2-57b
+122     write for new page
+186     2               6       Fig. 3-37a      Fig. 3-38a
+186     2               9       Fig. 3-38       Fig. 3-38b
+187     Ref. 3-5                to appear       Vol. 3, pp. 1-23, 1984
+194     Eq. 1                   xn +            xn -
+224     14 lines from bottom    t = 1/4         t = 3/4
+329     last eq.                -0.04           -0.13
+        next to last eq.        -0.04 twice     -0.13 twice
+        3rd from bottom         0.14            -0.14
+330     1st eq.                 -0.09           -0.14
+        2nd eq.                 -0.09           -0.14
+        3rd eq.                 -0.17           -0.27
+        4th eq.                 0.36            0.30
+                                5.25            4.65
+        last eq.                5.25            4.65
+332                     4       beta &lt;               beta &gt;
+                        6       beta &lt;               beta &gt;
+355     2nd eq.                 w = s(u,w)      w = s(theta,phi)
+385     2               5       magneta         magenta
+386                     3       magneta         magenta
+</PRE>
+<P>
+algorithms: (send self-addressed long stamped envelope for xeroxed
+             corrections)
+<P>
+<PRE>
+97      Bresenham       1       insert words  first quadrant  after modified
+                        10      remove ()
+                        12      1/2             I/2
+                        14      delta x         x sub 2
+
+117     Explicit        18      Icount = 0      delete
+        clipping
+                        18      insert          m = Large
+120                     9       P'2             P'1
+                        12      insert after    Icount = 0
+                                end if
+                        13      insert after    1 if Icount &lt;&gt; 0 then
+                                neither end        P' = P0
+                        14                      removed statement label 1
+                        15      &gt;=           &gt;
+                        17                      delete
+                        18                      delete
+                        43      y&gt;           yT&gt;
+
+122-124 Sutherland-     write for new pages
+        Cohen
+
+128     midpoint        4       insert after    initialize i
+                                                i = 1
+129                     6       i = 1           delete
+                        6       insert          save original p1
+                                                Temp = P1
+                        8       i = 2           i &gt; 2
+                        11,12   save original.. delete
+                                Temp = P1
+                        14      add statement label 2
+130                     19-22   delete
+                        24      i = 2           i = i + 1
+                        29      &lt;&gt;                &lt;&gt; 0
+                        33      P1              P
+
+143                     3       wdotn           Wdotn
+144                     20      &gt;=           &gt;
+
+176     Sutherland-     1       then 5          then 4
+        Hodgman
+177                     9       4 x 4           2 x 2
+
+198     floating        21,22   x,y             Xprev,Yprev
+        horizon
+199                     4       Lower           Upper
+200                     11-19   rewrite as
+                                if y &lt; Upper(x) and y &gt; Lower(x) then Cflag = 0
+                                if y&gt; = Upper(x) then Cflag = 1
+                                if y&lt; = Lower(x) then Cflag = -1
+                        29      delete
+                        31      Xinc            (x2-x1)
+                        36      step Xinc       step 1
+201                     4       delete
+                        6       Xinc = 0       (x2-x1) = 0
+                        12      Y1 -            Y1 + Slope -
+                        12      insert after    Csign = Ysign
+                        13      Yi = Y1         Yi = Y1 + Slope
+                        13      insert after    Xi = X1 + 1
+                        14-end  rewrite as      while(Csign = Ysign)
+                                                   Yi = Yi + Slope
+                                                    Xi = Xi + 1
+                                                    Csign = Sign(Yi - Array(Xi))
+                                                end while
+                                                select nearest integer value
+                                                if |Yi -Slope -Array(Xi - 1)| &lt;=
+                                                  |Yi - Array(Xi)| then
+                                                    Yi = Yi - Slope
+                                                    Xi = Xi -1
+                                                end if
+                                             end if
+                                         return
+
+258     subroutine Compute      N               i
+
+402     HSV to Rgb      12      insert after    end if
+                        25      end if          delete
+
+404     HLS to RGB      2       M1 = L*(1 - S)  M2 = L*(1 + S)
+                        4       M1              M2
+                        6       M2 = 2*L - M1   M1 = 2*L - M2
+                        10-12   =1              =L
+                        18      H               H + 120
+                        19      Value + 120     Value
+                        22      H               H - 120
+                        23      Value - 120     Value
+
+405     RGB to HLS      22      M1 + M2         M1 - M2
+
+figures:
+
+77      Fig. 2-39a              interchange Edge labels for scanlines 5 & 6
+        Fig. 2-39b              interchange information for lists 1 & 3, 2 & 4
+
+96      Fig. 2-57a,b            y sub i + 1     y sub(i+1)
+
+99      Fig. 2-59               abcissa of lowest plot should be xi vice x
+
+118     Fig. 3-4                first initialization block - add m = Large
+                                add F entry point just above IFLAG = -1
+                                decision block
+119                             to both IFLAG=-1 blocks add exit points to F
+
+125     Fig. 3-5                line f - interchange Pm1 & Pm2
+
+128     Fig. 3-6a               add initialization block immediately after Start
+                                initialize i, i=1
+
+                                immediately below new initialization block add
+                                entry point C
+
+                                in Look for the farthest vissible point from P1
+                                block - delete i=1
+
+                                in decision block i = 2 - change to i &gt; 2
+
+129     Fig. 3-6b               move return to below Save P1 , T = P1 block
+
+                                remove Switch end point codes block
+
+                                in Reset counter block replace i=2 with i=i + 1
+
+180     Fig. 3-34b              Reverse direction of arrows of box surrounding
+                                word Start.
+
+330     Fig. 5-16a              add P where rays meet surface
+
+374     Fig. 5-42               delete unlabelled third exit from decision
+                                box r ray?
+
+377     Fig. 5-44               in lowest box I=I+I sub(l (sub j)) replace
+                                S with S sub(j)
+_________________________________________________________________________
+</PRE>
+<P>
+Known corrections to the first printing:
+<P>
+<PRE>
+90,91   scan line seed          write for xeroxed corrections
+        fill algorithm
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

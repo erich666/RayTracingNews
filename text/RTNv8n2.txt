@@ -1,0 +1,1883 @@
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+                        "Light Makes Right"
+
+                           May 16, 1995
+                        Volume 8, Number 2
+
+Compiled by Eric Haines, 3D/Eye Inc, 1050 Craft Road, Ithaca, NY 14850
+	erich@acm.org
+All contents are copyright (c) 1995, all rights reserved
+	by the individual authors
+Archive locations:  anonymous FTP at ftp://princeton.edu/pub/Graphics/RTNews,
+	ftp://wuarchive.wustl.edu/graphics/graphics/RTNews, and many others.
+	HTML ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/html/index.html
+
+Contents:
+    Introduction
+    Ray Tracing Roundup
+    Scanline vs. Ray Tracing, by Loren Carpenter and Sam Richards
+    Pyramid Clipping, by Erik Reinhard and Erik Jansen
+    Copyrighting Raytraced Images, by J Edward Bell, Benton Holzwarth,
+	and Keith
+    Octrees and Whatnot, by Steve Worley and Eric Haines
+    Learning Radiance, by Kevin Matthews
+    Radiance vs. Pov, by "Cloister Bell"
+    Overlapping Refractors, by Steve Worley and Eric Haines
+    Raytracing Particle Systems, by Jos Stam
+    Answers/References on Cone Tracing, by Brent Baker
+    Dumb Radiosity Question, by Steve Worley and Eric Haines
+    Good Book on 3d Animation, by Scott McCaskill
+    Animation Books, by Dave DeBry
+    Fast Algorithms for 3D Graphics, by Glaeser: Any Good? by Brian Hook
+    Order of Rendering and Fast Texturing, by Bruno Levy, Dan Piponi,
+	and Bernie Roehl
+    FREE E-Mag on VR, Computer Graphics, et al: Issue 2, by David Lewis
+    Color Quantization Bibliography, by Ian Ashdown
+
+-------------------------------------------------------------------------------
+
+Introduction
+
+Today I got my latest ray tracer to work, so it's time to celebrate by
+whipping out an issue.  Life's been a tad hectic, as we've joined the real
+world and are trying to get a product out the door.
+
+One of the interesting things that came up in creating this product was that
+naming it was a nightmare.  It seems that the rate for new trademarks for
+computer software vs.  new trademarks for everything else in the world has a
+ratio of like 100 to 1.  So finding an unused real word is pretty tough.
+"Modelit"?  Sorry, taken.  Ditto with a few others.  We did a name search on
+"Perspectives", and the coast was clear.  In between the time the name search
+ended and our claim papers were filed (about 5 days), Borland had snapped up
+the name!  Anyway, we went with Trispectives (commercial alert:  which will
+run on Win95 and Windows NT, please buy a lot of them when they come out and
+help keep my kids fed and clothed.  What's it do?  Well, check out
+ftp://ftp.eye.com/TriSpectives for some info [eventually - we're still
+setting up]).
+
+So, my advice is to come up with incredibly short, stupid programs ("this one
+computes prime numbers using the Sieve of Erastothenes, this one does towers
+of Hanoi, this one converts all text to lowercase,...")  and trademark each
+one with whatever unclaimed cool words are left.  Sell a few to relatives.
+Sit back and wait for someone to want to use one, and cash in.  I expect a 10%
+cut.
+
+The other thing I've been doing is converting the back issues of the Ray
+Tracing News to HTML for the Web.  Old wine in new bottles, but there is some
+value in doing so:  it's nice to link related articles together, and I like
+being able to directly connect from the issues to ftp sites mentioned (though
+for the older issues many of those ftp sites no longer exist.  Raise your hand
+if you remember cs.uoregon.edu).  These issues are available on
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/html/index.html .  Yes,
+ftp, not http, though if you point your browser there it will look like http.
+Do I understand?  No, I leave it in Craig Kolb's hands, who kindly made a home
+for the files and set things up.
+
+My one comment is that if you, dear reader, ever undertake anything similar,
+i.e.  converting huge hunks of text to HTML, learn Perl.  It's a wonderful
+text processing language (and much much more), works on everything, is free,
+etc etc.  I could sing its praises for hours on end; instead, let me say it's
+simply the best thing I've learned about in the past year.  Anyway, my perl
+program to do the conversion is about 500 lines and automatically adds headers
+and links where it thinks it should (and it's right about 80+% of the time) -
+this language takes much of the drudgery and mind-numbing editing out of
+conversion.  Get it at ftp://ftp.cis.ufl.edu/pub/perl/.  O'Reilly & Associates
+has some good books on perl; they're at http://www.ora.com/ and check out
+the "programming" section.
+
+This issue covers some non-RT (Ray Tracing) RT's (Rendering Techniques).  I'm
+half tempted to rename this ezine the Rendering Techniques Newsletter (name
+suggested by Steve Worley), but, nah, I'll keep the old name for now.
+
+-------------------------------------------------------------------------------
+
+Ray Tracing Roundup
+
+If you'd like to join the Animator's Mailing List, mail to
+(animate-request@dsd.es.com).
+
+- Dave DeBry (debry@cs.utah.edu)
+
+--------
+
+Various Good Books
+
+Another WONDERFUL text that just come out this year from the Waite group is 3d
+Modelling lab.  It is AN EXCELLENT VERY VERY EASY read that will JUMP START
+you into the 3D world (w/rendering, raytracing, 3D modelling etc) is deemed
+"3d Modelling Lab"...  The book for $40 COMES WITH IMAGINE 2.0, this is a VERY
+VERY powerful 3d Modelling program.  I recommend it HIGHLY TO ANY graphics nut.
+It is the best $40 I have EVER spent on a book.
+
+Tricks of the Graphics Gurus & The HOW TO ANIMATE book/CD can get ya the goods
+on lots of 3D oriented procedures to use w/your new found talents from 3D
+Modelling LAB (GET IT!  Trust me!).
+
+Stuff like all these ratraced mirror balls and the like are EASY AS PIE w/this
+book & IMAGINE.  I just can't state enough... Buy it... You'll be thanking
+me... Honest.
+
+- Rich Gortatowsky (jdg@raster.Kodak.COM)
+
+--------
+
+FreeForm3D Modeler
+
+FreeForm 3D Bspline modeler brings truly affordable, super-fast Bspline
+modeling to your current 3D program rivaling that of high end workstations.
+FreeForm can output to Lightwave, Aladdin4D, Real3D2, Imagine and Caligari
+(POV and Rayshade are currently being added, as well as Renderman object)
+output, in spline format.  FreeForm has real-time object and point editing in
+all views; and a real-time, 3D space, through the camera perspective view.  In
+addition to the standard 3D tools, FreeForm has tension adjustment to Bsplines
+(giving NURB-like control, something that other Bspline modelers don't),
+deformations, rail extrusion, morph extrusion, cross sectional skinning,
+automatic Bones creation, real-time Bones manipulation and on-line help.
+FreeForm even gives Real3D2 users a faster, easier to use Bspline environment,
+and up to a 20 times faster grayscale preview curve rendering.  FreeForm 1.7+
+is $70, requires at least a 68020 with a FPU, and 1.2 megs of Ram.  Usable
+demo of V1.7 on Aminet ftp 128.252.135.4 in gfx/3D, on the Lightwave ftp
+tomahawk.welch.jhu.edu pub/LW/utils and on Compuserve.  Cash, check or money
+order to:
+
+Fori Owurowa
+1873-75 Cropsey Ave
+Brooklyn, NY 11214
+718-996-1842 12 noon to 7pm Eastern
+enigma@dorsai.dorsai.org
+
+--------
+
+Knowledge Media Ray Tracing CD ROM (a commercial)
+
+Knowledge Media, Inc.  has been selling a CD-ROM with POV and other ray
+tracing applications plus thousands of other files for two years now.  This
+CD-ROM is updated every year and lists for $ 25.
+
+The disc is titled GRAPHICS 1 Resource and it is full ( 650 Megabytes).  It
+contains more 3000 files, many of them zipped collections.  The actual file
+count exceeds 12,000.
+
+The disc contains the full POV set as well as DKB, RAYSHADE, RADIANCE,
+RENAISSANCE, RAYSLIDE, etc.  It also contains image processing, image
+converters, fractal, geometric, mapping, phigs, and image editoring
+applications.  Where source code is available it is included.  The CD is an
+ISO9660 CD and can be used on most platforms.  Where available code for every
+platform supported by the application has been included.  The disc also
+contains hundreds of objects, scenes, and images.
+
+The most recent version of this CD-ROM is being released this month (October,
+94).  The title has been changed to better reflect the contents.  The new
+title is:
+
+"GRAPHICS + : Image Processing & Ray Tracing".
+
+The pricing is still $ 25.00
+
+It not only contains the latest versions of these packages, it also has an
+easy to use Windows 3.1 visual file browser, entitled CLEAR VUE.  CLEAR VUE
+permits multiple layers of folders ( subdirectories) and instant execution of
+the Windows 3.1 applications simply by clicking on them.  Text can be read,
+images viewed, or sounds played in the same fashion.  It makes Windows 3.1 as
+easy to use as the Amiga or Macintosh.  All this for only $ 25.00
+
+Knowledge Media may be contacted at 1-800-78-CD-ROM ( 1-800-782-3766)
+or 1-916-872-7487 voice,
+1-916-872-3826 FAX,
+email: pbenson@ecst.csuchico.edu
+
+-------------------------------------------------------------------------------
+
+Scanline vs. Ray Tracing, by Loren Carpenter (loren@pixar.com) and Sam Richards
+	(samr@panix.com)
+
+Loren Carpenter (loren@pixar.com) wrote:
+>That said, look around you.  Pick some direction and point your imaginary
+>camera over there.  Now, how many pixels in that frame NEED a raytracer.
+>Who cares if the doorknob reflects your face?  Is it part of the story?  Or,
+>does the door just need a knob so it will look like a door? Why raytrace
+>99% of an image that doesn't need it?
+
+
+Sam Richards (samr@panix.com) replies:
+
+I would just like to stick up my hand in favor of the poor old Ray Tracer.  At
+Blue Sky we have a pretty good ray tracer.  When I first got to Blue Sky I was
+dubious as to how much I actually would need it.  I have been pleasantly
+surprised how much we use it.  It is partly to do with the fact that we went
+through a phase of doing shaver commercials (which require diffuse reflections
+as well as normal reflections).  But where it is really useful is having the
+ability of saying "what would this scene look like if it were in the real
+world" (We can do radiosity, too!).
+
+Sometimes having gotten a single frame that looks very real we then figure out
+how to cheat it using similar techniques to what a renderman user might do.
+Often the render times are low enough that we don't need to do that and simply
+render it as final.  While I agree that for a large part of the environment
+you don't need a ray tracer there are quite a lot of object types that do have
+diffuse reflections.
+
+I followed your advice and picked some direction in the room I am sitting at.
+In practically every direction I looked at I could see nice soft shadows.  The
+problem with shadow maps is that you have to define the radius of the shadow,
+however in the room I am in I can see the shadows getting blurier according to
+the distance all over the room.  The overhead light has a diffuse reflection
+in the glossy ceiling.  Diffuse reflections are everywhere (the floor, and
+numerous metal surfaces around the room).  And that's not even talking about
+the ambient light in the room.
+
+All the things I saw in my room can be achieved, with varying degrees of success
+with renderman and probably many other commercial and public domain scan line
+renderers.  However it does require operator intervention.  The nice thing
+about ray-tracers is that you don't have to think about it!  You just give the
+lights a radius and the shadows that they cast are soft and correct.  We
+definitely pay a rendering cost for this.  But as machines get quicker, the
+more the computer should do automatically.
+
+However, currently there is a downside, which is that it is definitely slow,
+there have been some jobs that I would dearly loved to have RenderMan, however
+there are other jobs where if all I had was renderman I would have had many
+nightmares over trying to figure out how to render the scene.
+
+In my ideal world, I would have both a scan-line and ray-tracing renderman, so
+that I at least could switch on the ray-tracing when I really needed it for
+particular objects.  This would at least give me the speed of the scan-line
+renderers and the power of the ray-tracers when I need it.
+
+-------------------------------------------------------------------------------
+
+Pyramid Clipping, by Erik Reinhard (erik@duticg.twi.tudelft.nl) and Erik Jansen
+
+[The paper concerning this work will be presented at the Sixth Eurographics
+Rendering Workshop in Dublin. -EAH]
+
+Within a student project by Maurice van der Zwaan an implementation has been
+made of a directional ray traversal method that encloses a bundle of rays with
+a pyramid that is intersected with a bintree prior to tracing the rays.  This
+pyramid clipping algorithm is similar to Ned Greene's algorithm in Graphics
+Gems IV, which intersects general polyhedrons with boxes.
+
+We have compared the pyramid-bintree algorithm with the recursive ray-bintree
+and the standard ray-grid intersection algorithm.  Testing was done on a
+Silicon Graphics Onyx workstation with 256 MB memory, allowing rather large
+models to be rendered.  The balls and teapot models were taken from Eric
+Haines' standard procedural database.  The grid method is from the standard
+Rayshade distribution and the bintree methods were implemented by us.
+
+Rendering times (in seconds) for primary rays only are as follows:
+
+Balls model:
+Number of objects   ray-grid   ray-bintree   pyramid-bintree
+
+    11                21.40       28.16           25.50
+    92                23.06       33.25           27.86
+   821                24.68       37.95           30.24
+  7382                27.10       40.76           32.72
+ 66431                31.71       42.98           37.30
+597872                42.21       46.39           49.80
+
+Teapot model:
+Number of objects   ray-grid   ray-bintree   pyramid-bintree
+
+ 23313               28.00        34.81           28.83
+ 54433               30.82        36.52           31.60
+ 98553               33.62        37.54           33.54
+155673               36.10        39.12           35.98
+225793               39.19        39.71           38.55
+308511               40.78        40.85           40.44
+403364               43.99        42.40           43.25
+
+Despite the sheer size of the models, the three algorithms are remarkably
+similar.  Pyramid clipping does not give additional advantages over the other
+two if used for speed purposes only.  However, in parallel implementations it
+may be a superior method, as the number of objects referenced per bundle of
+rays is lower than that for single ray techniques.  It may therefore be viewed
+as a technique to improve data coherence for efficient caching.
+
+-------------------------------------------------------------------------------
+
+Copyrighting Raytraced Images, by J Edward Bell <beljl@ucunix.san.uc.edu>,
+	Benton Holzwarth <bentonh@roscoe.cse.tek.com>, and Keith
+	(dhiggs@magnus.acs.ohio-state.edu) comments on:
+
+>How do you copyright a raytraced image?
+
+Well, copyright is really quite simple.  In the case of a photograph, when you
+take it, it is copyrighted.  (It's not registered, which is a bit more
+involved, but *that* only adds certain rights, such as the right to receive
+damages for unauthorized usage.)  All you have to do is afix to each copy the
+statement "1994 (c) Name" (assuming, of course, that the image was created in
+1994, and that you put your name in for Name).  That's all there is to it.
+
+Now, in the case of a *synthesized* image, I would think that you would have to
+do two things to truly protect it--you would not only have to copyright the
+generated image, but (I would think) you would have to copyright the model
+file that generated it.  For, in strictly legal terms, each run of the model
+file through a ray-tracer (again, I would think) would generate a *different*
+(and copyrightable) image.  Copyrighting the model file is the same as the
+image--just put "1994 (c) Name" in the file.
+
+So, in summary, since 1976, the gist of copyright is:  you create it, it's
+copyrighted.  As long as you label it as such, anyone using it without your
+permission is guilty of infringement, and can be tried and found guilty of a
+felony.  For you to sue for damages, you have to register it.  Details of that
+can be obtained from the Trademark and Copyright Office.  It's a fairly simple
+process, but it's not free.
+
+----
+
+Benton Holzwarth (Benton.Holzwarth@tek.com) followed up:
+
+    I had an opportunity to chat with one of the company patent lawyers, who
+pretty much confirmed all this:
+
+    If you produce something, you hold copyright to it, whether you add the
+copyright mark/message or not.  If it lacks the copyright mark/message, an
+infringer can claim to be an 'innocent infringer'.  By adding the mark/message
+you deny them this defense.
+
+    He suggested the C-in-a-circle (I believe a 'C' in parenthesis is
+sufficient for textual materials) with your name, year, and the words 'All
+rights reserved.'  which evidently has some international implications.
+
+    Registration is only really necessary if you begin legal proceeding
+against an infringer.  It may be *desirable* to register some items, but only
+after they've shown some degree of permanence.
+
+----
+
+Keith (dhiggs@magnus.acs.ohio-state.edu) comments on:
+
+>So, in summary, since 1976, the gist of copyright is: you create it, it's
+>copyrighted.  As long as you label it as such, anyone using it without
+>your permission is guilty of infringement, and can be tried and found
+>guilty of a felony.  For you to sue for damages, you have to register it.
+>Details of that can be obtained from the Trademark and Copyright Office.
+>It's a fairly simple process, but it's not free.
+
+True, but not 100% accurate.  You CAN sue for damages but the amount you can
+receive is limited (I think to $25,000).  There are different forms to
+register different types of material so it's good to write for information
+before registering for the first time.  Registration costs $12 but if you've
+got something you'll be distributing it can be worth the time and trouble.
+
+BTW, Here's the address for more information and registration:
+Copyright Office
+Library of Congress
+Washington, D.C. 20559
+
+----
+
+and Keith added this:
+
+Here's the actual section from a little publication called Circular 1 from the
+Library of Congress, Copyright Office.  Circular 1 is their document
+describing "Copyright Basics."
+
+"
+NOTICE OF COPYRIGHT
+
+   For works first published on and after March 1, 1989, use of the copyright
+notice is optional, though highly recommended.  Before March 1, 1989, the use
+of the notice was mandatory on all published works, and any work first
+published before that date must bear a notice or risk loss of copyright
+protection.  Use of the notices is recommended because it informs the public
+tat the work is protected by copyright, identifies the copyright owner, and
+shows the year of first publication.  Furthermore, in the event that a work is
+infringed, if the work carries a proper notice, the court will not allow a
+defendant to claim "innocent infringement"-that is, that he or she did not
+realize that the work was protected.  (A successful innocent infringement
+claim may result in a reduction in damages that the copyright owner would
+otherwise receive.)  the use of the copyright notice is the responsibility of
+the copyright owner and does not require advance permission from, or
+registration with, the Copyright Office.
+
+Form of Notice for Visually Perceptible Copies
+
+  The notice for visually perceptible copies should contain all of the
+following three elements::
+
+1.  _The symbol_ (c) (the letter C in a circle), or the word "Copyright," or
+the abbreviation "Copr."; and
+
+2.  _The year of first publication_ of the work.  In the case of compilations
+or derivative works incorporating previously published material, the date of
+first publication of the compilation or derivative work is sufficient.  The
+year date may be omitted where a pictorial, graphic, or sculptural work, with
+accompanying textual matter, if any, is reproduced in or on greeting cards,
+postcards, stationery, jewelry, dolls, toys, or any useful article; and
+
+3.  _The name of the owner of copyright_ in the work, or an abbreviation by
+which the name can be recognized, or a generally known alternative designation
+of the owner.
+
+Example: (c) 1991 John Doe
+
+-------------------------------------------------------------------------------
+
+Octrees and Whatnot, by Steve Worley (spworley@netcom.com) and Eric Haines
+
+[Steve wrote about how his SO and he were writing a ray tracer for her class
+assignment]
+
+The octree we decided to use in particular was pretty successful.  We decided
+to add a bounding box to the objects in each octree node, and this seemed to
+be a quite good speedup.  Note that this change really makes the octree almost
+more like a hierarchical bounding volume as opposed to a space partition,
+especially after we allowed each node to hold objects as well as children
+nodes.
+
+Anyway, I know you're a big fan of hierarchical bounding volumes.  Any
+suggestions on good algorithms for making good partitioning?  I can see how an
+octree-like partitioning algorithm could be a good starting point for one,
+especially when you start making the octree's three dividing planes free to
+"slide" to even out the objects in the nodes.  (This is a lot like color
+quantization algorithms, eh?)  But there's got to be some better references to
+building hierarchical BV's, and I can't remember any papers that talk about
+specifics.  (I DO remember you talking about a neat rendering optimization
+though, when you trace a ray starting with the last hit object then moving up
+and out to the root instead of the other way around.)
+
+Ah well.  Sometimes going back to the basics really sparks things up again.
+I'm in the middle of designing a new hybrid rendering method, mostly
+octree-sorted Zbuffering for primary and ray tracing for secondary rays.  It
+isn't that exciting for small scenes, but start adding lots of polygons and
+the thing cooks...  rethinking my octree for by girlfriend's tracer has got me
+rethinking my space subdivision for my new, "real" renderer.  Better to
+research now, before I start writing code!
+
+----
+
+[Steve writes again later discussing his octree idea]
+
+Consider an octree for ray tracing acceleration, straight from Glassner.  It's
+just a space partitioning.  It uses object density to help control the depth
+of a local node split, but other than that, it's pretty object-ignorant.
+
+Now, as a first level enhancement, each node of the octree isn't completely
+filled from side to side with objects of course.  It will have objects in just
+a part of it.  Now construct an axis aligned bounding volume for the node, so
+you know a tighter bound for where the objects are, inside the node.  When
+you're traversing the tree, you can intercept the ray with this node bounding
+volume and decide whether to enter the node or not.  The "pure" octree
+algorithm never "shrinks" the nodes, so nodes are definitely opened, even when
+the ray passes far away from the objects.  With the extra layer of bounding
+boxes, you get trivial rejection a bit faster.
+
+Another enhancement is when you have a large object, say one that intersects 4
+or 5 nodes of the 8 possible.  In this case, copying the object (well, a
+pointer to it) into each subnode becomes wasteful, since the object will come
+up for intersection multiple times (this is not that a big deal with a mailbox
+ID to prevent multiple testing, but that's still overhead.)  So sometimes it's
+nice to keep an object in an octree node and NOT distribute the object to
+children nodes.
+
+Now if you do both these optimizations, you get a nice little speedup from the
+"pure" octree.  (100% to 70% for Tetra, 100% to 90% for the fractal mountain.)
+Not revolutionary, just a nice little boost.  But if you notice, the octree
+space partition has been awfully corrupted from what it was.  You have objects
+in middle nodes, and effectively have oddly-sized bounding volumes.  It's
+getting closer to an object bounding hierarchy, not a space partition.
+
+----
+
+[and he discusses his octree z-buffer]
+
+Ah, my hybrid.  Still in the "designing in my head" stage, but I think it has
+a lot of promise.
+
+You see, as perfect and wondrous as Ray Tracing is, it, sadly, has a problem.
+It's slow!  For primary rays, especially in polygon scenes, Z buffering or
+scanline wins often by a factor of 2 or more.  [Me, I'd say by 200 or more...
+- EAH]
+
+Now a standard Z buffer sorts its objects from front to back before rendering,
+so there is surprisingly little overlap.  The pixels that need to be multiply
+shaded are trivial, like just a few percent.  So no, octree sorting is
+unnecessary and overkill in this respect.
+
+What *I* am thinking of is the biggest disadvantage of z buffering.  You still
+need to scan-convert each primitive.  If a certain poly is hidden, it's pretty
+fast, but it still needs to be tested.
+
+Now ray tracing, at its very very simplest, does just the same thing:  it
+tests every polygon for every ray.  This, of course, is insane, so we've
+designed everything from bounding volume hierarchies to NuGrid to make as few
+tests as possible, by rejecting collections of objects at once.
+
+This same idea can be used for scan conversion.  If you have a scene which is
+a little cabin in a forest, it is silly to scan convert the 10,000 polygons in
+a tree that can't be seen since it's behind the cabin.
+
+So my idea (inspired by the paper from last year's SIGGRAPH, I shouldn't even
+say it's my idea!  [Ned Greene's work, I assume]) is to scan convert
+(invisibly) an octree node.  If any part of the octree node is visible, you
+need to open the node up and scan convert the children.
+
+This suddenly makes the complexity of scan conversion MUCH less dependent on
+the number of primitives.  Instead of being proportional to the number of
+polygons, it's more like it's proportional to the number of VISIBLE polygons.
+
+Now the neat part is that we can use the same, IDENTICAL octree, and trace
+rays for shadows and secondary reflections.  It's free, ready to go!
+
+Anyway, that's the whole idea, and it should, in practice, help complex scenes
+a lot but not make any big changes for small ones (say with a mere couple
+thousand polygons).
+
+----
+
+Part of my reply:
+
+>Now, as a first level enhancement, each node of the octree isn't
+>completely filled from side to side with objects of course. It will
+
+Yes, that's a good one, and I'm trying to recall if I've heard it before.  Not
+offhand; I think it's one of those ideas that gets mentioned and not tested.
+Snyder & Barr in Siggraph '87 talk about clipping triangles directly to the
+cell (instead of just using the bounding box) in order to hit fewer cells, but
+that's not the same thing.  Maybe in one of those GI octree optimizing papers?
+I know Glassner also talked about some octree tricks in his "Spacetime Ray
+Tracing for Animation" paper in IEEE CG&A, March 1988.  More to the point,
+Subramanian studied octree variants for a long time, coming up with K-D tree
+methods (where the "octree" walls do slide).  Unfortunately, it's only a tech
+report, never made it to a journal.  Also interesting is J. David MacDonald's
+"Heuristics for Ray Tracing Using Space Subdivision" in GI '89, which also
+does k-d tree explorations.
+
+It's an interesting question that isn't clear in my mind:  say that one corner
+of an bintree cell is occupied.  Is it better to just put a BV box around it
+(as you do, and which seems better to me) or to do what Subramanian and
+MacDonald contemplate:  finding the optimal dividing plane for the cell, i.e.
+a dividing plane which tries to get equal numbers of primitives in each of the
+two sub-cells while also minimizing the total number of primitive pointers
+(i.e.  given 40 objects, a 25/25 split is probably better than an 35/5 split,
+even though the latter has no primitives in both cells).  Hmmm, maybe the
+answer is "both":  slide the walls when the cell has a lot of primitives (and
+don't bother subdividing above some criteria.  For example, a 38/38 split
+would be pretty useless), and use bounding volumes as you have when you get to
+the point where further subdivision is useless.
+
+It's interesting to think of mixing the methods.  For example, at the 38/38
+split the bintree is useless, so maybe you go to grids or BV's or whatever.
+Arvo's old idea of mixing schemes [RTNews1b] (and wouldn't that be a fun
+coding task...).  My gut feeling nowadays is that Jevans' nested grids show a
+lot of potential:  essentially you get the power of octrees (i.e.
+non-uniformly filled space doesn't kill the scheme) along with grid traversal
+speed.  Hmmm, it's so hard to know...  and I guess the savings are not going
+to be more than 2x overall, so probably pointless to worry about.
+
+Which reminds me of another BV paper:  Subramanian & Fussell in GI '91 talks
+about criteria for various methods ("Automatic Termination Criteria for Ray
+Tracing Hierarchies").  I should read this one again, I just skimmed it
+before.
+
+
+>This same idea can be used for scan conversion. If you have a scene
+>which is a little cabin in a forest, it is silly to scan convert the
+>10,000 polygons in a tree that can't be seen since it's behind the
+>cabin.
+
+Having an octree or BV hierarchy definitely comes in handy for z-buffering.  I
+know that some packages out there already do things like check for full
+clipping of the bounding boxes and so toss out a lot of data as time goes by.
+The nasty part of having to check each box against the z-buffer is the
+obvious:  you gotta check each box against the z-buffer!  There are some
+tricks, there, at least:  use the closest z value for the box for all z
+comparisons (to save on all that interpolation), use the 2D screen bounds for
+the box (also sloppy, but then you avoid all the edge table set up), etc.  I
+suspect there might also be some way to quickly categorize octree nodes and
+their primitives.  For example, the closest node to the eye obviously does not
+need box testing (except for the quick clip test).  If this node has something
+in it, then all neighboring nodes behind it could need the box z-buffer test,
+and so on - by assuming that a node does not need the box z-buffer test until
+there's evidence that something was in front of it might result in some
+savings.  Anyway, fun to contemplate, I'll be interested to see what you come
+up with!
+
+-------------------------------------------------------------------------------
+
+Learning Radiance, by Kevin Matthews (matthews@aaa.uoregon.edu)
+
+One way to smooth out the Radiance learning curve is to build models with
+DesignWorkshop, a commercial Macintosh-based 3D modeler (with a really nice
+live 3D interface).  DesignWorkshop has a direct export function for Radiance
+that not only provides a geometry file, with sophisticated sky function all
+set up, etc., but also automatically creates a couple of shell scripts
+sufficient to completely automate your initial rendering of a view of a model.
+
+Of course, if you become a Radiance fiend you'll want to do more than the DW
+translation builds in, but even them it is a major time-saver and dumb-error
+preventer.
+
+-------------------------------------------------------------------------------
+
+Radiance vs. Pov, by "Cloister Bell" (cloister@hhhh.org)
+
+Jonathan Williams (williamj@cs.uni.edu) wrote:
+>: My question is, I do basically artistic renderings, and am not incredibly
+>: hung up on reality.  What benefits (if any) does Radiance have over Pov? I'm
+>: looking at things such as easier syntax (not likely),
+
+Easier syntax is certainly not one of Radiance's benefits.  Writing Radiance
+files, until you get the hang of it, is truly tortuous.  It's really not that
+bad once you do get the hang of it, but the learning curve is very steep.  I
+would say that the biggest benefit to the artist is that Radiance's scene
+description language, while being difficult, supports generic shape primitives
+and texture primitives.  This allows you to create anything (well, within the
+limits of your machine's memory, etc.)  you can think of.  POV, by contrast,
+does limit you to the fixed and not entirely general shape primitives that it
+has (although heightfields somewhat make up for this, albeit in a less than
+elegant way), and even more so to the textures that it has.  A secondary (or
+at least, less important to me) benefit is Radiance's more accurate lighting.
+If you have the CPU to burn (and the patience), you can get much better
+lighting in your scenes than with POV.
+
+POV's strong points are that it does have a heck of a lot of different shape
+and texture primitives, and that its input language is much simpler.  POV is
+truly a great renderer for the beginning and intermediate computer artist.
+But it lacks some of the more advanced features that Radiance has, and in the
+end that's why I switched.
+
+
+jhh@hebron.connected.com (Joel Hayes Hunter) writes [about POV vs. Radiance]:
+>: more built-in shapes,
+
+Well, yes and no.  POV has more primitives, but Radiance handles shapes
+generically.  If you like lots of primitives, then that's a plus for POV and a
+minus for Radiance, but that is also a limitation since you're limited to what
+you can do with those primitives.  Notice the incredibly prevalent use of
+heightfields in POV to get around limitations of primitives.  On the other
+hand, if you don't mind a little math in order to specify interesting shapes
+generically, then Radiance wins hands down even though it only has 9 or so
+object primitives.  It has the primitives you are most likely to want, and
+anything else can be made (with varying degrees of effort) by parametrizing
+the surface you want to construct and specifying functions of those parameters
+which yield points on the surface.  Clearly Greg Ward (the author of Radiance)
+had this tradeoff in mind when he wrote Radiance.  I'd be willing to bet that
+he was faced with the choice between implementing dozens and dozens of
+procedures for handling all sorts of primitives and doing the job once,
+generically, and so he chose the latter.
+
+This tradeoff is a win for shapes that do not easily decompose into geometric
+primitives, but a lose for ones that do.  Some examples are in order (taken
+from a scene I'm working on currently):
+
+1. Consider a 90 degree section of a tube.  In POV this is a trivial CSG
+   object, something like:
+
+intersection {
+  difference {
+    cylinder {  // the outer cylinder
+      <0,0,0>,  // center of one end
+      <0,1,0>,  // center of other end
+      0.5       // radius
+    }
+    cylinder {  // the inner, removed, cylinder
+      <0,-.01,0>,
+      <0,1.01,0>,
+      0.4
+    }
+  }
+  box {		// the 90 degree section of interest...
+    <0,0,0>,
+    <1,1,1>
+  }
+  texture {pigment Blue}
+}
+
+In Radiance, this object is difficult to produce.  Consider that it has six
+faces, only 2 of which are rectangular.  Each face has to be described
+separately:
+
+# the rectangular end pieces:
+polygon blue end1
+0
+0
+12
+  .4 0 0   .5 0 0   .5 0 1   .4 0 1
+
+polygon blue end2
+0
+0
+12
+  0 .5 0   0 .4 0   0 .4 1   0 .5 1
+
+# the curved corners of the towelbar
+
+!gensurf blue right_outer_corner \
+          '.5*cos((3+t)*PI*.5)' \
+          '.5*sin((3+t)*PI*.5)' \
+          's' 1 10 -s
+
+!gensurf blue right_inner_corner \
+          '.4*cos((3+t)*PI*.5)' \
+          '.4*sin((3+t)*PI*.5)' \
+          's' 1 10 -s
+
+!gensurf blue right_bottom \
+          '(.4+.1*s)*cos((3+t)*PI*.5)' \
+          '(.4+.1*s)*sin((3+t)*PI*.5)' \
+          '0' 1 10 -s
+
+# same as previous, but translated up
+!gensurf blue right_top \
+          '(.4+.1*s)*cos((3+t)*PI*.5)' \
+          '(.4+.1*s)*sin((3+t)*PI*.5)' \
+          '0' 1 10 -s | xform -t 0 0 2
+
+Clearly POV wins hands down on this shape.  But that's because this shape has
+such a simple decomposition in terms of regular primitives (actually, I do
+Radiance a small disservice with this example, since Radiance does have some
+CSG facilities which this example doesn't make use of).
+
+2.  Consider a curved shampoo bottle (modelled after the old-style "Head and
+Shoulders" bottle, before they recently changed their shape).  This bottle can
+be described in English as the shape you get when you do the following:
+
+Place a 1.25 x 0.625 oval on the ground.  Start lifting the oval.  As you do,
+change its dimensions so that its length follows a sinusoid starting at 1.25,
+peaking soon at 2.0, then narrowing down to 0.5 at the top, while the width
+follows a similar sinusoid starting at 0.625, peaking at 0.8, and ending at
+0.5.  By this point, the oval is a circle of radius 1 and is 8 units above the
+ground.  The shape swept out by this oval is the bottle.
+
+In Radiance this bottle is described as:
+
+# the above-described shape
+!gensurf blue body \
+  '(1.25+.75*sin((PI+5*PI*t)/4))*cos(2*PI*s)' \
+  '(.625+.125*sin((PI+5*PI*t)/4))*sin(2*PI*s)' \
+  '8*t' 20 20 -s
+
+# the bottom of the bottle, which i could leave out since no one will
+# ever see it:
+!gensurf blue bottom \
+ 's*1.7803*cos(2*PI*t)' \
+ 's*0.7134*sin(2*PI*t)' \
+ '0' 1 20
+
+# an end-cap, which people will see.
+blue ring endcap
+0
+0
+8
+  0 0 8   0 0 1   0   0.5
+
+In POV, well, I'll be kind and not describe how this could be made in POV.
+The only answer is "heightfields", which a) are tedious to make, and b) take
+up lots of space.  Clearly Radiance kicks butt over POV on this example.
+That's because this shape doesn't have a simple breakdown in terms of
+geometric primitives on which one can do CSG, but it does have a simple
+description in terms of parametric surfaces.
+
+So depending on what sort of objects are in your scene, you may decide to go
+with POV because they're simple and POV makes it easy, or you may decide to go
+with Radiance because they're not and because you like the feeling of mental
+machismo you get for being able to handle the necessary math to make "gensurf"
+(the generic surface constructor) do what you want.
+
+
+>: different lighting and texture models, etc.
+
+Radiance does win hands down for lighting simulation.  That's what it was
+written for, and it's hard to compete with something that is the right tool
+for the job.
+
+With textures, you are again faced with the choice of having a system with
+several primitive textures that you can combine however you like (POV), and a
+system that gives you many very good material properties and allows you to
+define your own textures mathematically in whatever way you can dream up.
+There are textures that Radiance can do that POV simply can't because POV's
+texture primitives can't be combined to handle it.
+
+For example (don't worry, this isn't as nasty as the previous), how about a
+linoleum tile floor with alternating tiles, like you often see in bathrooms,
+where the tiles form groups like this:
+
+    ---------
+    |___| | |
+    |   | | |
+    ---------
+    | | |___|
+    | | |   |
+    ---------
+
+You get the idea.  The problem is how do you get the lines to be one
+color/texture and the open spaces to be another?  In POV, the answer is "you
+use an image map".  This is fine, except that it leaves the scene's author
+with the task of creating an actual image file to map in, for which s/he may
+not have the tools readily available, and that image maps take up a lot of
+memory (although probably not for a small example like this), and tweaking
+them later may not be simple.  In Radiance, you can describe this floor
+mathematically (which is pretty easy in this case since it's a repeating
+pattern):
+
+{ a tile floor pattern: }
+
+# foreground is yellow, background is grey
+foreground = 1 1 0
+background = .8 .8 .8
+
+xq = (mod(Px,16)-8);
+yq = (mod(Py,16)-8);
+x  = mod(mod(Px,16),8);
+y  = mod(mod(Py,16),8);
+
+htile(x,y) = if(abs(y-4)-.25, if(abs(y-4)-3.75,0,1), 0);
+vtile(x,y) = if(abs(x-4)-.25, if(abs(x-4)-3.75,0,1), 0);
+
+floor_color = linterp(if(xq,if(yq,htile(x,y),vtile(x,y)),
+                      if(yq,vtile(x,y),htile(x,y))),
+                      foreground,background);
+
+Granted, this is horribly unreadable and is rather tricky to actually write.
+What it boils down to is a bunch of conditions about the ray/floor
+intersection point (Px, Py) such that some of the points are eventually
+assigned to be the foreground color, and some the background color.  I won't
+explain the details of how those expressions produce the above pattern, but
+they do.  Also note that I've simplified this example down to one color
+channel; in an actual Radiance function file you can specify wholly different
+functions for the red, green, and blue channels of the texture you're
+defining.
+
+The salient feature of this example is that Radiance has facilities (even if
+they're hard to use) for creating any texture you like, so long as you can
+describe it mathematically in some form or another.  And if you can't, you can
+always fall back on an image map as in POV.
+
+POV, on the other hand, offers you a pile of built in textures, but to create
+a fundamentally different texture you have to actually add some C code to POV.
+Many users are not programmers, or may happen to be on a DOS system where you
+don't actually get a compiler with the system, which makes this solution
+impractical.  And even if they can program a new texture, it will be a long
+time before it can get incorporated into the official POV distribution and
+thus be available to people without compilers.
+
+Of course, POV has lots of neat ways to combine textures and do some pretty
+eye-popping stuff, but we all know how much of a speed hit layered textures
+are.  This is, in my opinion, why we see such an overuse of marble and wood
+textures in POV; marble and wood are reasonably interesting to look at and
+anything else is either boring, not worth implementing in C, or too slow to do
+with layered textures.
+
+
+>: I'm not really concerned about speed, as I'm running on a unix box at
+>: school, but if it's going to take days to render simple images (a ball on a
+>: checkered field), I'd like to know.
+
+I've actually been pretty impressed with Radiance's speed.  It compares quite
+well to POV.  I would say that it is on the whole faster than POV, although as
+scene complexity increases in different ways, that comparison can go right out
+the window.  For example, POV gets really slow when you have layered textures
+and hoards of objects.  Radiance does fine with lots of objects because of the
+way it stores the scene internally, but also slows down with complex textures.
+Radiance suffers more (imho) than POV when adding light sources, especially if
+there are any reflectives surfaces in the scene.  This is due to the
+mathematical properties of the radiosity algorithm.  Also, Radiance has a lot
+of command line options that allow you to cause the rendering to take much
+much longer in order to further improve the accuracy of the simulation.  Life
+is full of tradeoffs.
+
+In the balance I'd say that for the day to day work of previewing a scene that
+is under development, Radiance is faster.  Radiance wins in simple scenes by
+using an adaptive sampling algorithm that can treat large flat areas very
+quickly while spending more time on the interesting parts of the image.  When
+you crank up the options and go for the photo-quality lighting with soft
+shadows, reflections, and the whole works, be prepared to leave your machine
+alone for a few days.  The same is true of POV, of course.
+
+
+>:  Also I believe its primitives and textures are quite limited (only a few of
+>:  each).
+
+See above.  In addition, Radiance has a lot more primitive material types than
+POV does.  POV treats everything more or less as if it were made out of
+"stuff" that has properties you can set about it.  That's fine most of the
+time, but isn't very realistic; different material types do actually interact
+with light differently in a physical sense.  Radiance gives you different
+material types to handle those differences.  Radiance takes the approach to
+materials that POV takes to shapes -- lots of primitives.
+
+
+>:  But apparently nothing in the whole universe models actual light as
+>: accurately as this program does, so if that's what you want go for it...
+
+Well, it's a big universe, so I'd hesitate to say that.  :)  But I would
+venture to say that Radiance is the best free package that you'll find for
+doing lighting simulation.  It's still missing some features that I'd like to
+see like reflection from curved surfaces [i.e.  caustics] and focussing of
+light through transparent curved surfaces.  Of course, I know how hard those
+things are to implement, so I'm not seriously criticising any renderers out
+there for not doing them.
+
+-------------------------------------------------------------------------------
+
+Overlapping Refractors, by Steve Worley (spworley@netcom.com) and Eric Haines
+
+I've done it!  I've finally implemented a full ray tracer and it's finally
+complete.  I do Whitted and Torrance/Cook shading, distributed BDRF reflection
+and refraction, algorithmic textures, image mapping, adaptive antialiasing,
+displacement mapping, Phong shading, light penumbras, depth of field, volume
+rendering (for stuff like patchy fog, really a hypertexture hook), and
+probably half a dozen other things.
+
+Anyway, it works great and I'm very pleased with it!
+
+Now, for my dumb question.  The only real hitch I ever had with the program
+was trying to figure out how to do refraction PROPERLY.  I mean simple
+refraction transmission; nothing fancy.  Figuring out the refraction ray at a
+hitpoint is a snap, of course; my problem was figuring out the index of
+refraction ratio.
+
+In my tracer, every object is assigned an index of refraction.  I assume air
+is 1.0.
+
+Now I have a hit point, and it's transparent, so I fire a refraction ray.
+Suddenly my coding comes to a stop; I need to know *TWO* indexes of
+refraction, one for the material the ray is coming from, and one for the
+object I have just hit.
+
+ARGH!  This was annoying!  It took HOURS to get working.  You see, you can't
+just store the index of refraction of the material you're traveling in, then
+use it with your hit surface refraction index.  This works great for inital
+refractions, but not for secondary ones, like entering and leaving a sphere;
+your second ray says "I'm travelling through an index of refraction 1.5, and I
+just hit a surface with index 1.5, I'll go straight through with no
+refraction."  Whups!
+
+It gets bad.  You really need to TOGGLE between indexes of refraction, say
+from 1.0 to 1.5 on the first hit with a material, and 1.5 back to 1.0 on the
+second hit.
+
+But even that's not true!  What if you have an extra layer, like a glass
+tumbler filled with water?  then you go from 1.0 to 1.5, 1.5 to 1.33, 1.33 to
+1.5, 1.5 to 1.0.
+
+Geez!
+
+This was a much harder problem than I had ever expected it would be.  I ended
+up implementing a stack of refraction indexes.  If I hit a new material, I'd
+refract using the index on the top of the stack and the index of the new
+material.  If the hit was the same material I had LAST put onto the stack, I
+popped the stack and used the top two indexed for the ratio.  Finally, this
+worked!
+
+Of course, it breaks for non-solid geometries, like a raw polygon hanging in
+the air, but that's just a bad input specification.
+
+While my stack works, it's awfully messy, especially since I need to be
+careful when recursing with REFLECTION rays; I sort of need to "lock" the
+stack at a certain level so that a refraction after a reflection doesn't
+inadvertently pop a layer that's needed in the "parent" shading call.
+
+
+So my dumb question to you is:  How The Heck Is Refraction Really Done?  It's
+interesting that throughout the entire design and implementation of my (pretty
+complete) ray tracer, this was the only thing that really made me think "geez,
+how are you supposed to do this?"  There's got to be a standard method for
+keeping track of indexes of refraction.  I get the feeling any solution will
+be stack based, but there's go to be a better way than my hack, especially
+when I want to deal with reflection nodes.
+
+Surprisingly, this problem doesn't really seem to be discussed in Intro to Ray
+Tracing..  I had never really thought about it before until the actual second
+I started typing in refraction code.  Whups.
+
+So tell me, all-knowing Master Tracer, what's the True Method Of Refraction?
+
+--------
+
+Eric's reply:
+
+The ray tracer sounds pretty great!  Displacement mapping?  I assume you mean
+bump mapping (and not RenderMan displacement mapping, where the surface really
+does get deformed)?  Are light penumbras via stochastic ray tracing, or is
+something more clever going on (this is a problem I think about every now and
+again - I hate having to shoot 16 shadow rays per intersection per light just
+to find all 16 hit the light (or all 16 missed) - this is like 90%+ of what
+happens with these things, so I'm looking for simplifications).
+
+
+>Now, for my dumb question. The only real hitch I ever had with the
+>program was trying to figure out how to do refraction PROPERLY. I
+
+If we assume a well-behaved scene, then just keep track of whether you're
+hitting the front face or back face.  If front, then you're entering a
+refractor; if back, you're exiting.
+
+Unfortunately, you can get overlapping refractors (which strictly should not
+be possible), like say a glass marble in a glass of water.  No one in their
+right minds models the extra sphere where the water ends and the marble
+starts, i.e. they just plunk the marble in the water and hope the software
+figures it out.  In this case, yep, a stack is necessary.  If you have
+something really stupid, like two overlapping spheres with different indices
+of refraction, then all bets are off (and, hey, what the heck material is that
+place where the two spheres overlap?).
+
+This reminds me:  how did you get around the epsilon problem [RTNews2c]?  i.e.
+when you launch a ray from a surface, how do you avoid hitting the surface
+itself?  I like identifying each ray as "entering" or "exiting" when testing
+the ray against the object it originated upon.
+
+For example, you start two rays from a glass torus.  A torus can have multiple
+intersections, so it's a good test case.  A reflection ray is considered
+entering, that is, it's not traveling through an object but rather is going
+through space and could enter an object.  When it's tested against the torus
+the only intersection found is at, say, 0.0000121 (i.e.  the original torus
+itself, due to precision error).  Normally this would be a valid intersection
+if no corrective technique is performed, or perhaps you rely on some epsilon
+value (which doesn't always work, depending on your data; if the epsilon is
+too low, black dots appear on the surface, too high and you start to miss
+valid intersections where objects touch and holes appear).
+
+Since we know that the ray is "entering", so the only valid intersections are
+those in which the ray is "entering" the surface; if it's "exiting", then the
+intersection can be ignored.  When we take the normal at the torus'
+intersection point, we find that it points in the same direction as our ray,
+so this intersection at 0.0000121 is an "exiting" intersection and so can be
+safely ignored.  There's nothing deep here, just the realization that if the
+reflection ray and the exterior surface's normal point the same direction then
+the intersection can be ignored (similar to backface culling).
+
+Conversely, say a refraction ray (an "entering" ray) hits at 0.0000327 and
+0.22432.  The first intersection is an exiting intersection so we can ignore
+it, and the next one is used because we find it's an entering ray.
+
+Things get easier for spheres:  entering (reflection) rays which originate on
+a sphere can never hit the sphere.  Polygons are trivial, of course:  a ray
+originating on a polygon can never hit the polygon.  Note that there's no use
+of any epsilon in this method:  objects are simply handled correctly by
+looking at the nature of the object or the intersection itself compared to the
+surface normal.
+
+-------------------------------------------------------------------------------
+
+Raytracing Particle Systems, by Jos Stam (stam@dgp.toronto.edu)
+
+dyoung@superdec.uni.uiuc.edu (David Young) writes:
+>	I'd like to have some input on how others have handled particle
+>systems & ray tracing. I have a few ideas for fiery little particles
+>(as opposed to smoke or water vapor particles):
+
+I have used particle systems to model various gaseous phenomena.  The motion
+of the particles is achieved through the superposition of wind fields.  I use
+smooth wind fields (directional, point, vortex, ...)  to model the average
+motion ("sketch" of the motion) and a turbulent wind field to model the small
+scale motions.
+
+The particles are ray-traced by blurring them in space and time (density
+highest at center of the blob).  The rendering is efficient as the
+transparency (along a ray) is a function of the ray to the center of the blob
+only.  By using a hierarchical tree of bounding spheres the fuzzy particles
+can be rendered from front to back efficiently.
+
+A cheap trick to model fire is to assign a point light source to each
+particle.  [Yikes!  (even assuming no shadow computations) -EAH] This is
+pretty expensive though and not PC (physically correct).
+
+References:
+
+Reeves, Particle Systems.  A Technique for Modelling a Class of Fuzzy Objects,
+SIGGRAPH'83, 359-376.
+
+Sims, Particle Animation and Rendering Using Data Parallel Computation,
+SIGGRAPH'90, 405-413.
+
+Stam and Fiume, Turbulent Wind Fields for Gaseous Phenomena, SIGGRAPH'93,
+369-376.
+
+Also Wyvill's group at the U. of Calgary has a method of raytracing fuzzy
+particles.  Don't know if it is published.
+
+And there are many other papers I have left out. E-mail me for more details.
+
+-------------------------------------------------------------------------------
+
+Answers/References on Cone Tracing, by Brent Baker (brent@COR.EPA.GOV)
+
+Frank Belme writes:
+> I was wondering if anyone could give me references on ray tracing with
+> cones.  I have read the paper from the SIGGRAPH '84 proceedings by
+> J. Amanatides (sp.?).  Any other references would be greatly
+> appreciated.
+>
+> PS. I don't mean how to ray trace a cone, I mean ray tracing using a cone
+> instead of a ray.
+
+There is a brief explanation of cone tracing in the text:  Advanced Animation
+and Rendering Techniques (Theory and Practice) by Alan and Mark Watt, (pp
+260-262).  They reference the Amantatides paper you mention, and also:
+
+R.  L.  Cook, et al.  Distributed Ray Tracing, Computer Graphics, 18(3), pp
+137-44, (Proc.  SIGGRAPH '84)
+
+The Watt & Watt book also discusses Beam Tracing, which is similar to cone
+tracing, but motivated by efficiency concerns, rather than image quality.  Some
+references:
+
+Heckbert and Hanrahan, Beam Tracing Polygonal Objects, (Proc.  SIGGRAPH '84)
+pp.  119-27
+
+Shinya, et al., Principles and Applications of Pencil Tracing, (Proc.
+SIGGRAPH '87) pp.  45-54
+
+Speer, et al., A Theoretical and Empirical Analysis of Coherent Ray Tracing,
+Computer Generated Images, pp 11-25.  (Proc. of Graphics Interface, '85)
+
+At first look, cone tracing is a cool idea. I don't know if anyone has found a
+good solution its problems.
+
+-------------------------------------------------------------------------------
+
+Dumb Radiosity Question, by Steve Worley (spworley@netcom.com) and Eric Haines
+
+[Actually, an insightful radiosity question, but that was the title of the
+original note.  -EAH]
+
+My latest topic is radiosity and I've been reading paper after paper on it.
+
+I have a dumb confusion which doesn't seem to be explicitly stated in any of
+the papers.  I though you might help me..  :-)
+
+Obviously the radiosity solution computes the lack of first-order light flux
+on directly shadowed surfaces (patches which have no direct line of sight to a
+prime light source) and this greatly affects their own respective emmitivity.
+Second, third, and nth order effects from multiple diffuse bounces get added
+until you say "OK, good enough."
+
+Now you have the radiosity solution.  When rendering, you now know the diffuse
+emmitivity from each patch.  This includes the fact that shadows (those first
+order ones) have much less emmitivity:  that is your shadow computation has
+already been done and so this is not necessary to compute when rendering.
+Yes?  [Yes.  -EAH] In fact this is one of the primary uses of radiosity; those
+primary shadows, since they are formed from patch to patch form factors and
+not point to point ray sampling are soft:  fuzzy edged shadows!  Huzzah
+huzzah!  Of course the resolution of this fuzzy shadow area depends on your
+meshing.
+
+Ok.  Here's my dumb question.  Using radiosity to make soft shadows works,
+but, unless you're doing a walk-through or something, isn't it horribly
+inaccurate and inefficient?  Standard distributed ray tracing for fuzzy
+shadows can operate on a pixel by pixel basis, and give much more accurate
+results (It's not based on a mesh, it's "on demand" at whatever accuracy you
+need).  The goal of radiosity must not be those simple first order shadows,
+but for the color bleeding and multiple-order diffuse lighting effects.  If
+you just wanted fuzzy primary shadows you'd just use distributed ray sampling,
+which is faster and much more accurate.  (you could use this ray testing just
+for shadows if you like, using a z buffer for geometry or whatever if you
+wished.)
+
+With this in mind, I keep thinking either I've missed a point in practical
+radiosity implementation or that there's a MUCH better way to handle this
+problem.  The way I would do this would be to solve the radiosity equations
+but keep track of "first order" emmitivity and "2nd order and higher"
+emmitivity separately.  The total emmitivity, used in the computation of the
+radiosity solution, is just the sum of these two.  The first order emmitivity
+would be ONLY from the flux received from the original lights (whatever is a
+true bright light source).  The radiosity solution would continue like normal,
+progressively refining multiple order interreflections, (using total
+emmitivity) until that reaches a solution good enough for your tastes.  At
+RENDER time, though, you'd take and only apply the emmitivity due to NON-first
+order effects.  The first order effects would be recomputed on a sample by
+sample basis by distributed ray tracing to each light.  Since this primary
+light contribution is done using ray casting at need, its error will be very
+low, and there will be no mesh artifacts.  The radiosity information for the
+multiple-order effects can be added for the ambient light contribution..  this
+is much more subtle and although it has meshing artifacts, it provides that
+global indirect lighting solution that ray-sampling can't easily do.
+
+My question is whether I'm just being dumb and this is the way that everyone
+does it already?  After looking at a couple radiosity papers which talk about
+meshing artifact reduction, every example seems to be from a primary shadow
+edge...  this annoys me since we know how to compute these first order fuzzy
+shadows pretty easily and radiosity's real strength is for multiple order
+effects and color bleeding.
+
+So tell me, how is it really done in practice?
+
+----
+
+Eric's reply:
+
+>In fact this is one of the
+>primary uses of radiosity; those primary shadows, since they are
+>formed from patch to patch form factors and not point to point ray
+>sampling are soft: fuzzy edged shadows! Huzzah huzzah! Of course the
+>resolution of this fuzzy shadow area depends on your meshing.
+
+And which is something that's fairly bogus about radiosity - the shadows are
+always soft, even when they should be sharp (and in fact sharp == very
+expensive, as you note, since you have to go to a high mesh factor along the
+shadow edges or otherwise compute them - a la Campbell or others).
+
+
+>Ok. Here's my dumb question. Using radiosity to make soft shadows
+>works, but, unless you're doing a walk-through or something, isn't it
+>horribly inaccurate and inefficient?
+
+I agree!  (as an aside, professional illustrators tend to think 3D graphics is
+mostly a waste of time if no animation is performed, and they're mostly right:
+it's easier for them to just paint what they want in a still than to model
+something in which you are going to make just a single image).
+
+
+>The goal of radiosity must not be be
+>those simple first order shadows, but for the color bleeding and
+>multiple-order diffuse lighting effects. If you just wanted fuzzy
+>primary shadows you'd just use distributed ray sampling, which is
+>faster and much more accurate. (you could use this ray testing just
+>for shadows if you like, using a z buffer for geometry or whatever if
+>you wished.)
+
+Indeed, this is just the sort of thing we do in our rendering package:  you
+can easily blend ray tracing and radiosity.  One way we do it is to still use
+the radiosity solution for primary shadows, then the ray tracing becomes a
+matter of intersecting a surface and finding the shadow information in the
+corresponding mesh.  This saves a lot of rendering time (no shadow testing).
+If you think the mesh stinks, though, you can then (though we haven't made
+this a released feature) make the ray tracer just do normal shadow testing or
+fuzzy shadowing.  Makes for cool pictures:  nice curved surfaces with
+reflections and soft shadows and nice ambient.
+
+Though, to be honest, I don't think meshed radiosity does a great job with
+interreflection computations.  Light falls on the floor from overhead lights.
+How do you correctly split up the floor so that light on it correctly bounces
+around?  Some areas are in shadow, and some light areas are right next to
+receiving polygons (e.g.  the walls) and cause some problems.  All the
+problems are solvable, but the number of different important situations is
+real nasty.
+
+The advantage radiosity has is that most people don't know/care about the
+exact correctness of the interreflections, as long as they are there.  This is
+an interesting issue!  What if an architect uses radiosity and shows a client
+a rendering of his potential building, the building gets built, but never
+looks like the rendering in terms of lighting [Credit to Dan Ambrosi, now at
+SGI, for this question.?  Artist's renditions of a building never look like
+the real thing, either, but no one expects them to.  Using "scientific
+lighting computation models" could be an interesting legal headache someday...
+Also, getting back to the "too soft" shadows, this is a bonus!  Photographers
+usually have to work hard to soften or get rid of shadows in commercial
+display photos, for example.  With radiosity there is rarely any doubt that
+it's a shadow you're looking at (unlike standard ray tracing, where sharp
+shadow lines often subtract from the overall understanding of the image).
+
+BTW, did you read my net paper about some of the interesting problems in
+radiosity?  It's at ftp://princeton.edu/pub/Graphics/Papers/Ronchamp.tar.Z.
+
+
+>My question is whether I'm just being dumb and this is the way that
+>everyone does it already? After looking at a couple radiosity papers
+>which talk about meshing artifact reduction, every example seems to be
+>from a primary shadow edge... this annoys me since we know how to
+>compute these first order fuzzy shadows pretty easily and radiosity's
+>real strength is for multiple order effects and color bleeding.
+
+I agree, it's just sort of lazy to do primary shadows with radiosity - but,
+laziness is one of the goals of computer graphics!  Do as little as you can
+get away with (I'm serious).  The "right" way for any of this is a million
+rays per pixel and monte carlo till you drop (talk to Pete Shirley).  While we
+wait the 50 years it'll take to get computers this fast, we're biding our time
+coming out with algorithms for the interim.  Sort of like what people did with
+hidden surface until Z-buffer hardware appeared.  Anyway, I do have to admit
+that with Ronchamp it was great to have a solution which took a day to compute
+(5000 shots of emmisivity), but then could be viewed almost interactively and
+could be rendered nicely very quickly (15 minutes a frame, with 10 of those
+being for computing the beams o' light I added in using Monte Carlo).
+Computing diffuse shadows would have probably added 30 minutes or so (at
+least) a frame, given the 64K polygon database and 6 or so primary light
+sources - instead of 2 months of frame computation, it would have been 6 (and
+I would have lost my mind baby-sitting our flakey Apollo DN 10000 machine -
+I'm so happy we finally tossed this sucker).
+
+Anyway, I've rambled on long enough; just my view, take it all with a grano of
+salo.
+
+----
+
+Steve replies:
+
+You have cleared up some of this confusion.  Indeed, the precomputed shadows
+will dramatically decrease rendering time for anims.  I guess I think more
+about the theory versus the practice.  I was thinking about accuracy, mostly,
+under the theory that if you're going to do radiosity, you're obviously
+CONCERNED with accuracy.  (I guess this goes especially for something like
+Radiance which really tries to be a simulator of real lighting calculations.)
+
+
+> This saves a lot of rendering time (no shadow testing).  If you think
+> the mesh stinks, though, you can then (though we haven't made this a
+> released feature) make the ray tracer just do normal shadow testing or
+> fuzzy shadowing.
+
+Ah, now this relates to what I was thinking about.  Replacing the primary
+shadows in the radiosity with a more accurate direct computation.  How do you
+do this?  Do you split the emmisivity contributions in the original matrix
+into primary and n-th order effects?
+
+In terms of accuracy, this seems like the best possible strategy!  The biggest
+problem with radiosity is high frequency details which need tight meshing at
+the intensity boundaries.  And sharp details are really only seen at the
+primary shadow boundaries, not the nth-order interdiffuse reflections.
+
+I can see how tempting it is to use the radiosity for direct shadows:  they
+ARE, after all, precomputed and ready to use!  I agree that the best way to
+render is to use WHATEVER method that gives you the best results for the least
+effort.
+
+What I am thinking about though is that perhaps using ray traced first-order
+shadows and radiosity for the leftover multiple-order effects might let you
+get away with a horribly coarse radiosity solution, little or no adaptive
+meshing, more error in the matrix solution, etc.  Why put a lot of effort into
+a refined radiosity solution if the nth order effects are relatively robust to
+errors?
+
+Again I keep thinking about all the papers that try different ways of
+increasing the radiosity accuracy by adaptive meshes, more accurate form
+factors, etc, and most of these show pictures with "before" and "after"
+radiosity images.  What strikes me with these images is that the visible error
+is blatant in the primary shadows (mostly from coarse meshing) and pretty much
+undetectable for the higher-order shadings.
+
+----
+
+I reply:
+
+>Ah, now this relates two what I was thinking about. Replacing the
+>primary shadows in the radiosity with a more accurate direct
+>computation.  How do you do this? Do you split the emmisivity
+>contributions in the original matrix into primary and n-th order
+>effects?
+
+Yes, I had that in the system for awhile, though our latest architecture does
+not use this.  We finally didn't bother with distributed ray traced shadows
+because they took too long, there were issues about sampling area lights with
+ray tracing, etc.  Instead we went with a scheme where we recorded how much
+each vertex was in shadow with respect to the first 16 primary lights in the
+scene, with 16 levels (i.e.  4 bits) of accuracy.  This allowed us to at least
+get the specular highlights more or less correct when ray tracing or even just
+doing scanline rendering (highlights were a lot more important than perfect
+fuzzy shadows, and lots cheaper to compute, too).  In fact, this "shadow bit"
+technique is a part of some of HP's hardware boxes for this purpose, giving us
+realtime radiosity with specular highlights (without the shadow bits you'd get
+specular highlights on surfaces in shadow, which was disturbingly wrong).
+
+Another interesting technique:  Do radiosity, then shoot rays from the eye to
+the visible mesh vertices in the image just like you're ray tracing.  Blend in
+the highlight/reflection/transmission colors you compute into the mesh point's
+RGB radiosity contribution.  Now you display the polygons like you normally do
+with meshed radiosity - voila, "soft" reflections and transmission because you
+interpolate between samples.  Obviously the ray traced contributions are view
+dependent, so you compute these and add them into the vertices on the fly
+(i.e.  when you output a polygon).  Since you're ray tracing you can't do this
+massively quickly, but there are a lot less vertices visible (normally) than
+there are pixels in an image so it's pretty quick, good for previewing at
+least (and it sometimes looks better than the perfect reflections offered by
+classical ray tracing).  Yes, you get various artifacts (soft reflections when
+they should be hard, and meshing artifacts galore - just like primary light
+meshed radiosity) but many of these could be attacked in the same way as
+meshed radiosity:  check continuity of mesh point samples and add new samples
+to the mesh if needed.  I like this one a lot - you do get a lot of the punch
+of radiosity and ray tracing (and soft reflections to boot) without extremely
+serious sampling.
+
+[The Microcosm system turns out to have implemented this algorithm, sans
+subdivision and meshing of objects.  See RTNv7n5]
+
+
+>What I am thinking about though is that perhaps using ray traced
+>first-order shadows and radiosity for the leftover multiple-order
+>effects might let you get away with a horribly coarse radiosity
+>solution, little or no adaptive meshing, more error in the matrix
+>solution, etc. Why put a lot of effort into a refined radiosity
+>solution if the nth order effects are relatively robust to errors?
+
+Yes, I think I touched on this last message.  People really don't care about
+utter accuracy for the second order things, they just want some light on the
+matter (har har), and slowly varying light is a lot more interesting than dull
+ambient add-in light.  Which is why a lot of the artifacts from radiosity
+techniques (meshed or Radiance-like) usually don't matter.  You just have to
+make sure you don't get real serious artifacts, and you could do this by
+filtering out the high frequencies and/or high amplitude nth-order effects (in
+other words, if you smooth out the various continuity changes so that the
+second order lighting contributions do not dramatically change over a surface,
+then you normally won't get any weird second+ order lighting artifacts).  This
+philosophy comes from that great computer graphics guru Chee Ting, but it is
+one way to make pretty (vs.  "realistic") pictures.  Of course, you also won't
+get the right answer, but...
+
+It's interesting to look around my own house for ugly lighting situations:
+the sun hits the corner of a mirror and that reflected light places a
+distorted rectangle on the wall.  In a photo of the wall, do I really want to
+see this sharp blob of light?  Probably not, if I'm just showing someone how
+nice my living room looks.  Maybe not even if I'm doing an analysis of general
+room lighting.  The interesting thing is that there are often weird blobs of
+light around.  On my desk I can see four funky bright lines of light from
+where the four fluorescents overhead penetrate a narrow crack between two
+shelves.  If this lighting pattern was in a computer graphics image, we'd all
+speculate as to what caused this bug.
+
+Another quick story:  in the new computer graphics lab at Cornell there's a
+hallway where the light comes on down the corridor.  You can see regular
+fluctuations on the walls of the lighting - it's where the drywalls come
+together, and there's a discontinuity at each seam.  My comment about this
+hallway is "look at the meshing artifacts in this image".  Which is indeed
+what they would look to us graphics geeks like if you perfectly rendered it
+onto a computer screen.
+
+So it's an interesting question whether realism is always what you really
+want.  We should of course continue to research photorealism, but there's also
+a definite need for photoidealism (to coin a word), where you want the
+"nicest" looking image given a set of inputs, not the most realistic.  Of
+course, "nice" is very subjective, but adding soft shadows, getting rid of
+confusing reflections (which would be more expensive for ray tracing) and
+stray blobs of light (like the mirror blob), and similar stuff is interesting
+to contemplate.  Anyway, that's my zany idea for the day.
+
+----
+
+Steve replies:
+
+Hey, an add-on to your super-fast vertex tracer idea.  This might be kinda
+cool not just for previews, but for a full tracing acceleration scheme.  When
+you fire secondary rays, you can look at the secondary hits that the current
+polygon's vertices found, and test those first.  You'll likely get a hit, so
+you'll cull any more distant intersections.  Same with shadows.  It's really a
+type of last-hit cache, but it's indexed in object space, not image space.  I
+dunno how much this could help, but it'd be awfully cheap.
+
+
+On another topic, Eric, that's a really sweet trick you have for adding in
+"soft" reflections and transmissions.  Sure, you're geared up to do intensity
+interpolation for every hit anyway, so the extra overhead of tracing a few
+(thousand) vertices is nothing compared to tracing every pixel.  Very ad-hoc,
+since as you say, everything will be soft and not perfect, but it'd give you a
+very very fast and fairly good idea of the reflection and transmission effects.
+You could even divorce this from the radiosity and use it in any tracer, and
+use it for shadows as well.  Again, you'd get artifacts, but speedwise it'd
+rock and roll.
+
+----
+
+I reply:
+
+Exactly!  Just determine vertex visibility, trace rays to them, shade them,
+and output the polygons to a scanline renderer.  The thing is, though, that
+meshing the suckers with respect to some screen space resolution is really
+worthwhile to look half decent, so you still may want to do object space
+meshing (vs.  taking every 64th [8x8] pixel and ray tracing it - I'll leave it
+to you to figure out the problems with this idea...  [bad because suddenly you
+lose the edges of the objects from the eye's point of view, if you simply
+interpolate every 64th pixel]) For an example of why you want to mesh, imagine
+a large polygon being rendered.  With no sample points in the interior, the
+shading depends entirely on what is computed at the corners and that's it.  A
+spotlight shining on the middle of the polygon but not the corners will cast
+no light at all when doing Gouraud shading.  So, you still want to do
+something like initial radiosity meshing to capture the shading.  Essentially,
+this is a poor man's RenderMan (RenderBoy?):  instead of meshing an object
+down to the subpixel level you mesh it to some fairly reasonable resolution
+(e.g.  each poly covers say 100 pixels or less) and shade it from there.
+
+
+>It might be fast enough for interactive viewing if you
+>had hardware Z buffering and Gouraud shading. Wow, that'd be really
+>interesting to see.
+
+Like you noticed, you really need just a few thousand rays for an image, a
+three magnitude speed increase in ray tracing time (though the meshing's a
+pain, unless you just do it once up front and call it a day).
+
+-------------------------------------------------------------------------------
+
+Good Book on 3d Animation, by Scott McCaskill (jmccaski@CS.Trinity.Edu)
+
+CIDAAL Electronics (cidaal@perth.DIALix.oz.au) wrote:
+> Does anybody know of a good book on 3D graphics algorithms. I need
+> something pretty detailed, that covers solids, shading, lightings and
+> all that jazz. Any help or recommendations are welcome. Thanks in advance.
+
+I have looked at a lot of graphics books over the last several years, and my
+current favorite is _3d Computer Animation_ by John Vince.  Although not as
+thorough as the book by Foley et al (I believe that one is _Computer Graphics:
+Principles and Practice_), it gives some of the most easily understandable
+explanations I've seen.  It covers everything you mentioned, and more.  It's
+published by Addison-Wesley, and you should definitely take a look at it.  If
+it turns out that it's not detailed enough for you, then the book by Foley et
+al is what you need (it's considered by many to be the "bible" of computer
+graphics, and for good reason).
+
+-------------------------------------------------------------------------------
+
+Animation Books, by Dave DeBry <debry@cs.utah.edu>
+
+[from the Animators Mailing List; see the Ray Tracing Roundup. -EAH]
+
+mvidal@netcom.com spilled a Coke on the keyboard, producing this:
+> I just subscribed to this list and want to learn about traditional and
+> computer animation. Are there any books that readers of this list can
+> recommend.
+
+	Here's some of the books listed on this list in the past concerning
+that question.
+
+TECHNICAL
+=========
+
+	Preston Blair
+	Animation
+	Walter Foster Publishing
+
+	Preston Blair
+	How To Animate Film Cartoons
+	Walter Foster Publishing
+
+	John Canemaker
+	Storytelling In Animation: The Art Of The Animated Image
+	American Film Institute
+
+	John Cawley, Jim Korkis
+	How To Create Animation
+	Pioneer Press
+
+	Shamus Culhane
+	Animation From Script To Screen
+	St. Martin's Press
+
+	Betty Edwards
+	Drawing On The Right Side Of The Brain
+	Jeremy P. Tarcher Inc.
+
+	Milt Gray
+	Cartoon Animation: Introduction To A Career
+	Lion's Den
+
+	Bob Heath
+	Animation In 12 Hard Lessons
+
+	Thomas W. Hoffer
+	Animation: A Reference Guide
+	Greenwood Press
+
+	John Lasseter
+	Principles Of Tradition Animation Applied To 3D Computer Animation
+	SIGGRAPH '87, Computer Graphics, Vol. 21, No. 4
+
+	Kimon Nicolaides
+	The Natural Way To Draw
+	Houghton Mifflin
+
+	Kit Laybourne
+	The Animation Book
+	Crown Publishers
+
+	Roy P. Madsen
+	Animated Film: Concepts, Methods, Uses
+	Interland Publishing Inc.
+
+	Frank Thomas, Ollie Johnston
+	Disney Animation: The Illusion of Life
+	Abbeville
+
+	Harold Whitaker, John Halas
+	Timing For Animation
+	Focal Press
+
+	Tony White
+	The Animator's Workbook
+	Watson-Guptill Publications
+
+	S. S. Wilson
+	Puppets And People
+	Tantivy Press
+
+	---
+	Education Of A Computer Animator
+	SIGGRAPH '91, Course 4
+
+
+HISTORICAL
+==========
+
+	Joe Adamson
+	Tex Avery: King Of Cartoons
+	Da Capo Paperback
+
+	Patrick Brion
+	Tex Avery
+	Schuler
+
+	Christopher Finch
+	The Art Of Walt Disney: From Mickey Mouse To The Magic Kingdoms
+	Abrams
+
+	Chuck Jones
+	Check Amuck: The Life And Times Of An Animated Cartoonist
+	Avon Books
+
+	Leonard Maltin
+	Of Mice And Magic: A History Of American Animated Cartoons
+	Plume / New American Library
+
+-------------------------------------------------------------------------------
+
+Fast Algorithms for 3D Graphics, by Glaeser: Any Good? by Brian Hook
+	(bwh@kato.prl.ufl.edu)
+
+Generally a good book, nothing spectacular.  Worth having if you're a computer
+graphics professional, probably not worth having if you are just building up
+your library.  Some of those "fast algorithms" aren't exactly the epitome of
+blazing.
+
+Not many very advanced topics, not many true "tricks" and optimizations like
+some of Graphics Gems, but a lot of fairly solid material.
+
+The code is in C, however it's formatted poorly -- italics for code?  Who
+thought of THAT one?!
+
+-------------------------------------------------------------------------------
+
+Order of Rendering and Fast Texturing, by Bruno Levy, Dan Piponi
+	<dpdp19801@ggr.co.uk> and Bernie Roehl <broehl@UWaterloo.ca>
+
+[There was a discussion of how to render quickly using various techniques.
+It's not ray tracing, so you purists out there should avert your eyes.
+Anyway, I thought it was interesting, and the texturing idea has been bouncing
+around the net ever since.  -EAH]
+
+Bruno Levy says:
+
+flat-shading                    : 0 interpolation  / pixel(quite fast)
+Gouraud shading - colormap mode : 1 interpolation  / pixel
+Gouraud shading - RGB mode      : 3 interpolations / pixel
+texture mapping                 : 2 interpolations / pixel
+Phong shading                   : 3 interpolations + a square root / pixel
+
+----
+
+Dan Piponi responds:
+
+That's a pretty good way of expressing the answer but can I refine this model
+a bit.  From my experience it is memory accesses rather than interpolations
+that form the bottleneck - talking to various people this seems to be true on
+many architectures.  An interpolation typically takes one machine instruction
+using two registers - 1 clock cycle on a 486(?).  A memory access on the other
+hand can take a few clock cycles - especially if you have a fast processor.
+
+I suggest:
+
+flat shading:                   1 access / pixel
+gouraud shading:                1 access / pixel
+				assuming all of the colour dimensions fit
+				into registers otherwise add up to 3
+				accesses /pixel / colour dimension
+texture mapping by
+horizontal scanline:            2 accesses / pixel
+free direction texture mapping: 3 accesses / pixel
+phong shading:                  1 access / pixel if you have enough registers
+				but now the mathematics becomes the
+				bottleneck depending on your algorithm.
+z-buffering:                    1 access / pixel not drawn
+				3 accesses / pixel drawn
+
+All of these can be improved if you can read/write more than 1 pixel per
+memory write - for example using a VESA local bus on a PC you can write 4
+pixels in one write instruction (and I'm working on getting the free direction
+texture mapping down to 2.5 accesses / pixel...)
+
+The truth is probably an interpolation between the two tables above!
+
+----
+
+Bernie Roehl says:
+
+Perspective-corrected texture mapping involves at least one divide per pixel.
+
+----
+
+Dan Piponi replies:
+
+No it doesn't!  I've got some code working that I described a little while ago
+in this newsgroup although lots of other people had already figured the method
+out.  Look up `free direction texture mapping' in the games player
+encyclopaedia for example.
+
+Dan's earlier note:
+
+Suppose we wish to texture map a triangle in 3-space onto the screen using the
+map pi:(x,y,z) -> (x/z,y/z).  Let L be the line segment that is the
+intersection of this triangle with the plane z=k.  Then pi restricted to L is
+an affine map.  If we then rule the triangle with lines parallel to L we can
+use an affine map to render each line to the screen.  Instead of using
+horizontal scan lines, say, we have to use non-horizontal lines.  Any
+interest?  Is it novel?
+
+----
+
+Bernie Roehl later notes:
+
+The PC-GPE (found on x2ftp.oulu.fi) has an article on "Free-Direction Texture
+Mapping" that is a more detailed description of the algorithm you describe.
+It's a good idea.
+
+-------------------------------------------------------------------------------
+
+FREE E-Mag on VR, Computer Graphics, et al: Issue 2, by David Lewis
+	(callewis@netcom.com)
+
+The HOTT (Hot Off The Tree) Internet-based e-magazine is a FREE, monthly
+(10/year) update on the latest in VR, telepresence & intelligent user
+interfaces; AI & "intelligent" agent-oriented software; interactive multimedia
+& game development; wireless communications & PCS; mobile, portable & handheld
+computing devices; neural, fuzzy & genetic systems; nanotechnology,
+bio/microsensors & molecular electronics; voice I/O & handwriting recognition;
+HDTV & I-TV; ATM, frame relay & FDDI; visual programming, object-oriented
+databases & client/server application development; fractals, wavelets &
+quadtree data structures for image & signal processing; ULSI circuits &
+megacells; optical computing & erasable optical disks; PC telephony & PC TV;
+animats & micro/telerobotics; and, other bleeding-edge technologies.
+
+For a FREE subscription, send a request TODAY to listserv@ucsd.edu .  The
+"Subject" line is ignored; leave it blank or type in whatever you'd like.  In
+the body of the message, input:  SUBSCRIBE HOTT-LIST .  Do NOT include first
+or last names following "SUBSCRIBE HOTT-LIST"; this is a quirk of the UCSD
+listserv software.  You will receive subscription confirmation from the UCSD
+host site.
+
+Disclaimer:  Please note that although the mailing list is currently
+maintained at UCSD, there are no official ties between HOTT and the University
+of California.
+
+-------------------------------------------------------------------------------
+
+Color Quantization Bibliography, by Ian Ashdown (Ledalite@mindlink.bc.ca)
+
+In message <35jhi0$ae7@alf.uib.no>, Jan De Bruyckere wrote:
+>   I'm a student in computer science and I'm making a description
+> about converting images with 24-bit colours to images with
+> only 8-bits colours.
+>   I need different algorithms, source or sites where I can
+> find the source, titles of books and other useful
+> information.
+
+With apologies in advance for the following commercial blurb, I'm posting a
+bibliography on the topic from my forthcoming book, "Radiosity:  A
+Programmer's Perspective" (John Wiley & Sons, October 1994).  The diskette
+accompanying the book includes a complete C++ implementation of the Gervautz-
+Purgathofer octree color quantization algorithm.  (It also includes a detailed
+look at radiosity theory and complete C++ implementations of 3 fully
+functional radiosity-based renderers for the MS-Windows Win16 and Win32
+environments, but that's another story.)
+
+End of commercial. Here's the offering:
+
+Color Quantization Bibliography
+-------------------------------
+
+1.  Arvo, J., ed. 1991. Graphics Gems II, San Diego, CA:
+    Academic Press.
+2.  Ashdown, I. 1994. Radiosity: A Programmer's Perspective,
+    New York, NY: John Wiley & Sons.
+3.  Balasubramaian, R., and J. Allebach. 1991. "A New Approach
+    to Palette Selection for Color Images," Journal of Imaging
+    Technology, pp. 284-290 (December).
+4.  Betz, M. 1993. "VGA Palette Mapping Using BSP Trees," Dr.
+    Dobb's Journal 18(7):28-36, 94 (July).
+5.  Bouman, C., and M. Orchard. 1989. "Color Image Display with
+    a Limited Palette Size," Visual Communications and Image
+    Processing '89, Bellingham, WA: Society of Photo-optical
+    Instrumentation Engineers, pp. 522-533.
+6.  Bragg, D. 1992. "A Simple Color Reduction Filter," in Kirk
+    (1992), pp. 20-22, 429-431.
+7.  Braudaway, G. 1987. "A Procedure for Optimum Choice of a
+    Small Number of Colors from a Large Color Palette for Color
+    Imaging," Proceedings of Electronic Imaging '87 (San
+    Francisco, CA).
+8.  Dekker, A. 1994. "Kohonen Neural Networks for Optimal Colour
+    Quantization," to appear in Network: Computation in Neural
+    Systems, Bristol, England: Institute of Physics Publishing,
+    Techno House.
+9.  Gentile, R., J. Allebach, and E. Walowit. 1990. "Quantization
+    of Color Images Based on Uniform Color Spaces," Journal of
+    Imaging Technology 16(1):11-21 (February).
+10. Gentile, R., J. Allebach, and E. Walowit. 1990. "Quantization
+    and Multilevel Halftoning of Color Images for Near-Original
+    Image Quality," Journal of the Optical Society of America
+    7(6):1019-1026 (June).
+11. Gervautz, M., and W. Purgathofer. 1988. "A Simple Method for
+    Color Quantization: Octree Quantization," in Magenat-Thalmann
+    and Thalmann (1988), pp. 219-231.
+12. Gervautz, M. and W. Purgathofer 1990. "A Simple Method for
+    Color Quantization: Octree Quantization," in Glassner (1990),
+    pp. 287-293.
+13. Glassner, A. S., ed. 1990. Graphics Gems, San Diego, CA:
+    Academic Press.
+14. Gotsman, C. 1994. "Dynamic Color Quantization of Video
+    Sequences," to appear in Proceedings of Computer Graphics
+    International '94, (Melbourne, Australia).
+15. Heckbert, P. S. 1982. "Color Image Quantization for Frame
+    Buffer Display," ACM Computer Graphics 16(3):297-307 (ACM
+    SIGGRAPH '82 Proc.).
+16. Iverson, V.S., and E. A. Riskin. 1993. "A Fast Method for
+    Combining Palettes of Color Quantized Images," Proceedings
+    of the IEEE International Conference on Acoustics, Speech,
+    and Signal Processing '93, Vol. 5, pp. 317-320.
+17. Joy, G., and Z. Xiang. 1993. "Center-Cut for Color-Image
+    Quantization," The Visual Computer 10(1):62-66.
+18. Kirk, D., ed. 1992. Graphics Gems III, San Diego, CA:
+    Academic Press.
+19. Kruger, A. 1994. "Median-Cut Color Quantization," Dr.
+    Dobb's Journal 19(10):46-54, 91-92.
+20. Kurz, B. J. 1983. "Optimal Color Quantization for Color
+    Displays," IEEE Computer Vision and Pattern Recognition
+    Proceedings, Silver Spring, MD, IEEE Computer Science
+    Press.
+21. Lehar, A. F., and R. J. Stevens. 1984. "High-Speed
+    Manipulation of the Color Chromaticity of Digital Images,"
+    IEEE Computer Graphics and Applications 4(2):34-39
+    (February).
+22. Levine, J. 1994. Programming for Graphics Files in C and
+    C++, New York: John Wiley & Sons.
+23. Lindley, C. 1992. Practical Ray Tracing in C, New York:
+    John Wiley & Sons. 24. Luse, M. 1994. Bitmapped Graphics Programming
+    in C++, Reading, MA: Addison-Welsey.
+25. Magnenat-Thalmann, N., and D. Thalmann, eds. 1988. New
+    Trends in Computer Graphics, New York: Springer-Verlag.
+26. Orchard, M. T., and C. A. Bouman. 1991. "Color
+    Quantization of Images," IEEE Transactions on Signal
+    Processing 39(12):2677-2690 (December).
+27. Pomerantz, D. 1990. "A Few Good Colors," Computer Language
+    7(8):32-41 (August).
+28. Schore, M. 1991. "Octree Method of Color Matching," The C
+    Users Journal 9(8):43-52 (August).
+29. Thomas, S. W., and R. G. Bogart. 1991. "Color Dithering,"
+    in Arvo (1991), pp. 72-77, 509-513.
+30. Wan, S., S. Wong, and P. Prusinkiewicz. 1968. "An
+    Algorithm for Multidimensional Data Clustering," ACM
+    Transactions on Mathematical Software 14(2):153-162.
+31. Wan, S. J., P. Prusinkiewicz, and S. K. M. Wong. 1990.
+    "Variance-Based Color Image Quantization for Frame Buffer
+    Display," Color Research and Application 15(1):52-58.
+32. Wu, X., and I. Witten. 1985. "A Fast k-Means Type
+    Clustering Algorithm," Research Report 85/197/10, Department
+    of Computer Science, University of Calgary, Alberta.
+33. Wu, X. 1991. "Efficient Statistical Computations for Optimal
+    Color Quantization," in Arvo (1991), pp. 126-133.
+34. Xiang, Z., and G. Joy. 1994. "Color Image Quantization by
+    Agglomerative Clustering," IEEE Computer Graphics and
+    Applications 14(3):44-48 (May).
+
+There are undoubtably other papers on the topic, since color quantization has
+many applications in computer graphics.  (If you know of any others, please
+let me know!)  I think, however, that the above will prove useful to anyone
+interested in color quantization issues.
+
+Happy reading!
+
+-------------------------------------------------------------------------------
+END OF RTNEWS

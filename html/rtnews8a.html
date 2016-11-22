@@ -1,0 +1,731 @@
+<!-- html version of Volume 2, Number 6 :  -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 2, Number 6</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>September 20, 1989</FONT>
+<P><FONT size=+1>Volume 2, Number 6</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1989, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction
+</A></LI>
+<LI><A HREF="#art2">
+New People and Address Changes
+</A></LI>
+<LI><A HREF="#art3">
+Q&A on Radiosity Using Ray Tracing,
+</A></LI>
+by Mark VandeWettering and John Wallace
+<LI><A HREF="#art4">
+Dark Bulbs,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art5">
+MTV Ray Tracer Update and Bugfix,
+</A></LI>
+by Mark VandeWettering
+<LI><A HREF="#art6">
+DBW Ray Tracer Description
+</A></LI>
+</UL>
+========Net News Cullings========
+<UL>
+<LI><A HREF="#art7">
+Wanted: Easy Ray/Torus Intersection,
+</A></LI>
+by Jochen Schwarze
+<LI><A HREF="#art8">
+Polygon to Patch NFF Filter,
+</A></LI>
+by Didier Badouel
+<LI><A HREF="#art9">
+Texture Mapping Resources,
+</A></LI>
+by Eric Haines, Prem Subrahmanyam,
+Ranjit Bhatnagar, and Jack Ritter
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction
+</A></FONT>
+</H4>
+        There are a lot of new people, with some interesting fields of study.
+There's been a lot of talk about texture mapping and the DBW ray tracer on the
+net.  This discussion will probably continue into next issue, but I felt Jack
+Ritter's posting a good way to end it for now.  I've also been toying with
+texturing again, making my version of "Mount Mandrillbrot" (fractal mountain
+with everyone's favorite beasty textured onto it), which some clever person
+invented at the University of Waterloo (I think) some years ago (does anyone
+know who?).  There are also other useful snippets throughout.
+<P>
+        However, one major reason that I'm flushing the queue right now is
+that the node "hpfcrs" is disappearing off the face of the earth.  So, please
+note my only valid address is the "wrath" path at the top of the issue.
+Thanks!
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+New People and Address Changes
+</A></FONT>
+</H4>
+Panu Rekola, <A HREF="mailto:pre@cs.hut.fi">pre@cs.hut.fi</A>
+<P>
+To update my personal information in your files:
+<P>
+<PRE>
+Surface mail:   Panu Rekola
+                Mannerheimintie 69 A 7
+                SF-00250 Helsinki, Finland
+Phone:          +358-0-4513243 (work), +358-0-413082 (home)
+Email:          <A HREF="mailto:pre@cs.hut.fi">pre@cs.hut.fi</A>
+Interests:      illumination models, texture mapping, parametric surfaces.
+</PRE>
+<P>
+You may remove one of the names you may have in the contact list.  Dr. Markku
+Tamminen died in the U.S.  when he was returning home from SIGGRAPH.  How his
+project will go on, is still somewhat unclear.
+<P>
+________
+<P>
+Andrew Pearce, pearce@alias
+<P>
+I wrote my MS thesis on Multiprocessor Ray Tracing, then moved to Alias where
+I sped up Mike Sweeney's ray caster.  I've just completed writing the Alias
+Ray Tracer using a recursive uniform subdivision method (see Dave Jevans paper
+in Graphics Interface '89, "Adaptive Voxel Subdivision for Ray Tracing") with
+additional bounding box and triangle intersection speed ups.
+<P>
+Right now, I'm fooling around with using the guts of the ray tracer to do
+particle/object collision detection with complex environments, and
+particle/particle interaction with the search space reduced by the spatial
+subdivision.  (No, I don't use the ray tracer to render the particles.)
+<P>
+In response to Susan Spach's question about mip mapping, we use mip maps for
+our textures, we get the sample size by using a "cone" size parameter which is
+based on the field of view, aspect ratio, distance to the surface and angle of
+incidence.  For secondary rays this size parameter is modified based on the
+tangents to the surface and the type of secondary ray it is (reflection or
+refraction).  This may be difficult to do if you are not ray tracing surfaces
+for which the tangent information is readily available (smooth shaded
+polygonal meshes?).
+<P>
+<PRE>
+- Andrew Pearce
+- Alias Research Inc., Toronto, Ontario, Canada.
+- pearce%<A HREF="mailto:pearce@alias.com">alias@csri.utoronto.ca</A>   |   pearce@alias.UUCP
+- ...{allegra,ihnp4,watmath!utai}!utcsri!alias!pearce
+</PRE>
+<P>
+________
+<P>
+Brian Corrie, <A HREF="mailto:bcorrie@uvicctr.uvic.ca">bcorrie@uvicctr.uvic.ca</A>
+<P>
+        I am a graduate student at the University of Victoria, nearing the
+completion of my Masters degree.  The topic of my thesis is producing
+realistic computer generated images in a distributed network environment.
+This consists of two major research areas:  providing a distributed (in the
+parallel computing sense) system for ray tracing, as well as a workbench for
+scene description, and image manipulation.  The problems that need to be
+addressed by a system for parallel processing in a distributed loosely coupled
+system are quite different than those addressed by a tightly coupled parallel
+processor system.  Because of the (likely) very high cost of communication in
+a distributed processing environment, most parallel algorithms currently used
+are not feasible (due to the high overhead).  The gains of parallel ray
+tracing in a distributed environment are:  the obvious speedup by bringing
+more processing power to bear on the problem, the flexibility of distributed
+systems, and the availability of the resources that will become accessible as
+distributed systems become more prominent in the computer community.
+<P>
+        Whew, what a mouthful.  In a nutshell, I am interested in:  ray
+tracing in general, parallel algorithms, distributed systems for image
+synthesis (any one know of any good references), and this new fangled
+radiosity stuff.
+<P>
+________
+<P>
+Joe Cychosz
+<P>
+<PRE>
+    Purdue University CADLAB
+    Potter Engineering Center
+    W. Lafayette, IN  47906
+</PRE>
+<P>
+<PRE>
+    Phone: 317-494-5944
+    Email: <A HREF="mailto:cychosz@ecn.purdue.edu">cychosz@ecn.purdue.edu</A>
+</PRE>
+<P>
+My interests are in supercomputing and computer graphics.  Research work is
+Vectorized Ray Tracing.  Other interests are:  Ray tracing on MIMD tightly
+coupled shared memory machines, Algorithm vectorization, Mechanical design
+processes, Music synthesis, and Rendering in general.
+<P>
+________
+<P>
+<PRE>
+Jerry Quinn
+Department of Math and Computer Science
+Bradley Hall
+Dartmouth College
+Hanover, NH 03755
+sunapee.dartmouth.edu!quinn
+</PRE>
+<P>
+My interests are currently ray tracing efficiency, parallelism,
+animation, radiosity, and whatever else happens to catch my eye at the
+given moment.
+<P>
+________
+<P>
+<PRE>
+Marty Barrett - octrees, parametric surfaces, parallelism.
+        <A HREF="mailto:mlb6@psuvm.bitnet">mlb6@psuvm.bitnet</A>
+</PRE>
+<P>
+Here is some info about my interests in ray tracing:
+<P>
+I'm interested in efficient storage structures for ray tracing, including
+octree representations and hybrid regular subdivision/octree grids.  I've
+looked at ray tracing of parametric surfaces, in particular Bezier patches and
+box spline surfaces, via triangular tessellations.  Parallel implementations of
+ray tracing are also of interest to me.
+<P>
+________
+<P>
+<PRE>
+    Charles A. Clinton
+    Sierra Geophysics, Inc.
+    11255 Kirkland Way
+    Kirkland, WA 98033 USA
+    Email: ...!uw-beaver!sumax!ole!steven!cac
+    Voice: (206) 822-5200
+    Telex: 5106016171
+    FAX:   (206) 827-3893
+</PRE>
+<P>
+I am doing scientific visualization of 3D seismic data. To see the kind of
+work that I am doing, check out:
+<P>
+<PRE>
+        'A Rendering Algorithm for Visualizing 3D Scaler Fields'
+        Paolo Sabella
+        Schlumberger-Doll Research
+        Computer Graphics, Vol. 22, Number 4 (SIGGRAPH '88 Conference Proc.)
+        pp 51-58
+</PRE>
+<P>
+In addition, I try to keep up with ray-tracing and computer graphics in
+general. I occasionally try my hand at doing some artistic ray-tracing.
+(I would like to extend my thanks to Mark VandeWettering for distributing
+MTV. It has provided a wonderful platform for experimentation.)
+<P>
+________
+<P>
+Jochen Schwarze
+<P>
+   I've been developing several smaller graphics packages, e.g.  a 3D
+visualization of turning parts etc.  Now I'm implementing the 2nd version of a
+ray tracing program that supports modular programming using a description
+language, C++ vector analysis and body class hierarchy, CSG trees, texture
+functions and mapping, a set of body primitives, including typeface rendering
+for logos, and a network ipc component to allow several cpu's to calculate a
+single image.
+<P>
+   My interests lie - of course :-) - in speedup techniques, and the
+simulation of natural phenomena, clouds, water, etc.  Just starting with this.
+<P>
+<PRE>
+Jochen Schwarze                     Domain: <A HREF="mailto:schwarze@isaak.isa.de">schwarze@isaak.isa.de</A>
+ISA GmbH, Stuttgart, West Germany   UUCP:   <A HREF="mailto:schwarze@isaak.uucp">schwarze@isaak.uucp</A>
+                                    Bang:   ...!uunet!unido!isaak!schwarze
+</PRE>
+<P>
+<PRE>
+                                    S-Mail: ISA GmbH
+                                            c/o Jochen Schwarze
+                                            Azenberstr. 35
+                                            7000 Stuttgart 1
+                                            West Germany
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Q&A on Radiosity Using Ray Tracing,
+</A></FONT>
+by Mark VandeWettering and John Wallace
+</H4>
+From Mark VandeWettering:
+<P>
+I am currently working on rewriting my ray tracer to employ radiosity-like
+effects.  Your paper (with Wallace and Elmquist) is very nice, and suggests
+a really straightforward implementation.  I just have a couple of questions
+that you might be able to answer.
+<P>
+When you shoot energy from a source patch, it is collected at a specific
+patch vertex.  How does this energy get transferred to a given patch for
+secondary shooting?  In particular, is the vertex shared between multiple
+patches, or is each vertex only in a single patch?  I can imagine the
+solution if each vertex is distinct, but have trouble with the case where
+vertices are shared.  Any quick insights?
+<P>
+The only other question I have is:  HOW DO YOU GET SUCH NICE MODELS TO RENDER?
+[We use ME30, HP's Romulus based solids modeler - EAH]
+<P>
+Is there a public domain modeling package that is available for suns or sgi's
+that I can use to make more sophisticated models?  Something cheap even?
+<P>
+[The BRL modeler and ray tracer runs on a large number of machines, and they
+like having universities as users - see <A HREF="rtnews6b.html">Vol.2 No. 2</A> (archive 6).  According
+to Mike Muuss' write-up, some department in Princeton already has a copy.
+<P>
+The Simple Surface Modeler (SSM) works on SGI equipment.  It was developed at
+the Johnson Space Center and, since they are not supposed to make any money
+off it, is being sold cheap (?) by a commercial distributor.  COSMIC, at
+404-542-3265, can send you some information on it.  It also runs on a Pixel
+Machine (which is what I saw it running on at SIGGRAPH 88), though I don't
+believe support for this machine will be shipped.  It's evidentally not
+shipping yet (red tape - the product is done), but should be "realsoonnow".
+More information when I get the abstract.  Does anyone else know any
+resources?]
+<P>
+________
+<P>
+Reply from John Wallace:
+<P>
+Computing the patch energy in progressive radiosity using ray tracing:
+<P>
+Following a step of progressive radiosity, every mesh vertex in the scene will
+have a radiosity.  Energy is not actually collected at the mesh vertices.
+What is computed at each vertex is the energy per unit area (radiosity)
+leaving the surface at that location.  The patch radiosity is the average
+energy per unit area over the patch.  Finally, the patch energy is the patch
+radiosity times the patch area (energy per unit area times area).
+<P>
+The vertex radiosities can be considered a sampling of the energy per unit
+area at selected points across the patch.  To obtain the average energy per
+unit area over the patch, take the average of the vertex radiosities.  This
+assumes that the vertices represent uniform sub-areas of the patch.  This is
+not necessarily true, and when it is not a more accurate answer is obtained by
+taking an area weighted average of the vertex radiosity.  The weight given to
+a vertex is equal to the area of the patch that it represents.  In our work we
+used a uniform mesh and weighted all vertices equally.
+<P>
+It doesn't matter whether vertices are shared by neighboring patches, since
+we're talking about energy per unit area.  Picture four patches that happen to
+all share a particular vertex.  The energy per unit area leaving any of the
+patches at the vertex is not affected by the fact that other patches share
+that vertex.  If we were somehow collecting energy at the vertex, then it
+would have to be portioned out between the patches.
+<P>
+Once the patch radiosity is know, the patch energy is obtained by multiplying
+patch radiosity times patch area.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Dark Bulbs,
+</A></FONT>
+by Eric Haines
+</H4>
+        An interesting idea mentioned to me by Andrew Glassner was the concept
+of "darkbulbs" in computer graphics.  This idea is a classic joke technology,
+in which the darkbulb sucks light out of an area.  For example, if you want
+to sleep during the daytime, you simply turn on your negative 100 watt dark
+bulb and your bedroom is flooded in darkness.  Andrew noted that this
+technology is entirely viable in computer graphics, and would even be useful
+in obtaining interesting results.
+<P>
+        I happened to mention the idea to Roy Hall, and he told me that this
+was an undocumented feature of the Wavefront package!  Last year Wavefront came
+out with an image of two pieces of pottery behind a candle, with wonderful
+texturing on the objects.  It turns out that the artist had wanted to
+tone down the brightness in some parts of the image, and so tried negative
+intensity light sources.  This turned out to work just fine, and the artist
+mentioned this to Roy, who, as an implementer of this part of the package,
+had never considered that anyone would try this and so never restricted the
+intensity values to be non-negative.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+MTV Ray Tracer Update and Bugfix,
+</A></FONT>
+by Mark VandeWettering
+</H4>
+[this was extracted by me from personal mail, with parts appearing on
+comp.graphics - EAH]
+<P>
+As was recently pointed out to me by Mike Schoenborn, the cylinder code in the
+version of the MTV raytracer is broken somewhat severely.  Or at least it
+appeared to be so, what actually happens is that I forgot to normalize two
+vectors, which leads to interesting distortions and weird looking cylinders.
+Anyway, the bug is in cone.c, in the function MakeCone().  After the vectors
+cd -&gt; cone_u and cd -&gt; cone_v are created, they should be normalized.  A
+context diff follows at the end of this.  This makes the SPD "tree" look MUCH
+better.  (And all this time I thought it was Eric's fault :-)
+<P>
+This bugfix will be worked into the next release, and I should also update the
+version on <A HREF="ftp://cs.uoregon.edu">cs.uoregon.edu</A> SOMETIME REAL SOON NOW (read, don't hold your breath
+TOO anxiously).  Hope that this program continues to be of use...  :-)
+<P>
+Somebody has some texture mapping code that they are sending me, I will
+probably try to integrate it in before I make my next release.  I am also
+trying to get in spline surfaces, but am having difficulty to the point of
+frustration. Any recommendations on implementing them?
+<P>
+<PRE>
+*** ../tmp/cone.c       Fri Aug 25 20:25:52 1989
+--- cone.c      Fri Aug 25 21:31:04 1989
+***************
+*** 240,247 ****
+--- 240,251 ----
+        /* find two axes which are at right angles to cone_w
+         */
++
+        VecCross(cd -&gt; cone_w, tmp, cd -&gt; cone_u) ;
+        VecCross(cd -&gt; cone_u, cd -&gt; cone_w, cd -&gt; cone_v) ;
++
++       VecNormalize(cd -&gt; cone_u) ;
++       VecNormalize(cd -&gt; cone_v) ;
+
+        cd -&gt; cone_min_d = VecDot(cd -&gt; cone_w, cd -&gt; cone_base) ;
+        cd -&gt; cone_max_d = VecDot(cd -&gt; cone_w, cd -&gt; cone_apex) ;
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+DBW Ray Tracer Description
+</A></FONT>
+</H4>
+[A ray tracer that has been mentioned in these pages (screens?) before is DBW.
+Not having an Amiga and not being able to deal with "zoo" files, I never got a
+copy.  Prem Subrahmanyam has now made it available via anonymous FTP from
+<A HREF="ftp://geomag.gly.fsu.edu">geomag.gly.fsu.edu</A> in /pub/pics/DBW.src.  Output is four bits for each
+channel.
+<P>
+The original program was written by David B. Wecker, translating from a Vax
+11/750 to the Amiga, with a conversion to Sun workstations by Ofer Licht
+(<A HREF="mailto:ofer@gandalf.berkeley.edu">ofer@gandalf.berkeley.edu</A>). - EAH]
+<P>
+Below is an excerpt from the documentation RAY.DOC:
+<P>
+The RAY program knows how to create images composed of four primitive
+geometric objects:  spheres, parallelograms, triangles, and flat circular
+rings (disks with holes in them).  Some of the features of the program are:
+<P>
+Diffuse and specular reflections (with arbitrary levels of gloss or polish).
+Rudimentary modeling of object-to-object diffusely reflected light is also
+implemented, that among other things accurately simulates color bleed effects
+from adjacent contrasting colored objects.
+<P>
+Mirror reflections, including varying levels of mirror smoothness or
+perfection.
+<P>
+Refraction and translucency (which is akin to variable microscopic smoothness,
+like the surface of etched glass).
+<P>
+Two types of light sources:  purely directional (parallel rays from infinity)
+of constant intensity, and spherical sources (like light bulbs, which cast
+penumbral shadows as a function of radius and distance) where intensity is
+determined by the inverse square law.
+<P>
+Photographic depth-of-field.  That is, the virtual camera may be focused on a
+particular object in the scene, and the virtual camera's aperture can be
+manipulated to affect the sharpness of foreground and background objects.
+<P>
+Solid texturing.  Normally, a particular object (say a sphere) is considered
+to have constant properties (like color) over the entire surface of the
+object, often resulting in fake looking objects.  Solid texturing is a way to
+algorithmically change the surface properties of an object (thus the entire
+surface area is no longer of constant nature) to try and model some real world
+material.  Currently the program has built in rules for modelling wood,
+marble, bricks, snow covered scenes, water (with arbitrary wave sources), plus
+more abstract things like color blend functions.
+<P>
+Fractals.  The program implements what's known as recursive triangle
+subdivision, which creates all manners of natural looking surface shapes (like
+broken rock, mountains, etc.).  The character of the fractal surface (degree
+of detail, roughness, etc.)  is controlled by parameters fed to the program.
+<P>
+AI heuristics to complete computation of a scene within a user specified
+length of time.  [???]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<P>
+======== USENET cullings follow ==============
+<H4><FONT size=+1><A NAME="art7">
+Wanted: Easy Ray/Torus Intersection,
+</A></FONT>
+by Jochen Schwarze
+</H4>
+<P>
+What I want to do is to turn a path consisting of line and arc segments around
+an axis and then ray-trace the generated turning part.  The rotated line
+segments produce cylinders or cones that are easy to intersect with a ray,
+whereas the arcs produce tori.  To evaluate the intersection of the ray with a
+torus I'd have to numerically solve a polynomial equation of fourth degree.
+<P>
+Does anybody know a way that avoids solving a general fourth- degree equation?
+Perhaps something that respects torus geometry and allows to split the
+equation into two quadric ones?  Any other fast way to do it?
+<P>
+Thanks very much.
+<P>
+<PRE>
+Jochen Schwarze                     Domain: <A HREF="mailto:schwarze@isaak.isa.de">schwarze@isaak.isa.de</A>
+ISA GmbH, Stuttgart, West Germany   UUCP:   <A HREF="mailto:schwarze@isaak.uucp">schwarze@isaak.uucp</A>
+                                    Bang:   ...!uunet!unido!isaak!schwarze
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art8">
+Polygon to Patch NFF Filter,
+</A></FONT>
+by Didier Badouel
+</H4>
+This is a new filter program for NFF databases, it  converts polygons (p)
+into patches (pp) computing normal vector for vertices.
+<P>
+<PRE>
+________________________________________________________________
+  Didier  BADOUEL                       <A HREF="mailto:badouel@irisa.fr">badouel@irisa.fr</A>
+  INRIA / IRISA                         Phone : +33 99 36 20 00
+ Campus Universitaire de Beaulieu       Fax :   99 38 38 32
+ 35042 RENNES CEDEX - FRANCE            Telex : UNIRISA 950 473F
+________________________________________________________________
+</PRE>
+<P>
+[Code removed.  Find it at cs.uoregon.edu or write him - EAH]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art9">
+Texture Mapping Resources,
+</A></FONT>
+by Eric Haines, Prem Subrahmanyam, Ranjit Bhatnagar, and Jack Ritter
+</H4>
+From: Eric Haines
+<P>
+Robert Minsk had a question about how to do inverse mapping on a quadrilateral.
+This was my response:
+<P>
+For the inverse bilinear mapping of XYZ to UV, see p. 59-64 of "An Introduction
+to Ray Tracing", edited by Andrew Glassner, Academic Press (hot off the press).
+Tell me if you find any bugs, since I need to send typoes to AP.  This same
+info is in the "Intro to RT" SIGGRAPH course notes from 1987 & 1988,
+with one important typo fixed (see old issues of the Ray Tracing News to
+find out the typo).
+<P>
+An excellent discussion of the most popular mappings (affine, bilinear, and
+projective), and for a discussion on why to avoid simple Gouraud interpolation,
+get a copy of Paul Heckbert's Master's Thesis (again, hot off the press),
+"Fundamentals of Texture Mapping and Image Warping".  It's got what you need
+and is also a good start on sampling/filtering problems.  Order it as
+Report No. UCB/CSD 89/516 (June 1989) from
+<P>
+<PRE>
+        Computer Science Division
+        Dept of Electrical Engineering and Computer Sciences
+        University of California
+        Berkeley, California  94720
+</PRE>
+<P>
+It was $5.50 when I ordered mine.  Oh, I should also note: it has source
+code in C for most of the algorithms described in the text.
+<P>
+________
+<P>
+<PRE>
+From: <A HREF="mailto:prem@geomag.fsu.edu">prem@geomag.fsu.edu</A> (Prem Subrahmanyam)
+Newsgroups: comp.graphics
+Subject: Re: Texture mapping
+Organization: Florida State University Computing Center
+</PRE>
+<P>
+I would strongly recommend obtaining copies of both DBW_Render and QRT, as
+both have very good texture mapping routines.  DBW uses absolute spatial
+coordinates to determine texture, while QRT uses a relative position per each
+object type mapping.  DBW has some really interesting features, like
+sinusoidal reflection to simulate waves, a turbulence-based marble/wood
+texture based on the wave sources defined for the scene.  It as well has a
+brick texture, checkerboard, and mottling (turbulent variance of the color
+intensity).  Writing a texture routine in DBW is quite simple, since you're
+provided with a host of tools (like a turbulence function, noise function,
+color blending, etc.).  I have recently created a random-color texture that
+uses the turbulence to redefine the base color based on the spatial point
+given, which it then blends into the object's base color using the color blend
+routines.  Next will be a turbulent-color marble texture that will modify the
+marble vein coloring according to the turbulent color.  Also in the works are
+random color checkerboarding (this will require a little more thought),
+variant brick height and mortar color (presently they are hard-wired), the
+list is almost endless.  I would think the ideal ray-tracer would be one that
+used QRT's user-definable texture patches which are then mapped onto the
+object, as well as DBW's turbulence/wave based routines.  The latter would
+have to be absolute coordinate based, while the former can use QRT's relative
+position functions.  In any case, getting copies of both of these would be the
+most convenient, as there's no reason to reinvent the wheel.
+<P>
+________
+<P>
+<PRE>
+From: <A HREF="mailto:ranjit@grad1.cis.upenn.edu">ranjit@grad1.cis.upenn.edu</A> (Ranjit Bhatnagar)
+    4211 Pine St., Phila PA 19104
+Newsgroups: comp.graphics
+Subject: Re: Texture mapping by spatial position
+Organization: University of Pennsylvania
+</PRE>
+<P>
+The combination of 3-d spatial texture-mapping (where the map for a particular
+point is determined by its position in space rather than its position on the
+patch or polygon) with a nice 3-d turbulence function can give really neat
+results for marble, wood, and such.  Because the texture is 3-d, objects look
+like they are carved out of the texture function rather than veneered with it.
+It works well with non-turbulent texture functions too, like bricks, 3-d
+checkerboards, waves, and so on.  However, there's a disadvantage to this kind
+of texture function that I haven't seen discussed before:  as generally
+proposed, it's highly unsuited to _animation._ The problem is that you
+generally define one texture function throughout all of space.  If an object
+happens to move, its texture changes accordingly.  It's a neat effect - try it
+- but it's not what one usually wants to see.
+<P>
+The obvious solution to this is to define a separate 3-d texture for each
+object, and, further, _cause the texture to be rotated, translated, and scaled
+with the object._ DBW does not allow this, so if you want to do animations of
+any real complexity with DBW, you can't use the nice wood or marble textures.
+<P>
+This almost solves the problem.  However, it doesn't handle the case of an
+object whose shape changes.  Consider a sphere that metamorphoses into a cube,
+or a human figure which walks, bends, and so on.  There's no way to keep the
+3-d texture function consistent in such a case.
+<P>
+Actually, the real world has a similar defect, so to speak.  If you carve a
+statue out of wood and then bend its limbs around, the grain of the wood will
+be distorted.  If you want to simulate the real world in this way and get
+animated objects whose textures stay consistent as they change shape, you have
+to use ordinary surface-mapped (2-d) textures.  But 3-d textures are so much
+nicer for wood, stone, and such!  There are a couple of ways to get the best
+of both worlds:  [I assume that an object's surface is defined as a constant
+set of patches, whether polygonal or smooth, and though the control points may
+be moved around, the topology of the patches that make up the object never
+changes, and patches are neither added to or deleted from the object during
+the animation.]
+<P>
+<PRE>
+        1) define the base-shape of your object, and _sample its surface_ in
+           the 3-d texture.  You can then use these sample tables as ordinary
+           2-d texture maps for the animation.
+</PRE>
+<P>
+<PRE>
+        2) define the base-shape of your object, and for each metamorphosized
+           shape, keep pointers to the original shape.  Then, whenever a ray
+           strikes a point on the surface of the metamorphed shape, find the
+           corresponding point on the original shape and look up its
+           properties (i.e.  color, etc.)  in the 3-d texture map.  [Note:  I
+           use ray-tracing terminology but the same trick should be applicable
+           to other techniques.]
+</PRE>
+<P>
+The first technique is perhaps simpler, and does not require you to modify
+your favorite renderer which supports 2-d surface texture maps.  You just
+write a preprocessor which generates 2-d maps from the 3-d texture and the
+base-shape of the object.  However, it is susceptible to really nasty aliasing
+and loss of information.  The second technique has to be built into the
+renderer, but is amenable to all the antialiasing techniques possible in an
+ordinary renderer with 3-d textures, such as DBW.  Since the notion of 'the
+same point' on a particular patch when the control points have moved is
+well-defined except in degenerate cases, the mapping shouldn't be a problem --
+though it does add an extra level of antialiasing to worry about.  [Why?
+Imagine that a patch which is very large in the original base-shape has become
+very small - sub-pixel size - in the current animated shape.  Then a single
+pixel-sized sample in the current shape could be mapped to a large part of the
+original - using, for instance, stochastic sampling or analytic techniques.]
+<P>
+If anyone actually implements these ideas, I'd like to hear from you (and get
+credit, heh heh, if I thought of it first).  I doubt that I will have the
+opportunity to try it.
+<P>
+________
+<P>
+<PRE>
+From: <A HREF="mailto:ritter@versatc.UUCP">ritter@versatc.UUCP</A> (Jack Ritter)
+Organization: Versatec, Santa Clara, Ca. 95051
+</PRE>
+<P>
+[Commenting on Ranjit's posting]
+<P>
+It seems to me that you could solve this problem by transforming the
+center/orientation of the texture function along with the object that is being
+instantiated.  No need to store values, no tables, etc.  The texture function
+must of course be simple enough to be so transformable.
+<P>
+Example, wood grain simulated by concentric cylindrical shells around an axis
+(the core of the log):
+<P>
+    Imagine the log's center line as a half-line vector, (plus a position, if
+necessary), making it transformable.  Imagine each object type in its object
+space, BOLTED to the log by an invisible bracket.  As you translate and rotate
+the object, you also sling the log around.  But be careful, some of these logs
+are heavy, and might break your teapots.  I use only natural logs myself.
+<P>
+<PRE>
+   Jack Ritter, S/W Eng. Versatec, 2710 Walsh Av, Santa Clara, CA 95051
+   Mail Stop 1-7.  (408)982-4332, or (408)988-2800 X 5743
+   UUCP:  {ames,apple,sun,pyramid}!versatc!ritter
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

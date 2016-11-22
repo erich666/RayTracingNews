@@ -1,0 +1,1469 @@
+"The Ray Tracing News" email edition began after some ray tracing researchers
+met at SIGGRAPH 87 and an address list was formed.  Andrew Glassner started
+"The Ray Tracing News", hardcopy edition, and soon thereafter we distributed
+copies of the email address list to researchers.
+
+This is the first archive collection of "The Ray Tracing News".  I hope you
+will get as much use out of it as I have,
+
+    Eric Haines, 3D/Eye Inc, 2359 N. Triphammer Rd, Ithaca, NY  14850
+    ...!hpfcla!hpfcrs!eye!erich
+
+----------------------------------------------------
+
+	I'm presently keeping the list up-to-date.  As far as adding new people
+to this mailing list, I'd personally like to see the list not grow without
+bounds.  Given that the Intro to Ray Tracing course had the highest attendance,
+there's obviously a lot of people interested in ray-tracing.  The group
+presently consists of researchers and people building ray-tracing systems, and
+it'd be nice to keep it at this level (and keep all of our long-distance e-mail
+costs down).
+
+	First off, a quick announcement:  if you didn't get a copy of the
+"Intro. to Ray Tracing" course notes at SIGGRAPH 87 and would like a copy
+(they sold out twice), send me $20 and I'll xerox them.  There are only three
+articles which are reprints - the rest is new stuff and pretty worthwhile.
+
+
+[Skip the next offering if you read it in The Ray Tracing News]
+
+SPD & NETLIB:
+
+	My news for the day is that netlib is now carrying my "standard"
+procedural database generators (written in C).  If you don't know about netlib,
+here's the two minute explanation:
+
+-------------------------------------------------------------------------------
+
+	Netlib has two addresses.  One is:
+
+	...!hplabs!hpfcla!research!netlib
+
+(There may be other quicker routes to netlib - you'll have to research that
+yourself).  The second one may be more convenient, as it is an arpa connection:
+
+	netlib@anl-mcs.arpa
+
+So after you do "mail [...!]hplabs!hpfcla!research!netlib", the next step is to
+request what you want, one line per request.  For example, to get my databases,
+simply type on a single line (and don't have anything else on the line):
+
+	send haines from graphics
+
+and end the message.  Netlib is computerized, and will automatically parse
+your message and send you the 82K bytes of dox & code for my databases.
+
+	The best way to find out about netlib and what it has to offer is to
+send it a request:
+
+	send index
+
+and you'll get sent a listing of all the libraries available.  It's mostly
+numerical analysissy stuff (lots'o'matrix solvers), but there are some things
+of interest.  One particularly yummy database is the "polyhedron"
+contributions.  There are some 142 polyhedra descriptions (vertices, faces, &
+edge descriptions and more).  Some of these descriptions are buggy, but most
+are good (as netlib says, "Anything free comes with no guarantee").
+
+-----------------------------------------------------------------------------
+
+	As far as the question "what do the images look like?" goes, the
+images will be published in IEEE CG&A in November.
+
+
+SPLINE SURFACES:
+
+	A question which I want to answer is "which is the best way in
+software to ray-trace bicubic spline patches?"  In particular, I want to
+intersect bicubics (also quadrics and linears, and any mix of the three, e.g.
+bicubic u, quadric v) that can also be rational, and also have non-uniform
+knots.  As an added bonus, I'd like to do trimming curves.  I am interested in
+anyone's feelings or findings on this subject, especially any experiences with
+actual implementation they may have had.
+
+To kick off discussion of this problem, John Peterson, who is researching this
+question at the University of Utah, was kind enough to spend some time on a
+response to me.  His reply follows (printed with his permission):
+
+------------------------------------------------------------------------------
+
+RE ray tracing splines..  I've sent a paper on ray tracing splines via
+polygons to TOG, but since that's going to be stuck in the review process
+for a while, here's an overview:
+
+Most of the recent published stuff on this have been approaches using
+numerical methods; which I would avoid like the plague.  I recently
+discovered that Whitted mentions surface subdivision very briefly in his
+classic paper (CACM '80) and also in Rubin & Whitted (SIGGRAPH '80).
+The technique they use was to subdivide the surface "on the fly", i.e.,
+an area of surface is split only when rays come near it.  Whitted
+doesn't go into any detail in these papers though, just a couple of
+paragraphs each.
+
+However, Whitted's motivation for "subdivision on the fly" was lack of
+memory on his PDP-11 - nowadays I think you're better off just to do all
+the subdivision initially, then throw the surface away - much less
+bookkeeping.  The polygon/bounding volume database isn't that huge if you
+use adaptive surface subdivision (more on that in a moment).
+
+In terms of references, I'd highly recommend the "Killer B's" - "An 
+Introduction to the Use of Splines in Computer Graphics" by Bartels,
+Beatty and Barsky.  It appeared as SIGGRAPH tutorial notes in '85 and
+'86, and I think a book version is coming out from Kaufmann(sp?) in
+September.  Another good reference is, "A Survey of Curve and Surface
+Methods in CAGD", by Bohm, Farin and Kahmann, in "Computer Aided Geometric
+Design", July 1984.  Both of these give excellent background on all the
+math you'll need for dealing with splines.  If you need to know about
+rationals, see Tiller's paper "Rational B-Splines for Curve and Surface
+Representations" in CG&A, September '83.
+
+The subdivision algorithm I used is based on the Oslo Algorithm (Cohen,
+Lyche & Riesenfeld, Computer Graphics & Image Proc., Oct. 1980).  This
+is a little slower than some of the other subdivision algorithms, but
+the win is that you're not restricted to specific orders or knot
+vectors.  Since the subdivision time is generally small compared to the
+ray tracing time (like < 10%) I find it's worth the generality.  (By
+the way, the Killer B's description of the Oslo algorithm is much easier
+reading than the CG&IP article.  Sweeney's paper in the Feb. '86 CG&A
+also has a good description of it).  Other subdivision classics are Ed
+Catmull's PhD thesis (U. Utah, '75) and Lane, Carpenter, Whitted &
+Blinn's article in the Jan. '80 CACM.
+
+A couple tricks are noteworthy.  First, if you're doing adaptive surface
+subdivision, you'll need a "flatness criteria" (to determine when to
+quit splitting the surface).  I've found a good approximation is to take
+the bounding box of the control mesh, and find the point in the middle
+of it.  Then project the size of a pixel onto this point, and use this
+distance as a flatness criteria.  
+
+Other trick: Crack prevention.  If you split a surface into two parts,
+one part may get subdivided more than the other.  If this happens, along
+the seam between the two halves you need to force the polygon vertices in the
+side with more divisions to lie on the edge of the surface with fewer
+subdivisions.
+
+
+My reply to John follows:
+
+	Thanks much for taking the time to tell me about splines and your
+findings.  You leave me in a quandary, though.  I'm interested in the
+numerical techniques for bicubics, but I also want to take your warnings to
+heart.
+
+	I have to admit, I have a great fear of throwing away the nice
+compact spline description and blow it up into tons of polygons.  From your
+comments, you say that using adaptive techniques can help avoid this problem.
+You seem to divide to the pixel level as your criteria - hmmm, I'll have to
+think about that.  Avoiding cracks sounds like a headache.  Also, it seems to
+me that you'll have problems when you generate reflection rays, since for these
+rays the "flatness criteria" is not necessarily valid.  Have you ever noticed
+practical problems with this (one pathological example I can think of is a
+lens in front of a spline patch: the lens magnifies the pixel sized patches
+into much larger entities.  However, almost everything has pathological
+problems of some sort.  Have you run into any problems due to your method on a
+practical level)?
+
+	I may try subdividing on the fly to avoid all this.  To this end, have
+you looked at Ron Pulleyblank's routine for calculating bicubic patch
+intersections (IEEE CG&A March 1987)?  What do you think of his "on the fly"
+subdivision algorithm?
+
+	Articles: thanks for the references.  Have you seen the article by
+Levner, Tassinari, and Marini, "A Simple Method for Ray Tracing Bicubic
+Surfaces," in Computer Graphics 1987, T.L. Kunii editor, Springer-Verlag, Tokyo?
+Sounded intriguing - someone's hopefully going to get me a copy of it soon
+if you don't have it and would like a copy.  If you do have a copy, is it any
+good?
+
+----------------------------------------------------------------------------
+
+Now, here's John's response:
+
+RE: Numerical techniques.  I guess grim memories of round-off errors
+and consistently inconsistent results may bias my opinion, but there
+are some fundamental reasons for the problems with numerical methods.
+Finding roots of systems of two equations is inherently an unstable
+process (for a good description of this, see section 9.6 in "Numerical
+Recipes" by William Press, et. al.).  Another way to think about
+iterative approximations in two variables is the chaotic patterns
+you see Mandlebrot sets.  It's (very roughly) the same idea.  Chaos
+and ray tracing don't mix...
+
+Your comments about the flatness criteria are true, though in practice
+I've only found one "practical" instance where it really poses a
+problem.  This is when a light source is very close to an object, and
+casts a shadow on a wall some distance away.  The shadow projection
+magnifies the surface's silhouette onto the wall, and in some cases
+you see some faceting in the shadow's edge.  The work-around is to
+have a per-surface "resolution factor" attribute.  The flatness
+criteria found by projecting the pixel is multiplied by this factor,
+so a surface with a "res factor" of 0.5 may generate up to twice as
+many polygons as it normally would (extra polygons are generated only
+where the surface is really curved, though).
+
+In order to get a feel for just how much data subdivision generates, I
+tried the following experiment.  I took the code for balls.c (from
+the procedural database package you posted) and modified it to
+generate a rational quadratic Bezier surface for each sphere
+(as well as bounding volumes around each "group" of spheres).  I
+didn't do the formal benchmark case (too lazy), but just choose a view
+where all the spheres (level 2 == 91 of them) just filled the screen.
+The results look like this:
+
+	Image Size  Triangles
+	(pixels)    generated
+	128x128	     7800
+	512x512     30400
+
+The original spline surface definition wasn't small, each sphere has
+45 rational (homogeneous) control points + knot vectors.  My
+philosophy at the moment is that the algorithms for handling lots of
+trivial primatives win over those for handling a few complex ones.
+Right now the "lots of little primatives" camp has a lot of strong
+members (Octrees/Voxels, Kay/Kajiya/Caltech, Arvo & Co, etc).  If you
+just want to maximize speed, I think these are difficult to beat, but
+they do eat lots of memory.
+
+I'd be very interested in seeing a software implementation of Pulleyblank's
+method.  The method seemed very clever, but it was very hardware oriented
+(lots of integer arithmetic, etc).  I guess the question is whether or not
+their subdivision algorithm is faster than just a database traversal.  
+Something like Kay/Kajiya or Arvo's traversal methods would probably scream
+if you could get them to run in strictly integer arithmetic (not to mention
+putting them in hardware...)
+
+Cheers,
+jp
+
+----------------------------------------------------------------------------
+
+Anywell, that's the discussion as far as it's gone.  We can continue it in one
+of two ways:  (1) everyone writes to everyone on the subject (this is quick,
+but can get confusing if there are a lot of answers), (2) send replies to me,
+which I'll then send to all.  I opt for (1) for now:  if things get confusing
+we can always shift to (2).
+
+[Actually, we're shifting to (2) around now, though it seems worthwhile to
+pass on your comments to all, if you're set up to do it.  A summary of the
+comments will (eventually, probably) get put in Andrew's ray-tracing
+newsletter.]
+
+
+More responses so far:
+
+>From Jeff Goldsmith:
+
+Re: flatness criterion
+
+The definition that JP gave seems to be based on pixel geometry.
+That doesn't seem right.  Why not subdivide until you reach 
+subpatches that have preset limits in the change in their 
+tangent vector (bounded curvature?)  Al Barr and Brian Von
+Herzen have done some formal studies of that in a paper given
+this year.  (It wasn't applied to ray tracing, but it doesn't
+matter.)  I used that technique for creating polygonal representations
+of superquadrics with fair to good success.  The geometric 
+criterion makes sure that not much happens to the surface
+within a patch, which is what you really want, anyway. 
+
+I, too, by the way, believe in the gobs of polygons vs. one 
+compicated object tradeoff.  The two seem to be close in
+speed, but polygons saves big time in that you never need
+new code for your renderer.  I hate writing (debugging) 
+renderer code because it takes so long.  Modeling code
+is much faster.
+				--Jeff
+ 
+
+>From Tim Kay:
+
+Subject: ray tracing bicubic patches
+
+The discussion about subdivision was interesting.  I just want to point
+out that a paper in this year's proceedings (Snyder and Barr) did just
+what the discussion suggested.  The teapot was modeled with patches,
+and John hacked them up into very small polygons.  He also talked about
+some of the problems that you run into.
+
+Tim
+
+------------------
+
+>From Brian Barsky:
+
+What numerical techniques is John referring to?  He doesn't mean the 
+resolvent work, does he?
+
+----------------------------
+
+Response from John Peterson:
+
+I was using a modified version of Sweeney's method.  It was extended in
+two ways; first, a more effective means was used to generate the bounding
+volumes around the mesh, and it was able to handle surfaces with arbitrary
+orders and knot vectors.  I wrote up the results in a paper that appeared
+in a very obscure proceedings (ACM Rocky Mnt. Regional Conference,
+Santa Fe, NM, Nov. 1986)
+
+------------------------------------------------------
+
+
+ABNORMAL NORMALS:
+
+>From Eric Haines:
+
+My contribution for the week is an in-house memo I just wrote on transforming
+normals, which is easier that it sounds.  Some of you have undoubtedly dealt
+with this long ago, but hopefully I'll notify some poor soul that all is not
+simple with normal transforms.  Pat Hanrahan mentioned this problem in his talk
+at the SIGGRAPH '87 Intro to Ray Tracing course, but I didn't really understand
+why he was saying "don't use the modeling matrix to transform normals!"  Now
+I do, and I thought I'd explain it in a fairly informal way.  Any comments
+and corrections are appreciated!
+
+The file's in troff format, run by:
+
+	pic thisfile | troff -mm
+
+(The document was written partly so that I could learn about troff and pic,
+so it's pretty primitive).
+
+
+All for now.  The file follows, indented by 4 spaces so that no "."'s would
+be in column one (which some e-mailers evidentally don't like).
+
+----------------------cut here---------------------
+    .tr ~
+    .ds HF 3 3 2 2 2 2 2
+    .nr Hi 0
+    .HM I A 1 a
+    .nr Ht 1
+    .nr Hb 6
+    .nr Hs 6
+    .nr Cl 7
+    .na
+    .fi
+    .ad l
+    \f(CS
+    .ce
+    Abnormal Normals
+    .ce
+    Eric Haines, 3D/Eye Inc.
+
+	The problem:  given a polygon and its normal(s) and a modeling matrix, how
+    do we correctly transform the polygon from model to world space?  We assume
+    that the modeling matrix is affine (i.e. no perspective transformation is going
+    on).
+
+	This question turns out to be fraught with peril.  The right answer is
+    to transform the vertices using the modeling matrix, and to transform the
+    normals using the transpose of the inverse (also known as the adjunct) of the
+    modeling matrix.  However, no one believes this on first glance.  Why do all
+    that extra work of taking the inverse and transposing it?  So, we'll present
+    the wrong answers (which are commonly used in the graphics community
+    nonetheless, sometimes with good reason), then talk about why the right answer
+    is right.
+
+	Wrong answer #1:  Transform the normals using the modeling matrix.  What
+    this means is multiplying the normal [~x~y~z~0~] by the modeling matrix.  This
+    actually works just fine if the modeling matrix is formed from translation
+    matrices (which won't affect the normal transformation, since translations
+    multiply the 'w' component of the vector, which is 0 for normals) and rotation
+    matrices.  Scaling matrices are also legal, as long as the x, y, and z
+    components are the same (i.e. no "stretching" occurs).  Reflection matrices
+    (where the object is flipped through a mirror plane - more about these later)
+    are also legal, as long as there is no stretching.  Note that scaling will
+    change the overall length of the vector, but not the direction.
+
+	So what's wrong?  Well, scaling matrices which stretch the object (i.e.
+    whose scaling factors are not all the same for x, y, and z) ruin this scheme.
+    Imagine you have a plane at a 45 degree tilt, formed by the equation
+    x~=~y (more formally, x~-~y~=~0).  Looking down upon the x-y plane from the z
+    axis, the plane would appear as a line x~=~y.  The plane normal is [~1~-1~0~]
+    (for simplicity don't worry about normalizing the vector), which would appear
+    to be a ray where x~=~-y, x~>~0.  Now, say we scale the plane by stretching
+    it along the x axis by 2, i.e. the matrix:
+
+	[~2~0~0~0~]
+    .br
+	[~0~1~0~0~]
+    .br
+	[~0~0~1~0~]
+    .br
+	[~0~0~0~1~]
+
+    This would form a plane in world space where x~=~2y.  Using the method of
+    multiplying the normal by this modeling matrix gives us a ray where x~=~-2y,
+    x~>~0.  The problem with this ray is that it is not perpendicular to our
+    plane.  In fact, the normal is now 2x~=~-y, x~>~0.  Therefore, using the
+    modeling matrix to transform normals is wrong for the
+    stretching case.
+
+
+    .DS
+    .PS 6.3
+
+    # x-y grid
+    LX: arrow up up
+    "+y" at LX.end above
+    move to LX.end
+    move left 0.25
+    "before" "transform"
+    move to LX.start
+    LY: arrow right right
+    "+x" at LY.end ljust
+    move to LY.start
+    line left ; move to LY.start
+    line down ; move to LY.start
+
+    # plane
+    M: line up right up right
+    "plane" at M.end + (-0.05,0.0) rjust
+    move to M.start
+    line down left
+    move to M.start
+
+    N: arrow down right dashed
+    "normal" at N.end + (0.05,0.0) ljust
+    move to N.start
+
+    ##############
+    move right 2.0
+    # x-y grid
+    LX: arrow up up
+    "+y" at LX.end above
+    move to LX.end
+    move left 0.25
+    "after" "transform"
+    move to LX.start
+    LY: arrow right right
+    "+x" at LY.end ljust
+    move to LY.start
+    line left ; move to LY.start
+    line down ; move to LY.start
+
+    # plane
+    M: line up right right
+    "plane" at M.end + (-0.05,0.0) rjust
+    move to M.start
+    line down 0.25 left
+    move to M.start
+
+    N: arrow down right right dashed
+    box invisible height 0.25 "bad" "normal" with .n at N.end
+    move to N.start
+
+    N: arrow down right 0.25 dotted
+    box invisible height 0.25 "correct" "normal" with .n at N.end
+    move to N.start
+    .PE
+
+
+    .ce
+    Figure 1 (a) & (b) - Stretching Transformation
+    .DE
+    .na
+    .fi
+    .ad l
+
+
+	Wrong answer #2:  Transform the vertices, then calculate the normal.  This
+    is a limited response to the wrongness of method #1, solving the stretching
+    problem.  It's limited because this method assumes the normal is calculated
+    from the vertices.  This is not necessarily the case.  The normals could be
+    supplied by the user, given as a normal for the polygon, or on a normal per
+    vertex basis, or both.  However, even if the system only allowed normals which
+    were computed from the vertices, there would still be a direction problem.
+
+	Say the method used to calculate the normal is to take the cross product of
+    the first two edges of the polygon (This is by far the most common method.
+    Most other methods based on the local geometry of the polygon will suffer from
+    the same problem, or else the problem in method #1).  Say the vertices are
+    [~1~0~0~], [~0~0~0~], and [~0~-1~0~].  The edge vectors (i.e. the vector formed
+    from subtracting one vertex on the edge from the other vertex forming that edge)
+    are [~1~0~0~] and [~0~1~0~], in other words the two edge vectors are parallel
+    to the +x and +y axes.  The normal is then [~0~0~1~], calculated from the cross
+    product of these vectors.
+
+	If we transform the points by the reflection matrix:
+
+	[~1~0~~0~0~]
+    .br
+	[~0~1~~0~0~]
+    .br
+	[~0~0~-1~0~]
+    .br
+	[~0~0~~0~1~]
+
+    the result is the same: none of the edges actually moved.  However, when we
+    use a reflection matrix as a transform it is assumed that we want to reverse the
+    object's appearance.  With the above transform the expected result is that
+    the normal will be reversed, thereby reversing which side is thought of as
+    the front face.  Our method fails on these reflection transforms because it
+    does not reverse the normal:  no points changed location, so the normal will
+    be calculated as staying in the same direction.
+
+	The right (?) answer:  What (usually) works is to transform the normals
+    with the transpose of the inverse of the modeling matrix.  Rather than trying
+    to give a full proof, I'll talk about the three types of matrices which are
+    relevant:  rotation, reflection, and scaling (stretching).  Translation was
+    already seen to have no effect on normals, so we can ignore it.  Other more
+    obscure affine transformations (e.g. shearing) are avoided in the discussion,
+    though the method should also hold for them.
+
+	In the case of rotation matrices and reflection matrices, the transpose and
+    the inverse of these transforms are identical.  So, the transpose of the
+    inverse is simply the original modeling matrix in this case.  As we saw, using
+    the modeling matrix worked fine for these matrices in method #1.  The problems
+    occurred with stretching matrices.  For these, the inverse is not just a
+    transpose of the matrix, so the transpose of the inverse gives a different
+    kind of matrix.  This matrix solves our problems.  For example, with the bad
+    stretching case of method #1, the transpose of the inverse of the stretch
+    matrix is simply:
+
+	[~0.5~0~0~0~]
+    .br
+	[~~0~~1~0~0~]
+    .br
+	[~~0~~0~1~0~]
+    .br
+	[~~0~~0~0~1~]
+
+    (note that the transpose operation is not actually needed in this particular
+    case).  Multiplying our normal [~1~-1~0~] by this matrix yields [~0.5~-1~0~],
+    or the equation 2x~=~-y, x~>~0, which is the correct answer.
+
+	The determinant:  One problem with taking the inverse is that sometimes
+    it isn't defined for various transforms.  For example, casting an object onto
+    a 2D x-y plane:
+
+	[~1~0~0~0~]
+    .br
+	[~0~1~0~0~]
+    .br
+	[~0~0~0~0~]
+    .br
+	[~0~0~0~1~]
+
+    does not have an inverse:  there's no way to know what the z component should
+    turn back into, given that the above transform matrix will always set the z
+    component to 0.  Essentially, information has been irretrievably destroyed
+    by this transform.  The determinant of the upper-left 3x3 matrix (the only
+    part of the matrix we really need to invert for the normal transform) is 0,
+    which means that this matrix is not invertable.
+
+	An interesting property of the determinant is that it, coupled with method
+    #2, can make that method work.  If the determinant of the 3x3 is positive, we
+    have not shifted into the mirror world.  If it is negative, then we should
+    reverse the sign of the normal calculated as we have entered the mirror
+    universe).
+
+	It would be nice to get a normal for polygons which have gone through this
+    transform.  All bets are off, but some interesting observations can be made.
+    The normal must be either [~0~0~1~] or its negative [~0~0~-1~] for this
+    transformation (or undefined, if all vertices are now on a single line).
+    Choosing which normal is a bit tricky.  One OK method is to check the normal
+    before transform against [~0~0~1~]: if the dot product of the two is negative,
+    then reverse the normal so that it will point towards the original direction.
+    However, if our points went through the z-reflection matrix we used earlier,
+    then went through the transform above, the normals were reversed, then the
+    object was cast onto the x-y plane.  In this case we would want to have the
+    reverse of the normal calculated from the edges.  However, this reversal has
+    been lost by our casting transform:  concatenating the reflection matrix with
+    the casting matrix yields the same casting matrix.  One tricky way of
+    preserving this is to allow 0 and -0 to be separate entities, with the sign of
+    zero telling us whether to reverse the normal or not.  This trick is rather
+    bizarre, though - it's probably easier to just do it the simple way and warn
+    whoever's using the system to avoid non-invertable transformations.
+
+THE END:
+
+	Well, that's all for now.  Do you have any comments? questions?
+interesting offerings for the group?  Either send your bit to everyone on the
+list, or send a copy on to me and I'll post it to all.  I realize this is
+quite a deluge of info for one message, but all of this has accumulated over a
+few months.  The traffic so far has been quite mild: don't worry about future
+flooding.
+
+	All for now,
+
+	Eric Haines
+
+----------------------------------------
+
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+Ray Tracing News, e-mail edition, 1/15/88
+
+concatenated by Eric Haines, hpfcla!hpfcrs!eye!erich@hplabs.HP.COM
+
+Well, we've all been massively inactive as far as ray tracing news, what with
+SIGGRAPH and the holidays.  Now that the rush is over, I thought I'd pass on
+some additional comments on spline surfaces and how to ray-trace them, a
+polemic against octree subdivision, and end with a quick list of recommended
+books.  Finally, the updated mailing list (note that Andrew Glassner moved).
+
+Speaking of whom, Andrew Glassner would like contributions to "The Ray Tracing
+News", hardcopy edition.  He hopes to publish another one soon, but says it may
+be the last if no one sends him any more material.  So, if you have an
+interesting technical memo or other short (less than 5 pages) piece you'd like
+to share with the rest of us, please write him (see the mailing list).
+
+	All for now,
+
+	Eric
+
+------------------------------------------------------------------------------
+
+
+From: hpfcla!hpda!uunet!mcvax!dutio!fwj (erik jansen)
+Subject: subdivision and CSG.
+
+I went briefly through the discussion. I have been working on most items 
+the last five years. Some of the results are described in 'Solid modelling 
+with faceted primitives', my PhD thesis 'book'.  It is printed (108 pages) with
+a cover in colour. People who are interested in a free copy can mail me.
+
+Here is the abstract::
+
+
+     Solid modelling with faceted primitives
+
+     F.W. Jansen
+
+
+     Computer Aided Design and Computer Graphics techniques are valuable
+     tools in industrial design for the design and visualisation of
+     objects. For the internal representation of the geometry of objects,
+     several geometric modelling schemes are used. One approach, Con-
+     structive Solid Geometry (CSG), models objects as combinations of
+     primitive solids.  The subject of research in this project is a CSG
+     representation where the surfaces of the primitives are approximated
+     with flat surface elements (facets).  Techniques to improve the
+     efficiency of the display of models with a large number of these
+     surface elements have been developed.
+
+          Two approaches have been taken.  The first approach is based on
+     the use of additional data structures to enhance the processing,
+     sorting and search of these surface elements.  Further, a method is
+     presented to store intermediate results of the logical computations
+     needed for the processing of CSG representations.  These methods are
+     applied to a CSG polygon modelling system.
+
+          The second approach aims at the development of algorithms for
+     multi-processor systems and VLSI-based display systems.  The central
+     method is a CSG depth-buffer algorithm.  A tree traversal method is
+     introduced that combines several techniques to reduce the processing
+     and memory use.  The methods have been applied to a CSG halfspace
+     modelling system.
+
+
+          Keywords: computer graphics, geometric modelling, solid 
+     modelling, Constructive Solid Geometry (CSG), ray tracing algorithm,
+     depth-buffer algorithm, z-buffer algorithm, list-priority algorithm,
+     depth-priority algorithm, spatial subdivision, CSG classification, 
+     CSG coherence.
+
+The following subjects are also included: adaptive subdivision, crack removal.
+
+You can send this information to all. I will read the discussion more carefully
+and will comment on it later.
+ 
+Erik Jansen
+
+-------------------------------------------------------------------------------
+
+From: Masataka Ohta <hpfcda!mohta%titcce.cc.titech.junet%utokyo-relay.csnet@RELAY.CS.NET>
+Subject: Bounded ray tracing
+
+Dear Sir,
+
+The discussions so far is very interesting one and I have
+several comments.
+
+As I am charged for foreign mail (about $1 for 1K bytes, both
+incoming and out going), it costs considerablely to mail everyone
+on the list separately. So, I would like you to re-distribute
+my transpacific mail to everyone else.
+
+					Masataka Ohta
+
+My comment on the flatness criteria with reflections follows:
+-----------------------------
+
+Though I don't like subdividing patches into polygons for ray
+tracing (it's incoherent and, for example, CSG objects are
+difficult to render), good "flatness criteria" even with
+reflection, refraction or shadowing can be given using ray
+bound tracing.
+
+The basic idea is simple. Ray bound is a combination of two
+bounds: a bound of ray origins and a bound of ray directions.
+A efficient bound can be formed by using a sphere for bounding
+ray origins and using a circle (on a unit sphere, i.e. using
+spherical geometry) for ray directions.
+
+To begin with, bound a set of all rays which originates from
+each pixel. Flatness of a patch for the first generation ray
+should be computed against this ray bound, which is equivalent
+to measure flatness with perspective transformation, because
+rays are bounded by a pixel-sized cone.
+
+As for the second generation rays, they can be bounded by a
+certain ray bound which can be calculated form the first
+generation ray bound. And those ray bounds should be used
+for the flatness check.
+
+For those further interested in ray bound tracing, I will
+physically mail my paper titled "Bounded ray tracing for
+perfect and efficient anti-aliasing".
+
+-------------------------------------------------------------------------------
+
+From: Eric Haines
+Subject: Spline surface rendering, and what's wrong with octrees
+
+Well, after all the discussion of spline surfaces, I finally went with turning
+the spline surface into patches, putting an octree around these, and then do
+Glassner/Kay/Fujimoto/etc octree ray-tracing (in reality I found Glassner's
+article the most useful, though I didn't use his hashing scheme due to (a)
+being pressed for time and (b) being pressed for memory space.  This seems to
+work fairly well, but I noticed some interesting problems with octrees that
+I thought I'd pass on.
+
+----------
+
+[Note: this first problem is kinda boring if you've never implemented an octree
+subdivision scheme before.  Skip on to problem # 2, which I think is more
+important].
+
+The first problem is: How do I cleverly chose octree bounds?  This problem was
+first mentioned to me by Mike Kaplan, which I did not think about much until I
+suddenly noticed that all available memory was getting gobbled by certain
+polygonalized splines.  The problem is that there are two parameters which are
+commonly used to end the further subdivision of an octree cube into its eight
+component "cubies".
+
+One is a maximum number of primitives per octree cube.  To make the octree in
+the first place we have a bounding cube which contains the environment.  If
+the cube has more than a certain number of primitives in it, then octree
+subdivision takes place.  The octree cubies formed are then each treated in a
+like fashion, subdividing until all leaf cubies contain less than or equal to
+the number of primitives.  The second parameter is the maximum tree depth,
+which is the number of levels beyond which we will not subdivide cubes.  This
+parameter generally has precedence over the first parameter, i.e. if the
+maximum level has been reached but the maximum number of primitives is still
+exceeded, subdivision will nonetheless halt.
+
+The trick is that you have to pay close attention to both parameters.
+Originally I set these parameters to some reasonable numbers: 6 primitives and
+8 levels being my maximums.  What I found is that some objects would have
+very deep octrees, all the way down to level 8, even though their number of
+primitives was low.  For example, an object with 64 patches would still have
+some leaf nodes down at level 8 which had 7+ primitives in them.  I was
+pretty surprised by this problem.
+
+My solution for spline surfaces was to keep the maximum number of primitives
+at 6 and use another parameter to determine the maximum level.  I use the
+formula:
+
+	max level = round_up [ ln( primitives / K ) / ln( S ) ]
+
+where K is the maximum number of primitives (i.e. 6) and S was a prediction of
+how much an octree subdivision would cut down the number of primitives in an
+octree.  For example, in an environment consisting of a set of randomly
+distributed points, one would expect that when the octree cube containing these
+points was subdivided into eight octree cubies, each octree cubie would have
+about 1/8th of the points inside it.  For a spline surface I reasoned that
+about four of the octree cubies might have some part of the surface in them,
+which would give an S=4 (Note that the largest, original octree must have at
+least four cubies filled by the surface.  However, this is not necessarily true
+for suceedingly smaller cubies).  Another factor which had to be taken into
+account was that there would also be some overlap: some primitives would appear
+in two or more cubies.  So, as a final reasonable guess I chose S=3.5 .  This
+seems to work fairly well in practice, though further testing would be very
+worthwhile.
+
+Coming up with some optimal way to chose a maximum octree depth still seems to
+be an open question.  Further study on how various environments actually fill
+space would be worthwhile:  how many octree nodes really are filled on the
+average for each subdivision?  More pragmatically, how do we determine the
+best maximum depth for ray-tracing an environment?  The problem with not
+limiting the maximum level is primarily one of memory.  If the octree grows
+without reasonable bounds a simple scene could use all available memory.  Also,
+a large number of unnecessary octree nodes results in additional access time,
+either through having to search through the octree or through having extraneous
+objects in the hashing table.
+
+A more intelligent approach might be to do adaptive subdivision: subdivide an
+octree cube as usual, then see how many fewer primitives there are in each
+cubie.  If some cube has more than some percentage of primitives in it, the
+subdivision could be deemed useless and so subdivision would end at this point.
+If anyone knows a master's candidate looking for a project, this whole question
+of when it is profitable to subdivide might make a worthwhile topic.  Judging
+from the interest in octrees by ray tracing researchers at last year's
+roundtable, I think this will become more and more important as time goes on.
+
+-------------
+
+The second problem with octrees:  I decided to go with octrees for spline
+surfaces only because these objects would have fairly localized and even
+distribution of primitives (i.e. quadrilateral patches).  I feel that octree
+efficiency techniques are probably horrible for ray tracing in general.
+
+For example, imagine you have a football stadium made of, say, 5K primitives.
+Sitting on a goal line is a shiny polygonalized teapot of 5K quadrilaterals
+(note that the teapot is teapot sized compared to the stadium).  You fill the
+frame with the teapot for a ray trace, hoping to get some nice reflections of
+the stadium on its surface.
+
+If you use an octree for this scene, you'll run into an interesting problem.
+The teapot is, say, a foot long.  The stadium is 200 yards long.  So, the
+teapot is going to be only 1/600th the size of the stadium.  Each octree
+subdivision creates 8 cubies which are each half the length of the parent
+cube.  You could well subdivide down to 9 levels (with that 9th level cubie
+having a length of 1/512th of the stadium length: about 14 inches) of octrees
+and still have the whole teapot inside one octree cube, still undivided.  If
+you stopped at this 9th level of subdivision, your ray trace would take
+forever.  Why?  Because whenever a ray would enter the octree cubie containing
+the teapot (which most of the rays from your eye would do, along with all those
+reflection and shadow rays), the cubie would contain a list of the 5K teapot
+polygons.  Each of these polygons would have to be tested against the ray,
+since there is no additional efficiency structure to help you out.  In this
+case the octree has been a total failure.
+
+Now, you may be in a position where you know that your environments will be
+well behaved: you're ray tracing some specific object and the surrounding
+environment is limited in size.  However, the designer who is attempting to
+create a system which can respond to any user's modeling requests is still
+confronted by this problem.  Further subdivision beyond level nine down to
+level eighteen may solve the problem in this case.  But I can always come up
+with a worse pathological case.  Some realistic examples are an animation
+zooming in on a texture mapped earth into the Caltech campus:  when you're
+on the campus the sphere which represents the earth would create a huge
+octree node, and the campus would easily fall within one octree cubie.  Or
+a user simply wants to have a realistic sun, and places a spherical light
+source 93 million miles away from the scene being rendered.  Ridiculous?  Well,
+many times I find that I will place positional light sources quite some
+distance away from a scene, since I don't really care how far the light is,
+but just the direction the light is coming from.  If a primitive is associated
+with that light source, the octree suddenly gets huge.
+
+Solutions?  Mine is simply to avoid the octree altogether and use Goldsmith's
+automatic bounding volume generation algorithm (IEEE CG&A, May 1987).  However,
+I hate to give up all that power of the octree so easily.  So, my question:
+has anyone found a good way around this problem?  One method might be to do
+octree subdivision down to a certain level, then consider all leaf cubies that
+have more than the specified number of primitives in their lists as "problem
+cubies".  For this list of primitives we perform Goldsmith's algorithm to get
+a nice bounding volume hierarchy.  This method reminds me of the SIGGRAPH 87
+paper by John Snyder and Alan Barr, "Ray Tracing Complex Models Containing
+Surface Tesselations".  Their paper uses SEADS on the tesselated primitives and
+hierarchy on these instanced SEADS boxes to get around memory constraints,
+while my idea is to use the octree for the total environment so that the
+quick cutoff feature of the octree can be used (i.e. if any primitive in an
+octree cubie is intersected, then ray trace testing is done, versus having to
+test the whole environment's hierarchy against the ray).  Using bounding
+volume hierarchy locally then gets rid of the pathological cases for the octree.
+
+However, I tend to think the above just is not worthwhile.  It solves the
+pathological cases, but I think that automatic bounding volume hierarchy (let's
+call it ABVH) methods will be found to be comparable in speed to octrees in
+many cases.  I think I can justify that assertion, but first I would like to
+get your opinions about this problem.
+
+-------------------------------------------------------------------------------
+
+Top Ten Hit Parade of Computer Graphics Books
+    by Eric Haines
+
+One of the most important resources I have as a computer graphics programmer
+is a good set of books, both for education and for reference.  However, there
+are a lot of wonderful books that I learn about years after I could have first
+used them.  Alternately, I will find that books I consider classics are unknown
+by others.  So, I would like to collect a list of recommended reading and
+reference from you all, to be published later in the year.  I would especially
+like a recommendation for good books on filtering and on analytic geometry.
+Right now I am reading _Digital Image Processing_ by Gonzalez and Wintz and have
+_A Programmer's Geometry_ on order, but am not sure these fit the bill.
+_An Introduction to Splines for use in Computer Graphics and Geometric
+Modeling_ by Bartels/Beatty/Barsky looks like a great resource on splines,
+but I have read only four chapters so far so am leaving it off the list for
+now.
+
+Without further ado, here are my top ten book recommendations.  Most should be
+well known to you all, and so are listed mostly as a kernel of core books I
+consider useful.  I look forward to your additions!
+
+    _The Elements of Programming Style, 2nd Edition_, Brian W. Kernighan,
+	P.J. Plauger, 168 pages, Bell Telephone Laboratories Inc, 1978.
+
+	All programmers should read this book.  It is truly an "Elements of
+	Style" for programmers.  Examples of bad coding style are taken from
+	other textbooks, corrected, and discussed.  Wonderful and pithy.
+
+    _Fundamentals of Interactive Computer Graphics_, James D. Foley, A. Van
+	Dam, 664 pages, Addison-Wesley Inc, 1982.
+
+	A classic, covering just about everything once over lightly.
+
+    _Principles of Interactive Computer Graphics, 2nd Edition_,  William M.
+	Newman, R.F. Sproull, 541 pages, McGraw-Hill Inc, 1979.
+
+	The other classic.  It's older (e.g. ray-tracing did not exist at this
+	point), but gives another perspective on various algorithms.
+
+    _Mathematical Elements for Computer Graphics_, David F. Rogers, J.A. Adams,
+	239 pages, McGraw-Hill Inc, 1976.
+
+	An oldie but goodie, its major thrust is a thorough coverage of 2D and
+	3D transformations, along with some basics on spline curves and
+	surfaces.
+
+    _Procedural Elements for Computer Graphics_, David F. Rogers, 433 pages,
+	McGraw-Hill Inc, 1985.
+
+	For information on how to actually implement a wide variety of
+	graphics algorithms, from Bresenham's line drawer on up through
+	ray-tracing, this is the best book I know.  However, for complicated
+	algorithms I would recommend also reading the original papers.
+	
+    _Numerical Recipes_, William H. Press, B.P. Flannery, S.A. Teukolsky,
+	W.T. Vetterling, 818 pages, Cambridge University Press, 1986.
+
+	Chock-full of information on numerical algorithms, including code
+	in FORTRAN and PASCAL (no "C", unfortunately).  The best part of
+	this book is that they give good advice on what methods are appropriate
+	for different types of problems.
+
+    _A First Course in Numerical Analysis, 2nd Edition_, Anthony Ralston,
+	P. Rabinowitz, 556 pages, McGraw-Hill Inc, 1978.
+
+	Tom Duff's recommendation says it best: "This book is SO GOOD [<-these
+	words should be printed in italics] that some colleges refuse to use
+	it as a text because of the difficulty of finding exam questions that
+	are not answered in the book".  It covers material in depth which
+	_Numerical Recipes_ glosses over.
+
+    _C: A Reference Manual_, Samuel P. Harbison, G.L. Steele Jr., 352 pages,
+	Prentice-Hall Inc, 1984.
+
+	A comprehensive and comprehensible manual on "C".
+
+    _The Mythical Man-Month_, Frederick P. Brooks Jr, 195 pages, Addison-Wesley
+	Inc, 1982.
+
+	A classic on the pitfalls of managing software projects, especially
+	large ones.  A great book for beginning to learn how to schedule
+	resources and make good predictions of when software really is going
+	to be finished.
+
+    _Programming Pearls_, Jon Bentley, 195 pages, Bell Telephone Laboratories
+	Inc, 1986.
+
+	Though directed more towards systems and business programmers, there
+	are a lot of clever coding techniques to be learnt from this book.
+	Also, it's just plain fun reading.
+
+As an added bonus, here's one more that I could not resist:
+
+    _Patterns in Nature_, Peter S. Stevens, 240 pages, Little, Brown and Co.
+	Inc, 1974.
+
+	The thesis is that simple patterns recur again and again in nature and
+	for good reasons.  A quick read with wonderful photographs (my favorite
+	is the comparison of a turtle shell with a collection of bubbles
+	forming a similar shape).  Quite a few graphics researchers have used
+	this book for inspiration in simulating natural processes.
+
+---------------------------------
+
+From Olin Lathrop:
+
+Here goes another attempt to reach more people.  I will now spare you all
+a paragraph of griping about the e-mail system.
+
+About the normal vector transform:
+
+Eric, you are absolutely right.  I also ran into this when some of my squashed
+objects just didn't look right, about 4 years ago.  I would just like to offer
+a slightly different way of looking at the same thing.  I find I have difficulty
+with mathematical concepts unless I can attatch some sort of physical significance
+to them.  (I think of a 3x4 transformation matrix as three basis
+vectors and a displacement vector instead of an amorphous pile of 12 numbers.)
+
+My first attack at finding a transformed normal was to find two non-paralell
+surface vectors at the point in question.  These could be transformed regularly
+and the transformed normal would be their cross product.  This certainly 
+works, but is computationally slow.  It seemed clear that there should exist
+some 3x3 matrix that was the total transform the normal vector really went thru.
+To simplify the thought experiment, what if the original normal vector was exactly
+along the X axis?  Well, the unit surface vectors would be the Y and Z axis
+vectors.  When these are sent thru the regular 3x3 transformation matrix, 
+they become the Y and Z basis vectors of that matrix.  The final resulting
+normal vector is therefore the cross product of the Y and Z basis vectors of the
+regular matrix.  This is then what the X basis vector of the normal vector
+transformation matrix should be.  In general, a basis vector in the normal
+vector transformation matrix is the cross product of the other two basis
+vectors of the regular transformation matrix.  I wasn't until about a year
+later that I realized that this resulting matrix was the inverse transpose
+of the regular one.  
+
+This derivation results in exactly the same matrix that Eric was talking about,
+but leaves me with more physical understanding of what it represents.
+
+Now for a question:  It has always bothered me that this matrix trashes the
+vector magnitude.  This usually implies re-unitizing the transformed normal
+vector in practise.  Does anyone avoid this step?  I don't want to do any
+more SQRTs than necessary.  You can assume that the original normal vector
+was of unit length, but that the result also needs to be.
+
+
+About octrees:
+
+1)  I don't use Andrew's hashing scheme either.  I transform the ray so that
+  my octree always lives in the (0,0,0) to (1,1,1) cube.  To find the voxel
+  containing any one point, I first convert the coordinates to 24 bit integers.
+  The octree now sits in the 0 to 2**23 cube.  Picking off the most significant
+  address bit for each coordinate yields a 3 bit number.  This is used to select
+  one of 8 voxels at the top level.  Now pick off the next address bit down
+  and chose the next level of subordinate voxel, etc, until you hit a leaf node.
+  This process is LOGn, and is very quick in practise.  Finding a leaf voxel
+  given an integer coordinate seems to consume about 2.5% of the time for most
+  images.  I store direct pointers to subordinate voxels directly in the parent
+  voxel data block.  In fact, this is the ONLY way I have of finding all but the
+  top voxel.
+
+2)  Choosing subdivision criteria:  First, the biggest win is to subdivide on
+  the fly.  Never subdivide anything until you find there is a demand for it.
+  My current subdivision criteria in order of precidence (#1 overrides #2) are:
+
+  1)  Do not subdivide if hit subdivision generation limit.  This is the same
+    as what Eric talked about.  I think everyone does this.
+
+  2)  Do not subdivide if voxel is empty.
+
+  3)  Subdivide if voxel contains more than one object.
+
+  4)  Do not subdivide if less than N rays passed thru this voxel, but did
+    not hit anything.  Currently, N is set to 4.
+
+  5)  Subdivide if M*K < N.  Where M is the number of rays that passed thru this
+    voxel that DID hit something, and K is a parameter you chose.  Currently,
+    K is set to 2, but I suspect it should be higher.  This step seeks to avoid
+    subdividing a voxel that may be large, but has a good history of producing
+    real intersections anyway.  Keep in mind that for every ray that did hit
+    something, there are probably light source rays that did not hit anything.
+    (The shader avoids launching light rays if the surface is facing away from
+    the light source.)  This can distort the statistics, and make a voxel appear
+    less "tight" than it really is, hence the need for larger values of K.
+
+  6)  Subdivide.
+
+Again, the most important point is lazy evaluation of the octree.  The above rules
+are only applied when a ray passes thru a leaf node voxel.  Before any rays are
+cast, my octree is exactly one leaf node containing all the objects.
+
+3) First solution to teapot in stadium:  This really cries out for nested objects.
+  Jim Arvo, Dave Kirk, and I submitted a paper last year on "The Ray Tracing Kernel"
+  which discussed applying object oriented programming to designing a ray tracer.
+  Jim just told me he is going to reply about this in detail so I will make this
+  real quick.  Basically, objects are only defined implicitly by the results of
+  various standard operations they must be able to perform, like "intersect
+  yourself with this ray".  The caller has no information HOW this is done.  An
+  object can therefore be an "aggregate" object which really returns the result of
+  intersecting the ray with all its subordinate objects.  this allows for easily
+  and elegantly mixing storage techniques (octrees, linear space, 5D structures,
+  etc.) in the same scene.  More on this from JIM.
+
+4) Second solution to teapot in stadium:  I didn't understand why an octree 
+  wouldn't work well here anyway.  Suppose the teapot is completely enclosed
+  in a level 8 voxel.  That would only "waste" 8x8=64 voxels in getting down
+  to the space you would have chosen for just the teapot alone.  Reflection
+  rays actually hitting the rest of the stadium would be very sparse, so go
+  ahead and crank up the max subdivision limit.  Am I missing something?
+
+-----------------------------------------------
+
+(This is a reply to Olin Lathrop.  Summary: "well, maybe the octree is not so
+bad after all...").
+
+From: Eric Haines
+
+
+Olin Lathrop writes:
+> To simplify the thought experiment, what if the original normal vector was exactly
+> along the X axis?  Well, the unit surface vectors would be the Y and Z axis
+> vectors.  When these are sent thru the regular 3x3 transformation matrix, 
+> they become the Y and Z basis vectors of that matrix.  The final resulting
+> normal vector is therefore the cross product of the Y and Z basis vectors of the
+> regular matrix.  This is then what the X basis vector of the normal vector
+> transformation matrix should be.  In general, a basis vector in the normal
+> vector transformation matrix is the cross product of the other two basis
+> vectors of the regular transformation matrix.  It wasn't until about a year
+> later that I realized that this resulting matrix was the inverse transpose
+> of the regular one.  
+
+The problem is the sign of the basis vector is unclear by this method.
+I tried this approach, but it fails on mirror matrices.  Suppose your
+transformation matrix is:
+[ -1 0 0 0 ]
+[  0 1 0 0 ]
+[  0 0 1 0 ]
+[  0 0 0 1 ]
+
+This matrix definitely affects the surface normal in X, but your two vectors
+in Y and Z are unaffected.  This problem never occurs in the "real" world
+because such a matrix is equivalent to twisting an object through 4D space
+and making it go "through the looking glass".  However, it happens in computer
+graphics a lot:  e.g. I model half a car body, then mirror reflect to get the
+other half.  If you have a two sided polygon laying in the YZ plane, with one
+side red & the other blue, and apply the above transformation, no vertices
+(and no tangent vectors) have any non-zero X components, and so will not change.
+But the normal does reverse, and the sides switch colors.  My conclusion was
+that you have to use the transpose of the inverse to avoid this problem, since
+surface normals fail for this case. (p.s. did you get a copy of Glassner's
+latest (2nd edition) memo on this problem?  He does a good job explaining the
+math).
+
+> About octrees:
+>
+> 1)  I don't use Andrew's hashing scheme either.  I transform the ray so that
+>   my octree always lives in the (0,0,0) to (1,1,1) cube...
+
+Actually, this is the exact approach I finally took, also.  I had rejected
+the hashing scheme earlier, and forgotten why (and misremembered that it was
+because of memory costs) - the correct reason for not hashing is that it's
+faster to just zip through the octree by the above method; no hashing is
+needed.  It's pretty durn fast to find the right voxel, I agree.
+
+Have you experimented with trying to walk up and down the octree, that is, when
+you are leaving an octree voxel you go up to the parent and see if the address
+is inside the parent?  If not, you go to its parent and check the address, etc,
+until you find that you can go back down.  Should be faster than the straight
+downwards traversal when the octree is deep: the neighboring voxels of the
+parent of the voxel you're presently in account for 3 of the 6 directions the
+ray can go, after all.  You have 1/2 a chance of descending the octree if you
+check the parent, 3/4ths if you go up two parents, etc.  (Where did I read of
+this idea, anyway?  Fujimoto?  Kaplan?  Whatever the case, it's not original
+with me).
+
+Another idea that should be mentioned is one I first heard from Andrew
+Glassner:  putting quadtree-like structures on the cube faces of the octree
+cubes.  It's additional memory, but knowing which octree cube is the next would
+be a faster process.  Hopefully Andrew will write this up sometime.
+
+The subdivision criteria ideas are great - makes me want to go and try them
+out!  When are you going to write it up and get it published somewhere? Lazy
+subdivision sounds worthwhile: it definitely takes awhile for the octrees to
+get set up under my present "do it all at the beginning" approach (not to
+mention the memory costs).  That was something I loved about the Arvo/Kirk
+paper - without it the 5D scheme would appear to be a serious memory hog.
+
+> 4) Second solution to teapot in stadium:  I didn't understand why an octree 
+>   wouldn't work well here anyway.  Suppose the teapot is completely enclosed
+>   in a level 8 voxel.  That would only "waste" 8x8=64 voxels in getting down
+>   to the space you would have chosen for just the teapot alone.  Reflection
+>   rays actually hitting the rest of the stadium would be very sparse, so go
+>   ahead and crank up the max subdivision limit.  Am I missing something?
+
+There are two things which disturbed me about the use of the octree for this
+problem.  One was that if the maximum subdivision level was reached prematurely
+then the octree falls apart.  I mentioned that you could indeed subdivide down
+another 9 levels and have an 18 level octree that would work.  However, the
+problem with this is knowing when to stop - why not go on to 24 levels?  For
+me it boils down to "when do I subdivide?".  I suspect that your additional
+criteria might solve a lot of the pathological cases, which is why I want
+to test them out.  Also note that there are built in maximum subdivision levels
+in octree schemes which could be reached and still not be sufficient (though
+admittedly your 24 levels of depth are probably enough.  Of course, I once
+thought 16 bits was enough for a z-buffer - now I'm not so sure.  Say you have
+a satellite which is 5 feet tall in an image, with the earth in the background.
+We're now talking 23 levels of subdivision before you get within the realm
+of subdividing the satellite.  With 24 levels of depth being your absolute
+maximum you've hit the wall, with only one subdivision level helping you out
+on the satellite itself).
+
+Good point that as far as memory goes it's really just 8x8 more voxels "wasted".
+One problem is: say I'm 8 feet in each direction from the teapot, with me and
+the teapot in diagonally opposite corners of a cube which is then made into an
+octree.  The only way to get through the 8 cubes in the containing box is to
+travel through 4 of them (i.e. if I'm in Xhi, Yhi, Zhi and the teapot is in
+Xlo, Ylo, Zlo, then I have to intersect my own box and then three other boxes
+to move me through in each "lo" direction).  In this case there are only 3
+levels of octree cubes I have to go through before getting to the 1 foot cube
+voxel which contains the teapot.  The drawback of the octree is that I have to
+then do 3x4=12 box intersections which must be done each ray and which are
+useless.  Minor, but now think of reflection rays from the teapot which try to
+hit the stadium: each could go through up to 8 levels x 4 voxels per level =
+32 voxels just to escape the stadium without hitting anything (not including
+all the voxels needed to be traversed from the teapot to the one foot cube).
+Seems like a lot of intersection and finding the next octree address and tree
+traversal for hitting the background.  I suspect less bounding volumes would be
+hit using hierarchy, and the tests would be simpler (many of them being just
+a quick "is the ray origin inside this box?": if so, check inside the box).
+
+I guess it just feels cleaner to have to intersect only bounding volumes
+which are needed, which is the feel which automatic bounding volume hierarchy
+has to it.  Boxes can be of any size, so that if someone adds a huge earth
+behind a satellite all that is added is a box that contains both.  With
+hierarchy you can do some simple tricks to cut down on the number of
+bounding volumes intersected.  For example, by recording that the ray fired
+at the last pixel hit such and so object, you can test this object first for
+intersection.  This quickly gets you a maximum depth that you need not go
+beyond: if a bounding volume is intersected beyond this distance you don't have
+to worry about intersecting its contents.  This trick seems to gain you about
+90% of the speed-up of the octree (i.e. not having to intersect any more
+voxels once an intersection is found), while also allowing you the speed up
+of avoiding needless octree voxel intersections.  I call this the "ray
+coherency" speedup - it can be used for all types of rays (and if you hit
+when the ray is a shadow ray, you can immediately stop testing - this trick
+will work for the octree, too!  Simply save a pointer to the object which
+blocked a particular shadow ray for a particular light last pixel and try it
+again for the next shadow ray).
+
+I still have doubts about the octree.  However, with lazy evaluation I think
+you get rid of one of my major concerns: subdividing too deep makes for massive
+octrees which soak up tons of memory.  Have you had to deal with this problem,
+i.e. has the octree ever gotten too big, and do you have some way to free up
+memory (some "least recently used" kind of thing)?
+
+An interesting comment that I read by John Peterson on USENET news some months
+ago was:
+
+>> [John Watson @ Ames:]
+>> Anyway, I know there have been a few variations of the constant-time
+>> algorithms around, and what I need to know is, what is the _best_, 
+>> i.e. simplest, most effiecent, etc, ... version to implement.
+>> 
+>> Could some of you wonderful people comment on these techniques in general, 
+>> and maybe give me some pointers on recent research, implementions, etc. 
+>
+> This is an interesting question.  Here at Utah, myself and Tom Malley
+> implemented three different schemes in the same ray tracer; Whitted/Rubin,
+> Kay/Kajiya, and an octree scheme (similar to the Glassner/Kaplan, camp, I
+> think).  The result?  All three schemes were within 10-20% of each other
+> speedwise.  Now, we haven't tested these times extensively; I'm sure you could
+> find wider variances for pathological cases.  But on the few generic test
+> cases we measured, there just wasn't much difference.  (If we get the time,
+> we plan on benchmarking the three algorithms more closely).
+
+I suspect that this is probably the case, with octree working best when the
+scene depth (i.e. the number of objects which are intersected by each ray,
+regardless of distance) is high, the "ray coherency" method outlined above for
+hierarchy fails, and so cutting off early is a big benefit. Automatic hierarchy
+probably wins when there are large irregularities in the density of the
+number of objects in space.  (Of course, the SEADS method (equal sized voxels
+and 3DDDA) is ridiculous for solving the "teapot in a stadium" kind of
+problems, but it's probably great for machines with lots of memory ray tracing
+scenes with a localized set of objects.
+
+By the way, I found Whitted/Rubin vs. Kay/Kajiya to be about the same:  Kay had
+less intersections, but the sorting killed any time gained.  I find the
+coherency ray technique mostly does what Kay/Kajiya does: quickly gets you a
+maximum intersection depth for cutoff.
+
+Without the memory constraints limiting the effectiveness of the octree I can
+believe it well could be the way of the future:  it is ideal for hardware
+solution (so those extra voxel intersection and traversal tests don't bother me
+if they're real fast), sort of like how the z-buffer is the present winner in
+hidden surface algorithms because of its simplicity.
+
+So, how's that for a turnabout on my polemical anti-octree position?
+Nonetheless, I'm not planning to change my hierarchy code in the near future -
+not until the subdivision and memory management problems are more fully
+understood.
+
+All for now,
+
+Eric Haines
+
+    
+--------------------------------------------------
+
+  SUBSPACES AND SIMULATED ANNEALING
+
+  I  started  out  intending  to  write a very short reply to Eric Haines's
+  "teapot in  a football stadium" example, but it turned out to  be  rather
+  long.   At  any  rate,  most of what's described here (except for some of
+  the very speculative stuff near  the bottom) is a result  of  joint  work
+  with Dave Kirk, Olin Lathrop, and John Francis. 
+
+  One  way  that  we've  dealt  with  situations  similar  to Eric's teapot
+  example is to use a  combination  of  spatial  subdivision  and  bounding
+  volume  techniques.   For  instance,  we commonly mix two or three of the
+  following techniques into a  "meta" hierarchy for ray  tracing  a  single
+  environment:
+
+      1) Linear list 
+      
+      2) Bounding box hierarchy  
+      
+      3) Octrees  (including BSP trees) 
+      
+      4) Linear grid subdivision 
+      
+      5) Ray Classification      
+      
+  We  commonly  refer  to  these  as  "subspaces".   For us this means some
+  (convex) volume of  space, a  collection  of  objects  in  it,  and  some
+  technique  for  intersecting a ray with those objects.  This technique is
+  part of an "aggregate  object", and all the objects it  manages  are  the
+  "children".   Any  aggregate  object  can  be  the  child  of  any  other
+  aggregate  object,  and   appears  simply  as  a  bounding   volume   and
+  intersection  technique  to  its parent.  In other words, it behaves just
+  like a primitive object. 
+
+  Encapsulating a subspace as just another  "object"  is  very  convenient.
+  This  is something which Dave and Olin and I agreed upon in order to make
+  it possible to "mix  and  match"  our  favorite  acceleration  techniques
+  within  the  same  ray  tracer for testing, benchmarking, and development
+  purposes. 
+
+  As an example of how we've used this  to  ray  trace  moderately  complex
+  scenes  I'll  describe  the amusement park scene which we animated.  This
+  consisted of a number of rides spread throughout a park, each  containing
+  quite  a  bit  of  detail.   We  often  showed  closeups of objects which
+  reflected the rest of the park (a somewhat scaled  down  version  of  the
+  teapot  reflecting   the  stadium).   There  were somewhere around 10,000
+  primitive objects  (not   including  fractal  mountains),  which  doesn't
+  sound  like  much  anymore,  but  I   think  it still represents a fairly
+  challenging scene to ray trace --  particularly for animating. 
+
+  The organization of the scene suggested  three  very  natural  levels  of
+  detail.  A typical example of this is
+
+      I) Entire park ( a collection of rides, trees, and mountains )
+  
+          II) Triple decker Merry-go-round ( one of the rides )
+  
+              III) A character riding a horse ( a "detail" of a ride )
+
+  Clearly  a single linear grid would not do well here because of the scale
+  involved.  Very  significant  collections  of  primitives  would  end  up
+  clumped  into  single  voxels.  Octress, on the other hand, can deal with
+  this problem  but don't enjoy quite the  "voxel  walking"  speed  of  the
+  linear grid.  This suggests a compromise. 
+
+  What  we did initially was to place a coarse linear grid around the whole
+  park, then  another  linear  grid  (or  octree)  around  each  ride,  and
+  frequently  a  bounding box hierarchy around small clusters of primitives
+  which would fall entirely with a voxel of even the second-level  (usually
+  16x16x16) linear grid. 
+
+  Later,  we  began to use ray classification at the top level because, for
+  one thing, it did  some  optimizations  on  first-generation  rays.   The
+  other   levels  of  the  hierarchy  were  kept in place for the most part
+  (simplified a bit)  in order to run well on machines  with  <  16  MB  of
+  physical  memory.   This  effectively  gave  the  RC (ray classification)
+  aggregate object a "coarser" world to  deal  with,  and  drastically  cut
+  down  the  size  of the candidate sets it built.  Of course, it also "put
+  blinders" on it by not allowing it to distinguish between objects  inside
+  these   "black  boxes"  it  was  handed.   It's  obviously  a  space-time
+  trade-off.  Being able to nest the subspaces  provides  a  good  deal  of
+  flexibility for making trade-offs like this. 
+
+  A  small  but  sort  of interesting additional benefit which falls out of
+  nesting  subspaces is that it's possible  to  take  better  advantage  of
+  "sparse"  transformations.   Obviously the same trick of transforming the
+  rays into a canonical object space  before doing  the  intersection  test
+  (and  transform  the  normal  on  the  way  out) also works for aggregate
+  objects.  Though this means doing possibly several transforms  of  a  ray
+  before  it  even  gets  to a primitive object, quite often the transforms
+  which are lower  in  the  hierarchy  are  very  simple  (e.g.  scale  and
+  translate).   So,  there  are  cases  when  a  "dense"  (i.e.  expensive)
+  transform gets you into  a  subspace  where  most  of  the  objects  have
+  "sparse"  (i.e.  cheap)  transforms.  [I'll  gladly  describe how we take
+  advantage of matrix sparsity structures if anybody  is  interested.]   If
+  you  end   up  testing N objects before finding the closest intersection,
+  this means that (occasionally)  you  can  do  the  job  with   one  dense
+  transform  and  N  sparse  ones, instead of N dense transforms.   This is
+  particularly appropriate when you build a  fairly  complex  object   from
+  many  scaled  and  translated primitives, then rotate the whole mess into
+  some strange final orientation.  Unfortunately, even in  this  case  it's
+  not   necessarily   always  a  win.   Often  just  pre-concatenating  the
+  transforms and tossing the autonomous objects (dense transforms and  all)
+  into  the  parent  octree  (or  whatever) is the better thing to do.  The
+  jury is still out on this one. 
+
+  Currently, all of the "high level" decisions  about  which  subspaces  to
+  place  where  are  all  made  manually  and  specified  in  the  modeling
+  language.  This is much harder to do well  than  we  imagined  initially.
+  The  tradeoffs  are  very  tricky  and  sometimes  counter-intuitive.   A
+  general rule of thumb which seems to be of value is to put an  "adaptive"
+  subspace  (e.g.  an  octree, RC) at the top level if the scene  has tight
+  clusters of geometry, and  a  Linear  grid  if  the  geometry  is  fairly
+  uniform.    Judicious  placement  of  bounding  box hierarchies within an
+  adaptive hierarchy is a real art.  On the one hand,  you  don't  want  to
+  hinder  the  effectiveness   of  the  adaptive subspace by creating large
+  clumps of geometry that it  can't   partition.   On  the  other  hand,  a
+  little  a  priori  knowledge  about  what's  important and where bounding
+  boxes will do a good job can often make a big   difference  in  terms  of
+  both time and space (the space part goes quintuple for RC). 
+
+  Now,   the   obvious   question   to   ask  is  "How  can  this  be  done
+  automatically?"  Something  akin  to  Goldsmith  and  Salmon's  automatic
+  bounding  volume generation  algorithm may be appropriate.  Naturally, in
+  this context, we're talking about a heterogeneous mixture  of  "volumes,"
+  not  only  differing  in shape and surface area, but also in "cost," both
+  in terms of space and time.  Think of each subspace as being  a  function
+  which  allows you to intersect a ray with a set of objects with a certain
+  expected (i.e. average) cost.  This  cost  is  very  dependent  upon  the
+  spatial  arrangement  and  characteristics of the objects in the set, and
+  each type of  subspace  provides  different   trade-offs.   Producing  an
+  optimal  (or  at  least  good)  organization of  subspaces is then a very
+  nasty combinatorial optimization problem.  
+
+  An idea that I've been toying with for quite some  time  now  is  to  use
+  "simulated  annealing"  to  find a near-optimal subspace hierarchy, where
+  "optimality" can be phrased in terms of any  desired  objective  function
+  (taking  into  account,  e.g., both space and time).  Simulated annealing
+  is a technique for  probabilistically exploring the vast  solution  space
+  (typically)   of   a  combinatorial  optimization  problem,  looking  for
+  incremental improvements WITHOUT getting   stuck  too  soon  in  a  local
+  minimum.   It's  very closely linked to some ideas in thermodynamics, and
+  was  originally  motivated  by  nature's  ability  to  find  near-optimal
+  solutions  to  mind-bogglingly  complex  optimization  problems  --  like
+  getting all the water molecules in  a  lake  into  a  near-minimum-energy
+  configuration  as  the temperature gradually reaches freezing.  It's been
+  fairly successfull at "solving" NP-hard problems such  as  the  travaling
+  salesman and chip placement (which are practically the same thing). 
+
+  This  part  about  simulated  annealing  and  subspace hierarchies is all
+  very  speculative, mind you.  It may not  be  practical  at  all.    It's
+  easy  to  imagine  the  "annealing"  taking three  CPU-years to produce a
+  data structure which takes an hour to  ray  trace  (if  it's  done  as  a
+  preprocessing  step  --  not  lazily).   There  are  many details which I
+  haven't discussed here -- largely because  I  haven't  figured  them  out
+  yet.   For example, one needs to get a handle on the distribution of rays
+  which will be intersected with the environment in order to  estimate  the
+  efficiency  of the various subspaces.  Assuming a uniform distribution is
+  probably a good first approximation,  but there's got to be a better  way
+  --  perhaps  through  incremental improvements as the scene is ray traced
+  and, in particular, between successive frames of an animation. 
+
+  If this has any chance of working it's going to  require  an  interesting
+  mix  of  science and "art".  The science is in efficiently estimating the
+  effectiveness of a subspace (i.e. predicting the relevant costs) given  a
+  collection  of  objects   and  a  probability  density  function  of rays
+  (probably uniform).  The art is in  selecting  an   "annealing  schedule"
+  which  will  let  the  various  combinations of hierarchies percolate and
+  gradually  "freeze"  into  a  near-optimal  configuration.   Doing   this
+  incrementally  for an animation is a further twist for which I've seen no
+  analogies in the simulated annealing literature. 
+
+  If you've never heard of simulated annealing  and  you're  interested  in
+  reading  about  it,  there's  a  very  short  description  in  "Numerical
+  Recipes."   The best  paper that I've found, though, is "Optimization  by
+  Simulated  Annealing,"   by  S. Kirkpatrick, C. D. Gelatt, Jr., and M. P.
+  Vecchi, in the May 13, 1983 issue  of Science. 
+
+  Does this sound at all interesting to anybody?  Is anyone  else  thinking
+  along  these or similar lines?  
+  
+                                                              -- Jim Arvo

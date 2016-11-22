@@ -1,0 +1,878 @@
+<!-- html version of Volume 12, Number 1 -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 12, Number 1</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT> 
+<P><I>"Light Makes Right"</I> 
+<P><FONT size=+1>June 25, 1999</FONT> 
+<P><FONT size=+1>Volume 12, Number 1</FONT> 
+</CENTER>
+<P>
+Compiled by <AUTHOR>Eric Haines</AUTHOR>, 1050 Craft Road, Ithaca, NY 14850
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine, not Autodesk's.<P>
+All contents are copyright (c) 1998,1999, all rights reserved
+by the individual authors
+<P>
+Archive locations:  text version at
+<A HREF="http://www.acm.org/tog/resources/RTNews/text/">
+http://www.acm.org/tog/resources/RTNews/text/</A>
+<BR>HTML at <A HREF="http://www.acm.org/tog/resources/RTNews/html/">
+http://www.acm.org/tog/resources/RTNews/html/</A>
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction</A></LI>
+<LI><A HREF="#art2">
+Ray Tracing Roundup</A></LI>
+<LI><A HREF="#art3">
+Comparison of Hierarchical Grids</A></LI>, by Vlastimil Havran and Filip Sixta
+<LI><A HREF="#art4">
+Great Shadow Hack</A></LI>, summarized by Eric Haines
+<LI><A HREF="#art5">
+Octree Traversal and the Best Efficiency Scheme</A></LI>, by Ben Hutchison,
+Eric Haines, Hanan Samet, and Erik Jansen
+<LI><A HREF="#art6">
+Quicker Grid Generation via Memory Allocation</A></LI>, by Eric Haines
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction</A></FONT></H4>
+So what's my excuse this time? Well, it's a good one, actually: I've been
+working on a book. I'm the second author of the upcoming book &quot;Real-Time
+Rendering&quot;, Tomas Moeller is first author. I'm still not exactly sure how I
+got involved with the project, but am happy to have done so - we wrote the
+book we wished we'd had when starting out. Interestingly, Tomas and I have
+never met in person, and talked but once on the phone after the bulk of the
+work was done. That said, I've never worked as closely with anyone else in my
+life - ahhh, the miracle of email and FTP. Anyway, the book will be out by
+SIGGRAPH 99, the publisher is A.K. Peters, the web site is
+<A HREF="http://www.acm.org/tog/resources/RTR/">http://www.acm.org/tog/resources/RTR/</A> and has sample sections and an edited
+guide to resource links.
+<P>
+Actually, real-time ray tracing rendering techniques (RTRTRT) is a hot topic
+now. Remember SIGGRAPH 98? The Ray Tracing Roundtable was more than just a
+shmooze-fest last year, with the idea of using ray tracing in a real-time
+setting discussed as a serious possibility. Well, real-time ray tracing has
+been possible for years on a PC, but only through demo programs - see
+<A HREF="http://www.acm.org/tog/resources/RTNews/demos/overview.htm">http://www.acm.org/tog/resources/RTNews/demos/overview.htm</A> for a page put
+together by Piero Foscari. That a 4K program can do anything, let alone
+rapidly ray trace, is pretty great. For an online Java interactive ray tracer
+in action, see <A HREF="http://www.eyeone.no/raytracing/index.html">http://www.eyeone.no/raytracing/index.html</A>.
+<P>
+Parker et al. at the University of Utah just presented a paper, &quot;Interactive
+Ray Tracing&quot;, at the 1999 Symposium on Interactive 3D Graphics. 35 million
+spheres at 15 frames per second on 60 processors. Admittedly, a lot of those
+spheres were occluded by being in a dense array (hey, even if spread out,
+there are only so many pixels on the screen), but the point is that a hidden
+surface algorithm which simply threw the entire database at the screen
+currently cannot compete. The announced Playstation 2 (which I've read one
+reviewer say is about 4.5x as fast as an InfiniteReality 2) can do 20 million
+polygons a second. This is pretty good (no, actually, it's incredible), but a
+far cry from 525 million spheres a second. With Moore's Law it would take
+pure Z-buffer based machines almost a decade to catch up to Utah's feat. See
+their paper at <A HREF="http://www2.cs.utah.edu/~bes/">http://www2.cs.utah.edu/~bes/</A>. The one word summary of their
+paper: optimization. For every hour spent programming algorithms they spent
+four hours optimizing the code.
+<P>
+It is interesting to see that, as architectures change, the importance of
+avoiding cache misses and branches and whatnot has become much more important
+than worrying about algorithm operation counts (i.e. how many adds and
+multiplies there are). See &quot;Efficiency Issues for Ray Tracing&quot; by Brian
+Smits, published in the journal of graphics tools. It is also available
+online at <A HREF="http://www2.cs.utah.edu/~bes/">http://www2.cs.utah.edu/~bes/</A>
+<P>
+The Utah paper has one of the best hacks I've seen in years for ray tracing,
+a great way of faking soft shadows. It's explained in the article in this
+issue, and is one of the main reasons I felt the need to get out an issue. It
+was going to be the lead article, but then I received Havran and Sixta's
+article on hierarchical grid efficiency scheme testing. Their results are
+surprising, plus they give a nice grid traversal speed-up, so they're now in
+the lead spot.
+<P>
+To finish up, here's an interesting puzzle, from an MAA question book: given
+an axis-aligned cube with corners at (0,0,0) and (1,1,1), cut it with the
+three planes x=y, y=z, and x=z. How many pieces is the cube cut into?
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+Ray Tracing Roundup</A></FONT></H4>
+Ulf Assarsson, Jonas Lext, and Tomas Moeller are leading an initiative to
+create a set of animation benchmark scenes for testing renderers (typically
+ray tracers) which have temporal coherence schemes. See their call for
+participation and current thoughts at
+<A HREF="http://www.ce.chalmers.se/staff/tomasm/benchmark/">http://www.ce.chalmers.se/staff/tomasm/benchmark/</A>
+<P>
+________
+<P>
+Mark VandeWettering contributed a much better hashing function by Bob Jenkins
+for the fractal mountain generator in the Standard Procedural Databases code.
+If you make fractal mountains using the SPD and generate a huge number of
+polygons you'll notice patterning artifacts. The new hashing function gets
+rid of these. <A HREF="http://www.acm.org/tog/resources/SPD/overview.html">http://www.acm.org/tog/resources/SPD/overview.html</A>
+<P>
+________
+<P>
+Teddy is an amazing modeler which will be presented at SIGGRAPH 99 - easy to
+learn, use, and it's fun. Play with the Java version at
+<A HREF="http://www.mtl.t.u-tokyo.ac.jp/~takeo/teddy/teddy.htm">http://www.mtl.t.u-tokyo.ac.jp/~takeo/teddy/teddy.htm</A>. For links to other
+SIGGRAPH 99 papers, see Fredo Durand's site at
+<A HREF="http://w3imagis.imag.fr/Membres/Fredo.Durand/Book/sig99.html">http://w3imagis.imag.fr/Membres/Fredo.Durand/Book/sig99.html</A>.
+<P>
+________
+<P>
+Xfrog creates extremely impressive plant forms and more, exporting to
+POV-Ray, Rayshade, DXF, OBJ, RIB, VRML, and Maya formats. Currently on SGIs,
+they're seeking beta sites for the Windows and Linux versions.
+<A HREF="http://www.greenworks.de/">http://www.greenworks.de/</A>.
+<P>
+________
+<P>
+3DWin, a shareware 3D file converter, is available at
+<A HREF="http://www.stmuc.com/thbaier/">http://www.stmuc.com/thbaier/</A>
+<P>
+________
+<P>
+The paper
+<P>
+<PRE>
+ Image-Based BRDF Acquisition Including Human Skin,
+ by Steve Marschner, myself, Eric Lafortune, Ken Torrance,
+   and Don Greenberg,
+</PRE>
+<P>
+presented at the 10th Eurographics Workshop on Rendering, is now available
+online at
+<P>
+<PRE>
+  <A HREF="http://www.graphics.cornell.edu/~westin/pubs/egwr99-marschner.pdf">http://www.graphics.cornell.edu/~westin/pubs/egwr99-marschner.pdf</A>
+</PRE>
+<P>
+It describes how we measured the BRDF of various surfaces, including
+living human skin, using only a digital camera, an electronic flash,
+and a Cyberware scanner. The measurements have been verified against
+measurements on our gonioreflectometer; in the best case, they appear
+to be accurate to within the limits of the gonioreflectometer.
+<P>
+Stephen H. Westin &lt;<A HREF="mailto:westin@graphics.cornell.edu">westin@graphics.cornell.edu</A>&gt;
+<P>
+________
+<P>
+For mathematical definitions and tidbits (along with collections on other
+topics), try Eric Weisstein's treasure trove:
+<A HREF="http://www.treasure-troves.com/">http://www.treasure-troves.com/</A>. The book made from his math collection, &quot;CRC
+Concise Encyclopedia of Mathematics&quot;, is an amazing achievement - no great
+depth, but an incredible range of material and fun to just page through.
+<P>
+Various geometric formulae can be found at
+<A HREF="http://freeabel.geom.umn.edu/docs/reference/CRC-formulas/">http://freeabel.geom.umn.edu/docs/reference/CRC-formulas/</A>. Linear algebra
+definitions can be found at
+<A HREF="http://maths.uwa.edu.au/~keady/M25n/M25nS1/laglossary.html">http://maths.uwa.edu.au/~keady/M25n/M25nS1/laglossary.html</A>. Finally, for a
+quick reference to mathematical formulae in general, try Dave's Math Tables
+at <A HREF="http://www.sisweb.com/math/tables.htm">http://www.sisweb.com/math/tables.htm</A>.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Comparison of Hierarchical Grids</A></FONT>, by Vlastimil Havran (<A HREF="mailto:havran@fel.cvut.cz">havran@fel.cvut.cz</A>) and Filip Sixta
+</H4>
+[Vlastimil and Filip are part of the Department of Computer Science and
+Engineering, Faculty of Electrical Engineering, Czech Technical University,
+Prague]
+<P>
+In <A HREF="rtnv10n3.html#art8">RTNv10n3</A> we observed an interesting discussion concerning
+hierarchical grids. The problem with the algorithms published was that they
+were developed more or less independently on different platforms and
+hardware, and they could not be compared against one another. We decided to
+take up the gauntlet and make some comparisons. There have been about three
+methods published; let us recall the basic properties of these approaches:
+<P>
+a) Jevans and Wyvill's article (GI'89) - we call this approach the
+  recursive grid here. The principle is simple: construct a uniform grid
+  over the set of objects, assign the objects to all voxels where they
+  belong. Then recursively descend; that is, for each voxel that contains more
+  objects than a given threshold construct a grid again. The construction
+  of grids is terminated when the number of primitives in the voxel is
+  smaller than a threshold or some maximum depth for grids is hit (usually
+  2 or 3).
+<P>
+b) Cazals, Drettakis, and Puech articles (EG'95 and SCG'97) - we call
+  this approach the hierarchy of uniform grids (HUG) here. The principle is
+  more complex; first, we compute the histogram according to object size.
+  Using the histogram we split the objects into groups, we use three groups
+  here for explanation. The first group contains large objects, the second
+  group middle-size objects, and the last group small-sized objects. Within
+  the middle-size and small-size groups we perform clustering according to
+  the distance between the objects. Thus each group contains several clusters.
+  For large-size group objects we construct an initial global grid. For all
+  clusters having a large enough number of objects we also construct the grid.
+  These grids are inserted into the global grid recursively, so the smaller
+  grids are contained in bigger ones. The author's statement in the paper's
+  introduction that the method is fully automatic is true as far as it goes;
+  however, it does require at least two parameters to be set initially (the
+  number of groups and delta-connectivity).
+<P>
+c) Klimaszewski and Sedeberg (Klimaszewski PhD thesis and IEEE'97 article)
+  - we call this approach the adaptive grid here. The algorithm principally
+  differs from HUG. The first step of algorithm is clusterizing of objects
+  according to some criteria based on the distance between two candidates.
+  A candidate can be the current cluster or an object. The criteria consider
+  candidates' and the resulting cluster's surface areas. Moreover, the resulting
+  cluster must be small enough in comparison with the scene bounding box.
+  In the second phase of the algorithm, bounding volume hierarchy (BVH) is
+  built up over the clusters. The grids are then constructed for the
+  clusters (leaves of BVH). We have found that the number of children
+  in the interior nodes of BVH is small, so it is unsuitable to create grids
+  for these nodes. In the last phase, so called sub-voxel grids are constructed
+  for voxels, where the number of objects is greater than a given threshold.
+<P>
+The hierarchical grids (b) and (c) differ from (a), since voxels in recursive
+grids cannot overlap, so each nested grid along the ray path is tested
+exactly once. The HUG approach requires having mail boxes in the traversal
+algorithm, where the grids are taken as an object. The ray traversal for
+hierarchical grids is somewhat similar for all the approaches, but it differs
+between (b) and (c), since the BVH is traversed in (c).
+<P>
+In forming the list of objects for a grid cell, we use the simple scheme of
+comparing only the object's bounding box to the grid and adding the object to
+overlapped cells. This can result in a cell having objects in its list which
+in fact do not overlap the grid cell, thereby causing superfluous ray
+intersection tests to occur. However, we also implemented pruning (exactly
+testing the primitives' surfaces against the cells). The results do not
+improve very much for SPD scenes (by 10% at most).
+<P>
+Ray Traversal:
+<OL>
+<LI>If this grid was already tested, results are already known, return.</LI>
+<LI>Prepare the constants for 3DDDA algorithm for the current grid instance.</LI>
+<LI>Within current voxel, test all its children for intersection; if there
+     is an intersection and it lies in the current voxel, return.</LI>
+<LI>Otherwise, proceed to the next voxel in the current grid along ray path.</LI>
+<LI>If there is not another voxel in the current grid, return -
+     no intersection. Otherwise, go to step (3).</LI>
+</OL>
+<P>
+There are several issues concerning the hierarchical grids construction. How
+many voxels should be in the grid of a given size containing N objects? The
+same question arises for uniform grids as well. The answer is usually the
+pragmatic rule often called the (N^1/3) rule: the axis-aligned bounding box
+is split on each axis into (N/1^3) cells. The construction of adaptive grids
+also provides another approach called the heterogeneous grid, where the
+number of voxels is proportional to the number of objects, but the voxel is
+made to be cubic as much as possible (that is, the number of cells along an
+axis is proportional to the relative length of the axis). We found out this
+setting is generally more efficient than the regular one. It can lead to
+better performance since it assumes the direction of rays is uniform, even if
+this assumption is usually violated. The second important issue is the
+parameter settings for grid hierarchy construction. What should be the
+threshold and the number of objects to construct a grid over its child and
+maximum hierarchy depth? What should be the distance criteria
+(delta-connectivity) and number of groups for the HUG approach, or the two
+parameters for merging in adaptive grids and the threshold for construction
+of subvoxel grids?
+<P>
+Suitable settings should be found experimentally, even if the authors
+recommend some values to use. The problem of parameter setting is complex and
+the best settings can differ from scene to scene.
+<P>
+We implemented the uniform grid and hierarchical grids schemes in the GOLEM
+rendering system (<A HREF="http://www.cgg.cvut.cz/GOLEM">http://www.cgg.cvut.cz/GOLEM</A>). Due to space restriction and
+readability we present here only the final timings for the SPD scenes.
+Several other parameters reflecting the finer points of hierarchical grids
+behavior obtained from testing can be found in supplementary statistics at
+<A HREF="http://www.acm.org/tog/resources/SPD/overview.html">http://www.acm.org/tog/resources/SPD/overview.html</A>. The interested reader
+will find much more information in this statistics document.
+<P>
+The testing was conducted on an Intel Pentium II, 350 MHz, 128 MBytes,
+running the Linux operating system, compiler version egcs-1.1.2.
+<P>
+<PRE>
+T_B[s]  .. time for construction of grid hierarchy
+T_TR[s] .. time for ray tracing a scene of resolution 513x513,
+           depth of recursion 4, according to the SPD description.
+
+                                         Scenes
+Timings           ---------------------------------------------------------
+--------------    balls   gears lattice  mount  rings teapot tetra     tree
+
+Uniform Grid - D = 1.0
+T_B[s]             0.19    0.38    0.38   0.26   0.35  0.3    0.13     0.22
+T_TR[s]          244.7   201.0   54.68  28.99  129.8  28.68   5.54  1517.0
+
+Uniform Grid - Customary ( D = 20.0 )
+T_B[s]             0.39    1.13    1.27   0.4    0.98  0.65   0.34     0.33
+T_TR[s]           38.52  192.3    34.21  25.15  83.7  18.6    3.86   781.3
+
+Recursive grid
+T_B[s]             0.39    5.06    0.16   1.98   0.39  1.55   0.47     0.28
+T_TR[s]           36.73  214.9    82.05  30.28 113.9  22.67   7.23    33.91
+
+HUG
+T_B[s]             0.4     1.04    0.3    0.16   0.45  0.53   0.24     0.48
+T_TR[s]           34.0   242.1    71.62  62.31 116.3  25.61   7.22    33.48
+
+Adaptive grid
+T_B[s]             2.79    5.88    0.6    2.54   1.82  3.16   1.19     1.46
+T_TR[s]           30.51  330.0   129.6   59.05 167.7  43.04   8.71    18.38
+</PRE>
+
+It is apparent that the time for construction is always less than 10% of the
+time for ray tracing itself. We devoted special care to the efficiency
+algorithm for grid traversal. It requires four comparisons per traversal step
+when the voxel is empty. We studied the Rayshade grid traversal code. The
+result of our studies is our traversal code is much more efficient than
+Rayshade's. One trick is to compute in advance the coordinates of the voxel
+in the grid where to terminate the traversal (i.e. the voxel where the ray
+leaves the grid), as it saves comparisons during the traversal.
+<P>
+The uniform grid (Uniform Grid Customary) constructed with a high number of
+voxels can be very efficient for SPD scenes (excluding scenes which are
+extremely sparse). With custom setting of the grid resolution, it outperforms
+hierarchical grids for some SPD scenes. The full results show that the rule
+of thumb of having the number of voxels equal to the number of objects is not
+very good. We call the ratio between the number of voxels and number of
+objects the voxel density. Uniform Grid Customary has the density set to D =
+20.0 and uses a resolution setting according to Woo's GI'92 article: &quot;Ray
+Tracing Polygons Using Spatial Subdivision&quot; (i.e. strive to create cubical
+voxels). It always outperforms density D=1.0, and in many cases outperforms
+any hierarchy of grids, regardless the construction algorithm. The
+disadvantage of setting a high voxel density is the total memory used; the
+memory consumed for a hierarchical grid is typically much smaller, with
+similar performance.
+<P>
+Recursive grids is the simplest hierarchical grid scheme to implement and in
+most cases shows reasonable performance in comparison with methods (b) and
+(c). In our opinion, implementation of HUG and adaptive grids is rather
+difficult and brings interesting efficiency improvements only for the scene
+tree and, we suspect, for other very sparse scenes as well. You should
+consider carefully if the implementations of HUG and adaptive grids pays off
+for your application.
+<P>
+The three methods for construction of the grid hierarchy are not the only
+ones which can be used, someone can develop his own method with different
+performance characteristics. In order to compute ray shooting quickly, the
+methods try to organize the free space and the objects in the scene in some
+reasonable, adaptive way according to the local scene properties. We would
+like to stress that even if the traversal of the grid is a very efficient
+algorithm, there are unavoidable drawbacks of hierarchical grids.
+<P>
+First, the initialization of the variables for ray traversal in the grid is
+expensive; that is why, for some scenes, the uniform grid with a high number
+of voxels can outperform the hierarchical grid. Second, we need to set the
+grid resolution somehow, and how to compute the resolution setting for real
+scenes is a difficult and still rather unsolved problem. Moreover, the cells'
+boundary positioning does not take into account the objects boundaries, which
+seems to be important. That is, a slightly different resolution along an axis
+can noticeably change how many cells the objects overlap and the tightness of
+the fit. To traverse the grid efficiently, the voxels along the axis have to
+be the same size, so local changes in cell size seem unwise.
+<P>
+To conclude our observations from testing, we consider the approaches of
+hierarchical grids appealing and promising, but their best/optimal/suboptimal
+construction algorithms (clustering, resolution setting, etc.) is still
+relatively unsolved and is a difficult problem needing more research. We
+agree with the opinion that the best setting of parameters is scene
+dependent. Generally speaking, performance also depends on the viewer
+position and global illumination algorithm, since these affect the
+distribution of rays. It should be also interesting to test efficiency of the
+hierarchical grids for scenes with huge number of objects, say hundreds of
+thousands, but we do not have such models available (The SPD models can be
+made to produce more primitives, but we have found the computation time to
+grow very slowly with increasing size, perhaps due to the fractal nature of
+these models. We would like to try different large scale models). It would
+also be worth researching how grid resolution is dependent upon the object
+distribution in space, not just upon the number of objects. We have done some
+research along these lines for BSP trees (see &quot;Rectilinear BSP Trees for
+Preferred Ray Sets&quot;, <A HREF="http://sgi.felk.cvut.cz/~bittner/abstracts.html">http://sgi.felk.cvut.cz/~bittner/abstracts.html</A>).
+<P>
+The future work in this area should also include the optimization of
+hierarchical grids construction that will be based on the known or predicted
+rays distribution for given global illumination task. It is interesting this
+topic of the non-uniformity of ray distribution (what is the distribution?
+can we predict and utilize this distribution knowledge somehow?) has not yet
+been researched.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Great Shadow Hack</A></FONT>, summarized by Eric Haines
+</H4>
+This is a summary in hand waving terms of the technical report, &quot;Single
+Sample Soft Shadows&quot; by Steven Parker, Peter Shirley, and Brian Smits. I
+definitely have nothing to do with this idea, I'm merely summarizing it
+because I think it's great and deserves more air play. Interestingly enough,
+none of the three authors exactly knows which one of them invented it! My
+thanks go out to Steve and Brian for giving additional information on their
+technique and helping correct this article. For the original paper, go see it
+at <A HREF="http://www2.cs.utah.edu/~bes/">http://www2.cs.utah.edu/~bes/</A> under &quot;Papers&quot;.
+<P>
+Start with a triangle casting a shadow on a ground plane. One way to get a
+soft shadow is to shoot a number of rays from a point on the ground plane at
+the area of a light source. Count up the times the light was hit vs. missed
+and you have a rough guess of the coverage of the triangle and can attenuate
+(dim) the light's contribution accordingly. Do this for all pixels and you've
+got a soft shadow cast on the ground plane. However, the cost is excessive:
+just to get 16 gray levels you need to cast 16 shadow rays from each test
+point. Even with this the soft shadows are noisy: at one pixel 14 rays hit
+the light, the next has 10 hit, the next 13 hit, due to changing sampling
+patterns (and you do want to change the light's sampling pattern, otherwise
+visible patterns such as banding can arise; noise is better than banding).
+There are various acceleration schemes which can trim away at having to fire
+16 shadow rays for each sample (e.g. by identifying areas on the plane that
+must be fully illuminated or fully obscured). But in general this classic
+stochastic sampling of area lights is costly and noisy, sparkling when you
+animate it.
+<P>
+So, wouldn't it be nicer if the penumbra of the shadow wasn't noisy? What if
+I said that such a technique exists, and that it costs little more than
+sending one shadow ray per sample? Now how much would you pay? But wait, this
+technique can also be added to any ray tracer in just a few hours. Well...
+there is a little fine print, the shadows are a bit overstated and some
+banding is also possible. Let's dispense immediately with the criticism that
+this method is not realistic. The authors present it in the context of making
+an interactive ray tracer, where the computing time is short. I believe the
+method is useful in a number of other areas, such as previewing and in
+artistic or even technical rendering. Many techniques in computer graphics,
+such as environment maps and bump maps, Phong lighting, etc. are attempts at
+realism with simplifications. Perceived realism often does not have to match
+physical realism (that said, physical phenomena and theory are great sources
+of ideas and algorithms for computer graphics; hacks do have their limits). A
+soft shadow, improperly drawn, is almost always better than a hard shadow,
+which can be misinterpreted as a crease or a material change in the occluded
+object instead of as a shadow.
+<P>
+The idea developed at Utah is that the penumbra grows linearly with the
+distance of the occluder from the shadowed surface. This isn't quite true in
+reality, but accept it for now. In a classic, point light ray test the ray is
+shot from the plane (or whatever) to the triangle and the triangle either
+blocks it or not. In the Utah test, the ray is first tested against the
+triangle's plane. If the plane is hit, the length of the ray (the distance
+from the ground plane to the triangle's plane) is used to extend the original
+triangle outwards. You may wish to look at their figure at
+<A HREF="http://www.cs.utah.edu/~bes/papers/coneShadow/shadow-node5.html">http://www.cs.utah.edu/~bes/papers/coneShadow/shadow-node5.html</A>. The idea is
+that the triangle itself fully blocks the shadow test ray. As we get farther
+away from the triangle's edges, the amount of light stopped by the triangle
+falls off, until finally at some maximum distance the light is not blocked at
+all by the triangle.
+<P>
+Because the width of this &quot;extended area&quot; of the extended triangle is
+proportional to the distance of the triangle from the ground plane, the
+penumbra works about right. When the triangle is close to the ground plane,
+the extended area, and hence the penumbra, is narrow; as it moves further
+away, the extended area increases and so does the penumbra. The same idea can
+be easily done with occluding spheres (other primitives are trickier - you
+want to grow their extents in a smoothly changing and easily calculable way).
+<P>
+Less obvious, but also good, is to notice what happens with a triangle which
+is, say, perpendicular to the ground plane and touches at one vertex. Near this
+vertex the shadow cast will be sharp, because the distance from the ground
+plane to the triangle will be small. At the other vertices, further away from
+the ground plane, the shadow generated will be fuzzy.
+<P>
+One question is how this system works with, say, a mesh of triangles. Say
+three extended triangles are hit by a shadow test ray, letting through 0.4,
+0.8, and 0.3 of the light. How much light really gets through? The authors
+tried a number of methods (multiplication and addition of various sorts); the
+most effective method, called thresholding, is simply to take the lowest
+value found, e.g. 0.3. This gives physically unrealistic results, but does
+give a reasonable looking soft shadow. The umbra is over- or understated: the
+object casts a hard shadow, but is extended outwards with a false penumbra.
+In reality an object smaller than the light's area can cast a shadow with no
+umbra; an object larger than the light's area can cast a larger umbra. With
+the Utah method the umbra is always the size of the object (though I guess
+you could simply change the interpolation function in the extended, fringe
+areas to be an umbra, then drop off as a penumbra, so this understated umbra
+is less of a problem).
+<P>
+One idea is to make the overstated umbra smaller by having the penumbra area
+not only extended beyond the triangle, but also extended inwards towards the
+center of the triangle. This then would give a triangle an umbra that would
+decrease in size as it moved away from the ground plane. Nice in theory, but
+it has a fatal flaw. Imagine a checkerboard, and imagine each checker square
+pulling in as the checkerboard moves away from the ground plane. With each
+checker shrinking, light can now leak in between neighboring checkers, and a
+checkered shadow produced. Obviously this is not what should happen with a
+solid checkerboard.
+<P>
+Note that the scheme is somewhat more expensive than classic shadow testing,
+but not much more. The ray/triangle test is more complex and returns a
+percentage instead of a hit/miss bit. Hitting these extended triangles does
+not necessarily end testing; only a full occlusion by the initial triangle
+does. The efficiency scheme holding the shadowing objects also has to take
+into account the maximum increased size of the triangles.
+<P>
+How much to move out the edges of the triangle is an interesting question. As
+mentioned, the distance extended is proportional to the distance the ray
+travels from the test location to the intersected plane. This in fact is how
+Steve Parker first implemented it, and it looks pretty good. However, the
+angle between the ray and the occluding plane's normal should also affect the
+amount to extend the edges. Think of the edge of a square shadowing polygon.
+Now rotate the square around one of its edges. As it turns on this edge,
+compared to the light this edge will need to be extended further to cast the
+same sized penumbra. The square's opposite, parallel edge will also have to
+be extended more. Notice that the other two edges do not have to be extended,
+even though the square is being rotated. Each edge has to be extended a
+variable amount, something like 1/DotProduct(d,en), where &quot;d&quot; is the ray
+direction and &quot;en&quot; is the edge's normal in the triangle's plane. However,
+even this is not quite right, as these extended edges could go out quite far
+and so the intersection distance can increase considerably, causing a larger
+penumbra. Also, you don't even want to think about how to join variable sized
+edges' endpoints to give curved corners. Finally, such huge triangles will
+cost extra processing time, as the largest possible triangle has to be used
+in forming the efficiency structure storing the scene.
+<P>
+Happily, just recall this is a hack and then live with the simple solution of
+extending edges based only on distance. While one particular triangle may
+have its edges understated due to its orientation, recall that there are
+normally two triangles touching any silhouette edge and that the odds are
+with you that one of these will be fairly well aligned with the ray direction
+and so cast a reasonable penumbra.
+<P>
+However you do it, these extended triangles are larger than their original
+primitives. This means that the efficiency structure put around them must
+take their larger size into account. Either a separate structure must be
+created for shadow computations, or the shared efficiency structure must be
+made less efficient for eye/reflection/refraction rays (since these do not
+need to have extended triangles).
+<P>
+As far as actually testing the ray against this extended triangle, here are a
+few approaches. If you're not interested in implementing this method, skip to
+the last paragraph or two. I'm making some of this up as I go, so feel free
+to correct me if you try something out and it fails miserably. The original
+paper says you extend the edges and round the corners. In practice, Steve
+Parker (first author) said they extend the edges of the triangle out, also
+clamping the corners by this extension distance, and do not bother with
+rounding.
+<P>
+One way to implement extending the edges and corners is to use barycentric
+coordinates (see <A HREF="rtnv5n3.html#art4">RTNv5n3</A>) and extend the edges out by loosening the range 0
+to 1 requirement. In barycentric coordinates, the point is in the basic
+triangle if all three coordinates are between 0 and 1. However, giving
+different ranges for these coordinates results in different primitives. For
+example, if the intersection point's barycentric coordinate is -0.1 for a
+given vertex, this means the point is 1/10th of the way outside the triangle
+edge opposite from this vertex. Values above 1 means the point is beyond the
+vertex compared to its opposite edge. Say you allow the triangle to extend by
++/- 0.5 for a given coordinate, i.e. from -0.5 to 1.5. From 0 to 1 is then
+the umbra, and something like 1.3 would dim the light by 0.4 (the light would
+be multiplied by 0.6), since it is 60 percent of the way from 1.0 to 1.5.
+Compute the attenuation for each coordinate and choose the one that dims the
+light the least (i.e. is highest). Varying the allowed range of these
+coordinates allows you to limit how far the triangle extends, vary the
+penumbra, and also compute the attenuation.
+<P>
+However, just using barycentric coordinates will give a somewhat chopped off
+extended triangle, with sharp corners. Allowing the values to be below 0
+pushes the edges out, and values above 1 move the amount each corner extends
+out (essentially, controls the bevel formed at the corner). The corners are
+worth limiting because a corner with a sharp tip, when extended, will have a
+penumbra which extends quite a distance as a sharp extension.
+<P>
+The amount each barycentric coordinate is extended is relative to the width
+of the triangle for that coordinate. For example, say corner A is across from
+the long side of a right triangle (a triangle where corner A is 90 degrees
+and the other two corners B and C are each 45 degrees). Say the triangle is 4
+units across from corner A to the opposite edge. To extend the opposite edge
+and corner A out 1 unit, change the range from [0,1] to [-0.25,1.25].
+However, for corner B (and C), the opposite edge is 4*sqrt(2) far away, so to
+extend it 1 unit the range is only [-0.1767,1.1767].
+<P>
+I've tried to figure out a way to add rounding to the corners while using
+barycentric coordinates but can't quite figure out a foolproof way to do it.
+Enter method two, which is less efficient but higher quality: simply build
+the extra geometry needed on the fly and test against it. First test against
+the triangle, of course - if it's hit, you're done. Else, each edge is
+extended perpendicularly outwards to form a rectangle, each of which is
+tested. If any of these are hit, immediately return the amount of attenuation
+from it, since only one rectangle can be hit. You might test the longest
+edge's rectangle first, since this is most likely to be hit. If none are hit,
+then test against a circle around each vertex. If inside one or more circles,
+return the value which dims the light the most (i.e. is closest) - note you
+have to test against all circles, not just stop when you first get a hit
+[well, this isn't quite true - you have to test against all circles only if
+the radius of these circles is larger than the length of the smallest edge of
+the triangle].
+<P>
+Up to this point I've assumed a linear falloff in the penumbra region. This
+is in fact the sort of shadow you would get if a shadow edge was aligned with
+a light source which was rectangular. However, this gives sharp slope changes
+where the penumbra starts. To avoid the discontinuities at both edges of the
+penumbra, the falloff could be determined instead by a form of the Bernstein
+polynomial (essentially, an S curve):
+<P>
+<PRE>
+    f = (3 a^2 - 2 a^3)
+</PRE>
+<P>
+with a=0 at the umbra's edge, a=1 at the point entering full illumination,
+and f being the resulting falloff.
+<P>
+That's about it. Now someone find some time to code it up into POV-Ray or
+Rayshade or somesuch! Should be easy.
+<P>
+I do not believe this idea has yet been used in Z-buffer projective shadows,
+i.e. extend each triangle with an alpha-blended fringe. This sort of thing
+should work, though as mentioned, thresholding seems to yield the best
+results, which is not normally supported in graphics accelerators. Still,
+such soft shadows would be of higher quality than typical methods used, such
+as accumulation buffers (jitter the projection of the shadow and average the
+results) or post-process blurring of the projection.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Octree Traversal and the Best Efficiency Scheme</A></FONT>, by Ben Hutchison, Eric Haines, Hanan Samet, and Erik Jansen
+</H4>
+Ben Hutchison &lt;<A HREF="mailto:ben@melbourneit.com.au">ben@melbourneit.com.au</A>&gt; writes:
+<P>
+I'm trying to find out about fast methods for traversing octrees. It strikes
+me that you could use some kind of integer math method like a 3D Bresenham
+algorithm to get a list of cells a ray intersects. I assume I'm not the first
+to think of this, and that somewhere there is some C source code for such a
+method, or at least a detailed description of how to do it. I found a
+fragment in Graphic Gems IV, by Daniel Cohen. Unfortunately, it's complex,
+uncommented code, and the email address listed is no longer in use.
+<P>
+____
+<P>
+Eric Haines &lt;<A HREF="mailto:erich@acm.org">erich@acm.org</A>&gt; replies:
+<P>
+People do essentially use a 3D Bresenham to traverse a grid efficiency
+structure, getting the cells as they go. There are many ways of looking at
+octree traversal, Erik Jansen wrote an article discussing some of these, in
+the book _Data Structures for Raster Graphics_, Springer-Verlag. In the RT
+News, Jim Arvo's &quot;Linear-Time Voxel Walking for Octrees&quot; in <A HREF="rtnews2d.html#art5">RTNews2</A> is an
+interesting method of examining the octree and minimizing octree traversal.
+Graphics Gems III has an article by Sung and Shirley on walking through
+octrees (BSP trees, but essentially the same thing) and some skeletal code.
+Personally I tend to just find the next three intersections (one for X, Y,
+and Z) and take the closest one and walk to the next neighbor. But I've
+definitely become a nested grids convert over the years so have lost track of
+what the best octree traversal methods are.
+<P>
+____
+<P>
+Hanan Samet &lt;<A HREF="mailto:hjs@umiacs.umd.edu">hjs@umiacs.umd.edu</A>&gt; replies:
+<P>
+With respect to the octree Bresenham, etc. I saw the Ray Tracing News issue
+of sometime back that discussed this problem.  There are fast methods of
+doing this and in fact am close to finishing up a paper on doing it on the
+sphere as well.  So, the bottom line is that there are very fast ways of
+doing the neighbor finding.  I wrote it up in the style of my book for a
+rewrite of the section.  However I found some errors while writing the paper
+on the sphere. I will try to fix it next week (it is on my stack). If I get
+somewhere I will let you know.
+<P>
+By the way, the ray tracing code in my Applications book is rewritten and
+published in the newer printings of the book. Look for the latest printing
+which came out in 1995.
+<P>
+____
+<P>
+Erik Jansen &lt;<A HREF="mailto:F.W.Jansen@twi.tudelft.nl">F.W.Jansen@twi.tudelft.nl</A>&gt; writes:
+<P>
+As far as I know there is no dominant &quot;fastest&quot; method yet/still. The &quot;nested
+grids&quot; is indeed a good choice. Easy, robust, and fast. The BSP traversal is
+also fast and if you have a bintree spatial subdivision a good choice. It
+should be very easy to adapt the BSP-traversal to octrees (do some extra
+recursions for the x,y,z direction). You can also apply some intelligent
+coding like in the HERO-algorithm (I have no copy any more of the paper). The
+SMART algorithm is also a variant in the same style.  Then there is the
+DDA-Octree traversal, which is the grid traversal but mapped to an octree (or
+more the other way around: the octree mapped to a grid).
+<P>
+The last comparison we did is with the grid, our BSP-traversal, and the
+DDA-Octree. It is reported in <A HREF="rtnv7n2.html#art6">RTNv7n2</A>, Comparison of Ray Traversal Methods.
+<P>
+That was the last thing we did. The (nested) grid (with some tweaking) was
+the winner. But with other data models, the results may be slightly
+different, but not dramatically.
+<P>
+____
+<P>
+Ben later writes:
+<P>
+One easy way to convert a grid traversal to octree traversal is to pretend
+the octree is actually a grid of resolution equal to the octree depth. In
+many data sets I've tried, the average depth of an octree is close to the max
+depth, so this simplifying assumption isn't too wasteful. Then you must cull
+out grid cells which aren't actual octree cells, by doing some lookup into
+the real octree.
+<P>
+I have developed a 2 pass algorithm over the last few days to do this. I've
+coded it up but it isn't debugged, so I've no runtime figures yet.
+<P>
+Pass 1 traverses a grid and fill and array with grid coordinate for the cells
+pierced by the ray. Essentially a normal grid traversal. In my
+implementation, I convert these (i,j,k) co-ordinate into a 64bit key which
+uniquely specifies an octree cell location. Each depth level is encoded into
+three bits in the key, with a depth value occupying the last few bits of the
+key. The conversion process is all bit manipulation should it should execute
+fast.
+<P>
+Pass 2 culls out the missing cells. I map ID values to Cell pointers via a
+hash table. If they table returns null for an ID, I derive that Cell's
+parent's ID (bit manipulation again) and try the hash table again, repeat
+until found. The found cell will have 0 or more subsequent cells in the
+octree which are also missing, depending on how high in the tree it was. The
+ID of the cell can be quickly bit-manipulated into a template which can be
+matched against subsequent IDs in the list, enabling further culling without
+a hash table lookup.
+<P>
+I believe it will run fast because its basically integer traversal, then bit
+manipulation and hash table lookups. The actual octree never needs to be
+touched. Result - little bus activity, most calculation stays in the
+registers or the L1 cache. it would work well in SMP enviroments and on ultra
+fast CPUs with (relatively) slow buses/main memory.
+<P>
+Anyway, hopefully I can get the thing to work soon and I'll know. The
+bit-manipulation stuff is pretty heavy and its tedious to debug. Once again,
+I hate to be doing this if someone else has (I try never to reinvent a wheel)
+already, so if what Im saying sounds all too familiar, please send me the
+right way.
+<P>
+____
+<P>
+Erik Jansen &lt;<A HREF="mailto:F.W.Jansen@twi.tudelft.nl">F.W.Jansen@twi.tudelft.nl</A>&gt; replies:
+<P>
+Ben,
+<P>
+The thing you are doing is what we call a DDA-Octree traversal algorithm.
+There is a paper by Kelvin Sung in the Eurographics Proceedings of 1991:
+<P>
+K. Sung, <I>A DDA Octree Traversal Algorithm for Ray Tracing</I>, Eurographics'91,
+North Holland-Elsevier, ISBN 0444 89096 3, p. 73-85.
+<P>
+In this paper Kelvin compares the DDA-Octree some other traversal algorithms
+including the recursive bintre traversal, which he called ARVO. I started a
+discussion with him because his implementation was not optimal. A result of
+this was that he made a better ARVO implementation and published this in
+Graphics Gems. In the meantime I asked some students here to also make a
+comparison, which resulted in the figures that I mentioned in my previous
+message. Of course you can do some tuning and clever coding, and make one
+method look better than an other. (The other strategy is to implement other
+methods dummer than necessary, also an often applied strategy.)
+<P>
+(there's <a href="rtnv12n2.html#art5">a followup to this article in the next RT News</a>)
+<P>
+(there is also <a href="rtnv12n2.html#art4">in-depth coverage of octree schemes in the next RT News</a>)
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Quicker Grid Generation via Memory Allocation</A></FONT>, by Eric Haines
+</H4>
+I've noticed that some software which generates grid efficiency structures
+for ray tracing does so in a classic computer science fashion, but is usually
+inefficient in real life. Here's the classic method:
+<P>
+1) Form a grid structure, say 20x20x20, of pointers to linked lists.
+2) Insert each object into the grid, e.g. find the bounding box for the
+   object and for each grid cell overlapped by the box add the object. The
+   object is added to the front of the linked list pointed to by the grid
+   structure.
+<P>
+This grid structure is then accessed as is, walking through the linked list
+on each access. Linked list access is usually not as fast as pure indexing,
+i.e. it would be nice to just have a list of pointers at each grid cell to
+walk through, vs. grabbing &quot;next&quot; pointers. Even if of comparable speed,
+linked list nodes can be allocated in a fragmented fashion - some nodes are
+on this page of memory, some on that, etc. This leads to more paging than is
+necessary. Also, linked list nodes take up more memory than indexed lists.
+Finally, allocating a huge number of separate nodes is expensive both in time
+and in additional memory header costs. Some of these problems can be solved
+for linked lists by using a preallocated pool of memory which can then be
+used to quickly dole out link nodes. Nonetheless, linked lists are generally
+clunkier than need be, and are just an artifact of the way the grid structure
+is built. Also, indexed arrays allow such tricks as on-the-fly sorting: when
+an object in a cell is found to be intersected by a ray, you can swap that
+object to the top of the grid cell's indexed list, on the theory that it is
+likely to be the first thing hit next time the cell is accessed. This can buy
+you a few percent speed improvement (though I have occasionally seen
+performance get worse, strangely enough).
+<P>
+So, one method to get indexed lists at each cell of the grid structure is to
+post-process the linked lists, tossing out each linked list and replacing it
+with a list of pointers. That is, if a grid cell has a linked list consisting
+of 5 nodes, replace it with a single list of pointers to the 5 objects, plus
+a NULL pointer at the end of the list. Better yet, you could have kept a
+count of all the linked list nodes in use in the grid structure and allocate
+one hunk of memory of this length, plus additional space for the NULL end of
+list pointers. In this way a single piece of memory is allocated, minimizing
+both storage and page misses.
+<P>
+However, we can do even better, though at possibly a (generally small)
+additional cost. Allocating memory for linked list nodes can be costly, so
+this could be done away with by doing a two pass method. On the first pass,
+find out how many grid cells are overlapped by each object. Say you are doing
+the simple (but inefficient for ray tracing itself) method of seeing which
+grid cells are overlapped by the object's bounding box. It's trivial to
+compute how many grid cells are overlapped by each: sum up, and after you go
+through the objects once you know exactly how many list elements are needed
+in your array. Also allocate an array for the grid structure, to keep track
+of how many objects are in each grid cell. You then go through this array and
+can set where the beginning of each grid cell list begins in the large
+allocated list of elements. That is, for cell (0,0,0) in the grid you point
+at element 0. This cell has, say, 5 objects in it found in the first pass, so
+cell (0,0,1) will point at element 5+1 (+1 for the NULL end of list pointer).
+Add in this next cell's number of objects+1, this is where cell (0,0,2) is
+set to point, etc.
+<P>
+Once the grid structure's pointers are set up, go through the list of objects
+again, this time saving the pointer to the object in each overlapped grid
+cell's list. Since you know the exact number of list elements and how many
+are in each grid cell before the second pass, the object pointers will
+perfectly fit when stored. No additional memory (except for the piece which
+stored how many objects were in each grid cell; this piece could be reused as
+the array which holds the grid cell object lists) is allocated or freed.
+<P>
+Even if you do a more elaborate test than bounding box overlapping the grid,
+i.e. you precisely test whether the object itself overlaps each individual
+grid cell, two passes may still be worth it just for avoiding memory
+fragmentation or even to avoid running out of memory. You could also use a
+hybrid method, where the first pass just does box overlap testing to get an
+upper bound on the number of object pointers needed, then the second pass is
+more precise and so does not use all the memory allocated - it is still most
+likely a win over storing linked lists.
+<P>
+Anyway, perhaps this is more than you ever wanted to know, but it makes for a
+fairly efficient grid cell allocation scheme that avoids memory headaches and
+is simple to code, to boot. It's not for everyone, but is a way of thinking
+worth knowing about. There are a bunch of extra tricks to squeeze more memory
+out of the grid cell lists - using short or byte sized indices instead of
+pointers to the objects, using the sign bit or lowest bit of a word-aligned
+pointer to denote the end of an object list so you do not have to store NULL
+pointers, etc.
+<P>
+<I>(Followup article in <A HREF="rtnv15n1.html#art5">RTNv15n1</A>.)</I>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

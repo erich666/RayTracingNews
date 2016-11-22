@@ -1,0 +1,588 @@
+<!-- html version of Volume 1, Number 1 : Fri Apr 28 14:45:43 EDT 1995 -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 1, Number 1</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>September-December, 1987</FONT>
+<P><FONT size=+1>Volume 0 (we're C programmers, right?)</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1987, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and
+the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction
+</A></LI>
+<LI><A HREF="#art2">
+SPD & NETLIB
+</A></LI>
+<LI><A HREF="#art3">
+Spline Surfaces
+</A></LI>
+<LI><A HREF="#art4">
+Abnormal Normals
+</A></LI>
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction
+</A></FONT>
+</H4>
+"The Ray Tracing News" email edition began after some ray tracing researchers
+met at SIGGRAPH 87 and an address list was formed.  Andrew Glassner started
+"The Ray Tracing News", hardcopy edition, and soon thereafter we distributed
+copies of the email address list to researchers.
+<P>
+This is the first archive collection of "The Ray Tracing News".  I hope you
+will get as much use out of it as I have,
+<P>
+<PRE>
+    Eric Haines, 3D/Eye Inc, 2359 N. Triphammer Rd, Ithaca, NY  14850
+    ...!hpfcla!hpfcrs!eye!erich
+</PRE>
+___________________________
+<P>
+I'm presently keeping the list up-to-date.  As far as adding new people to
+this mailing list, I'd personally like to see the list not grow without
+bounds.  Given that the Intro to Ray Tracing course had the highest
+attendance, there's obviously a lot of people interested in ray-tracing.  The
+group presently consists of researchers and people building ray-tracing
+systems, and it'd be nice to keep it at this level (and keep all of our
+long-distance e-mail costs down).
+<P>
+        First off, a quick announcement:  if you didn't get a copy of the
+"Intro. to Ray Tracing" course notes at SIGGRAPH 87 and would like a copy
+(they sold out twice), send me $20 and I'll xerox them.  There are only three
+articles which are reprints - the rest is new stuff and pretty worthwhile.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+SPD & NETLIB
+</A></FONT>
+</H4>
+        My news for the day is that netlib is now carrying my "standard"
+procedural database generators (written in C).  If you don't know about netlib,
+here's the two minute explanation:
+<P>
+        Netlib has two addresses.  One is:
+<P>
+<PRE>
+        ...!hplabs!hpfcla!research!netlib
+</PRE>
+<P>
+(There may be other quicker routes to netlib - you'll have to research that
+yourself).  The second one may be more convenient, as it is an arpa connection:
+<P>
+<PRE>
+        <A HREF="mailto:netlib@anl-mcs.arpa">netlib@anl-mcs.arpa</A>
+</PRE>
+<P>
+So after you do "mail [...!]hplabs!hpfcla!research!netlib", the next step is to
+request what you want, one line per request.  For example, to get my databases,
+simply type on a single line (and don't have anything else on the line):
+<P>
+<PRE>
+        send haines from graphics
+</PRE>
+<P>
+and end the message.  Netlib is computerized, and will automatically parse
+your message and send you the 82K bytes of dox & code for my databases.
+<P>
+        The best way to find out about netlib and what it has to offer is to
+send it a request:
+<P>
+<PRE>
+        send index
+</PRE>
+<P>
+and you'll get sent a listing of all the libraries available.  It's mostly
+numerical analysissy stuff (lots'o'matrix solvers), but there are some things
+of interest.  One particularly yummy database is the "polyhedron"
+contributions.  There are some 142 polyhedra descriptions (vertices, faces, &
+edge descriptions and more).  Some of these descriptions are buggy, but most
+are good (as netlib says, "Anything free comes with no guarantee").
+<P>
+        As far as the question "what do the images look like?" goes, the
+images will be published in IEEE CG&A in November.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Spline Surfaces
+</A></FONT>
+</H4>
+        A question which I want to answer is "which is the best way in
+software to ray-trace bicubic spline patches?"  In particular, I want to
+intersect bicubics (also quadrics and linears, and any mix of the three, e.g.
+bicubic u, quadric v) that can also be rational, and also have non-uniform
+knots.  As an added bonus, I'd like to do trimming curves.  I am interested in
+anyone's feelings or findings on this subject, especially any experiences with
+actual implementation they may have had.
+<P>
+To kick off discussion of this problem, John Peterson, who is researching this
+question at the University of Utah, was kind enough to spend some time on a
+response to me.  His reply follows (printed with his permission):
+<P>
+___________________________
+<P>
+RE ray tracing splines..  I've sent a paper on ray tracing splines via
+polygons to TOG, but since that's going to be stuck in the review process
+for a while, here's an overview:
+<P>
+Most of the recent published stuff on this have been approaches using
+numerical methods; which I would avoid like the plague.  I recently
+discovered that Whitted mentions surface subdivision very briefly in his
+classic paper (CACM '80) and also in Rubin & Whitted (SIGGRAPH '80).
+The technique they use was to subdivide the surface "on the fly", i.e.,
+an area of surface is split only when rays come near it.  Whitted
+doesn't go into any detail in these papers though, just a couple of
+paragraphs each.
+<P>
+However, Whitted's motivation for "subdivision on the fly" was lack of
+memory on his PDP-11 - nowadays I think you're better off just to do all
+the subdivision initially, then throw the surface away - much less
+bookkeeping.  The polygon/bounding volume database isn't that huge if you
+use adaptive surface subdivision (more on that in a moment).
+<P>
+In terms of references, I'd highly recommend the "Killer B's" - "An
+Introduction to the Use of Splines in Computer Graphics" by Bartels,
+Beatty and Barsky.  It appeared as SIGGRAPH tutorial notes in '85 and
+'86, and I think a book version is coming out from Kaufmann(sp?) in
+September.  Another good reference is, "A Survey of Curve and Surface
+Methods in CAGD", by Bohm, Farin and Kahmann, in "Computer Aided Geometric
+Design", July 1984.  Both of these give excellent background on all the
+math you'll need for dealing with splines.  If you need to know about
+rationals, see Tiller's paper "Rational B-Splines for Curve and Surface
+Representations" in CG&A, September '83.
+<P>
+The subdivision algorithm I used is based on the Oslo Algorithm (Cohen,
+Lyche & Riesenfeld, Computer Graphics & Image Proc., Oct. 1980).  This
+is a little slower than some of the other subdivision algorithms, but
+the win is that you're not restricted to specific orders or knot
+vectors.  Since the subdivision time is generally small compared to the
+ray tracing time (like &lt; 10%) I find it's worth the generality.  (By
+the way, the Killer B's description of the Oslo algorithm is much easier
+reading than the CG&IP article.  Sweeney's paper in the Feb. '86 CG&A
+also has a good description of it).  Other subdivision classics are Ed
+Catmull's PhD thesis (U. Utah, '75) and Lane, Carpenter, Whitted &
+Blinn's article in the Jan. '80 CACM.
+<P>
+A couple tricks are noteworthy.  First, if you're doing adaptive surface
+subdivision, you'll need a "flatness criteria" (to determine when to
+quit splitting the surface).  I've found a good approximation is to take
+the bounding box of the control mesh, and find the point in the middle
+of it.  Then project the size of a pixel onto this point, and use this
+distance as a flatness criteria.
+<P>
+Other trick: Crack prevention.  If you split a surface into two parts,
+one part may get subdivided more than the other.  If this happens, along
+the seam between the two halves you need to force the polygon vertices in the
+side with more divisions to lie on the edge of the surface with fewer
+subdivisions.
+<P>
+_________________________
+<P>
+My reply to John follows:
+<P>
+        Thanks much for taking the time to tell me about splines and your
+findings.  You leave me in a quandary, though.  I'm interested in the
+numerical techniques for bicubics, but I also want to take your warnings to
+heart.
+<P>
+        I have to admit, I have a great fear of throwing away the nice
+compact spline description and blow it up into tons of polygons.  From your
+comments, you say that using adaptive techniques can help avoid this problem.
+You seem to divide to the pixel level as your criteria - hmmm, I'll have to
+think about that.  Avoiding cracks sounds like a headache.  Also, it seems to
+me that you'll have problems when you generate reflection rays, since for these
+rays the "flatness criteria" is not necessarily valid.  Have you ever noticed
+practical problems with this (one pathological example I can think of is a
+lens in front of a spline patch: the lens magnifies the pixel sized patches
+into much larger entities.  However, almost everything has pathological
+problems of some sort.  Have you run into any problems due to your method on a
+practical level)?
+<P>
+        I may try subdividing on the fly to avoid all this.  To this end, have
+you looked at Ron Pulleyblank's routine for calculating bicubic patch
+intersections (IEEE CG&A March 1987)?  What do you think of his "on the fly"
+subdivision algorithm?
+<P>
+        Articles: thanks for the references.  Have you seen the article by
+Levner, Tassinari, and Marini, "A Simple Method for Ray Tracing Bicubic
+Surfaces," in Computer Graphics 1987, T.L. Kunii editor, Springer-Verlag, Tokyo?
+Sounded intriguing - someone's hopefully going to get me a copy of it soon
+if you don't have it and would like a copy.  If you do have a copy, is it any
+good?
+<P>
+__________________________
+<P>
+Now, here's John's response:
+<P>
+RE: Numerical techniques.  I guess grim memories of round-off errors
+and consistently inconsistent results may bias my opinion, but there
+are some fundamental reasons for the problems with numerical methods.
+Finding roots of systems of two equations is inherently an unstable
+process (for a good description of this, see section 9.6 in "Numerical
+Recipes" by William Press, et. al.).  Another way to think about
+iterative approximations in two variables is the chaotic patterns
+you see Mandlebrot sets.  It's (very roughly) the same idea.  Chaos
+and ray tracing don't mix...
+<P>
+Your comments about the flatness criteria are true, though in practice
+I've only found one "practical" instance where it really poses a
+problem.  This is when a light source is very close to an object, and
+casts a shadow on a wall some distance away.  The shadow projection
+magnifies the surface's silhouette onto the wall, and in some cases
+you see some faceting in the shadow's edge.  The work-around is to
+have a per-surface "resolution factor" attribute.  The flatness
+criteria found by projecting the pixel is multiplied by this factor,
+so a surface with a "res factor" of 0.5 may generate up to twice as
+many polygons as it normally would (extra polygons are generated only
+where the surface is really curved, though).
+<P>
+In order to get a feel for just how much data subdivision generates, I
+tried the following experiment.  I took the code for balls.c (from
+the procedural database package you posted) and modified it to
+generate a rational quadratic Bezier surface for each sphere
+(as well as bounding volumes around each "group" of spheres).  I
+didn't do the formal benchmark case (too lazy), but just choose a view
+where all the spheres (level 2 == 91 of them) just filled the screen.
+The results look like this:
+<P>
+<PRE>
+        Image Size  Triangles
+        (pixels)    generated
+        128x128             7800
+        512x512     30400
+</PRE>
+<P>
+The original spline surface definition wasn't small, each sphere has
+45 rational (homogeneous) control points + knot vectors.  My
+philosophy at the moment is that the algorithms for handling lots of
+trivial primatives win over those for handling a few complex ones.
+Right now the "lots of little primatives" camp has a lot of strong
+members (Octrees/Voxels, Kay/Kajiya/Caltech, Arvo & Co, etc).  If you
+just want to maximize speed, I think these are difficult to beat, but
+they do eat lots of memory.
+<P>
+I'd be very interested in seeing a software implementation of Pulleyblank's
+method.  The method seemed very clever, but it was very hardware oriented
+(lots of integer arithmetic, etc).  I guess the question is whether or not
+their subdivision algorithm is faster than just a database traversal.
+Something like Kay/Kajiya or Arvo's traversal methods would probably scream
+if you could get them to run in strictly integer arithmetic (not to mention
+putting them in hardware...)
+<P>
+Cheers,<BR>
+jp
+<P>
+__________________________
+<P>
+Anywell, that's the discussion as far as it's gone.  We can continue it in one
+of two ways:  (1) everyone writes to everyone on the subject (this is quick,
+but can get confusing if there are a lot of answers), (2) send replies to me,
+which I'll then send to all.  I opt for (1) for now:  if things get confusing
+we can always shift to (2).
+<P>
+[Actually, we're shifting to (2) around now, though it seems worthwhile to
+pass on your comments to all, if you're set up to do it.  A summary of the
+comments will (eventually, probably) get put in Andrew's ray-tracing
+newsletter.]
+<P>
+More responses so far:
+<P>
+&gt;From Jeff Goldsmith:<BR>
+<P>
+Re: flatness criterion
+<P>
+The definition that JP gave seems to be based on pixel geometry.
+That doesn't seem right.  Why not subdivide until you reach
+subpatches that have preset limits in the change in their
+tangent vector (bounded curvature?)  Al Barr and Brian Von
+Herzen have done some formal studies of that in a paper given
+this year.  (It wasn't applied to ray tracing, but it doesn't
+matter.)  I used that technique for creating polygonal representations
+of superquadrics with fair to good success.  The geometric
+criterion makes sure that not much happens to the surface
+within a patch, which is what you really want, anyway.
+<P>
+I, too, by the way, believe in the gobs of polygons vs. one
+compicated object tradeoff.  The two seem to be close in
+speed, but polygons saves big time in that you never need
+new code for your renderer.  I hate writing (debugging)
+renderer code because it takes so long.  Modeling code
+is much faster.
+<PRE>
+                                --Jeff
+</PRE>
+<P>
+&gt;From Tim Kay:<BR>
+<P>
+Subject: ray tracing bicubic patches
+<P>
+The discussion about subdivision was interesting.  I just want to point
+out that a paper in this year's proceedings (Snyder and Barr) did just
+what the discussion suggested.  The teapot was modeled with patches,
+and John hacked them up into very small polygons.  He also talked about
+some of the problems that you run into.
+<P>
+Tim
+<P>
+__________________
+<P>
+&gt;From Brian Barsky:<BR>
+<P>
+What numerical techniques is John referring to?  He doesn't mean the
+resolvent work, does he?
+<P>
+____________________________
+<P>
+Response from John Peterson:
+<P>
+I was using a modified version of Sweeney's method.  It was extended in
+two ways; first, a more effective means was used to generate the bounding
+volumes around the mesh, and it was able to handle surfaces with arbitrary
+orders and knot vectors.  I wrote up the results in a paper that appeared
+in a very obscure proceedings (ACM Rocky Mnt. Regional Conference,
+Santa Fe, NM, Nov. 1986)
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Abnormal Normals
+</A></FONT>
+</H4>
+&gt;From Eric Haines:<BR>
+<P>
+My contribution for the week is an in-house memo I just wrote on transforming
+normals, which is easier that it sounds.  Some of you have undoubtedly dealt
+with this long ago, but hopefully I'll notify some poor soul that all is not
+simple with normal transforms.  Pat Hanrahan mentioned this problem in his talk
+at the SIGGRAPH '87 Intro to Ray Tracing course, but I didn't really understand
+why he was saying "don't use the modeling matrix to transform normals!"  Now
+I do, and I thought I'd explain it in a fairly informal way.  Any comments
+and corrections are appreciated!
+<P>
+<B>Abnormal Normals</B>
+<P>
+Eric Haines, 3D/Eye Inc.
+<P>
+    The problem:  given a polygon and its normal(s) and a modeling matrix, how
+do we correctly transform the polygon from model to world space?  We assume
+that the modeling matrix is affine (i.e. no perspective transformation is going
+on).
+<P>
+    This question turns out to be fraught with peril.  The right answer is
+to transform the vertices using the modeling matrix, and to transform the
+normals using the transpose of the inverse (also known as the adjunct) of the
+modeling matrix.  However, no one believes this on first glance.  Why do all
+that extra work of taking the inverse and transposing it?  So, we'll present
+the wrong answers (which are commonly used in the graphics community
+nonetheless, sometimes with good reason), then talk about why the right answer
+is right.
+<P>
+    Wrong answer #1:  Transform the normals using the modeling matrix.  What
+this means is multiplying the normal [ x y z 0 ] by the modeling matrix.  This
+actually works just fine if the modeling matrix is formed from translation
+matrices (which won't affect the normal transformation, since translations
+multiply the 'w' component of the vector, which is 0 for normals) and rotation
+matrices.  Scaling matrices are also legal, as long as the x, y, and z
+components are the same (i.e. no "stretching" occurs).  Reflection matrices
+(where the object is flipped through a mirror plane - more about these later)
+are also legal, as long as there is no stretching.  Note that scaling will
+change the overall length of the vector, but not the direction.
+<P>
+    So what's wrong?  Well, scaling matrices which stretch the object (i.e.
+whose scaling factors are not all the same for x, y, and z) ruin this scheme.
+Imagine you have a plane at a 45 degree tilt, formed by the equation
+x = y (more formally, x - y = 0).  Looking down upon the x-y plane from the z
+axis, the plane would appear as a line x = y.  The plane normal is [ 1 -1 0 ]
+(for simplicity don't worry about normalizing the vector), which would appear
+to be a ray where x = -y, x &gt; 0.  Now, say we scale the plane by stretching
+it along the x axis by 2, i.e. the matrix:
+<P>
+<PRE>
+    [ 2 0 0 0 ]
+    [ 0 1 0 0 ]
+    [ 0 0 1 0 ]
+    [ 0 0 0 1 ]
+</PRE>
+<P>
+This would form a plane in world space where x = 2y.  Using the method of
+multiplying the normal by this modeling matrix gives us a ray where x = -2y,
+x &gt; 0.  The problem with this ray is that it is not perpendicular to our
+plane.  In fact, the normal is now 2x = -y, x &gt; 0.  Therefore, using the
+modeling matrix to transform normals is wrong for the
+stretching case.
+<P>
+<PRE>
+    ^+Y          ^normal       ^+Y              .../^normal
+    |   \      .               |   \__      .../
+    |    \   .                 |      \__../
+    |     \.                   |         \__
+    |      \                   |            \_
+    +---------&gt; X+             +---------------&gt; X+
+</PRE>
+<P>
+Figure 1 (a) & (b) - Incorrect Stretching Transformation
+<P>
+    Wrong answer #2:  Transform the vertices, then calculate the normal.  This
+is a limited response to the wrongness of method #1, solving the stretching
+problem.  It's limited because this method assumes the normal is calculated
+from the vertices.  This is not necessarily the case.  The normals could be
+supplied by the user, given as a normal for the polygon, or on a normal per
+vertex basis, or both.  However, even if the system only allowed normals which
+were computed from the vertices, there would still be a direction problem.
+<P>
+    Say the method used to calculate the normal is to take the cross product of
+the first two edges of the polygon (This is by far the most common method.
+Most other methods based on the local geometry of the polygon will suffer from
+the same problem, or else the problem in method #1).  Say the vertices are
+[ 1 0 0 ], [ 0 0 0 ], and [ 0 -1 0 ].  The edge vectors (i.e. the vector formed
+from subtracting one vertex on the edge from the other vertex forming that edge)
+are [ 1 0 0 ] and [ 0 1 0 ], in other words the two edge vectors are parallel
+to the +x and +y axes.  The normal is then [ 0 0 1 ], calculated from the cross
+product of these vectors.
+<P>
+    If we transform the points by the reflection matrix:
+<P>
+<PRE>
+    [ 1 0  0 0 ]
+    [ 0 1  0 0 ]
+    [ 0 0 -1 0 ]
+    [ 0 0  0 1 ]
+</PRE>
+<P>
+the result is the same: none of the edges actually moved.  However, when we
+use a reflection matrix as a transform it is assumed that we want to reverse the
+object's appearance.  With the above transform the expected result is that
+the normal will be reversed, thereby reversing which side is thought of as
+the front face.  Our method fails on these reflection transforms because it
+does not reverse the normal:  no points changed location, so the normal will
+be calculated as staying in the same direction.
+<P>
+    The right (?) answer:  What (usually) works is to transform the normals
+with the transpose of the inverse of the modeling matrix.  Rather than trying
+to give a full proof, I'll talk about the three types of matrices which are
+relevant:  rotation, reflection, and scaling (stretching).  Translation was
+already seen to have no effect on normals, so we can ignore it.  Other more
+obscure affine transformations (e.g. shearing) are avoided in the discussion,
+though the method should also hold for them.
+<P>
+    In the case of rotation matrices and reflection matrices, the transpose and
+the inverse of these transforms are identical.  So, the transpose of the
+inverse is simply the original modeling matrix in this case.  As we saw, using
+the modeling matrix worked fine for these matrices in method #1.  The problems
+occurred with stretching matrices.  For these, the inverse is not just a
+transpose of the matrix, so the transpose of the inverse gives a different
+kind of matrix.  This matrix solves our problems.  For example, with the bad
+stretching case of method #1, the transpose of the inverse of the stretch
+matrix is simply:
+<P>
+<PRE>
+    [ 0.5 0 0 0 ]
+    [  0  1 0 0 ]
+    [  0  0 1 0 ]
+    [  0  0 0 1 ]
+</PRE>
+<P>
+(note that the transpose operation is not actually needed in this particular
+case).  Multiplying our normal [ 1 -1 0 ] by this matrix yields [ 0.5 -1 0 ],
+or the equation 2x = -y, x &gt; 0, which is the correct answer.
+<P>
+    The determinant:  One problem with taking the inverse is that sometimes
+it isn't defined for various transforms.  For example, casting an object onto
+a 2D x-y plane:
+<P>
+<PRE>
+    [ 1 0 0 0 ]
+    [ 0 1 0 0 ]
+    [ 0 0 0 0 ]
+    [ 0 0 0 1 ]
+</PRE>
+<P>
+does not have an inverse:  there's no way to know what the z component should
+turn back into, given that the above transform matrix will always set the z
+component to 0.  Essentially, information has been irretrievably destroyed
+by this transform.  The determinant of the upper-left 3x3 matrix (the only
+part of the matrix we really need to invert for the normal transform) is 0,
+which means that this matrix is not invertable.
+<P>
+    An interesting property of the determinant is that it, coupled with method
+#2, can make that method work.  If the determinant of the 3x3 is positive, we
+have not shifted into the mirror world.  If it is negative, then we should
+reverse the sign of the normal calculated as we have entered the mirror
+universe).
+<P>
+    It would be nice to get a normal for polygons which have gone through this
+transform.  All bets are off, but some interesting observations can be made.
+The normal must be either [ 0 0 1 ] or its negative [ 0 0 -1 ] for this
+transformation (or undefined, if all vertices are now on a single line).
+Choosing which normal is a bit tricky.  One OK method is to check the normal
+before transform against [ 0 0 1 ]: if the dot product of the two is negative,
+then reverse the normal so that it will point towards the original direction.
+However, if our points went through the z-reflection matrix we used earlier,
+then went through the transform above, the normals were reversed, then the
+object was cast onto the x-y plane.  In this case we would want to have the
+reverse of the normal calculated from the edges.  However, this reversal has
+been lost by our casting transform:  concatenating the reflection matrix with
+the casting matrix yields the same casting matrix.  One tricky way of
+preserving this is to allow 0 and -0 to be separate entities, with the sign of
+zero telling us whether to reverse the normal or not.  This trick is rather
+bizarre, though - it's probably easier to just do it the simple way and warn
+whoever's using the system to avoid non-invertable transformations.
+<P>
+THE END:
+<P>
+        Well, that's all for now.  Do you have any comments? questions?
+interesting offerings for the group?  Either send your bit to everyone on the
+list, or send a copy on to me and I'll post it to all.  I realize this is
+quite a deluge of info for one message, but all of this has accumulated over a
+few months.  The traffic so far has been quite mild: don't worry about future
+flooding.
+<P>
+        All for now,
+<P>
+        Eric Haines
+</PRE>
+<I><A HREF="rtnews1b.html#art6">
+more discussion of problem</A></I>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

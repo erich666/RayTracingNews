@@ -1,0 +1,1857 @@
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+                        "Light Makes Right"
+
+                             May 11, 2004
+                        Volume 17, Number 1
+
+Compiled by Eric Haines, erich@acm.org, http://www.acm.org/tog/editors/erich/
+All contents are copyright (c) 2002-2003, all rights reserved by the
+        individual authors
+Archive locations:
+    HTML http://www.acm.org/tog/resources/RTNews/html/index.html
+    text version at http://www.acm.org/tog/resources/RTNews/text/
+
+Contents:
+    Introduction
+    Ray Tracing Roundup
+    OpenEXR and Radiance Floating Point Image File Formats, by Simon Bunker,
+        Steve Westin, and Greg Ward
+    Raytraced Games, by Greg Alt
+    Randomly Sampling Bounding Volumes, by Philipp Slusallek, Pete Shirley,
+        Fredo Durand, and more
+    Ray Tracing's Roots, by Juan Rayces, Andrew Glassner, Jonathan Maxwell,
+        Phil Dutre, and Chris Trendall
+    Faster Yet Point in Polygon Test? by Stephen Bridgett
+    BSP Plane Cost Function Revisited, by Eric Haines
+    RTNews Errata, by Nikos Platis
+
+----------------------------------------------------------------------------
+
+Introduction
+
+So if you don't have any issue out during a year, do you label the next
+year's issue as N+1 or N+2? I'll go for N+2, and this is the beginning of
+Volume 17. Yes, it's been way, way too long, even for me. I've been kept too
+busy reviewing and editing papers and books, and let's not talk about my
+"Battlefield: 1942" addiction... (well, the one cool thing I learnt from
+*that* experience was how to set up a wiki; if you don't know what a wiki is,
+go find out right now). The latest thing getting in the way of me finishing
+this issue was compiling the results of the Fantasy Graphics League, see
+http://www.realtimerendering.com/fgl/siggraph2004/index.htm. Oh, and then I
+had to read 133 sketches for the SIGGRAPH Sketches committee. But now I'm
+really going to get out an issue...
+
+In book news, Peter Shirley and R. Keith Morley have put out a second edition
+of the book "Realistic Ray Tracing", adding much C++ code, along with new
+information on photon mapping and other advanced topics. This currently is
+the best book on how to make a ray tracer. That said, it is going to have
+some competition soon. Matt Pharr and Greg Humphreys have coauthored a book,
+entitled "Physically-Based Rendering: From Theory to Implementation". It
+should be out by SIGGRAPH from Morgan Kaufmann. It's a pretty impressive work
+(I was one of the technical editors, so have been able to read it), covering
+the topic from soup to nuts. The usual areas are covered, such as object
+intersection, shading, texturing, etc. What's noteworthy is that topics such
+as tone mapping, sampling patterns, Monte Carlo integration, and many other
+areas are also covered. Similar to Shirley's book, the authors do not attempt
+to cover all possible methods but instead focus on what they consider best
+practices. They explain their own rendering system and along the way discuss
+why they made the choices they did. A rather amazing thing is that the whole
+codebase is done using literate programming, making this easily the longest
+literate program I've ever seen (and I suspect the longest in the world). See
+Matt Pharr's page at http://graphics.stanford.edu/~mmp/ for a taste of some
+images and other information. Matt also has some interesting comments in the
+Roundup notes, below.
+
+Another noteworthy book that came out last SIGGRAPH is "Advanced Global
+Illumination" by Phil Dutre, Philippe Bekaert, Kavita Bala, from A.K. Peters.
+This volume is focused on giving a broad overview of theory and techniques.
+It is a more traditional college-level text, and it does a thorough job of
+presenting the field. The authors are professors, and much of the material
+has been honed by being used in classes and presentations at SIGGRAPH. This
+results in a clear and well-illustrated book on the subject. Recommended.
+
+By the way, July 8th will be a day of celebration, or something: the Unisys
+LZW (GIF) patent runs its course in the last country in the world, Canada.
+See http://www.unisys.com/about__unisys/lzw. The assumption nowadays in
+computer graphics is that if you see a research paper coming from a business,
+the technique's patented, from a university, it's probably patented. Patents
+and publication go hand-in-hand, since a patent is a public declaration of
+invention.
+
+I like to offer up a graphics or geometry related puzzle each issue. Since
+this issue is so long in coming, I'll offer five:
+http://www.acm.org/tog/editors/erich/SubtleTools.zip. This is the slideset
+for a talk I gave at NVIDIA University last year. It was fun to make, and the
+skeleton is five computer graphics related test questions. Long-time readers
+of the RTNews should be able to get most of them (since I stole them from
+these pages).
+
+If you need to use up some more time: my blog (which is really just a place
+for me to store fun links) is at http://erich666.blogspot.com/, and Andrew
+Glassner's (which is chewier) is at http://www.glassner.com/OpenSeason/.
+
+----------------------------------------------------------------------------
+
+Ray Tracing Roundup
+
+Jack Hsia, one of the authors of the classic 1977 paper on BRDF nomenclature,
+by Nicodemus et al., has kindly agreed to have the paper optically scanned
+and placed online.  You can find it at:
+
+http://physics.nist.gov/spectrophotometry
+
+- Marc Levoy (levoy@cs.stanford.edu)
+
+----
+
+Check out the following--all POV-Ray images rendered with scene description
+files of size 256 bytes or less.
+
+http://astronomy.swin.edu.au/~pbourke/povray/scc3/entries/
+
+This one is probably the most impressive, IMHO:
+
+http://astronomy.swin.edu.au/~pbourke/povray/scc3/entries/gyscwj.html
+
+- Matt Pharr (mmp@graphics.stanford.edu)
+
+By the way, POV-Ray continues to improve, it's now up to version 3.6 beta 4:
+http://www.povray.org/. If you haven't looked lately, POV-Ray now includes
+radiosity and photon mapping extensions. If you want even more extensions,
+visit MegaPOV, http://megapov.inetart.net/ (though this site is a bit old
+now; some of these additions have since been folded into POV-Ray itself).
+
+If you'd just like to check out some nice POV-Ray work and wander around
+looking at resources, see http://www.oyonale.com/oy_en.htm. Some of his
+images at http://www.oyonale.com/new_en.htm are pretty incredible.
+
+----
+
+JGT's Quite Alive, Thanks
+
+The ACM sold subscriptions to the "journal of graphics tools"
+(http://www.acm.org/jgt) through its membership services for many years. They
+have decided to terminate this arrangement, and some subscribers have not
+received word about this change. So if you subscribed through the ACM and
+have not been receiving issues, please contact A.K. Peters, the publisher of
+the JGT: 1-800-450-2210 or at service@akpeters.com. Also, if your university
+library receives this journal (but hasn't lately), please do pass this note
+on to them.
+
+By the way, this journal began in the middle of the year, meaning that issue
+No. 3 comes out around February of the next year (in other words, we’re on
+schedule).
+
+- Eric Haines (erich@acm.org)
+
+----
+
+Tone Operator Code
+
+Regarding tone reproduction operators, here's what I know/have: the Radiance
+package implements Greg Ward's histogram adjustment technique.
+
+Source code for our photographic tone reproduction operator (Siggraph '02) is
+freely available online (it implements a newer version which automates two
+parameters that used to be manual):
+
+http://www.cs.ucf.edu/~reinhard/Reinhard02/
+
+I have research code for a number of other operators, but this code is not
+cleaned up, messy, and comes with no guarantees, and is for those reasons not
+online. If any one has a need for that code, I'd be happy to share - please
+send e-mail.
+
+- Erik Reinhard (reinhard@cs.ucf.edu)
+
+----
+
+Have you seen this?  I think it's one of the clever-er things I've seen in a
+while. Mark VandeWettering took the Escher picture of the guy holding a
+reflective sphere:
+
+http://brainwagon.org/images/escher.jpg
+
+And ran it through an unwrapper to make a cubical environment map:
+
+http://brainwagon.org/images/escher.env.jpg
+
+Came out pretty close!
+
+- Matt Pharr (mmp@graphics.stanford.edu)
+
+[Here's another Escher-y thing for fun:
+http://www.mantasoft.co.uk/_stuff/Recursive.htm]
+
+----
+
+Here are a bunch of short hacks for optimizing various aspects of ray tracing
+for little interactive ray tracers:
+http://www.tigrazone.narod.ru/raytracing/. There's also a little Java ray
+tracer here.
+
+----
+
+An interesting thing: some competitions to render various data sets. There
+are pretty nice results, see them at
+
+http://hdri.cgtechniques.com/~sibenik2/
+
+(poke around in the "quick overview" section of the Cathedral page.)
+
+- submitted by Christian Bauer (christian@cgtechniques.com)
+
+----
+
+Fast, high-quality previewing is becoming in reach for production rendering.
+Gelato is NVIDIA's rendering product, which uses the GPU to accelerate high
+quality non-interactive rendering: http://film.nvidia.com/page/gelato.html.
+The race is on, as CPU-side previewers are also available, e.g. FPrime for
+Lightwave: http://www.worley.com/fprime.html.
+
+----
+
+My name's Thomas Ludwig (or lycium, ldwtho001@mail.uct.ac.za). I noticed in
+one issue of RTNews you listed lray as "a ray tracer with caustics, soft
+shadows, and implicit surfaces".
+
+I currently have two ray tracers online on my page http://lycium.cfxweb.net,
+lRay and trace3D. trace3D was my experimental renderer for learning about
+monte carlo methods in ray tracing (soft shadows, global illumination etc),
+and is really far from realtime. lRay, on the other hand, is my (by recent
+standards set by the realstorm guys ;) simple real time ray tracer, which
+supports neither caustics or soft shadows (it does however support implicit
+surfaces). Actually, even trace3D doesn't really have any support for doing
+caustics efficiently (via photon mapping).
+
+----
+
+If you haven't seen it yet, check out recent papers by Vlastimil Havran, in
+particular V.Havran and J.Bittner: "On Improving KD-Trees for Ray Shooting",
+Proceedings of WSCG'2002 conference, pp. 209--217, February 2002,
+http://www.mpi-sb.mpg.de/~havran/ARTICLES/wscg2002.pdf.
+
+Since that review copy of the book went out, we implemented more or less the
+stuff described in that paper, and it works quite nicely.  To the point where
+we simplified the grid in the book to just be a dumb uniform grid, since all
+the extra code and discussion of doing it hierarchically wasn't worth the
+bang for the buck.  
+
+The papers on interactive ray-tracing by Wald et al also have some good
+discussion of building good kd-trees.
+
+There are some nice visualizations of how various acceleration schemes
+partition space for a variety of (mostly SPD) scenes here--pretty
+fun/interesting to look through. 
+
+http://sgi.felk.cvut.cz/~havran/vis/visualization.html
+
+[This site really is pretty cool. -EAH]
+
+- Matt Pharr (mmp@graphics.stanford.edu)
+
+----
+
+Go to http://www.realstorm.com/Download.html and grab "Still Sucking Nature"
+and run it. Pretty cool, it's some more real-time raytracing on the CPU -
+starts out slow, then gets to some fairly interesting environments. Lots of
+sampling artifacts, though, such as shimmering reflective pipes, etc, due to
+undersampling. Still, definitely worth 5 minutes of your time.
+
+An article from the previous RT News about their engine is at
+http://turing.acm.org/pubs/tog/resources/RTNews/html/rtnv15n1.html#art3.
+
+----
+
+I just thought I'd drop you a note to let you know that I've finally got
+around to making available some source code for a ray tracer implementing my
+hoary old SMART alogorithm for octtree traversal, and taking your SPD models
+as input.
+
+The source is in plain old ANSI C - no SSE, 3D-Now!, assembler or other such
+optimizations - and in case you are interested is available at
+http://www.johnspackman.ukf.net/raytrace/smart.zip with some brief
+accompanying documentation at
+http://www.johnspackman.ukf.net/raytrace/index.htm
+
+As a coarse benchmark, the ray tracer is currently rendering a default sized
+sphere-flake in 3-and-a-bit seconds on a 1GHz Athlon machine; this includes
+pre-processing and ray tracing time since models are decomposed lazily into
+an octtree during during ray tracing.
+
+An interesting feature of the ray tracer is that it can be made to output the
+octtree decomposition generated for a model in NFF format, which may be
+subsequently ray traced itself for a "cubist" visualisation of the
+decomposition.  I've generated some very large models with this :-)
+
+Happy ray tracing!
+
+- John Spackman (JohnSpackman@ukf.net)
+
+----
+
+My physically-based renderer is available at:
+http://www.hxa7241.org/perceptuum/
+
+featuring:
+  * monte-carlo ray tracing basis
+  * photon mapping
+  * open source C++
+  * etc...
+
+...it *might* be interesting to some - it was engaging to write.
+
+- h.artifex@virgin.net
+
+----
+
+"Interactive Raytraced Caustics", by Chris Wyman. Find this technical report
+at http://www.cs.utah.edu/~wyman/publications/index.html.
+
+----
+
+Due to budget constraints, SIGGRAPH 2002 was the last year there were Panel
+Sessions (happily they're back this year), and the first year I was actually
+on a panel - coincidence? Anyway, many of the panels' content are all
+available online:
+http://online.cs.nps.navy.mil/DistanceEducation/online.siggraph.org/2002/
+Panels/. Of particular interest to ray tracers are "When Will Ray Tracing
+Replace Rasterization?" I'm also happy to find the Demo Scene panel is there,
+with even little movies of the panelists. In the last half of
+http://online.cs.nps.navy.mil/DistanceEducation/online.siggraph.org/2002/
+Panels/06_DemoScene/haines2.mov I discuss some of the cool tricks of the
+"Heaven 7" real-time raytracing demo (at
+http://www.demoscene.hu/%7Epicard/h7/). More fun is Theo Engell-Nielsen's
+presentation on the demo scene:
+http://online.cs.nps.navy.mil/DistanceEducation/online.siggraph.org/2002/
+Panels/06_DemoScene/engell_nielsen.mov. The best is his Pixor spoofs, get
+them in http://www.scene.org/dog/files/sig02/siggraph02slides.zip.
+
+----
+
+In the hope that this might be useful for somebody, I've put two
+bibliographies for adjoints and importance up on the following web page:
+
+http://www.seanet.com/~myandper/importance.htm
+
+"importance_background.bib" contains references to mathematics texts on
+adjoints in general and articles and books about the use of importance in
+nuclear physics (where it is an adjoint of neutron density).
+
+"importance_graphics.bib" contains references to articles, dissertations, and
+books about the use of importance (defined as an adjoint of light) in global
+illumination and ray tracing.  The entries are divided into five categories:
+1) theoretical results in rendering, 2) "classic" ray tracing and
+distribution ray tracing, 3) finite element methods, 4) Monte Carlo methods,
+5) volume ray tracing and participating media.  The entries are sorted
+chronologically within each category.
+
+The bibliographies are in BibTeX format and are intended to supplement Ian
+Ashdown's excellent radbib bibliography.  Many thanks to Philippe Bekaert who
+pointed out some of these references.  If you know of any references that
+should be added, please send me an e-mail.
+
+- Per Christensen (per.christensen@acm.org)
+
+----
+
+Check out Rendermania, http://www.rendermania.com/, for RenderMan and HDR
+related information.
+
+----
+
+The 320 file format (!!!) shareware 3D object converter from Hungary now has
+its own web site. Check it out at http://web.axelero.hu/karpo/
+
+----
+
+Some of the research Philipp Slusallek, Ingo Wald, and others have been doing
+on accelerating ray tracing is being sold through a company Philipp started:
+http://www.inTrace.com. Interesting site, check it out.
+
+----
+
+Sourceforge (http://3d.foundries.sourceforge.net/ and
+http://sourceforge.net/softwaremap/trove_list.php?form_cat=100) is, of
+course, the first place to look for useful open source. In case you missed
+it, check out http://pygmalion3d.sourceforge.net/, a subdivision surface
+modeller (mainly for POV-Ray).
+
+For more odd little bits (or large chunks) of code, some graphical in nature,
+check out Sweetcode: http://www.sweetcode.org/, and the archives:
+http://sweetcode.org/archives.html.
+
+Code relating to the second edition of _Texturing and Modeling, A Procedural
+Approach_ by Ebert et al. is available at
+http://dynamo.ecn.purdue.edu/~ebertd/book2e.html. Admittedly the third
+edition is out now, but code doesn't rust. There's even a cloud ray tracer in
+Musgrave's area.
+
+----
+
+It's made waves as the "unifying equation for computer graphics" and other
+odd claims. That said, the so-called Superformula
+http://www.nature.com/nsu/030331/030331-3.html does give a nice range of
+interesting and evocative organic shapes:
+http://astronomy.swin.edu.au/~pbourke/curves/supershape/.
+
+----
+
+In a similar vein, check out the Electric Sheep screensaver:
+http://electricsheep.org/. Some nice concepts here: each user of the
+screensaver downloads the latest MPEG movie made, which is used as a
+screensaver. At the same time, each user contributes compute power while in
+screensaver mode to make a frame of the next movie everyone will get. If you
+leave the screensaver by hitting the "up" key (I believe), you'll give it a
+thumbs up and so request that the pattern used to generate the movie continue
+to evolve. There will be a sketch at SIGGRAPH about it. Me, I want the
+version that automagically distributes data that raytraces interesting little
+screensaver movies.
+
+----
+
+As a coauthor, I'm definitely guilty of visiting Amazon and checking out the
+sales rank, etc. I even wrote a Perl program once that sucked ranking data
+off the site hourly, mostly because I was curious about the semi-random
+algorithm they use that has your rank jump from 11,635 to 5,119 in an hour
+("woohoo! we sold one!"). Now someone has a service that does pretty much
+this same thing: http://www.junglescan.com/, e.g. our latest book's ranking
+is at http://1.amazonscan.com/scan/details.php?asin=1568811829 (I recommend
+you buy a few and see how the graph changes).
+
+While we're on the topic of Amazon, if you haven't heard the word, you can
+now search inside many of the books sold there. Clever system: it finds
+relevant pages, lets you look at each and the two pages before and after. If
+you like what you see, you'll probably get the book. Start searching at
+http://www.amazon.com/exec/obidos/tg/browse/-/10197021/.
+
+----
+
+Quote for the day, from Ditherati (http://www.ditherati.net/archive/):
+
+DIYMAC
+
+"You can make this stuff. You can make things that are better than what you
+get out of Hollywood."
+
+- Apple CEO Steve Jobs, on unveiling new desktop movie-editing tools that
+promise to put his other company, Pixar, out of business, San Jose Mercury
+News, 7 January 2003
+
+http://www.siliconvalley.com/mld/siliconvalley/business/companies/4893598.htm
+
+----------------------------------------------------------------------------
+
+OpenEXR and Radiance Floating Point Image File Formats, by Simon Bunker
+(simon@rendermania.com), Steve Westin (westin@graphics.cornell.edu), and Greg
+Ward (gward@lmi.net)
+
+Neil Gatenby asked about OpenEXR vs. the Radiance file format for storing
+synthetic images.
+
+Simon Bunker replies:
+
+The OpenEXR image format, developed by ILM, allows higher precision formats
+to be written and read, including support for the 16-bit floating point
+"half" format used in NVIDIA's Cg format. It is an extensible format that
+allows arbitrary buffers of data. The latest version's "exrdisplay" program
+uses hardware acceleration to implement the display pipeline. Find it at
+http://www.openexr.org/.
+
+Simon Bunker writes (1/23/03) on globillum, comparing OpenEXR to Greg Ward's
+Radiance file format:
+
+From a really quick look these formats look very similar. Except ILM's one
+has more dynamic range information as it uses 16 bits per channel instead of
+the 8 (I think) the .hdr/.pic format uses (which Greg Ward-Larson created for
+Radiance).  Both use a mantissa for basic colour information, and an exponent
+- just OpenEXR has more of them! .pic uses 8bits /colour channel to save
+space. The fourth channel is the common exponent instead of an alpha. OpenEXR
+can have different exponents for each channel, plus you can mix data types
+between channels.
+
+Radiance file format information can be found here
+http://radsite.lbl.gov/radiance/framer.html
+
+.pic has the advantage that it is already supported in several applications -
+eg. HDRshop, Radiance and Lightwave. OpenEXR has the advantage it comes from
+ILM and has a cool geek factor.
+
+If you want to store radiance maps in a high dynamic range format and use it
+in commercial software anytime soon then you'll have to use .pic. You could
+use OpenEXR if you a) write your own renderer b) are very good friends with
+someone who writes a renderer or c) are willing to wait for the tools to
+catch up.
+
+----
+
+Steve Westin replies:
+
+First choice for compatibility: RADIANCE .pic/.hdr/.rgbe format. For more
+precision, TIFF either in floating-point format (compatible in the RenderMan
+world as texture map input, I think) or in LOGLUV format which Greg invented
+as a more universal sequel to pic/hdr/rgbe. Both are supported by libtiff
+(the Sam Leffler publicly-available library), but not by Photoshop.
+
+----
+
+Greg Ward replies:
+
+I have been working with Drew Hess of ILM to get OpenEXR to compile under Mac
+OS X, and I have the following comments.  The 16-bit/primary EXR "half" float
+format uses what's called an "s-e5-10" bit arrangement, for "sign plus 5
+exponent plus 10 mantissa."  This arrangement allows for correct sorting by
+bit pattern, and is the same format designed at SGI for their never-happened-
+generation of high-end graphics, which eventually became NVidia's cg system. 
+It covers values of 6e-5 to 6.5e4, positive and negative, where the bottom
+part of the range "denormalized" to a linear form.  This follows IEEE float
+conventions very closely, including a zero bit pattern that corresponds to
+0.0 and representations for infinity and NaN, I believe.  Heck, let me just
+make a table showing the different representations I know.
+
+The comparison is here: http://www.anyhere.com/gward/hdrenc/. The summary
+is that OpenEXR compares favorably with Radiance format, offering 9 orders
+of magnitude in dynamic range at much better precision (0.1% rather than
+the 0.8% of Radiance). The down side is that it takes up slightly more
+space, and the i/o library is C++ and a LOT more complicated. (It's quite
+nice, though.)
+
+If what you care about is color accuracy, the LogLuv TIFF format is what I
+recommend.  It uses a perceptual color space to get the most relevant
+information into the fewest bits.  There's a 24-bit and a 32-bit/pixel format
+to choose from (plus a 16-bit/pixel luminance variant).  A lot of programmers
+balk at the CIE XYZ color interface, but it's the best way to be sure of the
+color you're getting.  Most of the other formats just assume you know,
+without making the color space explicit.  Radiance supports an additional tag
+(as does floating-point TIFF) saying what the primaries are, but since
+Radiance doesn't allow for negative primary values, your gamut is restricted
+to the colors within this space.  (Not so for EXR or floating-point TIFF.)
+Also, LogLuv TIFF is supported for reading by such common viewers as ACDSee,
+because it was incorporated into Sam Leffler's library to convert
+automatically to 8-bit RGBA.  The main advantage I find, though, is that the
+separation of luminance and chrominance channels allows for very fast global
+tone-mapping using look-ups.  I can load and tone-map a LogLuv TIFF in less
+time than it takes to decompress a JPEG of the same size!
+
+Speaking of which, anyone who wants to play around with HDR images on the Mac
+should pick up and try out the Photosphere application I've been working on. 
+It's available from the URL below for a limited time only to beta testers,
+and catalogs regular TIFFs and JPEGs as well as the various HDRI formats.  It
+also has facilities for building HDRI's from multiple, hand-held exposures.
+It's the only program that can as far as I know.  I also have a command-line
+tool that works on Linux and under Windows, but I need to recompile it for
+those platforms.
+
+Photosphere at: http://www.anyhere.com/
+
+----
+
+Bretton Wade (brettonw@microsoft.com) followed up with this question: "Could
+you also speak to how you see these file formats playing into next generation
+graphics hardware from nVidia and ATI, and their support for floating point
+buffers?"
+
+Well, I'm not much of a graphics hardware expert, but the fact that the
+OpenEXR "half" data type matches that used by nVidia in their new card has to
+be a plus.  (I don't know anything about ATI's format, but I can't imagine
+it's too different.)  Taking an EXR image, you should be able to go straight
+into a texture map on these cards.  Both cards will have the problem of
+mapping their output to a display, since you presumably put your hardware
+between your software and your display, not between your software and more
+software.  The study of how to map high dynamic-range imagery to low dynamic-
+range displays has garnered a lot of attention, recently.  There were three
+papers in last year's [2002] Siggraph, and one at the Eurographics Workshop
+on Rendering.
+
+[A bit more about this at http://www.nvidia.com/object/IO_7998.html - EAH]
+
+----------------------------------------------------------------------------
+
+Raytraced Games, by Greg Alt (galt@eskimo.com)
+
+[reprinted from the realtime raytracing email list, realtime_raytracing-
+subscribe@onelist.com. -EAH]
+
+I thought I'd share some things I came across and see if anyone has other
+links.  I'm a game programmer professionally, and I'm very interested in
+real-time raytracing on the side.  I'm especially looking forward to the next
+generation of game consoles, since I think they will be up to the task of
+allowing the first comercially produced real-time raytraced game.
+
+As far as I know, there are two real-time raytraced games in existence:
+
+RTChess: http://www.newimage.com/~rhk/rtchess/
+
+AntiPlanet: http://www.virtualray.ru/eng/shots.html - a ray-tracer's dream, a
+world made entirely of spheres.
+
+[More on this one at http://www.digit-
+life.com/articles/virtualrayengine/index.html?54121, and an in-depth article
+by one of the programmers of this system on using SSE for raytracing:
+http://www.digit-life.com/articles/rtraytracing/index.html. -EAH]
+
+And one in the works: http://www.realstorm.com/Screenshots.html
+
+Has anyone seen any others?
+
+Also, one gap that I can see is research on animating characters with non-
+rigid vertex weighting (meaning a vertex can be influenced by 2 or more bones
+in the skeleton). Does anyone know of research into appropriate bounding
+structures for such a character?  What I imagine would be necessary would be
+to also animate on demand -- only characters that are rendered would be
+animated at all, and only the bones that correspond to the rendered polys
+would be animated. Unfortunately, I haven't seen any research addressing
+these issues yet, and it seemms like a difficult (though solvable) problem.
+
+----------------------------------------------------------------------------
+
+Randomly Sampling Bounding Volumes, by Philipp Slusallek
+        (slusallek@cs.uni-sb.de), Pete Shirley (shirley@cs.utah.edu),
+        Fredo Durand (fredo@mit.edu), and more
+
+I wanted to do some tests of various ray/object intersection algorithms. To
+do so, I wanted to generate random rays that would pass through a volume of
+space. I had some vague recollections on the topic, but couldn't find or
+think of anything good. I asked on globillum, and thought I'd summarize some
+of the answers here (so I'll know where it's written down, for next time).
+
+----
+
+Philipp Slusallek notes a simple unbiased method if the volume is a sphere:
+
+If I remember correctly from the global line people (Sbert and company), they
+are using two random points on the sphere and connect them. I have not
+verified this in the paper as I do not have access to the paper right now, so
+please be careful. It should at least be a good starting point for your
+search and, if I am not mistaken, also contains a proof (in one of the early
+papers).
+
+----
+Pete Shirley gave a nice summary of a method for any convex volume of space,
+which Bruce Walter and Greg Ward also outlined:
+
+I am pretty sure the following observations are true using geometric
+probability for justification (i.e., I read this once but don't have a strong
+argument, but I think there is one using measure theory that I don't
+remember!)
+
+* all points on the surface of a convex solid are equally likely to be hit by
+a random line
+
+* the angle of incidence of random lines near a point follow a cosine
+distribution with respect to the normal at that point.
+
+So I think the pseudocode is much as Greg Ward suggests:
+
+1. Choose a random face based on area
+2. Choose a random point uniformly on that face
+3. Choose a random direction with respect to normal N
+
+3 is most easily done by constructing a UVW basis with W = N, and then
+choosing (u,v,w) as follows:
+
+phi = 2*pi*ra()  // ra is random on [0,1), e.g., drand48()
+r = sqrt(ra())
+u = r*cos(phi)
+v = r*sin(phi)
+w = sqrt(1-u*u-v*v)
+direction = u*U + v*V + w*W
+
+You could stratify in 4D for all this, but I think that would only start to
+pay off for billions of samples.
+
+----
+
+Fredo Durand notes: if you want mathematical justifications, see e.g. Luis
+Santalo, _Integral Geometry and Geometric Probability_, Addison-Wesley, 1976.
+
+----------------------------------------------------------------------------
+
+Ray Tracing's Roots, by Juan Rayces, Andrew Glassner, Jonathan Maxwell, Phil
+        Dutre (Philip.Dutre@cs.kuleuven.ac.be), and Chris Trendall
+        (trendall@dgp.toronto.edu)
+
+[This letter, from Juan Rayces, a consultant on lens design, was sent to
+Andrew Glassner; his colleague Jonathan Maxwell contributed his own research
+later on. I also asked on globillum about what people consider the origins of
+ray tracing. - EAH]
+
+Dear Dr. Glassner:
+
+I am a lens designer: stupid people used to call us "ray tracers". Like
+calling barbers "hair cutters". 
+
+For years I have browsed "An Introduction to Ray Tracing". I have found it
+interesting as the approach to ray tracing is somewhat different from methods
+used by most workers in our profession. The pictures in the book are
+fascinating.
+
+I suspect that methods proposed in your book are used nowadays in lens design
+for investigation of stray light and ghost images in optical instruments.
+
+Every time I have your book in my hands, though, it hurts me to see that the
+Preface does not give much credit to those who have been using numerical ray
+tracing for centuries for designing optical instruments.
+
+Moreover, in Ray Tracing Bibliography, page 295 you may read:
+
+"5. Appel, A., Some techniques for shading machine rendering of solids. AFIPS
+1968 Spring Joint Computer Conf.,32, 37-45, 1968. First ray tracing paper,
+light ray tracing, b&w pictures on Calcomp plotter."
+
+First ray tracing paper? Oh boy!
+
+I always wanted to write to you about this subject but I could not prove to
+you that numerical ray tracing was used in lens design very many years before
+it was used to synthesize images. I myself started "tracing rays" with a
+mechanical desk calculator 24 years before this "first ray tracing paper"!
+
+A recently published book, "Classical and Evolutionary Algorithms in the
+Optimization of Optical Systems" by Darko Vasiljevic (Kluwer Academic
+Publishers, 2002), throws light on the subject of numerical ray tracing
+history. The book starts on page 1 with the following statement:
+
+"The optical design is one of the oldest branches of physics, with a history
+going back over three centuries ago" . And after a few lines: "The first ray
+tracing is done probably by Gascoigne who died in 1641 at the age of 24. His
+work is not published but it is known to Flamsteed, the first English
+Astronomer Royal."
+
+It is regrettable that Dr. Vasiljevic does not tell us where he got that
+information. If this is important to you may be you want to send him an email
+to "darkov@diginaut.com" (obtained from his page at the Internet). I tried
+contacting him on a different subject and I did not have any luck.
+
+Besides this historical question, may I take exception to this statement of
+yours (Preface, page ix):
+
+"When designing lenses, physicists traditionally plotted on paper the path
+taken by rays of light starting at a light source, then passing through the
+lens and slightly beyond"...
+
+The idea that anyone believes that lens systems were ever designed by
+graphical ray tracing bends my mind. Even in the days of painful use of log
+tables photographic objectives were designed using numerical methods for
+tracing rays on meridional planes. Astigmatism along the principal rays was
+always computed. Some ambitious people even traced skew rays. Excellent
+lenses were designed.
+
+Very sincerely yours,
+
+Juan Rayces
+
+----
+
+Andrew Glassner replies:
+
+Early history? Allowing for some poetic license in the definition of ray
+tracing, we have the "Mo Jing", a text written circa by Mo Zi in China circa
+450 BC. In it are discussions of the camera obscura and the principles of
+concave mirrors with their focal points (the "central fire.") This work was
+unfortunately lost eight centuries later, but resurfaced in the eighteenth
+century.
+
+Moving forward 1,600 years or so (this is ancient China, where such time
+spans are immaterial), we have Sung dynasty scientist Shen Gua with his
+"burning mirrors," wherein the focal point is likened to an oar lock. He
+wrote, "The oarlock constitutes a kind of 'pivot point'. Such opposite motion
+can also be observed as follows: when one's hand moves upward, the pinhole
+image moves downward and vice versa."
+
+Another two hundred years or so brings us to the thirteenth century
+photometrist Zhao Youqin, who with his experimental apparatus developed the
+inverse square law and the circle of confusion for finite apertures with
+pinhole cameras. He used "1,000 candles" as his light source, which may or
+may not have been more poetic license, but only in terms of quantity.
+
+There are also Indian tracts on optics of similar antiquity, but it is
+somewhat harder to separate observation and theory from the supporting
+religious philosophy.
+
+Ray tracing? I cannot imagine that the ancient Chinese scientists (in the
+modern sense of the word) did not develop at least the rudiments of ray
+tracing, if only to illustrate their treatises.
+
+----
+
+From Johnathan Maxwell:
+
+Juan: Thank you for mailing me about image synthesis through raytacing. Like
+you, when I first saw a book on image synthesis using raytracing (about 12
+years ago, I suppose). I was bowled over and most impressed that our good old
+friends rays were being put to such good use.
+
+As for me, alas, I do not know as much about Gascoigne and Flamsteed as you
+imply I might, Juan, and your mail has sent me into a fluster of "research"
+[see below -EAH].
+
+While browsing through the books within reach of my desk for information on
+the history of ray tracing, I gained some amusement in this quotation from
+the first edition (1975) of "Optics" by Eugene Hecht and Alfred Zajac:
+
+6.2 Analytical Ray Tracing
+
+Ray tracing is unquestionably one of the designer's chief tools. Having
+formulated an optical system on paper, he can mathematically shine rays
+through it to evaluate its performance ... Thus while it would probably take
+10 or 15 minutes for a skilled person with a desk calculator to evaluate the
+trajectory of a single skew ray through a single surface, a computer might
+require roughly a thousandth of a second for the same job and, equally
+important, it would be ready for the next calculation with undiminished
+enthusiasm.
+
+--
+
+These days, of course, you probably need to explain to people what a hand-
+cranked "desk calculator" was ... a machine designed to induce repetitive
+stress injury!
+
+----
+
+On globillum Chris Trendall writes:
+
+Depends a little on what you mean by 'ray-tracing'.
+
+How about Euclid's account of 'backward ray-tracing' (including perspective,
+reflection, and occlusion)
+http://www.chass.utoronto.ca/~ajones/cla203/eucarist.pdf
+http://www.albertson.edu/math/History/edietz/Classical/Optics.htm
+http://farside.ph.utexas.edu/~rfitzp/teaching/302l/lectures/node107.html
+http://www.du.edu/~jcalvert/classics/nugreek/lesson24.htm
+
+Followed by AlHazan's work in 'forward ray-tracing' http://www-gap.dcs.st-
+and.ac.uk/~history/Mathematicians/Al-Haytham.html somewhat disputed in
+http://www.wordtrade.com/science/optics.htm
+
+Continued by Newton and Kepler, who respectively unified colour and light,
+and described the function of a lens; Snell/Descartes who mathematically
+described refraction, all in the geometric optics tradition. As for theories
+on why certain objects have certain colours, we had to wait until the 20th
+century for reasonable theories of solids and quantum mechanics...
+
+I guess that if you're just thinking of the geometry of the tracing of rays
+(including reflective and refractive rules) then Euclid -> Snell/Descartes
+covers this...
+
+----
+
+Phil Dutre writes:
+
+There are of course Durer's famous woodcuts (see an example on the cover of
+the Global illumination compendium -- shameless plug :-) )
+
+Also, Turner (not Whitted, but the British Landscape artist) studied the
+subject in the early 19th century, but that is of course not the earliest ,
+but it was the first 'course' on perspective and accurate drawing at the
+Royal Society.
+
+Also very interesting to read is David Hockney's "Secret Knowledge", where he
+explains how renaissance artists use optics to paint and achieve accurate
+geometry (basically using a camera lucida).
+
+I guess you can make a point that if some caveman was tracing a silhouette
+cast by a campfire he was 'tracing rays' ;-)
+
+[Interestingly, in Greek mythology the origin of art is attributed to someone
+(I forget who) tracing a silhouette on a wall. I forget the details, but
+believe it's in "A Short History of the Shadow" by Victor Stoichita. - EAH]
+
+----
+
+Finally, here's a document entitled "The Origins of Raytracing?" by Jonathan
+Maxwell, dated January 12, 2003, used with permission:
+
+The question of who was the first raytracer is a fascinating one. 
+
+The Conventional History
+------------------------
+
+I think as far as tracing rays in optical instruments is concerned, and
+taking the law of refraction as opposed to the law of reflection as being the
+key to it, the readily available standard literature regards Willebrord
+Snellius (1591-1626) as its inventor in Holland in 1621. Having said this, I
+accept that discovering the law of refraction is not necessarily the same as
+tracing rays. Snell's law was not well known until Rene Descartes (1596-1650)
+published it in 1638, and even then he did not make it clear that he was
+following Snell, so for some time Descartes was regarded as the originator of
+Snell's law.
+
+As far as the explicit tracing of rays is concerned, it looks as though
+William Gascoine (1612-1644) in England was doing this in the 1620's or
+1630's, but again this was not widely known until some time later (1692) when
+William Molyneux, the author of _Dioptrica Nova_, attributed his first clue
+of how rigorous raytracing might be done to hearing of it from the Astronomer
+Royal, John Flamsteed, who in turn attributed his knowledge of it to papers
+by Gascoine in his possession. 
+
+Going Back Further
+------------------
+
+However, the history of raytracing, especially with regard to refraction and
+also its more generalised application to image synthesis, and the creation of
+shadows (Sciography) and the like, goes back a lot further; to the Greek
+philosopher Thales of Miletus (circa 585BC). Thales is thought to have
+studied the geometry the Egyptians used and thereby came to understand what
+we now call trigonometry. He not only used this information for astronomy,
+but he also propounded a law of refraction, which turned out to be wrong.
+
+Moving forward 1500 years, the Arab scientist Alhazan (Abu ibn al-Hasan ibn
+al-Haitham (965-1039 AD approx) wrote an important treatise on many aspects
+of optics in 7 books, using the concept of rays with arrows on to explain
+geometrical optics. These books contained sections on aberrations, and even
+diffraction, and were published in manuscript form in Arabic around about AD
+984, and in Latin in 1269 (preceded by publication of his treatise on
+rainbows in 1170). Finally they were published in print in Latin in 1572. I
+do not know if Alhazan knew Snell's law; it wouldn't surprise me if he did,
+and If he did then it's Alhazan's law, rather than Snell's law.
+
+References
+----------
+
+The historical details of Snell's law and Gascoine's work can be gleened from
+books such as H.C.King's History of the Telescope (Griffin, London, 1955) and
+Isaac Asimov's _Eyes on the Universe_ (Imprint Magazine, Bombay 1977, but
+published before that in the UK I believe)
+
+For the information on Alhazan I am indebted to a close friend Tareq AlBaho,
+and also _The Oxford History of Science and Technology_. 
+
+Robert Temple's _The Crystal Sun_ (Century/Random House, London, 2000)
+provided the information on Thales, and also further information on Alhazan.
+
+----------------------------------------------------------------------------
+
+Faster Yet Point in Polygon Test? by Stephen Bridgett (s.bridgett@qub.ac.uk)
+
+[The CrossingsMultiplyTest() in the online code for Graphics Gems IV, at
+http://www1.acm.org/pubs/tog/GraphicsGems/gemsiv/ptpoly_haines/, is the
+fastest general test (without precomputes) for point in polygon testing. It's
+a bit more efficient than the traditional test found in the
+comp.graphics.algorithms FAQ (http://www.faqs.org/faqs/graphics/algorithms-
+faq/), as it avoids division. The idea, from Mark Haigh-Hutchinson (now at
+Retro Studios), is that you can turn the division into a multiply by keeping
+track of which direction your test edge is going.
+
+I can't say if the following will help, but knocking a little off this key
+algorithm can have a noticeable performance effect so it's worth a try if
+you're doing a lot of ray/triangle testing. - EAH]
+
+I'm writing to say a big thank-you for your article in Graphics Gems IV on
+point in polygon testing. I'm a student in N. Ireland, and have been writing
+a small program in my spare time using Borland Delphi, to display models of a
+few engineering components, and had been looking for an efficient but easily
+implemented point in polygon test for concave polygons, and the
+'CrossingsMultiplyTest()' was just what I needed. So thank you very much.
+
+When converting it to Pascal, I noticed a possible slight improvement, which
+you've probably thought of already anyway (I hadn't - EAH). I'd read that on
+newer processors, conditional jumps could cause a slight cache delay. So, I
+was thinking that the 'if' after the multiply test could be replaced with an
+'xor' test, as it has the same truth table, i.e.
+
+Original 'if':
+==============
+  ytest:= (m[p1].z-tz)*(m[p0].y-m[p1].y) 
+       >= (m[p1].y-ty)*(m[p0].z-m[p1].z);
+  if ytest = yflag1 then Result:= not Result;
+
+(The original C version was:)
+       if ( ((vtx1[Y]-ty) * (vtx0[X]-vtx1[X]) >=
+             (vtx1[X]-tx) * (vtx0[Y]-vtx1[Y])) == yflag1 ) {
+                inside_flag = !inside_flag ;
+                
+Using 'xor' test instead:
+=========================
+  ytest:= (m[p1].z-tz)*(m[p0].y-m[p1].y) 
+       >= (m[p1].y-ty)*(m[p0].z-m[p1].z);
+  Result:= (ytest=yflag1) xor Result;
+
+I haven't tested it, and in practice in may not make much actual difference
+to the processing time, or may even slow it down, but it's a thought anyway.
+
+----------------------------------------------------------------------------
+
+BSP Plane Cost Function Revisited, by Eric Haines
+
+We all know a BSP tree (or octree, or k-d tree) helps in limiting the number
+of ray/object intersections needed. But how much? MacDonald and Booth
+[MacDonald89] already analyzed this problem fairly well, though due to space
+limitations they did not include analysis of what happens when a splitting
+plane hits one or more objects in a node. Also, their work, which has some
+fascinating and useful results, appears to be less known than it should; this
+article covers some of their contributions and goes a bit further. 
+
+MacDonald and Booth use the key fact that a child of a node has a chance of
+being hit proportional to its surface area, one that I will also use
+extensively (see RTNv10n1
+http://turing.acm.org/pubs/tog/resources/RTNews/html/rtnv10n1.html#art4). As
+a shorthand term, I'll call this the "area expectancy algorithm". MacDonald
+calls it the "surface area heuristic", but at the time he probably didn't
+realize there was a solid proof of this result in geometric probability, so
+"heuristic" is a misnomer. For a formal justification, Fredo Durand
+recommends _Integral Geometry and Geometric Probability by Luis Santalo,
+Addison-Wesley, 1976.
+
+What good does splitting a BSP node by a plane do, as far as ray tracing
+goes? The obvious thing it does is (usually) cut down on the number of
+objects to be tested against the ray. If a ray hits the node, the splitting
+plane is compared against the ray. The ray can do one of two types of things:
+it can progress through just one side of the splitting plane (i.e. one child
+of the node), or it can progress through one side and then the other (both
+children). If it progresses through just one side, you then need to test only
+those primitives on that side. If it goes through both sides, the potential
+savings are smaller (or nil): you have some chance of hitting a primitive on
+the first side traversed; if you hit (and the intersection point really is in
+the first part of the node), then no primitives on the other side need to be
+intersected. This can be useful for eye/reflection/refraction rays, since you
+want the closest intersection, but is usually little help in accelerating
+shadow rays.
+
+
+Great Expectations
+------------------
+
+The chance of hitting a bounding box is proportional to its surface area. Say
+NX, NY, and NZ are the dimensions of the box. The chance of hitting a given
+child node is:
+
+     node hit expectance == ENH = NX*NY + NX*NZ + NY*NZ
+
+(Actually, there is a factor of 2 we leave out here and elsewhere, which
+accounts for the area for 6 faces vs. just 3. Since we leave it out
+everywhere, it is not important in this article. That said, it is important
+to also then treat polygons as one-sided when computing their expectance.)
+
+This "expectance" is not a percentage chance, but rather a surface area
+measurement that can be compared with other surface areas to determine the
+relative chance an object is hit. So, given a random ray, a convex object
+with twice the surface of another convex object is twice as likely to be hit.
+
+One principle of splitting a node is that you usually want to maximizes the
+chance that a ray will hit only one of the two children nodes. Say you split
+the node on the X axis at R, where R = 0 at minimum X and R = 1 at maximum X.
+The expectance of hitting each child box is then:
+
+    child A hit expectance = ((R*NX)*NY + (R*NX)*NZ + NY*NZ)
+    child B hit expectance = (((1-R)*NX)*NY + ((1-R)*NX)*NZ + NY*NZ)
+
+If you divide either of these expectances by the expectance of hitting the
+node itself, you get the relative chance (a value from 0% to 100%) that a
+subnode will be traversed if the node is hit. The chance that one child or
+the other is traversed of course varies with R; lower R, lower chance of
+being hit. What's interesting is that the chance that both child nodes will
+be traversed by a ray is independent of R! This chance depends on the ray
+hitting the plane splitting the node into two children. The ratio of this
+area (the BSP plane inside the node) vs. the surface area of the node itself
+is this chance:
+
+    plane hit expectance == EPH = NY*NZ
+
+    plane hit relative chance == CPH = EPH / ENH = NY*NZ / (NX*NY + NX*NZ + NY*NZ)
+
+(Notational note: a variable of the form "E*H" is always the area/2 of an
+object, which I call its expectance, and a variable of the form "C*H" is a
+relative chance of hitting something compared to hitting something else,
+computed by dividing one area by another.)
+
+As an example, say the cube 1x1x1 is split by a plane:
+
+    CPH = 1*1 / ( 1*1 + 1*1 + 1*1 ) = 1/3
+
+So for a cube hit by a ray, an arbitrary plane splitting the cube has one
+chance in three of being hit, regardless of the split location. Since this
+axis-aligned splitting plane has the same area as a cube face, this also
+means that a given cube face has a 1/3 chance of being hit by a ray. This is
+surprising to me on an intuitive level. I would have thought that a plane
+inside the middle of the cube would have a higher chance of being hit than a
+cube face, but that's not the case.
+
+To prove it to yourself, it's helpful to think about the area expectancy
+principle in terms of orthographically projecting the object on to a plane
+instead of shooting a ray at it. These are equivalent, in that you can think
+of shooting a ray through a pixel and testing against an object as the same
+as computing a pixel's chance of being covered by projecting the object into
+a z-buffer. So, visualize a box and the splitting plane inside it and how
+this would project orthographically on a screen. Slide the plane back and
+forth along one axis of the box and it becomes clear that the screen area of
+the splitting plane never changes. Therefore it's always equally likely to be
+hit, regardless of its position in the cube.
+
+The irrelevance of R on the splitting plane's chance of being hit makes it
+easier to think about how best to split the node. Say the cube's dimension NX
+is increased slightly, to 1.1. If your plane cuts the X axis, it now has 1
+chance in 3.2 (0.325) of getting hit by a ray hitting the box, less than a
+third. If your plane cuts the Y or Z axis, it now has a 1.1 chance in 3.2
+(0.34375) of getting hit, greater than a third. This analysis verifies what
+we intuitively know, that splitting a box along its longest axis minimizes
+the chance a ray will hit both nodes and so is more likely to improve
+efficiency.
+
+To compute a few more examples, say the box was 2x1x1: the values are then a
+1/5th chance of both children being hit if a split is made on the X axis vs.
+2/5ths for either other axis. For a 10x1x1 it's 1/21 along X vs. 10/21. For a
+flat, squarish box (like a CD case), say 10x10x1, splitting along X or Y
+gives 10/120 chance of hitting both boxes, while splitting along Z gives
+100/120.
+
+
+Childcare Costs
+---------------
+
+We want to learn something about the cost of traversing an unsplit node vs. a
+split one. The time to test an unsplit node is something like this:
+
+    time for unsplit node = TK1 + M*TP
+
+where TK1 is some constant time spent intersecting the node and accessing its
+contents, M is the number of primitives in the node, and TP is the time per
+primitive (which admittedly can vary, but let's ignore that fact for now;
+we'll come back to it later). Compare this to:
+
+    time for split node = TK1 +
+            time to hit both children + time to hit one child
+
+Let's subdivide this equation into the four possible cases that a ray can
+have when it hits a node: hits child A then B, hits B then A, hits child A
+only, hits child B only. Call the probabilities of each CabH, CbaH, CaH, CbH.
+These must sum to 1. We also know that CabH+CbaH = CPH, the probability of
+hitting the splitting plane. It turns out that CabH==CbaH, i.e. that the
+chance of a ray going from child A to B is the same as the other direction,
+regardless of the location of the splitting plane. This is clear if you think
+about it, since a random ray is as likely to hit the splitting plane coming
+from one side as the other. So:
+
+    CabH == CbaH == CPH/2. 
+
+We can compute CabH and CbaH given CPH. What we want is the chance that one
+and only one child is hit. Basically, we want all random rays that pass
+through a child, minus the rays that hit the BSP plane face. For example, if
+R is 0, then child A has no thickness and so all rays that hit it will also
+hit the plane making up its face, so its chance of being the only child hit
+will be 0. As R increases, rays can enter the sides of the child and possibly
+not hit the BSP plane. When R is 1, then child A is equivalent to the
+original node. We know that there is a percentage chance CPH of hitting the
+BSP plane, so for this case we know that (1-CPH) is the chance of hitting
+child A but not the plane (i.e. not hitting both children).
+
+At R=0 the relative area of child A is the same as that of the BSP plane, and
+the chance of hitting only child A was zero, i.e. (EPH-EPH)/ENH=0. At R=1 the
+relative area of child A is ENH, and the chance of hitting only child A was
+(ENH-EPH)/ENH=(1-CPH). We also know that at R=0.5 the chance for child A and
+child B is the same, (1-CPH)/2. The three values we know are on a line, and
+the function is linear with R. Putting these facts together:
+
+    child A ONLY chance == CaH = (R*NX*NY + R*NX*NZ + NY*NZ) / ENH - CPH
+    child B ONLY chance == CbH = ((1-R)*NX*NY + (1-R)*NX*NZ + NY*NZ) / ENH - CPH
+
+As a reality check, we'll test a 1x1x1 node. When R is 0, there is no chance
+of hitting only child A and a 2/3rd chance of hitting only child B, leaving
+the CPH chance of hitting the plane of 1/3rd. When R is 0.5, each child has a
+1/3rd chance of being the only one hit.
+
+These two functions simplify down to:
+
+    CaH = R*NX*( NY + NZ ) / ENH
+    CbH = (1-R)*NX*( NY + NZ ) / ENH
+
+With all this in mind, we can compute the average cost in time of a ray
+traversing a node with two children leaf nodes:
+
+    node traversal cost = TK1 + TK2 + (1+CPH) * TK3 +
+                            CabH * (Pa*TP + Ma*Pb*TP) +
+                            CbaH * (Pb*TP + Mb*Pa*TP) +
+                            CaH *(Pa*TP) +
+                            CbH *(Pb*TP)
+                        = TK1 + TK2 + (1+CPH) * TK3 +
+                            TP * ( CUH * (Pa + Pb + Ma*Pb + Mb*Pa) +
+                                   CaH*Pa + CbH*Pb )
+                        = TK1 + TK2 + (1+CPH) * TK3 +
+                            TP * ( (CPH/2) * ( (Mb+1)*Pa + (Ma+1)*Pb ) +
+                                   CaH*Pa + CbH*Pb )
+
+That's a lot of stuff; the last four terms are the four possible intersection
+cases, A then B, B then A, A only, B only. TK2 is the cost of testing the ray
+segment against the splitting plane and other fixed child access costs. TK3
+is the cost of accessing a particular child node, multiplied by (1+CPH) since
+one or two children's lists could be accessed. Pa is the number of primitives
+inside only child A's box (Pb for child B). Ma is the chance of the ray
+missing all the primitives in child A and so having to access child B. For
+example, if there wasn't anything in child A, Ma would be 1.0, as the ray
+will always reach child B if it were going that way.
+
+Let's give this function a try. Say the TK values are pretty small overall,
+maybe 0.2 of the time it costs to intersect a primitive, TP. Also assume that
+the chance that a ray going from one to another child has, say, a 20 percent
+chance of hitting a primitive in the first child and so not needing to test
+the second, so Ma = Mb = 0.8. Also say that the node is a cube of length
+1x1x1 (though overall scale does not matter), so CPH = 1/3. The formula for
+these starting conditions are:
+
+    node traversal cost = 0.2*TP + 0.2*TP + (1+1/3) * 0.2*TP +
+                            TP * ( (1/6) * ((0.8+1)*Pa + (0.8+1)*Pb) +
+                                   CaH*Pa + CbH*Pb )
+                        = 0.666*TP +
+                            TP * ( 0.3 * (Pa+Pb) +
+                                   CaH*Pa + CbH*Pb )
+                        = 0.666*TP +
+                            TP * ( (CaH + 0.3)*Pa +
+                                   (CbH + 0.3)*Pb )
+                        = 0.666*TP +
+                            TP * ( ((R*NX*( NY + NZ )/ENH + 0.3)*Pa +
+                                   ((1-R)*NX*( NY + NZ )/ENH + 0.3)*Pb )
+                        = 0.666*TP +
+                            TP * ( (2/3)*R     + 0.3)*Pa +
+                                   (2/3)*(1-R) + 0.3)*Pb )
+
+So there's some fixed cost for traversing the BSP tree, in this case (2/3)*TP
+(or whatever, depending how you set the TK values), and the main cost is
+based on the number of primitives in each child times the chance of hitting
+only that child, which depends on R, the relative location of the splitting
+plane along the node's axis.
+
+Let's say we put the splitting plane at R=0.5, the middle of the box, and
+that there were 12 primitives and they nicely divide evenly into 6 in each
+child (i.e. none are split by the BSP plane), so Pa = Pb = 6. We get:
+
+    example cost = 0.666*TP + TP * ( (1/3 + 0.3)*6 + (1/3 + 0.3)*6 )
+                 = 0.666*TP + 7.6*TP
+                 = 8.266*TP
+
+Now, if you had not split the node and intersected all the primitives in it,
+you'd have intersected 12 objects. So, by subdividing the node into two
+children, you expect to spend the time equivalent to 8.266 primitives (and on
+average you'll actually test the ray for intersection against 7.6 primitives,
+plus traversal overhead). The savings, in this case, are from the fact that
+there are two bounding boxes, and because there's a small chance that the ray
+stops in the first child due to intersecting something. So, there's a savings
+in subdividing a node by a BSP tree, but it doesn't cut the time in half,
+since a ray potentially can hit both nodes.
+
+If you go through this same analysis and assume the worst case that the ray
+will always miss everything in the first child tested (i.e. Ma = Mb = 0.0),
+you'll find that the value 0.3 goes to 1/3 and the final answer is "0.666*TP
++ 8*TP". If you assume the unlikely event that if the ray enters the first
+child it won't escape and ever enter the second, the value 0.3 goes to 1/6
+and the cost that comes out is "0.666*TP + 6*TP", which is exactly what you
+would expect, that any ray would test against either the 6 primitives in one
+child or the other, since the ray is (somehow) guaranteed to not continue and
+pass between the two children.
+
+One minor idea (that I won't really pursue here) is to compute these
+occlusion terms based on the areas of the objects inside the node. For
+example, if we knew each of the six objects in child A has an expectance
+(surface area) of EOH, and child A's area expectance is EaH, then ((EaH-
+EOH)/EaH)^6 is a rough estimate of the chance a ray will miss all of these
+objects. For example, say a 3x3x3 node had 6 1x1x2 object boxes fully inside
+it somewhere. EaH is 27, EOH is 5 for each box, and the chance of missing
+them all is (22/27)^6, 0.293, so the occlusion term Ma is 1-0.293=0.707. This
+assumes the objects in the node are randomly distributed, etc. So it's
+possible to get a handle on the Ma and Mb occlusion chance terms, but it's
+work.
+
+The occlusion term does matter, in our example it made the amount of
+variation go from 6 to 7.6 objects tested per ray. However, this term is
+meaningless for shadow testing because the shadow ray stops being tested
+whenever any object is found that blocks it. Testing the contents of child A
+before child B (or vice versa) does not matter. All that's important is that
+the BSP tree minimize the number of objects found near the ray - for this
+purpose, BSP planes that are more parallel to the ray vs. chopping it are
+much more important (the only exceptions are BSP planes that eliminate
+testing objects beyond the endpoints of the test shadow ray line segment).
+Our node traversal equation for shadow testing becomes considerably
+different, and I won't try to write it out here. It basically depends more on
+the chance of hitting each primitive in the node, since a hit ends the
+process.
+
+
+Analyze This
+------------
+
+Is this formula derived reasonable? Let's do an analysis of what happens when
+we chop our usual 1x1x1 uniform 1000 points of stuff by X, then by Y, then by
+Z, i.e. chopping it into 8 subnodes total. How much does this save overall?
+In the first chop each child has 500 objects. We know that there's a 1/3
+chance of hitting both nodes, and of hitting only one of the two nodes. So
+there are 333 objects always tested, and 333 more objects that are tested
+once (in either one child or the other), for 666 total.
+
+Now we divide each 0.5x1x1 (aka 1x2x2) child into two 1x1x2 subchildren. The
+average chance of hitting both of these subchildren, for a ray hitting the
+child, is 0.25, with an 0.375 chance of hitting only one child. For 1000
+objects this would give 250+375=625 ray/object tests, on average. Splitting
+these 1x1x2 subchildren down to 1x1x1, the average chance of hitting both is
+0.2, with 0.4 for hitting only one. 200+400 is 600 ray/object tests average
+when one of these is split and it contains 1000 objects. Note how the
+performance improves at each level, because a split always does more good the
+proportionally less surface area (and so less chance that both nodes are
+traversed) the splitting plane has. The more non-cubic a node is, the better
+the improvement.
+
+Go down the tree: one way to think about things is that there's an average
+testing cost of 666 at the first level. Let's instead think of the number of
+objects tested as being reduced to 0.666 of the total amount. The next level
+of the tree causes the number of objects to go down to 0.625 of its current
+level, and the next after that causes a drop by 0.600. Multiply these
+together: 0.666*0.625*0.600 = 0.250. So we predict that only 250 "point"
+objects will be tested against a ray when using a BSP tree of three levels.
+
+How does this analysis compare with just looking at the subsubchildren and
+their average chance of being hit? At the bottom level each child has an
+average of 125 real objects. Based on surface area, each of the eight
+subchildren turns out to have one chance in four of a random ray hitting
+them, so on average two subchildren are hit. So, three subdivisions gives
+about a 4x speedup, with 250 objects expected to be tested. These predictions
+match. That said, I believe neither is a perfect analysis, as both ignore the
+geometric realities of the situation. If a ray hits both children, it cannot
+also hit both subchildren of these children, it can hit only one additional
+subchild. In other words, you can draw a straight line through the interiors
+of only three, not four, of the squares in a 2x2 grid. The next level down
+again adds only one subchild, i.e. a ray going through a 2x2x2 cube can hit
+up to a maximum of 4 cells, not all 8. To be honest, I do not know how or
+whether this matters to the analysis, but at least the exercise shows that
+two independent analyses match. If anything, because there is an upper limit
+on how many cells can be visited, this may lower the expected number of tests
+further. I think this is a place where MacDonald's analysis may be faulty,
+but am not really sure.
+
+
+1000 Points of Stuff
+--------------------
+
+Where things get interesting is in analyzing how this function respond to
+various changes and conditions. One simple scene to analyze is the "1000
+points of stuff" dataset. Imagine your 1x1x1 cube has 1000 objects in it,
+each dimensionless (i.e. each just a point), uniformly distributed. The Ma
+and Mb values, i.e. the chance of the first child traversed not stopping the
+ray, are also 1. Furthermore, let's also set the time for testing a primitive
+TP = 1, and ignore the fixed costs. This then gives us a function that shows
+how many primitives have to be tested given various settings of the
+dimensions, of R, and of the way objects in the scene are distributed. This
+leaves the simple function:
+
+    simple NTC = CPH*(Pa+Pb) + CaH*Pa + CbH*Pb
+
+This function is a fairly reasonable approximation of how the BSP-tree would be
+used in general. There's a little loss in efficiency from not caring that a
+ray could be stopped in one child before reaching the other. There's also a
+little overhead being ignored for traversing the BSP-tree, so this sort of
+balances out. By using this simpler function, we don't have to guess at what
+the chance is that a ray will be blocked by a child, and we can set up
+idealized situations and get "perfect" predictive results.
+
+Expanding and simplifying this function out a bit:
+    simple NTC = (Pa+Pb) * CPH +
+                   Pa * R*(1-CPH) +
+                   Pb * (1-R)*(1-CPH)
+               = Pa * CaH(R) + Pb * CbH(R)
+
+As discussed earlier, CaH(R) is the chance that child A is hit at all by a
+ray that hits the node (i.e. its area divided by the area of the node),
+CbH(R) is the chance for child B. This is, in fact, the formula that
+MacDonald uses in his first paper [MacDonald89].
+
+MacDonald gives two interesting related results. He evaluates the cost of the
+spatial median strategy and the object median strategy. In the spatial median
+strategy, R is always 0.5, i.e. each node is always split in half. In the
+object median strategy, the objects are sorted along the axis and the plane
+inserted at the median of this object list. For example, if there are 1000
+points of stuff, the plane is inserted halfway between point 500 and 501 on
+the sorted list; the corresponding R might be close to 0.5, but might also be
+very far from it. MacDonald's result: these two strategies will always yield
+the same cost. Surprising! Here's why.
+
+For the spatial median strategy, CaH(0.5) = CbH(0.5), since the nodes are the
+same size. The number of objects in the scene is N = Pa+Pb. Also,
+CaH(R)+CbH(R)=1+CPH. So the cost function is:
+
+    SpatialNTC(0.5) = Pa * CaH(0.5) + Pb * CbH(0.5)
+                    = Pa * CaH(0.5) + Pb * CaH(0.5)
+                    = (Pa+Pb) * CaH(0.5)
+                    = N * CaH(0.5)
+                    = (N/2) * (CaH(0.5)+CaH(0.5))
+                    = (N/2) * (CaH(0.5)+CbH(0.5))
+                    = (N/2) * (1+CPH)
+
+In other words, as we've seen before, the number of primitives intersected is
+halved by splitting the node, but then CPH raises this value due to rays that
+hit both nodes. Note how this result is independent of how many primitives
+are actually in either node.
+
+For the object median strategy, Pa = Pb, and so Pa+Pa=N, so the cost function
+is:
+
+    ObjectNTC(R) = Pa * CaH(R) + Pb * CbH(R)
+                 = Pa * CaH(R) + Pa * CbH(R)
+                 = Pa * (CaH(R) + CbH(R))
+                 = Pa * (1+CPH)
+                 = ((Pa+Pa)/2) * (1+CPH)
+                 = (N/2) * (1+CPH)
+
+Again, notice how this cost function has no reference to the distribution of
+the objects themselves, it is purely a function of the number of objects to
+be intersected and the relative cross-sectional area of the node. MacDonald
+notes that this equivalence is useful, in that the optimal splitting plane
+must lie at or between these two R values (0.5 and whatever the object median
+R is). This bears repeating and stressing: splitting the node in half (R=0.5)
+gives the same average number of intersection tests as splitting the node at
+the median of the sorted list of non-overlapping objects (R is computed by
+the algorithm). The optimum R value lies between 0.5 and the median R value,
+and this optimum R value can actually give a cost value better than these two
+strategies.
+
+Unfortunately, this rule falls apart as soon as objects in the node are
+pierced by the splitting plane, i.e. as soon as the objects have volume to
+them and can get split. To skip ahead for a minute, imagine one object
+spanning the interval [0,0.6] and another from [0.4,0.8]. The spatial median
+is R=0.5, of course, and the object median is R=(0.3+0.6)/2=0.45, but both of
+these planes pierce both objects and so have a cost value of 2. At R=0.4 and
+R=0.6, neither of which are in the interval [0.45,0.5], the cost values go
+down to 1.733. So, splitting objects throws off this concept.
+
+As we saw with 12 items, splitting the 1x1x1 cube meant that 1/3rd of the
+rays hit both children and 2/3rds hit just one. With 500 points in each child
+when R=0.5, this gives an average of 666.66 objects that will be tested by a
+random ray. With R=0 or 1, the function properly predicts that 1000 objects
+will have to be tested (since no subdivision is actually taking place). The
+graph as R goes from 0 to 1 is a parabola centered at R=0.5, pointing
+upwards.
+
+What if the distribution of points in the node is changed? Say we make it so
+that the 1000 points are all in the area [0.0,0.2]*NX of the node, with the
+rest of the [0.2,1.0]*NX volume empty. Do you have any guesses what the best
+value for R will be? With the object median strategy, splitting the number of
+objects so that half are in each child, you have R=0.1. You could also simply
+split the node in half. Another strategy says that there's a large volume of
+empty space, so the plane should be put right at R=0.2 so that one child is
+entirely empty and rays hitting only it can quickly be discarded. The object
+and spatial median strategies must give the same average, as we have seen,
+and for 1000 objects this value is always 666.66, no matter what the
+distribution - only the object median's R value varies. So we know the
+optimum value is between R=0.1 and 0.5. You could find this minimum value of
+R by expressing Pa and Pb as functions of R, substituting them in, and
+differentiating this new function and look for where the slope is 0 and at
+the bottom of a trough. Or you could be lazy like I am and write a Perl
+program to brute force its way through values of R and find the best one. It
+turns out the third, "bound the primitives" strategy is the best in this
+case: R=0.2 gives a minimum value of an average of 466.66 objects that need
+to be intersected.
+
+Say we do the same experiment, but with the interval [0.0,0.5]*NX filled with
+our 1000 objects, i.e. half the node is empty. The object median strategy
+predicts R=0.25, and the "bound the primitives" method says R=0.5 might be
+good, since it chops off the empty half of space. However, we know that the
+spatial median strategy picks R=0.5 and will give the same cost as the object
+median strategy, so the optimal answer lies between these two. Running the
+analysis, the answer turns out to be that at R=0.375 the average is 625
+objects tested against the ray. The split at 0.375 makes child A contain 750
+objects and child B contain 250. So there's some point at which it's
+worthwhile to include some objects in both children, but beyond that point
+you should always make the splitting plane such that the one child is all
+empty space.
+
+For the 1x1x1 cube, this point turns out to be at R=0.333 (and at R=0.667, of
+course), a third. What this means is that if your objects fill up a third or
+less of the left or right end of a cubic node, then you want to put the
+splitting plane so as to contain them all in one child. If the objects in the
+node extend out further than this one third, you'll need to do some work to
+find the best splitting plane.
+
+Now here is the surprising part: this is true for a node of any dimensions.
+The node could be 100x20x3, and it will still be true that if all the objects
+in that node are between say [0,0.2], you'll want to put R=0.2, and this is
+true up to [0,0.333] for a node of any dimensions along any axis.
+
+Let's look at the cost function if we say that there is a uniform density
+along the interval [0,Rd], with [Rd,1] devoid of objects. The cost function
+is then (ignoring the scaling factor of the number of objects):
+
+  F(R,Rd) = [ R*CaH(R) + (Rd-R)*CbH(R)   when R <= Rd
+            [ Rd * CaH(R)                when R > Rd
+
+The second part of this function, Rd*CaH(R), is obviously minimized when
+R=Rd; a higher R just increases the surface area of the child node A. This
+represents putting the splitting plane to enclose the entire data set in one
+child.
+
+The first part of this function has a derivative with respect to R that can
+be used to find the minimum point of the function. This is located where:
+
+    0 = 4R - Rd - 1
+
+So:
+
+    R = ( Rd + 1 ) / 4
+
+You can set Rd=R and solve: indeed, when Rd is 1/3rd, R is also 1/3rd. As Rd
+increases, R then increases slower (1/4th as fast), so the ideal split point
+moves from this 1/3rd point to 0.5 as Rd moves from 1/3rd to 1.0. So the
+1/3rd answer is verified by the derivative equation, but I can't say I have a
+good sense of why the value 1/3rd is significant.
+
+Here's another example to ponder. Let's say we put 400 points in the interval
+[0,0.4] and 600 points in the interval [0.6,1] (so there's nothing in
+[0.4,0.6]). So, the density of points is 1.5 times as high in the second
+interval vs. the first. Here's an illustration, showing the node, the
+relative densities, and the two places to split:
+
+   |---------------+-------+---------------+
+   |  #  #  #  #  #|       |# # # # # # # #|
+   | #  #  #  #  # |       | # # # # # # # |
+   |#  #  #  #  #  |       |# # # # # # # #|
+   |  #  #  #  #  #|       | # # # # # # # |
+   | #  #  #  #  # |       |# # # # # # # #|
+   |#  #  #  #  #  |       | # # # # # # # |
+   |  #  #  #  #  #|       |# # # # # # # #|
+   | #  #  #  #  # |       | # # # # # # # |
+   |#  #  #  #  #  |       |# # # # # # # #|
+   |  #  #  #  #  #|       | # # # # # # # |
+   | #  #  #  #  # |       |# # # # # # # #|
+   |#  #  #  #  #  |       | # # # # # # # |
+   |---------------+-------+---------------+---> X axis
+R=0.0             0.4     0.6             1.0
+
+Where is the best place to split this set of points? It will probably be in
+[0.4,0.6], the empty zone, but where? It turns out that R=0.6 is the best
+place. The two choices of splitting planes are symmetrical, so the rule
+appears to be to put the plane closer to the volume with the higher density
+of objects in it - this makes a certain sense. We could have guessed this
+from the rule that the optimum is between 0.5 and the object median location
+(which is at 0.666).
+
+By the way, if the densities were the same, 500 points in each of the two
+intervals, any plane in the interval [0.4,0.6] has the same minimal cost
+function, so any would be an acceptable split. Note that there's no
+preference for R=0.5 by the formula, i.e. the centerpoint is not superior to
+where either set of data begins.
+
+
+Stuck in the Middle with You
+----------------------------
+
+Up to this point our primitives have all been dimensionless points. The next
+thing to do is to start looking at the effect of the BSP plane splitting
+objects. This is where inefficiency comes into the BSP scheme. For example,
+if your splitting plane intersects all 12 objects in the node, then both
+children have 12 objects in them, and no efficiency is gained (in fact, it's
+lost, since a ray has to waste time accessing the useless, no good, dead-beat
+children). The function above does not show this fact.
+
+Assume mailboxing gets used in the code, so that any primitives in both
+children get tested only once by a particular ray. Also assume that the cost
+of checking the mailbox is negligible (we could add it in, but it just
+confuses things further). This is the formula with it all (well, almost -
+it's also possible to vary TP per object, which I'll discuss later). From
+here on in we'll be playing with this function and trying various simplifying
+assumptions and see what happens. Here it is:
+
+    node traversal cost = TK1 + TK2 + (1+CPH) * TK3 +
+                            CUH * (TK3 + (Pa+Pab)*TP + Ma*Pb*TP) +
+                            CUH * (TK3 + (Pb+Pab)*TP + Mb*Pa*TP) +
+                            CaH *((Pa+Pab)*TP) +
+                            CbH *((Pb+Pab)*TP)
+                        = TK1 + TK2 + (1+CPH) * TK3 +
+                            TP * ( CUH * (Pa+Pb+2*Pab + Ma*Pb+Mb*Pa) +
+                                   CaH*(Pa+Pab) + CbH*(Pb+Pab))
+                        = TK1 + TK2 + (1+CPH) * TK3 +
+                            TP * ( Pab +
+                                   CUH * (Pa*(1+Mb) + Pb*(1+Ma)) +
+                                   CaH*Pa + CbH*Pb)
+
+where Pa are the primitives exclusively in child A, Pb only in B, and Pab are
+those shared by both children. The last step of the derivation is something
+of a jump. What happens is that we know that 2*CUH+CaH+CbH = 1, these are
+just the probabilities of hitting two children or just one, and so TP*Pab
+comes out of the function. In other words, any primitive cut by the splitting
+plane is just as expensive to intersect as if there was no splitting plane at
+all, since it will always be tested by any ray hitting the node.
+
+This fact brings up an interesting idea for storage: any objects that
+are split by the BSP plane do not really have to be stored in both children.
+In other words, a split node could have three lists: objects in child A, in
+child B, and shared (hit by the split plane). When you test a node for ray
+intersection, you would first test its shared list, then traverse the two
+children. This would save a little memory: each object on the shared list is
+stored in only one list instead of in both children's lists. There's one
+other noticeable savings: mailbox avoidance. Shared objects are tested only
+once with this scheme. In the traditional approach, if a ray travelled
+through both children, each shared object would have to be accessed twice
+(once in each child's list) and the mailbox test would then avoid the second
+intersection test. Anyway, this alternate scheme is probably a wash
+performance-wise, and I'll bet someone's thought of it before I did, but it's
+one that occurred to me due to analyzing where time goes due to a BSP split.
+
+
+Hair Splitting
+--------------
+
+One classic question is, given the choice of splitting a node in half by a
+plane along the X, Y, or Z axes, which axis should we pick? The functions
+above address that question in a direct way: choose the one that gives the
+lowest average number of ray intersections. Let's look at a 2x1x1 node with a
+uniform distribution of 1000 points. We can all guess that spliting along the
+center of the X axis is the best plan (so forming two 1x1x1 children), but
+how much does this help? The answer turns out to be that an X split yields an
+average of 600 ray/object tests, and a Y or Z split yields 700 ray/object
+tests, with 1000 being the unsplit value. I thought this was interesting:
+splitting the obvious axis does save us something, it saves 33% more tests
+(400 vs. 300 fewer tests). The limit of savings is, of course, 500 ray/object
+tests, which would happen with splitting something like a 1000x1x1 node,
+where the splitting plane area is relatively tiny and so extremely few rays
+hit both children.
+
+What happens if we start paying attention to "Pab", the number of objects
+chopped by the splitting plane? This changes everything, of course, since you
+tend to want to minimize Pab.
+
+Say you have a 1x1x1 node filled with 1000 straight strands of hair (or
+uncooked spaghetti, say) extending along the X axis. It's obviously more
+worthwhile to chop this node along the Y or Z axis, where Pab=0, because
+chopping along the X axis will result in each child having the same list of
+objects, Pab=1000 - no help at all. But what happens if the chance of hitting
+a strand of spaghetti varies? In other words, say space is filled with
+strands of spaghetti, but each piece of spaghetti is 0.5 units long.
+
+For an N-length spaghetti strand the set of centers is [-N/2,N/2+1], and the
+overlap with a plane at say 0.5 is [0.5-N/2,0.5+N/2]. So, if all the X-
+aligned spaghetti strands were 0.5 units long and randomly overlap a 1x1x1
+node, these would have centers from X=-0.25 to X=1.25 and would overlap a
+plane at say 0.5 from center X=0.25 to X=0.75. So the probability of being
+split by a plane at 0.5 is (0.75-0.25)/(1.25-(-0.25)) = 0.333.
+
+Taking the difference of the endpoints of the intervals, the general formula
+is then simply P(N) = N/(N+1). So a strand 10 units long that is known to
+overlap the node has a 10/11 chance that it will pierce the BSP plane
+(regardless of where the BSP plane is placed, in fact - the plane's location
+is irrelevant).
+
+So, say we have spaghetti bits of length 1 throughout space. That will mean
+that Pab=P(N)*1000=(1/2)*1000=500, and the other 500 1-unit spaghetti bits
+will divide between the two children, on average 250 each. From our previous
+analysis, 333+500=833 is the expected number of ray intersections that will
+have to be performed. In fact, varying the length of the spaghetti bits gives
+a function going from the "1000 points of stuff" minimum of 667 tests, up to
+the worst case of 1000 tests, depending on the length of the spaghetti bits.
+Let's look at the yield for a 1x1x1 node:
+
+Object length    Ray/object tests     Savings
+=============    ================     =======
+     0.0               667              333
+     0.1               697              303
+     0.2               722              278
+     0.3               744              256
+     0.4               762              238
+     0.5               778              222
+     0.7               804              196
+     1.0               833              167
+     1.5               867              133
+     2.0               889              111
+     3.0               917               83
+     4.0               933               67
+     5.0               944               56
+   infinity           1000                0
+
+If the objects we're trying to split up by a BSP plane are 0.1 of the
+dimension of the 1x1x1 node, then we can save 30.3 percent of tests. If our
+objects are about the size of the node itself, 1.0, we can save 16.7 percent
+of tests, continuing to decrease as the object size increases. This implies
+that as the node size decreases with each BSP cut there will likely be
+diminishing returns in efficiency, since the relative object size increases
+compared to the leaf node size.
+
+
+This is the End, My Only Friend
+-------------------------------
+
+This section's for the only person to reach this section, whoever he is. We
+want to create the (nearly) ultimate optimal BSP-tree. We can split on any
+plane, and we can put the split wherever we want. MacDonald suggests
+searching between the object and spatial medians, sampling a number of times
+along this interval. But say we're insane and we want to optimize like crazy,
+which also means searching outside of this interval.
+
+Here's one way to get the perfect (at least judged locally by the formula)
+split at any level. The idea is that when a plane is inserted, the only
+places you need to check is where something is happening, i.e. where an
+object's bounds in the node is located. MacDonald realized this, but he did
+not give an ultimate algorithm. So here we go:
+
+For each axis X, Y, Z:
+   Pab = Pa = 0
+   Pb = number of objects
+   Put the interval of each object that overlaps the node into a sorted list.
+     If an object's minimum is outside the node,
+          increment Pab, decrement Pb.
+     If an object's maximum is outside the node, ignore it.
+   Evaluate the cost function at every location on this list.
+     If it's a start location, evaluate, increment Pab and decrement Pb.
+     If it's an end location, decrement Pab, increment Pa, evaluate.
+
+Use the splitting plane and location found to be optimal.
+
+Dropping the constant TP, and including neither the fixed amounts of time
+spent nor the occlusion of one child by another, the cost function can have a
+few forms:
+
+    F(R) = Pab + Pa * CaH(R) + Pb * CbH(R)
+         = Pab +
+           (Pa+Pb) * CPH +
+           Pa * R*(1-CPH) +
+           Pb * (1-R)*(1-CPH)
+
+These are almost the same as the 1000 points of stuff formula, with the
+additional cost of objects hit by the split plane included in. The first form
+is more elegant, but hides the involved computations done by CaH(R) and
+CbH(R), so we use the second in examples that follow.
+
+So, for example, say you have 3 objects overlapping a 10x10x10 node, going
+from [0,10] in all directions. Along the X axis object number one goes from
+[4,7], object two from [-2,8], and object three from [6,12].
+
+              |
+object 1      |               |***********|
+              |
+object 2 -2<************************************|
+              |
+object 3      |                       |*********************>12
+              |
+              |-------+-------+-------+-------+-------+---> X axis
+             X=0      2       4       6       8       10
+            R=0.0    0.2     0.4     0.6     0.8     1.0
+
+
+When the first object is inserted into the sorted list, the list is (4s,7e),
+where the "s" means the location is where an object's interval starts, "e"
+where it ends. Object two's minimum extent, -2, starts outside the cube, so
+"Pab" increments up to 1 and "Pb" decrements down to 2. The sorted list is
+now (4s,7e,8e). Object three's maximum extent, 12, is outside the node, so
+can be ignored. The final sorted list of object starts and ends is
+(4s,6s,7e,8e).
+
+Now go through the list and evaluate the cost function with each R value. Pab
+starts at 1 in this case (because of object two). Since the test node is an
+"s" start node, we know that an object is starting at this distance. So at
+R=0.4 there are no objects that would be placed in child A, one object is
+split, and two objects are in child B. So:
+
+    F(0.4) = 1 +
+             (0+2) * 1/3 +
+             0 * 0.4 * 2/3 +
+             2 * 0.6 * 2/3
+           = 2.4666
+
+So if we split here, we would expect to test for intersection 2.4666 objects
+with a random ray. Once we are done computing with the "4s" plane (and any
+other start plane), we add one to Pab (now 2) and decrement Pb (now 1), since
+we know that succeeding plane tests will hit two objects (one and two) until
+we reach the end of one of them. Pa is still 0.
+
+We then test "6s". F(R) is computed first, and turns out to be:
+
+    F(0.6) = 2 +
+             (0+1) * 1/3 +
+             0 * 0.6 * 2/3 +
+             1 * 0.4 * 2/3
+           = 2.6
+
+Pab is then incremented to 3 and Pb decrements to 0. Note that in the
+interval [6,7] all three objects would be penetrated by a plane, so splitting
+the node would give no benefit.
+
+We then hit "7e", and this signals the end of an object, so we first
+decrement Pab, to 2, and add one to Pa, to 1, before computing F(R), which
+turns out to be 2.8. Note that at any interval break, we always evaluate on
+the "side" where Pab is lower, by evaluating before incrementing Pab and
+after decrementing Pab.
+
+The last entry on the sorted list is "8e", which first decrements Pab to 1
+(only object three is left as being split), increments Pa to 2, and F(R) is
+2.7333.
+
+The smallest function value was at R=0.4, 2.4666, so a splitting plane is
+best put at 0.4. Note that the intervals of the objects should all be grown
+by some small epsilon, so that when the splitting plane is chosen it won't
+intersect the object that is close to it. The Y and Z axes can be tested
+similarly, and the axis plane with the smallest ray/object cost overall is
+the one that is chosen.
+
+Recall the rule that if objects are near one end or the other the optimal
+splitting plane chops off the empty volume. So, a quick out on all this
+testing is to first find the bounding box for the objects. If along an axis
+the highest end value is less than R=1/3, or the lowest start value is
+greater than R=2/3, then you can safely put the split plane at this end or
+start value and be done with evaluating that axis.
+
+Some other implementation notes: if the minimum value for a node comes back
+as being close to the number of objects (say within 5 or 10 percent -
+experiments are needed here, and your mileage will definitely vary), this
+means that inserting a plane is probably not buying much performance and so
+subdivision can halt. Alternately, you can fold in the fixed costs of
+traversing children, as shown near the beginning of this article.
+
+You don't really have to track all three of Pab, Pa, and Pb; you can track
+just two and subtract these from the number of objects in the node to get the
+third.
+
+As usual, you can also have a maximum level beyond which you won't subdivide.
+What's nice about the evaluation function is that it's pretty simple: you
+plug the box dimensions and how many primitives are to the right, left, or
+pierced by the plane and get an answer. You may also want to experiment with
+setting the chances a child blocks a ray, Ma and Mb.
+
+The basic algorithm treats all primitives as equally costly to intersect,
+i.e. TP is a constant. If desired (i.e. you are truly out to massively
+optimize as much as possible), it's straightforward to factor in the cost of
+various types of primitives, assuming you have reasonable values for these.
+Instead of simply incrementing and decrementing the various counts such as
+Pab in the algorithm, you increment and decrement by the approximate amount
+of time that the primitive costs to test.
+
+Now the bad news. Recursively doing this split procedure should be fairly
+near-optimal locally, but it will not necessarily be globally optimal. For a
+distribution of objects, it may be the case that a sub-optimal split at one
+level provides a number of perfectly optimal splits to be done at lower
+levels, giving a better tree overall. MacDonald discusses this problem and
+how simple BSP-tree algorithms outperformed his plane-searching method under
+certain circumstances.
+
+Still, for "n" objects to be inserted into an BSP-tree, this algorithm is O(n
+log n) per level (due to the sort). It gives an interesting mix of the
+externally imposed BSP-tree mixed with splitting planes that try their best to
+tightly bound at least one object in the node itself.
+
+[MacDonald89] J. David MacDonald and Kellogg S. Booth, "Heuristics for Ray
+Tracing Using Space Subdivision", Graphics Interface '89, pp. 152--163, 1989.
+
+----------------------------------------------------------------------------
+
+RTNews Errata, by Nikos Platis (nplatis@di.uoa.gr)
+
+[Included here in case someone's mirroring these pages or printed them out or
+whatever. I have fixed the web pages in question with this information. -
+EAH]
+
+I would like to inform you of some mistakes that I believe I found in
+articles that I used.
+
+In "Ray/Triangle Intersection with Barycentric Coordinates"
+(http://www.acm.org/tog/resources/RTNews/html/rtnews5b.html#art3), the
+denominators for s and t must be "(length N)^2". Also, in the picture, s and
+t (or vertices 2 and 3) must be swapped: s seems to be the barycentric
+coordinate with respect to vertex 2 and t the barycentric coordinate with
+respect to vertex 3; the same is implied by the relations given.
+
+In "Pluecker Coordinate Tutorial"
+(http://www.acm.org/tog/resources/RTNews/html/rtnv11n1.html#art3), in the
+second relation provided ( L = {P-Q:PxQ} ), I think it should be clarified
+that the line is directed from Q to P; this is important since Pluecker
+coordinates describe directed lines, and also in accordance to the next
+relation, for which it would be U=P-Q.
+
+----------------------------------------------------------------------------
+END OF RTNEWS

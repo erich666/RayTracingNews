@@ -1,0 +1,1804 @@
+<!-- html version of Volume 18, Number 1 -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 18, Number 1</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT> 
+<P><I>"Light Makes Right"</I> 
+<P><FONT size=+1>December 12, 2005</FONT> 
+<P><FONT size=+1>Volume 18, Number 1</FONT> 
+</CENTER>
+<P>
+Compiled by <a href="http://www.acm.org/tog/editors/erich/">Eric Haines</a>, Autodesk, 10 Brown Road, Ithaca, NY 14850
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine, not Autodesk's.<P>
+All contents are copyright (c) 2004,2005, all rights reserved
+by the individual authors
+<P>
+Archive locations:  text version at
+<A HREF="http://www.acm.org/tog/resources/RTNews/text/">
+http://www.acm.org/tog/resources/RTNews/text/</A>
+<BR>HTML at <A HREF="http://www.acm.org/tog/resources/RTNews/html/">
+http://www.acm.org/tog/resources/RTNews/html/</A>
+<P>
+You may also want to check out the
+<A HREF="index.html">Ray Tracing News issue guide</A>,
+the <A HREF="rtn_index.html">index to the Ray Tracing News</a>,
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction</A></LI>
+<LI><A HREF="#art2">
+Ray Tracing Roundup</A></LI>
+<LI><A HREF="#art3">
+Newish Books</A>, by Eric Haines</LI>
+<LI><A HREF="#art4">
+More on Randomly Sampling Bounding Volumes</A>, by Mateu Sbert</LI>
+<LI><A HREF="#art5">
+Image Comparison</A>, by Chris Cason, Eric Haines, and Greg Ward</LI>
+<LI><A HREF="#art6">
+Real-Time GPU Spheres</A>, by John Stone</LI>
+<LI><A HREF="#art7">
+Plane Equations of a Tetrahedron</A>, by Paul Kahler</LI>
+<LI><A HREF="#art8">
+Ray/Tetrahedron Intersection</A>, by Paul Kahler</LI>
+<LI><A HREF="#art9">
+K-d Tree Comments</A>, by Ingo Wald, Gordon Stoll, Vlastimil Havran, and Eric Haines</LI>
+<LI><A HREF="#art10">
+Processor Level Optimization Verification</A>, by Paul Kahler and Anonymous</LI>
+<LI><A HREF="#art11">
+SIGGRAPH 2005 Report</A>, by Eric Haines</LI>
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction</A></FONT></H4>
+Yeesh, two SIGGRAPHs (and two Fantasy Graphics League winners,
+<A HREF="http://www.realtimerendering.com/fgl">http://www.realtimerendering.com/fgl</A>) have come and gone, and I'm finally
+getting around to putting out an issue.
+<P>
+So, the coolest things I saw at SIGGRAPH 2004 (yes, 4): the fingernail
+printer in the Guerilla Studio, and the Lightspace display on the exhibit
+floor. 20 LCDs on top of each other in a 4&quot; deep block, cycled through at
+50 frames per second. Not a perfect technology by any means, and there
+were some funky artifacts since only the closest object *from one
+direction* is displayed (what happens if you look around that object? You
+see a hole in space). But it was cool to see a display with lots of color,
+no weird technology, and that worked from a wide range of angles without
+special headgear, etc.
+<P>
+Emerging Technologies for 2004: The high dynamic range (HDR) display from
+Sunnybrook Technologies has been developed further from 2003's
+demonstration, and looked pretty cool; in 2005 it is now something you can
+buy. The technology for getting an overall range of more than 8 bits per
+channel is to add a set of LEDs for a backlight, which seems like it
+should be inexpensive in the long run. There were other interesting demos
+of other technologies and ideas, such as super-high refresh rate displays
+(1000 Hz) that could hide images by displaying the image and then
+immediately displaying its inverse. Due to persistence in the eye the two
+images cancelled to a gray, but you could use a pair of glasses with LCDs
+flickering that would then show just the hidden image. Multiple different
+images could be hidden this way in the same refresh set of images. There
+were also other oddities and artsy stuff: virtual swimming, a set of
+robotic floor tiles that would constantly shuffle to stay in your path of
+walking, mixed reality on PDAs with cameras that show you unreal objects
+mixed with a real scene.
+<P>
+Art show: I liked &quot;All This Useless Beauty&quot;, which was a panorama over
+space. Imagine taking panorama shots while walking and seamlessly blending
+these into one very long image (15000 x 89 pixels on the web). See it here:
+<A HREF="http://www.santoroland.com/siggraph2004/artgallery.html">http://www.santoroland.com/siggraph2004/artgallery.html</A>
+<P>
+My favorite sketch from SIGGRAPH 2004 was &quot;Experimental Validation of
+Analytical BRDF Models&quot; by Addy Ngan et alia, MIT. It compared various
+lighting models with high-resolution surface reflectance data and found
+two interesting things: Cook-Torrance and Ashikmin models were quite good
+overall, LaFortune was fairly good but sometimes falls apart, and Phong-
+Blinn and Ward not so good (not a surprise). Second thing: the half-angle
+vector formula used for specular reflections is actually more in accord
+with real surface reflection than the mirror vector formula. Surprising.
+Find it and related work at <A HREF="http://people.csail.mit.edu/addy/research/">http://people.csail.mit.edu/addy/research/</A>.
+<P>
+SIGGRAPH 2005? Well, I've rambled enough in this introduction for now, so
+that article will come later in this issue.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+Ray Tracing Roundup</A></FONT></H4>
+Jeffrey Mahovsky, &quot;Ray Tracing with Reduced-Precision Bounding Volume
+Hierarchies,&quot; PhD thesis, University of Calgary, 2005.
+<P>
+Recently published and available at: <A HREF="http://www.8dn.com/~jm/">http://www.8dn.com/~jm/</A>
+<P>
+Jeff kindly summarized some of his research for the RTNews as he went
+along, it was good stuff, but I kept getting distracted and never got an
+issue out. So if you'd like to read a really long issue of the RTN
+(actually, it's better than that), go check his work out. He offers, among
+other things, a comprehensive survey of papers and patents related to BVH
+and ray tracing hardware. Code for various routines are in the appendix
+and on the website. The thesis is somewhat oriented towards making ray
+tracing hardware, but there are a number of interesting theory and
+software bits. For example, he introduces a new ray/bounding-box
+intersection test based on Pluecker coordinates, and discusses one based
+on using the separating axis theorem. Surprisingly, these two methods
+appear to usually be faster than the standard slabs method. The bad news:
+no ray/box intersection distance is computed with the new tests, but some
+traversal schemes do not need this.
+<P>
+For bounding volume hierarchy creation (BVH), he finds that about 6
+triangles per leaf bounding box is a good stopping criteria. He does some
+experiments with BVH traversal, changing the order in which children are
+traversed based on ray direction, i.e. attempting to hit the closer child
+first (important for eye-related rays, of course; not important for shadow
+rays). The speedup for some scenes is quite large. That said, it would
+have been interesting to compare this algorithm vs. Smit's skip pointers
+flattened tree traversal scheme for BVH, which gets rid of clever schemes
+in favor of lean and fast code (More about Smit's scheme, and a URL to
+it, later in this issue). But I guess Jeff wanted to graduate before he
+retired.
+<P>
+There is also much exploration of ways of representing bounding boxes as
+sets of integers (vs. floats), with the intent of reducing the memory
+footprint while speeding processing. Anyway, I won't spoil the whole thing
+for you; give it a look!
+<P>
+________
+<P>
+As of SIGGRAPH 2005, a noncommercial version of OpenRT will be released to
+the public. The version release will - for the moment - be a slightly
+limited, PC/Linux-only version of OpenRT. If you are interested in getting
+a copy, please subscribe to the &quot;noncommercial&quot; mailing list at
+<P>
+<a href="https://scihparg.cs.uni-sb.de/cgi-bin/mailman/listinfo/noncommercial">https://scihparg.cs.uni-sb.de/cgi-bin/mailman/listinfo/noncommercial</a>
+<P>
+You will then receive email providing you with a download link and some
+additional information.
+<P>
+FAQ at <A HREF="http://www.openrt.de/GettingOpenRT/FAQ.php">http://www.openrt.de/GettingOpenRT/FAQ.php</A>
+<P>
+________
+<P>
+MAXIMA: This beastie has finally been GPL'ed and made free, after too many
+years. This is an equation manipulation package with graphic capabilities.
+Not as good as Mathematica, but $1500 cheaper:
+<A HREF="http://maxima.sourceforge.net/">http://maxima.sourceforge.net/</A>
+<P>
+________
+<P>
+<A HREF="http://www.cs.utah.edu/~sparker/images.html">http://www.cs.utah.edu/~sparker/images.html</A> has all sorts of heavy-duty
+ray-traced images, with movies at the bottom. My fave, just for the
+resources spent: <A HREF="http://www.cs.utah.edu/~sparker/images/seurat/bigcbox.jpg">http://www.cs.utah.edu/~sparker/images/seurat/bigcbox.jpg</A>        
+- a tera-ray monte-carlo rendering of the Cornell Box. This was generated
+in 2 CPU years on an Origin 2000. The full image contains 2048 x 2048
+pixels with over 100,000 primary rays per pixel (317 x 317 jittered
+samples). Over one trillion rays were traced in the generation of this
+image.
+<P>
+________
+<P>
+Yet another free ray tracer: <A HREF="http://www.yafray.org/">http://www.yafray.org/</A> - with OpenEXR support,
+lots of features, and meant to work with Blender.
+<P>
+________
+<P>
+Wouldn't it be nice to have all the tables of contents of all journals at
+your fingertips, in one handy place? Here you go:
+<P>
+<A HREF="http://www.math.utah.edu/ftp/pub/tex/bib/toc/index-table.html">http://www.math.utah.edu/ftp/pub/tex/bib/toc/index-table.html</A>
+<P>
+________
+<P>
+You may be interested in a rewritten Quake 3 with using OpenRT. It runs in
+real-time using a network of 20 AMDs with 1800 MHz. I have screenshots and
+an impressive video on this page:
+<P>
+<A HREF="http://games.slashdot.org/games/04/06/07/2350243.shtml">http://games.slashdot.org/games/04/06/07/2350243.shtml</A>
+<P>
+&nbsp;&nbsp;-- Daniel Pohl (elchtest(at)quake(.)de)
+<P>
+____
+<P>
+I had *nothing* to do with that Quake 3 stuff entirely, I promise. It's
+just some of our crazy students, that don't even have the source code
+(only precompiled libraries and the API), who started to play around with it.
+<P>
+There's even a more interesting game than the entire quake/unreal thing:
+one of our students has created a game with lots of different effects
+(including sun-created caustics in shallow regions of the sea), animated
+objects, a sun/sky illumination model, efficient handling of hundreds and
+thousands of light sources, etc., etc....
+<P>
+Check it out: visit
+<A HREF="http://graphics.cs.uni-sb.de/~morfiel/oasen/index.html">http://graphics.cs.uni-sb.de/~morfiel/oasen/index.html</A>, then click on
+screenshots. *that* one is impressive if you see it in real time.
+<P>
+&nbsp;&nbsp;-- Ingo Wald (wald(at)mpi-sb(.)mpg(.)de)
+<P>
+________
+<P>
+Open source GPU ray tracers
+<P>
+I just wanted to inform that we (Filip Karlsson, Carl Johan Ljungstedt and
+Ulf Assarsson) submitted an open source GPU ray tracer to GPGPU. It is
+part of a master thesis project. I'm in a supervisor role nowadays, but
+I've been deeply involved in this project.
+<P>
+The practical contribution is that we actually got it working under OpenGL
+and Cg, which has been very messy with all driver bugs, Cg-compiler bugs,
+and unwritten &quot;features&quot; of the PixelShader 3.0-support of the NV 6800.
+Theoretically, it is not very hard to write a GPU-ray tracer, but in
+practice it was a totally different story, and we have spent at least 3
+months, more or less, full time. Our hope is that people will use it as a
+starting place for continued research/development or whatever to boost the
+evolution of GPU-ray tracing. As a small research contribution, we also
+test standard grids vs. grids and proximity clouds. The largest model we
+tested was the classic Buddha of 1M triangles.
+<P>
+Home page with thesis report and open source here:
+<A HREF="http://www.ce.chalmers.se/edu/proj/raygpu/">http://www.ce.chalmers.se/edu/proj/raygpu/</A>
+<P>
+There is also a very nice &quot;competitor&quot; work :-), by Martin Christen,
+published the same day at GPGPU, here:
+<A HREF="http://www.clockworkcoders.com/oglsl/rt/">http://www.clockworkcoders.com/oglsl/rt/</A>
+<P>
+[That one has lots of documentation and a Sourceforge code base. -EAH]
+<P>
+His version is also open source and  uses Direct3D and HLSL. He also has a
+version running under OpenGL and GLSL. I've been testing his Direct3D ray
+tracer some and it works fine. He has his own implemented CPU ray tracer
+against which he compares performance, while we use Mental Ray.
+<P>
+Both Christen's and our version can import 3DS-files, although the shading
+of course is much more limited than in 3DStudio.
+<P>
+&nbsp;&nbsp;-- Ulf Assarsson (ulf(.)assarsson(at)illuminatelabs(.)com)
+<P>
+____
+<P>
+Here's a tech report that covers some of the ray-tracing-on-GPU stuff that
+Rodrigo Toledo's been doing:
+<P>
+<A HREF="http://www.loria.fr/~levy/php/article.php?pub=../publications/papers/2004/ray_tracing_gpu">http://www.loria.fr/~levy/php/article.php?pub=../publications/papers/2004/ray_tracing_gpu</A>
+<P>
+&nbsp;&nbsp;-- John Stone (johns(at)ks(.)uiuc(.)edu)
+<P>
+____
+<P>
+The Graphics Hardware 2005 conference had one paper of relevance to ray
+tracing. See <A HREF="http://www.graphicshardware.org/program.html">http://www.graphicshardware.org/program.html</A> for the full
+program, along with links to PDFs and slide sets.
+<P>
+KD-Tree Acceleration Structures for a GPU Raytracer, T. Foley, J. Sugerman,
+presentation at:
+<A HREF="http://www.graphicshardware.org/presentations/foley-kdtreegpu-gh05.ppt">http://www.graphicshardware.org/presentations/foley-kdtreegpu-gh05.ppt</A>
+<P>
+____
+<P>
+<A HREF="http://www.gpgpu.org">GPGPU.org</A> has lots of great rendering news relating to cutting-edge research
+and the GPU. For example, included in the news area
+<A HREF="http://www.gpgpu.org/cgi-bin/blosxom.cgi/Advanced%20Rendering">http://www.gpgpu.org/cgi-bin/blosxom.cgi/Advanced%20Rendering</A>
+was the abstract of this master's thesis, among other things:
+<P>
+A Comparison of Acceleration Structures for GPU Assisted Ray Tracing
+<P>
+Recently, ray tracing on consumer level graphics hardware has been
+introduced. So far, most published studies on this topic use the uniform
+grid spatial subdivision structure for reducing the number of ray/triangle
+intersection tests. For many types of scenes, a hierarchical acceleration
+structure is more appropriate. This thesis by Lars Ole Simonsen and Niels
+Thrane of University of Aarhus compares GPU based traversal of kd-trees
+and uniform grids with a novel bounding volume hierarchy traversal scheme.
+The three implementations are compared in terms of performance and
+usefulness on the GPU. The thesis concludes that on the GPU, the bounding
+volume hierarchy traversal technique is up to 9 times faster than its
+implementations of uniform grid and kd-tree. Additionally, this technique
+proves the simplest to implement and the most memory efficient.
+<P>
+<A HREF="http://www.larsole.com/files/GPU_BVHthesis.pdf">http://www.larsole.com/files/GPU_BVHthesis.pdf</A>
+<P>
+Ulf Assarsson comments, &quot;they also present some GPU source code&quot;.
+<P>
+________
+<P>
+A history of MAGI, the first production house to use ray tracing and CSG:
+<P>
+<A HREF="http://accad.osu.edu/~waynec/history/tree/magi.html">http://accad.osu.edu/~waynec/history/tree/magi.html</A>
+<P>
+A number of its employees went on to found Blue Sky Studios. Note that this
+page is part of a larger site giving a history of computer graphics:
+<P>
+<A HREF="http://accad.osu.edu/~waynec/history/ID797.html">http://accad.osu.edu/~waynec/history/ID797.html</A>
+<P>
+Don't miss the extensive lessons section:
+<P>
+<A HREF="http://accad.osu.edu/~waynec/history/lessons.html">http://accad.osu.edu/~waynec/history/lessons.html</A>
+<P>
+There's lots of other pages around with all sorts of things, e.g. check out
+the index:
+<P>
+<A HREF="http://accad.osu.edu/~waynec/history/content-index.html">http://accad.osu.edu/~waynec/history/content-index.html</A>
+<P>
+________
+<P>
+By the way, there's a wikipedia entry for ray tracing:
+<P>
+<A HREF="http://en.wikipedia.org/wiki/Ray_tracing">http://en.wikipedia.org/wiki/Ray_tracing</A>
+<P>
+Feel free to go fix anything you don't like (I did, cleaning out weirdness
+about the definition of &quot;backwards ray tracing&quot;; asking what people think
+this term means is like asking them where they put their matrix
+translation values, in the right column or the bottom row; it's a
+religious thing.)
+<P>
+There's also a nice page on POV-Ray:
+<P>
+<A HREF="http://en.wikipedia.org/wiki/POV-Ray">http://en.wikipedia.org/wiki/POV-Ray</A>
+<P>
+with plenty of worthwhile links.
+<P>
+________
+<P>
+A fellow named Bruce Dawson of the Xbox advanced technology group has also
+published some interesting papers of good practical alternatives to the
+evil wicked bad epsilon tests:
+<P>
+<A HREF="http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm">http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm</A>
+<P>
+&nbsp;&nbsp;-- Steve Hollasch (hollasch(at)acm(.)org)
+<P>
+[I should note that Steve's page,
+<A HREF="http://stevehollasch.com/cgindex/index.html">http://stevehollasch.com/cgindex/index.html</A>, has a bunch of useful links,
+though it's starting to suffer a little from url-rot. That said, what is
+nice is that Steve has stored away a number of worthwhile articles at his
+site itself, so they won't get lost. - Eric]
+<P>
+________
+<P>
+I released a small raytracer that now runs on smartphones at:
+<P>
+<A HREF="http://www.yasrt.org">http://www.yasrt.org</A>
+<P>
+- Emmanuel Viale (emmanuel(.)viale(at)wanadoo(.)fr)
+<P>
+____
+<P>
+It also had to happen someday, a ray tracer in Perl:
+<P>
+<A HREF="http://perl.plover.com/RayTracer/">http://perl.plover.com/RayTracer/</A>
+<P>
+____
+<P>
+And a ray tracer in six different languages, including LISP:
+<P>
+<A HREF="http://www.ffconsultancy.com/free/ray_tracer/languages.html">http://www.ffconsultancy.com/free/ray_tracer/languages.html</A>
+<P>
+________
+<P>
+As mentioned <a href="rtnv17n1.html#art1">last issue</a>, the LZW (GIF) patent has expired everywhere,
+as of July 7, 2004: <A HREF="http://www.unisys.com/about__unisys/lzw/">http://www.unisys.com/about__unisys/lzw/</A>. I mention it
+again only because I ran across a wonderful passage at
+<A HREF="http://news.com.com/2100-1032-1014236.html">http://news.com.com/2100-1032-1014236.html</A>, worth recording for posterity:
+<P>
+But Unisys credited its exertion of the LZW patent with the creation of
+the PNG format, and whatever improvements the newer technology brought
+to bear.
+<P>
+&quot;We haven't evaluated the new recommendation for PNG, and it remains to
+be seen whether the new version will have an effect on the use of GIF
+images,&quot; said Unisys representative Kristine Grow. &quot;If so, the patent
+situation will have achieved its purpose, which is to advance
+technological innovation. So we applaud that.&quot;
+<P>
+________
+<P>
+So what's your favorite mathematical theorem? Here's a list:
+<P>
+<A HREF="http://personal.stevens.edu/~nkahl/Top100Theorems.html">http://personal.stevens.edu/~nkahl/Top100Theorems.html</A>
+<P>
+Personally, I love Pick's Theorem, it applies so nicely to pixel grids and
+is surprising and elegant:
+<A HREF="http://www.mcs.drexel.edu/~crorres/Archimedes/Stomachion/Pick.html">http://www.mcs.drexel.edu/~crorres/Archimedes/Stomachion/Pick.html</A>
+<P>
+________
+<P>
+Dictionary of Algorithms and Data Structures, from NIST:
+<P>
+<A HREF="http://www.nist.gov/dads/">http://www.nist.gov/dads/</A>
+<P>
+________
+<P>
+A wiki about computing effects of lighting:
+<P>
+<A HREF="http://lightingwiki.com/FrontPage">http://lightingwiki.com/FrontPage</A>
+<P>
+________
+<P>
+<A HREF="http://webexhibits.org/causesofcolor/0.html">http://webexhibits.org/causesofcolor/0.html</A>
+<P>
+I like the concept of &quot;15 causes of color&quot;. If we could only stamp out
+just one of these causes in our lifetime! Actually, the homepage now talks
+about just 3 causes of color: <A HREF="http://webexhibits.org/causesofcolor">http://webexhibits.org/causesofcolor</A>.
+Anyway, a pretty site.
+<P>
+Interestingly enough, the Cornell Box gets used in real-life:
+<A HREF="http://webexhibits.org/causesofcolor/1H.html">http://webexhibits.org/causesofcolor/1H.html</A>, and you can even change the
+lighting (in a javascripty way). Gosh, it seemed so much bigger in virtual
+reality. (Actually, I was around when the first physical Cornell box was
+made, around 1984, for perceptual experiments; I recall it was maybe two
+or three feet high).
+<P>
+________
+<P>
+A triangle mesh library that is GPL'ed and looks useful:
+<A HREF="http://www.cs.princeton.edu/gfx/proj/trimesh2/">http://www.cs.princeton.edu/gfx/proj/trimesh2/</A>
+<P>
+________
+<P>
+I've heard good things about the Farbrausch demo tool, at
+<A HREF="http://www.farb-rausch.com/">http://www.farb-rausch.com/</A> (&quot;demo&quot; meaning &quot;those tiny graphics effects
+programs set to music&quot;). (recommended by Vincent Scheib)
+<P>
+When I tried, this site's download links failed. Some googling turned up
+one that worked:
+<A HREF="http://www.softonic.de/file.phtml?&id_file=35387&action=view&view=downloads">http://www.softonic.de/file.phtml?&amp;id_file=35387&amp;action=view&amp;view=downloads</A>
+<P>
+I looked over the tutorial briefly (run file werkkzeug1.exe). One cool
+thing here is that they have a pretty elaborate way of generating
+procedural textures (which is the key to having tiny demos, procedural
+everything). The program looks quite involved, but just walking through
+the tutorial gave me an appreciation of some of the elements that go into
+making a demo.
+<P>
+________
+<P>
+Just cool links (most of these are in my new public bookmarks list at
+<A HREF="http://del.icio.us/erich666">http://del.icio.us/erich666</A>):
+<P>
+<A HREF="http://www.pacifict.com/Story/">http://www.pacifict.com/Story/</A> - best skunkworks story ever. Ken Turkowski
+comments on the product itself: &quot;It's great! It's not just graphing, you
+know. It's also algebra and various kinds of differential calculus. One of
+the neatest things is direct manipulation on symbols, i.e. if you have an
+equation and want to move a term from one side of the equals sign to
+another, you just drag it over!&quot;
+<P>
+<A HREF="http://www.krazydad.com/visco/">http://www.krazydad.com/visco/</A> - a rainbow of sci-fi magazine covers. Cute.
+<P>
+<A HREF="http://www.michaelbach.de/ot">http://www.michaelbach.de/ot</A> - many great illusions here, old and new. My
+current favorite mind-fry:
+<A HREF="http://www.michaelbach.de/ot/col_lilacChaser/index.html">http://www.michaelbach.de/ot/col_lilacChaser/index.html</A>
+<P>
+<A HREF="http://www.ianrowland.com/MiscPages/Mrangryandmrscalm.html">http://www.ianrowland.com/MiscPages/Mrangryandmrscalm.html</A> - a new
+illusion. Squint. (from Ronen Barzel)
+<P>
+<A HREF="http://www.gigapxl.org/">http://www.gigapxl.org/</A> - Imagine a single camera that takes a photo that's
+equivalent to 600 professional photos (or 10,000 TV screens) in terms of
+resolution. Pretty wild; check out the website: photos of cityscapes,
+which they then zoom in on a single window. (from Michael Cohen)
+<P>
+<A HREF="http://www.rendermagazine.com/">http://www.rendermagazine.com/</A> - Read the URL before clicking. What could it
+be? Wrong. (from Neil Gatenby)
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Newish Books</A></FONT>, by Eric Haines
+</H4>
+There are books, books, and more new books. Here's an abbreviated list of
+ones that caught my eye this past year or so:
+<P>
+&quot;Fundamentals of Computer Graphics&quot; by Peter Shirley et alia,
+<A HREF="http://www.amazon.com/Fundamentals-Computer-Graphics-Peter-Shirley/dp/1568814690?tag=somebooksilike">http://www.amazon.com/Fundamentals-Computer-Graphics-Peter-Shirley/dp/1568814690</A>,
+has come out in a second edition this year. Lots of new material (270
+pages worth), and lots of error cleanup of the first edition. This book
+seems likely to become the new &quot;Foley &amp; van Dam&quot; for computer graphics
+(though the field has grown so much since that book, &quot;Computer
+Graphics: Principles and Practice,&quot; that it's a different world). It
+looked worthwhile from my brief skim of the Table of Contents. Currently
+it is on the top of my pile of books, daring me to read it at lunchtime
+instead of the backlog of Wireds and Computer Gaming Worlds clogging up
+my valise.
+<P>
+&quot;Graphics Tools: The JGT Editors' Choice&quot;, edited by Ronen Barzel,
+<A HREF="http://www.amazon.com/exec/obidos/tg/detail/-/1568812469?tag=somebooksilike">http://www.amazon.com/exec/obidos/tg/detail/-/1568812469</A>,
+is a collection of articles by the editors of the &quot;journal of
+graphics tools&quot; of what they consider their favorite articles
+published over the past nine years. This could be thought of as the
+sixth &quot;Graphics Gems&quot; book, in some ways (since the goal of the journal
+is to publish tools for computer graphics, like Graphics Gems). Yes, I'm
+an editor; no, I don't get a dime on book sales. If you don't have back
+issues of JGT available to you, I recommend it, as there are some good
+ray tracing articles (and much else) in there.
+<P>
+&quot;Foundations of Multidimensional and Metric Data Structures&quot;, by
+Hanan Samet,
+<A HREF="http://www.elsevier.com/wps/find/bookdescription.cws_home/706187/description#description">http://www.elsevier.com/wps/find/bookdescription.cws_home/706187/description#description</A>.
+Each time I've run into Hanan at SIGGRAPH he's been working on this book,
+year after year. It's finally going to press in November. It looks to be
+pretty darn comprehensive, with a number of data structures relevant for
+computer graphics and for other multidimensional search and sort areas.
+He says this book will actually complement, not replace, his (now out-of-print)
+books on the topic from the late 80's.
+<P>
+Those are the ray tracing related books that come to mind. Of course, Pharr
+and Humphrey's &quot;Physically Based Rendering&quot; book has been out for more than
+a year now, and why don't you have one yet? See the last <a href="rtnv17n1.html#art1">RTN</a> for my
+brief review.
+<P>
+There were also some other graphics books that came out in the past year
+that appealed to me, but since they're not ray tracing related I won't dwell
+on them. &quot;GPU Gems 2&quot;, edited by Matt Pharr (does he ever sleep?), has a lot
+of chewy material. I particularly appreciated seeing articles like John Owens'
+&quot;Streaming Architectures and Technology Trends.&quot; Samples at
+<A HREF="http://developer.nvidia.com/object/gpu_gems_2_home.html">http://developer.nvidia.com/object/gpu_gems_2_home.html</A>.
+<P>
+&quot;Real-Time Collision Detection&quot;, by Christer Ericson,
+<A HREF="http://www.amazon.com/exec/obidos/tg/detail/-/1558607323?tag=somebooksilike">http://www.amazon.com/exec/obidos/tg/detail/-/1558607323</A>.
+It covers the topic thoroughly, and keeps focused on doing this task
+at interactive rates.
+<P>
+&quot;Practical Linear Algebra: A Geometry Toolbox&quot;, by Gerald Farin and Dianne
+Hansford, <A HREF="http://www.amazon.com/gp/product/1568812345?tag=somebooksilike">http://www.amazon.com/gp/product/1568812345</A>.
+This is essentially a second edition of &quot;The Geometry Toolbox&quot;. It's a
+nice, approachable book on linear algebra, with many illustrations. I
+appreciate the authors' attempts to build up an intuition of what the
+various equations mean. For most graphics professionals the book won't be
+anything new until about Chapter 7, &quot;Eigen Things&quot; (and as I've said
+before, how can you dislike a book with a chapter title like that?). The
+only unfortunate bit is that the postscript files that go along with the
+book are no longer available on the web, the URL is dead last I checked.
+<P>
+&quot;High Dynamic Range Imaging&quot;, by Erik Reinhard, Greg Ward, Sumanta
+Pattanaik, and Paul Debevec,
+<A HREF="http://www.amazon.com/gp/product/0125852630?tag=somebooksilike">http://www.amazon.com/gp/product/0125852630</A>. Coming out
+soon. I've gotten a glimpse at Paul's section. Lots of practical advice
+and theory all pulled together, putting in all those useful bits that
+can't fit (and normally don't get presented) in articles; just what a book
+is for.
+<P>
+I'm interested to page through &quot;Real-Time Cameras&quot;, by Mark Haigh-Hutchinson,
+<A HREF="http://www.amazon.com/exec/obidos/tg/detail/-/0123116341?tag=somebooksilike">http://www.amazon.com/exec/obidos/tg/detail/-/0123116341</A>.
+It is more for video-game programmers, discussing techniques of
+camera control and response to occlusion from nearby walls, etc. I'm seen
+this done poorly enough times that I'm interested to learn any knowledge he
+has to impart.
+<P>
+&quot;Advanced Game Development with Programmable Graphics Hardware&quot;,
+by A. Watt and F. Policarpo,
+<A HREF="http://www.amazon.com/exec/obidos/tg/detail/-/156881240X?tag=somebooksilike">http://www.amazon.com/exec/obidos/tg/detail/-/156881240X</A>.
+The first four chapters look to be a good treatment of theory and practice
+concerning the GPU, then about a fifth of the book is focused on Policarpo's
+Relief Texture Map research (which does look nice, but you might end up
+learning more than you want about the technique). Then a quick effects chapter,
+and the last half of the book is on animation and game engine architecture.
+<P>
+&quot;Mathematical Illustrations&quot;, by Bill Casselman,
+<A HREF="http://www.math.ubc.ca/~cass/graphics/manual/">http://www.math.ubc.ca/~cass/graphics/manual/</A>. Pretty wild book, mainly
+talking about controlling Postscript by using its programming language,
+including how to draw in 3D with hidden surfaces. It looks like a fun
+way to learn about Postscript's power. Also, the whole darn book is free
+online!
+<P>
+&quot;Production Rendering: Design and Implementation&quot; edited by Ian
+Stephenson, <A HREF="http://www.amazon.com/gp/product/1852338210?tag=somebooksilike">http://www.amazon.com/gp/product/1852338210</A>.
+I haven't seen this one yet, but it's on my wish list; now you know what
+to get me for Christmas. From one of the authors: &quot;This is the first book
+dedicated to teaching how to write your own RenderMan-compliant (or
+similar) production renderer. It includes separate chapters on shader
+compilers and shader interpreters, and presents a single architecture for
+incorporating ray tracing and global illumination into a micropolygon
+framework.  It was written more or less equally by seven experienced
+graphics software developers, each of whom have published a renderer.  The
+other authors: Mark Elendt (Mantra), Rick LaMont (RenderDotC), Jacopo
+Pantaleoni (Lightflow), Scott Iverson (AIR), Paul Gregory (Aqsis), and
+Matthew Bentham (RenderDrive).&quot;
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+More on Randomly Sampling Bounding Volumes</A></FONT>, by Mateu Sbert (mateu(at)ima(.)udg(.)es)
+</H4>
+I've just happened to browse the Ray Tracing News, Volume 17, Number 1. In
+the article <A HREF="http://www.acm.org/tog/resources/RTNews/html/rtnv17n1.html#art5">&quot;Randomly Sampling Bounding Volumes&quot;</A> is an
+algorithm to obtain uniformly distributed lines within a convex volume:
+<P>
+<OL>
+<LI>Choose a random face based on area
+<LI>Choose a random point uniformly on that face
+<LI>Choose a random direction with respect to normal N
+</OL>
+</PRE>
+<P>
+I think, for the sake of clarity, point 3 should be changed to:
+<P>
+<OL START=3>
+<LI>
+Choose a cosine distributed random direction with respect to normal N
+</OL>
+<P>
+I'm sure this is what authors wanted to say, because (if I've checked
+well) the line generation they give below the algorithm corresponds to
+this cosine generation.
+<P>
+I have with my students already published in several places how to sample
+global lines from bounding boxes. You can find it, for example, in:
+<P>
+Francesc Castro, Mateu Sbert, &quot;Application of quasi-Monte Carlo sampling
+to the multi-path method for radiosity&quot;, International Conference on Monte
+Carlo and Quasi Monte Carlo Methods '98, Claremont (USA), 1998, published
+by Springer Verlag
+<P>
+where I have described the above method, and more recently my tutorial
+(with Andrey Iones and S.Zhukov) on Integral Geometry in Eurographics
+2001, Manchester.
+<P>
+It can be easily proven that the selection of pairs of random points on a
+sphere is a very particular case of the above technique.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Real-Time GPU Spheres</A></FONT>, by John Stone (johns(at)ks(.)uiuc(.)edu)
+</H4>
+I've been having fun with ray tracing again recently.  I've been using
+OpenGL programmable shading in the new version of the molecular
+visualization tool I develop for a while, as a means of getting higher
+quality rendering (fragment lighting and such), and very recently I
+implemented a new shader that does ray tracing as a means of rendering
+spheres.  Rather than rendering the sphere using several hundred
+triangles, my code draws the sphere bounding box, and the vertex and
+fragment shaders collectively perform the necessary ray-sphere
+intersection tests, Z-buffer depth evaluations, and shading calculations
+necessary to mix the ray-traced spheres with polygonal objects drawn with
+regular OpenGL operations. Here's a test image from one of my early
+versions:
+<P>
+<A HREF="http://www.ks.uiuc.edu/Research/vmd/images/collections/openglshader/2004/spheretrace.jpg">http://www.ks.uiuc.edu/Research/vmd/images/collections/openglshader/2004/spheretrace.jpg</A>
+<P>
+The ray traced spheres outperform polygonal spheres using the fragment
+lighting in most cases, and they have the advantage of always looking
+spherical in profile regardless of their on-screen size, which is nice
+when you're displaying molecules.
+<P>
+One could ray trace any object inside of the bounding box, with just a few
+changes to the code, but spheres and cylinders are the main object types
+of interest in molecular visualization.  With some work, I think I can
+gain another 2x or more in performance, which would give the ray traced
+spheres a significant advantage over polygonal spheres.  My plan is to
+change the code to use a billboard rather than a full bounding box.  The
+billboard would always be oriented so it's normal aligns with the view
+direction, and with this I should be able to eliminate the 2-times
+overdraw that occurs with the axis aligned bounding box method.  Beyond
+that I think I can also make the shaders generally more efficient with a
+little work.
+<P>
+Once I'm done with the spheres, I'll implement cylinders, and after that
+I'll probably write a ray-casting volume renderer...  Exciting stuff!
+<P>
+[Unlike other similar work I've seen, this one actually has perspective
+distortion, i.e., it's not just an orthogonal projection of the spheres. -
+EAH]
+<P>
+Yeah, in fact my code has to work for both perspective and orthographic
+projections since this is going into a real application and not just a
+cute one-time siggraph demo or something :-)
+<P>
+I'd been planning to do some sort of sphere rendering trick using GLSL for
+about 6 months, and finally got all of the kinks worked out of my main
+GLSL shader (lots of NVidia, ATI, 3DLabs driver bugs to sidestep along the
+way).  Earlier this fall I was thinking I'd do something much simpler than
+this, but I decided to give ray tracing a shot after two of my colleagues
+mentioned they'd been working on similar things with decent results.
+Russell Taylor wrote a nice short paper on rendering non-polygonal objects
+with programmable shading:
+<P>
+<A HREF="ftp://ftp.cs.unc.edu/pub/publications/techreports/04-023.pdf">ftp://ftp.cs.unc.edu/pub/publications/techreports/04-023.pdf</A>
+<P>
+Directly Rendering Non-Polygonal Objects on Graphics Hardware using Vertex
+and Fragment Programs, Russell M. Taylor II, TR04-023, UNC Chapel Hill
+Dept. of Computer Science, 2004.
+<P>
+He's got a more sophisticated implementation than I have, though I think
+mine is faster (as a result of simplicity) and better suited to my
+particular purpose since my implementation is very closely tied to my
+application.  Russell is using Cg for his stuff. Rodrigo Toledo at
+INRIA/Nancy has a cool piece of code he's written for ray tracing large
+factory models using the ARB vertex/fragment shader stuff. His
+implementation ray traces spheres, cylinders, and torii, and he's spent a
+lot of effort on tuning his performance as well as getting good results
+with the limited floating point precision in some programmable pipelines. See
+<A HREF="http://www.loria.fr/~levy/php/article.php?pub=../publications/papers/2004/ray_tracing_gpu">http://www.loria.fr/~levy/php/article.php?pub=../publications/papers/2004/ray_tracing_gpu</A>
+<P>
+[I commented: It's a kind of wild approach; does it work for anything but
+bunnies and other soft stuff without hard edges?]
+<P>
+Their method definitely works for much more than bunnies. :-) Their
+approach is very similar to what I'm doing, but they've done some extra
+work exploring the cost of the &quot;empty&quot; parts of the bounding geometry,
+point, or billboard. Rodrigo has a nice demo which renders a huge factory
+model interactively using this ray tracing technique.  His large model is
+rendered with spheres, cylinders, torii, and triangles as I recall.  He
+and I are planning to see if we can create a molecular surface rendering
+implementation based on this same approach, though that's a much more
+complex problem for various reasons.
+<P>
+____
+<P>
+I asked John if anything has happened since he wrote me (which was around
+January 2005). He replied:
+<P>
+In the months that have passed since our emails, the code I wrote about
+was released in VMD 1.8.3 and a large number of my VMD users benefit from
+the GLSL-based GPU sphere ray tracing when making screenshots of molecules
+or quick movie renderings when they don't want to take the time to run one
+of the various software renderers that VMD can export molecular scenes to.
+<P>
+As is always seemingly the case, the final version of my GPU sphere ray
+tracing code that's in the shipping program runs a bit slower than the
+development version did because I had to add various workarounds for bugs
+in the GLSL implementations that are in the field.  Also, my initial
+shader implementations didn't have all of the 3-D texturing code and other
+features that the final version has.  The performance is good, but could
+still be improved if I broke the implementation into separate shaders for
+perspective and orthographic projections, 3-D texturing on/off, etc. Now
+that there are better shader performance analysis tools coming out for
+GLSL and the drivers are much improved, I plan to revisit the performance
+issues in my implementation and see what I can do to improve on it.
+<P>
+The fastest ray tracing implementations I've seen to date were hand-coded
+GPU assembler programs that take great pains to do just the right things
+for the target video board.  My implementation doesn't beat these, but
+it's flexible and the ray tracing is only part of what the shader is doing
+so it's hard to compare apples-to-apples when I look at my implementation
+versus the others that are out there.
+<P>
+I've recently gotten various queries from a few CS grad students
+interested in working on shaders that draw perspective correct spheres in
+other ways, it'll be interesting to see what other GPU methods people come
+up with.
+<P>
+I had hoped to write a GPU-based ray casting volume renderer by this time,
+but other development tasks have distracted me from my shader work
+recently and I probably won't get that done until next year.  Maybe
+that'll make an interesting topic for a future RTN if I do anything
+interesting/unique there.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Image Comparison</A></FONT>, by Chris Cason (Chris(.)Cason(at)povray(.)org), Eric Haines, and Greg Ward (gward(at)lmi(.)net)
+</H4>
+We're currently part-way through the submission of POV-Ray as a SPEC
+benchmark. One of the things the SPEC committee seem to want is a way to
+quantify if the output of the benchmark on a given platform is 'valid'. By
+'valid' I mean that if it is not too 'different' from the reference image.
+<P>
+There are some problems with rounding on some platforms, depending on the
+compilation options, because we use double-precision to integer
+conversions in our 3d noise hash function.
+<P>
+Of course the question is, how do we define 'too different'? We could
+simply say that if any pixel is different by any amount, then it's counted
+in the total of different pixels.
+<P>
+However I am wondering if there is a more formal way to evaluate the
+differences, e.g. by looking at how much a given pixel differs from the
+reference pixel, and then somehow summing this into some sort of result.
+<P>
+Do you know of a specific means of doing this which can give us a number
+as a e.g. 'percentage difference' or something, and which has (or would
+have, if we used it) reasonable industry acceptance?
+<P>
+____
+<P>
+Eric replied:
+<P>
+Usually a &quot;sum of squares&quot; approach is the simplest method I know,
+i.e. take the difference between what's expected and what you got and
+square it for the pixel, add these differences up to get a total. I
+don't know if there's a formal way of expressing this; Greg, do you?
+<P>
+Greg might also be able to recommend a better metric. For example,
+Visual Difference Predictor, a metric Scott Daly came up with that
+seems to have good correlation with the perceptual difference (vs.
+pure numerical difference) of two images. I don't think this measure
+is appropriate for your task, you probably want something that's
+simpler since your goals are more conformance testing of the code than
+actual visual result. Anyway, Greg, is there some &quot;official&quot; way of
+expressing or normalizing some simple metric like distance-squared for
+image comparison?
+<P>
+____
+<P>
+Greg Ward replied:
+<P>
+Mean squared error (MSE) is frequently used to compare images, though it
+has a poor correlation to visible differences. A better pixel-wise
+comparison is to use CIE Delta E* 1994, which is a complicated but
+manageable formula to compute color differences. Better still is Scott
+Daly's VDP metric, though it is rather challenging from an implementation
+standpoint. (I don't have an implementation myself, else I'd share it
+with you.) As Eric points out, this may be overkill for conformance
+testing, anyway, though you might consider taking the maximum error rather
+than the mean if you are looking for bugs. The only problem is if the
+round-off concerns the locations of samples, in which case your maximum
+error could be enormous. The eye doesn't care if an object moves one
+pixel to the left, but any pixel-wise comparison will show this up as a
+huge difference.
+<P>
+Your biggest problem may be with your random number generator, which you
+may wish to disable or replace with a low-discrepancy sequence. Even then,
+if POV-ray is like Radiance, round-off error in a test to determine which
+rays to trace can throw everything off if the random numbers are a simple
+sequence, since you will get out of step between machines.  All
+correlations are lost at that point.  That's why I would recommend either
+turning the random number generator off (i.e., returning 0.5 every time)
+or keying the sequence off pixel location or something repeatable.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+Plane Equations of a Tetrahedron</A></FONT>, by Paul Kahler (phkahler(at)wowway(.)com)
+</H4>
+How to find the plane equations of a tetrahedron given the vertices.
+<P>
+There is an extremely elegant way to solve the problem. Please put this
+in RTN.
+<P>
+1) A point/vertex can be represented by a column vector [x,y,z,1].
+2) A plane equation  ax+by+cz+d=0 can be represented by a row vector
+[a,b,c,d].
+3) A point can be plugged into (tested in) a plane equation by taking the
+product of these (plane*point).
+4) A tetrahedron can be represented by a 4x4 matrix whose columns are its
+vertices.
+5) A tetrahedron in this point-form can be transformed by multiplication
+with standard transform matrices.
+6) A tetrahedron can also be represented by a 4x4 matrix whose rows are
+the plane equation vectors.
+7) A tetrahedron in this plane-matrix form can be transformed similar to
+the point version, as I recall, you need to use the inverse transform and
+perhaps multiply on the other side?
+<P>
+Now the magic:
+<P>
+8) The inverse of the point-tetrahedron-matrix is the plane-tetrahedron-
+matrix. You can verify this by plugging the points into the resulting
+plane equations. All 16 combinations can be done by multiplication of the
+plane and point matrices. Since the result is an identity matrix (by
+definition of the inverse) we see that 3 points lie on each plane. We also
+see that the plane equations are scaled such that the point not contained
+in the plane produces a value of 1 when taking the product. This indicates
+that the plane normals (a,b,c of each row) are pointing inward.
+<P>
+I believe two more things happen that are really nice:
+<P>
+9) The barycentric coordinates (w,x,y,z) of a point inside the tetrahedron
+can be determined by multiplying the plane-tetrahedron-matrix by the
+point. Obviously if the point is on one of the faces, one of these
+coordinates is zero. I believe the plane equations are such that it all
+just works out - you get your point as a linear combination of the 4
+vertices.
+<P>
+10) All of this works in 2D as well.
+<P>
+I suspect the points can be found from plane equations in a similar way,
+but they would not have a W coordinate of 1 unless you scaled the plane
+equations properly first - or divide by W after. Obviously with the
+scaling above, the points are simply the inverse of the planes.
+<P>
+So my solution to the original question: Throw the points into a matrix
+and invert. Beautiful? Profound? Decide for yourself, but I think so.
+<P>
+________
+<P>
+I passed this on to Pat Hanrahan (hanrahan(at)cs(.)stanford(.)edu), who comments:
+<P>
+That's a neat result that I am well aware of. I use the 2D version all the
+time. Projective geometry and homogenous coordinates are sooo cool!
+<P>
+One minor point. Wherever he says &quot;inverse&quot; you can use the adjoint. That
+makes the geometry particularly elegant since the adjoint is a co-factor
+and that has a simple geometric interpretation. Also, the adjoint always
+exists.
+<P>
+Here is a slide that I go over in class that somewhat illustrates these
+ideas:
+<P>
+<A HREF="http://www.graphics.stanford.edu/courses/cs348b-04/lectures/lecture2/walk013.html">http://www.graphics.stanford.edu/courses/cs348b-04/lectures/lecture2/walk013.html</A>
+<P>
+________
+<P>
+Paul comments:
+<P>
+Pat is correct that you can use the adjoint instead of the inverse, the
+division just multiplies through all 4 plane equations by 1/determinant.
+However the scaling that you get from the inverse is very interesting. I
+believe you'll only have a zero determinant if the tetrahedron is
+degenerate (all points in a plane) and I suspect the determinant is
+actually (equal?) closely related to the volume of the tetrahedron, which
+means an inverse will by fine for any meaningful tetrahedron. It's not
+much more math when you have the adjoint already.
+<P>
+I have considered some interesting uses for ones that are not well formed.
+For example, it should be possible to negate the '1' of one vertex to
+create a triangular viewing frustum - truncated by the tetrahedron. This
+is really why I wanted to find a nice tetra-tetra intersection method.
+Beam tracing then becomes a bunch of tetrahedron intersection tests.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art8">
+Ray/Tetrahedron Intersection</A></FONT>, by Paul Kahler (phkahler(at)wowway(.)com)
+</H4>
+[Paul followed up with this article. It's fairly standard, basically the idea
+is to consider the tetrahedron as a set of planes. My old ray/polyhedron code,
+at <A HREF="http://www.acm.org/pubs/tog/GraphicsGems/gemsii/RayCPhdron.c">http://www.acm.org/pubs/tog/GraphicsGems/gemsii/RayCPhdron.c</A>, does the same
+thing. However, this article dovetails nicely with Paul's previous article, so
+here it is. - Eric]
+<P>
+The ray tetrahedron intersection can be done as follows:
+1) Put all vertices in as columns in a matrix. (Tv for tetrahedron
+vertices as columns)
+2) Invert to get Tp (Tetrahedron plane equations as rows)
+3) Using the ray equation R=P+Lt plug R into the plane equations:
+</PRE>
+<P>
+Tp*R = 0 (where * is product and R is a column vector)
+<P>
+Expand:
+<P>
+Tp*P + Tp*Lt = 0
+<P>
+t = -(Tp*P) / (Tp*L)
+<P>
+Now this is really not quite standard notation, t in this case is a 4
+vector containing the distances to the 4 planes. You need to do the divide
+as 4 separate scalar divisions, the matrix notation is just a handy way to
+do 4 dot products at a time.
+<P>
+Now given the 4 distances, you may treat the tetrahedron as the
+intersection of 4 half-spaces defined by the planes. The ray will enter or
+exit each half space at the point of intersection. We can determine
+whether it enters or exits by taking the dot product of the surface normal
+and the ray direction; this has already been done as Tp*L. Because it is
+a convex object, we can take the farthest distance to an entry point and
+the closest distance to an exit point (this defines the extent of the
+intersection). If the exit is beyond the entry point, there is no
+intersection. Or, if ANY exit point lies in front of ANY entry point,
+there is no intersection. This test feels like there should be some sort
+of handy matrix method behind it, but I don't know.
+<P>
+I believe this method requires fewer calculations than Pluecker coordinates
+(not by much) but it does use division, which I suspect can be
+eliminated. Storing the inverse matrix requires less storage than Pluecker
+coordinates, too. In fact, because of the relation between the matrices,
+you may choose to only store one of them (point or plane) depending on how
+you expect them to be used the most.
+<P>
+I didn't like the Pluecker coordinates method - it is what I expected after
+reading the ray-triangle intersection. Very mechanical /procedural. This
+matrix method suffers from the same ugliness in the final part where you
+compare a lot of distances and check a bunch of signs. Not only does all
+that condition checking run slow, it's not very pretty. I like things like
+the ray-sphere intersection where the sign of a calculation tells you if
+they intersect or not. I still think ray-tetrahedron may have such a test,
+and that it will involve a matrix representation of the tetrahedron. But I
+have not found any such result... yet.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art9">
+K-d Tree Comments</A></FONT>, by Ingo Wald (wald(at)sci(.)utah(.)edu), Gordon Stoll (gordon.stoll(at)intel(.)com),
+Vlastimil Havran (havran(at)mpi-sb(.)mpg(.)de), and Eric Haines
+</H4>
+[I wrote about k-d trees last issue, having had fun with Perl programs to
+see how these things are best split under various circumstances (see
+<A HREF="http://www.acm.org/tog/resources/RTNews/html/rtnv17n1.html#art8">RTNv17n1</A>). I did
+this mostly for my own entertainment, as it's a nice little problem that's
+fun to think about. It turns out I had been reinventing the wheel (though
+one or two of my results are new, AFAIK). Vlastimil Havran let me know he
+wrote about this extensively in his thesis, which can be downloaded at
+<A HREF="http://www.cgg.cvut.cz/~havran/phdthesis.html">http://www.cgg.cvut.cz/~havran/phdthesis.html</A>. Check out pages 49-91 in
+particular. I admit I haven't read his thesis, and I should! (Well, for
+this article I at least did a skim...). There's lots of interesting bits
+in there, judging from talking with him and others at SIGGRAPH. - EAH]
+<P>
+Ingo Wald (wald(at)mpi-sb(.)mpg(.)de) writes:
+<P>
+There's a thick chapter about the cost function for splitting a BSP
+node in Vlastimil Havran's PhD thesis, and more recently (though thinner)
+in mine ;-) (<A HREF="http://graphics.cs.uni-sb.de/~wald/phd.pdf">http://graphics.cs.uni-sb.de/~wald/phd.pdf</A>).
+<P>
+The same ideas can also be used for accelerating photon mapping, see
+<A HREF="http://www.sci.utah.edu/~wald/Publications/webgen/2004/VVH/download//vvh.pdf">http://www.sci.utah.edu/~wald/Publications/webgen/2004/VVH/download//vvh.pdf</A>,
+a paper we've just had accepted at this year's (2004) Eurographics.
+<P>
+There is a more optimal algorithm for building the k-d tree. Sorting in
+every step - as you correctly mention - is O(n log n), so the total
+complexity is O(huge). You can, however, build the entire tree in O(n log
+n), which is asymptotically optimal. The algorithm for that is sketched in
+the vvh paper I've pointed you to - it's for points only, but applies
+(almost) the same for non-point primitives.
+<P>
+On the article itself:
+<P>
+I personally find the argumentation with the four probabilities (Pa, Pb,
+Pab, Pba) a little bit confusing, and overly complex. The original
+argumentation with C = C_trav + C_isec( P(a)C(a) + P(b)C(b)) is much
+easier to understand and implement. Thus, I don't hope anybody wants to
+implement the approach based on the much more complex formulae used in the
+text. On the other hand, that way of calculating has brought up some
+interesting facts that I did not know myself before, either. Like, for
+example, that the probability for hitting the plane doesn't change
+wherever you put it, or that in the one example it doesn't matter where
+exactly between 0.4 and 0.6 you place the split plane (which was
+completely surprising to me, and I'm still sure it won't hold if you
+consider the next-level split).
+<P>
+____
+<P>
+I have a bunch of other things to say, some of them even interesting:
+<P>
+At SIGGRAPH 2005 in the Real-Time Ray Tracing course, Gordon Stoll gave a        
+fascinating talk about how to make an extremely efficient ray tracing.        
+This presentation, and many others, is available at the OpenRT project        
+site: <A HREF="http://www.openrt.de/Siggraph05/UpdatedCourseNotes/course.php">http://www.openrt.de/Siggraph05/UpdatedCourseNotes/course.php</A>. I        
+didn't expect too much from the talk: something about using SSE for        
+shooting four rays at a polygon, some talk about cache misses, the usual        
+new tricks for wringing more performance from the CPU. These techniques        
+*were* covered, and it was impressive how much they could help. For        
+example, due to ray coherence, about 95% of the rays in one of these SSE        
+packets actually all had the same result (all hits, or all misses), so the        
+gain from SSE was 3.5x or more. The Saarbrucken folks have said about the        
+same thing for some time, but it was nice to hear this independently        
+verified. Squishing a node of a k-d tree into 8 bytes resulted in a nice        
+speed-up due to fitting the cache nicely. But he went on from there, with        
+tip after tip. Philipp Slusallek (who has done much of this original        
+research in the Saarbrucken group with Ingo Wald, Vlastimil Havran, and        
+others, and who has a company on the side, <A HREF="http://www.intrace.com/">http://www.intrace.com/</A>, that        
+is selling such a ray tracer to VolksWagen and others) half-jokingly        
+commented to me, &quot;He's telling all the secrets!&quot; Other than more CPU        
+tricks like stressing memory coherence when making the k-d tree        
+acceleration structure, avoiding recursion and stack operations, etc., the        
+interesting thing to me was how he stressed doing locally optimal splits        
+of each node in the tree.        
+<P>
+Stoll confirms what Havran and others have researched: this sort of local
+optimization makes a huge difference in the speed of ray traversal. This
+is a non-obvious result, however: on a ray tracer that hasn't had a lot of
+optimization of its various elements, it's a bit hard to tell what's
+really worth doing. The cost function's fixed cost values (cost to
+intersect a node, to traverse a child, to intersect a polygon, etc.)
+affect the cost function itself. So faster results on an experimental ray
+tracer can sometimes be misleading. For example, say your ray/polygon test
+is terrible compared to the rest of your code. In this case, algorithms
+stressing avoiding testing a ray against a polygon will be better for your
+system, but only because your original code stinks.
+<P>
+Stoll's group has worked very hard to optimize all the critical elements
+of their ray tracer. So hearing that a better k-d tree really makes a
+difference is exciting to me; this was supposed to be a solved problem
+back in 1992, that you just use some sort of simple BSP-tree (or nested
+grids, or bounding volume hierarchy) and it'll be good enough. Not true:
+more optimization can really matter, it gives a tree that's several times
+faster than a mediocre tree. Nice! The locally optimal trees created are
+quite deep (50-100 levels), many levels go by where the various splitting
+planes don't so much split as chop off hunks of space from a node making
+it bound the stuff inside the node more tightly, giving &quot;stringy&quot; trees
+where only one child continues to get subdivided, and child nodes ending
+with 2 triangles per cell. Another interesting tidbit of Gordon Stoll's
+talk: lazy evaluation is not such a good idea, since it ruins the cache's
+performance.
+<P>
+My observation on this optimized process is that it reminds me of bounding
+volume hierarchies. You can sort-of think of each splitting plane being
+generated as adding a plane of a bounding box. For example, imagine a
+trivial scene: two identical blobs some distance apart along a single
+axis, say the X axis. The global bounding box, in this case, has four
+sides, the Y and Z faces, that touch both blobs; each blob touches a
+single X face:
+<P>
+<PRE>
++-------------------------+
+|   #                   # |
+|####                #### |
+|#  ##               #  ##|
+| ###                 ### |
++-------------------------+
+X axis--&gt;
+</PRE>
+<P>
+With bounding volume hierarchies say a bounding box is put around each
+blob. So the bounding volume hierarchy is one global box containing two.
+What optimized k-d trees do in this situation is to find the edges of
+these two blob objects, which is where you want to test to put planes.
+There are only two planes that need to be checked, with these planes
+corresponding to the &quot;new&quot; faces of the blob bounding box hierarchy:
+<P>
+<PRE>
++-------------------------+
+|   # |             |   # |
+|#### |             |#### |
+|#  ##|             |#  ##|
+| ### |             | ### |
++-------------------------+
+X axis--&gt;
+</PRE>
+<P>
+A trivial example, but what's interesting here is that the k-d tree and
+the bounding box hierarchy have test planes in the *same* locations. The
+k-d tree is more memory efficient, as you've had to add two just two
+nodes, each with one splitting plane. For the bounding volume hierarchy
+you've had to add two complete bounding boxes. From an efficiency
+standpoint, k-d trees appear to have an advantage. Both k-d trees and BV
+hierarchy have to test the topmost global box. But then the computations
+for k-d trees consist of (at most) two cutting planes; for BV hierarchy
+you have to test two whole bounding boxes. Essentially, k-d trees, in this
+(contrived) case, have the advantage of coherency: 5 of the 6 planes
+forming each child bounding box are shared by the global bounding box. So
+k-d trees just have to test the sixth bounding box face of two boxes,
+while bounding volumes don't get to share intersection results with their
+parent.
+<P>
+You could do a similar analysis on this situation if the two blobs were
+displaced by an X, Y, and Z offset. In this case we've had to make six k-d
+tree cutting planes. Now it's less clear that k-d trees beat bounding
+boxes: sure, the two child bounding boxes have 12 planes total to test,
+and k-d only 6, but there's a bit more overhead in dealing with each plane
+with k-d trees.
+<P>
+Anyway, there are certainly many differences between k-d trees and
+bounding volume hierarchies, but I thought it interesting how they're
+similar in that the optimal k-d trees put planes in the same places that
+bounding boxes do, etc.
+<P>
+There's still more to be done in the area of efficiently forming the k-d
+tree, e.g. how to best form the upper levels of a BSP tree quickly is not
+solved (and I think there's probably no one good answer; it all
+depends...). Stoll pointed out that using Level-of-detail representations
+in ray-tracing is another tantalizing area that turns out to be hard to do
+in some use cases.
+<P>
+To address this first question, efficient k-d tree creation, there are
+basically two approaches I know of: sorting and binning. Say you have a
+million object database. It's a fair amount of work to sort the million
+objects, then test to find which cutting plane (along each of three axes)
+gives the best cost function. Recall that every object has two possible
+cutting planes to test for it, at its extents along each axis, so this
+gives 6 million planes that would need to be tested. Once you split, you
+now have two nodes with around half a million objects each, and each of
+these nodes then potentially needs 3 million plane tests to find the
+optimal split; 6 million tests again for a single level. Even if you use a
+rule of thumb (which Havran shows is worthwhile) of testing for splits
+only along the longest of the three axes, this is still 2 million plane
+tests per level. Havran also points out that you can reduce this by
+another factor of two by finding the object median plane (the plane that
+splits the set of objects' centroids in the middle) and then testing only
+the side of the object that is closer to this median. You're down to a
+full sort and then a million plane cost tests per level, still a
+considerable number.
+<P>
+So one alternative is binning, where you simply run through the objects'
+centroids and toss them into a regularly-space set of bins. For example,
+you can record each object's extents and what bins are overlapped. You can
+then check just the boundaries between the bins to see which of these
+planes is best. You've limited the number of plane tests you do, and
+you've avoided a sort. Gordon Stoll talked about this idea briefly during
+the talk and afterwards in discussions. My discussion of binning here is
+an &quot;off the top of my head&quot; idea, and I'm guessing others have studied
+this more thoroughly (though I don't know of any published results).
+<P>
+Anyway, I believe more research could be done here. The tradeoff in any of
+these systems is what the cost is in forming the tree vs. the speedup
+gained from the tree. This obviously depends on the system's use: if you
+plan on shooting more rays, then more time spent forming a good BSP tree
+may be of use. Having not done any research in this area, I'm sure I'm at
+the baby steps, don't know much stage of understanding what's sensible to
+do.
+<P>
+____
+<P>
+The original version of this text had a discussion about Smits great
+article on ray tracing optimization techniques, at
+<A HREF="http://www.cs.utah.edu/~bes/papers/fastRT/">http://www.cs.utah.edu/~bes/papers/fastRT/</A>. The idea itself is at
+<A HREF="http://www.cs.utah.edu/~bes/papers/fastRT/paper-node12.html">http://www.cs.utah.edu/~bes/papers/fastRT/paper-node12.html</A>. The concept
+for bounding volume hierarchies is that you want to not bother storing the
+hierarchy as a hierarchy in memory, but rather as a long list of boxes and
+surfaces to be intersected. This list contains the whole hierarchy and all
+objects, in depth-first order. If you hit the box, you simply go test the
+next object on the list, be it a box or object, as this is the first child
+of the box. Each box has a single skip pointer: if you miss a box, you use
+the skip pointer to find out what the next object is in the list that
+needs to be tested. By arranging the hierarchy in this way you avoid
+recursion, you minimize storage, and you get excellent memory coherence
+among nearby objects. The cost is that you have to zip through the
+original tree and convert it. But this is done only once, vs. having to
+access parts of the original, inefficient tree for every ray.
+<P>
+About two minutes after sending my text out for comments, I realized this
+sort of thing does not apply to k-d trees, which (if created depth-first)
+already should have memory coherence of nearby nodes, and which have an
+order of evaluation which is view dependent (vs. bounding volumes, which
+normally do not, and so can always be evaluated in a particular order).
+<P>
+____
+<P>
+[...Much give and take among Ingo Wald, Gordon Stoll, Vlastimil Havran,
+and myself omitted here...]
+<P>
+____
+<P>
+Eric writes:
+<P>
+Here's my other random thought for the day: let's say when you found that
+a ray pierced the cutting plane of a kd-tree that you always traversed the
+left one first (regardless if it's a min or max). This of course makes no
+sense for eye/reflection/refraction rays, since the power of the kd-tree
+is that ray walking is implicit. But for shadow rays, which can often make
+up 80% or more of the rays shot in a scene for a classical ray tracer, you
+just want to find any hit, not the closest hit, so traversal order doesn't
+matter. I don't know if there's any possible advantage to doing this with
+kd-trees, it really seems like there isn't, but thought I'd throw it out
+there. Maybe one less compare is needed? Anyway, this is then more like
+Smits' "same order each time" traversal idea.
+<P>
+____
+<P>
+Gordon Stoll replies:
+<P>
+I've thought about this a little, mostly thinking about cache performance
+for shadow rays in general.  There are a bunch of different possible
+orders that you could use for shadow rays.  You could do light-to-
+hitpoint, hitpoint-to-light, fixed order, or even SAH-based probability
+order.  Unfortunately I can think of good and bad cases for all of those,
+depending on the scene and whether you do smart light culling.
+Hitpoint to light is probably a must if you have a big scene with
+occlusion and don't have smart light culling.  Otherwise light to hitpoint
+might be good if you have a lot of occlusion by the lights (like
+fixtures). SAH (surface area heuristic) probability order might be
+interesting, but who the heck knows how that would behave or how you would
+do it, or how much overhead it would have.
+<P>
+Oh, one other comment about the flattened BVH traversal that might not
+come through from Smits's writeup.  The traversal is *so* simple that you
+might profitably eliminate at least one of the unpredictable branches from
+the inner loop (converting into indexed or conditional moves).  Could be a
+significant win, and maybe more so for the SSE packet tracing stuff.  I
+vaguely remember that the Saarland guys tried to do this for kD-tree
+traversal way back when, but there was too much overhead for it to be
+profitable.
+<P>
+_____
+<P>
+In the rundown above I wrote:
+<P>
+&gt; lazy evaluation is not such a good idea, since it ruins the cache's        
+performance.  ...        
+<P>
+Gordon Stoll comments:
+<P>
+Hmm...don't know if I'd put it quite that way.  I guess the real point is
+that the effect of lazy evaluation is...non-obvious :).
+<P>
+Looking at a straightforward depth-first kD-tree builder, think about the
+&quot;frontier&quot; of nodes where the data needed to pick a split is equal to the
+size of the cache (whatever cache).  During the course of building, there
+are piles of cache misses when you're working on nodes above that frontier
+in the tree.  Whenever you cross that frontier, there are *zero* cache
+misses for the entire sub-tree until you pop back above the frontier.
+Deciding to be lazy and stop what you're doing when you're below the
+frontier can only hurt your total memory traffic (can't get better than
+zero :).
+<P>
+It might not hurt as much as that implies, though.  Say a ray hits a chunk
+of the tree that's below the frontier (i.e. smaller than the cache) for
+the first time in the course of the tracing.  In the non-lazy scheme, the
+data is probably not in cache because the whole tree was built up front.
+So you get some misses pulling in tree data.  In the lazy scheme, the data
+needed for building is not in cache, so you get some misses pulling that
+in -- but when you're done the finished tree data is right there in the
+cache :).
+<P>
+This also still leaves the possibility of being lazy above the frontier,
+or changing the way the builder accesses memory in general, or doing lazy
+evaluation for computation rather than bandwidth purposes.
+<P>
+____
+<P>
+Ingo Wald (wald(at)sci(.)utah(.)edu) replies:
+<P>
+There're two important points about building kd-trees lazily.
+<P>
+1.) Assuming high occlusion / depth complexity and/or lots of triangles
+outside the view frustum (in other words: we're seeing only a fraction of
+the triangles), then lazy building will build only a fraction of the kd-
+tree. and this will most likely more than counter the effects of a few
+cache misses here and there, even *if* those should increase. Remember one
+important point: the finest level of the kd-tree has as many nodes as all
+the other ones above summed together! Thus, the impact of not even
+building parts of the kd-tree (which will work best at the leaves) could
+potentially be pretty high.
+<P>
+1.b.) The same actually applies to distributed rendering: in lazy
+building, each client could/would build different parts of the tree, so
+this would even kind of parallelize the building process (including
+distributing the cache misses over all clients).
+<P>
+2.) You have more information about the number of rays. Thus, you cannot
+only build the kd-tree *lazily*, but even *adaptively*. E.g., in the usual
+cost function, one argues about the &quot;probability&quot; of rays hitting a voxel,
+and use that probability to compute a estimated cost. Once you build it
+hierarchically you actually have some hands-on data on where the rays
+actually go. And of course, you could use that to decide a.) whether to
+subdivide a node at all (for a single active ray that probably won't make
+sense), and/or b.) where to put the split plane(s).
+<P>
+Thus, I think there is some really high potential in building kd-trees
+lazily. I just didn't find the time to really implement it :-(
+<P>
+____
+<P>
+We talked a fair bit about ray tracing efficiency research progress in the
+past 15 years. Here are some excerpted comments:
+<P>
+Vlastimil Havran (havran(at)mpi-sb(.)mpg(.)de) wrote:
+<P>
+In between there are more than 15 years of hardware improvements, so the
+estimated speedup from hardware advancements should be about 1000,
+according to Moore's law.
+<P>
+____
+<P>
+Gordon Stoll replied:
+<P>
+Ah, this is something I've thought about a lot.  Fifteen years ago, 1990,
+would be (I think) a 33MHz 80486. That had onboard floating-point, which
+is obviously important for RT. The actual semiconductor scaling trend
+(including both the number of transistors and their switching speed)
+predicts an improvement of 3,125 times since then. Do you think that the
+core CPU performance of RT has actually gone up that much?
+<P>
+My guess is that it didn't, and that instead RT fell off of the
+performance curve right around then because RT breaks pretty much
+everything that we've put into CPUs since then (deep pipelines with branch
+prediction, superscalar, out-of-order, SIMD/vector operations, etc, etc,
+etc). I've been thinking about trying an experiment or doing a literature
+survey to try to support this, but for now it's just a crackpot theory.
+Maybe I'll try to convince Eric to figure it out.  :)
+<P>
+Things are really good right now as far as this goes. The code is getting
+friendlier for the architecture (things like the packet tracing
+technique), and the architecture is getting friendlier for the code
+(shorter pipelines, multi-core, multi-threaded).
+<P>
+____
+<P>
+My wrap-up:
+<P>
+One other topic of conversation was about MacDonald and Booth's paper
+&quot;Heuristics for Ray Tracing Using Space Subdivision&quot; in Graphics Interface
+'89. The two bits that were interesting to me are related, in that they
+both involve the dissemination of information. First, this paper spends
+some time establishing the fact that the surface area of a convex object
+is directly related to the chance it will be hit by a ray. They use
+empirical testing to show that there is a correlation. This was
+unnecessary work, from a god's-eye view, as this result was known for some
+years. For example, in 1987 Goldsmith and Salmon cite L. Stone, &quot;Theory of
+Optimal Search&quot;, Academic Press, 1975, pp. 27-28, as their justification
+for using the surface area. However, this fact hadn't really percolated
+out into the field of computer graphics until some time later. For
+example, Jim Arvo presented this fact and its proof, usually referred to
+nowadays as the surface area heuristic (SAH), in some SIGGRAPH 90 course
+notes (in <A HREF="http://www.ics.uci.edu/~arvo/papers/MetaHierarchies.ps">http://www.ics.uci.edu/~arvo/papers/MetaHierarchies.ps</A>), see
+<A HREF="http://www.acm.org/tog/resources/RTNews/html/rtnv10n1.html#art4">RTNv10n1</A>. As
+mentioned later in this issue, the Discrete Differential Geometry course
+presents this result in a formal framework of measure.
+<P>
+The point is that SAH had been known by some people for some time, but it
+took a good long while for this fact to filter out to the general graphics
+community, so it's hardly MacDonald's fault that he did not know of it at
+that time. The other interesting bit in MacDonald's paper relating to
+information dissemination is his own presentation of results. On the ninth
+page of his article he writes, &quot;the arbitrary acyclic algorithm performed
+best, providing up to three orders of magnitude reduction in the number of
+objects tested for intersection.&quot; He even shows, in a log graph, how much
+better this algorithm is for one test scene. How significant is that?!
+He's found an algorithm (essentially what Gordon Stoll and others have
+also found to be great: placing kd-tree cutting planes in locally optimal
+locations) that works up to a thousand times faster on a particular type
+of scene (many small objects uniformly distributed). But then he gets
+distracted by his other test scenes where this algorithm does not work as
+well. However, these scenes are entirely unlikely, pathological cases:
+large overlapping objects filling a space. So he doesn't really realize
+he's found a critical result, and in fact spends some time trying to find
+a hybrid algorithm that will handle all his test scenes well, reasonable
+and pathological alike.
+<P>
+My point here is not to beat on MacDonald; he was a master's student in
+math who was doing his best to complete a thesis project, so did not have
+time to create interesting test scenes (ahhh, too bad he didn't know about
+the Standard Procedural Databases...). He found a great result, but didn't
+fully realize what he had found. What's interesting is how long it has
+taken for this result to percolate out. Nowadays if a new ray tracing
+algorithm shows a 2x speedup, it's a worthwhile result. Here MacDonald
+gets up to a 1000x speedup in some cases and buries the result on the
+ninth page of sixteen page article, because it worked for only two of his
+five test scenes (though for two of the remaining scenes he was getting up
+to a 10x improvement). The conference was relatively unknown and the
+proceedings not easily available, there were no pretty pictures in the
+article, and the most significant result is well-buried, never mentioned
+in the abstract, introduction, or conclusions. Amazing, really, that this
+result ever surfaced again at all. Heck, I certainly missed it! I mention
+his paper in
+<A HREF="http://www.acm.org/tog/resources/RTNews/html/rtnv8n2.html#art6">RTNv8n2</A>, noting
+that he explored this area, but never really put two and two together (or
+perhaps taking 5 and subtracting the 3 pathological scenes). And MacDonald
+was not the only person to explore this area, Fussell and Subramanian also
+did so, but their work never made it out past a technical report:
+<P>
+D. Fussell and K. R. Subramanian, &quot;Fast ray tracing using K-D trees,&quot;
+Technical Report TR-88-07, U. of Texas, Austin, Dept. Of Computer Science,
+Mar. 1988. <A HREF="http://www.cs.utexas.edu/ftp/pub/techreports/tr88-07.pdf">http://www.cs.utexas.edu/ftp/pub/techreports/tr88-07.pdf</A>
+<P>
+Their conclusion was that this method was one of the fastest known,
+comparable to Arvo &amp; Kirk's 5D method (a scheme that works well for
+coherent rays but that bogs down otherwise, and has seen little use). But
+they do not show their scheme was significantly faster than other schemes
+overall. Is it because of coding style, or the processor type, or that
+they used different termination criteria? We're unlikely to ever know.
+<P>
+The takeaway for me is that first discovering a result is important, but
+interpretation of the significance and validation of that result is also
+equally valuable. MacDonald found a useful result, but his test scenes
+misled him to think the result was not of interest. Also, though his
+advisor is well-known, MacDonald was working on his ray tracer on his own.
+It is very difficult for a reader to evaluate the worth of any efficiency
+work done by one coder in isolation: is his speedup due to a better
+algorithm, or just better coding of the new work? As I mentioned before,
+this is why I think Gordon's work is significant, as his group is
+optimizing every element they can, and working with realistic test data,
+so making their results more solid.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art10">
+Processor Level Optimization Verification</A></FONT>, by Paul Kahler (phkahler(at)wowway(.)com) and Anonymous
+</H4>
+Paul Kahler writes:
+<P>
+I just read Stephen Bridgett's article in 
+<A HREF="http://www.acm.org/tog/resources/RTNews/html/rtnv17n1.html#art5">RTNv17n1</A> and
+wanted to comment on optimizing the point in polygon test. I've found that
+branching code is indeed the worst thing you can run on a modern
+processor. I'm still using an Athlon 700, so I'm sure the problem has
+gotten worse than I've seen. Anyway, while Stephen has eliminated one
+branch from the test there is still one left in his code fragment that can
+be eliminated. While it appears as an assignment it involves evaluation of
+a boolean &gt;= condition which involves a conditional branch. Some
+processors can handle this without branching, but only with the right
+compiler as well.
+</PRE>
+<P>
+When doing a magnitude comparison (A&lt;B) we can replace it with a simple
+subtraction (A-B) and the sign of the difference can be interpreted as a
+flag. The great thing is you can AND, OR, or XOR multiple flags of this
+form using the &amp; | ^ operators which are supported on all hardware and
+compilers without branches provided your operands are an integer type.
+There is no need to worry about the other bits - the resulting number will
+have no real meaning, but its sign will be the desired flag. On modern
+processors I've actually been able to abuse pointers to floats (recast as
+pointers to ints) to get a real benefit from this with floats and doubles
+(it works but not worth the cost to clarity). Anyway, since the flags in
+this case are XORed, you could take the product of the flags (differences)
+to get the same effect even with floating point. I'm assuming the context
+of the code fragment here involves several such tests and flag XORing. You
+could therefore compute a product of differences and test only the sign of
+the final result.
+<P>
+____
+<P>
+He continues:
+<P>
+In other news, the ray tracer from rtChess has been fully separated into a
+library. It's now 40% faster than the implementation in the game for
+complex scenes.
+<P>
+The 40% improvement came from several small changes and one big one. I
+used to have the octtree nodes call each other passing the ray as a
+parameter. One day I moved this recursive function over to the ray class
+and passed the nodes as a parameter instead. I almost fell off my chair
+when it ran about 25% faster. I can guess that when calling the recursive
+function in different octtree nodes, it's changing the &quot;this&quot; pointer and
+causing something along the lines of data-dependent program flow which
+could stall pipelines pretty badly. That's my best guess and I never
+really investigated (don't look a gift horse in the mouth).
+<P>
+[This is backed up by Gordon Stoll's idea, mentioned in the previous
+article, of avoiding recursion and flattening things to a stack. - EAH]
+<P>
+________
+<P>
+[Someone who wishes to remain anonymous tried out one of the grid
+coherency techniques I described in
+<A HREF="http://www.acm.org/tog/resources/RTNews/html/rtnv12n1.html#art6">RTNv12n1</A> and
+improved performance in his own ray tracer with the following. He/she
+writes, &quot;I'd just as soon not have my flailing around in that space
+immortalized in RTN, since I think they are pretty much flailings at this
+point, especially since other folks have done a lot of really good work in
+this area lately.&quot; Personally, I'm still going to put this tidbit here,
+both because it's worth noting verification of the importance of striving
+for memory coherence, and it's nice to know that little changes in data
+structure storage can have a big effect. -EAH]
+<P>
+So how about another 15% speedup for the ray-tracer, purely due to
+changing the voxel grid from:
+<P>
+<PRE>
+    struct Voxel { ... };
+    Voxel *voxels = new Voxel [xres * yres * zres];
+</PRE>
+<P>
+to
+<P>
+<PRE>
+    Voxel **voxels = new Voxel * [xres * yres * zres];
+    // set voxels to NULL
+    // only allocate a Voxel structure for non-empty voxels
+</PRE>
+<P>
+Doing it the latter way is the obvious right way to do it from the start,
+in terms of reducing memory use for all those empty voxels, but hey, by
+starting from a so-so implementation, it's been possible to see how much
+of an effect all of this stuff has due to improved cache behavior.
+<P>
+Presumably by doing it the better way, the cache isn't blown out by rays
+going through empty voxels, accessing a Voxel just to find that it's
+empty, but having loaded the whole thing into memory and pushed something
+else out to do so.  This way, empty voxels are just a NULL pointer check
+in the voxels[] array, which is likely to already be in cache...  Still,
+I'm surprised (as always), that this gave me a 15% speedup to the entire
+rendering process (for a random handful of test scenes).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art11">
+SIGGRAPH 2005 Report</A></FONT>, by Eric Haines
+</H4>
+What follows are just some random impressions, with some tie-in to ray
+tracing. Well, plus some other stuff on digital rights that I keep
+forgetting to write about. And then I ramble on about Lucas, Japanese mind
+control, and other things, but hey it's my web page.
+<P>
+The course &quot;Discrete Differential Geometry&quot; was pretty interesting, at
+least until the equations went over my head. Equations in lectures are a
+tough row to hoe: if the audience already knows the equation, then the
+presentation is not offering all that much that is new; if they don't,
+then a pretty dense chunk of information appears in a single slide.
+Equations are wonderful, they concisely sum up this or that relationship
+or operation, but with no way for the recipients to put the lecture on
+&quot;pause&quot; there is a high risk of losing people. In a lecture I like
+presenting an equation as a &quot;mug shot&quot;, sort of &quot;If you see this equation
+in the future, you might recognize it.&quot; Then I can talk around the
+equation, saying what it is for and what it does. But showing many slides
+of equations, showing derivation after derivation, well, very few people
+are that quick to absorb this information. Anyway, enough on that...
+<P>
+The field gives a unified view of what various measurements mean and how
+they can be used. For example, take a box: it has a volume, a surface
+area, and a mean width (which, for a box, is proportional to the sum of
+the lengths of its edges; otherwise think of the measure as an average
+maximum diameter). It turns out these various measures can be used in
+geometric probability: the chance that an arbitrary point in space is
+inside the box is proportional to the box's volume (duh). However, you can
+go further: the chance an arbitrary ray hits a box is proportional to the
+box's surface area (a result known to most ray tracing type, but otherwise
+not commonly considered). Going a step further, the equations lead to the
+result that the chance the object intersects with an arbitrary plane is
+proportional to the mean width of the object. That's an interesting result
+when thinking about clipping planes, for example. It also turns out these
+various measures can be combined for sets of convex objects, which means
+the measures hold for any object (since any object can be decomposed into
+convex objects). Going further, you can also derive curvature values for
+edges and vertices (normally you find curvature only on curved surfaces),
+and it all falls out from theory. Anyway, look up the course notes under
+&quot;Resources&quot; at <A HREF="http://ddg.cs.columbia.edu/">http://ddg.cs.columbia.edu/</A>. The first two chapters, at
+least, are pretty approachable.
+<P>
+Talking with Steve Worley, it turns out another course I wish I had
+attended on Monday was Computational Photography. The idea here is to
+substitute software for high-end hardware. Instead of a camera with a
+$5000 lens, use a bunch of cheaper cameras and use a computer to crunch
+the resulting images into one high quality image. Or you could have a
+variety of images collected at once, e.g. some polarized and some not, and
+selectively choose where to reduce glare. This sort of thing is just the
+tip of the iceberg, and Steve raved about this course for half an hour or
+so. Sounded worthwhile, though I can't recall (correctly) a lot more. This
+field is an up-and-coming area as computer vision, photography, computer
+graphics, and other fields cross-pollinate. See
+<A HREF="http://photo.csail.mit.edu/">http://photo.csail.mit.edu/</A> for some presentations at a different
+conference, in particular click on Schedule and see the talks in &quot;What
+will a camera look like in 20 years&quot;.
+<P>
+The de rigeur event at SIGGRAPH is the Fast-Forward Papers Review. Over
+the course of two hours it covers the 99 papers being presented at
+SIGGRAPH 2005. Lightly and often humorously, but there's usually enough
+info to have a sense if a paper's something you'd want to see. Thankfully,
+only two authors gave their presentations by rapping, and only one took
+off some of his clothes.
+<P>
+Monday started early with hardware rendering related papers. The
+Saarbrucken folks presented their design for an RPU, a ray-tracing
+processing unit. It's not considerably different than today's GPUs, having
+just a bit more specialized hardware here and there. Interesting stat:
+their *software* ray tracer is about 30x faster than the freely-available
+POVRay ray tracer. Now, I could probably speed POVRay up by 2x by some
+tuning of this and that, but 30x is pretty incredible. More on this topic
+later in this issue.
+<P>
+One interesting thing: image rights. I discussed this topic with a few
+people, and most do not realize their rights when they have their paper
+published in SIGGRAPH or any other ACM journal. As I understand it, the
+rights to the image are mostly owned by the ACM when your article is
+published. You yourself can reuse your image elsewhere (i.e. in your own
+publications, web pages, news releases, etc.), but if a magazine or book
+wants to republish your image, they need permission from the ACM, not from
+you. The ACM charges a fairly nominal fee, $25, mostly to protect their
+rights.
+<P>
+My advice (worth exactly nothing in court) to anyone publishing nowadays
+is to make two images of any image to be published, one from a fairly
+different view, etc. In this way you can reuse and grant rights to the
+second, unpublished image as you wish. That said, there's an area of law
+where you compare one photo with another and if they match by 80% (by some
+eyeballing metric), then they're considered the same photo for purposes of
+copyright. Usually this is meant to protect one photographer's composition
+from being reused by another. What it means to 3D computer graphics, where
+it's easy to change the view, etc., remains to be seen. Still, ACM's
+rights to your work are less clear for a new, different image. This sort
+of thing is small potatoes, but taking action so that you have images and
+videos you fully own then removes the hassle-factor of granting permission
+to others wanting to use your work.
+<P>
+After lunch on Monday was the keynote with George Lucas. Not to be missed,
+of course, and fanboys were lining up at least 2.5 hours ahead. Coming in
+five minutes before it started, I was shunted with more than a thousand
+other people into a separate hall. So I can't say I saw George Lucas' real
+photons, but rather just a giant TV picture of his real photons, with him
+a few hundred feet away in the room next door. Lamest keynote ever: he was
+interviewed by some guy for an hour. Though it is the first time I've seen
+a keynote preceded by a fancy video production saying all the cool things
+developed under Lucas direction (and impressive they were). And, after
+five minutes of the interview, I left. I felt my time would be better
+spent getting shocked by Japanese telephone researchers. In Emerging
+Technologies there were a number of peculiar technologies, like the
+virtual straw, where you could get the impression of sucking up some drink
+without actually having the drink there. This one was almost always down
+for maintenance when I was around, so I never tried it. I did get to try
+the Galvanic Vestibular Stimulation device from NTT's Computer Science lab
+(<A HREF="http://www.siggraph.org/s2005/main.php?f=conference&p=etech&s=etech24">http://www.siggraph.org/s2005/main.php?f=conference&amp;p=etech&amp;s=etech24</A>,
+and googling on this term turns up a bunch of hits, e.g.
+<A HREF="http://jp.physoc.org/cgi/content/full/517/3/631">http://jp.physoc.org/cgi/content/full/517/3/631</A>). Sign a waiver and put on
+some headphones, but not for listening. No, these headphones shock you
+behind your left and right ears. This has the effect that, instead of
+thinking gravity goes straight down, you think it goes a bit to the left
+or right, depending on which behind-ear-area is &quot;stimulated&quot; (i.e.
+shocked). Weird effect: you're walking forward, they push the joystick
+left, you think you're falling and you go left to compensate! Stranger
+still is when you have the headphones on and you control yourself with the
+joystick; how self-referential can you get? Less effective was wearing the
+device while looking at a race game. Funniest concept was alternating
+left-and-right shocks in time with the beat of music: yes, you *will* have
+rhythm! Other than feeling shocks and tasting a metallic taste, and my
+inability to remember any of the year 1981, there were no side effects
+whatever.
+<P>
+Oh, from talking with others afterwards, the summary of Lucas' keynote:
+He's the father of digital cinema. He's developed about all the tools he
+needs (by pestering good people for them), though pre-visualization tools
+(e.g. interactive rendering of film scenes) could be handy. Voice
+recognition and AI in computer games could make them better. He's also
+spending money on education nowadays. Not sure what the other 55 minutes
+of the interview were about.
+<P>
+Monday evening I went to &quot;Games, Beyond the Joystick&quot; for an hour. Pretty
+fun to see some different interactive devices. My favorite is still the
+Eye Toy, which I first saw two years ago at SIGGRAPH and was one of the
+two reasons I then bought a Playstation 2 (the other being Dance Dance
+Revolution; hey, a nerd needs his exercise). Richard Marks talked more
+about the use of the Eye Toy with the Playstation 3. Coolest one: it
+quietly tracks your head. In a shooter game you can peek around a corner
+in a natural way, by tilting your head to one side. This sort of computing
+would take up about 30% of the processing power of the PS2, but only 1% of
+the PS3, making it cheap for developers to use in the next generation.
+<P>
+Sketches were generally of high quality. This venue is getting quite
+competitive (I've been on sketches committee the past two years), with a
+large percentage of submissions having additional materials such as
+videos. Starting in 2004, the one page sketch summaries are no longer
+printed in any SIGGRAPH publication, but are available only on the DVD.
+Sketches are currently not considered a publication. This can be a good
+thing, as the intent is that the appearance of the sketch should not be
+considered a prior publication when judging the newness of an final
+article submitted by the same authors. However, a side-effect of this not-
+publication status is that sketches are not archived in the ACM's Digital
+Library.
+<P>
+One of my favorite sketches this year was Joern Loviscach's paper on
+&quot;Efficient Magnification of Bi-Level Textures&quot;. The problem is that you
+want to have simple bitonal images representing text on signs (for
+example). You want these to look good when magnified: bilinear
+interpolation between the texels, giving levels of gray, looks bad. Simply
+quantizing (display black if gray&lt;128, white otherwise) also doesn't look
+that great. This is the first practical application I've seen of the
+Bixels concept (the idea of storing an image as both texels and the lines
+between texels). What was very clever was that he found you could modify
+the underlying texture map so as to capture the intent of a higher
+resolution bixel version of the sign. The resulting texture is just a
+simple texel texture, which can be rendered with a simple pixel program
+doing quantization. But, the underlying gray samples are modified so that
+quantization more accurately matches the higher resolution curve edges.
+There was more (doing better antialiasing, problems with matching V vs. S
+vs. other letters' curves), but overall it was pretty convincing, useful,
+and enjoyably non-intuitive.
+<P>
+What's the future hold for GPUs? I came upon this little technical report,
+by Bill Mark and Donald Fussell, mentioned by someone or other at
+SIGGRAPH: <A HREF="http://www.cs.utexas.edu/users/billmark/papers/rendering2010-TR/">http://www.cs.utexas.edu/users/billmark/papers/rendering2010-TR/</A>. The wheel of reincarnation turns again, with the authors saying that
+scene management should move back to the GPU (something that used to be
+done around the early 80's but that eventually moved back to the CPU).
+Lots of other musings and ideas in this one, including ray tracing as a
+basic tool. A related tidbit: newer games are more and more becoming CPU-
+bound, as its difficult to keep the newer GPUs fed with things to do.
+<P>
+There was lots of other fun stuff, of course. The Electronic Theater was
+good, with relatively few dark pieces (thankfully short, no 15-minute
+grayscale slow-sad-clown-driving-nails-into-himself filmfests). One new
+guy I met this year is Jeff Han. I was impressed by the cool hardware
+things he's been doing. For example, the Media Mirror, New York University
+Media Research Lab: <A HREF="http://mrl.nyu.edu/~jhan/mediamirror/">http://mrl.nyu.edu/~jhan/mediamirror/</A>. Cute idea, and
+amazing you can do this (a) in real-time and (b) with less hardware than
+you might think: take a video of a person and form a photomosaic of them
+using the video channels available.
+<P>
+Since you made it this far into this rambling article, you win two free
+Los Angeles SIGGRAPH tips. First, the Hotel Figueroa's room rate is the
+same whether booked through SIGGRAPH or not, and you can book these rooms
+well in advance of whenever SIGGRAPH opens its official hotel booking
+website. Second, the outside bar on the top floor of The Standard hotel is
+a cool place to visit, and during Mon-Weds there's no cover (of course,
+things may change).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>	
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

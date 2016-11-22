@@ -1,0 +1,592 @@
+<!-- html version of Volume 1, Number 3 : Tue May  2 10:09:22 EDT 1995 -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 1, Number 3</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>March 1, 1988</FONT>
+<P><FONT size=+1>Volume 1, Number 3</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1988, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction
+</A></LI>
+<LI><A HREF="#art2">
+Mailing List Updates
+</A></LI>
+<LI><A HREF="#art3">
+Another Dore' Article
+</A></LI>
+<LI><A HREF="#art4">
+Responses to the "teapot in a football stadium" Problem,
+</A></LI>
+by Andrew Glassner
+<LI><A HREF="#art5">
+Comments on Jim Arvo's Efficiency Article,
+</A></LI>
+by Eric Haines and Jim Arvo
+<LI><A HREF="#art6">
+Efficiency Tricks,
+</A></LI>
+by Jeff Goldsmith
+<LI><A HREF="#art7">
+More Book Recommendations,
+</A></LI>
+by Jeff Goldsmith
+<LI><A HREF="#art8">
+Bug for the Day,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art9">
+A Pet Peeve,
+</A></LI>
+by Jeff Goldsmith
+<LI><A HREF="#art10">
+Postscript
+</A></LI>
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+        ntroduction
+</A></FONT>
+</H4>
+         just receive Andrew's note that the hardcopy RTN is in the mail, which
+inspired me to flush the buffer and send on the latest offerings.  Special
+thanks to Jeff Goldsmith for submissions.
+<P>
+<PRE>
+    - Eric
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+Mailing List Updates
+</A></FONT>
+</H4>
+First, an address change.  John Peterson is now with Apple, who writes:
+<P>
+    'I'm currently hanging out at Apple thinking about "3D graphics for the
+    rest of us" and how to keep the jaggies away from personal computers.
+    (But there is this Cray sitting about 50 feet away.  Hmmm...)'
+<P>
+<PRE>
+#
+# John Peterson - bicubic splines, texturing
+# Apple Computer (graduated University of Utah, 1988)
+alias   john_peterson   hpfcrs!hpfcla!jp%apple.apple.com@RELAY.CS.NET
+</PRE>
+<P>
+         asked him for ray tracers at the University of Utah.  So, Tom Malley and
+Rod Bogart (whose initials are 'RGB') are now subscribers.
+<P>
+From Tom:
+    My thesis research was similar to what John Wallace described,
+    being a two pass approach to radiosity to include specular reflection
+    and transparency.  Form factors were all calculated via ray tracing,
+    however.  I did some brief examination of different ray intersection
+    methods along the way (Rubin-Whitted, Kay-Kajiya, and Glassner).
+<P>
+<PRE>
+#
+# Tom Malley - blending ray tracing and radiosity
+# Evans & Sutherland (graduated University of Utah, 1988)
+# (<A HREF="mailto:malley@cs.utah.edu">malley@cs.utah.edu</A>, cs.utah.edu!esunix!tmalley)
+alias   tom_malley      hpfcrs!hpfcla!hplabs!<A HREF="mailto:malley@cs.utah.edu">malley@cs.utah.edu</A>
+</PRE>
+<P>
+<PRE>
+To quote John Peterson about Rod Bogart:
+    Rod developed a really neat method for using ray tracing to integrate
+    computer generated pictures with real world images (coming soon to a
+    SIGGRAPH near you...).
+</PRE>
+<P>
+<PRE>
+#
+# Rod Bogart - blending ray tracing and images
+# University of Utah
+alias   rod_bogart      hpfcrs!hpfcla!hplabs!bogart%<A HREF="mailto:gr@cs.utah.edu">gr@cs.utah.edu</A>
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Another Dore' Article
+</A></FONT>
+</H4>
+        n case you have not been able to track down the two articles previously
+mentioned about Dore', Ardent's new rendering system, there's now a third
+(that I know of):  it's in "Computer Design", Feb 15, 1988, pages 30-31.
+Pretty much like the other articles (i.e. cast from the same press release).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Response to the "teapot in a football stadium" Problem,
+</A></FONT>
+by Andrew Glassner
+</H4>
+<I><A HREF="rtnews1b.html#art4">
+previous discussion of topic</A></I>
+<P>
+ Just a quick response to your football stadium/teapot example.  When you
+subdivide a node, look at its children.  If only one child is non-empty,
+replace the original node with its non-null child.  Do this recursively
+until the subdivision criterion is satisfied.  I do this in my spacetime
+ray tracer, and the results can be big.  The ray propagation can get just
+a bit more complex, but there are clever rays to keep it simple (see
+John Amanatide's article in Eurographics '87, plus I have a scheme that
+         hope to write up soon...).
+<P>
+  Better yet, go with a hybrid space subdivision/bounding volume scheme,
+such as the one described in my spacetime paper (poorly described in the
+        ntro to RT notes, but better described in the version slated for the
+March issue of CG&A; I'd be happy to mail you a preprint).  I think this
+hybrid scheme gives the best of both worlds, and you can use whatever
+space subdivision and bounding volume techniques that you like in the
+two distinct phases of the algorithm.  I use adaptive space subdivision
+and Kay's bounding slabs, and that combination seems to work pretty well.
+<P>
+<PRE>
+  And now I have to get back to moving into my office!
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Comments on Jim Arvo's Efficiency Article,
+</A></FONT>
+by Eric Haines and Jim Arvo
+</H4>
+<I><A HREF="rtnews1b.html#art7">
+previous discussion of topic</A></I>
+<P>
+From: Eric Haines (with a few extra comments than my original letter to Jim)
+<P>
+        Your article on efficiency is fascinating.  I hope to read it more
+carefully tonight and (eventually--we just came under a crunch of work)
+comment on it.  Sounds like you've done a lot of serious thought and
+speculation on the possibilities.  I agree with the philosophy of objects
+each having their own private hierarchies, and having the ability to hook
+these hierarchies up however you want.  We've done that on a small scale
+with our tesselated spline surfaces:  automatic hierarchy a la Goldsmith &
+Salmon (IEEE CG&A, May 1987) for everything, but then octrees for the spline
+surfaces themselves.  A nice feature of Goldsmith is that you can weight the
+cost of each primitive into the algorithm: multiply its area by some
+intersection cost (which you'll probably have to figure out through
+experimentation) to give it a weighting.  In this way a torus surface which has
+the same size bounding volume as a quadrilateral can be given a higher
+weighting factor.  A higher cost has the effect of making the hierarchical tree
+less horizontal near the complicated object, i.e. there are more bounding
+volumes overall, with a few complicated objects in each.  This is what you
+want, since you'd rather spend a little extra time on intersecting bounding
+volumes than wasting a lot of time intersecting the empty space around costly
+objects.
+<P>
+____
+<P>
+Response from: Jim Arvo
+<P>
+    I'm glad you found my article interesting.  All your interesting
+    mail finally motivated me to contribute to the discussion.  I
+    thought I would toss out a pet idea of mine and see if it sparked
+    any debate.  It turns out that Jeff Goldsmith also looked at
+    simulated annealing for bounding box hierarchies.  One day one
+    of us will get some results.  Hopefully not negative results!
+<P>
+    With all the talk about octrees and such, it's clear that there
+    are a number of potential papers "waiting in the wings".  I've
+    been thinking that by getting the right collaborations going,
+    we (the ray tracing group) could easily "hand" IEEE several
+    related papers, effectively defining a theme issue.  What do
+    you think?
+<P>
+____
+<P>
+My reply:
+<P>
+        The efficiency article collection sounds possible.  Another idea which
+someone (Mike Kaplan, maybe?  I forget) mentioned at last SIGGRAPH was "A
+Characterization of Ten Ray Tracing Efficiency Algorithms".  If well done, this
+would be a classic.  There are probably entirely new schemes still to be found,
+and certainly trying to optimize and figure out good hybrid methods is an
+area ripe for development.  But right now many of the structures and algorithms
+are in place, and still have not been fully compared.  Timings are
+unconvincing, and statistics are worthwhile but don't tell the whole story.
+An in-depth comparison of the major algorithms and techniques to improve these
+would be wonderful.  Someday, someday ... well, my hope is that a few of us
+could do some writing along these lines, even if it's just brainstorming on
+how to compare particular algorithms in a rigorous fashion  (e.g. How can we
+simulate a scene mathematically?  OK, idealize each object as a box or sphere
+for simplicity.  Now, how do we distribute the points to get realistic
+clustering? Once we have a "scene generator" which could create various typical
+distributions of objects in a scene, then we have to analyze how this generator
+would interact with each algorithm, and be able to predict how each efficiency
+scheme deals with the scenes generated.  Or there might be simpler ways to
+isolate and analyze each factor which affects the efficiency of a scheme.
+Anyway, whatever, but this stuff looks fun!).  Understanding the strengths of
+the various techniques seems vital to being able to do any kind of "annealing"
+process for optimization.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Efficiency Tricks,
+</A></FONT>
+by Jeff Goldsmith
+</H4>
+    Here's a good hack for Ray Tracing News:  When using Tim Kay's heapsort on
+bounding volumes in order to get the closest, don't bother to do that for
+illumination rays.  I know it seems obvious, but I never thought to do it.
+<P>
+The obvious corollary to that idea has a little more reach to it.  Since
+illumination rays form the bulk of the rays we trace, getting the nearest
+intersection is of limited value.  In addition, if CSG is used, more times
+occur when the nearest intersection is of less value.  This seems to indicate
+that space tracing techniques are doing some amount of needless work.  Since
+it doesn't really cost that much, perhaps it is not a flaw, but maybe space
+tracers should consider approaches that don't worry about where along the path
+we are and optimize that problem instead.
+<P>
+<I><A HREF="rtnews2c.html#art3">
+more discussion of topic</A></I>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+More Book Recommendations,
+</A></FONT>
+by Jeff Goldsmith
+</H4>
+<I><A HREF="rtnews1b.html#art5">
+previous discussion of topic</A></I>
+<P>
+    I agree completely with your comment about libraries.
+Mine is a crucial resource for me.  Here are some of my
+favorite books that are in my office:
+<P>
+<PRE>
+  Geometry:
+</PRE>
+<P>
+<PRE>
+      Computational Geometry for Design and Manufacture
+          Faux & Pratt
+          --an early CAD text.  It has lots of good stuff
+          on splines and 3D math.
+</PRE>
+<P>
+<PRE>
+      Differential Geometry of Curves and Surfaces
+          DoCarmo
+          --A super text on classical differential geometry.
+          (Not quite the same as analytic geometry.)
+</PRE>
+<P>
+<PRE>
+      CRC Standard Math Tables
+          --This has an awesome section on analytic geometry.
+          Calculus, too.  Can't live without it.  It is not
+          the same as the first part of the Chemistry and
+          Physics one.
+</PRE>
+<P>
+<PRE>
+      Analytic Geometry
+          Steen and Ballou
+          --Once was the standard college text on the subject.
+          That was a long time ago, but it is very easy to
+          read and it covers the fundamentals.
+</PRE>
+<P>
+<PRE>
+  Computing:
+</PRE>
+<P>
+<PRE>
+      Data Structures and Algorithms
+          --Aho, Hopcroft and Ullman
+          Read anything by these guys.
+</PRE>
+<P>
+<PRE>
+      Data Structure Techniques
+          --Standish
+          More How-to than AHU's tome.
+</PRE>
+<P>
+<PRE>
+      Numerical Analysis
+          --Burden, Faires, and Reynolds
+          I have the other two, as well.  This is the
+          least complete of the three, but the algorithms
+          inside are childishly easy to implement.  They
+          always seem to work, too.  Best of all, for many
+          cases, they have test data and solutions.
+</PRE>
+<P>
+<PRE>
+      Software Tools
+          --Kernighan and Plauger
+          How to write command line interpreters, editors,
+          macro expanders, the works.  Great reading.
+</PRE>
+<P>
+<PRE>
+      Fundamentals of Computer Algorithms
+          --Horowitz and Sahni
+          Less technical than AHU, but pretty technical.
+          Thicker.  It may very well answer the problem
+          you can't figure out straight off.
+</PRE>
+<P>
+<PRE>
+      The Art of Computer Programming
+          --Knuth
+          The "Encyclopedia"
+</PRE>
+<P>
+<PRE>
+  Physics:  (Seem awfully useful sometimes)
+</PRE>
+<P>
+<PRE>
+      Gravitation
+          --Misner, Thorne, and Wheeler
+          The thickest book on my shelf.  It's a paperback, too.
+          (It's bent three bookends permanently.  Cheap JPL ones.)
+          Truly a tome on modern physics.
+</PRE>
+<P>
+<PRE>
+      Modern Physics
+          --Tippler
+          Much easier to read than MTW.  Has lots of good appendices.
+</PRE>
+<P>
+<PRE>
+      University Astronomy
+          --Pasachoff and Kuttner
+          I read this book for fun.  I wonder why I didn't read it
+          while I was taking Kuttner's course?
+</PRE>
+<P>
+<PRE>
+      The Feynman Lectures on Physics
+          Awesome first course.  Most of my needs are problems in
+          the text.
+</PRE>
+<P>
+<PRE>
+  Graphics, etc:
+</PRE>
+<P>
+<PRE>
+      Raster Graphics Handbook
+          --Conrac
+          All about fundamentals of the craft.
+</PRE>
+<P>
+<PRE>
+      Light and Color in Nature and Art
+          --Williamson and Cummings
+          Much easier to read than Hall's thesis, but less
+          technical as well.
+</PRE>
+<P>
+<PRE>
+  Etc, Etc:
+</PRE>
+<P>
+<PRE>
+      The Random House Dictionary of the English Language,
+      College Edition
+          The best collegiate sized dictionary around.
+          By far.
+</PRE>
+<P>
+<PRE>
+      The Chicago Manual of Style
+          Has most of the answers. Did you know that
+          to recreate is to have fun, but to
+          re-create is computer graphics?
+</PRE>
+<P>
+<PRE>
+      The Elements of Style
+          The one that came before computers.
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art8">
+Bug for the Day,
+</A></FONT>
+by Eric Haines
+</H4>
+{This will be pretty unexciting for those who never intend to implement an
+octree subdivision scheme.  For future implementers, I hope you find it of
+use:  it took me quite a few hours to track this one down, so I think it is
+worth going into.}
+<P>
+        This bug was one I had when implementing octree subdivision for ray
+tracing.  The basic algorithm used was Glassner's:  once you intersect the
+octree structure, move the intersection point in one half of the smallest
+cube's dimension in the direction normal to the wall hit.  In other words,
+find out what cube is the next cube by finding a point that should be well
+inside of it, then translating this point into integer octree coordinates
+and traversing the octree downwards until a leaf node is found.
+<P>
+        However, there are some subtle errors that can occur with moving to the
+next octree cube.  My favorite is almost hitting the edge of a cube, moving
+into the next cube, then getting caught moving to the cube diagonal to this
+cube, i.e. moving from cube 1 to 2 to 3 ...
+<P>
+<PRE>
+        X--&gt;
+        +---+---+
+      ^ | 2 | $ |       Numbers are the order of cubes moved through.
+      | +---#---+
+      Y | 1 | 3 |
+        +---+---+
+          ^________ray started here, and hit almost at the "#".
+                   (ray is in +X, +Y direction)
+</PRE>
+<P>
+This went into an infinite loop, going between 2 and 3 forever.  The reason
+was that when I hit the boundary 1&2 I would add a Y increment (half minimum
+box size) to the intersection point, then convert this to find that I was
+now in box 2.  I would then shoot the ray again and it would hit the
+wall at 2&$.  To this intersection point I would add an X increment.  However,
+what would happen is that the Y intersection point would actually be ever so
+slightly low - earlier when I hit the 1&2 wall adding the increment pushed us
+into box 2.  But now when the Y intersection point was converted it would
+put us in the 1+3 boxes, and X would then put us in box 3.  Basically, the
+precision of the machine made the mapping between world space and octree
+space be ever so slightly off.
+<P>
+        The infinite loop occurred when we shot the ray again at box 3.  It
+would hit the 3/$ wall, get Y incremented, and because X was ever so slightly
+less than what was truly needed to put the intersection point in the 3+$
+boxes, we would go back to box 2, ad infinitum.  Another way to look at this
+is that when we would intersect the ray against any of the walls near the
+"#" point, the intersection point (due to roundoff) was always mapping to
+box 1 if not incremented.  Incrementing in Y would move it to box 2, and in
+X would move it to box 3, but then the next intersection test would yield
+another point that would be in box 1.  Since we couldn't increment in
+both directions at once, we could never get past 2 and 3 simultaneously.
+<P>
+        This bug occurs very rarely because of this: the intersection points
+all have to be such that they are very near a corner, and the mapping of the
+points must all land within box 1.  This problem occurred for me once in a
+few million rays, which of course made it all that much more fun to search
+for it.
+<P>
+        My solution was to check the distance of the intersections generated
+each time: if the closest intersection was a smaller distance from the origin
+than the closest distance for the previous cube move, then this intersection
+point would not be used, but rather the next higher would be.  In this way
+forward progress along the ray would always be made.
+<P>
+        By the way, I found that it was worthwhile to always use the original
+ray origin for testing ray/cube intersections - doing this avoids any
+cumulative precision errors which could occur by successively starting from
+each new intersection point.  To simulate the origin starting within the cube
+would simply test only the 3 cube faces which faced away from the ray
+direction (this was also faster to test).
+<P>
+        Anyway, hope this made sense - has anyone else run into this bug? Any
+other solutions?
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art9">
+A Pet Peeve,
+</A></FONT>
+by Jeff Goldsmith
+</H4>
+Don't ever refer to pixels as rows and columns.  It makes it hard to get the
+order (row,column)?  (column,row)?  right.  Refer to pixels as (x,y)
+coordinates.  Not only is that the natural system to do math on them, but it
+is much easier to visualize in a debugging environment, as well as running the
+thing.  I use the -x and -y npix switches on the tracer command line to
+override any settings and have found them to be much easier to deal with than
+the -r and -c that seem to be everywhere.  Note that C's normal array order is
+(I think.  I always get these things wrong.)  (y,x).
+<P>
+<PRE>
+        [I agree: my problem now is that Y=0 is the bottom edge of the screen
+        when dealing with the graphics package (HP's Starbase), and Y=0 is the
+        top when directly accessing the frame buffer (HP's SRX). -- EAH]
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art10">
+Postscript
+</A></FONT>
+</H4>
+        Next "RT News" issue I'll include a write-up of Goldsmith/Salmon which
+should hopefully make the algorithm clearer, plus some little additions I've
+made.  I've found Goldsmith/Salmon to be a worthwhile, robust efficiency scheme
+which hasn't received much attention.  It embodies an odd way of thinking
+(I have to reread my notes about it when I want to change the code), as there
+are a number of costs which must be taken into account and inherited.  It's
+not immediately intuitive, but has a certain sense to it once all the pieces
+are in place.  Hopefully I'll be able to shed some more light on it.
+<P>
+All for now,
+<P>
+Eric
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

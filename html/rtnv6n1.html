@@ -1,0 +1,1781 @@
+<!-- html version of Volume 6, Number 1 :  -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 6, Number 1</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>January 27, 1993</FONT>
+<P><FONT size=+1>Volume 6, Number 1</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1992,1993, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction
+</A></LI>
+<LI><A HREF="#art2">
+New People,
+</A></LI>
+New Places, etc
+<LI><A HREF="#art3">
+An Easily Implemented Ray Tracing Speedup,
+</A></LI>
+by Steve Worley
+<LI><A HREF="#art4">
+Color Storage,
+</A></LI>
+by Greg Ward
+<LI><A HREF="#art5">
+Bounding Areas for Ray/Polygon Intersection,
+</A></LI>
+by Steve Worley and
+Eric Haines
+<LI><A HREF="#art6">
+Simple,
+</A></LI>
+Fast Triangle Intersection, by Chris Green and Steve Worley
+<LI><A HREF="#art7">
+Ray Tracing Roundup
+</A></LI>
+<LI><A HREF="#art8">
+Spectrum Overview,
+</A></LI>
+edited by Nick Fotis
+<LI><A HREF="#art9">
+Comments on the Glazing Trick,
+</A></LI>
+by Eric Haines
+</UL>
+========Net News Cullings========
+<UL>
+<LI><A HREF="#art9a">
+Graphics Gems IV Announcement,
+</A></LI>
+by Paul Heckbert
+<LI><A HREF="#art10">
+Announcing the ACM SIGGRAPH Online Bibliography Project,
+</A></LI>
+by Stephen Spencer
+<LI><A HREF="#art11">
+A Brief History of Blobby Modeling,
+</A></LI>
+by Paul Heckbert
+<LI><A HREF="#art12">
+Cool Raytracing Ideas,
+</A></LI>
+Karen Paik
+<LI><A HREF="#art13">
+Optical Effects and Accuracy,
+</A></LI>
+by Sam Uselton
+<LI><A HREF="#art14">
+Map Projections Reference Book,
+</A></LI>
+by Mike Goss
+<LI><A HREF="#art15">
+A Brief Review of Playmation,
+</A></LI>
+by Chris Williams
+<LI><A HREF="#art16">
+PV3D Quick Review,
+</A></LI>
+by David Anjo
+<LI><A HREF="#art17">
+Bounding Volumes (Sphere vs. Box),
+</A></LI>
+by Tom Wilson
+<LI><A HREF="#art18">
+Raytracing Swept Objects,
+</A></LI>
+by Mark Podlipec
+<LI><A HREF="#art19">
+Ray Transformation,
+</A></LI>
+by Kendall Bennett
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction
+</A></FONT>
+</H4>
+This issue seems to have a theme of efficiency hacking.  It's interesting to
+note that there are still many "engineering" details which have not been worked
+out (or at least are not commonly available).  Some of the articles here talk
+about ways to polish common algorithms (bounding volume testing, polygon
+testing) that makes them noticeably faster.
+<P>
+On a related note, recently I received a note from Ken Sykes at Microsoft.  He
+had sped up the rgbvary.c code in Graphics Gems III by using integers instead
+of floating point.  Doing this reduced filtering time by a factor of 8 on his
+PC.  He wished more publicly available code used integer arithmetic when
+possible.
+<P>
+The ray tracing roundup in this issue shows that people are quite busy out
+there.  I've broadened the bounds of the column a bit to include other
+rendering related releases, since the dividing line between ray tracing and
+other algorithms is not particularly sharp nor important (for example, you may
+preview a ray trace with a z-buffer algorithm, or use scanline methods to
+accelerate your ray tracer).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+New People,
+</A></FONT>
+New Places, etc
+</H4>
+<PRE>
+George Simiakakis
+SYS PG
+University of East Anglia
+Norwich NR4 7TJ
+England
+<A HREF="mailto:A118@CPC865.EAST-ANGLIA.AC.UK">A118@CPC865.EAST-ANGLIA.AC.UK</A>
+</PRE>
+<P>
+Interests : subdivision techniques, radiosity
+<P>
+For the moment I am investigating 5D subdivision techniques for ray tracing.
+Starting from the Ray Classification algorithm I am trying to come up with a
+more efficient algorithm with less variance in it's performance.  The main
+ways of doing that are adaptive choice of subdivision parameters and
+degeneration of 5D subdivision to spatial subdivision where this is
+appropriate.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+An Easily Implemented Ray Tracing Speedup,
+</A></FONT>
+by Steve Worley (<A HREF="mailto:spworley@netcom.com">spworley@netcom.com</A>)
+</H4>
+Most ray tracing acceleration methods are variants of just a few simple ideas
+that somehow presort space to minimize the number of objects that must be
+tested for intersection.  Grids (uniform and non-uniform), octrees, and
+hierarchical bounding boxes are probably the most common methods though there
+are of course many more.
+<P>
+Grids and octrees are certainly the most popular, and they do quite an
+effective job at speeding up intersections by reducing the number of candidate
+objects that the ray might hit.  More speed is always better, of course, so
+there are always variants of these methods usually with a time speedup at the
+expense of storage, preprocessing, and/or programming complexity.
+<P>
+I've thought up a small, quick, trick that can be included in almost any
+grid-type sorting algorithm.  It trades off storage space for a decent
+speedup, but its biggest charm is very easy implementation.  Modification of
+your favorite grid-sorting algorithm is probably only an hour or two of work.
+<P>
+The trick is based on the observation that the number of "cubes" that a ray
+passes through per unit length is a function of the direction of the ray.  A
+uniform unit-sized grid aligned along the world axes is the easiest
+demonstration of this, though it works for non-uniform grids and octrees too.
+If a ray is pointed straight along the X axis, it will obviously "skewer" an
+entire row of cubes.  At a distance of n units, the ray has passed through n
+unit cubes.
+<P>
+If the ray's direction is different, though, it passes through MORE cubes.  At
+a 45 degree angle ( the unit vector is xn=0.707 yn=0.707 zn=0.0), the ray will
+have moved an x distance of 0.707*n units and a y distance of 0.707*n units.
+It has passed through a total of 1.414*n cubes!  [This is correct:  A ray will
+only pass from one cube to a cube that it shares a face with.  Most algorithms
+never even check for a diagonal step, since this has a vanishingly small
+probability when you're dealing with floating point numbers.  For example, a
+ray going from cube 0,0 to cube 1,1 might go from 0,0 to 0,1 to 1,1 and not
+straight from 0,0 to 1,1.]
+<P>
+The number of unit cubes a ray passes through (at the limit of n large) is
+just the sum of the absolute x,y,and z distances the ray traverses.  The
+important thing to notice is that the volume of space that contains objects
+that need to be tested for intersection with the ray is directly proportional
+to this number of cubes.  The more cubes the ray passes through, the more
+intersections you'll probably have to do.  It is therefore "cheaper" to test a
+ray that moves right along an axis, which passes through one cube per unit
+length, than one that moves at a perfect diagonal along the lattice (from 0 0
+0 to the direction 1 1 1 ) which passes through 1.703 cubes per unit length.
+THIS WORST CASE HAS TO TEST 70% MORE VOLUME (AND OBJECTS) THAN THE BEST CASE.
+This is all due simply to the direction of the ray as compared to the
+coordinate system of the grid.  I wrote a quick program to find the "average"
+case, which was about 1.3 cubes per unit length, assuming all ray directions
+were equally likely.
+<P>
+My algorithm enhancement is based on this grid orientation dependency.  The
+basic idea is simple:  just make one (or more) EXTRA grids with the same
+objects, but with the grids at an angle to the original grid.  To test a ray
+with the objects in the world, you just choose which grid is most "aligned"
+with the ray along any axis.  This "best" alignment can be determined quickly
+and simply by looking at the (normalized) ray direction in each grid's
+coordinate system.  The function [fabs(xn)+fabs(yn)+fabs(zn)] tells you the
+number of cubes per unit length that the ray will pass through.  The smaller
+this number the better, since less volume (and on the average less objects)
+will have to be tested.
+<P>
+Storage requirements are obviously increased:  two grids take twice the room
+of one.  [Always a trade off!]  But usually the grids aren't THAT large, since
+they just store lists of object ID's and not the actual objects themselves.
+The time to assemble the grid is obviously increased but I found that it was
+easy to modify the loop that decides what box(es) each object goes into so
+that it did all of the grids simultaneously with the same loop.  For two
+grids, it increased preprocessing time by about 70%.
+<P>
+What kind of overall speedup is expected?  Well, the more grids (at different
+angles) that are used, the better your ray-alignment will be on average,
+meaning fewer cubes will have to be tested.  The testing to determine which
+set of boxes to use takes a trivial amount of extra time, but the extra
+preprocessing to make the grids IS significant.  Also, there will STILL be
+inefficiency:  every ray can't always be directly along an axis of one of the
+grids.  I implemented a two grid and a four grid model.  Though I didn't spend
+a whole lot of time in optimization, the four grid method was horrible:  the
+preprocessing step took far too long for a scene with about 1000 objects,
+slowing down the overall render time.  For two grids (the second grid rotated
+at a 45, 45, 45 degree angle, you know what I mean), the speedup was evident:
+Preprocessing was about 170% of the old time, but actual rendering was about
+25% faster.  Depending on how many objects were being traced, the overall
+speedup was from 0% to 20%.  This is in no way a revolutionary speedup, but
+for about two hours of programming it is not bad!  Also, these numbers are
+based on a non-optimized program, and can only get better if I do a more
+careful implementation.
+<P>
+Why wasn't the rendering speedup more than 25%?  A couple of reasons.  The
+biggest is that when a ray passes though more volume, there TENDS to be more
+objects that need to be intersected.  But there's often many objects that span
+adjacent boxes, and these (in a good implementation!)  are not re-tested so it
+doesn't matter much that the extra volume was passed though.  It depends on
+the object density and size:  if most objects were small compared to the box
+size and roughly uniformly distributed in space, the number of objects tested
+would correlate better with the volume of the cubes that the ray passes
+through.  [Which is really what we're reducing with this algorithm.]  But even
+when most grids are empty or have objects that span many cells, using the more
+"aligned" grid is never going to hurt:  testing less cells is going to be
+easier.
+<P>
+Anyway, there might be some improvements to this idea (it's only about a week
+old!) but it is so simple to implement that I thought I'd pass it along.
+I've implemented it for uniform grids (very simple but not necessarily the
+best!) and octrees.  I have not tried to make a non-uniform grid yet, but
+you'd probably have to make a modification of the cost function based on the
+AVERAGE x, y, and z sizes of the boxes.
+<P>
+If anyone implements this idea or has any new ideas, I'd like to hear about
+it.  Meanwhile I'll hopefully get some time to run some more accurate
+benchmarks.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Color Storage,
+</A></FONT>
+by Greg Ward (<A HREF="mailto:greg@hobbes.lbl.gov">greg@hobbes.lbl.gov</A>)
+</H4>
+From the Radiance Digest, v2n4 (dedicated to questions from users of Radiance.
+For a free subscription, write Greg)
+<P>
+<PRE>
+Jim Callahan (<A HREF="mailto:jmc@sioux.eel.ufl.edu">jmc@sioux.eel.ufl.edu</A>) writes:
+        I understand that Radiance stores images as 32-Bit RGB.  How does
+an adjustment of exposure effect the colors displayed.  Obviously it
+affects the brightness of the image, but what are the differences between
+exposure and gamma correction? Are both needed?  If a light source is too
+dim, I want to know in absolute terms.
+</PRE>
+<P>
+        This is a bit confusing to me because I realize that the eye is
+constantly readjusting its exposure.  I would like to be able to say that
+the image is a "realistic" simulation of a scene, but can this really be
+done?
+<P>
+____
+<P>
+Greg replies:
+<P>
+You've touched on a very complicated issue.  The 32-bit format used in
+Radiance stores a common 1-byte exponent and linear (uncorrected gamma)
+values.  This provides better than 1% accuracy over a dynamic range of about
+10^30:1, compared to about 3% accuracy over a 100:1 dynamic range for 24-bit
+gamma-corrected color.
+<P>
+Changing the exposure of a Radiance image changes only the relative brightness
+of the image.  Gamma correction is meaningful only in the presence of a
+monitor or display device with a power law response function.  Gamma
+correction is an imperfect attempt to compensate for this response function to
+get back linear radiances.  Thus, applying the proper gamma correction for
+your monitor merely gives you a linear correlation between CRT radiance and
+the radiance value calculated.  (Radiance is named after the value it
+calculates, in case you didn't already know.)
+<P>
+However, as you correctly pointed out, linear radiances are not necessarily
+what you want to have displayed.  Since the dynamic range of a CRT is limited
+to less than 100:1 in most environments, mapping calculated radiances to such
+a small range of dispayable values does not necessarily evoke the same
+response from the viewer that the actual scene would.  The film industry has
+known this for many years, and has a host of processing and exposure
+techniques for dealing with the problem.  Even though computer graphics
+provides us with much greater flexibility in designing our input to output
+radiance mapping, we have only just begun to consider the problem, and it has
+not gotten nearly the attention it deserves.  (If you are interested in
+learning more on the topic, I suggest you check out the excellent CG+A article
+[not out yet, should be good. - EAH] and longer Georgia Tech technical report
+by Jack Tumblin and Holly Rushmeier.)
+<P>
+Color is an even stickier problem.  Gary Meyer and others have explored a
+little the problem of mapping out-of-gamut colors to a CRT, but offhand I
+don't know what work has been done on handling clipped (over-bright) values.
+This is another interesting perceptual issue ripe for exploration.
+<P>
+The best you can currently claim for a computer graphics rendering is that
+photography would produce similar results.  Combined with accurate luminance
+calculations, this should be enough to convince most people.  In absolute
+terms, the only way to know is by understanding lighting design and
+luminance/illuminance levels appropriate to the task.  It will be many years
+before we will have displays capable of SHOWING us unambiguously whether or
+not a given lighting level is adequate.
+<P>
+[Graphics Gems II has an article "Real Pixels" and code by Greg Ward for using
+32 bit format for RGB.  The on-line distribution has more code than the book,
+as I recall.  - EAH]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Bounding Areas for Ray/Polygon Intersection,
+</A></FONT>
+by Steve Worley (<A HREF="mailto:spworley@netcom.com">spworley@netcom.com</A>) and Eric Haines (erich@acm.org)
+</H4>
+The last issue of RTN (v5n3) was devoted to fast methods of intersecting rays
+with polygons and particularly the subtask of determining whether a single
+point was inside a 2D polygon.  We (Eric and Steve) have been discussing
+another aspect of polygon intersection:  the best type of bounding volume to
+surround polygons with, particularly complex ones that have enough sides that
+the "is the point in the polygon?" test gets slow.
+<P>
+One particularly useful trick if you do have a bounding volume around the
+polygon (say an axis-aligned cube) is to check the ray/plane intersection
+POINT with the bounding volume.  The point in volume test is very cheap (6
+compares) and provides a way to trivially reject hits that are far from the
+polygon.  This quick rejection method has been developed by several people
+independently, and Andrew Woo has a nice description in Graphics Gems I on
+page 394.  The only possible danger of using this extra rejection is that that
+a polygon laying on an axis-aligned plane will have a bounding box with no
+depth, and the "ray hits box?" and/or "point in box?" algorithms need to be
+robust enough to correctly handle it.
+<P>
+The method is therefore:
+<P>
+<PRE>
+  1) Test to see if plane's normal is facing you (50% culling right here!)
+  2) Test to see if ray intersects bounding cube at all
+  3) Intersect the ray with polygon's plane
+  4) Test intersection POINT with bounding cube
+  5) Test intersection point for in/out polygon
+</PRE>
+<P>
+But what if you eliminated the ray/bounding cube test (#2) completely and for
+ALL (facing) polygons you computed the ray/plane intersection and tested that
+point with the bounds?  If you count up the ray/bounding box test's costs, you
+need 3 adds, 3 divides, and 13 compares (This is from Woo's algorithm in GG
+I.)  But intersection with a plane only costs 5 adds, 5 mults, and 2 compares,
+since you already computed the dot product to test whether the plane was
+facing you or not.  So basically you can skip right ahead to the "is the
+ray/plane intersection POINT in the bounding box" (which provides better
+rejection than the ray/cube intersection) and you'll be ahead speed-wise.
+<P>
+Now here's a neat trick:  if you're now JUST using the bounding volume to
+provide point rejection (not ray rejection) we might as well do it ONLY in the
+2D projected plane we also do our in-out tests in.  We don't even have to
+compute that third component (the one we don't use for testing polygon in/out
+anyway,) saving a mult or two.  We basically have a 2D bounding AREA and not a
+bounding volume.  The third coordinate did provide some additional rejection,
+but how effective it is depends on the plane's angle:  the Z coordinate is a
+linear function of X and Y.  This also avoids any ugliness from a zero-height
+bounding box.
+<P>
+The bounding AREA will do a fast rejection of trivial points far away from the
+center of interest.  <A HREF="rtnv5n3.html">RTNv5n3</A> had several discussions of different test
+methods, but all of them might be helped by this trivial rejection depending
+on the complexity of the polygon.  (Any bounding for a triangle is probably a
+waste, but if you have a 500 sided polygon, doing at least a gross rejection
+of far off points is going to be a severe win.)
+<P>
+NOTE:  This does not mean that a bounding volume is necessarily a bad idea for
+a polygonal object!  It DOES mean that a bounding volume for a SINGLE polygon
+is definitely slower than doing a 2D point rejection instead.
+<P>
+The question is for these complex-enough polygons, what type of rejection to
+use?  (The rest of this discussion assumes the XY plane is the plane being
+used for the polygon test, but XZ or YZ are obviously just the same.)  The
+bounding square (max/min X,Y) is by far the most obvious and useful, since it
+only costs 4 compares and will reject all of the way-off hits.  A tighter
+bound might be useful for a more complex figure, however.  One logical further
+test would be to measure the maximum extents of the polygon along other
+directions such as the 45 and 135 degree angles:  you sort of get a tight
+shrink-wrapped octagon bounding your polygon.
+<P>
+If you want to check the 45 degree angles, you do a separate min/max test on
+the value sqrt(1/2)*X+sqrt(1/2)*Y, which is just a coordinate rotation of the
+point by 45 degrees.  The 135 degree rotation is done by testing
+sqrt(1/2)*X-sqrt(1/2)*Y.  The extra 4 rejections therefore cost 2 adds, 4
+mults, and 2 compares.
+<P>
+Now here's a really sneaky trick:  What if you change to an *UNNORMALIZED*
+coordinate system.  Don't check sqrt(1/2)*X+sqrt(1/2)*Y, check instead X+Y!
+The maximum extent you're checking against absorbs that normalization
+constant, but that is the only thing you ever use these min/max numbers for so
+it is not a problem.
+<P>
+So to evaluate the shrink wrapped octagon, you:
+<P>
+<PRE>
+ 1) Check min/max X span                 2 compares
+ 2) Check min/max Y span                 2 compares
+ 3) Compute A=X+Y                        1 add
+ 4) Check min/max A span                 2 compares
+ 5) Compute B=X-Y                        1 add
+ 6) Check min/max B span                 2 compares
+</PRE>
+<P>
+You could continue into 16 sided shrinkwrapped hulls if you really need to
+(C=A+X D=B+X E=A+Y F=B-Y) but this is probably tight enough for anybody.
+<P>
+This type of bounding box is useful for other types of point sampling as well;
+solid texturing evaluates functions of a single point and they often have a
+region where a color or pattern is applied to a central location and outlying
+areas are left alone or colored with a background.  A 16 sided bounding volume
+(this time in 3D) only takes 16 compares and 6 adds (by coincidence, the same
+as 2D.)  This has been implemented in several textures, in particular one that
+renders Bezier outline fonts on an object's surface.
+<P>
+---
+<P>
+A very different method for trivial rejection of 2D points takes much more
+precomputation but has the additional benefit of trivial ACCEPTANCE.
+Basically, you impose a uniform grid onto the XY plane and classify each box
+in the grid as inside, outside, or indeterminate.  Only when a point lies in
+an "indeterminate" box does the full point-in-polygon routine need to be
+called.  Any point that falls outside the grid is automatically rejected.
+(The grid is sized to just fit over the polygon.)  This method is especially
+effective for many-sided but simple polygons that have a lot of "empty" inner
+area since any hits on the inside away from the edges are quickly accepted.
+<P>
+This grid isn't too hard to make.  You "render" each polygon segment into the
+grid, marking any boxes the line touches with an ID meaning "indeterminate."
+Flood fill any untouched boxes that lie along the outside edge of the grid
+(using the N S E W neighbors) with a flag saying "outside."  Then use the
+"point in polygon" routine in the center of each of the remaining untouched
+squares to determine its state, inside or outside.  When you determine a new
+square, you can flood fill its unchecked neighbors.  This all works since the
+only indeterminate boxes are the ones that edges pass through, and an edge
+(and therefore an "indeterminate" box) will always separate any transition
+between inside and outside.  This will work for either winding number or
+even-odd methods of point-in-polygon definition.
+<P>
+The lookup grid is expensive in terms of memory, but the speedup can be
+significant especially for large or complex polygons.  Each box in the grid
+needs two bits of storage since there are three possibilities to choose from.
+A cheaper but slower alternative is to use only one bit to encode the
+in/out/indeterminate state.  During precompute, count up the number of boxes
+for acceptance and rejection, and encode the less common state as
+indeterminate.
+<P>
+[I have implemented this algorithm and it works very well, giving you near
+O(1) performance for "reasonable" data.  I used the outlines of continents for
+my polygons (from 164 to 1152 points) and had good results.  This algorithm
+would probably be good for GIS applications.  The indeterminate cells can be
+evaluated much faster by noting which edges actually pass through the cell.
+Since you know the state of the corners of the cell (i.e. each corner is in
+or out), you draw a line segment from your test point to the nearest cell
+corner (or any corner, but the nearest should have less crossings).  Using the
+ideas of Mukesh Prasad in Graphics Gems II for line segment intersection
+testing, you can quickly find how many crossings occur between the test point
+and the cell corner and so know the test point's status.  - EAH]
+<P>
+One implementation danger is in ROBUSTLY identifying each square in the lookup
+grid that any edge passes though.  A vertical or horizontal polygon edge might
+lie right along the borders of a square in the lookup grid, or less commonly,
+a line might pass diagonally through a corner of one of the squares of the
+grid.  In both cases it is probably best to be conservative and identify the
+adjoining square(s) as indeterminate.
+<P>
+One modification of this algorithm can speed it up further.  Instead of
+recording just three states in the look-up grid, a fourth state meaning
+"unprocessed" is added.  During precomputation, you mark all of the
+"indeterminate" squares as before, but you don't do anything else.  (Your grid
+after pre-computation will therefore be filled only with "indeterminate" and
+"unprocessed" squares.)  When you begin rendering, you use the grid as before,
+but when you hit an "unprocessed" square, you do the point-in-polygon test,
+record the answer in the grid, do the flood-fill of the neighbors, and return
+the correct answer.  This method is a little bit more complex to implement,
+but you'll only end up doing the minimum amount of work building the grid
+since you set it up partially "on demand."
+<P>
+____
+<P>
+These bounding area methods are useful complements to the point-in-polygon
+test.  They provide quick rejections (or acceptances) the number of times that
+the (relatively) slow point in polygon routine is called, exactly the same way
+that a bounding volume can provide quick rejection of ray/object
+intersections.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Simple,
+</A></FONT>
+Fast Triangle Intersection, by Chris Green (<A HREF="mailto:chrisg@cbmvax.cbm.commodore.com">chrisg@cbmvax.cbm.commodore.com</A>) and Steve Worley
+(<A HREF="mailto:spworley@netcom.com">spworley@netcom.com</A>)
+</H4>
+Chris writes about <A HREF="rtnv5n3.html">RTNv5n3</A>:
+<P>
+        I am always surprised to see articles advocating angle tests,
+intersection counting, or Barycentric coordinates for determining if an
+intersection point is inside of a 3d dimensional triangle, when the simple way
+of determining this is also the fastest, if you can live with a few more bytes
+stored per triangle.
+<P>
+My Method:
+<P>
+        Store with each triangle 2 indices, i1 and i2.  These are the
+coordinate offsets for the two axes that will be considered in the test.  (the
+axis with the largest component in the normal vector is dropped, as usual).
+Store the 2 coefficients and the 1 constant of the "inside-outside" equation
+of each edge.
+<P>
+        To test for intersection, calculate C[0]*X[i1]+C[1]*X[i2]+C[2] (X is
+the intersection coordinate, and C are the 3 constants for the linear equation
+calculated at setup time) over all 3 edges.  If any of them have a negative
+(or positive depending upon which convention you choose) result, return
+NO_INTERSECTION.
+<P>
+        Assuming hardware multiply, this can be coded extremely efficiently,
+and can take advantage of multiply-accumulate instructions if they are
+available.  In fact, with a fast MAC instruction, it might be more efficient
+to skip the coordinate indexing all together and just use the 3d equation of
+the plane passing through the edge perpendicular to the triangle on some
+architectures.
+<P>
+        The only further optimization I take is that I store the edge
+equations sorted by the area of the 2d bounding volume of the triangle which
+is outside of that edge.
+<P>
+<PRE>
+        In 68040 code, this all boils down to:
+
+        <A HREF="ftp://move.l">move.l</A>  0(a5,d6.w),d4           ; d6=i1, a5 = &intersection point
+        <A HREF="ftp://move.l">move.l</A>  0(a5,d7.w),d3           ; d7=i2
+        <A HREF="ftp://muls.l">muls.l</A>  (a4)+,d0:d4             ; C0*X1
+        <A HREF="ftp://muls.l">muls.l</A>  (a4)+,d1:d3             ; C1*X2
+        <A HREF="ftp://add.l">add.l</A>   d3,d4
+        <A HREF="ftp://addx.l">addx.l</A>  d1,d0                   ; C0*X1+c1*x2
+        <A HREF="ftp://movem.l">movem.l</A> (a4)+,d1/d3             ; fetch 64 bit constant term
+        <A HREF="ftp://add.l">add.l</A>   d3,d4
+        <A HREF="ftp://addx.l">addx.l</A>  d1,d0                   ; c0*x1+c1*x2+c2
+        <A HREF="ftp://bmi.s">bmi.s</A>   no_hit3                 ; outside?
+
+        repeated 3 times.
+</PRE>
+<P>
+________
+<P>
+Reply from Eric Haines:
+<P>
+        I'll put your note in the next RTN - thanks.  Berlin, in the truly
+obscure reference
+<P>
+<PRE>
+%A E.P. Berlin, Jr.
+%T Efficiency Considerations in Image Synthesis
+%B SIGGRAPH '85 course notes, volume 11
+%D July 1985
+%K polygon intersection
+</PRE>
+<P>
+gives the same method you do (he thinks of it as three planes).  I assume that
+your method works for convex polygons only, unless you test all triangles
+within the polygon and check the parity [see <A HREF="rtnv5n3.html">RTNv5n3</A> for more information].
+<P>
+        The catch is, most people don't code in assembler (the counting
+crossings test is darned fast in assembler).  However, your test is darned
+fast anyway, at least for simple polygons.  The extra memory is something of a
+drawback, but who can complain?
+<P>
+        I coded it up (looked pretty efficient) and tried it in my test suite.
+Here are the results:
+<P>
+For random polygons:
+<P>
+<PRE>
+                     Number of vertices
+                    3       4       5       3-7     20      100
+
+plane               1.15    1.88    2.81    2.91   16.10   87.02
+macmartin           1.90    2.33    2.76    2.67   10.63   51.47
+
+inside %            6.78   11.78   13.11   12.22   26.22   35.67
+</PRE>
+<P>
+For regular polygons:
+<P>
+<PRE>
+                     Number of vertices
+                    3       4       5       3-7     20      100
+
+plane               1.22    2.23    3.25    3.36   16.67   86.51
+macmartin           2.33    2.80    3.03    3.10    6.31   23.78
+
+inside %           33.22   51.00   60.22   55.22   77.44   80.22
+</PRE>
+<P>
+Admittedly, for the regular polygons I could do the test for the plane set
+based on "first hit means quit", since the regular polygons are convex.  This
+will result in faster timings for it (as it would for the macmartin tests:  if
+two crossings are found while doing the macmartin test for convex polygons,
+then you can quit).  It's cool that your test is better for 3 and 4 vertex
+polygons, since these are real common.
+<P>
+________
+<P>
+Chris replies:
+<P>
+        Thinking about my method applied to polygons with large (>4) numbers
+of sides, I realized that the edge equations should be stored in bit-reversed
+order, assuming some bounding volume that reduces PIP tests to only those
+points which are somewhat near the polygon, and also assuming most polygons
+are relatively regular.
+<P>
+        Imagine an octagon surrounded by a rough bounding box.  If the first
+side didn't clip off the point, the 2nd isn't that likely to if it is at a
+similar angle to the first one.  But the opposite side is more likely to.  The
+optimal thing to do is to calculate the area which is inside the bounding box
+which has not yet been clipped off by one of the previous edges, but this
+would involve calculating intersections of the edges with each other, which is
+probably too much work to do on a polygon which might only cover 10 pixels on
+the output image.
+<P>
+        The algorithm is to check the point against the edge equations of each
+edge of the convex polygon (the "inside-outside" equation of the edge).  i.e:
+<P>
+<PRE>
+        if v0 is one vertex and v1 is another, and v2 is another point on the
+        polygon,
+</PRE>
+<P>
+<PRE>
+        a=v1.x-v0.x
+        b=-(v1.y-v0.y)
+        c=-(a*v1.y+b*v1.x)
+</PRE>
+<P>
+<PRE>
+        if (a*v2.x+b*v2.y+c&gt;0) then negate a,b,c to make the inside-outside
+         sense correct.
+</PRE>
+<P>
+<PRE>
+        Which coordinate x and y are depends, of course, upon the surface
+        normal of the triangle.
+</PRE>
+<P>
+intersect:
+<P>
+<PRE>
+        x,y=intersection point of ray and plane projected onto the correct axis.
+</PRE>
+<P>
+<PRE>
+        for(each edge)
+                if (x*a[i]+y*b[i]+c[i] >0) then no_intersection
+</PRE>
+<P>
+All the abc[i]'s are sorted in such a way (based upon the bounding volume) so
+as to make the probability high that the first test will reject the point.
+For a many-sided (roughly regular) convex polygon, storing the sides in bit
+reversed order (for an 8 sided polygon this is 0,4,2,6,1,5,3,7) causes the
+loop above to test the point against a bounding volume which "homes-in" on
+the actual shape of the polygon.  For a triangle, I store the sides based upon
+the area of the triangle cut out by the intersection of the edge and the
+bounding box.
+<P>
+____
+<P>
+Steve Worley (<A HREF="mailto:spworley@netcom.com">spworley@netcom.com</A>) had some independent observations, also
+realizing that half-plane testing should be fast:
+<P>
+In <A HREF="rtnv5n3.html">RTNv5n3</A>, Peter Shirley wrote about a fast triangle test using barycentric
+coordinates.  It seems to me that the fastest method (by far!) to test
+whether a point is in a 2D triangle is to just do three half-plane tests.
+Represent each of the lines that make up the triangle with two real numbers A
+and B such that the line is described by the formula Ax+By=1.  If the triangle
+lies below that line, a point on the "wrong" side of the line will satisfy the
+inequality Ax+By&gt;1.  If the triangle is "above" the line, you just test
+Ax+By<1 instead.  You do this test for each of the three triangle sides, and
+immediately return if it fails at any time.  If it passes all three tests, the
+point is in the triangle.  The computational cost is two multiplies, an add,
+and two compares for each test, so worst case cost is 6 mults, 3 adds, 6
+compares.  However, you're more likely to get rejected on the first tests, and
+the mean amount of computation for a completely random triangle turns out to
+be exactly 3.5 mults, 1.75 adds, and 3.5 compares.
+<P>
+A slightly faster method would be to write each line in the form Cx+y=D
+instead, which would save a multiply on each test.  However this causes a
+problem because of perfectly vertical lines which would make C and D become
+infinite.  An extra compare would be needed to check for this case so that the
+more general Ax+By=1 test could be substituted.
+<P>
+While this method is probably about as fast as a 2D point in triangle test can
+get, Shirley's barycentric method has one big advantage in that AFTER a hit,
+the computed coordinates can be immediately used for Gouraud or Phong shading.
+Depending on the percentages of tests versus hits your application gets, it
+might be cheaper to use only barycentric if typical tests have a high enough
+hit rate.  Note also that both the barycentric and the half-plane rejection
+methods will work on any convex polygon.
+<P>
+<i><a href="rtnv5n3.html#art3">previous discussion of topic</a></i>
+<P>
+<i><a href="rtnv6n2.html#art4">more discussion of topic</a></i>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+Ray Tracing Roundup
+</A></FONT>
+</H4>
+The big news is that there is now an FTP site with some excellent 3D model
+datasets available.  Go to <A HREF="ftp://avalon.chinalake.navy.mil">avalon.chinalake.navy.mil</A> (129.131.31.11).  If you
+can't reach it, or your connection is slow, the site is mirrored on
+ftp.kpc.com (144.52.120.9) in /pub/mirror/avalon.  The objects in
+obj/Viewpoint are of particularly high quality:  there's a cow, foot bones,
+Beethoven's bust, a brontosaurus, a toy galleon, and I forget all what else,
+plus many road vehicles, a helicopter, etc.  There are also the Capone
+datasets, in case you didn't get yours free at SIGGRAPH at the Viewpoint
+booth.  I liked these .obj files well enough that I even wrote an obj2nff awk
+script (which is also FTPable from avalon - dig around).  And this is just one
+set of models - there are others from many other sources.  If they're missing
+your favorite dataset, upload it to them.  contact:  Francisco X DeJesus
+(<A HREF="mailto:dejesus@archimedes.chinalake.navy.mil">dejesus@archimedes.chinalake.navy.mil</A>)
+<P>
+________
+<P>
+The February 1993 issue of National Geographic has a fold-out image of Venus
+on page 37.  This image was rendered by David Anderson at SMU using Craig
+Kolb's Rayshade software.  Also, the computer firm Santa Cruz Operation is
+evidently using/going to use images made from public scene files by Rayshade
+in showing off their SCO Open Desktop.
+<P>
+________
+<P>
+A new book on ray-tracing has come out, and comes with a disk of code for
+"Bob", a ray tracer (of at least 8K lines of code).  Note that Stephen Coy is
+also the creator of the VIVID ray tracer.  I hope to review this book for the
+next issue of the RTN - EAH.  It's at least 8k lines of code.
+<P>
+<PRE>
+        Photorealism & Ray Tracing in C
+        Christopher D. Watkins, Stephen B. Coy, and Mark Finlay
+        M&T Books, a division of M&T Publishing, Inc.
+        411 Borel Avenue, Suite 100
+        San Mateo, CA  94402   (C) 1992
+        ISBN 1-55851-247-0
+</PRE>
+<P>
+Some comments from Stephen Coy:
+<P>
+Bob, the raytracer in the book, is basically Vivid with a few, minor changes.
+The changes tend to center around the parser.  I didn't want to use flex and
+byacc for the book so I spent a long day writing the parser from scratch in C.
+Everything works except allowing the user to perform math functions in the
+input files.  I'd like to see some benchmarks with Bob vs some of the other
+tracers out there.  Even though it is distantly derived from MTV I think it
+will generally beat MTV by quite a bit.
+<P>
+Before you ask, the name Bob just sort of happened.  When I was working on the
+code I got tired of talking to Chris and calling it "the ray tracer for the
+book."  I suggested that we just call it Bob until we came up with a better
+name.  The deadlines came first.
+<P>
+________
+<P>
+Another new book is _Practical Ray Tracing in C_ by Craig A. Lindley.  It
+contains a disk for the IBM PC and the ray tracer is DKB Trace.  I assume it
+has the same features as the PD one on the net (and vice versa).  The book is
+evidently a $49.95 paperback (with disk of course).  (Tom Wilson,
+<A HREF="mailto:wilson@eola.cs.ucf.edu">wilson@eola.cs.ucf.edu</A>)
+<P>
+[Does anyone know anything about this book?  I haven't seen it and am unwilling
+to blow bucks on it.  Any review (biased or no) is appreciated! - EAH]
+<P>
+________
+<P>
+For those of you who still believe free software is worthless, a comment from
+a guy at NASA on Radiance [an "industrial strength" lighting simulator free
+from Greg Ward - a ray tracer and much more]:
+<P>
+By the way, your package is a very good one, in just 2 weeks we were able to
+trace complex space shuttle lighting very easily.  Nice work.
+<P>
+________
+<P>
+The source code from the notes of Siggraph '92 Course 23 (Procedural Modeling
+and Rendering Techniques) is now available for anonymous ftp from
+<A HREF="ftp://archive.cis.ohio-state.edu">archive.cis.ohio-state.edu</A> as pub/siggraph92/siggraph92_C23.shar .  Without a
+copy of the course notes, these files may not make sense.  (David Ebert,
+<A HREF="mailto:ebert@hockey.cis.ohio-state.edu">ebert@hockey.cis.ohio-state.edu</A>)
+<P>
+________
+<P>
+Human heads and an anatomically correct human skull data are available.  The
+data is a mesh and the demo contains convert utilities to translate into
+various other formats, eg.  ASCII, Wavefront, IGES, etc.  The demo runs on a
+SGI IRIS workstation.  Ftp from <A HREF="ftp://taurus.cs.nps.navy.mil">taurus.cs.nps.navy.mil</A>, login anonymous,
+password guest, file pub/dabro/cyberware_demo.tar.Z .  (George Dabrowski,
+Cyberware Labs, <A HREF="mailto:dabro@taurus.cs.nps.navy.mil">dabro@taurus.cs.nps.navy.mil</A>)
+<P>
+________
+<P>
+A simple public-domain radiosity package is available at <A HREF="ftp://ftp.yorku.ca">ftp.yorku.ca</A> (was:
+<A HREF="ftp://nexus.yorku.ca">nexus.yorku.ca</A>) (130.63.9.66) in /pub/reports/Radiosity_code.tar.Z (also
+mirrored at <A HREF="ftp://wuarchive.wustl.edu">wuarchive.wustl.edu</A>).  The package contains C code for a
+progressive refinement solution using the following algorithms:
+<P>
+<PRE>
+        Wallace (Ray-traced form-factors),
+        Haines (Shaft Culling), using automatic hierarchical
+                bounding creation (Salmon 87)
+        Chen (Progressive refinement with jitter hemicubes)
+        A partial implementation of Hanrahan's BF-Refinement algorithm.
+</PRE>
+<P>
+Additionally, there are model preprocessors for conversion from QuickModel and
+OFF formats, with geometric constraints of Baum's 91 Siggraph paper partially
+included; and a scene walk through program with simple Gouraud shading.  The
+solution can be run stand-alone on any Unix box, but the walk-through requires
+a SGI 4D.  (Bernard Kwok, <A HREF="mailto:g-kwok@cs.yorku.ca">g-kwok@cs.yorku.ca</A>)
+<P>
+________
+<P>
+Version 2.2 of x3d, a 3D wireframe / hidden line / hidden surface viewer that
+runs under X11, is now available via anonymous ftp at <A HREF="ftp://castlab.engr.wisc.edu">castlab.engr.wisc.edu</A>
+(144.92.60.140) and is found as /pub/x3d.2.2.tar.Z.  (Mark Spychalla,
+<A HREF="mailto:spy@castlab.engr.wisc.edu">spy@castlab.engr.wisc.edu</A>)
+<P>
+________
+<P>
+If you use AutoCAD 11 Advanced Modelling Extensions (AME) software to build 3D
+objects, it is now possible to convert these models to a raytracer compatible
+scene file format (SCN), which is used by the RTrace package (raytracer plus
+utilities).  The converter code is available at <A HREF="ftp://asterix.inescn.pt">asterix.inescn.pt</A>
+[192.35.246.17] in directory pub/RTrace/scene-conv/acad (files scn.h and
+sol2scn.h).
+<P>
+A MAC version of RTrace 1.0 version (beta) is available in directory
+pub/RTrace/Macintosh at <A HREF="ftp://asterix.inescn.pt">asterix.inescn.pt</A> [192.35.246.17] The code was made by
+me; Reid Judd (reid.judd@east.sun.com) and Greg Ferrar
+(<A HREF="mailto:gregt@function.mps.ohio-state.edu">gregt@function.mps.ohio-state.edu</A>) made the Mac port.  (Antonio Costa,
+<A HREF="mailto:acc@asterix.inescn.pt">acc@asterix.inescn.pt</A>)
+<P>
+________
+<P>
+A new release of Tcl-SIPP is available from:
+<P>
+<PRE>
+        <A HREF="ftp://ftp.uu.net/graphics/3D/tsipp.3.0b.tar.Z">ftp.uu.net:/graphics/3D/tsipp.3.0b.tar.Z</A>
+</PRE>
+<P>
+and should be available soon from:
+<P>
+<PRE>
+        <A HREF="ftp://barkley.berkeley.edu/tcl/extensions/tsipp3.0b.tar.Z">barkley.berkeley.edu:/tcl/extensions/tsipp3.0b.tar.Z</A>
+</PRE>
+<P>
+Tcl-SIPP is a 3D image specification and rendering toolkit for use with Tcl
+and Tk.
+<P>
+It provides a Tcl command interface to SIPP, the SImple Polygon Processor
+library.  This is used for creating 3-dimensional scenes and rendering them
+using a scanline z-buffer algorithm.  The Tcl interpretive programming
+language is used to provide a powerful, yet simple interface to this library.
+The scene may be written to either a PPM format file, as defined by the
+PBMPlus toolkit or a RLE file, as defined by the Utah Raster Toolkit.
+<P>
+An interface to render to the photo widget in the Tk X11 toolkit is also
+provided.  Events such as button presses may take place while rendering is
+in progress. (<A HREF="mailto:markd@NeoSoft.com">markd@NeoSoft.com</A>, Mark Diekhans)
+<P>
+________
+<P>
+Under <A HREF="ftp://princeton.edu:pub/Graphics/rayshade.4.0">princeton.edu:pub/Graphics/rayshade.4.0</A>, you'll find several new
+directories, including:
+<P>
+<PRE>
+Contrib                 User-contributed enhancements, header files, etc.
+Amiga/DOS/MAC/OS2       Ports to various strange operating systems.
+Pix                     Rayshade-generated images, texture maps, etc.
+</PRE>
+<P>
+There have been other changes to the archive; poke around and you'll
+undoubtedly discover them.
+<P>
+____
+<P>
+I've placed all of the old rayshade-users messages on the princeton archive:
+        princeton.edu:pub/Graphics/rayshade-users/Feb-Sep92.Z.
+<P>
+This file is completely unedited -- if it was sent to the list between
+February and September 28th, it appears here.  If some brave soul wants to
+edit out the chaff, I'd be happy to replace the file with something more
+appropriate.
+<P>
+____
+<P>
+Utah RLE viewers for the IBM PC are available at
+<A HREF="ftp://cad0.arch.unsw.edu.au/pub/rayshade/dos">
+cad0.arch.unsw.edu.au:/pub/rayshade/dos</A>.
+They include:
+<PRE>
+        drawutah13.exe   SVGA Utah rle viewer.
+        drwrle15.exe     Utah rle viewer (Tseng Labs HiSierra 15 bit DAC).
+        drwrle24.exe     Utah rle viewer (Tseng Labs HiSierra 24 bit DAC).
+</PRE>
+The drawutah.exe may also be available from princeton.edu.
+<P>
+____
+<P>
+A new rsdefs package for Rayshade is available.  Changes made were:  new
+surfaces added (copper, several diamond, several glasses to name a few), fixed
+documentation -- all the examples should work now, made primitives more easy
+to use, added surface information file -- information for developing new
+surfaces (just RI values and some color info sofar), added a script for batch
+testing surfaces.  Larry Coffin (<A HREF="mailto:lcoffin@clciris.chem.umr.edu">lcoffin@clciris.chem.umr.edu</A>)
+<P>
+____
+<P>
+NCSA Polyview 3.0 is now available via anonymous FTP to <A HREF="ftp://ftp.ncsa.uiuc.edu">ftp.ncsa.uiuc.edu</A>
+(141.142.20.50) in /SGI/Polyview3.0.  Polyview 3.0 is a software tool for
+interactive visualization and analysis of 3D geometrical structures.  Polyview
+3.0 reads data files in NCSA HDF Vset format and automatically derives
+animation sequences based on available information.  Script-based and
+graphical user interfaces complement each other in a seamless fashion to allow
+the easy creation of movie-style animations.  Rayshade users on SGIs may be
+interested in this; among other things, it generates scene files in rayshade
+4.0 format (and also in Pixar's RenderMan format).  (Marc Andreessen,
+<A HREF="mailto:marca@ncsa.uiuc.edu">marca@ncsa.uiuc.edu</A>)
+<P>
+________
+<P>
+POLYRAY is a ray tracer that is "more difficult to use but substantially
+faster".  Version 1.4 is available at faramir(or
+ftp).<A HREF="ftp://informatik.uni-oldenburg.de">informatik.uni-oldenburg.de</A> (134.106.1.9) in
+pub/dkbtrace/incoming/polyray.  Note that the file has probably moved
+somewhere by now.  This site also contains a number of POV & DKBtrace scene
+files and images, as well as 3d fonts for POV and Vivid (Andy Haveland,
+<A HREF="mailto:andy@osea.demon.co.uk">andy@osea.demon.co.uk</A>)
+<P>
+________
+<P>
+If you're on (or have access to) an Amiga system, then you may want to check
+out Vertex, a shareware ($40) 3D object editor/converter.  It will read
+Wavefront .obj files and save them in Imagine, Sculpt 3D, Lightwave RayShade,
+GEO and 3D Professional file formats.  While not perfect, it does correctly
+read the Wavefront geometry from the file, and you can modify smoothing and
+face colors right in Vertex.  (<A HREF="mailto:Alex_-_DeBurie@cup.portal.com">Alex_-_DeBurie@cup.portal.com</A>)
+<P>
+________
+<P>
+White Sands Missile Range (192.88.110.20) in pd1:(msdos.graphics) carries
+Thunder, a ray tracer from Germany.
+<P>
+________
+<P>
+A 512x512x24 bit Mandrill is available in PPM and JPEG formats from
+<A HREF="ftp://popeye.genie.uottawa.ca/pub/pics/">popeye.genie.uottawa.ca</A>, in /pub/pics.  (Dominic Richens,
+<A HREF="mailto:dominic@shamin.genie.uottawa.ca">dominic@shamin.genie.uottawa.ca</A>)
+<P>
+________
+<P>
+The cameraman image is available via anonymous ftp from <A HREF="ftp://eedsp.gatech.edu">eedsp.gatech.edu</A> in
+database/images/camera.256.  The file is unformatted byte format with image
+dimensions 256x256.  (Stan Reeves, <A HREF="mailto:sjreeves@eng.auburn.edu">sjreeves@eng.auburn.edu</A>)
+<P>
+________
+<P>
+Graphtal is a L-system interpreter, and includes a number of features,
+including animation support, X11 previewer, z-buffer preview, and output for
+rayshade.  It is in C++, and currently works on SparcStations, RS/6000's, and
+DEC Stations.  The first public release of graphtal is now available via
+anonymous ftp at <A HREF="ftp://iamsun.unibe.ch">iamsun.unibe.ch</A> (130.92.64.10) and is found as
+        /Graphics/graphtal-1.0.tar.Z or
+        /Graphics/graphtal_no_bison_no_flex-1.0.tar.Z.
+(Christoph Streit, <A HREF="mailto:streit@iam.unibe.ch">streit@iam.unibe.ch</A>)
+<P>
+________
+<P>
+The Dr. Dobb's Journal's FTP directory <A HREF="ftp://ftp.mv.com">ftp.mv.com</A> /pub/ddj/packages has
+Xsharp, a fairly fast hidden surface displayer for the IBM PC.  Source code in
+C and assembler is included, and Xsharp now has some simple texture mapping
+capabilities.
+<P>
+________
+<P>
+The GRAPHIC CONNECTION can be reached at the following numbers:
+<PRE>
+    by modem: 503-591-8412
+    voice:    503-591-0134
+    FAX:      503-244-0919
+</PRE>
+V.32bis/V.42.bis MNP, 24 hours a day.
+<P>
+This BBS is owned and operated by Vertech Design, is located in Portland,
+Oregon.  TGC specializes in material/texture files, custom bitmap design,
+graphics utilities and programs, and specialized scanning services.  There
+will also be a large message base with topic specific areas for all areas of
+CAD and graphics support.
+<P>
+[I tried this BBS out some time ago, but had trouble getting any material
+texture samples - the directory which was supposed to have these publicly
+available was inaccessible, for some reason.  I paged the sysop, but he didn't
+seem to know what was wrong, either.  - EAH]
+<P>
+________
+<P>
+For 3D stereo supplies, one source is Reel 3D's mail order catalog:
+        Reel 3-D Enterprises, Inc.
+        P.O. Box 2368
+        Culver City
+        CA 90231
+        Phone (310)837-2368
+        Fax   (310)558-1653
+(Alexander Klein, editor of 3D-MAGAZIN, <A HREF="mailto:klein@nadia.stgt.sub.org">klein@nadia.stgt.sub.org</A>)
+<P>
+________
+<P>
+<A HREF="ftp://ftp.rahul.net">ftp.rahul.net</A> [192.160.13.1]:/pub/bryanw has a number of programs related to
+JPEG and MPEG generation and display.  (Bryan Woodworth, <A HREF="mailto:bryanw@rahul.net">bryanw@rahul.net</A>)
+<P>
+________
+<P>
+VIS-5D is a system for interactive visualization of 5-D gridded data sets such
+as those made by numeric weather models.  One can make isosurfaces, contour
+line slices, colored slices, wind vector slices, wind trajectories, etc.  of
+data in a 3-D grid and then rotate and animate the image in realtime.  There
+are also features for text annotation and video production.  Systems
+supported:  SGI, IBM RS/6000, Stardent/Stellar.  FTP from <A HREF="ftp://iris.ssec.wisc.edu">iris.ssec.wisc.edu</A>
+(144.92.108.63).  It is also available on <A HREF="ftp://wuarchive.wustl.edu">wuarchive.wustl.edu</A> in the directory
+graphics/graphics/packages.  (<A HREF="mailto:brianp@ssec.wisc.edu">brianp@ssec.wisc.edu</A>, Brian Paul)
+<P>
+________
+<P>
+Disc-1 Graphics- is a collection of more than 426 MegaBytes of popular public
+domain, shareware, and freeware graphics programs and data files.  The disc
+contains more than 1200 programs, 16,000 files.  The cost of the disc is
+$24.95 plus $5 to cover shipping and handling ($15 overseas).  Orders may be
+FAXed to (916)-872-3826.
+Prepaid orders may be mailed to : Knowledge Media
+                                  436 Nunnelley Rd. Suite B
+                                  Paradise,CA 95969, USA
+(Paul Benson, <A HREF="mailto:pbenson@cscihp.ecst.csuchico.edu">pbenson@cscihp.ecst.csuchico.edu</A>)
+<P>
+________
+<P>
+The Copyright Guide from the ASMP (American Society of Media Photographers) is
+available in digital form now.  FTP from <A HREF="ftp://ftp.eff.org">ftp.eff.org</A>:
+pub/cud/papers/asmp-guide, or <A HREF="ftp://ftp.ee.mu.oz.au">ftp.ee.mu.oz.au</A>:
+pub/text/CuD/papers/asmp-guide.Z, or ftp.moink.nmsu.edu.  Although written
+from a photographers perspective the Guide might help to clear up a few points
+of confusion about copyright protection of images.  (Don Smith,
+<A HREF="mailto:dsp@halcyon.com">dsp@halcyon.com</A>)
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art8">
+Spectrum Overview,
+</A></FONT>
+edited by Nick Fotis
+</H4>
+Here's a glimpse of the SPECTRUM rendering testbed proposed by A.Glassner in
+the Frontiers In Resdering Course Note 12 from SIGGRAPH '91:
+<P>
+"... the architecture supports the following features:
+<P>
+o       Standard radiosity and distribution ray tracing features (energy
+        balancing, soft shadows, depth of field, motion blur, spectral
+        sampling, etc.)
+<P>
+o       User control of most rendering parameters (with defaults)
+<P>
+o       Programmable shaders, selected by the user in run time (including
+        textures)
+<P>
+o       Programmable sampling techniques.  Any sampling strategy may be used,
+        including (bu not limited to) staticc or adaptive, uniform or noisy.
+        Any sampler may be used to draw samples on any two-dimensional
+        distribution.  Higher-dimensional samplers may be used as well.
+<P>
+[nfotis: I think that would be a better idea to separate rendering and
+ reconstruction, as G.Ward does with Radiance]
+<P>
+o       Programmable reconstruction techniques, appropriate for any two-
+        dimensional signal, such as illumination spheres and screen images.
+<P>
+o       Programmable radiation patterns for light emitters.
+<P>
+o       Programmable cameras, selected by the user at run time.
+<P>
+o       Easily-extended object and meta-object classes.
+<P>
+o       Still and animated sequence rendering.
+<P>
+o       Any geometric object may be a light emitter.
+<P>
+o       Sampling and reconstruction are techniques unified across screen and
+        object domains.  All sampling procedures are interchangeable, whether
+        they are sampling the image plane, the illumination arriving at an
+        object surface, the texture of a region, etc.  Similarly,
+        reconstruction techniques, are equally, generic and applicable to all
+        domains.  A sampler is simply considered a technique for gathering
+        information on a two-dimensional distribution.  Callback procedures
+        are used to control a sampler for the different purposes of screen
+        sampling, shading, texturing, etc.
+<P>
+o       Shaders receive as input a description of the illumination sphere.
+        They are not responsible for determining the incident illumination at
+        a point, and they may reconstruct a sampled illumination signal before
+        processing.
+<P>
+o       The incident illumination sphere is described as a collection of
+        samples of the incident light.  Typically, one determines this sphere
+        by first building a set of samples that are directed to light-emitting
+        objects; they return the color of the light foud along the ray,
+        whether it actually reached a light emitter or not.  Then this set may
+        be passed to an adaptive sampler as a "seed", or starting signal.
+        This increases the likelihood that light emitters are sampled, and
+        allows the incident illumination sphere to be adaptively sampled until
+        the sampled signal meets the criteria for that sampler.  This
+        illumination sphere is then passed to a shader for modulation vy the
+        bidirectional reflectance distribution function of the surface at this
+        point.
+<P>
+o       Objects may be queried by a shader for information.  This contrasts
+        with the Renderman model, where a shader may expect a number of
+        variables to be precomputed and available.  Since the shaders in this
+        system are not precompiled from a special-purpose language, if is
+        difficult to determine a priori what information a shader requires
+        from an object.  Thus each object contains a procedure that accepts a
+        request from a shader in the form of a list of requested geometric
+        values, and returns the relevant information.  There is a performance
+        penalty for this process, but it only occurs once per shading point.
+        I consider that the extra overhead to parse the request list is
+        compensated by the time saved by not calculating unnecessary values.
+<P>
+o       Colors may be specified in a variety of formats, including spectral
+        distributions.
+<P>
+o       Meta-objects (accelerators, CSG trees, abstract structures, etc.) are
+        considered "first-class".
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art9">
+Comments on the Glazing Trick,
+</A></FONT>
+by Eric Haines (<A HREF="mailto:erich@acm.org">erich@acm.org</A>)
+</H4>
+Hans Kilian (<A HREF="mailto:iqkili@cbs.dk">iqkili@cbs.dk</A>) writes:<BR>
+&gt;In vol. 5 issue 1, in 'The Glazing Trick' Haakan Andersson says that pumping<BR>
+&gt;up the specular exponent makes the shiny spot smaller and not sharper. If<BR>
+&gt;I'm not mistaken, this is because he uses point light sources and not area<BR>
+&gt;light sources. If he uses area lights he will get correct results. I'm sure<BR>
+&gt;that Haakan knows this, but I got the impression that he felt that this was<BR>
+&gt;Phong's fault, and it really isn't...<BR>
+<P>
+You're right in that part of the problem is that he's using point lights.
+However, Phong's highlights are basically a way to simulate surface shininess.
+After all, a true point light would never reflect (well, except at one single
+point) in a surface if the surface was perfectly reflective, with no "spread"
+in the reflection.  Essentially, Phong's trick is to spread out the reflected
+light in a cosine to a power distribution, and note the value of this
+distribution from the eye's view angle - a wider distribution gives a duller
+looking surface.  When you have area lights, you can't use this easily:  you
+either have to reflect the lights directly (in which case the lights are seen
+in the reflection as if the surface were perfectly reflective) or you have to
+sample the area a sufficient amount to get the phong highlights and sum and
+scale these.
+<P>
+In theory, what works for lights should work for light reflectors in the
+environment.  In other words, you could sample the environment (i.e.  ray
+trace) from the view of the surface and use Phong highlighting on these sample
+rays and so get a shiny or dull looking surface.  If you're smart, you'll
+simply use the Phong distribution itself to determine where the rays are shot,
+shooting more rays in the higher contribution areas.  This has been done, and
+looks pretty good with enough reflection samples.
+<P>
+The problem with Phong's trick is that it is not energy conserving at all:  a
+low cosine power gives a lot more total energy (light) reflected from a
+surface than a high cosine power.  Phong kept peak intensity constant, which
+is important for making it easy for a user to adjust the specular highlight's
+look, but is lousy from any physically based standpoint.
+<P>
+This lack of energy conservation hit home when I tried doing texture mapping of
+the cosine exponent.  Say you texture this exponent and it varies from 0 to 10.
+The weird effect is that the surface brightness is brightest around 1 (or less,
+if you allow &lt; 1 exponents) and drops off as you go to 10.  So at 0 you get
+no specular highlight, at 1 the overall brightness is at its height, then it
+drops off as you go to 10.
+<P>
+&gt;The thresholding trick is a neat trick, that I didn't know about, and it'll<BR>
+&gt;save a lot of rendering time when you *do* use point light sources and still<BR>
+&gt;want a large shiny spot on your objects.<BR>
+<P>
+Yes - essentially, you're saying you want the surface to look perfectly
+reflective (i.e. mirrorlike, not like brushed aluminum) and for the light to
+have a finite radius.  The only problem I see is that the thresholding trick
+does not take into account the distance the object is from the light, so that
+the light will always be reflected as the same relative size no matter what
+the distance the light is from the object.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<P>
+======== Net cullings follow =========================
+<P>
+<H4><FONT size=+1><A NAME="art9a">
+Graphics Gems IV Announcement,
+</A></FONT>
+by Paul Heckbert (<A HREF="mailto:ph@cs.cmu.edu">ph@cs.cmu.edu</A>)
+</H4>
+<P>
+We've decided to bring out Gems IV in 1994, not 1993, to keep the quality of
+the series high.  The deadline for contributions is in the late Spring of
+1993.  Write to Academic Press (not me) for more detailed information about
+how to contribute:
+<P>
+<PRE>
+    Graphics Gems Editor
+    Academic Press
+    955 Massachusetts Ave
+    Cambridge MA 02139
+</PRE>
+<P>
+or email <A HREF="mailto:jswetland@igc.org">jswetland@igc.org</A> .
+<P>
+And if you've got ideas for contributions and you'd like to discuss their
+appropriateness with me, email me at <A HREF="mailto:ph@cs.cmu.edu">ph@cs.cmu.edu</A> .  Suggestions and
+criticisms of the previous volumes are also welcome.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art10">
+Announcing the ACM SIGGRAPH Online Bibliography Project,
+</A></FONT>
+by Stephen Spencer (<A HREF="mailto:biblio@siggraph.org">biblio@siggraph.org</A>)
+</H4>
+A new resource for researchers is now available to the computer graphics
+community.  Over 15,000 unique bibliographic references from the computer
+graphics field have been compiled into a single database for use by students,
+researchers, and the computer community in general.
+<P>
+The project started with the DEC online computer graphics bibliography, which
+covered the years 1976 through 1986, and added the contributed bibliographic
+databases of a number of individuals, expanding the years covered as well as
+the sources of information.
+<P>
+This database includes references from conferences and workshops worldwide and
+from a variety of publications, from magazines and journals to books dating
+back as far as the late 19th century.  The majority of the major journals and
+conference proceedings between the mid-1970's and 1992 are listed here.
+<P>
+The database is formatted in the BibTeX bibliography entry format, an
+easy-to-read and understand ASCII format.  It is organized into files by year
+(except for the entries prior to 1975, which are collected into one file by
+themselves).
+<P>
+A set of tools for manipulating and searching the bibliography database is
+also available for downloading.
+<P>
+The database is available for anonymous FTP from "<A HREF="ftp://siggraph.org">siggraph.org</A>"
+"(128.248.245.250)" in the "publications/bibliography" directory.  Use
+"anonymous" as the username and your electronic mail address as the password
+to gain entry to the FTP area on this machine.  Please download and examine
+the file "READ_ME" contained in the "publications/bibliography" directory for
+more specific information concerning the database.
+<P>
+This project is an ongoing concern:  We plan to expand the bibliography, both
+keeping it up-to-date as well as filling in missing pieces, large or small,
+and polishing and refining the format of the existing database.  In addition,
+plans to provide interactive online searching of the database are underway.
+Alternative distribution channels are also being considered.
+<P>
+Volunteers are always welcome.  Contact "<A HREF="mailto:biblio@siggraph.org">biblio@siggraph.org</A>" for more
+information on what needs to be done.
+<P>
+Questions, corrections, suggestions, and contributions of material to the
+database can be directed to:  "<A HREF="mailto:biblio@siggraph.org">biblio@siggraph.org</A>" on the Internet.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art11">
+A Brief History of Blobby Modeling,
+</A></FONT>
+by Paul Heckbert (<A HREF="mailto:ph@cs.cmu.edu">ph@cs.cmu.edu</A>)
+</H4>
+[I deleted the reference - if you want these, check the online SIGGRAPH
+bibliography (see elsewhere in this issue for details). - EAH]
+<P>
+People have known for a long time that if you have two implicit surfaces
+f(x,y,z)=0 and g(x,y,z)=0 that are fairly continuous, with a common sign
+convention (f and g positive on the inside, negative on the outside, say) then
+the implicit surface defined by f+g=0 is a blend of the shapes.  See [Ricci
+1983] for a variant of this.
+<P>
+The van der Waals surfaces of molecules (roughly speaking, iso-potentials of
+the electron density) are described in Chemistry and Physics books and [Max
+1983].  To create animation of DNA for Carl Sagan's COSMOS TV Series, Jim
+Blinn proposed approximating each atom by a Gaussian potential, and using
+superposition of these potentials to define a surface.  He ray traced these
+[Blinn 1982], and called them "blobby models".
+<P>
+Shortly thereafter, people at Osaka University and at Toyo Links in Japan
+began using blobby models also.  They called theirs "metaballs" (or, when
+misspelled, "meatballs").  Yoichiro Kawaguchi became a big user of their
+software and their Links parallel processor machine to create his "Growth"
+animations which have appeared in the SIGGRAPH film show over the years.  The
+graduate students implementing the metaball software under Koichi Omura at
+Osaka used a piecewise quadratic approximation to the Gaussian, however, for
+faster ray-surface intersection testing (no need for iterative root finders;
+you just solve a quadratic).  I don't know of any papers by the Japanese on
+their blobby modeling work, which is too bad, because they have probably
+pushed the technique further than anyone.
+<P>
+Bloomenthal has discussed techniques for modeling organic forms (trees,
+leaves, arms) using blobby techniques [Bloomenthal 1991] (though he prefers
+the term "implicit modeling") and for polygonizing these using adaptive,
+surface-tracking octrees [Bloomenthal 1988].  The latter algorithm is not
+limited to blobby models, but works for any implicit model, not just blobs.
+Polygonization allows fast z-buffer renderers to be used instead of ray
+tracers, for interactive previewing of shapes.  A less general variant of this
+algorithm was described in the "marching cubes" paper by [Lorensen 87] and
+some bugs in this paper have been discussed in the scientific visualization
+community in the years since.  In the sci-vis community, people call them
+"iso-surfaces" not "implicit surfaces".
+<P>
+Meanwhile, in Canada and New Zealand, the Wyvill brothers, and grad students,
+were doing investigating many of the same ideas:  approximations of Gaussians,
+animation, and other ideas.  See their papers listed below.  Rather than
+"blobbies" or "metaballs", they called their creations "soft objects".  But
+it's really the same idea.
+<P>
+Bloomenthal and Wyvill collected many good papers on blobby and implicit
+modeling for a recent SIGGRAPH tutorial (1991?).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art12">
+Cool Raytracing Ideas,
+</A></FONT>
+Karen Paik (<A HREF="mailto:paik@cgl.citri.edu.au">paik@cgl.citri.edu.au</A>)
+</H4>
+Karen comments on:<BR>
+&gt;    In general removing "common sense" restraints from rendering equations<BR>
+&gt;gives you flexibility to do a lot of ad hoc effects.<BR>
+<P>
+At Compugraphics 92, M. Beigbeder and V. Bourgin presented a paper titled
+"New Perspectives for Image Synthesis" in which they used artistic perspective
+projections, instead of the usual one. They had a "fishbone" perspective and a
+circular perspective. These perspectives broke a lot of the fundamental
+assumptions. Straight lines weren't always straight after they were projected
+and light didn't always travel in a straight line.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art13">
+Optical Effects and Accuracy,
+</A></FONT>
+by Sam Uselton (<A HREF="mailto:uselton@wk207.nas.nasa.gov">uselton@wk207.nas.nasa.gov</A>)
+</H4>
+In article (1992Nov12.133317.5833@genes.icgeb.trieste.it) oberto@genes.icgeb.trieste.it (Jacques Oberto) writes:<BR>
+&gt;I am trying to reproduce one of Newton's experiments with POV.<BR>
+&gt;Would a simulated white light beam hitting a glass prism with the<BR>
+&gt;right angle be scattered into a rainbow spectrum ?<BR>
+&gt;Are POV and other ray-tracers optically accurate in that respect ?<BR>
+&gt;Has anybody tested the properties of 'raytraced' light other than<BR>
+&gt;reflection and refraction ?<BR>
+<P>
+I don't know POV................BUT
+<P>
+If it is in the tradition of the standard ray tracers, it starts at the eye,
+shooting rays through pixels into a scene.  Essentially this is tracing ray
+paths in reverse.  Generally speaking, ray paths are reversible, so this is
+fine.  There are, however, difficulties.  When a ray hits an object, in
+addition to reflected and refracted rays, rays to the light sources must be
+generated to determine shadows, intensity of illumination, etc.  If one of
+these light source rays hits a refractive object, it may no longer be headed
+for the light source once the refraction is done.
+<P>
+What one would LIKE to do is shoot the light source ray in a direction (there
+may be several correct choices) which will result in a ray pointed at the
+light AFTER the refraction.  Guessing what direction(s) this might be is HARD.
+One solution is to shoot lots of illumination rays in various directions
+(especially from a surface that is not perfectly specular, use the BRDF as the
+distribution being randomly sampled => distribution ("distributed") ray
+tracing).
+<P>
+Another solution is to do the ray tracing from the light, but then most of the
+rays won't get to the screen so the effort is wasted.  There are various
+schemes in the literature for getting around the difficulties, but my guess is
+that they are not in most public domain code.
+<P>
+Another difficulty probably ignored in most PD code, is that in order to break
+out the spectrum, the refraction angle must be calculated on a wavelength
+dependent basis, generally with a single ray turning into several rays to
+properly sample the spectrum.
+<P>
+We (Redner, Lee & Uselton ++)have done an image of the experiment I believe
+you are describing.  It was accepted into the SIGGRAPH slide set and
+distributed last summer at the conference.  It does involve a forward ray
+tracing phase, and some stuff to remember these results in a way that can be
+used in a traditional backward ray tracer.  Harder than it looks.
+<P>
+[Also see Mitchell & Hanrahan's article in SIGGRAPH '92 about this topic. -EAH]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art14">
+Map Projections Reference Book,
+</A></FONT>
+by Mike Goss (<A HREF="mailto:goss@CS.ColoState.EDU">goss@CS.ColoState.EDU</A>)
+</H4>
+<PRE>
+One of the best reference books for map projections is
+        Map Projections --- A Working Manual
+        by John P. Snyder
+        USGS Professional Paper 1395
+        US Gov't Printing Office, 1987 (383 pages)
+</PRE>
+<P>
+It's available directly from USGS, and was $20 a few years ago.  In the USA,
+call 1-800-USA-MAPS (1-800-872-6277) for ordering info.  Snyder covers all the
+projections used by USGS, and a few others.  For each one he gives a bit of
+history, some explanatory material, detailed formulas, and examples.
+<P>
+There is also some source code available for anonymous FTP at
+<A HREF="ftp://spectrum.xerox.com">spectrum.xerox.com</A>, under directory /pub/map/source (I haven't used it, but
+I've seen it there).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art15">
+A Brief Review of Playmation,
+</A></FONT>
+by Chris Williams (<A HREF="mailto:chrisw@fciad2.bsd.uchicago.edu">chrisw@fciad2.bsd.uchicago.edu</A>)
+</H4>
+   Playmation is a good quality ray-tracer, and one of the few that renders
+patches (Catmull-rom).  The base package only renders at 256 colors, but an
+they offer a 24-bit DOS-based renderer for ~$100.00.  It's a very nice
+renderer, and renders with an 8-bit alpha channel.  The major nice points of
+the package are its modeler and animation capabilities.  I may review this
+entire package in the future.
+<P>
+   BTW, Will Vinton has had nothing to do with the software other than lending
+it his name.  The program has been in development on the Amiga for several
+years as Animation Apprentice, then as Animation Journeyman.  It's still
+available on the Amiga, and Mac and SGI versions are supposed to be in the
+works.
+<P>
+[and in a later post:]
+<P>
+    If you are familiar with patch-based modeling, it is a fairly powerful
+modeling interface.  It (IMHO) gives Alias a run for the money at a tiny
+fraction of the cost.  I consider it the "poor person's Alias."
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art16">
+PV3D Quick Review,
+</A></FONT>
+by David Anjo (<A HREF="mailto:david.anjo@canrem.com">david.anjo@canrem.com</A>)
+</H4>
+I promised one individual on the net's that once I had received my registered
+copy of PV3D I would post a general, brief review of what I have found.
+<P>
+First and foremost the most current version of PV3D is v.0.50.  I did download
+it from The Graphics Alternative BBS (510 524-2165/2780) before I received my
+copy in the mail.  I do not have ftp status from the mail site I use, so I
+cannot suggest a location for those so inclined.  I would suspect that You Can
+Call Me Ray BBS (708 358-8721/5611) will have a copy available of v.0.50.  I
+mention this because YCCMR is a free access board, while TGA is subscriber
+based.  I highly recommend *both* systems for anyone interested in PC based
+raytracing.
+<P>
+The features included within the shareware version are identical to those in
+the registered version, save the following:
+<P>
+- you can save a created scene file for future manipulation.
+<P>
+- the registered version includes two additional utilities, of which one I
+have found to be most handy (a screen capture to texture map facility - very
+nice).  *Source* code is included for both.
+<P>
+- larger screen previews of the online texture maps included with the product.
+The preview screens certainly help in picking an appropriate texture for that
+object, especially when you forget what the 'ell GRNT9 is supposed to look
+like =].  As per the point above there are simple instructions on how to
+incorporate your "designed" textures to this online library.
+<P>
+- a host of sample "triangled" DXF files - something I certainly appreciate
+given the sweat I've had creating them.  Their integration is seamless, BTW.
+<P>
+For those who do not know what PV3D is, here's a brief review.
+<P>
+PV3D is a wireframe modeler for those PC based raytracers using Persistence of
+Vision.  It is something more oriented towards the novice PoV user and for
+even the advanced, experienced souls, who just want to get on with creating
+(hopefully) interesting raytraced artworks.  Beyond providing the basic
+primitives (sphere, quad sphere, cylinders, cones, cubes, pyramids, positive
+and negative blobs, planes and torii) PV3D can also generate spline based
+objects.  You can incorporate "triangled" DXF files.  Multiple lights can be
+positioned, as well as the look_at and camera locations, very easily.  You can
+preview the textures used and the colours applied (corresponding surface
+"highlights") to individual objects.  It is reasonably priced (250 Frebch
+Francs) and although still in a beta stage, extremely promising.  It has cut
+down my "code" time dramatically, increasing my creative time ten fold.  I'm a
+computer based artist and the goal is to produce art - PV3D is a major benefit
+in that pursuit.
+<P>
+Back to the latest version...
+<P>
+The biggest change in v.0.50 as far as I'm concerned is the new View 3D
+option.  This will give you a world view of your scene from the perspective of
+the camera location.  This is a major advantage, especially when you get up
+close to the maximum of 150 objects and you are, quite simply, lost.  I know,
+I certainly have been in the past =].  Very nice addition.
+<P>
+The documentation is still hurting from a lack of a suitable French to English
+translation, but I intend to offer my assistance in that regard.  Mind you if
+the author's English is bad, my French is a lot worse.  I will be seeking a
+good translation program in this effort - any suggestions for a bi-directional
+program would be much appreciated.
+<P>
+[unfortunately, I didn't receive the second part of the review at our site,
+so this is all there is! - EAH]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art17">
+Bounding Volumes (Sphere vs. Box),
+</A></FONT>
+by Tom Wilson (<A HREF="mailto:wilson@cs.ucf.edu">wilson@cs.ucf.edu</A>)
+</H4>
+[For those learning about the value of bounding volumes, here's a summary.
+- EAH]
+<P>
+<A HREF="mailto:djb@geovision.gvc.com">djb@geovision.gvc.com</A> (Darren Burns) wrote:<BR>
+&gt;I had been under the impression that it was quicker to intersect<BR>
+&gt;a line with a sphere than with a box.  I just did a timing test.<BR>
+&gt;Basically I had a bunch of spheres or boxes sitting there and I<BR>
+&gt;ray-traced the scene, once using spheres and once using boxes.<BR>
+&gt;I found that the boxes were faster (not a lot, 11 seconds for<BR>
+&gt;spheres vs 9 for boxes).  The volumes were about the same for<BR>
+&gt;both types of objects; actually the spheres were a little smaller.<BR>
+<P>
+You must be careful when drawing your conclusion.  I've found 3D boxes faster
+too, but it is very dependent upon what's inside as to whether or not it will
+be.  Depending on how optimized your code is, the sphere BV may be faster to
+intersect with a ray, but the comparison doesn't end there.  When a ray hits
+an object inside the BV, both the sphere and the box are a waste of time.
+When the object inside the BV is missed, it is up to the BV to cull as many
+rays as possible.  You want to perform the ray-object intersection code as few
+times as possible when it will miss the object (you obviously must execute the
+code when there is a hit).
+<P>
+Also you must take into account the relative execution times of (1) ray-sphere
+(as BV) int., (2) ray-box int., and (3) ray-object int.  If (3) is much
+greater than both (1) and (2), you may get a better answer from your test.
+Suppose you have 2 BVs:  BV #1 is the slower of the two, but culls more
+misses, BV #2 is the faster of the two, but culls fewer misses.  Which is
+better?  That depends on how many rays are actually involved in the
+comparison, but let's be sloppy and just say:  if the time saved by using the
+faster BV #2 is lost by executing the slower ray-object routine more times, BV
+#1 may actually be the better choice.  Too many tests involve spheres or boxes
+around simple triangles.
+<P>
+Basically, you are introducing yourself to an old, but difficult-to-fully-
+-solve problem.  Much work has been done on the choice of BVs.  Couple that
+with a construction of a hierarchy of BVs and you really have a mess.  Find
+some of the bibliographies at ftp sites to see the work that has already been
+done (also you might find my collection of ray tracing abstracts which might
+give you a clue about what is discussed before you actively seek the papers --
+send me e-mail for more details if you'd like, I don't want to bother at the
+moment).  The text _An Introduction to Ray Tracing_ has a sufficient
+explanation of the background material.
+<P>
+The only strong conclusion I can make is that boxes work best for the scene(s)
+you tested.  They may be a good choice in general, but that's a dangerous
+statement.
+<P>
+I hope I made some helpful comments. Others are appreciated.
+<P>
+[Me, I've given up bounding volume spheres and even ellipsoids:  boxes seem to
+almost always have tighter bounds and having only one bounding volume
+throughout your program saves a lot of messing around in the code.  - EAH]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art18">
+Raytracing Swept Objects,
+</A></FONT>
+by Mark Podlipec (<A HREF="mailto:podlipec@dgxyris.webo.dg.com">podlipec@dgxyris.webo.dg.com</A>)
+</H4>
+In article (BAGCHI.92Sep22220950@quip.eecs.umich.edu), bagchi@eecs.umich.edu (Ranjan Drzzzzt!  Bagchi) writes:
+|&gt;
+|&gt;      Consider this object:  I take a curve between two endpoints, and rotate
+|&gt; it 360 degrees about the y axis.  How would I go about ray-tracing the solid
+|&gt; I've just swept out.
+|&gt;
+|&gt;      I've given this some thought.. and I'm fairly sure that in
+|&gt; the general case, this is quite difficult.  But are there any classes
+|&gt; of curves which sweep out solids which are easy to get
+|&gt; ray-intersections and surface normals?
+<P>
+I've implemented an object for rayshade a couple of years ago which is pretty
+similar to what you've described(I call it cubicspin).  You take any curve
+described by a 3rd degree polynomial and rotate it about an arbitrary axis.
+End points are also specified.
+<P>
+A third degree polynomial rotated like that becomes a 6th degree polynomial
+and then you can substitute in the ray equations to find the point of
+intersection.  Throw in some checking for the end points and there ya go.
+This is the brute force method.
+<P>
+I use natural cubic splines to specify the curve.
+<P>
+Now if you started with a 4th degree curve, you would have to solve 8th degree
+equations, etc.  But for the most uses, the extra degrees don't buy you much.
+<P>
+<PRE>
+[My favorite article on this topic is still:
+        %A Jarke J. van Wijk
+        %T Ray Tracing Objects Defined by Sweeping Planar Cubic Splines
+        %J ACM Trans. on Graphics
+        %V 3
+        %N 3
+        %D July 1984
+        %P 223-37
+- EAH]
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art19">
+Ray Transformation,
+</A></FONT>
+by Kendall Bennett (<A HREF="mailto:rcskb@minyos.xx.rmit.oz.au">rcskb@minyos.xx.rmit.oz.au</A>)
+</H4>
+[an article for people trying to implement the viewing transform. - EAH]
+<P>
+&gt;<A HREF="mailto:belme@waterloo.hp.com">belme@waterloo.hp.com</A> (Frank Belme) writes:<BR>
+&gt;<BR>
+&gt;I was wondering what a good way is to calculate the direction of each ray<BR>
+&gt;for ray tracing a scene given an eyepoint, eye direction, and field of view<BR>
+&gt;angle.  Any help would be appreciated.  Thanks.<BR>
+<P>
+There is actually a better way of doing this, that can take into account
+aspect ratio and fields of view prior to actually computing the ray direction
+(the speedup in this routine are generally not that noticeable, but it is nice
+to have something elegant!).
+<P>
+The first step is to compute two vectors, one in the direction of increasing x
+coordinates for the image, and one for increasing y coords, that are scaled to
+be the length of a pixel in each respective direction (aspect ratio calcs go
+in here).  Then compute a vector that points towards the upper left corner of
+the screen (I will give pseudo code later).
+<P>
+When you have this information, you can quickly create any ray to fire by
+simply adding appropriately scaled versions of the x and y direction vectors
+to the vector pointing to the first pixel (of course you want to normalise the
+final vector :-):
+<P>
+PreProcessing stage:
+<P>
+<PRE>
+        xdir = (2 * lookDistance * tan(hfov / 2)) / xres
+        ydir = (2 * lookDistance * tan(vfov / 2)) / yres
+
+        ydir *= aspect // Adjust y pixel size given aspect ratio
+
+        LLdir = camera.dir - (xdir * xres)/2 - (ydir * yres)/2
+</PRE>
+<P>
+Computing the ray to fire:
+<P>
+<PRE>
+        dir = LLdir + xdir * x + ydir * y
+        dir = dir normalised
+</PRE>
+<P>
+and you are done - not rotations, just simply vector additions and scales
+(this is almost directly taken from my C++ ray tracer).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

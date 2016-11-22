@@ -1,0 +1,1379 @@
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+                        "Light Makes Right"
+
+                           July 20, 2010
+                        Volume 23, Number 1
+
+Compiled by Eric Haines, erich@acm.org, http://www.erichaines.com
+All contents are copyright (c) 2009-2010, all rights reserved by the
+        individual authors
+Join at: http://groups.google.com/group/ray-tracing-news
+Archive locations:
+    HTML http://www.raytracingnews.org
+    text version at http://www.acm.org/tog/resources/RTNews/text/
+
+Contents:
+    Introduction
+    Ray Tracing Roundup
+    Marcos and Arnold, by Eric Haines and Marcos Fajardo
+    Sorted BVHs, by Solomon Boulos and Eric Haines
+    Branch Prediction for Ray Tracing, by Eric Haines
+    How Often Do Shadow Rays Hit? by Solomon Boulos
+    More SSE Ray/box Code Optimization, by Manny Ko
+    Puzzle Answer: Triangle/Bounding Box Ratio, by Eric Haines
+    Where's the Rest of the Issue? by Eric Haines
+
+----------------------------------------------------------------------------
+
+Introduction
+
+Time to skip another volume, from 21 to 23, since I missed getting an issue
+out in 2009. Not because nothing happened in the area of ray tracing - quite
+the opposite. What's great to see is that there's continued interest in ray
+tracing research, such as two sessions at HPG 2010,
+http://kesen.realtimerendering.com/hpg2010Papers.htm, a few relevant papers in
+SIGGRAPH 2010, http://kesen.realtimerendering.com/sig2010.html, and so on.
+There's been a lot of chewy stuff at Ompf's forums, http://ompf.org/forum/,
+and in fact I won't quote any of their posts here - go read them yourselves
+(at the least, visit the glitched pictures thread:
+http://ompf.org/forum/viewtopic.php?f=6&t=508). Searching on "ray tracing" on
+Google, there are about 857,000 results. Nowhere near the 98 million for Lady
+Gaga, but still... 
+
+Forums, blogs, vendor sites, and all the rest of the internet mean I get to be
+lazy about the RTNews. Nowadays I put out an issue when something in the field
+interests me. At SIGGRAPH 2009 I had dinner with Marcos Fajardo, and followed
+up with some emails asking to interview him. He was too busy at the time
+working with Sony to reply, but got back to me just a few weeks ago. Last
+weekend I interviewed him, with the intent of writing an article. So, that's
+why there's an issue this time around.
+
+If you don't make it through the article, at least note that he'll be part of
+what looks like a great course at SIGGRAPH 2010, "Global Illumination Across
+Industries", Thursday, 2-5:15 pm. More about this course can be found on our
+"Real-Time Rendering" blog: http://www.realtimerendering.com/blog/more-siggraph-course-updates/.
+Other ray tracing related things at SIGGRAPH, listed chronologically:
+* Talk: PantaRay: Directional Occlusion for Fast Cinematic Lighting of Massive
+Scenes, Jacopo Pantaleoni, NVIDIA Research, Avatar in Depth session, Sunday,
+2-3:30 pm (third paper).
+* Talk: Fast Furry Ray Gathering, Ivan Neulander, Rhythm & Hues Studios,
+Rendering Intangibles session, Monday, 9-10:30 am (third paper).
+* Talk: An Error-Estimation Framework for Photon Density Estimation, Toshiya
+Hachisuka, University of California San Diego, Rendering Intangibles session,
+Monday, 9-10:30 am (fourth paper).
+* Technical Paper: PantaRay: Fast Ray-Traced Occlusion Caching, Jacopo
+Pantaleoni, NVIDIA Research, Lighting & Material Design session, Monday, 9-
+10:30 am (fourth paper).
+* Technical Paper: Micropolygon Ray Tracing With Defocus and Motion Blur,
+Qiming Hou, Tsinghua University, GPU Rendering session, Tuesday, 2-3:30 pm
+(first paper).
+* Technical Paper: OptiX: A General Purpose Ray Tracing Engine, Steven G.
+Parker, NVIDIA, GPU Rendering session, Tuesday, 2-3:30 pm (third paper). 
+* Birds of a Feather: GPU Ray Tracing, Wednesday, 4:30-6 pm, Room 301 A.
+
+A brief description of the GPU Ray Tracing BOF, from Austin Robison: "We won’t
+have a projector or desktop machines set up, but please feel free to bring
+your laptops to show off what you’ve been working on! Additionally, I’ve
+created a Google Group mailing list that I hope we can use, as a community, to
+share insights and ask questions about ray tracing on GPUs not tied to any
+specific API or vendor. Please sign up and share your news, experiences and
+ideas: http://groups.google.com/group/gpu-ray-tracing"
+
+----------------------------------------------------------------------------
+
+Ray Tracing Roundup
+
+The author of Picogen has written a ray tracer using C++ template
+metaprogramming--i.e. so all of the ray tracing is done at compile time,
+through crazy template expansion. The result of the compilation is a binary
+that just writes a PPM file from the bits embedded in it. Apparently multi-
+hour to multi-day compiles are required. I haven't run it yet, since I don't
+have the very latest g++ compiler installed here...
+
+http://gitorious.org/metatrace
+
+(from Matt Pharr)
+
+----
+
+A ray tracer written using LINQ database queries in C#,
+http://blogs.msdn.com/b/lukeh/archive/2007/04/03/a-ray-tracer-in-c-3-0.aspx
+
+And another one by the same author, fully LINQified, just a single database
+query: http://blogs.msdn.com/b/lukeh/archive/2007/10/01/taking-linq-to-objects-to-extremes-a-fully-linqified-raytracer.aspx
+
+----
+
+Here's a ray tracer written in F#, a functional programming language:
+http://www.ffconsultancy.com/dotnet/fsharp/raytracer/index.html
+
+I'm starting to believe writing a ray tracer is the graphics equivalent of
+writing a prime number generator, the canonical first program everyone makes.
+
+----
+
+More raytracers for your iPhone/iPad:
+http://angisoft.de/Angisoft/Angisoft.html - Mandelbulb, Julia sets, and
+spheres inside environment maps.
+
+----
+
+GPU ray caster using CUDA, with source code:
+http://www.geeks3d.com/20090310/gpu-raycaster-demo-using-nvidia-cuda/
+
+----
+
+How cute, a JavaScript raytracer, and I like the layout:
+http://jsdo.it/keim_at_Si/rtrt. There's a tiny bit of interactivity with the
+scene, dragging the mouse moves the camera a miniscule amount.
+
+----
+
+Daniel Pohl at Intel is well-known for adding ray tracing to the various Quake
+programs, http://www.idfun.de/qwrt/ is his latest work.
+
+I was interested to see that someone else has been doing similar work, and has
+released their ray tracer as a patch inside of ioQuake 3,
+http://ioquake3.org/2008/03/04/raytracing-ioquake3/,
+http://www.quake3world.com/forum/viewtopic.php?f=7&t=36482, screen shots here:
+http://picasaweb.google.at/stephan.reiter/IoQuake3Raytraced#. That said, in
+the demos I can't see anything that looks particularly ray traced.
+
+----
+
+MiniLight is an unbiased MC path tracer for triangles, with progressive
+refinement, in 10 different computer languages, and on average 570 lines of
+code in length: http://www.hxa.name/minilight/
+
+----
+
+99 lines for an unbiased MC path tracer for spheres, smallpt:
+http://www.kevinbeason.com/smallpt/
+
+----
+
+100 lines for a ray tracer that both generates and raytraces the sphereflake:
+http://ompf.org/ray/sphereflake/
+
+----
+
+A business card-sized ray tracer, *with depth of field*, that spells the
+author's initials: http://bit.ly/3T1PlE
+
+(from Morgan McGuire's useful Twitter feed, http://twitter.com/morgan3d)
+
+This ray tracer was made by Andrew Kensler, one of Pete Shirley's students at
+the time. Image here: http://www.realtimerendering.com/blog/visual-stuff/
+
+----
+
+A great sentence (from a review with a great title): "Nvidia’s new line of
+unbelievably expensive cards will block out the sun, and ray-trace its own
+shadow in real time." http://www.crunchgear.com/2009/03/25/new-quadros-from-nvidia-powerful-and-expensive-not-unlik-myself/
+
+----
+
+There was a Ray Tracing BOF at SIGGRAPH 2009. No summary from me, but here are
+some pictures, at least, among a bunch I took at SIGGRAPH; about a third of
+the way through, look for the projection screens,
+http://picasaweb.google.com/eric.haines/HPGAndSIGGRAPH2009#. There are many
+other ray tracing researchers scattered among this photo collection. Gotta
+catch 'em all.
+
+One BOF presentation was from Caustic Graphics, which I hadn't heard of
+before. See their demo video here: http://vimeo.com/4240520, website here:
+http://www.caustic.com/
+
+Another at the BOF was Arauna (mentioned before in the RTNews),
+http://www.geeks3d.com/20090406/tech-demo-arauna-raytracing-and-global-illumination/,
+which is quite impressive.
+
+There were plenty of other demos, but these are the ones for which I had links
+at hand.
+
+----
+
+Philip Slussalek's group is working on including ray tracing in a browser:
+http://news.slashdot.org/story/10/03/04/1351211/3D-Graphics-For-Firefox-Webkit
+
+----
+
+OpenRL is a proposed standard for real-time ray tracing. Beyond this, I do not
+know: http://www.geeks3d.com/20100219/openrl-open-ray-tracing-language/
+
+----
+
+Sony Pictures Imageworks has released OSL, an open source shading language
+aimed at ray tracing (Imageworks has embraced ray tracing, see the next
+article). Main page is here, http://code.google.com/p/openshadinglanguage/,
+introduction here,
+http://code.google.com/p/openshadinglanguage/wiki/OSL_Introduction.
+
+----
+
+Crytek has released an updated model of "Sponza" for global illumination
+testing: http://www.crytek.com/downloads/technology/
+
+----
+
+It's free to download a "cloudless earth" data set at as precise as a 250
+meter resolution:
+http://www.unearthedoutdoors.net/global_data/true_marble/download
+
+----
+
+The perfect movie for a simple ray tracer where you really want to amortize
+the cost of creating your efficiency structure: http://www.youtube.com/watch?v=otY1sfvELXQ
+- nothing in the scene moves, it's all camera. Interesting feel.
+
+(from Morgan McGuire)
+
+----
+
+"Compression and Persistent Estimation of Soft Shadows" is a non-existent but
+plausible-sounding paper title generated by the page
+http://www.ywing.net/graphicspaper.php (hit "refresh" for another title).
+
+----
+
+Matt Pharr pointed out to me this paper on quicksort,
+http://www.cs.dartmouth.edu/~doug/mdmspe.pdf, on how to structure the data to
+get the slowest sort.
+
+It made me wonder if there are scenes that give an interesting pathological
+pattern for graphics. For ray tracing, say you're given a million spheres, all
+in the view frustum, say an orthographic view and just shoot eye rays, and
+want to arrange them to be poorly structured for various algorithms: BSP, BVH,
+grids, etc. The model of "put all million spheres in the same location" does
+it - pretty dull.
+
+If we say "but the million spheres can't overlap", then that sort of becomes
+interesting - I guess it also matters how dense the spheres are compared to
+the viewed volume. For grids you stuff as many spheres as you can in a single
+grid cell to make that cell expensive, but once you've reached the limit for a
+cell, then what's the best way to waste rendering time, i.e. cause the most
+intersection tests? Hmmm, that's sort of interesting. What about BVH (and
+how's the BVH formed), etc.? Might be good to first solve in 2D for squares.
+
+----
+
+The main place to go for ray tracing efficiency papers in the past few years
+is HPG, http://kesen.realtimerendering.com/hpg2009Papers.htm and
+http://kesen.realtimerendering.com/hpg2010Papers.htm. Naty Hoffman wrote a
+report about HPG 2009, http://www.realtimerendering.com/blog/hpg-2009-report/.
+
+However, there are other bits of work around the periphery on all sorts of
+topics. For example, I ran across "How Reliable are Practical Point-in-Polygon
+Strategies?" by Stefan Schirra, http://wwwisg.cs.uni-magdeburg.de/ag/pointInPolygonReliability/pointPolygon.pdf,
+in which my "Point in Polygon Strategies" Graphics Gems code base and others
+are put through the ringer. It does verify something I've always thought:
+avoid those triangle-fan type of algorithms. The "on edge" conditions I
+don't care so much about, but for those that do, this is the article for
+you. CGAL wins, if you don't care about speed.
+
+
+----
+
+In the past few years a few researchers have written on the idea of
+considering rasterization and ray tracing to not be separate methods, but
+rather points on a continuum. See "3D Rasterization – Unifying Rasterization
+and Ray Casting", http://www.vis.uni-stuttgart.de/~dachsbcn/download/3dr_techreport.pdf,
+and "Ray-Specialized Acceleration Structures for Ray Tracing",
+http://userweb.cs.utexas.edu/users/whunt/papers/hunt-pers.pdf, for example.
+
+----
+
+I wrote a mini-rant in the RTNews a few years back on how "free for reuse by
+academics, not corporations" is mostly a waste,
+http://tog.acm.org/resources/RTNews/html/rtnv20n1.html#art6. A friend noticed
+that reddit had a thread on it,
+http://www.reddit.com/r/programming/comments/6wie9/eric_haines_on_academic_use_only_licenses/,
+which was interesting to see. In the interim, I also noticed
+a similar (and better expressed) article in an old Linux Journal about how the
+strict GPL is a lose-lose: http://www.linuxjournal.com/article/5935. In a
+similar vein, this article makes a good point, "Why Publish CS Papers Without
+Code?" http://billmill.org/why_no_code.
+
+----
+
+For ray tracing (or any) books, Google Books gives a number of previews (20%
+of the book, typically), http://www.google.com/search?tbs=bks:1&tbo=1&q=ray+tracing&btnG=Search+Books.
+
+Some books, like "Mathematics for 3D Game Programming and Computer Graphics"
+by Eric Lengyel, have chapters on ray tracing available online:
+http://books.google.com/books?id=bfcLeqRUsm8C&printsec=frontcover&source=gbs_v2_summary_r&cad=0#v=onepage&q&f=false
+
+----
+
+Pete Shirley has a ray tracing blog: http://psgraphics.blogspot.com/.
+Admittedly, he's tapered off on blogging, like ten million other semi-ex-
+bloggers, but his site is still worth reading.
+
+----
+
+There's also Twitter, e.g., Matt Pharr's feed http://twitter.com/mattpharr has
+graphics goodness in 140 characters or less, occasionally ray tracing related.
+The only Twitter feed I currently follow is Morgan McGuire's, http://twitter.com/morgan3d,
+since he uses it exclusively to post cool links.
+
+----
+
+The emission theory of vision is like ray tracing, and it's all explained
+here, by dinosaurs: http://www.qwantz.com/index.php?comic=1751
+
+Really it's just Plato that proposed this emission idea (Epicurus' earlier
+intromission theory even weirder in some ways), and Aristotle then followed
+with a theory that became the basis of modern optics. See
+http://knol.google.com/k/history-of-vision-science# for a good summary of this
+era and others. I do like that Democritus believed there were four basic
+colors: red, green, white, and black.
+
+Horrifying bit: the Wikipedia article on emission theory,
+http://en.wikipedia.org/wiki/Emission_theory_(vision), notes "Winer et al.
+(2002) have found recent evidence that as many as 50% of American college
+students believe in emission theory."
+
+----
+
+Random visual stuff:
+* I've been quietly collecting links of "objects used as pixels", someday I'll
+make a webpage: http://delicious.com/erich666/pixel
+* Pretty (but a bit ponderous for my tastes, since I have a short attention
+span) V-Ray film, The Third and the Seventh, http://vimeo.com/7809605.
+Compositing effects breakdown here: http://vimeo.com/8200251
+* Finally, a purpose for Rubik's Cube: http://gizmodo.com/5069826/pantone-rubiks-cube-color-matching-for-nerds
+* If programs were real: http://gadgets.boingboing.net/2008/11/07/photoshop-interface.html
+* If the world were low-res: http://www.neatorama.com/2008/11/12/3d-photo-sculpture-by-susy-olivera/
+* The Mirror Man was made for ray tracing; I love the caustics:
+http://www.neatorama.com/2010/04/14/mirror-man/
+* Cool mirrors: http://www.newscientist.com/gallery/dn16585-amazing-mirrors
+* Tilt-shift photography can make life-sized scenes look like miniatures. You
+can also use the post-process to cheat to get a depth-of-field look:
+http://tiltshiftmaker.com/, e.g. try it on http://www.techpowerup.com/img/08-08-18/33b.jpg
+* Frozen soap bubbles: http://www.boingboing.net/2009/01/05/frozen-soap-bubbles.html
+* The Mona Lisa, with 50 semitransparent polygons:
+http://rogeralsing.com/2008/12/07/genetic-programming-evolution-of-mona-lisa/
+* The Mandelbox, http://www.geeks3d.com/20100427/do-you-know-the-mandelbox-fractal/
+* Ray tracing gifts, http://www.zazzle.com/ray+tracing+gifts - the Christmas
+stamps are actually pretty nice.
+* Another in the cool graphical gifts category, 3d lenticular cards you can
+make yourself: http://www.snapily.com/
+* Sierpinski triangles, in doily form:
+http://tattingmydoilies.blogspot.com/2009/02/math-fiber-and-actual-tatting-content.html
+* Romanesco broccoli is a real-life procedural vegetable:
+http://www.realtimerendering.com/blog/romanesco-broccoli/
+* I've been noticing strange, mutant sphereflakes lately, 6 balls spawned per
+level instead of 9: http://www.flickr.com/photos/mylaboratory/512505770/
+* And also seriously simple sphereflakes: http://www.amazon.com/Computer-Graphics-Using-OpenGL-3rd/dp/0131496700/ref=ntt_at_ep_dpi_1
+* I'm somewhat surprised that there haven't been more general procedural
+software labs out there. Structure Synth, http://meshula.net/wordpress/?p=349,
+is one of the few I found. Don't miss the Flickr gallery:
+http://www.flickr.com/groups/structuresynth/
+* The Mighty Optical Illusions site is worth a minute every now and then,
+http://www.moillusions.com/.
+* Some of the images above, and many others, can be found in the entertaining
+"2 True 2B Good" gallery that Morgan McGuire maintains:
+http://graphics.cs.williams.edu/realartifacts/
+
+----
+
+Entirely off-topic, but my childhood hero was Martin Gardner, who passed away
+in May. I noticed the book "The Mathemagician and Pied Puzzler", in tribute to
+him, is free for download, http://www.g4g4.com/contentsmmpp.html. I used a
+puzzle from this book in the Ray Tracing News,
+http://tog.acm.org/resources/RTNews/html/rtnv12n2.html#art1 (answer at
+http://tog.acm.org/resources/RTNews/html/rtnv13n1.html#art1).
+
+----------------------------------------------------------------------------
+
+Marcos and Arnold, by Eric Haines and Marcos Fajardo
+
+I interviewed Marcos a few weeks ago; what was meant to be a half-hour
+interview turned into two - fascinating for me, but way too much material for
+a simple question and answer transcription. Instead, I'm going to summarize
+the information in a few parts: history, the renderer itself, and research.
+Due to followup emails, some passages, in quotes or not, are directly from
+Marcos, I just edited them in. Any opinions are Marcos', of course. I think
+he's a bit embarrassed by having this piece of his life's story be a focus of
+this article, but I found it an interesting and different type of career path.
+Seemingly chance occurrences led from one thing to another, but it was more
+"directed chance", where he was in places where he was bound to run into like-
+minded people. In addition, I like recording the small part the RTNews played
+in helping him flunk out of college.
+
+Marcos Fajardo is the chief architect of the "Arnold" renderer. As a start,
+here are some Arnold images from 2000:
+http://www.3dluvr.com/marcosss/morearni/. For that time, these images gave a
+realistic look rarely achieved, due to the hemispheric lighting and global
+illumination effects. These made quite a splash and brought Arnold
+considerable attention from studios and others. Since then, however, Marcos
+and Arnold have a pretty low-key presence except for those in the know. There
+are no Wikipedia articles about either, few web pages mention them, and the
+company's website, http://solidangle.com, is an "under construction" page.
+Some people have thought the renderer faded away. You'd hardly guess that
+you've probably watched a movie recently that used Arnold for rendering.
+
+Marcos was born in Spain, and first became interested in computer graphics
+when he was 14. Like many of us, he first used an 8-bit computer, using BASIC
+and assembly to write little graphical programs. He wanted to study
+mathematics but ended up in Computer Science, starting university around 1992.
+A friend introduced him to the Vivid and POV-Ray ray tracers, which was a
+moment of illumination for him. He was thrilled to find mathematics being used
+to generate cool images. He started working on his own ray tracer in 1994.
+
+The internet and web was just opening up at that time, and his second
+illuminating moment was running across "The Ray Tracing News". It made him
+realize that there was amazing research work going on by many people. The
+RTNews was kind of like a map for him, pointing out SIGGRAPH papers, books,
+etc. During the day he would go to the university library and photocopy
+papers, at night he'd read them, sometimes entire nights. Which took a toll:
+getting an hour or two of sleep and then going to the university in the
+morning caused his performance to degrade pretty quickly. He started to fail
+tests as he was having too much fun with ray tracing. His family became
+concerned. His three year degree turned into a five or six year degree, and he
+never quite completed it.
+
+He put some images online of work he was doing with atmospheric effects,
+others noticed his efforts, and he started getting job offers. First he worked
+two months with REYES Infografica (http://www.reyes-infografica.com/), in
+Madrid. He then worked for LightWorks
+(http://en.wikipedia.org/wiki/Lightworks) in Sheffield, England for a year.
+Not seeing the sun for a whole year was depressing, so he quit and went to his
+first SIGGRAPH in 1997. This was another event that opened his eyes, meeting
+researchers and seeing all the work going on.
+
+Instead of working for others, Marcos decided he wanted to make his own
+renderer. He saw the various hybrid renderers out there and compared them to
+elegant ideas such as Kajiya's path tracing research, concluding that pure
+stochastic ray tracing really was the future. The skeleton of what was to
+become Arnold was started in 1997 (the first file was probably sphere.c), when
+he was 24.
+
+He's found it's been an advantage to be small, in that he can be more
+responsive to customers' needs and give them what they want. Since 1997 he's
+moved from project to project, and country to country, as an independent
+consultant. He's refined and improved the software in the process and has
+always managed to keep the intellectual property. This sometimes required
+extensive negotiations, such as with Sony, but the problems involved are
+nothing a couple of good lawyers can't help solve. Keeping the IP means his
+contracts don't make him rich, but at the end of the day he owns his software.
+
+From 1997 on Marcos has worked with various firms. He noticed a company making
+a cool CAD stage lighting system in Toronto. He showed them the atmospheric
+scattering effects he had been adding to Arnold. They were blown away and
+hired him to use Arnold in their product. While he retained the IP, he wasn't
+paid much. Pretty much underpaid for this particular job, in fact, making it
+hard to survive in Toronto. However, it was a great experience, he had the
+freedom to work on what he wanted, his software improved, and he met a lot of
+people. This model - being paid by a company to add new features to Arnold -
+has been how he's lived the past 13 years.
+
+During Siggraph 1997 Marcos slept on the floor of some friends' house in Bel
+Air. These friends introduced him to many of their own friends; one of them
+was Justin Leach, who was working as an animator at Blue Sky Studios. Justin
+knew Marcos was into rendering and introduced him to Carl Ludwig, cofounder
+and one of the original developers of Blue Sky's renderer. Carl was great,
+gave him a tour, and they spent some time chatting about ray tracing. Blue Sky
+Studios, the first studio to use (classical, later Monte Carlo to some extent)
+ray tracing for all rendering. Marcos was blown away by their images,
+especially one rendered by John Cars, with illumination coming from the sky.
+He was inspired, these images convinced him that full stochastic ray tracing
+was the way to go. Blue Sky's "Bunny" was done with stochastic ray tracing,
+though the bunny itself did not have indirect lighting (too expensive). It was
+probably the first use of unbiased Monte Carlo radiosity in film, back in
+1998.
+
+In 2001 the animated film "50 Percent Grey", http://www.youtube.com/watch?v=zCP9f0VicBE,
+a single-person effort, was nominated for an Oscar; Arnold was
+used for the rendering. It was a landmark for Arnold: just a few machines
+were needed, showing that stochastic ray tracing could produce high quality
+images with a small CPU budget.
+
+In 2004 he became employed by Sony Pictures Imageworks. Pepe Valencia, a
+friend working on animation and previsualization for the Sony film "Monster
+House", introduced him to the visual effects supervisor and co-director, Jay
+Redd. Jay had a vision of what he wanted the film "Monster House" to look
+like, that it would look like marionettes a couple feet high. He wanted the
+characters to look solid and physical, not CG. So, global illumination was
+very important to him. They tried other renderers, but these packages were too
+slow for the effect he wanted. They did some tests with Arnold, and the
+results were very encouraging. However, many production-oriented features were
+missing, such as delayed reading of geometry archives, a texture caching
+system, a hair primitive, etc. So they assembled a small team of talented
+rendering developers that worked extremely hard supporting the production,
+tuning the software to meet the production's needs. Speed overall, and motion
+blur speed in particular, was considerably improved. 
+
+Marcos was supposed to be in Los Angeles a year, but one thing led to another
+and he was there for three. After five years, Sony is now 100% an Arnold
+rendering house. Arnold was used in "Monster House", aided in "Beowulf" (such
+as precomputing ambient occlusion), shots in "Eagle Eye", the glass palace
+(made for ray tracing!) and other shots in "Watchmen", "2012", "Cloudy With a
+Chance of Meatballs", "Alice in Wonderland", and the upcoming "Smurfs" and
+other unreleased titles. "Cloudy" was the second all-Arnold movie, and first
+to fully use Arnold's capabilities: motion blur, sub-surface scattering, hair,
+etc. While this article has been focused on Marcos, the credit for many of
+these new capabilities goes to the entire Arnold development team at Sony, in
+particular Cliff Stein and Chris Kulla, "two amazing hackers of all things
+rendering", as well as Rene Limberger, Scot Shinderman, Eduardo Bustillo,
+Solomon Boulos, and lately Larry Gritz, Alex Conty and Angel Jimenez.
+
+In January of this year he is no longer directly working with Sony, but now
+has a different agreement in place. Last year he founded Solid Angle SL,
+http://solidangle.com, in Madrid, to give things a bit more structure. They
+started as two people, currently consist of five engineers, and by the end of
+the year will be eight. Dealing with a company's needs means less time for
+coding, his first love, so he's looking for business specialists to take over
+these aspects. With all the improvements to his code from working with Sony
+and others, he's now interested in selling Arnold as a commercial product.
+They're working with a small number of customers and provides plug-in support
+for Maya and SoftImage. There are about a hundred beta users at companies of
+various sizes for the plug-ins, so support right now is a full-time job for
+the team. Customers have access to the source code for the plugins and
+shaders, using Subversion for source control and Trac for bug/feature
+tracking. Some beta example images are here:
+http://www.cgauiwtalk.com/showthread.php?p=75690. Arnold itself is a raw,
+multi-platform C/C++ API with Doxygen documentation, and some customers want
+to license just the rendering API itself.
+
+Arnold is very much a batch renderer with an API; a typical final film frame
+takes a processor 3-4 hours. What is interesting about Arnold is that it's an
+unbiased stochastic ray tracer through and through. No rasterization tricks
+for eye rays, no irradiance caches or photon maps for light sources. Motion
+blur and depth of field effects weakens rasterization's appeal, since much
+sampling has to be done either way; these features are a natural part of
+stochastic ray tracing. Not being a hybrid system using some form of
+rasterization has a number of advantages. First, there's only a single version
+of the model stored, not one for the rasterizer and another for the ray
+tracer. Reducing memory footprint is critical for rendering large scenes, so
+this helps considerably. Arnold also uses compression and quantization of data
+(lower precision) in order to reduce memory costs. Not using two methods of
+rendering avoids other headaches: maintaining two separate renderers, fixing
+mis-syncs between the two (e.g., one thinks a surface is in one location, the
+other has a different result), dealing with a large number of effects
+consistently in both, etc.
+
+Avoiding irradiance caches of any sort means that there is minimal
+precomputation time for Arnold - basically, just the efficiency structures
+needed are built. This means rendering can happen immediately, vs. waiting for
+precomputations to be completed. Combined with progressive rendering (where an
+image is roughed out and improves over time), this is an advantage in a
+production environment, as artists and technical directors can then iterate
+more rapidly. As discussed later, scene size is an important factor, due to
+memory constraints. No irradiance cache means no memory spent on this feature.
+He also finds that irradiance caches cause artifacts. More importantly, such
+algorithms expose to the users a fair number of control parameters, e.g. 12 to
+15. Users have to master knowing how to set these in order to get high quality
+results in a reasonable amount of time. Arnold has one parameter, the number
+of samples, making it easier for the users to understand the system. Finally,
+Arnold is aimed at animated film production, so there's not a lot of reuse of
+irradiance cache computations as there would be in, say, an architectural
+walkthrough.
+
+Marcos aimed to make Arnold as physically-based as possible. Sometimes
+customers will request modifications for usability. Surprisingly, in recent
+years some customers have been requesting direct physical controls, such as
+controlling metals' reflective characteristics by directly specifying the
+index of refraction (IofR). Tracking down these indices for metals can be a
+challenge. Marcos (and I) assumed that the IofR would not be a control artists
+would want, but it turns out that many of them do. The material models in
+systems such as 3DS Max use IofR as a control, so artists have gotten used to
+it.
+
+Arnold is entirely CPU-based, it doesn't work with GPUs. That's bad, in that
+they could get more speed from GPUs, but most render farms are pure CPUs right
+now. GPUs have serious drawbacks: a different (and less mature) programming
+model, smaller overall memory space available, and the overhead of maintaining
+two code bases that must be 100% identical in results. Any differences in
+handling NaNs or infinities or anything else loses the all-important feature
+of platform transparency, that the same image is produced (or progressively
+refined) regardless of the piece of silicon producing it. Some related
+comments by Larry Gritz of Sony can be found here:
+http://www.realtimerendering.com/blog/hpg-2009-report/.
+
+Similarly, Marcos has limited using CPU SIMD (SSE, etc.) types of operators in
+his code, due to the costs in programming time, maintainability, and
+readability. They're used, but in just time-critical parts of the code. He's
+been working on Arnold 13 years, and it's a package meant to work for years in
+the future, so short-term gains of say 10% are not worth the difficulties they
+present to keeping the code clean, fast, and reliable.
+
+But, why the name "Arnold"? In 1999 Marcos was working with Station X Studios
+in Los Angeles. One night he went with two friends to an Arnold Schwarzenegger
+film, "End of Days". His friends imitated the Arnold accent from the rear of
+the theater, cracking up the audience. Marcos had never realized what a
+distinctive voice Schwarzenegger had, since he had only seen Arnold films in
+Spain, where they're dubbed. For a few years his renderer's API was called
+"RenderAPI" - really boring - and needed a code name. Andy Lesniak, one of the
+friends at the theater, suggested "Arnold" as a joke, and Marcos liked it.
+Marcos then started showing images from Arnold on the web. The code name was
+picked up by people, so the name became permanent. He's thought of choosing
+something more professional, but "Arnold" now has a reputation so he hasn't
+changed it (yet).
+
+So, is rendering solved? Marcos feels there is definitely diminishing returns
+to research. There are new effects that come out every now and then, but
+they've become rarer. For example, he notes at EGSR 2010 there was a paper on
+refraction through non-constant media, "Interactive Rendering of Non-Constant,
+Refractive Media using the Ray Equations of Gradient-Index Optics"
+(http://kesen.realtimerendering.com/egsr2010Papers.htm), where the index of
+refraction changes throughout a volume, giving some interesting effects.
+Marcos also mentions the field of "predictive rendering", where researchers
+like Alex Wilkie are constantly pushing the limits of what our rendering
+simulations can do, exploring such exotic features as polarization,
+fluorescence, and birefringence. Volumetric scattering effects are also still
+a fertile area of research - the basic equations have been laid out for years,
+but it's still quite hard to make accurate simulations that are also efficient
+and usable.
+
+A lot of his research goes into efficiency, optimizing various light transport
+paths and sampling methods. Better sampling, in particular, is a place where
+he feels there are still large improvements to be had. He says there are two
+main camps for sampling. One is that you have an 11 or 17-dimensional (or
+whatever) sampling pattern, as advocated by Alex Keller's QMC work. The other
+camp is to have a chain of 2D and 1D patterns for every isolated integral
+you're evaluating, as originally advocated by Rob Cook and Pete Shirley. For
+example, an optimal 2D pattern for pixel sampling, a 1D pattern for motion
+blur, etc. You have to chain these together with decorrelation between
+adjacent dimensions in the overall integral. That said, people are constantly
+coming up with new ideas, like adaptive multidimensional sampling, for more
+efficient motion blur and depth of field.
+
+Arnold is currently aimed at fulfilling the needs of film animation, vs.
+lighting simulation, architecture, etc. Because it's a unidirectional (or
+classic) path tracer, effects such as true caustics are expensive and noisy in
+the system. Which turns out to be fine, as he has found no film-making client
+has ever needed to make caustics in their films. It would be great to have
+caustics, but really good diffuse global illumination and good area-light
+shadows are far more important for his clients.
+
+As far as efficiency goes, he started off with uniform grids (ugrids). They
+were using a per-object ugrid (storing triangles) and then a global or "root"
+ugrid (storing objects), so in a sense it was a 2-level hierarchy of ugrids.
+However, some objects could be "procedural" objects, which when hit by a ray
+expand and create a list of other objects (which themselves could be other
+procedural objects!) which they would store in another ugrid. So in the end it
+could be a deep hierarchy of ugrids. But unlike in the HUG paper ("Filtering,
+Clustering and Hierarchy Construction: a New Solution for Ray-Tracing Complex
+Scenes"), their hierarchy was dictated by the scene graph (i.e., the artists
+building the scene) rather than computed automatically by trying to minimize
+some metric of render time cost.
+
+To quote Marcos directly: "If I recall, I was choosing the number of voxels
+according to an IEEE CG&A paper that described a way to keep the voxels
+roughly cubical ("Faster Ray Tracing Using Adaptive Grids", some RTNews
+followup here: http://tog.acm.org/resources/RTNews/html/rtnv10n3.html#art8 -
+Eric). This was well known for anybody using ugrids, cubical voxels worked
+better than, say, using csqrt(N) in each dimension (which can give
+inefficient, elongated voxels). On top of that, we had a multiplier for the
+number of voxels that was set to around 4-8 by default, I don't remember. In
+many cases, increasing this multiplier would decrease render time a bit (at
+the expense of memory).
+
+"I remember trying hard to squeeze as much performance out of ugrids as
+possible with little tricks here and there. I stored in each voxel a list of
+quantized 30-bit bboxes, one for each triangle in the voxel (see RTNews,
+http://tog.acm.org/resources/RTNews/html/rtnv10n3.html#art8 - Eric). Using an
+integer bounding box of 6 values at 5 bits of precision for each axis cuts
+storage of the enclosing bounding box for a triangle from 24 bytes to just 4.
+This list was stored in a packed array (see RTNews,
+http://tog.acm.org/resources/RTNews/html/rtnv15n1.html#art5 - Eric). Another
+important optimization was to accurately clip the triangles against each
+voxel, to reduce false-positives stored in the voxel. I think there's code for
+this by Akenine-Moller in JGT (there is: "Fast 3D Triangle-Box Overlap
+Testing", http://jgt.akpeters.com/papers/AkenineMoller01/ - Eric) and that's
+what I used."
+
+However, once deformation motion blur is needed, it turns out grids just don't
+work. The problem is that, within the frame's time, a triangle can move a
+considerable distance. This movement means the volume swept out by this
+triangle overlaps many grid cells, considerably lowering efficiency. One idea
+is to form a separate 3D grid for a series of time segments. For example, the
+frame's time interval could be split into say 4 segments. Now the triangle has
+four separate, smaller, swept volumes, one per grid structure. However, to get
+good performance in scenes with a lot of motion, you need to use 100+ time
+segments (and so, 100+ 3D grids), which quickly becomes prohibitive in terms
+of time and memory.
+
+Because of this problem and others endemic to grids (teapot in a stadium, and
+non-uniform distribution), 4 years ago they moved to a bounding volume
+hierarchy, essentially. The details are proprietary information, but Marcos
+could say that it's not just a matter of choosing an algorithm but also
+working on the implementation quality and optimizations. They perform careful
+selection of the "accel constants", which are chosen according to the results
+of an extensive performance benchmark over a testsuite of many complex
+production scenes. They run this performance tuning separately for every
+primitive in the renderer (i.e. once for triangles, once for objects, once for
+hairs -- since they all have different intersection costs). This idea could be
+applied to the "number of voxels" problem as well, you could render your suite
+of stress tests with many values of the constant num_voxels(N), produce a
+table with results (build time, total render time, memory use), and report the
+value of the constant that gives you the absolute minimum, the average minimum
+etc.
+
+Marcos feels efficiency is not a solved problem, since there are all sorts of
+variables in a scene and system: effects needed, type of data, available
+memory, etc. Memory is important: scenes of 100 to 200 million polygons were
+not unusual in "Alice in Wonderland", and these need to fit inside of 4 GB (8
+GB if you're lucky) of machine memory. Memory for textures is not important,
+as caching usually keeps down the amount of texture data in memory. Arnold
+uses the open source OpenImageIO http://openimageio.org/wiki/index.php?title=Main_Page,
+started by Larry Gritz, for texture caching.
+
+The two primitives used in Arnold are curved lines and triangle meshes. Bezier
+splines (directly intersected, not tessellated) are for hair, triangles are
+for everything else. Since curved lines use the same efficiency structures and
+all the rest, they ray trace quickly. This means that they can perform ray-
+traced motion blur on hair, something most studios won't even contemplate
+rendering directly (because it's so expensive) but rather use post-processing
+applications like Shake. An optimized, tightly integrated stochastic ray
+tracer makes this effect possible: the blurred hair itself, blurred shadows,
+blurred reflections, blurring seen through a glass sphere, etc. He's thought
+about level of detail for meshes, and ray differentials can give some sense of
+the detail needed, but it's a tricky problem. Luckily, most of the meshes he
+uses are made of curved patches that can be approximated to an arbitrary level
+of precision, so he has the luxury of generating more detail from a simple
+model, vs. the more difficult problem of decimation of complex meshes without
+losing important features.
+
+I asked what he liked at EGSR 2010. He's focused on the few papers that are
+relevant to Arnold, or are very easy to implement (a rare quality for a paper
+these days). He mentioned the following:
+
+"Bounding the Albedo of the Ward Reflectance Model",
+http://www.uibk.ac.at/mathematik/personal/geisler-moroder/publications/dgmad_bounding_albedo_ward_brdf_tr.pdf, corrects the
+Ward anisotropic model.
+
+"Two Methods for Fast Ray-Cast Ambient Occlusion", http://www.tml.tkk.fi/~samuli/,
+looked fast to accelerate AO, and it may also be applicable to
+global illumination.
+
+"Compressive estimation for signal integration in rendering",
+http://www.ece.unm.edu/~psen/, seemed good for reducing noise from stochastic
+sampling for motion blur and DOF.
+
+"Invisible Seams", http://alice.loria.fr/~nivoliev/Seamless/, he agrees is an
+important problem and useful work, properly hiding seams among separate
+texture atlas elements (separate in the atlas, touching on the model).
+
+Of other recent work, he also particularly likes the PantaRay engine,
+http://research.nvidia.com/publication/pantaray-fast-ray-traced-occlusion-caching-massive-scenes,
+to be presented at SIGGRAPH 2010. From NVIDIA and Weta Digital, PantaRay
+uses an out-of-core BVH to ray trace billion-triangle scenes. Weta used it
+in "Avatar" to perform all the ambient occlusion precomputations, a huge
+amount of work. Motivation here:
+http://www.nvidia.com/object/wetadigital_avatar.html
+
+If you want to hear Marcos Fajardo talk about Arnold, he'll be speaking at
+SIGGRAPH (probably first) in the course "Global Illumination Across
+Industries", Thursday, 2-5:15 pm. I suspect Arnold will also get mentioned in
+the technical talk "Lighting and Rendering 'Alice In Wonderland'" by Adam
+Martinez and Terrance Tornberg, Monday, 9 am. I've heard this talk will focus
+on the use of physically based shaders.
+
+As a last piece of eye candy, the "Assassin's Creed: Brotherhood" game trailer
+for E3 2010 was rendered with Arnold: http://www.gametrailers.com/video/e3-2010-assassins-creed/101249?type=flv
+
+----------------------------------------------------------------------------
+
+Sorted BVHs, by Solomon Boulos and Eric Haines
+
+At SIGGRAPH 2009 Matt Pharr and I were discussing BVH optimizations. There's
+the optimization where, when you hit the parent box, you also determine which
+direction the incoming ray is traveling compared to a plane stored with the
+box. This was described in a previous RTNews,
+http://tog.acm.org/resources/RTNews/html/rtnv19n1.html#art4. Matt mentioned
+that this plane also helps in getting a shadow hit faster, which seems
+counterintuitive, since any shadow hit will work to terminate the test. Matt
+said Solomon had some pretty compelling arguments as to why the plane test
+helps shadows, but couldn't quite recall them at the time. So, I asked Solomon
+later by email.
+
+Solomon:
+
+Yes, the genesis of this was me telling Matt he had to do this and it's faster
+than Brian Smits's depth first ordering. Like you said, for "closest hit" it's
+probably an improvement since it probabilistically finds closest more quickly.
+For shadow "any hit" results, it's less obvious since it seems "any hit" is
+the goal. My retort at SIGGRAPH to both of you is that "it's any hit within
+[tmin, tmax]".
+
+Eric:
+
+I think Matt and I discussed the idea of local lights: if you're tracing a
+shadow ray from a surface towards a light, it's probably better to choose the
+box closer to the surface's origin, i.e. the sorted box, just on the theory
+that the farther box could indeed be entirely beyond the light itself. Even if
+the farther box is not beyond the light, odds are that the stuff in this
+farther box is not blocking the light. Think of a typical room, where there
+are lights on the walls and ceiling. The walls and ceiling geometry will be in
+the "far" box, but won't block, so testing the far box first is probably a
+waste. Anyway, that's my intuition, but I've found my intuitions are sometimes
+wrong when it comes to ray tracing. Were there other reasons you felt
+contributed to sorted-BVH being faster for shadows? Also, what about lights at
+infinity, where "the far box stuff is beyond the light" does not apply?
+
+Solomon:
+
+The local light example is mine: anything that isn't a directional light (good
+example, and you seem to be correct on it -- no benefit to be had) is
+contained within something for the most part. However, one bit of confusion is
+that while we just want "any hit within the interval" it would seem like
+hitting the parent box implies that the order we traverse the children
+shouldn't matter because the ray-box test is already saying "this is inside
+the interval". But therein lies the logic mistake and why I think this
+ordering is still beneficial even for shadow rays: the parent ray-box test
+tells you that the ray can reach the parent box at some point in [tmin, tmax]
+it doesn't tell you that the ray passes through the full box (i.e., at tmax
+you might just barely intersect the parent box, so you'd prefer to still
+traverse the near children first).
+
+Arguments about "is the occluder closer to tmin or tmax" would muddle this
+more and I like to avoid such things (little note below though).
+
+Eric:
+
+An amusing corollary to the "intersect the near box, then the far box, for
+shadow rays" result you've found is that, if you're tracing from the light to
+the surface (who does that? Though it's fine to do so), then you'd want to
+reverse the rule and intersect the far box first, then near.
+
+Solomon:
+
+All the packet tracing kids did this (shoot from the light). Tracing from the
+light to the hit points gives you a common origin optimization for packet
+tracing (and is the corollary of shadow mapping). Though there is an
+interesting realization that Ingo/Pete/I had a few years ago: putting a point
+light directly above a tessellated sphere means that tracing the rays from the
+hit points to the lights will graze all the geometry in the scene (doing lots
+of work), while tracing from the light to the point would need to do that as
+well for unoccluded rays but might find the occluder first and save lots of
+work.
+
+I don't see your "reversed order" argument though... If you trace the ray in
+the opposite direction, it already changes sign and effectively traces the
+rays in the same sort of order you'd want. This seems to boil down to whether
+you think the occluder is close to tmin or tmax (so in this case near the
+light or near the surface instead of the other way around).
+
+p.s. Can we think of other cases with tmax = positive-infinity where you want
+"any hit"? Direct lighting from an environment map sampling came to mind for
+me (which sounds less goofy than "you should care about this for the all
+important directional lights"). It's an interesting claim that one of us
+should test out (might suggest doing Smits style traversal for all shadow rays
+that you know have tmax = positive-infinity).
+
+----
+
+That's where I left our email exchange. I believe Solomon sums it up nicely,
+it's really a matter of whether you think the occluder is closer to the hit
+point or the light. I suspect for a typical scene the answer is indeed "it's
+closer to the hit point" in most scenes, as people tend to place lights "out
+there" and not inside complex geometric enclosures.
+
+Thinking about it today, I believe this area deserves further study and
+testing. Solomon notes that when a ray hits a box, there's a logic error of
+thinking of the ray's interval is entering and exiting the box. There are four
+states for ray/box: ray entering (but not leaving) the box, ray exiting, ray
+fully enclosed, and ray entering and exiting (call it "piercing"). For fully
+enclosed and piercing, the order of testing the children for shadow rays
+shouldn't matter, at least in theory (it might matter due to the nature of the
+scene itself). For rays that enter a box, it's certainly true that testing the
+nearer child box will be more efficient: either the ray hits something, which
+is more likely to be in the closer box, or is unoccluded, in which case order
+doesn't matter. Conversely, if a ray starts inside a box and is exiting it,
+the "far" box should be tested first.
+
+However, this "exiting" case is likely to be the norm early on for a ray
+leaving a hit point and traveling towards a light. It starts at an object
+which is deeply buried in the BVH, so starts inside many boxes and exits these
+boxes. So this sort of case gives the opposite to what Solomon was finding, it
+says that a "closer" box (first along the ray direction) should be tested
+after the "farther" box, since the ray origin itself is more likely to be
+beyond the "closer" box.
+
+Anyway, this is an interesting area to think about. Typically we test a ray
+against a box and get a boolean back, hit or miss. Perhaps also using the
+three important states - entering, exiting, inside/piercing - along with the
+directional plane we can gain a bit more efficiency for shadow rays.
+Alternately, as is often the case with such optimizations, the additional
+complication of computing and using the state may outweigh the benefits.
+Another possibility is that the theory is correct ("exiting shadow rays should
+test the far box first"), but in actual scenes the rule doesn't work in
+practice, due to the nature of how such scenes are constructed.
+
+----------------------------------------------------------------------------
+
+Branch Prediction for Ray Tracing, by Eric Haines
+
+The previous article made me think of yet another acceleration idea. Most
+ideas are bad ones, but I thought I'd still write it down: branch prediction.
+Modern CPUs use branch prediction internally, executing the most likely branch
+"in advance" in a pipeline while waiting for the results of a branch test.
+Whenever the wrong branch is taken, the new correct branch is kept around as
+the one to pipeline in the future. 
+
+Here's the idea for a ray tracer: a ray is traversing a bounding volume
+hierarchy. We open a parent box and try child box 1 and box 2, in that order.
+Box 2 has an object that blocks the ray (or is the closest intersected object,
+for eye rays). The idea of branch prediction is simply: let's try box 2 first
+from now on, since it was a winner last time and so looks more likely to
+terminate the search earlier. Ideally you'd want every parent, grandparent,
+etc., up the hierarchy to be tested first in future testing, since their child
+was the one that stopped the ray and so should get tested first. Doing all
+this reordering for the whole chain of parents is way too much work due to a
+single ray's result, I believe.
+
+One variant that is less expensive is to make a note of the *last* "second
+box" that is tested. That is, you're going down the hierarchy, opening boxes
+that are hit and testing box 1 and box 2. Any time you test box 2, make note
+of the parent box - not in a list, just save the pointer to that parent,
+replacing any previous parent whose second box was tested. At the end of
+testing, if a ray hit an object, then go modify the parent box (if any) you
+noted along the way. This was the last parent box where its second child box
+was found to be useful, one where you wish you had tested this box first
+instead of second. Swap the parent's box 1 and box 2. In the future, the
+"useful" box 2 will now be tested first.
+
+By modifying just the last parent box found to be out of order, you minimize
+work per ray - a maximum of one swap. You will also percolate branch
+prediction on up the hierarchy, if it indeed turns out that a particular
+object is occluding a long series of rays. Say a ray hits some object, and
+that object is in box 2 of its parent, which is in box 2 of the grandparent,
+which is in box 2 of the great-grandparent. After the first hit, the parent's
+boxes are swapped and the object is now in box 1 of the parent. The next ray
+also happens to hit the object. In this case, the grandparent's boxes 1 and 2
+are swapped, since the grandparent's box 2 was the last "second box" found and
+noted. In this way, as the ray hits the object more and more, the hierarchy
+continues to get modified, a little at a time, so that the object hit gets
+tested earlier and earlier.
+
+I can imagine reasons this method may not work for various systems. If you
+flatten the hierarchy and can't modify it on the fly, then this scheme cannot
+be used. The scheme might be a bit tough in a multiprocessor context, since
+you're modifying the hierarchy on the fly (maybe not so bad, an atomic
+operation on a single node per ray, at most). More likely, there's little
+coherence among the sets of rays each different processor is working on, so
+they could just be fighting each other, constantly swapping boxes as each goes
+down a different part of the hierarchy. However, I suspect that, given enough
+shadowing in a scene, and given that some parts of the BVH are going to
+occlude more than others, this method will reduce the total number of ray/box
+intersections performed overall. Whether these savings outweigh the recording
+of parents and swapping of boxes determines whether this scheme is worthwhile.
+
+There are variants, of course. You might keep a list of the last two or three
+"second box" parents and modify them all. More cost, but the idea is that you
+want to shift the hierarchy more quickly to get to the occluding objects in
+the scene.
+
+I like the elegance and balance of the idea: a single ray doesn't wreak huge
+changes on the hierarchy, changes that may be entirely misguided due to one
+unlikely ray/object intersection. Continued intersection of an object makes it
+be intersected earlier and earlier by subsequent rays. If an object, a single
+triangle of a larger structure, occludes a ray a number of times, then is
+missed by subsequent rays, the larger structure's other triangles will benefit
+from the earlier predictions, as their shared parents will be tested earlier
+on.
+
+----------------------------------------------------------------------------
+
+How Often Do Shadow Rays Hit? by Solomon Boulos
+
+[Our emails led me to ask how many shadow rays actually are occluded nowadays,
+in a typical scene. More occlusions means it's more significant to find the
+occluder sooner. If a shadow ray always reaches its target, testing order is
+irrelevant. If they almost always hit something, any little optimizations
+could have a large benefit.I know for my own scenes it tended to be something
+like 80% or so of shadow rays were unoccluded. It's our nature to put lights
+in places where they actually illuminate stuff, vs. behind walls, pointing
+away from the area of interest, or whatever. For architectural walkthroughs
+without any cell and portal preprocess (lights on in every room toured), the
+percentage could be like 5% or lower (in which case the coder really should do
+some preprocessing on the lights). Solomon dug up some numbers for recent
+scenes made at Sony Pictures Imageworks. - Eric]
+
+These are versions of scenes from the films that we have in our benchmark
+suite, not necessarily stuff that's in the final frames. More precisely, some
+of these are scenes that were in production, had some problem, and then we
+kept them as reminders for regression testing (particularly the ones with very
+low light counts). Moreover, I didn't run this with the production shaders
+(which might have done other things) but rather with our debugging shaders
+(which should still roughly end up with a similar number of shadow rays
+anyway).
+
+Beowulf, Mead Hall:              11 lights, 32 shadow rays per path, 50% hit rate.
+2012, Loading Dock:               8 lights, 28 shadow rays per path, 35% hit rate
+Cloudy, exploding building:       4 lights, 10 shadow rays per path, 62% hit rate
+Alice in Wonderland Rabbit Hole: 32 lights, 15 shadow rays per path, 93% hit rate
+Alice in Wonderland, Battle:      2 lights, 21 shadow rays per path, 18% hit rate
+Alice in Wonderland, Forest:      7 lights, 10 shadow rays per path, 56% hit rate
+
+I'll summarize the most salient features. The ones that are fairly enclosed
+(mead hall, the rabbit hole, forest) have fairly high hit rates, because
+obviously there's lots of stuff for them to hit. As a side note, Beowulf was a
+prman-based show so I think these lights were set up for that purpose (mostly
+point and spot lights with no area lights). The ones with extremely low hit
+rates (2012 Loading Dock and Alice in Wonderland battle scene) have a lot of
+empty space (early versions of the scenes) and, importantly, have a sun-like
+light source as well. Before looking at the pictures, I would have guessed
+that directional lights commonly get occluded (any hit within 0 and infinity
+counts), but after looking at them it became obvious that if a lighter is
+trying to place a light to be the sun, most of the scene will actually be
+illuminated (duh).
+
+I've also excluded some of our tests that are more like simple characters
+floating in space. These had low hit rates as well (10-ish percent), for
+similar reasons - it doesn't usually make sense to light your character with
+something that is fully occluded.
+
+You'll also note from my numbers of rays per path that shadow rays make up a
+huge portion of our ray budget. We've commonly seen scenes where 90% or more
+are shadow rays. So to answer your "does optimizing shadow rays matter"
+question, I can definitively say it does. The conclusion may not apply to all
+other usages, in particular because film rendering commonly leverages light
+linking (where a given light is assigned to affect only a certain set of
+objects). It's difficult for me to determine how much this matters in the
+results above without a lot of instrumentation -- I'm not even sure what I'd
+"check". Of course, in your architectural walkthrough example, disabling light
+linking would only boost the hit rates higher (presumably lights in other
+rooms would "cast shadows" to the current room).
+
+[... which is an interesting way to think of the world, by the way: there
+might be 100 light sources in the room you're in, but you're also in shadow of
+the quadrillions of light sources on the earth, not even counting the
+octilllions of stars for which you're in shadow. - Eric]
+
+----------------------------------------------------------------------------
+
+More SSE Ray/box Code Optimization, by Manny Ko
+
+(This is in response to the RTNews articles
+http://tog.acm.org/resources/RTNews/html/rtnv21n1.html#art9 and
+http://tog.acm.org/resources/RTNews/html/rtnv19n1.html#art7. - Eric) 
+
+I created an SSE version of Smits' [98, 02] and Williams' [Williams03] ray-box
+code that looks very similiar to Solomon's. My main concern is branching,
+versus Eric's main concern of early outs. I was not able to see which branch
+has more "rejection power" in real world scenes, hence my reluctance to commit
+to early outs. For a GPU you most definitely do not want all those branches.
+
+I use the IEEE trick Smits and Williams use to avoid the test for divide by
+zero and to capture the sign. I found I had to add one test to make it bullet-
+proof - to check for #IND (NaN) and to clamp these. The check involves a 3-way
+test for #IND, which is pretty fast. However, I do have to use
+_mm_movemask_ps, which involves syncing the SSE and integer pipes, which is 7
+cycles. After massaging Williams' logic into a more SSE-friendly form with an
+eye to removing branching, I managed to get it down to a single conditional -
+the final compare of tmin and tmax for the return code, in addition to the
+check for #IND. First, we need to examine Williams' improvements to Smits'
+original code. The following is taken from [Williams03]:
+
+
+Smits:
+
+if (r.direction.x() >= 0) {
+  tmin = (bounds[0].x() - r.origin.x()) / r.direction.x();
+  tmax = (bounds[1].x() - r.origin.x()) / r.direction.x();
+}
+else {
+  tmin = (bounds[1].x() - r.origin.x()) / r.direction.x();
+  tmax = (bounds[0].x() - r.origin.x()) / r.direction.x();
+}
+etc. for y and z.
+
+----
+
+Williams:
+
+divx = 1 / r.direction.x();
+if (divx >= 0) {
+  tmin = (bounds[0].x() - r.origin.x()) * divx;
+  tmax = (bounds[1].x() - r.origin.x()) * divx;
+}
+else {
+  tmin = (bounds[1].x() - r.origin.x()) * divx;
+  tmax = (bounds[0].x() - r.origin.x()) * divx;
+}
+
+Two multiplies are faster than the divide, but also handles the -0 case.
+'divx' captures the sign of the r.direction even when it is zero. Consider
+1/0.0 = +INF, 1/-0.0 = -INF. Willams then proposes a faster version that
+precomputes the inverse directions as well as the result of the sign tests
+(such as divx >= 0) in the ray structure. 
+
+tmin  = (bounds[r.sign[0]].x()   - r.origin.x()) * r.inv_direction.x();
+tmax  = (bounds[1-r.sign[0]].x() - r.origin.x()) * r.inv_direction.x();
+tymin = (bounds[r.sign[1]].y()   - r.origin.y()) * r.inv_direction.y();
+tymax = (bounds[1-r.sign[1]].y() - r.origin.y()) * r.inv_direction.y();
+if ( (tmin > tymax) || (tymin > tmax) )
+   return false;
+if (tymin > tmin)
+   tmin = tymin;
+if (tymax < tmax)
+   tmax = tymax;
+tzmin = (bounds[r.sign[2]].z() - r.origin.z()) * r.inv_direction.z();
+tzmax = (bounds[1-r.sign[2]].z() - r.origin.z()) * r.inv_direction.z();
+if ( (tmin > tzmax) || (tzmin > tmax) )
+   return false;
+if (tzmin > tmin)
+   tmin = tzmin;
+if (tzmax < tmax)
+   tmax = tzmax;
+return ( (tmin < t1) && (tmax > t0) );
+
+----
+
+I like Williams' approach of storing the extra data (1/dir and signs of dir)
+with the ray, but all the tests still worried me. There is a lot of branch
+misprediction in there. So I adopted the following approach of using SSE's
+min/max and horizontal min/max (which is only available in SSE 4).
+
+Manny version:
+
+static const SSE::Vec3 kINDVec3 = SSE::Invert4( SSE::Vec3(0.f,0.f,0.f) ); //(-1.0#IND,-1.0#IND,-1.0#IND)
+
+BBox::ClipRay(const Ray& r, float* tmin, float* tmax, float raymin, float raymax) const
+{
+  const SSE::Vec3& rayorig   = (r.GetOrigin().m_v);
+  const SSE::Vec3& rayinvdir = (r.GetInvDir().m_v);
+  SSE::Vec3 t0v, t1v;
+
+  t0v = ( (m_points[0] - rayorig) * rayinvdir );      //tmins - same as Williams
+  t1v = ( (m_points[1] - rayorig) * rayinvdir );      //tmaxs - same as Williams
+
+  if (result != 0) { //handle #IND
+    ClampTs( t0v, t1v, indmask );
+  }
+  SSE::Vec3 t0v_n, t1v_n;
+  t0v_n = SSE::Min( t0v, t1v ); //_mm_min_ps
+  t1v_n = SSE::Max( t0v, t1v ); //_mm_max_ps
+
+  SSE::Scalar interval_min, interval_max;
+  
+  SSE::Scalar t0, t1; //help keep them within SSE registers
+  t0 = SSE::MaxHorz3( t0v_n ); //horizontal-max
+  t1 = SSE::MinHorz3( t1v_n ); //horizontal-min
+
+  interval_min = MAX1( t0, raymin ); //SSE 1-compoment Max
+  interval_max = MIN1( t1, raymax ); //SSE 1-compoment Min
+
+  *tmin = interval_min * kBBEPSMIN; //* 0.9999f
+  *tmax = interval_max * kBBEPSMAX; //* 1.0001f
+
+  return (interval_min <= interval_max);
+}
+ 
+This code runs very fast and hardly takes any time at all. Instead of adding
+an epsilon to prevent a degenerate interval, I prefer to multiply by 0.9999
+and 1.0001. Adding an epsilon is not always robust due to the nature of
+floating point math. See [Goldberg91] or Christer Ericson's book [Ericson05]
+for a more detailed exposition. The horizontal min/max can be replaced by
+several SSE instructions on older CPUs and the code still runs well.
+
+I also found doing:
+
+t0 = MaxHorz3( t0v_n ); //horizontal-max
+t1 = MinHorz3( t1v_n ); //horizontal-min
+
+interval_min = MAX1( t0, raymin ); //SSE 1-compoment Max
+interval_max = MIN1( t1, raymax ); //SSE 1-compoment Min
+
+is a little bit faster than:
+
+t0v_n = MaxVec3( t0v_n, Vec3(raymin) );
+t1v_n = MinVec3( t1v_n, Vec3(raymax) );
+
+interval_min = MaxHorz3( t0v_n );   //horizontal-max
+interval_max = MinHorz3( t1v_n ); //horizontal-min
+
+----
+
+References
+----------
+
+[Ericson05] Real-Time Collision Detection. Morgan Kaufmann, 2005.
+[Goldberg91] "What Every Computer Scientist Should Know About Floating-Point Arithmetic",
+   ACM Computing Surveys, Vol 23, No 1, March 1991.   
+[Smits99] "Efficiency Issues for Ray Tracing", JGT, vol 3:2, 1998, pp. 1-14.
+[Smits02] "Efficient Bounding Box Intersection", Ray Tracing News 15:1 (2002).
+[Williams03] "An efficient and robust ray-box intersection algorithm", JGT, vol 10:1 (2005), pp. 49–54.
+
+----------------------------------------------------------------------------
+
+Puzzle Answer: Triangle/Bounding Box Ratio, by Eric Haines
+
+Last issue I asked what the average ratio of an arbitrarily-oriented
+equilateral triangle's area is to its bounding box's surface area,
+http://tog.acm.org/resources/RTNews/html/rtnv21n1.html#art4. To be clearer, I
+should have said "take the set of all possible orientations of an equilateral
+triangle, uniformly distributed, and make an axis-aligned bounding box for
+each one; what's the average surface area ratio?" This ratio should be
+proportional to the chance that a ray that pierces the bounding box (ignore
+rays with endpoints inside the box) then hits the triangle. It's trivial to
+show the ratio must be less than 1/2: if you put an oriented bounding box
+around any triangle and the area of the triangle will be half of base times
+height, and any set of axis-aligned boxes will naturally be larger than this
+oriented bounding box.
+
+Unfortunately, no one took the bait and solved it for me. Gilbert Bernstein
+did reply about this problem, proving that the length of the perimeter of any
+triangle which is randomly oriented is proportional to the average mean width
+of the set of axis-aligned bounding boxes put around this triangle. The mean
+width of a bounding box is the sum of its three axes, height + width + depth
+(see puzzle answer RTNews,
+http://tog.acm.org/resources/RTNews/html/rtnv21n1.html#art3). From testing
+below, it looks like the ratio is 4/3. To summarize:
+
+Sum of triangle's edge lengths = 4/3 * ( height + width + depth ) of the "average summed" bounding box.
+
+I like that this is true for any triangle, but it wasn't the answer I wanted -
+cold, hard numbers is what I was hoping to get. I decided to hack a quick perl
+program to give me an approximation, if not a formula. I tried it on a few
+common triangles:
+
+Equilateral triangle:                              0.267  - 1 in 3.75
+Isosceles right triangle (edges 1,1,sqrt(2):       0.243  - 1 in 4.12
+Golden ratio right triangle (short edges 1,1.618): 0.226  - 1 in 4.42
+Thin right triangle (short edges 1, 0.1):          0.069  - 1 in 14
+Very thin right triangle (short edges 1, 0.01):    0.0077 - 1 in 130
+
+The equilateral triangle seems like it would be a "best case", since it has
+the highest area to perimeter-squared ratio, and this indeed appears to be so,
+it giving the highest hit ratio of the triangles tested. The isosceles right
+triangle is a worthwhile case, in that two of these form a square, a common
+element in a mesh primitive. I recall reading in some "Mathematical Games"
+column that some person went around and measured rectangle ratios, wherever
+he'd see them. The average ratio was around the golden ratio, phi. A golden
+ratio right triangle forms such rectangles, so should also be a fairly common
+triangle type. The thin triangles were run just to see how bad things can get;
+no surprise, a randomly-oriented triangle that is needle-like, where
+area/perimeter is low, is likely to be contained by a proportionally huge
+bounding box.
+
+I think this is worth knowing, as many of us are constantly putting bounding
+boxes around triangles. For axis-aligned triangles, the best we can ever do is
+0.5, half the time the triangle will be hit by a ray piercing the bounding
+box. For arbitrary triangles, the best is 0.267 for an equilateral, and more
+likely the triangle will be hit by a box-piercing ray less than one time in
+four.
+
+This hit ratio has a bearing on the performance of various efficiency schemes.
+For example, it appears BIH (bounding interval hierarchy) works well on laser-
+scanned data, where the triangles are more equilateral and rarely thin.
+Synthetic model data, such as long pipes in the Factory model, or even endcaps
+of a cylinder, produce long, thin triangles that are less likely to be hit.
+
+It seems to me an important characteristic of any scene is what its hit ratio
+would be for its triangles, weighted by their areas (their chance of getting
+hit). For a static scene, this is easily done: look at every triangle, compute
+its bounding box, and get the ratio of areas directly. This would be an
+interesting number to know: sum of triangle areas / sum of bounding box areas.
+
+Where it gets trickier is when objects in the scene are animated by rotation,
+which is where a formula would be handy, to know how bad a model can become
+when it is rotated. A model full of arbitrarily-oriented equilateral triangles
+to start won't be worse when rotated; a model with long, thin, axis-aligned
+triangles will have tight bounds initially, but terrible bounding boxes once
+rotated. The paper "Edge Volume Heuristic - Robust Triangle Subdivision for
+Improved BVH Performance" by Holger Dammertz and Alexander Keller discusses
+the effects of such rotation and tackles the problem of subdividing triangles
+that give poor triangle/box hit ratios.
+
+A tiny project, maybe good for an undergrad's study project: what's the
+optimal triangulation of a polygon with the goal of minimizing the sum of the
+bounding box areas? For example, a polyline forming a circle could be
+triangulated into a fan (choose one vertex and fan from there) or a triangle
+strip (a zig-zag of triangles), or some mix of these, or some entirely
+arbitrary pattern. Which is best?
+
+I think there's much more work to be done here; what is of interest to me is
+whether we can find statistical characterizations of a scene's data and
+determine any correlations with the effectiveness of various efficiency
+schemes. It's probably impractical (and as the Arnold article in this issue
+shows, other factors such as motion blur can entirely change the choice of
+efficiency scheme), but I like the idea that a firm could feed some typical
+models into an analyzer to find out what sort of efficiency scheme would do
+their data the most good.
+
+----------------------------------------------------------------------------
+
+Where's the Rest of the Issue? by Eric Haines
+
+A lot of my energy these days is put into our "Real-Time Rendering" website
+and blog. Some of the articles there would normally go here, instead, as they
+pertain to ray tracing or graphics in general.
+
+The intersections page, http://realtimerendering.com/intersections.html,
+continues to be somewhat relevant to ray tracing (though, really, ray/triangle
+and ray/bezier are probably all you need). Our graphics books recommendation
+section, http://realtimerendering.com/books.html#recommended, also has some
+relevant bits.
+
+For blog entries, first of all, I edited a "book" on ray tracing, called
+"Another Introduction to Ray Tracing",
+http://pediapress.com/books/show/another-introduction-to-ray-tracing-eric/.
+471 pages, cool cover, just $22.84, with one small caveat: it's a bunch of
+Wikipedia articles and took me two hours to make. The free version is here:
+http://en.wikipedia.org/wiki/User:Erich666/Books/AnotherIntroRT. Don't like my
+book? Simply grab the contents of that page and make your own! I wrote an
+article about it and other (much scammier) print-on-demand schemes, see
+http://www.realtimerendering.com/blog/tag/ray-tracing/. Writing this today, I
+decided to actually order a physical copy, goofy as it is, just to see what
+that's like. It's sort of like an existence proof: a print-on-demand book
+doesn't really exist until you print at least one physical copy.
+
+I do recommend taking the quiz:
+http://www.realtimerendering.com/blog/questionable-content/, answers here:
+http://www.realtimerendering.com/blog/questionable-answers/
+
+There's an entry about a trick that everyone should know, but many don't,
+about looping through a list of vertices:
+http://www.realtimerendering.com/blog/looping-through-polygon-edges/. This
+would have been an RTNews article if I hadn't put it in the blog.
+
+My article on morphological antialiasing (MLAA),
+http://www.realtimerendering.com/blog/morphological-antialiasing/, gives a
+brief rundown of the idea and some experiments. For scenes with sharp edges in
+need of antialiasing, this is an interesting option. This can be quite cheap
+for ray tracing, compared to the cost of shooting more rays. I find it falls
+apart on thin objects that span a pixel or two in width and pixels at the
+edges of the image are problematic, but otherwise the results are pretty
+convincing. Naty has a few followup articles of this type of technique being
+used in a game, http://www.realtimerendering.com/blog/morphological-antialiasing-in-god-of-war-iii/ and
+http://www.realtimerendering.com/blog/more-on-god-of-war-iii-antialiasing/.
+
+I wrote two articles on left-handed vs. right-handed coordinate systems:
+http://www.realtimerendering.com/blog/left-handed-vs-right-handed-world-coordinates/
+and http://www.realtimerendering.com/blog/left-handed-vs-right-handed-viewing/.
+I'm not really satisfied with them, they're still a work in progress for me.
+I think this area still needs a thorough *clear* treatment from world to
+screen; I ignore the Y-flipping problem often run into going from Cartesian
+coordinates to screen coordinates. Still, I got a bit sick of seeing "just
+flip the Z coordinate" as the flip answer for converting from one coordinate
+system to another. Yes, this can work, but you have to understand what in
+the world you're doing and what you're giving up.
+
+Nothing to do with ray tracing, but I liked the idea of a constant luma
+palette: http://www.realtimerendering.com/blog/constant-luma-palette/
+
+The Octane 2 renderer mentioned here, http://www.realtimerendering.com/blog/7-things-for-may-2/
+
+The next-to-last entry here shows the dangers of ray tracing:
+http://www.realtimerendering.com/blog/clearing-the-queue/
+
+Our most popular post over the years has been this simple one:
+http://www.realtimerendering.com/blog/thought-for-the-day/
+
+Finally, some visual treats, all the stuff I didn't stick in the Roundup:
+http://www.realtimerendering.com/blog/visual-treats/,
+http://www.realtimerendering.com/blog/visual-stuff/, and
+http://www.realtimerendering.com/blog/shanghai-3d/.
+
+----------------------------------------------------------------------------
+END OF RTNEWS

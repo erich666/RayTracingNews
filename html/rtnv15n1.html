@@ -1,0 +1,1383 @@
+<!-- html version of Volume 15, Number 1 -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 15, Number 1</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT> 
+<P><I>"Light Makes Right"</I> 
+<P><FONT size=+1>October 21, 2002</FONT> 
+<P><FONT size=+1>Volume 15, Number 1</FONT> 
+</CENTER>
+<P>
+Compiled by <a href="http://www.acm.org/tog/editors/erich/">Eric Haines</a>, 1050 Craft Road, Ithaca, NY 14850
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine, not Autodesk's.<P>
+All contents are copyright (c) 2001,2002, all rights reserved
+by the individual authors
+<P>
+Archive locations:  text version at
+<A HREF="http://www.acm.org/tog/resources/RTNews/text/">
+http://www.acm.org/tog/resources/RTNews/text/</A>
+<BR>HTML at <A HREF="http://www.acm.org/tog/resources/RTNews/html/">
+http://www.acm.org/tog/resources/RTNews/html/</A>
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction</A></LI>
+<LI><A HREF="#art2">
+Ray Tracing Roundup</A></LI>
+<LI><A HREF="#art3">
+RealStorm: A Realtime Raytracing Engine</A>, by Michael Piepgras</LI>
+<LI><A HREF="#art4">
+Efficient Bounding Box Intersection</A>, by Brian Smits</LI>
+<LI><A HREF="#art5">
+Array Good, Linked List Bad</A>, by Matt Pharr</LI>
+<LI><A HREF="#art6">
+Questions and Answers</A>, by Vlastimil Havran</LI>
+<LI><A HREF="#art7">
+Scanline vs. Ray Tracing</A>, by Piero Foscari, Paul Kahler, and Matt Pharr</LI>
+<LI><A HREF="#art8">
+13th Annual Eurographics Workshop on Rendering</A>, by Nelson L. Max</LI>
+<LI><A HREF="#art9">
+SSM and OOM Become Enigma</A>, by Mark Manning</LI>
+<LI><A HREF="#art10">
+A Simple Ray-Triangle Pl&uuml;cker Optimization</A>, by Jeffrey Mahovsky</LI>
+<LI><A HREF="#art11">
+Recovering a Triangle's Surface Normal from the Pl&uuml;cker Coordinates of its Edges</A>,
+by Jeffrey Mahovsky</LI>
+<LI><A HREF="#art12">
+Objects per Grid Cell</A>, by Pete Shirley</LI>
+</H4>
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction</A></FONT></H4>
+Well, it's been more than a year since I got an RT News out the door. My
+excuse this time is that I was busy helping write a second edition of
+&quot;Real-Time Rendering&quot;, which turned out to be a huge amount of work. The
+usual stuff, including the Fantasy Graphics League
+(<A HREF="http://www.realtimerendering.com/fgl">http://www.realtimerendering.com/fgl</A>), also sucked up my time. Plus, of
+course, my &quot;Battlefield 1942&quot; addiction... Anyway, in this past year there
+have been two films rendered entirely using ray tracing. The first is
+&quot;Jimmy Neutron: Boy Genius&quot; and the second is &quot;Ice Age&quot;. While trying to
+find anything on the web about this (no luck), I did find a timeline of
+computer graphics and animation which might be handy someday:
+<A HREF="http://www.accad.ohio-state.edu/~waynec/history/timeline.html">http://www.accad.ohio-state.edu/~waynec/history/timeline.html</A>
+<P>
+There was no Ray Tracing Roundtable this year at SIGGRAPH, as I had felt
+the last few had become repetitive to some extent. Also, there were a
+number of other events concerning ray tracing that looked promising. The
+side effect, for me, of not organizing a roundtable was that I was off the
+hook, not feeling obligated to get an issue out before SIGGRAPH. Just as
+well: there were some tidbits in the RTNews pipe, but nothing meaty. Since
+SIGGRAPH a number of new articles came in, so this issue has a bit more
+heft to it.
+<P>
+SIGGRAPH 2002 had a number of interesting presentations and displays
+related to ray tracing. I sent a note off about these to subscribers of
+the RT News (simply ask me if you want to be subscribed), but for the
+record I will quickly summarize them here:
+<P>
+The &quot;When will RT replace Rasterization?&quot; panel, see
+<A HREF="http://www.siggraph.org/s2002/conference/panels/panels1.html">http://www.siggraph.org/s2002/conference/panels/panels1.html</A> for presenters.
+This panel was good - every major point I could think of, and a lot more
+besides, was covered by the panelists. Most people went with the reasonable,
+albeit boring, response to the question with &quot;It depends...&quot;. Some
+interesting points were made; for example, Dave Kirk noted that current
+graphics hardware is Turing complete. Someone (I didn't note who, but think
+it might have been Larry Seiler) noted that in the area of volume rendering
+systems, 50% are CPU-based, 45% are GPU-based (i.e. using layered textures
+or other techniques), and only 5% are special-purpose ray-casters. What I
+find interesting is the way that ray tracing and traditional hardware
+algorithms can feed off of each other. Ray tracing has natural occlusion
+culling and deferred shading built into it; that is, when a ray hits an
+object, you don't have to trace it further, and you need to shade each
+ray only once (vs. z-buffering, where normally you shade each pixel one
+or more times, depending on the number of objects covering the pixel and
+their draw order). Techniques such as Greene's hierarchical z-buffer have
+a ray-tracing feel to them, though the traversal method is different: it
+has the sense of rays moving through an octree, only accessing data if it
+is possibly visible. See Piepgras' &quot;Realstorm&quot; article in this issue for
+one way in which Z-buffer acceleration techniques have influenced one
+interactive ray tracer.
+<P>
+&quot;Ray Tracing on Programmable Graphics Hardware,&quot; paper, presented by Tim
+Purcell. Graphics hardware now includes a programmable pixel shader on it.
+Both ATI and NVIDIA had major announcements about how their latest
+architectures would support more shader instructions per pass (64 for ATI's
+new Radeon 9700, 1024 for NVIDIA's upcoming NV30 hardware) and would
+support higher precision for computations throughout the pipeline. By
+assuming the existence of such hardware (which was unavailable when the
+paper was accepted), Purcell et alia examined one way in which pixel
+shaders could be used to perform ray tracing. The idea is to use different
+shaders to generate eye rays, traverse an accelerating grid structure,
+and intersect and shade the triangles that represent the geometry in a
+scene. Grid data and triangle geometry is encoded in textures.
+See <A HREF="http://graphics.stanford.edu/papers/rtongfx/">http://graphics.stanford.edu/papers/rtongfx/</A> for the paper. The most
+important take-away from this paper for me was that it's indeed possible
+to map the ray tracing algorithm onto the latest graphics hardware. I
+personally couldn't see a way for this to happen prior to reading this
+paper.
+<P>
+At the presentation itself, the authors demonstrated their technique
+actually working on an ATI Radeon 9700. They also showed a hybrid
+technique, where ray tracing was done to compute shadows (a notoriously
+difficult problem for graphics hardware to do well, as the two current
+methods, stencil buffered shadow volumes and Z-depth shadow maps, each
+have their own costs and limitations). The method is not necessarily
+ready for prime-time; it's costly, as many passes are needed to compute
+one frame. However, graphics accelerators are getting faster at a rate
+much greater than Moore's Law (see the introductory slides at
+<A HREF="http://graphics.stanford.edu/courses/cs448a-01-fall/">http://graphics.stanford.edu/courses/cs448a-01-fall/</A>, for example), so
+it seems like just a matter of time for these ideas to become viable.
+As it is, their system has comparable performance to the best CPU-side ray tracers
+(such as Slusallek and Wald's).
+All in all, an incredible presentation.
+<P>
+Philipp Slussalek is starting a spin-off company called inTrace, with
+the goal being interactive global illumination. Their system was shown
+on an 8 node (dual AMD Athlon MP 2000+) at the AMD booth and on an 66
+node cluster (ditto) at the RackSaver booth. Their web site is just a
+placeholder at <A HREF="http://www.intrace.com">http://www.intrace.com</A>, the best information about their
+system is at <A HREF="http://www.openrt.de">http://www.openrt.de</A>.
+<P>
+Utah's interactive ray tracer (see
+<A HREF="http://www.cs.utah.edu/vissim/projects/raytracing/">http://www.cs.utah.edu/vissim/projects/raytracing/</A>) was also shown on
+the floor running on a 128 node Origin at the SGI booth. Interesting
+to me was that there really was not that much gratuitous ray tracing
+going on, i.e., not a lot of reflections and shadows. The stress was
+more on the sheer amount of geometry in the scenes, something that
+ray tracing can often handle well compared to z-buffer graphics hardware.
+<P>
+There were the usual fine courses on advanced global illumination and on
+practical photon mapping, both of which use ray tracing for computing
+illumination transport. I was on a panel this year about the Demo Scene,
+which was fun to do. I discussed the techniques behind the amazing
+&quot;Heaven Seven&quot; demo. See <A HREF="http://www.demoscene.hu/~picard/h7/">http://www.demoscene.hu/~picard/h7/</A> for the
+demo (definitely worth a view) and, as important, the author's
+description. This is a 64K program, which is nothing (an empty Word
+document uses 19K). For other interesting demos, check Demoo at
+<A HREF="http://www.calodox.scene.org/demoo/index.php3">http://www.calodox.scene.org/demoo/index.php3</A>, or Scene.org at
+<A HREF="http://www.scene.org/">http://www.scene.org/</A>, or Two-Headed Squirrel's commentary at
+<A HREF="http://ths.demoscene.org/start.html">http://ths.demoscene.org/start.html</A>.
+<P>
+The coolest program I've seen in a long time is a 256 byte demo, Tube,
+by Baze. Find it (and others) at <A HREF="http://www.256b.com">http://www.256b.com</A>. The program ray
+traces a single cylinder in real-time. However, through clever use of
+texture mapping, it actually looks like three concentric cylinders.
+Baze's Lattice demo is also excellent, showing an implicit surface
+ray traced in real-time. The lighting on the surface is a clever hack:
+the number of iterations it took to solve for the surface is used.
+Again, all in 256 bytes - astounding. Source code is provided.
+<P>
+There were a number of new books relevant to ray tracing that were
+announced or released at SIGGRAPH:
+<P> <a href="http://www.amazon.com/exec/obidos/tg/detail/-/1568811799/somebooksilike">&quot;Practical 
+  Parallel Rendering&quot;</a> edited by Chalmers et alia, is a must-have if you 
+  are working in the area of ray tracing on multiple CPUs. While it discusses 
+  other topics, such as graphics hardware and global illumination, a fair bit 
+  of the book, and all of the case studies, discuss methods of parallelizing ray 
+  tracing. It's got a lot of chewy information, collecting some of the best research 
+  in the field in the past few years into one place, and doing so in a coherent 
+  fashion. This book is based on the SIGGRAPH 2002 &quot;Practical Parallel Rendering&quot; 
+  course. It is a nicely-produced volume (despite some small squares sneaking 
+  into the final figures in some chapters), and a worthwhile guide to much of 
+  the current state of the art. 
+<P> Announced at SIGGRAPH 2002 and out this month is <a href="http://www.amazon.com/exec/obidos/ASIN/1558605940/somebooksilike">&quot;Geometric 
+  Tools for Computer Graphics,&quot;</a> by Philip Schneider and David Eberly. 
+  This is, to me, a must-have book for modern interactive computer graphics programmers. 
+  It is packed full of classical 2D and 3D geometric algorithms, along with many 
+  practical computational geometry techniques. It's not a great book to sit and 
+  read (vs. say, deBerg et alia's &quot;Computational Geometry&quot; book), but 
+  it is extensive and full of real-world solutions, an important reference work 
+  for anyone working with geometry. If you ever do picking, collision detection, 
+  ray tracing, or other kinds of surface manipulation, there's probably something 
+  useful for you in this book. See Dave Eberly's site at <A HREF="http://www.magic-software.com/GeometricTools.html">http://www.magic-software.com/GeometricTools.html</A> 
+  for more information on the book. [Full disclosure: I wrote a foreword for the 
+  book, which I was happy to do because it was a volume that I think will save 
+  lots of people lots of time.] 
+<P> <a href="http://www.amazon.com/exec/obidos/ASIN/1568811241/somebooksilike">&quot;Fundamentals 
+  of Computer Graphics,&quot;</a> by Peter Shirley, is a new introductory text 
+  of the field. My excuse for listing it here is that he does explain ray tracing 
+  as one rendering technique. It's a great book, with solid coverage of a wide 
+  range of topics, including BSP trees and the Z-buffer, subdivision surfaces, 
+  sampling and filtering, and image- -based rendering. I am particularly impressed 
+  by the thorough but succinct coverage of radiometry, photometry, vision, and 
+  color. At the end of each chapter is a &quot;Frequently Asked Questions&quot; 
+  section that covers some interesting questions. All in all a good book, from 
+  my brief reading of some small portions. I plan to go back and read a number 
+  of sections, as the book is quite up-to-date and covers a wide range of material. 
+  I definitely recommend considering it for use in classes, as well as for professionals 
+  (like me) who would like to catch up in areas they've neglected. About the only 
+  problem is that I wish the book was longer, as it weighs in at about 400 pages. 
+  Some topics get short-changed, e.g. mipmapping, an important technique commonly 
+  used in graphics accelerators, is mentioned in passing in a few sentences, and 
+  shadow volumes are not mentioned at all. That said, there is more than enough 
+  material here to keep a class occupied for a semester. The book is nicely produced, 
+  with many illustrative figures complementing the text. 
+<P>
+I've noticed there are currently two types of textbooks available on
+computer graphics fundamentals: some, such as Hill's and Angel's books,
+use OpenGL as the basis for understanding graphics. This approach I think
+is good for teaching &quot;graphics engineers&quot;, people who can then go out and
+help write code for games, CAD programs, and other interactive
+graphics-related software. The approach builds on existing APIs, so the
+students can quickly begin producing images without a lot of initial work.
+Shirley's book is more in a &quot;graphics scientist&quot; category, where the
+basic theory behind creating images is taught. He does not focus on a
+particular API. While possibly leading to an initially weaker understanding
+of mainstream APIs (which are, after all, what almost all programmers will
+use for interactive graphics), this approach provides a solid basis for
+future developments. Basic OpenGL is currently quite limiting as far as
+surface shading is concerned; only by using vertex and pixel shaders can
+many effects be produced. Each approach has its strengths (e.g., there is
+certainly a huge amount of material that can be covered within just basic
+OpenGL), and what's best for an introductory course is an open question, at
+least to me.
+<P>
+Our Second Edition of &quot;Real-Time Rendering&quot;,
+<A HREF="http://www.realtimerendering.com/">http://www.realtimerendering.com/</A>, came out this July. We did feel justified
+this time around to briefly discuss ray tracing and radiosity techniques and
+their uses in interactive rendering. What we thought would be a 100-150 page
+revision turned into a 350 page addition; way too much has been going on in
+this field, and a lot of theory that was irrelevant a few years ago is now
+quite important (e.g., high dynamic range images, BRDF theory, subdivision
+surfaces).
+<P>
+There were other interesting books out at SIGGRAPH 2002 or thereabouts, but
+no others directly related to ray tracing. For a list of recent books in
+graphics that may be of interest, you can check our real-time rendering
+site at <A HREF="http://www.realtimerendering.com/#books">http://www.realtimerendering.com/#books</A>.
+<P>
+That's about it for SIGGRAPH. Oh, one of the coolest demonstration programs
+there was ATI's interactive version of &quot;Natural Light&quot;, the Debevec
+high-dynamic range ray traced movie from a few years back. You can see
+their version at <A HREF="http://www.ati.com/developer/demos/r9700.html">http://www.ati.com/developer/demos/r9700.html</A>. It's
+amazing to me how well their reflection and refraction technique works
+(though it's a hack, no rays are traced; you can read more about it at
+<A HREF="http://www.realtimerendering.com/#gfxhw">http://www.realtimerendering.com/#gfxhw</A>).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+Ray Tracing Roundup</A></FONT></H4>
+Visit <A HREF="http://graphics.cs.uni-sb.de/RTRT/">http://graphics.cs.uni-sb.de/RTRT/</A> to see what the Saarland
+University group has been researching. There are new papers on interactive
+ray tracing and global illumination, a hardware architecture to accelerate
+the algorithm, and an API proposal for ray tracing called OpenRT (see
+their page <A HREF="http://www.openrt.de/">http://www.openrt.de/</A>). The paper publication list is at
+<A HREF="http://www.openrt.de/Publications/">http://www.openrt.de/Publications/</A>.
+<P>
+________
+<P>
+A fun thing: can you tell which images are real and which are computer
+generated?
+<P>
+<A HREF="http://www.fakeorfoto.com">http://www.fakeorfoto.com</A>
+<P>
+Most of them are so artsy and abstract that it's hard to get any traction,
+but it's still fun to try.
+<P>
+________
+<P>
+A new ray tracer in Java, written as part of the work for a PhD:
+<P>
+<A HREF="http://wfmh.org.pl/~thorgal/jatrac/">http://wfmh.org.pl/~thorgal/jatrac/</A>
+<P>
+It includes a number of goodies such as photon mapping.
+<P>
+________
+<P>
+An extensive site devoted to ray tracing, including a large glossary of
+terms: <A HREF="http://fuzzyphoton.tripod.com">http://fuzzyphoton.tripod.com</A>
+<P>
+________
+<P>
+A chess game with the graphics computed with real-time raytracing:
+<A HREF="http://www.newimage.com/~rhk/rtchess/">http://www.newimage.com/~rhk/rtchess/</A>
+<P>
+________
+<P>
+Nice images from the Arnold renderer can be found at
+<A HREF="http://www.3dluvr.com/marcosss/">http://www.3dluvr.com/marcosss/</A>. There is a little information about this
+technique in the SIGGRAPH 2001 course notes for &quot;State of the Art in Monte
+Carlo Ray Tracing for Realistic Image Synthesis&quot;
+(<A HREF="http://www.siggraph.org/s2001/conference/courses/crs29.html">http://www.siggraph.org/s2001/conference/courses/crs29.html</A>) about this
+technique. Some information from a user's point of view can be found at
+<A HREF="http://www.highend3d.com/xsi/tutorials/gi/">http://www.highend3d.com/xsi/tutorials/gi/</A>.
+<P>
+In a similar vein, another commercial ray-tracer is available from some
+programmers in Bulgaria: <A HREF="http://www.vrayrender.com/">http://www.vrayrender.com/</A>, and read a review about
+it at <A HREF="http://www.cgarchitect.com/news/Reviews/Review007_1.asp">http://www.cgarchitect.com/news/Reviews/Review007_1.asp</A> - some nice
+images there.
+<P>
+________
+<P>
+My Ph.D. thesis, entitled "On robust Monte Carlo algorithms for multi-pass
+global illumination", is online at:
+<P>
+<A HREF="http://www.cs.kuleuven.ac.be/~graphics/CGRG.PUBLICATIONS/FRANKPHD/">http://www.cs.kuleuven.ac.be/~graphics/CGRG.PUBLICATIONS/FRANKPHD/</a>
+<P>
+Abstract, table of contents, and downloads in various formats can be
+found there.
+<P>
+- Frank Suykens (<a href="mailto:Frank.Suykens@cs.kuleuven.ac.be">Frank.Suykens@cs.kuleuven.ac.be</a>)
+<P>
+________
+<P>
+ART VPS Ltd. makes and sells hardware solutions for fast RenderMan rendering
+using ray tracing. Seems like a tough market vs. using a cluster of cheap
+machines, but time will tell. Visit their site at <A HREF="http://www.art-render.com">http://www.art-render.com</A>.
+You can find some technical details in their talk at HWW 2001, see &quot;The
+AR350: Today's Ray Trace Rendering Processor&quot; at
+<A HREF="http://www.graphicshardware.org/previous/www_2001/program.html">http://www.graphicshardware.org/previous/www_2001/program.html</A>.
+<P>
+________
+<P>
+A sad thing is that BMRT is no more, as part of an out-of-court settlement.
+I don't know of many free RenderMan rendering resources. Here's one that
+might be of use:
+<P>
+<A HREF="http://www.mirage-3d.de/index2.html">http://www.mirage-3d.de/index2.html</A>
+<P>
+There are various free modeling tools that output RIB files, e.g.
+<A HREF="http://www.ayam3d.org/">http://www.ayam3d.org/</A>. Exluna still maintains an excellent page of
+RenderMan related links:
+<P>
+<A HREF="http://www.exluna.com/products/links.html">http://www.exluna.com/products/links.html</A>
+<P>
+________
+<P>
+[LBNL hired Greg to give a long-overdue update to his great, free Radiance
+renderer. It's now at version 3.4. Get it at <A HREF="http://radsite.lbl.gov/radiance/">http://radsite.lbl.gov/radiance/</A>.
+Greg also notes the following. - EAH]
+<P>
+There are two new mailing lists for Radiance users that are active and serve
+as a platforms for both the Windows/NT world and the UNIX/Linux users.
+<P>
+Windows/NT users of Desktop Radiance will find it useful to subscribe to
+    <A HREF="http://groups.yahoo.com/group/DesktopRadiance">http://groups.yahoo.com/group/DesktopRadiance</A>
+<P>
+UNIX/Linux users will find archives and subscription details at:
+    <A HREF="http://www.radiance-online.org">http://www.radiance-online.org</A>
+<P>
+    - Greg Ward &lt;<A HREF="mailto:greg@floyd.lbl.gov">greg@floyd.lbl.gov</A>&gt;
+<P>
+________
+<P>
+A nice page on the classic point in polygon problem:
+<P>
+<A HREF="http://www.geometryalgorithms.com/Archive/algorithm_0103/algorithm_0103.htm">http://www.geometryalgorithms.com/Archive/algorithm_0103/algorithm_0103.htm</A>
+<P>
+This whole site, <A HREF="http://www.geometryalgorithms.com/">http://www.geometryalgorithms.com/</A>, has a lot of worthwhile
+material and links.
+<P>
+________
+<P>
+A couple of people suggested that I put my Eurographics talk on &quot;Rendering:
+Input/Output&quot; online, so it is now available at:
+<A HREF="http://www.research.ibm.com/people/h/holly/pres.html">http://www.research.ibm.com/people/h/holly/pres.html</A>.
+It's in pdf, and with all the images still pretty bulky, so I divided it into
+2 to 6 Mb pieces. I also put a couple other presentations, including my
+attempt to be controversial for the &quot;Newton's Nightmare&quot; panel at SIGGRAPH.
+<P>
+    - Holly Rushmeier &lt;<A HREF="mailto:hertjwr@us.ibm.com">hertjwr@us.ibm.com</A>&gt;
+<P>
+________
+<P>
+lRay, a ray tracer with caustics, soft shadows, and implicit surfaces, is
+available at:
+<P>
+<A HREF="http://www.cfxweb.net/~lyc/lray.html">http://www.cfxweb.net/~lyc/lray.html</A>
+<P>
+________
+<P>
+It had to happen eventually:
+<P>
+<A HREF="http://cgi.ebay.com/ws/eBayISAPI.dll?ViewItem">http://cgi.ebay.com/ws/eBayISAPI.dll?ViewItem</A>&amp;item=2061898269
+<P>
+This page may have disappeared by the time you look, so here's the gist:
+<P>
+Selling NURBS Sphere for Maya 4.0!!! Cheap!!
+<P>
+That's right, you lucky animators! I'm selling a collection of control
+vertexes in 3D space! If you are the lucky bidder I will send you the MEL
+script file containing the power to create the one, the only, the ...
+NURBS Sphere!!! Payment will be accepted by PayPal only. Good Luck! May
+the Best Animator Win!!!!!
+<P>
+With 4 days to go, the auction had 13 bids and the current price was $10.50.
+<P>
+________
+<P>
+A little real-time ray tracer that raytraces only cubes:
+<P>
+<A HREF="http://www.perilith.com/~lode/trixel/Files/Trixel002.zip">http://www.perilith.com/~lode/trixel/Files/Trixel002.zip</A>
+<P>
+Seems a bit slow, but it's kind of cute.
+<P>
+________
+<P>
+A followup on <A HREF="rtnv9n2.html">RTNv9n2</A>, which was all about the pitfalls of writing a book,
+is this article, sent in by John Peterson:
+<P>
+<A HREF="http://www.mediachannel.org/views/oped/bookcontract.shtml">http://www.mediachannel.org/views/oped/bookcontract.shtml</A>
+<P>
+I should mention that my original &quot;fear and loathing&quot; column was not
+representative of my personal views (I had never dealt with a publisher at
+that point), but rather of a number of anonymous authors. My advice to
+prospective authors is to ask other authors how they feel about the
+various publishers - there are excellent publishers out there (and I'm not
+going to tread on any toes by making a list here and inadvertently leaving
+any out). That said, it does pay to be careful. Two other pieces of advice
+are to (a) get a lawyer to read over the book contract and (2) work your
+hardest to make your deadlines. If you're going to miss a deadline, tell
+your publisher sooner rather than later; in this way they can schedule
+resources better to meet everyone's needs.
+<P>
+________
+<P>
+For an entertaining use of global illumination (especially the Cornell Box)
+in computer games, check out this page: <A HREF="http://www.sync.dk/~khn/stuff/">http://www.sync.dk/~khn/stuff/</A> - now
+with extra color bleeding.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+RealStorm: A Realtime Raytracing Engine</A></FONT>, by Michael Piepgras (<A HREF="mailto:contact@realstorm.de">contact@realstorm.de</A>)
+</H4>
+[You owe it to yourself to visit 
+<A HREF="http://www.realstorm.com">http://www.realstorm.com</A>,
+download their benchmark, and give it a whirl;
+it's pretty impressive. I find Michael's approach to be very interesting in
+that it uses techniques normally used in the graphics accelerator world,
+such as view frustum culling, shadow volumes, and reflecting the viewpoint,
+instead applying them to the acceleration of ray tracing. - EAH]
+<P>
+RealStorm is a RTRT-engine based on polynomial primitives like planes and
+quadrics. The idea is to build an engine for games, one that can handle
+raytracing effects with large scenes at interactive rates. In this way we
+could improve the quality of game-engines and give them a more realistic
+look. As the number of polygons representing a curved surface gets higher
+and higher, the model representation converges to polygons being smaller
+than a screen pixel, which wouldn't make any sense at all for a traditional
+Z-buffer to render.
+<P>
+The raytracing engine is based on adaptive supersampling, with a 4x4 pixel
+grid for visibility, shadows, 1st recursion reflection, and shadows in 1st
+recursion reflections, each with its own buffer. In other words, only
+every 16th pixel is rendered, with more pixels sampled as needed. The
+primitives used are polynomial objects like polygons, planes and quadrics,
+because intersection calculations with these can be solved very rapidly.
+Each primitive uses its own optimized intersection code.
+<P>
+In the text that follows, whenever &quot;view frustum&quot; is used, it means to
+check the viewcone first (the cone that contains the view frustum), and if
+the viewcone is intersected, then check the view frustum (both are tested
+against the object's bounding sphere and bounding box). Checking against a
+cone is faster than checking against a frustum, so we often can obtain
+quick object rejection.
+<P>
+The engine lets each light be given a maximum radius of effect; beyond this
+radius the light does not affect any surface's shade. A far plane distance
+is also defined, as this is normally used in most game engines. These scene
+attributes are typically set by the world designer.
+<P>
+<PRE>
+Optimisation techniques per frame used are:
+(a) build a local scene out of the global scene objects which have any
+    effect on the picture.
+(b) visibility check with viewport and build up an orthogonal bsp-tree per
+    frame.
+(c) find the minimum projected viewplane area for each object.
+(d) &quot;object receives light&quot; check per light and object.
+(e) global shadow checking: obj&lt;--&gt;obj shadows, light&lt;--&gt;obj shadows.
+(f) shadow checking for 1st recursion shadows by checking the shadow volumes
+    with the view frustum and the bsp tree.
+(g) for 1st recursion reflective surfaces, do a visibility check for possible
+    reflected objects by reflecting the view frustum.
+(h) visibility checking for 1st recursion shadows in per object and shadow
+    volume by reflecting the viewport. In other words, reflect the viewport
+    on the reflective surface and do a shadow volume test with the reflected
+    viewport to see if an object on a reflected surface can receive shadow.
+(i) As needed, tessellate the projection plane to 2^n by 2^n picture parts
+    (depending on the actual frame complexity) and do (b)-(g) for each part.
+</PRE>
+<P>
+Some more details about (a)-(i):
+<P>
+for (a):<BR>
+One possibility for checking an object against the local render space is:
+<P>
+if (object.distance + object.radius &lt; max_view_distance + max_light_radius)
+    add_to_localscene;
+<P>
+In other words, if an object's distance from the eye is less than that of the
+far clipping plane's distance plus the maximum radius a light is allowed to
+affect, then that object potentially affects the scene.
+<P>
+for (b):<BR>
+An orthogonal BSP-tree is used because it can be calculated very quickly.
+<P>
+for (c):<BR>
+This rectangle, i.e., the near plane of the view frustum, helps make the
+visibility check for (i) faster.
+<P>
+for (d):<BR>
+The &quot;object receives light&quot; test simply checks if the object's bounding sphere
+is close enough to the light source, as each light is given a maximum radius
+of effect. If not, this reduces the loop-calls for lighting and shadows during
+rendering. That is, &quot;for (l=0; l&lt;lights_cause_light_on_object; l++)
+{ calculate light values; }&quot; and not &quot;for (l=0; l&lt;all_lights; l++) { calculate
+light values; }&quot;. In large scenes all_lights is much higher than
+lights_cause_light_on_object.
+<P>
+for (e):<BR>
+&quot;obj&lt;--&gt;obj shadows&quot; means finding what object can cause a shadow on another
+object:
+<P>
+if ( distance(object_a,object_b) + BoundingSphereSize(object_a) +
+BoundingSphereSize(object_b) &gt; max_light_radius)<BR>
+&nbsp;&nbsp;then object_a can't cause shadow on object_b (for all visibility and
+reflection rays).
+<P>
+&quot;light&lt;--&gt;obj shadows&quot; means checking if object_a can cause any shadow in the
+picture. For example, if (ShadowVolume(object_a,light) == inside viewport)
+object_a can cause a shadow; (works for visibility, not for reflection). In
+other words, take the shadow volume for object_a and test it for intersection
+with the viewport frustum (using, say, bounding spheres around each of these
+as possible to try to obtain a quick exit).
+<P>
+for (f):<BR>
+&quot;1st recursion shadows&quot; are those which are directly cast onto a visible
+object, and not the shadows which can be seen on reflected objects. Surviving
+shadow volumes from (e) are then checked with the orthogonal Bsp-Tree down to
+the leaves. If the shadow volume does not overlap any (visible) receiving
+object, then the cast shadow has no effect on the scene.
+<P>
+Another approach is to compute the minimum projected shadow volume, which
+means to get the minimum shadow volume rectangle on the projection plane to
+reduce the shadow tests in (i). In other words, I project the shadow volume
+onto the view plane and find the 2D rectangle it covers on the screen. Using
+this 2D rectangle, a simple &quot;is pixel in rectangle&quot; test tells if a shadow
+test is need or not.
+<P>
+for (g):<BR>
+This means building up a list of objects which can be seen in the reflection
+object from camera. This can be done easily for planes by reflecting the
+viewcone/frustum at the reflection plane. For quadrics I use something
+different: calculate the maximum rectangle inside the quadric parallel to
+the projection plane. For example, for a cylinder you can compute a rectangle
+formed of the two silhouette edges of the curved sides of the cylinder, along
+with two edges for the endcaps. This rectangle is then used to cull away
+anything behind the cylinder. In other words, a rectangle inside the cylinder
+is used to perform occlusion culling, and any objects behind the cylinder are
+thus eliminated from consideration.
+<P>
+for (h):<BR>
+Here the obj&lt;--&gt;obj shadow lists are used.
+<P>
+for (i):<BR>
+The list of visible objects has already been built for the whole image, as
+well as lists of possible shadowing objects. The next step is to find if
+image subdivision is needed. What I do is: subdivide the image if the number
+of rays needed for visibility tracing is more than 4 times higher than the
+resulting view frustum tests for the next subdivision level. For example:
+<P>
+if (needed_rays&gt;4*view_frustum_tests_for_next_subdivision_level)
+&nbsp;&nbsp;subdivide_subimage;
+<P>
+(I am sure this is not the best way, but it's the best I found so far ;-). In
+other words, say I know that 8000 rays will be needed for the image, and I
+have a current list of 1700 objects. I know I'll need to do 1700 view
+frustum/object tests. As 8000 is greater than 4*1700, the image will be
+subdivided.
+<P>
+Every subdivision level uses the list of the level above it, so in the first
+step you get 4 sublists from the single list, from each of these 4 you get 4
+new sublists, and so on. Normally I don't use more than 3 subdivision levels,
+to avoid getting too much overhead.
+<P>
+All these pre-frame checking techniques are optimized with special routines
+for each primitive (sphere&lt;--&gt;plane, sphere&lt;--&gt;cylinder, sphere&lt;--&gt;sphere,
+sphere &lt;--&gt;ellipsoid, ...) and the use of bounding boxes and bounding spheres.
+<P>
+With our benchmark at 320x180 during 2375 frames, (b)-(i) reduces the number
+of intersection calculations by a high ratio (of course, this depends on the
+scene to be raytraced):
+<P>
+<PRE>
+No. Of Rays     |   without (b)-(i)     with (b)-(i)       ratio
+----------------------------------------------------------------
+Visibility      |     8,589,935,274       84,251,189     101.9:1
+                |
+Shadows         |    15,533,963,921       69,563,770     223.2:1
+                |
+Visibility      |     6,444,228,737       52,383,307     123.0:1
+in reflections  |
+                |
+Shadows         |     7,920,241,335      112,368,826      70.4:1
+in reflections  |
+----------------------------------------------------------------
+Avg. Fps        |              1.18            24.26      20.5:1
+(on AMD1200)
+</PRE>
+<P>
+The main code optimization used is to reduce cache-misses, so lots of lists
+are copied around during rendering. For the rest the code is C, setting the
+compiler options to do Pentium II optimizations. Assembler optimizations,
+such as using MMX, SSE or 3Dnow, are not used yet.
+<P>
+About image quality:
+To provide a realistic look it is important to handle different material
+shaders, therefore 7 layers of textures are used. These are color, reflection,
+bump, diffuse intensity, specular intensity, glow, and translucency (some of
+these handle procedural textures). Another improvement to materials is to
+handle more than Lambert and Phong (cos, cos()^n) for shading. In fact, 12
+different shading models for diffuse and specular light are implemented.
+<P>
+To improve the lighting quality, volume lights (and radiosity in the next
+benchmark) are implemented, but this is still too slow. Some more work has
+to be done there to get it to be realtime with dynamic scenes.
+<P>
+For more information about RealStorm: <A HREF="http://www.realstorm.com">http://www.realstorm.com</A>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Efficient Bounding Box Intersection</A></FONT>, by Brian Smits (<A HREF="mailto:bes@pixar.com">bes@pixar.com</A>)
+</H4>
+[Brian commented on my article in the previous issue, <a href="rtnv14n1.html#art7">RTNv14n1</a>, in
+which I give a somewhat crazy way of testing boxes for intersection.
+Rereading that article, I realize that I did not stress enough that
+the approach there was not meant to be considered efficient or
+practical. I was more interested in the fact that an alternate approach
+was possible. Anyway, the silver lining was that I received a nice
+little article from Brian. It's something he's discussed in passing
+elsewhere, and I'm glad to have it written out in full here. - EAH]
+<P>
+I looked over the BBox intersection idea at the end of the last RTN.
+It seems way too complex.
+<P>
+As I recall:
+<P>
+<PRE>
+intervalMin = ray.T.min;
+intervalMax = ray.T.max;
+</PRE>
+<P>
+<PRE>
+t1 = (minX - originX ) * invDirX
+t2 = (maxX - originX) * invDirX
+if (invDirX &gt; 0) {
+  if (t1 &gt; intervalMin) intervalMin = t1;
+  if (t2 &lt; intervalMax) intervalMax = t2;
+  if (intervalMin &gt; intervalMax) return false;
+}
+else {
+  if (t2 &gt; intervalMin) intervalMin = t2;
+  if (t1 &lt; intervalMax) intervalMax = t1;
+  if (intervalMin &gt; intervalMax) return false;
+}
+</PRE>
+<P>
+repeat for each direction.
+<P>
+Note that the first &quot;if&quot; statement is constant for all bboxes intersected by
+the ray, so if you want to uglify your code you can create 8 versions of
+this function [i.e., one for each octant, dependent on the ray's direction],
+have no nested ifs (although you still have ifs that are dependent on
+operations done in previous ifs), and each function gets a lot simpler.
+<P>
+<PRE>
+bboxPosXDirPosYDirPosZDir
+<P>
+t1 = (minX - originX ) * invDirX
+t2 = (maxX - originX) * invDirX
+if (t1 &gt; intervalMin) intervalMin = t1;
+if (t2 &lt; intervalMax) intervalMax = t2;
+if (intervalMin &gt; intervalMax) return false;
+</PRE>
+repeat for each direction.
+<P>
+It seems unlikely that anything involving projecting points and doing any
+sort of polygon containment tests could be faster. Further argument is that
+for me, my bounding box test is either 4 or 10 times (memory is going)
+faster than my fastest ray triangle intersection (significant precomputation
+for each triangle).
+<P>
+Let me know if this isn't clear or I made a mistake in the above code.
+<P>
+[While we're on the topic, I wanted to add this note. There is an interesting
+little variant on ray/box testing. The article is:
+<P>
+Schroeder, Tim, &quot;Collision Detection Using Ray Casting,&quot; Game Developer,
+vol. 8, no. 8, pp. 50-56, August 2001. Code at <A HREF="http://www.gdmag.com/code.htm">http://www.gdmag.com/code.htm</A>
+(it's the last routine).
+<P>
+It has an odd variant on ray/box intersection there, actually line-segment/box
+intersection (but that's really what we all do, anyway). He takes the
+endpoints of the line segment and forms clip codes; you know, are both
+endpoints to the left or right of the bounding box, above or below, etc.
+If they are, he's done, he's missed. If they aren't, then from the codes
+he has knowledge of which faces could possibly be hit. Then test each possible
+face for an intersection using Woo's method, essentially. For example, if he
+finds the endpoints are in X.lo, X.middle; Y.middle, Y.hi; and both in
+Z.middle, he knows he has to test only the Xmin and Ymax faces of the box.
+Sounds like too much work for me, but maybe the clip codes give him an
+early-on high rejection rate and that's a win. - EAH]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Array Good, Linked List Bad</A></FONT>, by Matt Pharr (<A HREF="mailto:matt@pharr.org">matt@pharr.org</A>)
+</H4>
+[My title, not Matt's. Matt wrote me about my article in <a href="rtnv12n1.html#art6">RTNv12n1</a>, on
+allocating grids. - EAH]
+<P>
+I was looking around for something else when I came across that RT news
+from 1999 that had that suggestion about replacing linked lists in grids
+with memory that was allocated contiguously. So I made the corresponding
+changes to the little ray tracer project I've been working on here
+and... blammo! 10-20% faster! Who knew lists were <I>that</I> bad? Very
+exciting!
+<P>
+My code used to be something like:
+<P>
+<PRE>
+struct Mailbox {
+   int id;
+   Primitive *prim;
+};
+</PRE>
+<P>
+<PRE>
+struct Grid {
+   ...
+   list&lt;Mailbox *&gt; *voxels;
+};
+</PRE>
+<P>
+Where "voxels" is indexed by z*XRes*YRes + y*XRes + x.
+<P>
+I basically just changed that STL list&lt;&gt; in Grid to a vector&lt;&gt;, which is an
+automatically-growing array, doubling in size whenever you fill it up. So
+that 10% came from just keeping the Mailbox *'s contiguous in each voxel,
+and getting rid of the linked-list traversal overhead.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Questions and Answers</A></FONT>, by Vlastimil Havran (<A HREF="mailto:havran@mpi-sb.mpg.de">havran@mpi-sb.mpg.de</A>)
+</H4>
+[Vlastimil Havran had a number of comments on some questions I sent out to
+the RTNews subscription list before SIGGRAPH 2001. I've excerpted two of his
+responses here. - EAH]
+<P>
+Mailboxing, yea or nay?
+<P>
+I tested mailboxing within the GOLEM project, I can switch it on and off by
+recompiling the source codes using macros for conditional compilation as
+#ifdef ... My experience is that for the primitives in GOLEM the use of
+mailboxing improves the time required by at most 5-6%, but it can also
+increase the time by the same amount. This is heavily dependent on the
+surfaces, scene geometry and camera setting used. For triangles, spheres,
+cones, cylinders and other simpler primitives (as used within GOLEM)
+together with a good ray shooting algorithm, the use of mailboxing does
+not make sense or is completely questionable. For objects, where the
+ray-object intersection is computationally demanding (as NURBS and other
+spline, algebraic surfaces) it probably makes sense in most cases. The
+worse the ray shooting algorithm, the higher probability of testing
+unsuccessfully the same objects, and then logically mailboxing will be more
+successful. What would be a possible topic for research: given some ray
+shooting algorithm and the scene, predict whether the use of mailboxing
+makes sense or not. But the improvements in the time can be not so
+surprising. Since mailboxing also causes problems when uses in a parallel
+environment and particularly requires writing the results in the first
+access to the object into the main memory, my current feeling and all previous
+experience is then &quot;no mailboxes,&quot; or use them only for some class of complex
+objects.
+<P>
+Shared platform:
+<P>
+Another very important question in the category of RT philosophy is that
+people in the RT-community are able to use some common rendering framework,
+at least in the research field. I am aware that about 25 frameworks have been
+in use for this purpose, some of them are publicly available, some of them
+not. In some sense, many of them have completely common features etc. It is
+a phenomenon that everyone (including me) who gets to know about the existence
+of ray tracing, must write his own ray tracer, usually very simple for the
+first time, then another one, etc. But overall it is, in some sense, quite a
+loss of time. When people start to collaborate on some good international
+project for ray tracing and global illumination, it would be very fine to have
+a common library which would cover at least the research community (about a
+common RT library for commerce I am much more doubtful). Some of the diversity
+of research makes this difficult, but I think that this is just the problem of
+people. When people use a shared library, then their research work would be
+100% reproducible (which has also minuses, since it decreases the advance past
+competitive researchers). And it also requires a professional approach from
+the people involved in such a project. I was thinking about the topic very
+much in the last year, and I think it is really challenging problem.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+Scanline vs. Ray Tracing</A></FONT>, by Piero Foscari
+(<A HREF="mailto:wally@italymail.com">wally@italymail.com</A>),
+Paul Kahler (<A HREF="mailto:phkahler@oakland.edu">phkahler@oakland.edu</A>),
+and Matt Pharr (<A HREF="mailto:matt@pharr.org">matt@pharr.org</a>)
+</H4>
+Piero Foscari writes, on the Real-Time Raytracing email list
+<A HREF="http://www.onelist.com/community/realtime_raytracing">http://www.onelist.com/community/realtime_raytracing</A>:
+<P>
+But one side question... why do people keep including scanline rendering in
+commercial packages when even with actual medium sized scenes and unoptimized
+engines raytracing is faster?
+<P>
+Paul Kahler responds:
+<P>
+Because change takes time. First you have to convince people, THEN they
+can change the software :-) Generally you must SHOW people in order to
+convince them, which often involves showing them with their own system.
+That means one of their own developers has to become convinced (on their
+own of course) and have time to do a prototype to show management. There
+is also the &quot;if it ain't broke, don't fix it&quot; problem.
+<P>
+Matt Pharr replies:
+<P>
+Frankly, I don't think that's it at all. Rather, the simple reason that
+commercial packages still include scanline support is that ray-tracing the
+eye rays isn't in fact faster than a good scanline algorithm. Obviously
+this depends on how good the ray-tracer is versus how good the scanline
+algorithm is, but I think that the gap is pretty significant, if you're
+comparing with a scanline algorithm that does good occlusion culling, etc.
+<P>
+Particularly when you need to sample a pixel area very well, e.g. in order
+to get smooth motion blur or good anti-aliasing of fine geometry (think
+hair), ray-tracing just doesn't make sense, efficiency-wise--tracing
+hundreds of rays per pixel just takes too much time.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art8">
+13th Annual Eurographics Workshop on Rendering</A></FONT>, by Nelson L. Max
+(<A HREF="mailto:max2@llnl.gov">max2@llnl.gov</A>)
+</H4>
+[Nelson has been writing these worthwhile summaries of EGWR for a few years
+now. Here's this year's installment. - EAH]
+<P>
+The Eurographics Workshop on Rendering is an established conference, and
+the 13th annual session was held in Pisa, Italy, on June 26 - 28. Here
+are summaries of all the papers presented.
+<P>
+Fernandez, Bala, and Greenberg computed &quot;Local Illumination
+Environments&quot; which store in octree cells the fully and partially
+visible light sources and potential occluders for the cell, accelerating
+direct lighting computations. Wald, Kollig, Benthin, Keller, and
+Slusallek do parallel global illumination by tracing coherent ray groups
+with quasi-Monte Carlo integration sampling. Dimitriev, Brabek,
+Myszkowski, and Seidel do selective photon tracing for moving scenes,
+first tracing &quot;pilot photons&quot; to detect regions of change, and then
+tracing &quot;corrective photons&quot; for more accurate integration there.
+<P>
+Coconu and Hege have an octree-based point rendering system, which
+composits in hardware RGBA splats, using the recursive back to front
+sort for the octree cells, and the LDI occlusion compatible ordering for
+the points in an octree node. Botsch, Wiratanaya, and Kobbelt replace
+the points by the octree cells themselves, splatting the cell centers.
+Since most cells will be empty for surfaces, they suggest an efficient
+encoding taking about 2 bits per full cell. They also encode the normals
+and colors, and shade the normal codes, rather than the individual
+points.
+<P>
+Yang, Everett, Buehler, and McMillan described a system of 64 unsynchronized
+cheap firewire video cameras connected to 6 PCs, which warp on graphics cards
+only the parts of their input images that will be needed in the final novel
+image, composited by a seventh PC. With no use of geometry to enhance the
+light field reconstruction, multiple exposures are visible outside of the
+plane of focus.
+<P>
+Sander, Gortler, Snyder, and Hoppe construct a metric tensor representing
+the detail in a color or normal texture, and reparametrize the texture
+coordinate charts to minimize the stretch in this metric, putting the texture
+detail where it is needed most. Zelinka and Garland do very fast texture
+synthesis from examples using a jump map, which lists for each input pixel
+a set of matching input pixels. A new texture pixel is usually synthesized
+by extending the input patch of one of its neighbors, but occasionally a
+jump to a new patch is taken using the jump map. Lefebvre and Neyret generate
+either color or bump-map tree bark textures by an approximate simulation of
+the cracking process of the inelastic bark layers as the tree grows in
+diameter beneath them.
+<P>
+Ward and Eydelberg-Vileshin render color accurately by defining the
+surface colors in CIE XYZ space using spectral integration with the
+spectrum of the dominant illuminant (good for direct illumination from a
+single kind of source, but not for multiple bounces or spectrally
+different sources) and then correct for white-point balancing in the
+&quot;Sharp color space&quot;, which is based on super-saturated RGB primaries.
+<P>
+Beckaert, Sbert, and Halton speed up path tracing by reusing all but the
+first leg of the ray paths at nearby pixels. Cammarano and Wann Jensen
+do time dependent photon mapping for correct motion blur of caustics by
+storing time as well as color, energy, and direction at each photon hit,
+and then averaging photons that are near in time as well as in space
+when rendering with a distributed ray caster.
+<P>
+Ashikhmin maps high dynamic range input images to a limited output range
+by determining a local adaptation level (the average over the largest
+neighborhood without high contrast), tone mapping this adaptation level
+using linear compression, and then putting back the detailed contrast by
+multiplying by the ratio of the input pixel value to the local
+adaptation level.
+<P>
+Sawhney, Arpa, Kumar, Samarasekera, Aggarwal, Hsu, Nister, and Hanna map
+multiple real-time video surveillance images as textures onto a navigable
+urban geometric environment model. Yamazaki, Sagawa, Kawasaki, Ikeuchi,
+and Sakauchi extract RGBZ microfacets from a laser-scanner / color-camera
+input images by clipping the color/range data to small cubical volumes,
+and projecting it onto small quadrilaterals perpendicular to the output
+viewing directions. The projection and depth clipping is done in hardware
+by converting the depth to an opacity, and using register combiners and
+alpha clipping.
+<P>
+Jeshke and Wimmer simplify a complex model into textured polygonal
+meshes suitable for a specific view cell by scan converting the model
+into a voxel representation using depth-clipped hardware rendering into
+layers. The layer spacing is chosen so that parallax from a moving
+viewpoint within the view cell is no more than one pixel. The layers are
+processed in front-to-back order, in order to delete all occluded
+voxels, with special treatment for the one-pixel-wide border between
+filled and empty pixels in each layer. An initial complex polygonal mesh
+is constructed and then simplified, with the constraint that the
+simplified mesh must cover exactly all the non-occluded voxels.
+<P>
+Nirenstein, Blake, and Gain do exact polygon-to-polygon visibility by
+representing all stabbing lines connecting the two polygons in a 5D
+euclidean space using Plucker coordinates (with one of the six coordinates
+normalized to 1). By computational geometry in this space, volumes are
+subtracted for stabbing lines hitting each occluder, leaving the
+non-occluded stabbing lines. This is applied to give exact visibility
+culling for a polyhedral viewpoint volume.
+<P>
+Baxter, Sud, Govindaraju, and Manocha achieve interactive walkthroughs
+for huge complex environments, with a parallel pipelined system using
+two graphics pipelines and three CPU processes, based on an axis aligned
+bounding box scene hierarchy, hierarchical Z buffer occlusion culling,
+and level of detail decisions. The first process drives one pipeline
+renders an Item/Z buffer from the culled geometry for the previous
+frame, which is read back for the hierarchical Z buffer occlusion cull.
+Another process performs the view frustum and occlusion culls and level
+of detail decisions in software, and the third process drives the final
+rendering in the second graphics pipeline.
+<P>
+Secord, Heidrich, and Striet place point or stroke primitives for
+illustration-style rendering of a grey scale image, by redistributing a
+predefined Poisson-disc or Halton sequence 2D point distribution. The
+marginal y cumulative distribution of intensity in the input image
+(found by integration in x along scan lines) is used to redistribute the
+y coordinates, and then the cumulative distribution in x on the scan
+lines is used to redistribute the x coordinates. Corrections are made to
+account for the probability that multiple stokes are assigned to the
+same pixel. Stroke direction can be determined from image gradients,
+colors, or information from a 3D model, if available.
+<P>
+Freudenberg, Masuch, and Strothotte use blending operations on graphics
+hardware to emulate the halftone screening process traditionally used in
+the printing industry. Hertzmann, Oliver, Curless, and Seitz create line
+drawing line styles from examples, by adapting ideas from texture synthesis
+from examples. Masselus, Dutre, and Anrys capture the reflectance field of
+an object by determining the position of a hand-moved light source from its
+effects on four small diffusely reflecting spheres. Furukawa, Kawasaki,
+Ikeuchi, and Sakauchi compress a 4D bi-directional texture function
+measured from images of an object under varying illumination, using a
+tensor product expansion.
+<P>
+Matusik, Pfister, Ziegler, Ngan, and McMillan acquire low resolution
+reflectance information for a reflecting and refracting object using a
+traditional set-up of multiple rotating lights, a fixed set of cameras,
+and a rotating turntable for the object. But they add two large plasma
+panel monitors, a horizontal one below the turntable, and a vertical one
+behind the object, to obtain high resolution reflection and refraction
+information, each represented by a gaussian weight distribution about a
+reflection or refraction direction, as determined by fitting the response
+to 1D sinusoidal wave patterns in three orientations on the monitors. These
+monitor views are also used for detecting an alpha-matted visual hull. The
+parameters of the gaussians are determined for a new view using unstructured
+lumigraph interpolation, and used to convolve with a new environment map.
+Wexler, Fitzgibbon, and Zisserman solve a similar problem by using a
+sequence of images of a transparent object, moving in front of a fixed
+planar background image, but use a weighted combination of a few nearby
+pixels instead of a gaussian, and consider only refraction.
+<P>
+Kautz, Sloan, and Snyder convolve a BRDF with an environment map by
+representing both with spherical harmonics. The necessary rotations of
+the spherical harmonic coefficients for the environment into the local
+frame for the surface are done per vertex in software. The rotation of
+the viewing vector, the look-up of the spherical harmonic coefficients
+for expansion in the lighting direction from a texture function of the
+viewing vector, and the dot product of the two aligned spherical harmonic
+coefficients to do the convolution in frequency space, are done per pixel
+in hardware.
+<P>
+Akenine-Moller and Assarsson generalize Frank Crow's shadow volume
+method to penumbras by following along profile contour polylines
+creating a shadow wedge for each edge, bounded by the umbra plane, the
+penumbra plane, and two side planes separating the wedge for the current
+edge from those from the preceding and following edges on the contour.
+If a surface point is found to lie inside a wedge, a light intensity is
+found by bilinear interpolation within the quadrilateral where the plane
+through the viewing ray parallel to the profile edge intersects the
+wedge.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art9">
+SSM and OOM Become Enigma</A></FONT>, by Mark Manning (<A HREF="mailto:mark_manning1@jsc_nasa_gov">mark_manning1@jsc_nasa_gov</A>)
+</H4>
+In regards to <A HREF="rtnews8b.html#art3">RTNews8b</A>, I'm one of the original programmers for SSM (way back
+in 1988 is when I started). I thought I'd bring you up to date a bit.
+<P>
+First - we have no control over what the University of Georgia does with
+the software. We write it - they sell it. I've written to them recently
+though and asked them why such a high price for the software. Especially
+since SSM and OOM are now very very old in terms of 3D software. I've asked
+them to reduce the cost to something like $50.00. Time will only tell if
+they do this or not. :-)
+<P>
+Next - SSM and OOM went by the wayside back in 1994 when we combined the
+two pieces of software into a single package called Enigma. The match
+hasn't gone all that well for many years but is now beginning to come
+together at last. That is to say - we went through the change, then had
+to redo Enigma so it worked with X-Windows (SSM/OOM were written before
+X-Windows came along), then OpenGL caused another revamp, finally C++
+appeared and we have had several problems converting several hundred
+thousand lines of code from C to C++'s methods. Along the way Enigma
+has won several awards at NASA both for its capabilities as well as its
+general usefulness. We are also revamping several methodologies within
+Enigma which will enhance its speed considerably. We hope to win even
+more awards by doing this. Our highest achievement was to come in
+second place over all of the other thousands of programs across America
+which have been written and used at NASA. The first place program was
+truly awesome and deserved first place.
+<P>
+In going to Enigma, we have combined the creation of models with the
+animation of those models. This might not seem too big of a deal in
+today's world of Everquest but this capability was put in back before
+the Internet even began having an impact on everyone's lives. Remember
+too that this is an engineering tool and not really meant for games or
+movies. It's meant to be as accurate as possible. So we also sacrifice
+speed sometimes for precision.
+<P>
+Some of the new additions to Enigma are the capability to adjust the
+entire model, one of the objects within the model, or individual surfaces
+(polygons). I am presently expanding upon this by making it so someone can
+adjust an individual polygon and stretch all of the polygons around that
+polygon, snap the polygon off from the rest and move it, or to be able to
+stretch a polygon to fill holes and the like. We are also enhancing the
+animation capabilities, speed of redrawing scenes, speeding up the location
+of a particular model/object/surface, and many other things which were not
+a part of the original SSM and OOM programs.
+<P>
+If you would like more information about what all SSM and OOM has evolved
+into - just let me know.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art10">
+A Simple Ray-Triangle Pl&uuml;cker Optimization</A></FONT>, by Jeffrey Mahovsky (<A HREF="mailto:mahovskj@cpsc.ucalgary.ca">mahovskj@cpsc.ucalgary.ca</A>)
+</H4>
+[Though I personally prefer methods such as Moeller/Trumbore (see
+<A HREF="http://www.ce.chalmers.se/staff/tomasm/code/">http://www.ce.chalmers.se/staff/tomasm/code/</A>) for ray/triangle
+intersection, there are occasions when using Pl&uuml;cker coordinates
+can make sense. The test is straightforward and elegant. For some
+previous work on the subject, see Ray Jones' article in <a href="rtnv13n1.html#art8">RTNv13n1</a>. - EAH]
+<P>
+There is a simple way to reduce the memory requirements of ray-triangle
+intersections by 17% when using Pl&uuml;cker coordinates. The optimization
+also improves performance by roughly 5%.
+<P>
+Ray-triangle tests using Pl&uuml;cker coordinates will look something like
+this:
+<P>
+<PRE>
+  if (r0 * a4 + r1 * a5 + r2 * a3 + r3 * a2 + r4 * a0 + r5 * a1 &lt; 0)
+    return MISS;
+  if (r0 * b4 + r1 * b5 + r2 * b3 + r3 * b2 + r4 * b0 + r5 * b1 &lt; 0)
+    return MISS;
+  if (r0 * c4 + r1 * c5 + r2 * c3 + r3 * c2 + r4 * c0 + r5 * c1 &lt; 0)
+    return MISS;
+  else
+    return HIT;
+</PRE>
+<P>
+Where r0..r5 are the Pl&uuml;cker coefficients for the ray and a0..a5, b0..b5,
+and c0..c5 are the Pl&uuml;cker coefficients for the three triangle edges.
+<P>
+Say the triangle is defined counterclockwise as vertices (x0, y0, z0),
+(x1, y1, z1), (x2, y2, z2). Then the equations for generating the Pl&uuml;cker
+edge coefficients are:
+<P>
+<PRE>
+a0 = x0 * y1 - x1 * y0
+a1 = x0 * z1 - x1 * z0
+a2 = x0 - x1
+a3 = y0 * z1 - y1 * z0
+a4 = z0 - z1
+a5 = y1 - y0
+</PRE>
+<P>
+<PRE>
+b0 = x1 * y2 - x2 * y1
+b1 = x1 * z2 - x2 * z1
+b2 = x1 - x2
+b3 = y1 * z2 - y2 * z1
+b4 = z1 - z2
+b5 = y2 - y1
+</PRE>
+<P>
+<PRE>
+c0 = x2 * y0 - x0 * y2
+c1 = x2 * z0 - x0 * z2
+c2 = x2 - x0
+c3 = y2 * z0 - y0 * z2
+c4 = z2 - z0
+c5 = y0 - y2
+</PRE>
+<P>
+Realize that:
+<P>
+<PRE>
+a2 + b2 + c2 = x0 - x1 + x1 - x2 + x2 - x0 = 0
+a4 + b4 + c4 = z0 - z1 + z1 - z2 + z2 - z0 = 0
+a5 + b5 + c5 = y1 - y0 + y2 - y1 + y0 - y2 = 0
+</PRE>
+<P>
+therefore:
+<P>
+<PRE>
+c2 = -a2 - b2
+c4 = -a4 - b4
+c5 = -a5 - b5
+</PRE>
+<P>
+Substituting into the 'if' statements:
+<P>
+<PRE>
+  if (r0 * a4 + r1 * a5 + r2 * a3 + r3 * a2 + r4 * a0 + r5 * a1 &lt; 0)
+    return MISS;
+  if (r0 * b4 + r1 * b5 + r2 * b3 + r3 * b2 + r4 * b0 + r5 * b1 &lt; 0)
+    return MISS;
+  if (-r0 * a4 - r0 * b4 - r1 * a5 - r1 * b5 + r2 * c3 +
+      -r3 * a2 - r3 * b2 + r4 * c0 + r5 * c1 &lt; 0)
+    return MISS;
+  else
+    return HIT;
+</PRE>
+<P>
+Simplifying, the optimized form is obtained:
+<P>
+<PRE>
+  A = r0 * a4 + r1 * a5 + r3 * a2
+  if (A + r2 * a3 + r4 * a0 + r5 * a1 &lt; 0)
+    return MISS;
+  B = r0 * b4 + r1 * b5 + r3 * b2
+  if (B + r2 * b3 + r4 * b0 + r5 * b1 &lt; 0)
+    return MISS;
+  if (r2 * c3 + r4 * c0 + r5 * c1 - A - B &lt; 0)
+    return MISS;
+  else
+    return HIT;
+</PRE>
+<P>
+Note that we no longer need to precompute and store c2, c4, and c5.
+Hence only 15 Pl&uuml;cker coefficients need to be stored for the triangle
+instead of 18 - a 17% memory savings.
+<P>
+There should be no penalty for separately computing values A and B, as the
+total number of multiplies and adds is the same for both methods up until
+the third 'if' statement. The optimized third 'if' has 3 multiplies and 4
+adds/subtracts, instead of 6 multiplies and 5 adds in the unoptimized
+version. Hence the savings is 3 multiplies and 1 add. This results in a
+roughly 5% speed increase. Few ray-triangle tests make it all the way to
+the third 'if' so the overall speed increase is not as great as one might
+think.
+<P>
+This optimization also extends to convex polygons with more sides,
+although the percentage savings is not as great. For example, a 4-sided
+poly would require 21 coefficients instead of 24 (a 13% savings) and the
+fourth 'if' statement would require 3 multiplies and 5 adds/subtracts, a
+savings of 3 multiplies. (Note the additional subtract!)
+<P>
+(Note that the Pl&uuml;cker test shown here doesn't compute an intersection
+distance along the ray; a separate calculation is needed for that.)
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art11">
+Recovering a Triangle's Surface Normal from the Pl&uuml;cker Coordinates of its Edges</A></FONT>, by Jeffrey Mahovsky (<A HREF="mailto:mahovskj@cpsc.ucalgary.ca">mahovskj@cpsc.ucalgary.ca</A>)
+</H4>
+There is a simple way to recover the un-normalized surface normal of a
+triangle from the Pl&uuml;cker coordinates of its edges. This avoids the need to
+store the surface normal separately from the Pl&uuml;cker coefficients.
+<P>
+Given a triangle with vertices (x0, y0, z0), (x1, y1, z1), (x2, y2, z2), the
+Pl&uuml;cker coordinates of the edges A, B, and C are given by the following 18
+coefficients:
+<P>
+<PRE>
+A0 = x0 * y1 - x1 * y0;
+A1 = x0 * z1 - x1 * z0;
+A2 = x0 - x1;
+A3 = y0 * z1 - y1 * z0;
+A4 = z0 - z1;
+A5 = y1 - y0;
+</PRE>
+<P>
+<PRE>
+B0 = x1 * y2 - x2 * y1;
+B1 = x1 * z2 - x2 * z1;
+B2 = x1 - x2;
+B3 = y1 * z2 - y2 * z1;
+B4 = z1 - z2;
+B5 = y2 - y1;
+</PRE>
+<P>
+<PRE>
+C0 = x2 * y0 - x0 * y2;
+C1 = x2 * z0 - x0 * z2;
+C2 = x2 - x0;
+C3 = y2 * z0 - y0 * z2;
+C4 = z2 - z0;
+C5 = y0 - y2;
+</PRE>
+<P>
+The un-normalized surface normal can be recovered with the following equations:
+<P>
+<PRE>
+ni = A3 + B3 + C3
+nj = -A1 - B1 - C1
+nk = A0 + B0 + C0
+</PRE>
+<P>
+Proof:
+<P>
+The surface normal components (ni, nj, and nk) of a 3-D triangle are directly
+proportional to the areas of the 2-D triangles that result when the 3-D
+triangle is projected onto each of the x, y, and z planes.
+<P>
+The area of the 2-D triangle projected onto the z plane (and the k component of
+the surface normal) is given by the equation:
+<P>
+<PRE>
+                  | x0 y0 1 |
+areaZ or nk = 1/2 | x1 y1 1 |
+                  | x2 y2 1 |
+</PRE>
+<P>
+(This assumes the vertices are defined in counter-clockwise fashion.)
+(Any good book on geometry should have this area equation.)
+<P>
+Expanding the determinant gives:
+<P>
+<PRE>
+areaZ or nk = 1/2 * (x0 * y1 - y0 * x1 - x0 * y2 + y0 * x2 + x1 * y2 - y1 * x2)
+</PRE>
+<P>
+The factor of 1/2 can be removed as the resulting nk component isn't normalized anyways.
+<P>
+<PRE>
+areaZ or nk = x0 * y1 - y0 * x1 - x0 * y2 + y0 * x2 + x1 * y2 - y1 * x2
+</PRE>
+<P>
+Similarly, for ni and nj:
+<P>
+<PRE>
+                  | y0 z0 1 |
+areaX or ni = 1/2 | y1 z1 1 |
+                  | y2 z2 1 |
+
+areaX or ni = y0 * z1 - z0 * y1 - y0 * z2 + z0 * y2 + y1 * z2 - z1 * y2
+
+                  | x0 -z0 1 |
+areaY or nj = 1/2 | x1 -z1 1 |
+                  | x2 -z2 1 |
+
+areaY or nj = -x0 * z1 + z0 * x1 + x0 * z2 - z0 * x2 - x1 * z2 + z1 * x2
+</PRE>
+<P>
+Comparing these equations with the Pl&uuml;cker coefficient equations, it is easy to see that:
+<P>
+<PRE>
+ni = A3 + B3 + C3
+nj = -A1 - B1 - C1
+nk = A0 + B0 + C0
+</PRE>
+<P>
+This idea will probably extend to any convex n-sided polygon with edges defined
+as Pl&uuml;cker coordinates. The number of addition operations needed to recover
+each normal component would be (n-1), where n is the number of sides.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art12">
+Objects per Grid Cell</A></FONT>, by Pete Shirley (<A HREF="mailto:shirley@cs.utah.edu">shirley@cs.utah.edu</A>)
+</H4>
+I wrote Pete about uniform grid efficient structures, and how many cells they
+should have compared to the number of objects in the scene:
+<P>
+In your book "Realistic Ray Tracing" you mention that the number of cells in a
+grid should be within an order of magnitude of the number of objects. True,
+but interestingly, people seem to find that the number of cells should be
+noticeably larger than the number of objects for best performance, e.g. 3* as
+many cells as objects. Again, mileage varies, but if this turns out to be the
+case, then mailboxing becomes very important, as there will more likely be
+objects spanning two or more grid cells.
+<P>
+Pete's reply:
+<P>
+Bruce Walter and I did a bunch of work on analyzing this in an as yet
+unpublished paper. Definitely if (cost of object intersection) is greater
+than (cost of cell advance) then you want more cells than objects. My guess
+is between 2 and 10 has worked best in my code for most models. 8 is my
+default.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

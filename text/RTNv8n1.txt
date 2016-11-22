@@ -1,0 +1,2010 @@
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+                        "Light Makes Right"
+
+                         January 23, 1995
+                        Volume 8, Number 1
+
+Compiled by Eric Haines, 3D/Eye Inc, 1050 Craft Road, Ithaca, NY 14850
+	erich@acm.org
+All contents are copyright (c) 1994,1995, all rights reserved
+	by the individual authors
+Archive locations:  anonymous FTP at princeton.edu:/pub/Graphics/RTNews,
+	wuarchive.wustl.edu:/graphics/graphics/RTNews, and many others.
+
+Contents:
+	Introduction
+	People
+	Fetishes and Perversions, by Doug Andersen
+	Ray Tracing Roundup
+	New Web Sites of Note, by Eric Haines
+	MGF:  Materials and Geometry Format, by Greg Ward
+	Blue Moon Rendering Tools RenderMan Implementation, by Larry Gritz
+	RenderMan Implementation Paper On-Line, by Philipp Slusallek
+	TGA BBS CD ROM review, by Eric Haines
+	Review of Syndesis Avalon CDROM, by Keith Rule
+	SIRDS/SIS/stereograms/Holusions/whatever, by Eric Haines
+	Two Books on Stereograms, by Eric Haines
+	Siggraph Report: The Exhibits, by Techs Avery
+	Scanline Rendering Previewer, by Eric Haines due to Chris Cason
+	Raysmith, by Eduardo Bustillo Iceta
+	Terminology Survey Results, by Peter Shirley
+	Radiosity Online: A Bibliography, by Ian Ashdown
+	Jevans' Temporal Coherence for Ray Tracing, by Eric Haines
+	Reviews of _Encyclopedia of Graphics File Formats_, from Steve Lamont,
+		John Grieggs, Tom Lane, Brian Erwin, and Andy Key
+	SDSC Image Tools library, by Matt Hughes
+	LUG Library v1.0, by Raul Rivero
+
+-------------------------------------------------------------------------------
+
+Introduction
+
+Before I start, a quick request:  if you're a commercial user of Radiance,
+Greg Ward <greg@hobbes.lbl.gov>, the author, would like to hear from you as
+soon as possible.  Radiance is developed under the Department of Energy's
+funding.  If you can give a testimonial that this package has helped you
+commercially, you could help keep its funding intact.  You can also contact
+Greg via 510-486-4757 voice, 510-486-4089 fax.
+
+Well, I was going to talk about the great research presented at SIGGRAPH this
+year, but if you went then you already know, if you didn't then you should
+consider getting the Proceedings.  For some reason I found more of the papers
+directly useful to me this year than in the past few years.
+
+So, instead, I'll talk about something totally mundane and banal, and yet
+totally amazing:  Saturday morning cartoons.  Specifically, "Reboot" on ABC.
+It's an entirely 3D computer graphics rendered cartoon.  The character
+animation is not fantastic, there are no shadows, and one can make a whole
+bunch of other quibbles, but who cares?!  This show makes it clear how far
+computer graphics has come, that it's used for a weekly cartoon show.  It's
+fun to watch and figure out how effects were done (and there are some nice
+animated textures and whatnot).  Some of the models are wonderfully elaborate
+- I watch it and say to myself "hours and hours of modeling".  The show even
+answered a question I've had:  what does it look like if you move something
+through a static turbulence function?  That is, you apply Perlin noise and get
+a rendering of a marble ball; now, what happens if the ball moves but the
+noise function does not move along with it?  I figured a "swimming through
+marble" effect would happen.  They use this effect ("it's a feature, not a
+bug") for an animated worm-like thing that crawls around on the main bad guy.
+Anyway, how can you dislike a show where the old, wise character is named
+Phong?
+
+The other banal-yet-cool thing I've noticed is "Magic Carpet" for the Intel
+PC.  There's a demo version at ftp.uml.edu and ftp.uwp.edu in
+msdos/games/demos/magic.zip.  Pretty amazing stuff:  you fly over textured 3D
+terrain and can bank and change altitude, sorta like DOOM without the "fixed
+head" perspective.  Definitely worth checking out, even if you don't like
+games.  The real game includes output for 3D glasses (well, I can see 3D with
+my regular glasses, but you know what I mean) and also random dot stereogram
+output in realtime.  Amusing!
+
+
+As usual, there's a big backlog of stuff I haven't put in this issue, but I
+thought I'd get this one out the door.  Still, there should be more than
+enough to keep you busy.  The announcement of a RenderMan implementation from
+a non-Pixar source (and shareware at that) is probably the most amazing thing
+in this issue, and there are lots of other interesting sites and resources.
+More when I find the time...
+
+-------------------------------------------------------------------------------
+
+People
+
+Stefan Didak <sdidak@animagic.knoware.nl>
+Doelstraat 147
+3011 AJ Rotterdam
+The Netherlands
++31 10-412.57.19
+
+One line description: 3D Studio Die Hard User (some call it expert :)
+
+Additional information:
+
+Title    : managing director
+Company  : Animagic & Animagic Development
+Actually : doing computer graphics, animations, and development.
+	   (i.e. having fun and getting paid along the way :)
+Using    : PC Platform - 3D Studio, proprietary tools.
+	   SGI Platform - Alias PowerAnimator, proprietary tools.
+
+Interests:
+
+Almost anything that is related to three-dimensional computer graphics,
+animations, raytracing, commercial productions, broadcast design, high-end
+digital video and commercial production, software development (graphics).
+
+Special Interests:
+
+Autodesk's 3D Studio and development of IPAS routines for 3D Studio.
+
+So what about me ?:
+
+I'm both a programmer and computer animator that has been able to combine
+the best of both worlds. It has been five years since I formed my own
+business called Animagic specialized in 3D computer graphics for broadcast
+design. Alongside this, development of software also played a major role.
+Currently the development and production departments are separated due to
+the confusion created by our extensive list of services. The development
+department is currently developing IPAS routines for 3D Studio and in-house
+proprietary tools for both the PC and the Silicon Graphics platforms.
+It has been five wonderful years, and with the current state of progress
+the next five years will be even better in terms of new development.
+
+I started with computer graphics back in late 1985, when the Commodore
+Amiga computers were first introduced. This is where I got my first taste
+for computer graphics and animations with a package called Videoscape from
+Aegis, designed by Allen Hastings (currently the developer of Lightwave).
+By today's standards this package would be a real old-timer where 3D geometry
+had to be entered by hand (coordinates and polygons) in ASCII. So back in
+those days creating a twenty second animation was about a month's work. Today
+of course, this can be done in just hours :) I've been able to follow the
+evolution in the computer graphics industry from that point on, and quickly
+started to do some experimental raytracing with the Amiga port of DBW Render.
+That's where the fascination of raytracing got the best of me :) I've used
+those good old Amigas for a few years and about four years ago switched to
+bigger and better platforms and software (and never regretted it).
+
+-------------------------------------------------------------------------------
+
+Fetishes and Perversions, by Doug Andersen (douga@eskimo.com)
+
+[My automatic keyword searcher (a wonderful thing - see RTNv7n2, the article
+on Elib) turned this up on NetNews in alt.sex.  -EAH]
+
+Hadley Woolf <hadley.woolf@digitec.co.za> wrote:
+>Hi All,
+>I am looking for a good RAY TRACING program
+>Preferably WINDOWS for ease of use, but otherwise DOS ok.
+>I hear there are good shareware/freeware of this type of program available.
+>Please reply if convenient by phone (voice) 011 648 6629 or otherwise
+
+Please take this to alt.personals.fetish.ray-tracers.  And for the record,
+this radiosity stuff is sick sick sick.
+
+-------------------------------------------------------------------------------
+
+Ray Tracing Roundup
+
+----
+
+VolPack - fast, high-quality volume rendering library from Lacroute/Levoy
+
+Here is the FTP site info:
+
+graphics.stanford.edu [36.22.0.39]: pub/volpack/volpack.1.0b2.tar.Z -
+	current version of the *VolPack* volume rendering library.
+	Includes source, example programs, user's manual and man pages.
+	Data sets and a Tcl-based application are also available.
+	Phil Lacroute <lacroute@weevil.stanford.edu>
+
+Here is the WWW site info:
+
+http://www-graphics.stanford.edu/software/volpack - VolPack
+
+[The paper related to this new, much faster volume rendering technique is in
+SIGGRAPH '94, p. 451. -EAH]
+
+- Phil Lacroute <lacroute@weevil.Stanford.EDU>
+
+--------
+
+The book _Texturing and Modeling:  A Procedural Approach_, edited by David
+Ebert, from Academic Press is now out (see RTNv7n3 for a review).  The other
+co-authors are Ken Musgrave, Darwyn Peachey, Ken Perlin, and Steve Worley.
+They have graciously provided the book's disk's code at the FTP site
+archive.cs.umbc.edu:/texture.  Even if you have the disk you might want to
+download this code, as all bugfixes and additions reside here.
+
+----------
+
+L Systems Trees, images and program
+
+For those of you out there that were interested in my tree pictures, they are
+available on WWW now. The URL is :
+
+	http://hill.lut.ac.uk/TestStuff/trees/
+
+There are only the pictures there at the moment, but I intend to write some
+stuff about L Systems etc. so check it out in a while (a few weeks). A copy of
+the executable may be there soon as well.  [I recently grabbed the executable,
+though I haven't had a chance to unzip it yet. His images are great. -EAH]
+
+- Phil Drinkwater <P.J.Drinkwater1@student.lut.ac.uk>
+
+--------
+
+The Graphics Gems I-IV code distribution has had a few minor bugfixes and
+additions.  Personally, I've diddled a bit with, yes, my favorite, the point
+in polygon test and made a new routine which is a whopping 15% faster for
+triangles.  Hey, it keeps me off the streets.  The distribution is available
+by FTP from princeton.edu:/pub/Graphics (though this may move to Stanford
+soon, since Craig Kolb is now there).
+
+--------
+
+Computer Graphics Labs WWW Site
+
+I have finally joined the 1990s and set up a www home page.  It has several
+images and postscript copies of some of my papers.  It also has a listing of
+computer graphics labs-- please send me yours to include!
+
+http://www.graphics.cornell.edu/~shirley
+
+[Also, ftp://ray.graphics.cornell.edu/ has stuff, for those without Mosaic]
+
+----
+
+Several people have asked for copies of some of my hard-to-find papers, so to
+exploit parallelism I have put them in an ftp site.
+
+site:  ftp.cs.indiana.edu (129.79.254.191)
+directory   pub/shirley
+
+- Pete Shirley <shirley@graphics.cornell.edu>
+
+--------
+
+BSP FAQ
+
+I have just finished installing a rough WWW document structure for the BSP
+Tree FAQ.  If you are interested in keeping track of my progress, you can look
+here.  The FAQ is just getting underway, and may take a while, so don't expect
+a whole lot right now...
+
+Thanks to everybody who has encouraged me or provided assistance!
+
+http://www.graphics.cornell.edu/bspfaq/
+
+- Bretton Wade <bwade@graphics.cornell.edu>
+
+--------
+
+L-system Educational Package
+
+Anne Burns <aburns@aurora.liunet.edu> has written an L-System set of tutorials
+which run on an Intel PC for teaching her college class.  She has made them
+available via FTP on cgcr.gsu.edu, with login and password "cgcr".  The file
+is /pub/IBM_PC/flora/aburns.zip .  I have looked at it briefly, and it looks
+pretty interesting:  there are programs to grow various 2D L-system plants
+while also teaching about the algorithms used and pointing to references for
+more information.  Also, even old PC's look to be able to run this software.
+
+--------
+
+Rayshade Related
+
+
+It looks like the time has come to throw in the towel.
+
+I have a "version 4.1" floating around, waiting for me to get to some
+documentation-hacking and general cleaning up.  But between dissertation
+research/writing, moving to the opposite coast, and attempting to have
+something resembling a Life, it looks unlikely that I'll be able to wrap
+things up before the end of the year.
+
+As such, it's probably best if I simply stopped work on the freely-available
+version of rayshade for the time being, and let whoever wants to release a
+rayshade-based "netshade" (or whatever) go to it.  If I am not mistaken, a
+group of interested people have already set up a mailing list (David? Nick?)
+to discuss such matters -- I'll let the "TraceCore" folks speak up for
+themselves on this.
+
+I'll keep the mailing list going until the "netshade" future looks a bit
+more firm.
+
+Thanks to everybody who has contributed to rayshade over the years, and
+thanks for your patience during the last couple of years in particular.
+
+- Craig Kolb (cek@cs.princeton.edu, though he's now at Stanford)
+
+----
+
+Since Craig bowed out there's been confusion on what the latest version is
+or should be.  Here's one of the latest:
+
+This is an unofficial release of Rayshade, called 4.0.6.3 [was 4.1] because of
+the new features included.  I expect there will be problems and such, and
+welcome patches and suggestions.
+
+I have placed the file on
+	ftp://tbird.cc.iastate.edu/pub/rayshade/rayshade-4.0.6.3.tar.gz
+so grab it and make comments.  There is a lot of cleaning up to do yet,
+which I hope to do over the next few weeks between working and preparing
+for classes this semester.
+
+Comments, bug fixes, suggestions, flames, and hard drives welcome.  :)
+
+- Michael Graff <explorer@vorpal.com>
+
+----
+
+Rayshade Flame-Texture Enhancement Available
+
+This is an enhancement to rayshade version 4.0 so it can generate animated
+fire to further enhance the realism of scenes.
+
+You can get the enhancement via anonymous FTP from
+iamsun.unibe.ch (130.92.64.10):
+
+/Graphics/flame.tar.gz         and
+/Graphics/flame.examples.tar
+
+This work is based on the Article of Ken Perlin (Ken Perlin, An Image
+Synthesizer, p. 285-296, SIGGRAPH '85 Number 3, July 1985) and the book of
+A. and M. Watt (A. Watt and M. Watt, Advanced Animation and Rendering
+Techniques, Addison-Wesley, 1992) where all the principles used here are
+described. To explain my work in few words, it can be said, that the flame is
+generated by simulating and animating turbulence.
+
+Feel free to contact me for questions and suggestions...
+
+- Reto Mani (mani@iam.unibe.ch)
+
+----
+
+Latest Amiga Rayshade
+
+I just uploaded rayshade 4.0.6.3 (source + 68020/68881 binaries + several
+utilities) on wuarchive. It should be on an aminet site near you soon, in
+gfx/3d/rayshade-4.0.6.3.lha (e.g., wuarchive.wustl.edu:/pub/aminet/...).
+
+Kriton Kyrimis <kriton!kyrimis%theseas.ntua.gr@Princeton.EDU>
+
+----
+
+More Rayshade Web Sites
+
+http://www-graphics.stanford.edu/~cek/rayshade/
+	- The new "official" site (bop up a level and see a picture of Craig)
+
+http://web.mit.edu/afs/athena/activity/c/cgs/lib/html/rayshade/guide/guide.html
+	- Rayshade user's guide and reference manual, by Craig Kolb
+
+http://web.mit.edu/afs/athena/activity/c/cgs/lib/rayshade/surf/
+	- archive of various material definitions and other *.rh files
+
+--------
+
+Magazine News
+
+Bridget Testa (BrigittaT@aol.com) has an article in the November 1994 issue
+of Computer Graphics World about the Internet and computer graphics.  There
+are some nice images made with POV, pointers to net resources (already dated),
+and quotes from comp.graphics luminaries like Steve Hollasch, John Grieggs,
+John Cristy/Christy, and some guy named Erich Haines.
+
+- Eric
+
+----
+
+Check out the August 1994 issue of Computer Graphics - the cover is an image
+done by one of my students. He is an undergraduate and this was his first &
+only graphics course. The students write their ray tracers from scratch.
+[The cover shows a comparison of a simple scene rendered with 3D Studio,
+POV-Ray, and Radiance; there is also a short article about the cover. -EAH]
+
+- Scott Owen <matgso@ironduke.CS.Gsu.EDU>, Georgia State University
+
+--------
+
+Tcl-SIPP (tsipp) 3.1a available
+
+Tcl-SIPP provides a 3D image specification and rendering toolkit for use with
+Tcl and Tk.  It is based on SIPP, the SImple Polygon Processor, a library for
+creating 3-dimensional scenes and rendering them using a scan-line z-buffer
+algorithm.  Tcl is an easy to use, powerful, interpretive programming
+language, that is designed to be imbeddable in applications.  Tk is a X11
+toolkit programmed in Tcl.
+
+
+It is available from:
+
+	ftp.neosoft.com:/pub/tcl/distrib/tsipp3.1a.tar.gz
+or
+	harbor.ecn.purdue.edu:/pub/tcl/extensions/tsipp3.1a.tar.gz
+
+- Mark Diekhans (markd@sugar.NeoSoft.COM)
+
+--------
+
+You can subscribe to the Wavelet Digest mailing list of the Industrial
+Mathematics Initiative, Department of Mathematics, University of South
+Carolina by writing wavelet@math.scarolina.edu.
+
+More information, archives and papers can be found by anonymous ftp to
+ftp.math.scarolina.edu, in the directories under /pub/wavelet and /pub/imi_93,
+and by connecting to our gopher server at gopher.math.scarolina.edu.
+
+- Wim Sweldens, Bjorn Jawerth
+
+--------
+
+Avalon News
+
+As you should know, avalon.chinalake.navy.mil is a 3D model archive (which is
+like saying Mount Everest is a big hill).  Its name will change soon to
+avalon.vislab.navy.mil, though the old name will still work for awhile.
+
+The bad news is that Kubota's mirroring site ftp.kpc.com is no longer
+mirroring avalon.  If you can offer your site as a mirror, let Francisco
+DeJesus, dejesus@archimedes.chinalake.navy.mil, know.
+
+The good news is that Avalon's resources continue to grow.  There are working
+demos of Caligari's TrueSpace 3D Modeling program (look for file
+"tsdemo*.zip") and for Real3D (files "real3d*.zip", unzip them onto disks and
+load from there), a windows-based graphics/animation package.  Real3d does
+inverse kinematics, spline-based modelling, collision detection, particles,
+etc.  The site is also fast becoming a hot spot for 3D Studio users, with IPAS
+add-ons and other goodies becoming available.
+
+--------
+
+Another Optical Ray Tracer
+
+Jonathan Abourbih writes:
+>I am looking for a program for my Macintosh (IIci) that will do light-ray
+>tracing diagrams. i.e. I want to be able to enter focal lengths, diameters,
+>lens thicknesses, distances between lenses etc. and it should draw the path
+>of a light ray through the lens system.
+
+In the last 6 months or so, a company called Stellar Software came out with a
+Mac version of their Beam Two (and Three, Four?) optical ray tracer programs.
+People I know at NASA-Ames who used the PC versions seemed happy with them.
+The Two, Three, etc refer to two-dim, three-dim etc optics placement and views.
+
+Beam Two: $89
+Beam Three: $289
+Beam Four: $889
+
+[as Bob Knowlden noted, what four-dim lighting could mean is anyone's guess...
+- EAH]
+
+Stellar Software
+P.O. Box 10183
+Berkeley, CA  94709
+(510) 845-8405 voice
+(510) 845-2139 fax
+
+- Amara Graps <agraps@netcom.com>
+
+[see RTNv7n5 for other optical ray tracers. -EAH]
+
+--------
+
+Ray Dream Designer Mailing List
+
+List owner of raydream-l, an Internet mailing list for discussion &
+announcements of products from Ray Dream, Inc.  For subscriptions, send a
+message to listserv@cornell.edu with the following body text:
+
+	subscribe raydream-l FIRSTNAME LASTNAME
+
+Your address will be picked up by the listserv software.
+
+p.s. Ray Dream Designer 3.1 for PowerMac has shipped!
+
+- John T. Chapman (jtc1@cornell.edu)
+
+--------
+
+Doom-like Techniques
+
+If you're interested in looking at DOOM-like game engines, check:
+
+	ftp.funet.fi: //pub/msdos/games/programming/3dlab103.zip
+	or garbo.uwasa.fi://pc/turbopas/3dlab103.zip
+
+- Kimmo Fredriksson <kfredrik@cc.Helsinki.FI>
+
+----
+
+There is a cooperative InterNet effort (headed by Chris Laurel) to create a
+sorta Doom-like 3d engine called "wt" ("what's that" -never capitalized).
+
+The main ftp site for it is magoo.uwsuper.edu and the mailing list
+subscription is wtm-request@magoo.uwsuper.edu.  Mail to the group is
+wtm@magoo.uwsuper.edu.
+
+The current version available (I think) is wt 0.05...
+
+Lawson <103t_english@west.cscwc.pima.edu>
+
+--------
+
+Tiny Review of _Ray Tracing Worlds with POV-Ray_ [v2.2] (Waite Group book)
+
+I have had it for a couple of weeks now.  From what I have seen so far, it is
+a good book to use for a tutorial sort of thing for Moray, and it does go into
+some detail with regard to editing povray source, but I'm not so sure that I
+would recommend it strictly as a reference guide for povray.  As a reference
+source for povray, it comes nowhere near as complete as the povray manual.
+
+- Dan Kressin <wrench@jakesys.sol.net>
+
+--------
+
+Latest version of XAERO is v1.5.1 [see RTNv7n5 for info on this package]
+
+- Andreas Ziegler <aziegler@hermes.informatik.uni-stuttgart.de>
+
+--------
+
+GFX News
+
+For issues of this electronic magazine [mentioned in RTNv7n1], check out:
+
+Mosaic/WWW users:
+  http://barchetta.stu.rpi.edu
+
+FTP users:
+  barchetta.stu.rpi.edu:/pub/gfx-news/current
+
+If your name server has difficulty resolving our address, the
+	 IP # is 128.113.85.172
+Also, if the FTP server is badly lagged or not responding, please
+	 let me know and I'll provide an alternate server to use.
+
+[I personally couldn't connect when I tried, but who knows? - EAH]
+
+- Eric Hsiao <hsiaoe@rpi.edu>
+
+--------
+
+POV Related
+
+I've had a couple people express interest in a compilation of POV I made
+on a RS6000 (model 250, i think).  If anybody wants it, ftp to:
+	ftp.povray.org
+The file, "povray.rs6", and an accompanying text file are in the
+"pub/povray/incoming/misc" directory.  No guarantees, but I hope it helps!
+
+-Michael Sanchez <msanche@ux5.cso.uiuc.edu>
+
+----
+
+POV related WWW sites:
+
+http://www.cm.cf.ac.uk:/Ray.Tracing/ [excellent for all ray tracing! - EAH]
+http://www.cm.cf.ac.uk:/Ray.Tracing/RT.Bibliography.html
+http://www.uio.no/~mwatz/pov/utilities.html
+http://tomservo.st.hmc.edu/files/raytrace.html
+	[this last one did not work for me - EAH]
+
+- Albert Goodman <agoodman@deakin.edu.au>
+
+--------
+
+My BBS is carrying all back issues of RTN because nobody does it in Belgium
+(to my knowledge), so if a european guy (who can't use ftp :) ask you where
+he can get RTN issues, feel free to give him my number:
+	Virtual Access BBS - Belgium
+	+32.69.45.51.77
+
+- David Delabassee <delabass@nic.INbe.net>
+
+--------
+
+Major Announcement : New POV FTP Site
+
+Despite the following, ftp.uwa.edu.au continues to be the official secondary
+POV-Ray FTP site until further notice.
+
+A new FTP site has been set up for POV-Ray.  It is ftp.povray.org !  Yes, our
+very own domain.  And instead of a 50mB disk allocation, it currently has
+about 1.7 gigabytes of disk space available.  Currently it has more or less
+what was (and still is) up at uniwa, but you can expect it to expand over
+time, particularly when the POV CD-ROM is published.
+
+This machine is connected via a T1 to the Internet.  Currently, it shares the
+same T1 as wcarchive.cdrom.com, so in reality you'll be sharing the link with
+up to 140 other people at peak load times.  But the machine itself is more or
+less ours for the time being ; it is provided as a free community service by
+Walnut Creek CD-ROM and has no other FTP sites hosted right now.  [This will
+probably change sooner or later.]
+
+Please start using this site and do let me know of problems via email to
+ftp-bugs@povray.org ; I've only just finished configuring the FTPD and it's
+possible there may be a few glitches here and there.
+
+BTW, I'd like to thank Walnut Creek for offering us this free, no-strings-
+attached service.  Get their catalogue by fingering info@cdrom.com if you want
+more information.  Also, many thanks go to Toivo Pedaste of the UWA for
+tolerating us for so long (:-).
+
+[In reality, this is *the* site for POV Ray related stuff - the uwa site
+is no longer updated, near as I can tell. -EAH]
+
+- Chris Cason <cjcason@yarrow.wt.uwa.edu.au>
+
+--------
+
+Dear Radiance User,
+
+This is another reminder that if you want to sign up for the unmoderated
+Radiance discussion list, send mail requesting subscription to:
+
+	radiance-request@hobbes.lbl.gov
+
+Please, do not send administrative requests to the discussion list itself
+(radiance-discuss@hobbes.lbl.gov), as they will be immediately forwarded to
+the whole discussion group, which is a rather poor self-introduction.
+
+Also, you can pick up the most recent as well as past digests by anonymous ftp
+from hobbes.lbl.gov (128.3.12.38) in the /pub/digest/ directory.
+
+- Greg Ward <greg@hobbes.lbl.gov>
+
+-------------------------------------------------------------------------------
+
+New Web Sites of Note, by Eric Haines
+
+I finally got access to the World Wide Web in a non-stupid form and am now
+wasting time during compilation clicking on colored words.  A number of
+interesting computer graphics sites exist, and here are some of my finds from
+watching Usenet traffic and just general searching.  I haven't been around
+long enough to be critical and judge what are the "best" sites; rather, this
+is a list which encompasses different facets of computer graphics.
+Educational, commercial, hobbyist and BBS related sites and others are listed,
+many of which are jump-off points for other worthwhile pages.
+
+http://www.cm.cf.ac.uk/Ray.Tracing/ - actually, an old site, but it bears
+	repeating.  Points to all sorts of ray tracing related things.  A
+	great place to start explorations.  Contact: Ian 'The Grim' Grimstead
+	<Ian.Grimstead@cm.cf.ac.uk>
+
+http://mambo.ucsc.edu/psl/cg.html - A great site jump off spot for other
+	computer graphics programs and sites.
+
+http://www.graphics.cornell.edu/ - A good place as any to jump off and see
+	what's going on in research at various computer graphics programs
+	around the world.
+
+http://www.mcs.com/~bcleach/www/illusions.html - "Illusions - a computer
+	graphic/animation related magazine" covers 3D Studio, Lightwave,
+	Alias & Wavefront as well as SGI in general.  Contact: Brian Leach
+	<bcleach@popmail.mcs.com>
+
+http://www.lightside.com/~dani/ - 3D Web, a site about the computer
+	graphics industry.  Includes resumes of computer graphics people
+	interested in various sorts of work, pointers to various production
+	houses, etc.
+
+http://www.tgax.com - The Graphics Alternative BBS now has a Web homepage.
+	Under construction, but has some nice bits to it.  Contact:
+	Adam Shiffman <adams@tgax.com, adams@ccnet.com>
+
+http://www.sgi.com/ - Silicon Graphics Inc. homepage, pretty, but annoying if
+	you have a slow link, so here are some direct addresses:
+    http://www.sgi.com/grafica/ - GraficaObscura, an eclectic collection of
+	images, hints, and essays related to graphics.  Contact:  Paul
+	Haeberli <paul@sgi.com>
+    http://www.sgi.com/tech/openGL/openGL.html - OpenGL related
+
+http://www.algorithm.com/~cwatkins/algor.html - Chris Watkins' company's
+	homepage, also includes a number of pointers to other pages worth
+	checking out.  Give it a look.
+
+http://metallica.prakinf.tu-ilmenau.de/GOOD.html - the "GOOD" raytracer
+	and modeller and whatnot (see RTNv7n1 and RTNv7n3).
+	Contact: Ekki Beier <Ekkehard.Beier@Prakinf.TU-Ilmenau.DE>
+
+http://www.cs.tu-berlin.de/~lulli/xray/xray.html - the XRay ray tracer, a
+	new one in pre-pre-release for MS DOS and Windows (though the code's
+	portable to others).  Contact: Christian Schnell
+	<lulli@cs.tu-berlin.de>
+
+http://www.eecs.uic.edu/~malic/ - various MPEG animations, including one on
+	3D morphing.  Contact: Mihailo Alic <alic@evl.eecs.uic.edu>
+
+http://archpropplan.auckland.ac.nz - For things related to the Radiance
+	program:
+	http://archpropplan.auckland.ac.nz/Graphics/radiance/radiance.html
+	Contact: Paul Bourke <pd.bourke@auckland.ac.nz>
+
+http://siggraph.org/library/bibliography/bibliography.hmtl - WWW version of
+	SIGGRAPH on-line bibliography.  Contact: Stephen Spencer
+	<spencer@cgrg.ohio-state.edu>
+
+http://info.acm.org/~joyces/homepage.html - Shawn Joyce's homepage, a nice
+	little jump-off point for various commercial renderers and other stuff.
+
+http://www.petech.ac.za/~kon - yet another images site; interesting in that
+	it's based in South Africa.  Contact: Kon Wilms <kon@stud.petech.ac.za>
+
+http://www.clbooks.com/ - Computer Literacy Books, who sell Ray Tracing
+	Creations (second edition) & Ray Tracing Worlds, among other things.
+	A nice little place to browse information on books out there.
+
+-------------------------------------------------------------------------------
+
+MGF:  Materials and Geometry Format, by Greg Ward (greg@hobbes.lbl.gov)
+
+MGF was developed by myself with help from Rob Shakespeare, Ian Ashdown and
+Holly Rushmeier.  It will probably end up being the standard for representing
+light fixture geometry as part of a new IES (Illuminating Engineering Society)
+standard for luminaire data, but that's still down the road aways.  In the
+meantime, I am trying to get people to play with the parser and scene/object
+library to work out problems in the specification and the code, and in hopes
+of simplifying and promoting data exchange between us research types.
+
+Here is a reprint of a recent posting...
+
+	Announcing MGF:  Materials and Geometry Format
+
+Here we have yet another proposal for a standard graphics scene
+representation, but with a few notable differences:
+
+	1) The material descriptions are physically-based and
+		therefore usable for lighting simulation:  radiosity
+		and ray-tracing methods for global illumination.
+
+	2) The package includes an ANSI-C parser that makes writing
+		a translator to any native format quick and painless.
+		It also includes a nice library of objects and scenes
+		culled from the Radiance distribution.
+
+	3) Use of the parser and library is free.
+
+The language was designed by the author and some other lighting and computer
+graphics experts/enthusiasts.  It includes what it needs to include plus a
+little bit.  It is by no means the ultimate scene description, and future
+attempts to improve the format must be weighed against the benefits of keeping
+things simple.  Also, enhancements to the standard will be made in such a way
+that they do not place new demands on the programmers who support it.  This
+will be accomplished by updating the parser along with the standard, so each
+programmer need only support those entities s/he knows how to translate.  The
+parser will translate the rest.
+
+Some other basics about MGF:
+
+	o It is a compact, human-readable ASCII format
+	o Its syntax permits it to be embedded in TCL (I think)
+	o It is strictly boundary-representation (for now)
+	o It is mostly polyhedral, but supports a few conics
+	o Vertices may be named, may have normals, and may be shared
+	o Colors and materials may also be named and put in libraries
+	o It supports full-spectral colors and arbitrary basis functions
+	o It supports one-sided and two-sided surfaces
+	o It supports rigid-body transformations and instancing
+	o Materials may reflect, transmit and emit light
+
+To pick up the parser by anonymous ftp, look in the /www/mgf directory of
+hobbes.lbl.gov (128.3.12.38), or from WWW access the URL:
+
+	ftp://hobbes.lbl.gov/www/mgf/HOME.html
+
+(By the way, we'd welcome links to other WWW sites, as we're isolated at the
+moment.)
+
+Comments are welcome.
+
+-Greg Ward
+Lighting Research Group
+Lawrence Berkeley Laboratory
+Berkeley, California
+GJWard@Lbl.Gov
+
+-------------------------------------------------------------------------------
+
+Blue Moon Rendering Tools RenderMan Implementation, by Larry Gritz
+	<gritz@seas.gwu.edu>
+
+   I am happy to announce the availability of the Blue Moon Rendering Tools
+(BMRT), a collection of rendering programs which adhere to the RenderMan(R)
+interface standard.  RenderMan is a registered trademark of Pixar.
+
+   The toolkit consists of a full implementation of the RenderMan standard
+which supports ray tracing, radiosity, area light sources, texture and
+environment mapping, programmable shading in the RenderMan Shading Language,
+motion blur, automatic ray cast shadows, and other advanced features.  The
+toolkit also contains quick RIB previewers (using GL or X11) to allow "pencil
+tests" of scenes and animations.
+
+   The BMRT is being distributed as shareware.  Feel free to grab a copy for
+evaluation.  If you like it and continue to use it, a "donation" is requested.
+In exchange, this makes you a registered user, which means that you will be
+informed of bugs and updates, get some support, etc.  It's all outlined in the
+License file that comes with the distribution.
+
+   The toolkit is distributed as binaries for the following platforms:  SGI
+running IRIX 4.05 or later, HP 9000 8xx/7xx running HP-UX, Sun SPARC, NeXTSTEP
+(HP, Motorola, and Intel).  Other platforms may be supported if requested.
+Source code is not distributed, so please don't even bother asking for it.
+The toolkit comes with full documentation, several example scenes which
+illustrate the various nonstandard features, and several example shaders.
+
+   The BMRT is available via anonymous FTP:
+
+	FTP to ftp.gwu.edu
+	login as "anonymous", use your email address as the password
+	cd /pub/graphics/BMRT
+	get the appropriate file for your architecture.
+
+For more details, feel free to contact me.
+
+----
+
+Larry adds later:
+
+I've recently had a period of unexpected productivity, and have managed to fix
+all of the known limitations to the Shading Language compiler for my BMRT
+package.  A number of other bug fixes and enhancements have been added
+recently.  Updated binaries for SGI and HP are in the FTP site.
+
+----
+
+and this, excerpted from another note he posted:
+
+The rendering methods of the two programs [Pixar's vs.  BMRT] are very
+different (REYES vs.  ray tracing/radiosity).  Given this fact, I'd consider
+it very good any time BMRT was within an order of magnitude of prman.  Some
+people have written to me with timings for particular scenes, and they seem to
+be saying that BMRT is about 1/4 the speed of prman.  I think that's pretty
+good, but I'm not sure it proves much of anything.  Nobody's given me timing
+data on "real" scenes, whatever that means.
+
+I tend not to even try comparing the two programs in terms of speed, because I
+mostly think of them as having very different uses due to their different
+rendering techniques and capabilities.  You can let prman run all day, and you
+still won't get a radiosity solution.  On the other hand, you can't get true
+displacements with BMRT (or any ray tracer).
+
+----
+
+Errata on using Darwyn Peachey's textures from _Modeling and Texturing:  A
+Procedural Approach_ (Ebert et al.) with the Blue Moon Rendering Tools.
+
+Unfortunately, when the FTP site was set up [for the book], the examples from
+chapter 8 (Ken Musgrave's chapter) weren't included.  We've since put together
+all the (working!) shaders described in this chapter and also sample RIB
+scene description files which demonstrate their use, and put them in the FTP
+area.  The chapter 8 examples are specifically in the file
+musgrave_renderman.tar.Z.  The other subdirectories contain examples from the
+other chapters.  FTP from archive.cs.umbc.edu:/texture
+
+A couple minor incompatibilities made an earlier version of rendrib choke on
+some of these shaders.  It's since been fixed, so if you have trouble with any
+of the shaders that I say work, just get the newest copy of the BMRT.
+
+All of the shaders from chapter 2 work fine, except for the following:
+
+brickant.sl - has a problem due to use of the Du and Dv functions.  In BMRT,
+these functions can only take s or t as parameters.  Peachey uses them as
+follows (lines 34-35):
+
+	swidth = abs(Du(ss)*du) + abs(Dv(ss)*dv);
+	twidth = abs(Du(tt)*du) + abs(Dv(tt)*dv);
+
+The following change (which is perfectly equivalent) makes them work properly
+with both prman and BMRT:
+
+	swidth = abs(Du(s)*du) + abs(Dv(s)*dv) / BMWIDTH;
+	twidth = abs(Du(t)*du) + abs(Dv(t)*dv) / BMHEIGHT;
+
+
+bluemarb.sl - Peachey uses a function definition, which unfortunately is
+broken in BMRT.  To make it BMRT-compatible, change this line in Peachey's
+code:
+
+	Ct = marble_color(marble);
+
+to the following:
+
+	Ct = color spline(clamp(2*marble + .75, 0, 1),
+		PALE_BLUE, PALE_BLUE,
+		MEDIUM_BLUE, MEDIUM_BLUE, MEDIUM_BLUE,
+		PALE_BLUE, PALE_BLUE, DARK_BLUE, DARK_BLUE,
+		DARKER_BLUE, DARKER_BLUE, PALE_BLUE, DARKER_BLUE);
+
+This is simply folding the function definition into the main routine.  Also
+don't forget to delete the function definition itself.
+
+
+perturb.sl - works, but note that rendrib takes TIFF files directly as texture
+maps, not the .tx files that prman takes.
+
+-------------------------------------------------------------------------------
+
+RenderMan Implementation Paper On-Line, by Philipp Slusallek
+	<slusallek@informatik.uni-erlangen.de>
+
+We have an implementation of the RenderMan interface which currently runs on
+top of our own Renderer called VISION.  It supports ray tracing, various
+radiosity algorithms (hierarchical, galerkin, wavelet) and some other
+rendering stuff.  I just presented a paper describing the implementation at
+EUROGRAPHICS in Oslo last week.  The paper is available by ftp from
+ 	faui90.informatik.uni-erlangen.de:/TechReports/TR.93.9.ps.gz or
+ 	http://www9.informatik.uni-erlangen.de/
+
+-------------------------------------------------------------------------------
+
+TGA BBS CD ROM review, by Eric Haines
+
+I just couldn't resist making a title with all those acronyms.  TGA is The
+Graphics Alternative, a computer graphics related bulletin board run by Adam
+Shiffman.  He has made a compendium of the best files from his bulletin board.
+This CD ROM has been out for more than half a year (I'm embarrassed to say -
+what with the corporate takeover, the disgruntled postmen, and the other
+plights that have befallen the Ray Tracing News' Corporate Headquarters [well,
+actually, I've just plain been backlogged and busy with work and my family], I
+haven't been able to review it).
+
+So here's an overview of the directory structure and contents:
+
+    3ds, 40 megs total: 3D Studio files
+	3ds/3dsmesh, 22 megs of 3DS mesh files
+	3ds/ipas1 and ipas2, 1 meg, about 20-25 IPAS filters total
+	3ds/maps, 14 megs of texture GIFs (same as on the first Syndesis
+		CD ROM, from what I can tell)
+	3ds/util, 1 meg of utilities for 3DS
+    anim_utl, 3 megs total: various animation utilities, such as DTA, MPEG
+		makers, etc
+    anime, 103 megs total: not Japanimation, rather animations; about 120
+		FLC/FLI animations and other stuff
+    audio, 4 megs total: various sound editing programs
+    demos, 11 megs total: sundry graphics demos, like "Unreal", and Doom.
+    djgpp, 4 megs, the GNU C++ compiler, v1.11
+    dos_view, 4 megs, various dos viewers and image processors
+    fractal, 11 megs, various fractal programs, including Fractinit,
+		Lparser, and Mandy
+    f_prot, 1 meg, popular anti-virus program
+    gfxlib, 4 megs, graphics libraries with source, including SVGAKIT and
+		TGE (The Graphics Engine)
+    gfxsrc, 6 megs, graphics source code, including Graphics Gems I-III,
+		rend386, vr386, and other stuff.
+    imag_utl, 4 megs, various DOS image utilities
+    images, 204 megs, all sorts of stuff, mostly in GIF format:
+	images/astrogif, 18 megs, 191 images, various NASA images
+	images/fracgif, 7 megs, 48 images, 2D & 3D fractal images
+	images/handgif, 5 megs, 49 images, hand painted images
+	images/raygif, 61 megs, 384 images, ray traced images (8 bit mapped)
+	images/rayjpg, 5 megs, 43 images, ray traced JPEG (lossy 24 bit)
+	images/raytga, 69 megs, 88 images, ray traced TGA (24 bit)
+	images/textures, 11 megs, 73 images, GIF, TGA and TIF textures,
+		some tile, the TIF's are from Paul Bourke's collection
+    images/tga, 23 megs, not Targa files, but rather works by
+		Adam Schiffman (who made this CD ROM); some nice stuff
+    misc, 1 meg of various, such as arj and zip unpackers, Visual Basic DLL
+		Also, very useful, is a file description list which
+		briefly describes many of the utilities and whatnot.
+    os2_view, 1 meg of OS/2 image viewers
+    paint, 7 megs of various paint and image processing programs
+    ray, 15 megs of ray tracers, including OORT, Polyray, POV, Rayshade,
+		Vivid, and the Truespace demos and WorldRender3D demo
+    ray_utl, 7 megs of ray tracing utilities, mostly for POV, Polyray, Vivid
+		and fairly selective (i.e. not just every utility ever made).
+		Modelers include Moray, POVCAD, WinBlobs, PV3D.
+    rtnews, 2 megs of utter drivel.  For some reason, RTNv6n1 is missing.
+    win_view, 8 megs of Windows viewers and whatnot.
+
+As you can see, while the focus is ray tracing, with about 250+ of the 450
+megs of stuff directly related to this topic, there are also some other things
+of interest, such as 3D Studio related resources, fractal generators, other
+images, paint programs, graphics libraries, the GNU C++ compiler, audio
+utilities, etc etc.  A nice feature for users is that most of the files are
+uncompressed and can be executed directly from the CD.
+
+The image libraries are fairly nice, and unlike the "Tracers and Tracings" CD
+ROM (reviewed in RTNv7n4), there appears to be more editorial work done on the
+collections.  Many of the images are of some interest either visually or for
+educational purposes, e.g.  focus.gif shows depth of field effects (although
+there's an interest [also educational] bug:  the reflections are in focus!)
+and 6gear1.gif shows the SPD gears database rendered with 6 different ray
+tracers (the bug in Rayshade has been fixed!).  Some of the images in
+the ray traced image directories are not ray traced but rather produced by 3D
+Studio, but I'm no purist.  One annoying thing with the image libraries is
+that there are no catalog files, as on "Tracers and Tracings".  The creator
+says in the readme file that he decided against this because the user could
+create catalogs, but this excuse is a bit weak.  In terms of portability, time
+spent, and hard-disk space, having the catalogs on the CD ROM is a lot better
+than making and storing these on a particular machine.  Given that there are
+200+ megs of unused CD ROM disk space, storage would not have been a problem.
+
+The addition of 3D Studio related resources is worthwhile, and of course the
+textures are usable elsewhere and the meshes are convertible to other formats
+using 3DS2POV and other utilities.  The meshes and textures for the 3DS
+section do have catalog images on the disk, which is extremely helpful.
+
+Editing has also been done on the various program collections; there are no
+cases of "8 versions of the same software" clutter.  However, in checking for
+some of the better image utilities, I didn't find Image Alchemy (which
+"Tracers and Tracings" did have) image converter or the LView windows image
+viewer, so either a little too much editing occurred or these worthwhile
+programs were unknown to the creator.
+
+All in all, this is a nice collection of software and images for hobbyists and
+others who are interested in modeling and image generation, and beats the
+daylights out of downloading all this stuff from the net.  I use a fairly
+reasonable Internet connection, but it's a heck of a lot easier to grab stuff
+from CD ROMs than deal with unavailable or dropped connections and the amounts
+of thumb-twiddling time spent downloading (let alone finding) material on the
+net.  Also, if I find some worthwhile software on a CD ROM I can always try to
+find the latest version on the net and use that.  All in all, I consider CD
+ROM file collections to be a great boon to users of the Internet, saving much
+time and energy and bandwidth for us all.  This CD ROM is a welcome addition.
+
+
+Ordering info (straight from his advertisement):
+
+$39.95 + $3.00 shipping and handling - California Residents will be charged
+applicable sales tax.  $6.00 S/H for International orders.
+
+The price includes the TGA CD-ROM with 450MB of quality graphics-related
+material AND a FREE 30 day subscription to TGA.  For more details call TGA and
+download TGACDROM.ZIP - this archive gives detailed information on all the
+material contained on the disc.
+
+The TGA CD-ROM may be ordered online with a VISA or Mastercard by calling the
+BBS and typing CREDIT from the main menu.  The CD purchase also includes a 30
+day complimentary subscription to TGA.
+
+Node 1: 510-524-2780 - USR Dual 2400-14.4k, New Users
+Node 2: 510-PRI-VATE - Hayes Optima 288, 2400-28.8k, Subscribers
+Node 3: 510-PRI-VATE - USR Dual V.FC, 2400-28.8k, Subscribers
+
+Or you may send a bank draft (No Personal Checks Please!!) or money order to
+the following address:
+
+	TGA
+	190 El Cerrito Plaza #107
+	El Cerrito, CA. 94530
+
+Internet e-mail: adams@tgax.com
+World Wide Web:  http://www.tgax.com
+
+-------------------------------------------------------------------------------
+
+Review of Syndesis Avalon CDROM, by Keith Rule (keithr@tekig7.pen.tek.com)
+
+[The Syndesis Avalon CDROM is a snapshot of the avalon.chinalake.navy.mil ftp
+site as of July 15, 1994.  Avalon is a repository of many hundreds of freely
+available 3d models in a variety of formats.]
+
+I was looking around on avalon.chinalake.navy.mil the other day and noticed an
+ad for SYNDESIS AVALON CDROM.  I called up Syndesis [(414) 674-5200] and
+ordered it on monday (8/22) for $49.95 + shipping, and received it on
+Wednesday (8/24).
+
+It arrived with a CDROM and a booklet.  The booklet contains a Copyright page
+which basically says that they (Syndesis) doesn't claim ownership of the files
+on the CDROM, just the Copyright to the contents of the CDROM.  Permission
+must be obtained from them to make it available on a BBS, multiuser network,
+or network.
+
+I'm not a lawyer (obviously) but I had a bit of trouble understanding the
+distinctions they are trying to make here.  Perhaps someone else would share
+some insight here.
+
+In addition to the Copyright notice there is an introduction, and a section on
+installation.  The introduction thanks Francisco DeJesus (which I heartly
+agree with).  The Installation section talks about the fact that the disk is
+an ISO-9660 CDROM which can be read on any computer.
+
+The rest of the document is just a listing of the files on the CDROM.  The
+list serves two purposes, 1) it lets you see what's on the disk with motoring
+through the directories, and 2) it shows the mapping between the long file
+names used on the avalon site (I assume avalon is a UNIX machine) and shorter
+MSDOS names.
+
+After looking through this I popped the CDROM into my MSDOS machine, brought
+up the MS-Windows file manager and started looking through it.  The first
+place I looked was under the format_specs directory.  The listing in the
+manual showed a dozen or so files, but the MS-Windows file manager showed an
+empty directory.
+
+I started randomly looking around.  Most directories matched the listing, but
+many important ones were empty including utils/converters.
+
+I sent E-mail to Syndesis.  They said I had a driver problem with my PC and
+that it would work on another PC.  I tried my PC at work, it had the same
+problem.  I sent that info to syndesis.  They said oops, they have a mastering
+error and will have to re-master the disk.  This will take about 3 weeks and
+they will send a free update to anyone who requests one.
+
+Aside from that problem, the disk seems to be a direct copy of the
+avalon.chinalake.navy.mil site.  The only problems I see are that:
+
+	1) I need several tools on my PC that I'm not sure where
+	   to find to make this disk useful. These tools are:
+		a) An MSDOS equivalent of UNIX uncompress.
+		b) An MSDOS equivalent of UNIX Tar
+		c) An MSDOS equivalent of gunzip.
+		d) PKUNZIP (which I already have)
+
+	2) I'll probably have to get a larger harddisk for all the
+	   cool stuff I'll be moving off the CDROM.
+
+I would have preferred that syndesis had uncompressed all the files and then
+made their master disk.  One of the advantages of CDROMS is that I don't have
+to have all that stuff on may HD.  Unfortunately, I need to pull the models
+I'm interested off the CDROM to be able to use them.  Too bad.
+
+All in all I like the CDROM.  I'm looking forward to the update, and will be
+looking for MSDOS equivalents of the UNIX tools I need to access a large
+number of the files on this disk.
+
+[For ordering info, contact: John Foust / Syndesis Corporation
+	<76004.1763@CompuServe.COM>]
+
+[I had hoped to review Syndesis' second volume of models, but won't for now.
+Check out RTNv6n3 for a review of the first.  John is putting together a third
+volume of models on a CD ROM right now; if you want to get a free one, you can
+get one by having him accept your model for inclusion on the CD.  Write him
+for details. -EAH]
+
+-------------------------------------------------------------------------------
+
+SIRDS/SIS/stereograms/Holusions/whatever, by Eric Haines
+
+Everyone's doing it.  You've seen them in card stores, you've seen them in
+malls, you've seen them in, um, card stores in malls.  Those repeating pattern
+posters, books, postcards, tea cozies, and antimacassars, which when you focus
+your eyes just so cause a hidden image to pop out and look three dimensional.
+Personally, people have waved black and white random dot versions of these in
+my face for years without me getting it.  I finally got it this summer, and
+can now defocus my eyes and stare off into the middle distance in the blink
+of, yes, an eye.
+
+What worked for me was looking into my computer screen at one and looking at a
+reflection in the screen to get my eyes to defocus; there are at least five
+other methods of doing it, and I leave it to you to find them in the FAQ (next
+paragraph) or in books.  My other piece of advice:  don't try to cross your
+eyes, as this is not usually the way to do it as it makes the images reverse
+themselves in depth.
+
+So anyway, I thought I'd try to add this capability to my renderer.  After
+puzzling through the SIRDS FAQ (which can be FTPed from katz.anu.edu.au
+[150.203.7.91]:  /pub/stereograms, and the FAQ is maintained by Stuart Inglis
+(singlis@cs.waikato.ac.nz)) and trying out a few wrong ways, I came up with a
+very short addition to my renderer which made some reasonable SIS (Single
+Image Stereograms).  I was going to explain it here in depth, but it turns out
+there are now a few books that deal with the topic, so who am I to ruin
+capitalism?
+
+Actually, I'll give you the five minute description.  In creating these images
+you take a repeating texture pattern and vary it slightly.  The pattern
+repeats horizontally every couple of inches or less, i.e.  the repeat pattern
+must be less than the width between your eyes (so you can defocus and get a
+separate repetition of the pattern for each eye), and should probably be less
+than 1-1/2".
+
+Say you just repeat the texture pattern again and again horizontally without
+variation.  You defocus, and the left eye sees a pattern, and the right eye
+sees the same pattern, but is actually looking at the repetition of that
+pattern one to the right.  Still with me?  (if not, think of a picture, say
+Babe Ruth on a baseball card, and a copy of the Babe right next to it -
+defocussing makes the left eye look at the left image, the right eye at the
+right).  You all (should) know about stereo pairs, where one image is shown to
+the left eye and the other to the right and your brain puts them together and
+gets a 3D effect.  This idea of having separate similar images go to each eye
+is key to SIS.
+
+Now, since the pattern is repeated a number of times, once defocussed, your
+left eye and right eye can move over the entire image and continue to be in
+sync.  You will perceive the entire image to be at a distance farther from
+where it really is, as the angle formed by left eye/perceived thing/right eye
+is a lot smaller than if you just looked at the image normally.  Your brain
+knows that when this angle is small, you're (supposed to be) looking at
+something far away.
+
+Now, if you vary this left eye/perceived thing/right eye angle over an image,
+your brain will interpret these variations as changes in depth and you'll see
+a 3D effect.  I've read a fair bit of gobbledy gook about how to vary the
+depth, about dealing with factors like the left eye seeing parts of 3D objects
+that the right eye doesn't, and vice versa, but forget all that.  Just think
+that, given the basic repeating pattern being seen by each eye, if the right
+eye then has to look a little bit to the left of this base pattern at some
+feature (compared to what the left eye is seeing), then the brain will
+interpret this feature as being closer, since the angle has become larger.
+
+You now know the essential secret, believe it or not.  The basic algorithm
+starts with a texture pattern that the left eye is going to see and will be
+repeated.  The "hidden object" which is to appear is used to vary this
+pattern.  Say the hidden image is a square floating above a plane.  When the
+background of this hidden image is visible, the repeat pattern is not shifted,
+when the square is seen, the repeat pattern is then shifted to the left.  The
+closer the object is, the more left-shift there is.  [Actually, in practice
+these algorithms look at the distance from pixel to pixel, and you can start
+from the right or from the middle of the image, but this horizontal shifting
+is the basic mechanism] If you look at the image (without defocussing) you'll
+notice that the pattern repetition is relatively rapid on the square that is
+closer - this makes your eyes form a larger angle with the perceived object
+and so you think it is closer.
+
+So, we've started with a pattern on the left (call this pattern #1) and made a
+copy of this pattern just to the right (call this pattern #2), shifting the
+data in pattern #1 to the left as required by the hidden image to form #2.
+Now we move the process over to pattern #2 and use this as the starting point
+for the next repetition, where we form pattern #3 by shifting pattern #2 as
+needed.  Pattern #3 is used to form pattern #4, etc, until the image is done.
+Algorithmically it's even simpler than this.
+
+One great feature of these algorithms is that each scan line is entirely
+independent of the others.  That is, you can generate a scan line without any
+knowledge or effect on the other scan lines, so the entire depth image does
+not have to be saved.  Using the left-to-right algorithm above, you don't even
+need to keep the whole scan line of z-depths around, since you're shifting as
+you go along.  This is what makes the algorithm easy for ray tracers:  you're
+simply using the ray tracer to get depths as you go and shifting the pattern
+as you go.  Note that you don't really need a ray tracer, though (hey, I had
+to mention ray tracing, right?)  - a zbuffer renderer works just fine for the
+hidden images, and even just stored images used as depth maps work fine, too.
+Notice that a single depth map is used for generating the image, so there's
+nothing special about the image generation process.
+
+The good news is that once you have a half-decent renderer it's pretty easy to
+add this algorithm to it.  My first attempt was about 30 new lines of code to
+access and shift the texture pattern using the z-depth.  The bad news is that
+once you do the easy algorithm, you notice problems.  There's echoing, where
+pattern repetitions and elements get intertwined in a way that false 3D
+features appear.  There's also a limit to the number of levels of depth in the
+basic algorithm, making the 3D object look like it was terraced for farming by
+miniature Southeast Asian farmers.  You might try interpolating colors in the
+texture to get rid of this artifact (I did), and then it just looks blurry on
+the right side of the image.  Me, I finally wrote some additional code that
+maintains the exact links between repetitions and uses these precise numbers
+to interpolate between samples for output, which reduces blurring (though I
+still get some echoing).  Anyway, even with this additional code we're talking
+of a total of around 100 new lines (including whitespace and comments).
+
+I hope this article has given you a flavor of how these images work and are
+generated.  If you're seriously interested, look at the reviews that follow of
+two books which discuss in depth how to generate these images.  Playing with
+these algorithms (and seeing the sorts of goofs you can make) has given me a
+greater appreciation of well-constructed commercial images made using this
+technique.  It's also interesting to figure out what went wrong with the bad
+ones out there.  All in all, a cute technique, but watch it:  if you defocus
+too much your eyes will get stuck and you'll see everything in 3D.
+
+-------------------------------------------------------------------------------
+
+Two Books on Stereograms, by Eric Haines
+
+Recently two books have come out about stereograms, _Create Stereograms on
+Your PC_, by Dan Richardson, Waite Group Press, 192 pages, 8 color plates,
+$26.95, ISBN 1-878739-75-1, and _Hidden Images:  Making Random Dot
+Stereograms_ by Bob Hankinson and Alfonso Hermida, QUE Corp, 242 pages, 16
+color plates, $24.99, ISBN 1-56529-994-9.  Each book comes with a disk in the
+back containing software for the PC.
+
+Richardson's book collects some of the better stereogram generating tools
+together and describes how to use them and how they work.  He spends a little
+bit of time describing stereogram history and algorithms, then discusses many
+of the different ways the autostereogram effect can be used.  He covers normal
+text stereograms, random text stereograms, random dot stereograms, image
+mapped stereograms, and icon based stereograms.  Most of these (the exception
+being normal text stereograms, which are usually made by hand anyway) have one
+or more free or shareware programs presented along with them.
+
+For random text stereogram generation the SIRTSER program, written by the
+author, is provided on the disk and does the job.  The next program presented,
+RDSdraw, is a lot more fun.  It's an interactive program which is tailored
+towards making depth images for generating random dot stereograms (SIRDS).
+It's a fun program in which you can put various objects (boxes, pyramids,
+ellipses, etc) and text on the screen and turn the image into a SIRDS.
+Another SIRDS program, MindImages, is also presented.  I personally have a
+tough time getting MindImages images to work for me on my 15" screen because
+they have a wider repetition distance than RDSdraw, but they are nice when
+they do work.  There is also a cute program called Shimmer which ameliorates
+echoing and helps some people "lock on" to the 3D image quicker.  It's cute,
+and the effect reminds me of the book _Snow Crash_ (which is a great trashy
+cyberpunk [or cyberpunk parody, it's hard to tell the difference] novel).
+
+My favorite program is RDSGEN (by Fred Feucht, from a program originally by
+Alexander Enzmann), for two reasons.  One is that it generates image
+stereograms just like you see in malls, and the other is that source code is
+actually provided, a boon for explorers who would like to get their hands
+dirty with a little code.  The code provided in the book has evidently been
+cleaned up a bit from earlier versions out there.  If you have internet
+access, you can find some of these programs at katz.anu.edu.au [150.203.7.91]:
+/pub/stereograms, though I didn't notice RDSGEN there.
+
+The book then goes on to discuss other ways of creating depth maps.  The
+wonderful fractal program Fracint is described in this context, and the book's
+diskette provides some parameter and map files useful for making SIRDS
+(Fractint itself is not included due to space limitations, but is easy to find
+on the net at oak.oakland.edu:/pub/msdos/graphics/frain182.zip).  Using the
+POV Ray ray tracer with fog to generate depth maps is also discussed, and some
+sample scenes are provided.  To end, there's a short chapter on icon based
+stereograms and how to generate these with POV Ray.
+
+----
+
+Hankinson & Hermida's book focusses on random dot stereograms.  The principles
+involved in generating and viewing stereograms are made easily understandable.
+Many variations and pitfalls involved in the process are covered.  Along with
+the book is the Windows program POPOUT-LITE and some sample depth maps and
+random dot stereograms.  Installation was a snap, and the program is easy to
+use for generating SIRDS.  Creating depth maps is not so easy; the program
+relies on the Windows Paintbrush program to generate these.  Using Paintbrush
+finesses having to present and distribute (let alone write) new software, and
+this program is understood by many users already.  However, it is not tailored
+for creating depth maps and so makes for a lot of work for the user to do
+anything non-trivial.  I find RDSdraw much better for the task, as it is made
+to create simple 3D object depth maps as part of the program.
+
+Since I've begun a comparison of this book to Richardson's (which includes
+RDSdraw), let's continue.  The software offering of Richardson's is richer.
+It includes programs for a wide variety of generation techniques and also
+includes a little source code.  Hankinson includes essentially one program;
+the nice thing about it is that it's a Windows program which uses the standard
+BMP format.  However, after a short while you reach its limits.  You have to
+have an artist's abilities and patience to generate depth images using
+Paintbrush.  For example, Hankinson would have you draw each depth slice of a
+tilted cylinder separately by hand, since Paintbrush doesn't know anything
+about 3D objects.  This time would be better spent generating depth maps with
+appropriate tools.  Hankinson does briefly discuss other methods of generating
+these, e.g.  via POLYRAY.  However, POPOUT-LITE has only 16 levels for depth
+information (as does RDSdraw), so images generated with it all have serious
+terracing artifacts (where it looks like the object is made out of layers of
+corrugated cardboard glued together).
+
+Hankinson does discuss image stereograms (like those seen in malls) and puts a
+few in the set of plates and in the text.  However, there is no software to
+generate these images, unlike Richardson's book.  Throughout the book there
+are references to POPOUT PRO, which does generate these images and uses 256
+depth levels, but it is made available only by paying another $17.50
+(discounted from $35) for the program.  There is also a confusion between GP
+POPOUT and POPOUT PRO which I have not figured out - they seem to be the same
+thing, or maybe different things; it's hard to tell from the text.  Perhaps my
+review copy did not come with the discount coupon described in the book, which
+might have cleared up some of the mystery.
+
+Whatever the case, it is misleading to put a sunflower pattern image
+stereogram on the cover with a hidden teapot and say "Create Your Own
+Incredible 3-D Stereograms with Software Included", when in fact you cannot
+generate image stereograms or the teapot depth map with the software provided.
+This is a poor way of treating readers and it mars an otherwise fine book.
+
+Hankinson is good at fully presenting the algorithms involved.  He is thorough
+about discussing the various problems which are encountered and ways to fix
+these.  About two-thirds of the book purely is about the algorithms, the rest
+about describing how to run software.
+
+In summary, both books have their strengths.  Richardson's gives a quick
+once-over of the algorithms, then gets you using the programs in order to
+learn more.  Hankinson's spends time giving a coherent, full presentation of
+the algorithms involved, then allows some play time to try out SIRDS.  Both
+are well written and nicely presented.  Neither book gives a formal
+presentation on stereogram theory (nor should they) - for this you'll need to
+hit the scientific literature (check the FAQ).  Richardson's software offering
+is excellent, but the reader should be comfortable with DOS and some basic
+image manipulation software (most readers of this newsletter qualify).
+Hankinson's software is simple to use and has on-line help, but doesn't
+actually do all that much.  Hankinson explains things thoroughly enough that
+you could implement the algorithms after reading his book.  Richardson points
+at net resources and provides code; this is both a good and bad thing - it
+allows you to get going quickly, but without as deep an understanding of the
+techniques available and the problems you'll encounter.  If you want to read
+about random dot stereograms in a methodical fashion and don't care so much
+about playing (or would rather surf the Internet for software), get
+Hankinson's book.  If you would rather play as you go and learn about a wider
+variety of stereograms, get Richardson's.
+
+-------------------------------------------------------------------------------
+
+Siggraph Report: The Exhibits, by Techs Avery (tksavery@netcom.com)
+
+[I asked Techs for any updates for this report he posted right after SIGGRAPH,
+and he graciously added a few new details.  -EAH]
+
+THE EXHIBIT FLOOR
+
+Instead of reporting on the ultra high end stuff I am reporting on low end
+stuff that's pretty impressive.  Well, maybe a little high end.
+
+Rendermorphics from Reality Lab
+(408) 486-6956
+Email info@render.com
+
+At the Rendermorphics booth they were showing an API, which was explained to
+me as a software only render engine which is being licensed to 3D software
+makers.  This product was rendering like a hardware renderer.  In the booth
+they had the Matrox 3D engine (PC)and a Cirrus Logic render engine.  In a very
+fair test, it matched the Matrox and beat the Cirrus, though both were indeed
+respectable.  The boards also featured Open GL support, while Rendermorphics
+said that they plan to support this also.
+
+[Other vendors at SIGGRAPH included Ithaca Software's new HOOPS on the PC, and
+Criterion's RenderWare.  - EAH]
+
+January update:
+Rendermorphics is now directly supported by 3D Labs' GLINT chip, a 3D
+rendering engine on a chip being widely adapted by the PC-Mac-Windows NT board
+manufacturing community.  It will be even faster as a result when used with
+hardware acceleration.
+
+Cirrus Logic- (510) 226-6218
+
+The primary advantage to the Rendermorphics API is that they are making it
+cross platform compatible on the PC, Mac, Power PC, Windows NT and SGI
+(especially the INDY).  Expect to start seeing this incorporated into Lower
+Cost 3D software in the next few months.  The test that I saw was rendering at
+speeds comparable to my Indigo 2 Extreme.  It featured Phong, Gouraud,
+textured, reflected and I believe faceted shading and permitted real time
+movement of a lit object.
+
+They were demoing with a 200 polygon or so torus and a 16,000 poly skeleton.
+
+_________________________________
+
+Animation Master had some very cool demos on their reel this year.  One was a
+human head so real looking people thought it was actually video.  More
+sophisticated users thought it was Cyberscanned.  But it was done at home by
+this guy (Rod Altshul I think was his name) in LA with photos he took of
+himself.
+
+Another piece on their reel was done by a teacher at UCLA extension.  Very
+morphy and a good, clear story.  It should have been in the Electronic
+Theater.
+
+The product had very cool inverse kinematics and the ability to take character
+actions and add them to a list of character actions in a Direction module.
+All versions were under $1K.
+
+January update:
+A new version of AM is due out within the next 6-8 weeks, which features an
+integrated interface and lots of new features.  Their number is (206) 750-0042
+and Email is Animmaster@aol.com.
+
+_________________________________
+
+Real 3D takes the programmability award for a PC based 3D product.  You can
+write macros for everything.  It also has very impressive dynamics, inverse
+kinematics (though cruder than Animation Master) and a lot of high end
+features you normally find on high end programs.  Character animation looks
+challenging, and I'd like to see how fast it renders complex objects.  I think
+also around $1K.
+
+_______________________________
+
+Truespace from Caligari was similarly impressive, with animatable lattices and
+some impressive modeling capabilities.  Very fast rendering.
+
+_________________________________
+
+Reported earlier in this news group (by someone else) Newtek announced PC,
+Power PC, SGI and Windows NT versions of their popular Lightwave program.
+
+January update:
+Due out this month, I hear, for $995
+
+____________________________
+
+Most Needed unusual product award goes to Digital Image Design for a product
+called "THE MONKEY".
+
+This is a Claymation style armature set up to pose characters in 3D programs
+like Softimage, though I've been told several PC software companies were
+interested in supporting it.
+
+It allows you to pose characters as a whole without having to do the select a
+joint, move a joint with the mouse method of character animation.  It seems
+more useful and flexible than most of the motion capture I saw.
+
+Cost: around $10K. (212) 222-5236.
+
+_________________________________
+
+Synthetic Images had the "Reality Blaster", a VR card(s) for PCs.  $2500 to
+about $5K.  (407) 282-7740.
+
+I didn't see a demo, but the guy gave me the literature on the airplane back
+to LA.  Strangely, the company appears to be located in Orlando.
+
+_________________________________
+
+3D Xpres is a poor mans digitizer ($199 at the show) where you put a
+handyman's right angle in front of the object to be digitized, take pictures
+from at least two angles and click on the features similar in the two photos
+(they have to be scanned first).  The right angle is used to reference the x-z
+plane for the object.
+
+(818) 707-6000.  One of the better finds.
+
+Supports DXF and I hear OBJ.
+
+___________________________________
+
+
+At Animo, they had a dialogue system that supposedly could take spoken
+dialogue and automatically pick mouth shapes from a list based on phonemes.
+
+The product also featured resolution independence, impressive inbetweening, an
+exposure sheet and other character specific features.
+
+Also a compositor, ink and paint and Bill and Sue Kroyer as demonstrators.
+
+This is a 2D animation product. PC based.
+
+(818) 762-6466
+Email: admin@cam-ani-usa.com
+___________________________
+
+Linker System demoed their 2D package for the MAC and PPC.  Very capable with
+too many features to list.  I didn't see any Audio support.
+
+Their demo artist seemed to be their main programmer, a big mistake.  I saw an
+artist from Film Roman, the largest non-Disney animation producer in this
+country (The Simpsons, The Critic, Garfield, Cro, Mighty Max and more).  She
+wanted to talk art and animation and he wanted to talk tech.
+
+She didn't understand a word he said, and shouldn't have had to.  Especially
+for a MAC program.
+
+Tel # (714) 552-1904
+
+January update:
+I have since heard this same story repeated by a very well known animation
+director in Hollywood, who actually bought the product and doesn't understand
+how to use it, and the company still doesn't know how to talk his language.
+
+It sits idle and mute in his Quadra, mutely mocking him and his staff.
+
+_______________________________
+
+Another 2D animation Product was Pixiscan.  This runs on PCs and SGI.
+
+Telephone # (33-1) 49 85 17 18 (FRANCE). Looks impressive, but I didn't get a
+real good look.
+
+____________________________________
+
+I would like to point out that Softimage demoed the most esoteric dynamics
+products to date.  Seems they're digging deeper and deeper into obscure
+physics and mathematics textbooks.  I don't know what you'd use these things
+for, but it's pretty interesting to watch.
+
+Softimage still doesn't support a text interface.
+
+_______________________________________
+
+Wavefront has the best inverse kinematics to date for polygonal programs.
+Their "Smart Skin" solves a lot of problems encountered in Softimage.
+
+-------------------------------------------------------------------------------
+
+Scanline Rendering Previewer, by Eric Haines due to Chris Cason
+
+Chris Cason asks:
+
+>How much faster is scanline rendering compared to raytracing ? I am
+>considering whether or not a scanline rendering previewer (able to read POV
+>scenes) might not be a good idea, if it were *really* fast.
+
+My guess is, no, better yet, just a sec.  OK, POV 2.0beta+ rendered tetra,
+4096 polygons, in 56 seconds.  Subtracting out the time to read the database,
+call it 52 seconds.  My general software z-buffer renderer (not including
+database read) did it in 2 seconds [and I'm working to make it faster].
+
+
+Chris also asked about whether doing a scanline previewer for POV-Ray would
+be worthwhile.  I replied:
+
+I'd love to see a reasonable scanline renderer.  The main problem is turning
+everything into polygons.  Also, that's where the cost comes in:  a sphere is
+just a sphere to POV, but is 2000 polygons to a scanline renderer (or less,
+depending on what quality your talking here.  You could get by with maybe 200
+polygons per sphere).  Also, as far as CSG - forget it trying to get the
+polygonal version of a CSG model, people form companies around doing this
+problem.  Though there have been rumors on the net of people doing this in
+upcoming shareware...
+
+Anyway, if you can polygonalize the beastie (or even if it was just a simple
+guess), there are at least two resources for doing scanline images.  One is
+SIPP, which is pretty good (no front end scripting language, but then you don't
+need one for POV integration) - it includes texture mapping and shadowing (!).
+There's also VRend, which is more X windows based but the code itself (cobbled
+together from various sources) does indeed seem to render stuff.
+
+SIPP's home (it's also elsewhere, tell me if you have problems):
+isy.liu.se [130.236.1.3]:  pub/sipp/sipp-3.0.tar.Z - *SIPP* scan line z-buffer
+	and Phong shading renderer.  Jonas Yngvesson <jonas-y@isy.liu.se>
+
+There are some demo programs included, give it a try!
+
+Info on ZRend is in RTNv7n5.
+
+Anyway, it'd be great to have a POV scanline previewer, even with limitations
+(since most people work using polygons and simple quadrics and quartics, it'll
+make 90%+ of the people out there happy).  You could probably cobble one
+together in a few days, adding a front end to SIPP that is simply the POV
+script language.  Do it!  Fame!  Fortune!  (well, fame, at least...).
+
+----
+
+The above was a pretty old exchange of messages, but hey, I can always hope
+that someone will actually make a reasonable z-buffer renderer integrated with
+a shareware modeller or as a standalone program.  It shouldn't be *that* hard.
+
+- Eric
+
+-------------------------------------------------------------------------------
+
+Raysmith, by Eduardo Bustillo Iceta <epabuice@bi.ehu.es>
+
+I'm a recently graduated mechanical engineering student from Spain.  As part
+of my end of studies project I have developed a radiosity program with the
+following main characteristics:
+
+  -Monte Carlo integration to compute diffuse illumination:  This permits to
+    have refracted shadows, specular and diffuse reflections, blurry
+    reflections, translucency, texture mapping and any geometry of light
+    sources.
+
+  -Adaptive subdivision:  Objects with big radiosity gradients inside are
+    dynamically subdivided during the radiosity process.
+
+  -Ray tracing:  A postprocess of ray tracing is used to calculate the image.
+    The main characteristics of the algorithm used are:
+
+      -Depth of field.
+      -Stochastic anti-aliasing.
+      -Optional 3D glasses stereo view.
+
+  -Acceleration techniques: Three different user selectable techniques
+    are incorporated:
+      -Binary Object Partitioning
+      -Adaptive voxel subdivision (with optimal coordinate system selection)
+      -Z-Buffer for first ray acceleration
+
+  -Geometry input:  It reads 3D Studio v2 geometry files so the only geometric
+    entity supported is the triangle.
+
+  -Completely written in ANSI C:  This way it may be compiled in any system.
+    Actually, my work was done in a PC but I've tried and succeeded in
+    compiling it with no modifications on a DEC OSF/1 and a HP-UX server.
+
+If anyone wants a copy of my program (it's free), please feel free to contact
+me.  [This program is also available now at avalon.chinalake.navy.mil via FTP
+in pub/utils/raygcc10.arj, so check there first.  -EAH]
+
+	Eduardo Bustillo Iceta <epabuice@s835cc.bi.ehu.es>
+	Particular de Basterra 1
+	48990 Getxo (VIZCAYA)
+	SPAIN
+
+[There's been some interest in this package from the 3D Studio crowd, since it
+reads 3D Studio v2 files (unfortunately, the package doesn't seem to ignore
+packets of information which it doesn't understand - with luck the author will
+fix this in the future.  Anyway, the demo images are interesting; a
+Sillion-like image, and computed rapidly at that.  -EAH]
+
+----
+
+I asked about benchmarking, and Eduardo replied:
+
+I have done some quick benchmarking tonight.  The only 3DS to ray tracer file
+exchanger that I have is the one I wrote last year for POV.  I used two
+example scenes:
+
+-Scene 1:  Three spheres (mirror, glass and diffuse) with one light.  About
+800 polygons.  Resolution 320x240:
+
+	    POV 2.2                      RAYSMITH(default configuration)
+	     736 s                         337 s
+
+-Scene 2:  Based upon F. Sillion's example in Foley-Van Dam (plate III.27)
+with some added features.  Raysmith showed interobject reflections (even
+through reflective or transmitting objects) while POV didn't (it's a
+ray-tracer).  On the other hand Raysmith can't handle sharp shadows (needed in
+some cases).  About 6200 polygons.  Resolution 320x240:
+
+	    POV 2.2                      RAYSMITH(default configuration)
+	     340 s                         129 s
+
+I don't have a file exchanger for RAD386 or Rayshade but in the version that I
+have access to, both of them use a similar accelerating structure:  uniform
+voxel subdivision.  Raysmith has user selectable accelerating parameters (it
+uses adaptive voxel subdivision) such as grid resolution, maximum grid depth
+or minimum number of objects per voxel.  I think that with these options it
+should be theoretically faster (or at least as fast).
+
+-------------------------------------------------------------------------------
+
+Terminology Survey Results, by Peter Shirley <shirley@graphics.cornell.edu>
+
+[Pete surveyed various global illumination researchers for their opinions.]
+
+Enclosed are the results of my survey on which (if any) of the following terms
+were preferred to describe making computed images that relate to how things
+look in the real world (I don't want to say "realistic :^}).  I make no
+explicit suggestions of what this survey is useful for, but I hope everyone
+will remember how much easier it is to write a paper now that we all have the
+same term for "radiance".
+
+Many people thought rendering was the same as "scan conversion" or
+rasterizing.  Others thought that rendering and image synthesis are
+synonymous.  It is clear that there is not agreement on what rendering means.
+It is also clear that some think that the "realistic" is implicit in "image
+synthesis".  One thing is for sure-- there is no global agreement!
+
+		       TERM                 VOTES
+			   rendering          3
+		 realistic rendering          6
+	    photorealistic rendering          3
+			   image synthesis    4
+		 realistic image synthesis   16
+	    photorealistic image synthesis    9
+			   (other term)       2
+			   (no pref)          2
+				        -----------
+				             45
+
+
+			 * rendering         12
+			 * image synthesis   29
+
+
+			   *                  7
+		realistic  *                 22
+	   photorealistic  *                 12
+
+
+There were three "other term" votes that also expressed a preference among the
+six offerings, so I counted them as one of the first six categories.  The
+other terms listed were:
+
+	   physically based image synthesis
+	   photosimulation
+	   virtual image
+	   idealistic image synthesis
+	   pseudorealistic image synthesis
+
+-------------------------------------------------------------------------------
+
+Radiosity Online: A Bibliography, by Ian Ashdown <72060.2420@compuserve.com>
+
+[Ian has taken over upkeep of the Radiosity Bibliography from me.  He's done
+a great job expanding and updating it. -EAH]
+
+Those of you with an interest in radiative transfer theory (also known as
+"radiosity") may want to download the new release of /pub/doc/RadBib94.Z via
+anonymous ftp from <hobbes.lbl.gov>.  Its an online bibliography that lists
+over 500 references to papers, theses, books and technical reports concerning
+radiosity, radiative transfer theory and related topics.  Many of the
+references concern computer graphics, which is where most of the action is
+these days in radiative transfer theory research.  However, it also includes
+references to most of the important papers on radiative transfer theory from
+the illumination and thermal engineering literature.  If you do not have ftp
+capabilities, send me an e-mail message with a request for a free photocopy or
+an ASCII text file on a 3.5" MS-DOS diskette (please specify which).  Sorry,
+but at 121 KB (88 pages), the file is too big to send as an e-mail message.
+
+P.S.  - thanks to Greg Ward of Lawrence Berkeley Laboratory for providing
+space on his ftp server for this resource.
+
+P.P.S.  - if anyone finds any omissions in the bibliography, please let me
+know so that I can add them to the next release.
+
+-------------------------------------------------------------------------------
+
+Jevans' Temporal Coherence for Ray Tracing, by Eric Haines
+
+From a Rayshade user:
+>Also, my animation images are VERY similar from image to image.  It would
+>be nice to save the intermediate calculations from say image n-1 and apply
+>that knowledge to image n.  This might consist of saving all the ray
+>results from the previous image and looking for what hasn't moved in the
+>next frame of the animation, or, it could be as simple as auto-detecting
+>that, given the motion of objects, certain areas do not require recalculation.
+>I would gladly trade RAM for execution speed any day, any day, any day....
+
+An interesting paper on this topic is:
+
+%A David Jevans
+%T Object Space Temporal Coherence for Ray Tracing
+%J Proceedings of Graphics Interface '92
+%I Canadian Information Processing Society
+%C Toronto, Ontario
+%D May 1992
+%P 176-183
+%K temporal coherence, efficiency, space subdivision
+
+His method should be easy to do with Rayshade:  essentially, you record each
+ray shot in each voxel the ray hits.  When something moves in a voxel or to
+another voxel, only those rays in those voxels which have had changes
+(movement, entry/exit, etc of objects) need to be recomputed for the next
+image.  Jevans claims an almost 4x speedup.  Only works for a static camera,
+of course (i.e. the camera doesn't move).
+
+Memory intensive, of course (lots of rays get stored), but Jevans has a method
+of keeping this reasonable:  he needs only 64 bytes per voxel.  He stores a
+resolution independent grid of 16x16 bits, essentially dividing the image into
+16x16 blocks.  Each eye ray (and its children) then has a particular bit which
+gets set for it; as you propagate the ray it marks this bit in each voxel hit
+by it and its children.  For the next frame you move objects and note which
+voxels are touched.  "or" together all the dirty voxel bitmasks and you get a
+list of which of the 16x16 blocks need to get recomputed.  Simple stuff, the
+messy part for Rayshade is keeping the frame by frame coherence info around in
+a nice fashion.
+
+-------------------------------------------------------------------------------
+
+Reviews of _Encyclopedia of Graphics File Formats_, from Steve Lamont,
+	John Grieggs, Tom Lane, Brian Erwin, and Andy Key
+
+Steve Lamont (spl@szechuan.ucsd.edu) writes:
+
+You might want to look at _Encyclopedia of Graphics File Formats_ by James D.
+Murray and William van Ryper, published by O'Reilly and Associates, July, 1994
+(928 pages, softcover, with CD ROM, ISBN 1-56592-058-9, $59.95).  Email:
+orders@ora.com
+
+There's a CDROM readable by Mac, PC, and Unix systems with a bunch of
+utilities (most of which you can find, with some amount of effort, on the net
+if you know where to look).  While I can quibble with the claim on the back
+cover that it is "the only file format book you'll ever need," it is quite
+complete.
+
+It attempts to cover a lot more ground that Kay and Levine and does most of it
+fairly well (though there is a lot missing, too.  For instance, for legal
+reasons many of the proprietary formats, such as Kodak Photo CD, are covered
+with not much more than a pointer to the "owner" of the format).
+
+The book is organized into three parts, an Overview, describing the basics of
+graphics file formats, their care, and feeding, as well as other bits and
+pieces of useful tutorial information.  The second part covers the formats
+themselves.  The final part is a description of the CDROM and pointers to
+getting additional software.
+
+There are a few glitches in the index.  For instance, if you look up "PICT"
+format, you find only a single reference to a brief mention of the format in
+the introduction, but if you look up "Macintosh PICT," you find a reference to
+both the introduction and an article in the main body of the text.
+Unfortunately, the article doesn't really tell you much about PICT format
+either, but just points you at the Apple technical note.  There is software on
+the CDROM, which I haven't tried, that apparently does read and handle PICT,
+though.
+
+In my copy there is also an error in binding which may not be in every copy.
+The list of figures is inserted in the middle of the table of contents entries
+for section two.
+
+In summary, _Encyclopedia of Graphics File Formats_ is an useful, if sometimes
+necessarily incomplete, resource.
+
+[Disclaimer:  I was sent a free review copy of the book by O'Reilly and
+Associates, so I may have a small bias.  However, I have no connection with
+the publisher other than as a small contributor to their financial success due
+to twenty one of their other publications gracing my bookshelves that I've
+personally bought over the years.  :-)]
+
+----
+
+Another short review:
+
+From John Grieggs' comp.graphics FAQ:
+
+Good introduction to graphics file format issues for both vector and raster
+formats, plus specific descriptions of nearly 100 file formats.  CD-ROM
+includes sample images, original format spec documents where available, and C
+code snippets.  Also a lot of free and shareware image conversion/manipulation
+software for Unix, DOS, Windows, and Mac.  Much of this is available on the
+net (and indeed the book tells you where), but having it all pulled together
+is very useful.  Tom Lane (tgl@sss.pgh.pa.us) says:  "My only complaint is
+that there are too many typos in the printed text.  Check the original spec
+document whenever you find something unclear or dubious."
+
+----
+
+Brian Erwin writes:
+
+We have received several requests for a complete listing of all of the format
+specification documents on the CD-ROM accompanying our new book, _The
+Encyclopedia of Graphics File Formats_ by James D.  Murray and William
+vanRyper.  The CD-ROM contains specs from such vendors as Adobe, Aldus, Apple,
+IBM, Microsoft, and Silicon Graphics, along with test images and code examples
+for many of the formats.  Also on the CD-ROM is a set of free or public domain
+software and shareware--for MS-DOS, Windows, OS/2, UNIX, and Macintosh
+platforms--that will let readers convert, view, and manipulate graphics files
+and images.
+
+To access this listing:   http://ora.com/gnn/bus/ora/catalog/
+
+----
+
+Graphical file format FTP site
+
+As author of GBM, which I believe is the source code include on the CD with
+the book [I'm not sure what he means; the code on the disk is by the authors
+and does not appear to resemble this code.  - EAH], I would like to point out
+that the latest version of GBM source is usually available on one of :-
+
+	   ftp.cdrom.com:/pub/os2/32bit/graphics/gbmsrc.zip
+	ftp-os2.nmsu.edu:/pub/os2/32bit/graphics/gbmsrc.zip
+
+[There are also many ray-tracing and other rendering related things for OS/2
+here, too. -EAH]
+
+I particularly mention this because the latest GBM has fixes and a faster
+GIF/TIFF LZW save algorithm.
+
+- Andy Key <ak@hursley.ibm.com>
+
+-------------------------------------------------------------------------------
+
+SDSC Image Tools library, by Matt Hughes <hughes@msi.umn.edu>
+
+A good way of getting direct write to a number of formats is to link the whole
+thing to the SDSC Image Tools library available at
+ftp.sdsc.edu:/pub/sdsc/graphics/imtools.  As i recall, you just organize you
+images into their type of internal array, and then just make one call to write
+out the file based on the type you want.  I see they have stuff for the
+following machines:
+
+apple_mac, cray_ymp, dec_alpha, dec_mips, dec_vax, hp_700, ibm_rs6000,
+next_next, sgi_4d, sun_3, sun_sparc
+
+I also understand they will be providing source in the near future.
+
+Image types supported:
+
+bmp, cur, eps, gif, hdf, ico, icon, iff, mpnt, pbm, pcx, pgm, pic, pict, pix,
+ppm, pnm, ps, ras, rgb, rla, rle, synu, tga, tiff, viff, x, xbm, xwd
+
+-------------------------------------------------------------------------------
+
+LUG Library v1.0, by Raul Rivero <rivero@pinon.ccu.uniovi.es>
+
+What do you get ?
+
+i . file format translators:
+
+- compuserve's gif
+- zsoft's pcx
+- truevision's targa
+- sgi's rgb
+- aldus-microsoft's tiff
+- alias' pix
+- wavefront's rla
+- urt's rle
+- pbm/pgm/ppm
+- rgb
+- raw
+- rayshade's heightfield
+- jpeg
+
+ii . image editing functions:
+
+- resampling
+- blur
+- sharpening
+- cut
+- paste
+- median filter
+- histogram equalization
+- ... and so on
+
+iii . image viewers:
+
+- for Silicon Graphics and IBM RISC 6000 ( GL Library )
+- for HP9000 series ( Starbase Library )
+- for any kind of X11 platforms ( Xlib Library )
+- for PC386/486 ( GRX Library )
+- for Linux ( VGA and VGAGL libraries )
+
+
+... and it's a LIBRARY!!!, not a program. You! will be the person who
+write the programs.
+
+If your machine is a PC with MSDOS, you'll need the DJGCC compiler (or
+an equivalent).
+
+The original site distributor of this package is telva.ccu.uniovi.es
+(156.35.31.31): /uniovi/mathdept/src/liblug-1.0.tar.gz.
+
+Please, send me a E-mail so I can track all the users of LUG and send
+you news, bugs, etc ...
+
+LUG is free! (what a wonderful word :-) but it's distributed under
+the GNU LIBRARY GENERAL PUBLIC LICENSE.
+
+-------------------------------------------------------------------------------
+END OF RTNEWS

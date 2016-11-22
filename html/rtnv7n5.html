@@ -1,0 +1,2567 @@
+<!-- html version of Volume 7, Number 5 :  -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 7, Number 5</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>October 13, 1994</FONT>
+<P><FONT size=+1>Volume 7, Number 5</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1994, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction
+</A></LI>
+<LI><A HREF="#art2">
+New People
+</A></LI>
+<LI><A HREF="#art3">
+Ray Tracing Roundup
+</A></LI>
+<LI><A HREF="#art4">
+Recent Ray Tracing Papers
+</A></LI>
+<LI><A HREF="#art5">
+Rumor Mill
+</A></LI>
+<LI><A HREF="#art6">
+AERO Animation/Simulation System version 1.5.1,
+</A></LI>
+by Thomas Braeunl
+<LI><A HREF="#art7">
+A Brief Review of [an old] AERO,
+</A></LI>
+by Dave Negro
+<LI><A HREF="#art8">
+Photon Tracing,
+</A></LI>
+by Chris Thornborrow and Greg Ward
+<LI><A HREF="#art9">
+Faster Than POV-RAY 2.1,
+</A></LI>
+by Dieter Bayer
+<LI><A HREF="#art10">
+Z Buffer Based Rendering Program,
+</A></LI>
+by Raghu Karinthi
+<LI><A HREF="#art11">
+Gossamer,
+</A></LI>
+a Free Macintosh VR/3D Renderer, by Jon Blossom
+<LI><A HREF="#art12">
+Antialiasing Issues,
+</A></LI>
+by Arijan Siska
+<LI><A HREF="#art13">
+Microcosm,
+</A></LI>
+by Abe Megahed of Cosmic Software
+<LI><A HREF="#art14">
+Fisheye Lens Distortion,
+</A></LI>
+by Greg Ward
+<LI><A HREF="#art15">
+Optical Ray Tracers
+</A></LI>
+<LI><A HREF="#art16">
+Correcting Normal Direction,
+</A></LI>
+by Gavin Bell
+<LI><A HREF="#art17">
+Graphics Gems IV Table of Contents,
+</A></LI>
+by Paul Heckbert
+<LI><A HREF="#art18">
+Beyond Graphics Gems,
+</A></LI>
+by Paul Heckbert
+<LI><A HREF="#art19">
+Radiosity vs. Ray Tracing,
+</A></LI>
+by Rico Tsang
+<LI><A HREF="#art20">
+ACM SIGGRAPH Online Bibliography Updated,
+</A></LI>
+by Frank Kappe
+<LI><A HREF="#art21">
+How to be Notified of New POV Releases
+</A></LI>
+<LI><A HREF="#art22">
+PoVSB Windows-based Modeler v0.85,
+</A></LI>
+by Jeff Hauswirth
+<LI><A HREF="#art23">
+Porting Rayshade,
+</A></LI>
+PBM, etc from Unix to DOS, by Mike Castle
+<LI><A HREF="#art24">
+REYES & Patents,
+</A></LI>
+William C. Archibald
+<LI><A HREF="#art25">
+Going from AutoCAD and 3DS into Ray Tracing,
+</A></LI>
+by Sean Ross
+<LI><A HREF="#art26">
+Computer Lego Modeling,
+</A></LI>
+by Paul Gyugyi
+<LI><A HREF="#art27">
+Rowe's Ray Tracing World BBS,
+</A></LI>
+by Harry Rowe
+<LI><A HREF="#art28">
+On Using BSP trees,
+</A></LI>
+by Benton Jackson
+<LI><A HREF="#art29">
+Books about Commercial Renderers,
+</A></LI>
+by Don Lewis, Jimbo and Yury German
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction
+</A></FONT>
+</H4>
+        Another SIGGRAPH has come and gone, and it was a pretty fun one.
+Getting soaked time and again along with other allegedly intelligent people by
+the whales at the SeaWorld reception was definitely memorable.  In many ways
+this conference was better than previous years.  The proceedings and course
+notes were also provided on CD-ROM (some headaches on some machines, but
+that's the norm).  Being able to move course to course was wonderful (even
+with the headache of getting to and from Stouffer's, which was no fault of the
+conference organizers).  The addition of the technical sketches sessions and
+parallel paper sessions were both plusses to me.  Note that there are a number
+of great resources on the various CD-ROMs, e.g. the latest release of
+Radiance (since there was a paper on the system in the proceedings this year).
+<P>
+        The most noticeable technology for me was Apple's QuickTime VR.
+Nothing earth-shattering, but something which looks to be popular.
+Essentially you can move from view to view of an environment.  You have a
+panoramic view of wherever you're located, so you can turn your head, zoom in
+on something, and even look up and down a bit:  there's a nice illusion that
+you're interacting with the environment but without having more than a single
+panoramic view for a location.  The software does all the distortion
+correction on the fly.  The first product that is out using this technique is
+a tour of the Enterprise (TNG) on CD-ROM, and I suspect you'll see a lot of
+Apple's technique in upcoming CD-ROM tours and adventure games (e.g. rumor
+has it the Myst guys were looking at the technique).
+<P>
+        So what's this have to do with ray tracing?  Well, ray tracing is a
+natural for rendering panoramic views (Ken Musgrave has a Gem on how to do
+this in "Graphics Gems III").  Scanline images can be used and glued together
+and then warped, but ray traced images give you the distortion you need for
+free and at the sampling rates you need where you need them.
+<P>
+        This is yet another catch-up issue, where the bits and pieces left in
+the queue since April are gathered up and spewed out now.  If anything, have
+the material molder in my files for a few months meant I've culled a bit more
+than usual, leaving a denser filling with a firm yet flakey crust.  Food
+imagery aside, there *are* some worthwhile bits in this issue:  AERO, a demo
+of Microcosm, a new z-buffer renderer, and so on.  Next issue will have more
+juicy stuff (and I really do hope to get it out before the Millenium arrives),
+including an announcement of a non-Pixar-produced shareware RenderMan
+implementation!
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+New People
+</A></FONT>
+</H4>
+# Werner Purgathofer - radiosity, ray tracing, visualization, color<BR>
+# Technical University of Vienna<BR>
+# Institute of Computer Graphics<BR>
+# Karlsplatz 13 / 186-2<BR>
+# A-1040 Wien / Austria<BR>
+# +43 (1) 58801 4548<BR>
+alias <A HREF="mailto:purgathofer@cg.tuwien.ac.at">purgathofer@cg.tuwien.ac.at</A>
+<P>
+I am a professor of computer graphics, my main job consisting of teaching,
+administration and research.  My group consists of about 12 people, including
+a technician and a secretary.  We did a lot of ray tracing some years ago,
+including distributed ray tracing (see e.g. Eurographics 86), now we are
+concentrating on radiosity issues.  As (forward) ray tracing becomes more and
+more important here, we are almost back where we started!
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Ray Tracing Roundup
+</A></FONT>
+</H4>
+Thought folks might be interested in the On-Line Ray-Tracing Bibliography,
+available over the World Wide Web via URL:
+<P>
+<PRE>
+        <A HREF="http://www.cm.cf.ac.uk/Ray.Tracing/">http://www.cm.cf.ac.uk/Ray.Tracing/</A>
+</PRE>
+<P>
+Even those without Web clients like Mosaic can check this out by telneting to
+one of these sites:
+<P>
+<PRE>
+        If you're near:         Telnet to:
+
+        Switzerland:            <A HREF="telnet://info.cern.ch">info.cern.ch</A> or 128.141.201.74
+        Kansas, USA:            <A HREF="telnet://ukanaix.cc.ukans.edu">ukanaix.cc.ukans.edu</A>  (login as www)
+        New Jersey, USA:        <A HREF="telnet://www.njit.edu">www.njit.edu</A>  (login as www)
+        Israel:                 <A HREF="telnet://vms.huji.ac.il">vms.huji.ac.il</A> or 128.139.4.3 (login as www)
+        Slovakia:               <A HREF="telnet://sun.uakom.cs">sun.uakom.cs</A> (slow link; use only from nearby)
+        Hungary:                <A HREF="telnet://fserv.kfki.hu">fserv.kfki.hu</A> (slow link, login as www)
+        Finland:                <A HREF="telnet://info.funet.fi">info.funet.fi</A> or 128.214.6.100
+</PRE>
+<P>
+Mark Maimone (<A HREF="mailto:Mark.Maimone@A.GP.CS.CMU.EDU">Mark.Maimone@A.GP.CS.CMU.EDU</A>)
+<P>
+[This is Ian Grimstead's doing, and "bibliography" is a misnomer - it's a
+great place to start looking for all sorts of ray tracing and rendering
+resources, with links to just about everywhere.  Really, I could just list
+this site each issue and not have to list most of the other resources that I
+do.  -EAH]
+<P>
+________
+<P>
+The FAQ for comp.graphics.algorithms are available at:
+<P>
+<A HREF="http://www.cis.ohio-state/hypertext/faq/usenet/graphics/algorithms-faq/faq.html">http://www.cis.ohio-state/hypertext/faq/usenet/graphics/algorithms-faq/faq.html</A>
+<A HREF="ftp://rtfm.mit.edu/pub/usenet-by-group/news.answers/graphics/algorithms-faq">ftp://rtfm.mit.edu/pub/usenet-by-group/news.answers/graphics/algorithms-faq</A>
+<P>
+Also available at:
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/mail-lists/comp.graphics.algorithms">ftp://wuarchive.wustl.edu/graphics/graphics/mail-lists/comp.graphics.algorithms</A>
+<P>
+FYI, all usenet FAQ's are available with Mosaic via:
+<A HREF="http://www.cis.ohio-state/hypertext/faq/usenet/top.html">http://www.cis.ohio-state/hypertext/faq/usenet/top.html</A>
+<P>
+Jon Stone (<A HREF="mailto:jdstone@ingr.com">jdstone@ingr.com</A>)
+<P>
+________
+<P>
+A computer graphics related FTP list [maintained by Nick Fotis and myself.
+-EAH] is kept at:
+<P>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/">wuarchive.wustl.edu</A>: /graphics/graphics/ray/GraphicsFTP.txt
+<P>
+George Kyriazis (<A HREF="mailto:kyriazis@esd.sgi.com">kyriazis@esd.sgi.com</A>)
+<P>
+________
+<P>
+I've been playing around with HTML and the World-Wide Web lately, and I have
+created hypertext versions of the three latest RTNews issues, with more to
+come when I get the time and energy to do it...
+<P>
+RTNews is at
+<PRE>
+        <A HREF="http://www.lysator.liu.se:7500/users/ture/rtnews.htmll">http://www.lysator.liu.se:7500/users/ture/rtnews.html</A>
+</PRE>
+<P>
+I also have some general graphics stuff att .../graphics.html, and my own
+presentation at .../ture.html
+<P>
+Ture P\aa{}lsson (<A HREF="mailto:ture@lysator.liu.se">ture@lysator.liu.se</A>)
+<P>
+________
+<P>
+Texture Collections
+<P>
+:       I'm looking into different texture collections on CD-ROMs.  Are<BR>
+:       there any that are absolutely awesome, or others that should be<BR>
+:       avoided (i.e. not worth the money)?  "Accents" looks pretty nice<BR>
+:       (in reviews, etc), and also Pixar's $99 offer for "One Twenty Eight"<BR>
+:       CD-ROM texture collection looks good.<BR>
+<P>
+I just finished writing an article on this very topic for Digital Video
+Magazine.  It should be in the September issue, and it covers about twenty or
+so packages for the Amiga, Mac and PC, most of them on CD-ROM.  The Pixar set
+you mentioned is very good, as are Autodesk's Texture Universe and Texture
+City.  Check the article out for more info on a bunch of packages.  Hope this
+is helpful.
+<P>
+[Digital Video Magazine is at 603-924-0100 in Peterborough, NH. -EAH]
+<P>
+<PRE>
+Dave Thomas (<A HREF="mailto:dthomas@bbx.basis.com">dthomas@bbx.basis.com</A>)
+Moving Pixels
+(Client, looking at image of a sphere on a monitor: "Can we make it rounder?")
+</PRE>
+<P>
+________
+<P>
+Recent Uploads to <A HREF="ftp://ftp.cica.indiana.edu">ftp.cica.indiana.edu</A>
+<P>
+File: desktop/gcad110.zip                                Date:  940311
+Desc: GammaCAD v1.10 <ASP> - Full featured
+<P>
+File: programr/3dlib30a.zip                              Date:  940315
+File: programr/3dlib30b.zip                              Date:  940315
+Desc: C++ & Pascal 3D graphic animation
+<P>
+________
+<P>
+As a new feature, the fractal FAQ has some links for use with the World Wide
+Web.  It can be accessed with a program such as xmosaic at
+  <A HREF="http://www.cis.ohio-state.edu/hypertext/faq/usenet/fractal-faq/faq.html">http://www.cis.ohio-state.edu/hypertext/faq/usenet/fractal-faq/faq.html</A>
+<P>
+Ken Shirriff (<A HREF="mailto:shirriff@sprite.berkeley.edu">shirriff@sprite.berkeley.edu</A>)
+<P>
+________
+<P>
+New version of RTrace 8.4.0
+<P>
+There is a new version of the RTrace ray-tracing package (8.4.0) at
+<A HREF="ftp://asterix.inescn.pt/pub/RTrace/">asterix.inescn.pt</A> [192.35.246.17] in directory pub/RTrace.  Check the README
+file.
+<P>
+Antonio Costa, Comp. Graphics/CAD (<A HREF="mailto:cgcad@bart.inescn.pt">cgcad@bart.inescn.pt</A>)
+<P>
+________
+<P>
+New Game Programming FTP-Place
+<P>
+I have the great pleasure to officially announce the new (pc) game programming
+oriented ftp-place teeri.oulu.fi.  It's currently an old sun3, has max 20
+user limit, is located in Finland (Europe) and has about 40M more or less game
+programming oriented material online + lots more to come.
+<P>
+<PRE>
+        <A HREF="ftp://teeri.oulu.fi/pub/msdos/programming">teeri.oulu.fi:/pub/msdos/programming</A>
+        (uploads to <A HREF="ftp://teeri.oulu.fi/incoming">teeri.oulu.fi:/incoming</A> with a .txt file, please)
+</PRE>
+<P>
+There are graphics libs, sound libs, hardware tech specs, file format specs,
+drawing utils, music composing utils, sample game source, some carefully
+selected FAQs, file format converters, all 3 known Game Programmers Magazines,
+is the official home && dist site for Game Programmers Encyclopedia etc.  etc.
+<P>
+The PC Games Programmers Encyclopedia 1.0 (PC-GPE) is in
+/pub/msdos/programming/gpe/pcgpe10.zip
+<P>
+Jouni Miettunen (<A HREF="mailto:jon@stekt.oulu.fi">jon@stekt.oulu.fi</A>)
+<P>
+[Another place to look for PC related graphics source code is:
+<A HREF="ftp://ftp.uwp.edu/pub/msdos/demos/programming/source/">ftp.uwp.edu</A>: /pub/msdos/demos/programming/source  -EAH]
+<P>
+________
+<P>
+PCFormat (UK) RTPics on cover CD
+<P>
+Just thought UK readers might like to know that this month, PC Format magazine
+have launched a copy which comes with a CD rather than the usual disks.  On it
+are over 150 ray-traced images, most of which are pretty stunning and in at
+least 640x480 (GIFs though :-(, so only 256 colours).  The ray-traced trees
+generated with LParser are particularly gobsmacking!  Even 'Frosty' is on
+there, but compared to the rest, I found it to be pretty average (sorry Dan,
+but I think some of your others are MUCH better).
+<P>
+IMHO, it's well worth a look, and Pc Format can be reached at
+<A HREF="mailto:format@compulink.cix.co.uk">format@compulink.cix.co.uk</A> if you want to try & persuade them to put more
+ray-tracing stuff on the disc in future (such as source files, image data
+etc).
+<P>
+PS:  The Bowling.GIF has incredible motion blur (dunno what it was done on
+though!)
+<P>
+William Turner (<A HREF="mailto:wturner@acorn.co.uk">wturner@acorn.co.uk</A>)
+<P>
+________
+<P>
+Geombib Reminder
+<P>
+Otfried Schwarzkopf has set up an experimental server on the world-wide web
+for the geometry biblio; you can try it by pointing your browser (e.g.  mosaic
+for xwindows) at
+<P>
+<PRE>
+        <A HREF="http://www.cs.ruu.nl/people/otfried/html/geombib.html">http://www.cs.ruu.nl/people/otfried/html/geombib.html</A>
+</PRE>
+<P>
+The server can be used to do remote searches on the bibliography (it has
+biblook under the hood).  When the entry has been annotated with the new URL
+field, the server will recognize this and allow you to download the network
+object pointed to, e.g.  a Postscript copy of a techreport.  (You can find
+some examples by looking for "ftp" in "any" field.)  If you have comments or
+suggestions regarding the server, please send them to <A HREF="mailto:otfried@cs.ruu.nl">otfried@cs.ruu.nl</A>.
+<P>
+If you wish to join the computational geometry bibliography mailing list, send
+email with body of "subscribe geombib" to <A HREF="mailto:majordomo@cs.usask.ca">majordomo@cs.usask.ca</A>.  Beware that
+mail sent to <A HREF="mailto:geombib-request@cs.usask.ca">geombib-request@cs.usask.ca</A> gets a form letter from majordomo but
+not a subscription.
+<P>
+[You can FTP the bib from <A HREF="ftp://cs.usask.ca/pub/geometry/geombib.tar.Z">cs.usask.ca</A>: /pub/geometry/geombib.tar.Z  -EAH]
+<P>
+Bill Jones (<A HREF="mailto:jones@skdad.usask.ca">jones@skdad.usask.ca</A>)
+<P>
+________
+<P>
+Animation FTP Site
+<P>
+<A HREF="ftp://toe.cs.berkeley.edu/pub/multimedia/mpeg/movies/">toe.cs.berkeley.edu</A> in directory /pub/multimedia/mpeg/movies
+<P>
+has some quite good mpeg streams including the morphing sequence from Michael
+Jackson's 'Black and white' video.
+<P>
+Jim Marsden (<A HREF="mailto:ee_c456@vulture.dcs.kingston.ac.uk">ee_c456@vulture.dcs.kingston.ac.uk</A>)
+<P>
+________
+<P>
+I have recently completed version 1.1 of RenderCAD-PRO, a modeling and
+ray-tracing application for the Macintosh.  Its easy graphic user interface
+can be used to generate photo-realistic single images and multi-image
+animations.  A free demo (requires Mac w/ FPU co-pro) of this $45 package is
+available.  Please send info requests to...
+<P>
+Paul Rybarczyk (<A HREF="mailto:prybarc@heartland.bradley.edu">prybarc@heartland.bradley.edu</A>)
+<P>
+________
+<P>
+If you have direct Internet access, you can learn about BRL-CAD via:
+<P>
+ftp to <A HREF="ftp://ftp.arl.mil/brl-cad/">ftp.arl.mil</A>, directory /brl-cad
+<P>
+Mosaic/WWW to the following URL:
+<PRE>
+        <A HREF="http://www.brl.mil/software/brlcad/index.html">http://www.brl.mil/software/brlcad/index.html</A>
+</PRE>
+<P>
+Lee A. Butler (<A HREF="mailto:butler@ARL.MIL">butler@ARL.MIL</A>)
+<P>
+________
+<P>
+The current version of the Stereogram FAQ is in the HTML file at
+        <A HREF="http://www.cs.waikato.ac.nz/~singlis/sirds.html">http://www.cs.waikato.ac.nz/~singlis/sirds.html</A>
+or can be FTPed from:
+    <A HREF="ftp://katz.anu.edu.au/pub/stereograms/">katz.anu.edu.au</A> [150.203.7.91] :  /pub/stereograms
+(which also has a lot of other SIRDS related information)
+<P>
+[Stereograms are those things you see in the mall (trade name "Hollusion")
+that you try to stare at and defocus and see the dinosaur or whatever in 3D.
+I could never see the effect until I learned about the techniques listed in the
+FAQ.  Fun illusion, and it turns out to be very easy to implement as a post
+process to a ray tracer - I believe people have already done it for POV and
+Rayshade.  Also, at the listed FTP site there is a ray tracer called raysis
+which is devoted to this task.  To do this stuff yourself you can try to
+decode the FAQ (it's a tad cryptic when it comes to actually saying what to do
+for SIS), buy the new book _Create Stereograms on Your PC_ by Dan Richardson,
+Waite Group Press, or wait an issue:  I hope to write up the 20-30 lines of
+code I used to add it to my renderer for the heck of it.  -EAH]
+<P>
+________
+<P>
+Raytech is a BBS specialising in ray tracing.  It is located in northern
+Scotland, and their telephone number is 44-862-832020.
+<P>
+Adam Fulcher (<A HREF="mailto:afulcher@cix.compulink.co.uk">afulcher@cix.compulink.co.uk</A>)
+<P>
+________
+<P>
+Just about everything that always gets asked over and over again on
+rec.games.programmer is covered in the latest Dr. Dobbs:  circle, ellipse,
+line, texture mapping, landscape generation, and even ray-tracing.  So before
+you ask get that episode (#216 July 1994 ddj).
+<P>
+Ben (<A HREF="mailto:sbc5a@helga6.acc.Virginia.EDU">sbc5a@helga6.acc.Virginia.EDU</A>)
+<P>
+________
+<P>
+RT Ray Tracer
+<P>
+I have implemented a CSG Ray Tracer with lots of primitives, textures,
+bounding volumes in C (but I've no multi-processing/wire-frame stuff).
+<P>
+My Ray Tracer is called RT and is available on
+<A HREF="ftp://ftp-os2.nmsu.edu/os2/2_x/graphics/rt.zip">
+ftp-os2.nmsu.edu:os2/2_x/graphics/rt.zip</A>.  It comes with full portable C
+source and uses the GBM module for file I/O (found in same directory as
+gbmsrc.zip).  I will refresh it with a version less sensitive to rounding
+errors sometime soon.
+<P>
+Andy Key (<A HREF="mailto:ak@hursley.ibm.com">ak@hursley.ibm.com</A>)
+<P>
+________
+<P>
+Equation for a Cow, er Frog
+<P>
+There are some datasets at:
+<P>
+<PRE>
+        <A HREF="http://george.lbl.gov/ITG.html">http://george.lbl.gov/ITG.html</A>
+</PRE>
+<P>
+including a rasterization of a frog that was made by freezing, slicing, and
+scanning.  (They planned to do an MRI scan, but frogs don't scan well.)
+<P>
+There's also MRI data for an orange, a tomato, a pumpkin, and a rat.
+<P>
+Roger Critchlow (<A HREF="mailto:rec@arris.com">rec@arris.com</A>)
+<P>
+________
+<P>
+The WorldToolKit User's Group (SIG-WTK) electronic archive is located at
+<P>
+<PRE>
+        <A HREF="ftp://artemis.arc.nasa.gov/sig-wtk/">artemis.arc.nasa.gov</A>: /sig-wtk
+</PRE>
+<P>
+This anonymous ftp site serves as the software and documents library for the
+SIG-WTK.  It is intended to serve the needs of active WTK users and other
+parties interested in WorldToolKit.
+<P>
+The site is organized within the ~ftp/sig-wtk as follows:
+<P>
+<PRE>
+        incoming/       for anonymous contributions
+        models/         3D objects in various formats (NFF, DXF, etc.)
+        textures/       textures in various formats (SGI, Targa, etc.)
+</PRE>
+<P>
+[Note that the NFF format referred to is Sense8's NFF format, not mine. -EAH]
+<P>
+Terry Fong (<A HREF="mailto:terry@ptolemy.arc.nasa.gov">terry@ptolemy.arc.nasa.gov</A>)
+<P>
+________
+<P>
+Wavefront site:
+<P>
+<PRE>
+    <A HREF="http://wavefront.wti.com">http://wavefront.wti.com</A>
+</PRE>
+<P>
+(WWW only?)
+<P>
+Kevin Bjorke (<A HREF="mailto:bjorke@pixar.com">bjorke@pixar.com</A>)
+<P>
+________
+<P>
+The author of TextureSynth (Joshua Jeffe) has written a new texture
+generating application called TextureScape, which uses postscript shapes as
+the basis of really cool, resolution-independent textures. It can also be used
+to create animated textures for use in multimedia.  TextureSynth is
+published by Specular International (call 1-800-433-SPEC for more info).
+<P>
+Peter E. Lee (<A HREF="mailto:lee@cs.umass.edu">lee@cs.umass.edu</A>)
+<P>
+________
+<P>
+3D Studio utils uploaded to Avalon
+<P>
+I have uploaded 3D Studio IPAS routines and utilities to
+<A HREF="ftp://avalon.chinalake.navy.mil/pub/utils/3ds/">avalon.chinalake.navy.mil</A> (129.131.1.225) /pub/utils/3ds/
+<P>
+Each file is accompanied by a .txt file.  I didn't write, haven't used, don't
+know anything else about these utilities.  Just passing them on.
+<P>
+Pat Kane (<A HREF="mailto:prkane@nyx.cs.du.edu">prkane@nyx.cs.du.edu</A>)
+<P>
+________
+<P>
+Also at <A HREF="ftp://avalon.chinalake.navy.mil/pub/misc/">avalon.chinalake.navy.mil</A>, in the pub/misc directory, are all sorts
+of interesting PC software, including the fabled TrueSpace Caligari demo
+version (doesn't save/restore; ts_demo.zip), a Real3D demo (which is supposed
+to be tough to use without the documentation), and other interesting things.
+<P>
+________
+<P>
+Acoustic Simulation
+<P>
+Renkus-Heinz, a speaker manufacturer from California, distributes EASE
+(Electro Acoustic Simulation for Engineers), and EASE Jr.  Both run on MS-Dos
+systems.  Ease also supports aurilization using a companion program called
+EARS and a DSP board.  Ease allows you to calculate reverb time, impulse
+response, frequency response of systems, ray tracing, and perform sound system
+design.  Ease Jr allows reverb time and sound system design calculations.
+Both programs allow wireframe room models to be built in the program, or
+importation of 3-D DXF files.
+<P>
+Jay Paul (<A HREF="mailto:jaypaul1@aol.com">jaypaul1@aol.com</A>)
+<P>
+[it had the magic words "ray tracing" in there, so I included it. -EAH]
+<P>
+________
+<P>
+Blob Sculptor Update
+<P>
+We have released Blob Sculptor for Windows 1.0.  It has the same functionality
+as the DOS version.  Ron Praver ported the DOS version to Windoze.  [look
+around on <A HREF="ftp://ftp.povray.org">ftp.povray.org</A>, I think it's in there somewhere. -EAH]
+<P>
+Blob Sculptor, ver 2.0 for _DOS_ is almost ready to be released.  The new
+functionality includes:
+<P>
+<PRE>
+        * better user interface
+        * camera can be interactively located
+        * support for multiple blobs, i.e. components within a blob interact
+          with each other but blobs don't interact with each other
+        * sphere, cones and cylinder shaped components
+        * faster preview mode
+</PRE>
+<P>
+Version 2.0 has been beta tested for some time and already has produced some
+awesome images.  For example, Edgar L. Ibarra has produced various images
+including cartoon-like characters:  dog, candle holder (a la Beauty and the
+Beast), and a baby.  You can find these at CompuServe's GraphDev forum.  He
+renders the objects with Imagine 3.0.
+<P>
+I've been working on a spline blob component.  The component consists of 3
+points which are created in 3D space.  A spline is used to interpolate them
+and a radius is defined to give the object a bent cylinder look.  The
+component also permits the modification of a tension parameter which gives the
+user more versatility without the need to use more points.  Uses for this, you
+ask?  well, if you want to create the fingers in a hand you don't need to use
+spheres or 2 or more cylinders to do the job...just 1 spline blob will do the
+job.  Think of a spline blob as a generalized cylinder or playdough in the
+shape of a cylinder which can be bent.
+<P>
+Alfonso Hermida (<A HREF="mailto:AFANH@STDVAX.GSFC.NASA.GOV">AFANH@STDVAX.GSFC.NASA.GOV</A>)
+<P>
+________
+<P>
+<PRE>
+Radiance Related
+================
+</PRE>
+<P>
+SIGGRAPH Proceedings Distribution
+<P>
+Other than a paper about the Radiance system in the SIGGRAPH '94 Proceedings,
+the entire Radiance system is included on the Proceedings CD ROM.  It's in
+/papers/ward/rad2r4.tz (uncompress and read .tar, I assume).
+<P>
+Eric Haines
+<P>
+____
+<P>
+Radiance vs. POV
+<P>
+I have found Radiance to be comparable in speed to POV.  Once the octree is
+generated the tracing times are even shorter than POV.  It has very efficient
+pruning and the tracing times go up less than linearly with the increase in
+the number of polygons in a scene.  And besides - the results are MUCH better
+in terms of realistic-looking lighting and better-looking surfaces.  In my
+opinion Radiance is the best ray-tracing package on any platform - I use it on
+an Amiga.  The main problem with Radiance is lack of a good modeler and the
+many other support programs that are available for POV.
+<P>
+Alison Colman (<A HREF="mailto:acolman@magnus.acs.ohio-state.edu">acolman@magnus.acs.ohio-state.edu</A>)
+<P>
+________
+<P>
+<PRE>
+POV Related
+===========
+</PRE>
+<P>
+Andy Wardley (<A HREF="mailto:abw@dsbc.icl.co.uk">abw@dsbc.icl.co.uk</A>) notes:
+<P>
+I've just uploaded geodome1.zip to uniwa which is the utility for creating the
+geodome data models.
+<P>
+Non-PC users will be glad to hear that it *does* include source.
+<P>
+--
+<P>
+Harry Rowe (<A HREF="mailto:Harry.Rowe@wedowind.meaddata.com">Harry.Rowe@wedowind.meaddata.com</A>) comments:
+<P>
+Like others, I would just like to say GREAT scene!  The sky is one of the best
+I've seen.  I scarfed the GIF and your utility from uniwa and placed it on my
+BBS (Rowe's Ray Tracing World BBS (513) 866-8181).  It will be on my custom
+600 meg Ray Tracing/Graphics CD coming this fall
+<P>
+____
+<P>
+The POV-Utilities 2.0 for the Mac have hit the streets.  The package is now
+available on CompuServe, Go GRAPHDEV, Lib 8, POVUTL.SIT.  It is also available
+via anonymous ftp on the internet, from the Australian secondary official
+POV-Ray site, <A HREF="ftp://ftp.uwa.edu.au/pub/povray/utilities/">ftp.uwa.edu.au</A> (and
+<A HREF="ftp://ftp.povray.org/">ftp.povray.org</A> for N.American users, I
+assume), under pub/povray/utilities/.  As always, feedback and bug reports are
+encouraged.
+<P>
+Also look for my shareware System 7 "MooVer" utility, that converts a series
+of (POV-Ray animated?)  PICT files into a QuickTime movie with a simple
+drag-n-drop.  It should also be showing up on uniwa, and is on
+CIS/GRAPHDEV/Lib 6/MOOVER.SIT.
+<P>
+Eduard Schwan (<A HREF="mailto:71513.2161@CompuServe.COM">71513.2161@CompuServe.COM</A>)
+<P>
+____
+<P>
+New Povray Clipart Available
+<P>
+I've uploaded Povray V2.0 files to avalon.chinalake.navy.mil.  They can be
+found at pub/objects/pov.  They were all converted from *.obj files found on
+<A HREF="ftp://avalon.chinalake.navy.mil/pub/objects/">avalon.chinalake.navy.mil</A> in pub/objects/obj.
+<P>
+Keith D. Rule (<A HREF="mailto:keithr@tekig7.pen.tek.com">keithr@tekig7.pen.tek.com</A>)
+<P>
+[many are the free Viewpoint models, plus a few Star Trek thingies. -EAH]
+<P>
+____
+<P>
+POV Utility Information on the WWW
+<P>
+I have just set up a WWW page for POV utilities, containing information about
+a few popular ones, and also allowing you to download them directly from the
+page.  For most people that should be faster than the various ftp sites, as
+well as having the advantage that you actually get some info on what the
+utility is about.
+<P>
+The URL is <A HREF="http://www.ifi.uio.no/~mariusw/pov/utilities.html">http://www.ifi.uio.no/~mariusw/pov/utilities.html</A>
+<P>
+Please give me feedback and point me to utilities you think should be on the
+pages.
+<P>
+Marius Ibenhardt Watz (<A HREF="mailto:mariusw@ifi.uio.no">mariusw@ifi.uio.no</A>)
+<P>
+____
+<P>
+Some utilities of note:  MORAY (1.5 of course !), SUDS, CTDS, POVCAD, TGA2GIF,
+TTG, DXF2POV and RAYLATHE, just to mention a few.
+<P>
+[from the POV newsletter]
+<P>
+____
+<P>
+Faces for POV (Frosty):
+<P>
+        There was a thread a while back about Dan Farmer's Frosty picture and
+how we wanted the .POV file.  I think in fact most people wanted the face
+data, and on someone's advice on this group I got hold of the face1.3ds,
+face2.3ds and face3.3ds files from avalon.chinalake.navy.mil and converted
+them into .pov form with a utility also on that ftp server.  The utility for
+conversion is something like 3dspov18.zip [source for conversion from 3DS is
+included.  -EAH]
+<P>
+        The results are good, although they come out as 230-320k files that
+might fill up too much space, and take a while to parse.  The face are more
+like masks than real faces, but do the job so long as expressions aren't
+needed.
+<P>
+Mr. Jonathan H. S. Peterson (<A HREF="mailto:zctyjhp@ucl.ac.uk">zctyjhp@ucl.ac.uk</A>)
+<P>
+____
+<P>
+Parallel POV-Ray using PVM
+<P>
+I have written such a thing (somehow). It works like this:
+<P>
+A server is started, that takes all parameters and stuff.  The server divides
+the final picture in several stripes.  The server spawns some children, that
+each calculate one stripe (10 pixels high).  For this, each child starts
+povray with +SL and +EL and writes the result to a file.  This file is passed
+back to the server.  The server collects all files.
+<P>
+After all stripes have been calculated (a list of calculated stripes is
+maintained, so you can abort and restart the process), all stripes are
+collected into a final picture.
+<P>
+The results are impressive. texture1.pov-demo is rendered in 1-2 minutes
+at 1280x1024 pixels.
+<P>
+Aaron Digulla ([sorry, no address])
+<P>
+________
+<P>
+<PRE>
+Rayshade Related
+================
+</PRE>
+<P>
+Craig Kolb has moved to Stanford, following his advisor Pat Hanrahan, and so
+has pretty much bowed out of maintaining Rayshade.  In his place others are
+attempting to glue together all the additions and bug fixes over the years and
+get out a Rayshade 4.1.  More news as it happens.  Other than this effort,
+there has been an explosion of WWW stuff for Rayshade.
+<P>
+____
+<P>
+Scattered notes from Craig Kolb:
+<P>
+There's an experimental version of a rayshade homepage available on the Web:
+<P>
+<PRE>
+        <A HREF="http://www.cs.princeton.edu/grad/cek/rayshade">http://www.cs.princeton.edu/grad/cek/rayshade</A>
+</PRE>
+<P>
+Thanks to Jelle van Zeijl and Stuart Warmink for providing documents, images,
+and encouragement to set this up.
+<P>
+As some of you might have noticed, I've reorganized and expanded the
+rayshade FTP archive a bit.  If you have anything that you'd like to add
+(new primitives, textures, whatever), drop me a line.
+<P>
+Hundreds of surface definitions for Rayshade are available in:
+<A HREF="ftp://ftp.princeton.edu/pub/Graphics/rayshade/Contrib/Libraries/surfdefs.rh.Z">ftp://ftp.princeton.edu/pub/Graphics/rayshade/Contrib/Libraries/surfdefs.rh.Z</A>
+<P>
+Stephen Peter's excellent notes on using rayshade are now available
+via the rayshade homepage (<A HREF="http://www.cs.princeton.edu/grad/cek/rayshade/">http://www.cs.princeton.edu/grad/cek/rayshade/</A>),
+and in source form on the rayshade FTP archive as Contrib/Docs/raynotes.tar.gz.
+<P>
+Craig Kolb (<A HREF="mailto:cek@Princeton.EDU">cek@Princeton.EDU</A>)
+<P>
+____
+<P>
+Z Buffer (Range Map) Extension
+<P>
+To get this extension, ftp <A HREF="ftp://vacation.venari.cs.cmu.edu">vacation.venari.cs.cmu.edu</A> (128.2.209.207), don't
+chdir, and use binary mode and download zbuf.tar.  You can get documentation
+updates (a patch file and a new file) in the same place: file zbuf-doc.tar.
+<P>
+Mark Maimone (<A HREF="mailto:Mark.Maimone@A.GP.CS.CMU.EDU">Mark.Maimone@A.GP.CS.CMU.EDU</A>)
+<P>
+____
+<P>
+The RayShade docs done by Jelle are up as URL:
+<PRE>
+        <A HREF="http://www.msi.umn.edu/miscdocs/Rayshade/index.html">http://www.msi.umn.edu/miscdocs/Rayshade/index.html</A>
+</PRE>
+<P>
+-- Matt Hughes (<A HREF="mailto:hughes@msi.umn.edu">hughes@msi.umn.edu</A>)
+<P>
+The Rayshade users' manual can now be reach at MIT via two URLs:
+   <A HREF="http://web.mit.edu/afs/athena/activity/c/cgs/lib/html/rayshade/index.html">http://web.mit.edu/afs/athena/activity/c/cgs/lib/html/rayshade/index.html</A>
+and
+   <A HREF="http://www.mit.edu:8001/activities/cgs/rayshade/index.html">http://www.mit.edu:8001/activities/cgs/rayshade/index.html</A>
+<P>
+<PRE>
+-Fred, Director, MIT Computer Graphics Society
+         (<A HREF="http://www.mit.edu:8001/activities/cgs/mitcgs.html">http://www.mit.edu:8001/activities/cgs/mitcgs.html</A>)
+</PRE>
+<P>
+____
+<P>
+        For what it's worth, I've included a pointer to Rayshade in the
+Computer Vision Home Page:
+        <A HREF="http://www.cs.cmu.edu:8001/afs/cs/project/cil/ftp/html/vision.html">http://www.cs.cmu.edu:8001/afs/cs/project/cil/ftp/html/vision.html</A>
+<P>
+Mark Maimone (<A HREF="mailto:Mark.Maimone@A.GP.CS.CMU.EDU">Mark.Maimone@A.GP.CS.CMU.EDU</A>)
+<P>
+____
+<P>
+        I've made a sample page of the standard Rayshade images (and just a
+few more :-) available to the Net.  There are several ways to get at them:
+<P>
+        AFS filesystem:
+cd /afs/cs.cmu.edu/misc/rayshade/all_mach/omega/doc/Examples/
+<P>
+        WWW with icons:
+<A HREF="http://www.cs.cmu.edu:8001/afs/cs/misc/rayshade/all_mach/omega/doc/Examples/">http://www.cs.cmu.edu:8001/afs/cs/misc/rayshade/all_mach/omega/doc/Examples/</A>
+        <A HREF="ftp://rayimages.html">rayimages.html</A>
+<P>
+        WWW without icons:
+<A HREF="http://www.cs.cmu.edu:8001/afs/cs/misc/rayshade/all_mach/omega/doc/Examples/">http://www.cs.cmu.edu:8001/afs/cs/misc/rayshade/all_mach/omega/doc/Examples/</A>
+        <A HREF="ftp://rayimgtxt.html">rayimgtxt.html</A>
+<P>
+        anonymous FTP:
+ftp <A HREF="ftp://ftp.cs.cmu.edu">ftp.cs.cmu.edu</A>
+login: anonymous
+passwd: email
+cd /afs/cs/misc/rayshade/all_mach/omega/doc/Examples/
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Recent Ray Tracing Papers
+</A></FONT>
+</H4>
+[This is a list of some recent research papers related to ray tracing from some
+of the lesser known conferences and journals. -EAH]
+<P>
+____
+<P>
+[This paper is interesting in that it is the first independent testing of
+Arvo and Kirk's 5D space subdivision ray tracing scheme.  -EAH]
+<P>
+<PRE>
+G. Simiakakis and A. Day
+Five-dimensional Adaptive Subdivision for Ray Tracing
+Computer Graphics Forum, volume 13, number 2
+(Special Issue: Rendering), pp. 133-140, June 1994.
+</PRE>
+<P>
+[George Simiakis can be reached at <A HREF="mailto:gns@sys.uea.ac.uk">gns@sys.uea.ac.uk</A>]
+<P>
+____
+<P>
+<PRE>
+Fifth Eurographics Workshop on Rendering
+13-15 June 1994
+Darmstadt, Germany
+</PRE>
+<P>
+RAY TRACING (Chair: Erik Jansen (<A HREF="mailto:fwj@duticg.twi.tudelft.nl">fwj@duticg.twi.tudelft.nl</A>))
+        [Summaries courtesy of Erik Jansen]
+        [Really this session is more for global illumination via rays.  There
+        were many other global illumination papers here.  -EAH]
+<P>
+<PRE>
+Adaptive Splatting for Specular to Diffuse Light Transport
+        Steve Collins
+</PRE>
+<P>
+For a two-pass algorithm an adaptive light pass is used that deposits the
+power carried by rays as 'splats' of energy flux on the surfaces using a
+Gaussian distribution kernel.  The kernel of the splat is adaptively scaled
+according to the 'ray wavefront' convergence or divergence, thus resolving
+sharp intensity gradients in regions of high wavefront convergence and smooth
+gradients in areas of divergence.
+<P>
+<PRE>
+Rayvolution, An Evolutionary Ray Tracing Algorithm
+        Markus Beyer, N. Sander, Brigitta Lange
+</PRE>
+<P>
+In order to increase the statistical efficiency of Monte Carlo integration of
+the rendering equation, evolutionary algorithms are applied to optimize the
+sample distribution.  An initial population of rays evolves towards an optimal
+sample ray distribution by application of generic operators and selection
+mechanisms.  As a result we achieve an implicit stratification and a better
+convergence towards the actual value.
+<P>
+<PRE>
+Bidirectional Estimators for Light Transport
+        Eric Veach, Leonidas Guibas
+</PRE>
+<P>
+Monte Carlo methods do not suffer from the artifacts and limitations that
+standard radisoity methods have to address, but have another well-known
+artifact: noise. A major source of noise is bright indirect light. We can
+construct different light paths between the light sources and the eye
+either starting from the eye or from the light sources, or starting from
+both meeting halfway. The different paths leads to a partitioning of the
+rays. Each partition gives us a different unbiased estimator. Combining
+these estimators may lead to near-optimal variance reduction.
+<P>
+A New Raytracing Architecture
+        Robert E. Bacon, John A. Gerth, V. Alan Norton, James Kajiya
+<P>
+[withdrawn, unfortunately; mentioned because it sounded interesting. -EAH]
+<P>
+____
+<P>
+<PRE>
+Computer Graphics International '94
+Royal Melbourne Institute of Technology
+ Melbourne, Australia, June 27 - July 1, 1994
+</PRE>
+<P>
+<PRE>
+Rendering and Display
+    Kenjiro Takai Miura
+        Ray Tracing Gregory-type Patches
+    W. Lamotte, K. Elens, F. van Reeth and E. Flerackers
+        A Parallel Ray Tracing Algorithm Using Hierarchical Bounding Volumes
+</PRE>
+<P>
+Kerry Gigante (<A HREF="mailto:kerry@cgl.citri.edu.au">kerry@cgl.citri.edu.au</A>)
+<P>
+____
+<P>
+The Fourth Eurographics Workshop on Animation and Simulation was held
+in Barcelona, Spain September 4-5, 1993.
+<P>
+[This workshop had many papers with interesting titles, but here's the one
+with those magic words "raytracing":]
+<P>
+Combining computer animation and video using bluebox raytracing
+  M. Zeiller
+  Technical University of Vienna - Austria.
+<P>
+Sabine Coquillart (<A HREF="mailto:Sabine.Coquillart@inria.fr">Sabine.Coquillart@inria.fr</A>)
+<P>
+____
+<P>
+Abstract from the Sharp Technical Journal, #57 Nov 1993.
+<P>
+The Sharp Technical Journal is a Japanese language publication which
+contains English abstracts for most of the articles.
+<P>
+Optimization of Illumination System for LC Projector Using Newly
+Developed "Reverse Ray Tracing Method"
+<P>
+Takashi Shibatani, Hiroshi Nakanishi, Hiroshi Hamada
+<P>
+A new illumination simulation technique using "Reverse ray tracing
+method" has been developed as a design tool for an illumination system
+of an LC projector with a microlens array.  In this method, rays are
+traced from an illuminated plane to a light source in opposite direction
+compared to the conventional method.  This method have an advantage that
+the numbers of rays to be traced is much smaller than in the case of
+conventional method for required accuracy, and it presents 2-dimensional
+angular distribution of the incident rays, which affect the efficiency
+of the microlens array.
+<P>
+An illumination system for a single-panel LC projector with microlens
+array with a newly developed correction lens and an aspherical mirror is
+optimized to improve brightness of a screen employing this simulation
+method.
+<P>
+Dr. David K. Kahaner (<A HREF="mailto:kahaner@cs.titech.ac.jp">kahaner@cs.titech.ac.jp</A>)
+<P>
+[Copies of previous reports written by Kahaner can be obtained using
+anonymous FTP from host <A HREF="ftp://cs.arizona.edu">cs.arizona.edu</A>, directory japan/kahaner.reports.]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Rumor Mill
+</A></FONT>
+</H4>
+[A new feature - this is simply snippets of tantalizing information from the
+net that I saw no follow-up about.  If anyone has any details about these
+items, let us all know.  -EAH]
+<P>
+John T. Chapman (<A HREF="mailto:jtc1@cornell.edu">jtc1@cornell.edu</A>) notes:
+<P>
+By the way - there's a CD-ROM rendering/ray-tracing tutorial offered through
+Tiger Software and others.  It supposedly has stuff on Ray Dream Designer,
+along with other programs.  Has anyone seen this?  Is it for RDD 3.0 or
+earlier?  Is it worth the money?  (There is apparently two versions - a
+'sampler' at about $19 or so and the full version at about $90 or so.)
+<P>
+____
+<P>
+Vareck Bostrom (<A HREF="mailto:bostrov@CSOS.ORST.EDU">bostrov@CSOS.ORST.EDU</A>) says:
+<P>
+Didn't they have a Intel Paragon doing 1 frame/sec 1024x768 or so ray tracing
+at supercomputing '93?  I didn't see it myself, but my friends that did said
+it was impressive.
+<P>
+____
+<P>
+NURBS Rendering, by Henrik Wann Jensen
+<P>
+<PRE>
+Jouko Vuoskoski (<A HREF="mailto:jvuoskos@suca01.cern.ch">jvuoskos@suca01.cern.ch</A>) wrote:
+: 1) What is the "normal" method to do ray-tracing with
+: B-splines (or NURBS)?
+</PRE>
+<P>
+: 2) How can I do it fast (with less accuracy)?
+<P>
+<PRE>
+: I was thinking to ray-trace with facets from the control
+: polygon of the B-spline. Halving the knot intervals I could
+: get more accuracy. Is this right approach?
+</PRE>
+<P>
+You are right.  The easiest way and also fastest (often stated) is to created
+a facet representation of the NURBS-surface and halving the knot intervals is
+the way to do it.  I know there is some source-code floating around - try
+archie and search for nurbs.
+<P>
+[I vaguely recall there being some spline surface intersection code around and
+about, but does anyone have any hard info?  -EAH]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+AERO Animation/Simulation System version 1.5.1,
+</A></FONT>
+by Thomas Braeunl (<A HREF="mailto:braunl@hermes.informatik.uni-stuttgart.de">braunl@hermes.informatik.uni-stuttgart.de</A>)
+</H4>
+AERO is an X-window based tool for simulation and visualization of rigid-body
+systems.  AERO contains a 3D scene editor for designing simple blocks world
+scenes.  Objects may be placed in space, linked to each other, and forces may
+be exerted onto them.
+<P>
+In animation mode, the simulation of the scene entered is carried out in real
+time (depending on scene complexity) displaying 3D wire frames.  Also, a flag
+can be set to generate scene description files for each time point as input
+files for a ray tracing program, producing photorealistic output.
+<P>
+In both modes, wire frame and ray tracing scenes, the generation of stereo
+images is possible.  In the case of real time wire frames a red-green
+representation of the scene is rendered, which can be viewed with red-green
+glasses.  For the ray tracing output, a binocular pair of scene descriptions
+is generated for each time step.
+<P>
+AERO can be used for exploring the physical laws of mechanics and also for
+generating realistic computer animations.  AERO is available free of charge as
+public domain software.  Software and documentation can be copied via
+"anonymous ftp" over the Internet.
+<P>
+<PRE>
+The address of our server is:
+        <A HREF="ftp://ftp.informatik.uni-stuttgart.de">ftp.informatik.uni-stuttgart.de</A>  (currently 129.69.211.2)
+The directory is:
+        pub/AERO
+</PRE>
+<P>
+[Note that AERO 1.5.1 now outputs POV-Ray 2.2 format.  I believe AERO is
+mirrored on wuarchive, though check version numbers with archie.  This system
+looked to be pretty cool - you can simulate physically based phenomena.
+There's also a paper about the system and the algorithms used.  Admittedly the
+primitive set is limited (spheres and boxes), but Olli Vinberg
+(<A HREF="mailto:vinberg@cc.helsinki.fi">vinberg@cc.helsinki.fi</A>) pointed out that you can run the simulation, output
+the results, and substitute the primitives with your own complex objects.
+-EAH]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+A Brief Review of [an old] AERO,
+</A></FONT>
+by Dave Negro (<A HREF="mailto:dln2@cornell.edu">dln2@cornell.edu</A>)
+</H4>
+My room-mate is running Linux and I learned about AERO last [school] year and
+made him install it.  Haven't had any time to play with it this year, though.
+I can tell you some of the things that I remeber from last year.
+<P>
+1) The simulations were great!  I found the emulation of real life was great
+and could be used to make some great animations.
+<P>
+2) Editing was a little awkward but then again I wasn't able to fully get
+accustomed to it myself.  There was of course the standard primitives (Sphere,
+Cone, box etc)
+<P>
+3) Textures were lacking.  The selection and editing of textures left a lot to
+be desired.
+<P>
+4) A separate .pov file is created for each frame!  There is no way to make an
+include or anything for static objects.  Thus editing the files would be
+nearly impossible to do with each frame!
+<P>
+5) Adding things to the scene but not with the tools in the AERO editor would
+again be extremely difficult.
+<P>
+6) There were still some things that needed to be worked on like the open
+dialog and save.  Biggies in my opinion.
+<P>
+Well, that is all I can remember for the moment.  But let me remind you that I
+have not touched the program in a year, so I don't know if has changed at all,
+and I wouldn't totally trust my memory either.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art8">
+Photon Tracing,
+</A></FONT>
+by Chris Thornborrow (<A HREF="mailto:ct@opal.epcc.ed.ac.uk">ct@opal.epcc.ed.ac.uk</A>) and Greg Ward (greg@pink.lbl.gov)
+</H4>
+Chris Thornborrow writes:
+OK onto the questions. I am writing a raytracer which does the following:
+<P>
+<PRE>
+  a) Ordinary raytracing
+  b) Distributed raytracing for lighting
+  c) Path tracing (Kajiya)
+  d) Photon tracing
+</PRE>
+<P>
+  Now I need to be able to bias random vectors to do these *efficiently* but I
+am unsure how to do this.  First off then, to generate a random direction
+vector from a point, I generate a random vector in the unit cube and reject
+those that lie outside the unit sphere.  This has a 50rejection rate.  Can I
+do better without approximations (I know about generating a 0..1 element and
+then a random angle).
+<P>
+  The problem above appears compounded for a random vector within some solid
+angle of another vector.  Currently I generate a random vector (as above) and
+then reject ones out with the solid angle (using a dot product).  This is
+awful.  Very small angles can be approximated by generating within a cone but
+larger (say 20 solid degrees) give obviously biased distributions this way.
+<P>
+  Now my real problem.  Given an incident angle of a photon (ray) and the
+surface normal and the BRDF, how can I generate a random reflection/refraction
+angle that done many times would give the proper distribution defined by the
+BRDF.  In other words, how can I bias the angle of perfect reflection in some
+pseudo-random manner, so that a great number of samples of those directions
+have the same distribution as the BRDF ?
+<P>
+  Obviously this is trivial for perfectly diffuse surfaces, its the others I
+worry about :-).  I'd like to do this without rejection testing - is this even
+possible without rejection testing ?
+<P>
+____
+<P>
+Greg Ward answers:
+<P>
+Let me start by saying that I'm not the world's foremost expert on Monte Carlo
+sampling, but I have written a ray-tracer that does some of what you're
+asking.  I assume you have read some books on Monte Carlo sampling already,
+such as Rubenstein's 1981 treatise, "Simulation and the Monte Carlo Method"
+(Wiley, NY).  Professor Pete Shirley of Indiana University has also written a
+fair amount on Monte Carlo methods in ray tracing, though all I have in front
+of me is something from his 1992 course notes on Global Illumination (course
+18 that year), which I'm not sure you can find easily.  (I seem to remember
+that someone put a bunch of Monte Carlo examples in a Graphics Gems book.  It
+would have to be GG III, since that's the only one I don't have.)
+<P>
+The trick is to compute a cumulative probability function and invert it.  In
+many cases, this can be done analytically.  In the case of the random
+direction vector, it can even be solved by inspection.  You need only generate
+two random angles, altitude and azimuth, and convert it back to a Cartesian
+vector.  Rejection sampling is unnecessary.  Likewise, for the vector in the
+solid angle of another vector, you can limit your polar angle to the cone you
+have selected, 20 degrees in your example.
+<P>
+Arbitrary BRDF's are another matter.  Rejection sampling is the most general
+method, but there is a more efficient way to go.  As you probably know, many
+BRDF's are highly peaked, and using rejection sampling means you may have to
+test hundreds of ray directions before you get one that isn't rejected.  The
+more efficient approach is to generate a cumulative distribution table and
+invert it.  I haven't done this myself, so excuse me if I'm a little foggy on
+the details:
+<P>
+<PRE>
+1.  Select a resolution limit for the polar and azimuthal angles in your ray
+        direction calculation, somewhere around 5 degrees should be good.
+        (This is the only real limitation to this technique.)
+
+2.  Create a 3-dimensional table of real numbers.  The first dimension is the
+        number of polar angles, the second dimension is the number of
+        azimuthal angles, and the third dimension is the product of the two,
+        i.e.  float cuml_prob[N][M][N*M];
+
+3. For each reflected polar and azimuthal angle, do the following:
+
+        3a. For each incident polar and azimuthal angle, compute the BRDF
+                times the cosine of the polar angle times the sine of the
+                polar angle and add it to a running total.  Store this sum at
+                the appropriate point in the table created in step 2.
+
+        3b.  Once done, your sum should equal the total reflectance, which
+                should be less than one (but greater than 0!)  if you have a
+                valid BRDF.  If it doesn't, you might want to report an error,
+                but you can proceed with the calculation regardless.
+
+4.  You have now filled a 6.5 Mbyte table, and this completes the
+        initialization phase.  (Storing this sucker to disk wouldn't be a bad
+        idea.)
+</PRE>
+<P>
+Now, when you have to compute a ray direction, you look up the appropriate
+table for this reflection angle, and:
+<P>
+<PRE>
+5.  Compute a uniformly-distributed random number between 0 and 1 or 0 and the
+        maximum value in this cumulative table, depending on whether the
+        distribution is properly normalized and if you are accounting for
+        reflectance with a multiplier or with pure Monte Carlo.
+
+6.  Perform a binary search to find the value in the table that is closest to
+        your random number, and determine the corresponding polar and
+        azimuthal incident angles.  (This is the inversion step in this
+        algorithm.)
+
+7.  Jitter your sample uniformly within your 5 degree tolerance (or whatever
+        you picked in step 1) to get the final ray direction.
+
+8.  Trace that ray!
+</PRE>
+<P>
+Obviously, the above algorithm could benefit from some refinement.  Firstly,
+the precomputed table ends up being quite large.  The bigger your angle
+tolerance, the smaller it will be, but I can never see it being very compact.
+You can store the whole thing to disk, and just read in the section
+appropriate to the reflection angle in hand when the time comes, and this will
+save on your memory costs at the expense of one or two disk accesses.  Also,
+the binary search (step 6) is fast but not free, and it may pay to invert your
+table directly by computing azimuth and altitude angles corresponding to two
+random variables.  This would require a little more thought, but I think it
+could solve both of these problems.  The only catch is that you still want
+some way of jittering the final result so as to avoid sampling a discrete set
+of directions, and the distance between adjacent points in the table will vary
+with such a scheme.  (Shouldn't be a problem, though.)
+<P>
+Has anyone implemented something along these lines who could help us out?  Pete?
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art9">
+Faster Than POV-RAY 2.1,
+</A></FONT>
+by Dieter Bayer (<A HREF="mailto:dieter@cip.e-technik.uni-erlangen.de">dieter@cip.e-technik.uni-erlangen.de</A>)
+</H4>
+[This bent my mind:  someone actually implemented my light buffer algorithm?
+Astounding! -EAH]
+<P>
+<PRE>
+A modified, sped-up and unofficial version of the
+Persistence of Vision Ray-Tracer Version 2.2.
+</PRE>
+<P>
+Faster than POV-Ray (FTPOV-Ray) speeds up calculation of images by using some
+kind of direction cubes for primary rays (the vista buffer) and shadow rays
+(the light buffer) at the cost of additional preprocessing time and greater
+memory usage.  The bounding slab hierarchy used by POV-Ray is projected onto
+the viewing plane and each point light source a priori.  Thus the number of
+ray/slab-tests is reduced.  Furthermore some modules have been modified to
+eliminate unnecessary calculations and automatic bounding has been improved.
+<P>
+The modified source code in the archive FTPV21S.ZIP may only be distributed
+together with this text and the file POVLEGAL.DOC that is part of the official
+POV-Ray package.  To use the source code you'll need the original POV-Ray 2.2
+distribution.
+<P>
+WARNING!!!  If you use FTPOV-Ray you'll do it at your own risk!  And don't
+forget that the POV-Ray team isn't responsible for this version.
+<P>
+I have uploaded the source code and executables for MS-DOS and OS/2 2.x to
+<A HREF="ftp://ftp.informatik.uni-oldenburg.de">ftp.informatik.uni-oldenburg.de</A> and wuarchive.wustl.edu
+(/pub/graphics/graphics/ray/pov/pov-dkb-archive/incoming).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art10">
+Z Buffer Based Rendering Program,
+</A></FONT>
+by Raghu Karinthi (<A HREF="mailto:raghu@cerc.wvu.edu">raghu@cerc.wvu.edu</A>)
+</H4>
+[I tried this out and got some funky lighting problems (perhaps fixed by now),
+but it seemed essentially sound.  It's nice to see a z-buffer for a switch
+(lots harder to write than a basic ray tracer).  Hey, it reads NFF files, so I
+like it ;-&gt; -EAH]
+<P>
+We have developed a Z bufffer based rendering program in the West Virginia
+University.  The key features of this program are:
+<P>
+(a) Reads a variant of the standard Neutral File Format (NFF) as input
+(b) Outputs a 24 bit color TARGA file
+(c) Uses accurate fixpoint arithmetic in all its calculations
+(d) Works in X windows environment.  We have tested it on Sun Sparc machines.
+<P>
+This software is available via anonymous ftp.  The software includes two
+sample files, including the teapot.  We would appreciate any feedback you can
+give us on this software.  We are quite impressed by the quality of the images
+produced.  Enjoy the use of this utility!
+<P>
+FTP from 157.182.44.36: pub/sources/ZRendv1.tar.Z
+<P>
+Below is a short description of the software.
+<P>
+<PRE>
+Raghu Karinthi
+Department of Statistics and Computer Science
+Concurrent Engineering Research Center
+West Virginia University
+Morgantown, WV 26506-6506
+Voice: (304) 293-7226
+Fax:   (304) 293-7541
+Email: <A HREF="mailto:raghu@cs.wvu.edu">raghu@cs.wvu.edu</A> OR raghu@cerc.wvu.edu
+</PRE>
+<P>
+Description:
+<P>
+Often times, I have seen a question on the net for an accurate Z buffer
+rendering implementation producing 24 bit color output along with facilities
+for viewing the same.  We needed one ourselves as a benchmark for our work on
+parallel rendering.  This document describes a program that we developed for
+this purpose.  We have leveraged a number of public domain utilities and
+defacto standards in our development, and hence this program does not have any
+fundamental algorithms, it integrates existing ones effectively.
+<P>
+This describes briefly our implementation of the Z buffer rendering algorithm.
+The rendering pipeline has the following steps:
+<P>
+<PRE>
+1. Reading the input file.
+2. Computing the light intensity at the vertices.  Later, Gouraud
+   shading is used for interpolating the light intensity.
+3. Computing the view transformation matrix.
+4. Applying the view transformation to all the vertices
+5. Rasterization, and writing to framebuffer.
+6. Writing framebuffer to a TARGA file.
+</PRE>
+<P>
+Subsequently, one can display the TARGA file, by invoking a separate utility
+(included with this package).
+<P>
+This rendering program leverages of several public domain utilities.  The
+matrix library is from the SPHIGS package from Brown University.  The view
+transformation matrix also is computed using the code from the SPHIGS package.
+Rasterization is based on fixed point arithmetic.  Fixed point arithmetic
+library is from the directory "accurate_scan" from Graphics Gems III
+contributed by Kurt Fleischer.  The rasterization code used in this program is
+a modification of some code from the same source.  We compute 24 bit color
+(R,G,B) at each pixel and write it to a TARGA file.  The functions to do write
+in TARGA file format are from the "LUG" library due to Raul Rivero.  The
+program "sx11" to display a TARGA file is also from the same library.  We have
+extracted these two utilities from the LUG library and provided them in the
+subdirectories "tga" and "sx11".
+<P>
+Input File Format:  The file format we use is a modification of the Neutral
+File Format (NFF) described in the Standard Procedural Database (SPD) of Eric
+Haines.  The modified NFF is described in the file called NFF in this
+directory.  One can also look at the sample files.  In the NFF file format,
+perspective projection is assumed.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art11">
+Gossamer,
+</A></FONT>
+a Free Macintosh VR/3D Renderer, by Jon Blossom (<A HREF="mailto:jonbl@microsoft.com">jonbl@microsoft.com</A>)
+</H4>
+Gossamer 2.0, a real-time 3D walkthrough engine for the Macintosh, is now
+available - for FREE!
+<P>
+Gossamer is a very fast, general 3D polygon rendering engine.  This version
+radically improves speed over version 1.1, fixes a number of bugs, and focuses
+on a more coherent user interface for "experimenters."
+<P>
+Version 2.0 also supports object and world files based on the Rend386 PLG and
+WLD formats.  The Gossamer 2.0 package includes a number of sample worlds and
+objects ported directly from the PC to the Macintosh, and there are others
+available on bulletin boards, electronic services, and ftp sites all over.
+<P>
+The package is available for anonymous ftp from <A HREF="ftp://ftp.apple.com/pub/VR/graphics.systems/">ftp.apple.com</A> in the
+pub/VR/graphics.systems directory.
+<P>
+If you have a Macintosh and are interested in 3D graphics, this will be well
+worth your time.
+<P>
+The system requires a 68020 or better processor Mac running system 7 or system
+6.x with 32-bit color QuickDraw.  A color display is nice but not necessary.
+<P>
+If you like Gossamer 2.0, please let me know!
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art12">
+Antialiasing Issues,
+</A></FONT>
+by Arijan Siska (<A HREF="mailto:arijan@kette.fer.uni-lj.si">arijan@kette.fer.uni-lj.si</A>)
+</H4>
+I want to get some attention to the (in my opinion) a very serious issue:
+antialiasing.
+<P>
+When a raytracer with a finite resolution (obviously a resolution cannot be
+infinite) renders an image jagged edges appear in picture (or in case of an
+animation, when difference between two consecutive frames is large (when
+objects move fast), animation tends to flicker).
+<P>
+These type of problems can be solved by two approaches:
+<P>
+- supersampling:  is a very very expensive method, since it involves much
+extra (often unneeded) calculation, but generally it gives very good results
+(image quality).
+<P>
+- adaptive sampling:  implies that there exists some criterion function, upon
+which you can decide whether you should subdivide further to gain a more
+precise answer or you should be satisfied with the approximation you already
+have.  Note that in general there is no way to make this decision function
+absolutely correct.  The best counterexample that I can think of is a thin
+wire fence in front of uniform background.  If you use textures with rapid
+changes it can happen that you subdivide (to the maximum level) 80% the
+pixels, which is effectively supersampling, but slower (you need to evaluate
+criterion function all the time).  I don't see how some kind of preprocessing
+could help you with criterion function, since all those reflections
+refractions ....  are there.
+<P>
+____
+<P>
+Steven C. Demlow (<A HREF="mailto:demlow@cis.ohio-state.edu">demlow@cis.ohio-state.edu</A>) replies:
+<P>
+I played around with a variety of AA approaches in both my own ray tracer and
+the public domain POV ray tracer.  I tried various derivations and
+combinations of supersampling, stochastic jittering, adaptive methods, and
+filtering.  For the animation project I was working on I ended up using 4x4
+stochastically jittered grids on each pixel and a tent filter that extended
+into the (cached, of course) grids of neighboring pixels.  I've been working
+on using a hexagonal grid instead of a rectangular one (this gets tricky when
+you try to overlap the arbitrarily-sized filtering grids of adjacent pixels).
+The hex grid supposedly provides close to an optimal ray distribution for AA
+purposes.
+<P>
+It sounds like you would do well to add filtering to your ray tracer - it can
+help a lot.
+<P>
+The conclusion I came to, after eight months of rendering on a bunch of
+HP7?0s, was that ray tracing is not the way to go to generate a lot of high-
+quality images. :)  I love ray tracing but there are reasons that it sees
+little use in production environments.
+<P>
+____
+<P>
+Andy Key (<A HREF="mailto:ak@hursley.ibm.com">ak@hursley.ibm.com</A>) replies:
+<P>
+I implemented Whitted Adaptive Supersampling as my anti-aliasing mechanism.
+Really, the test of seeing whether to subdivide is tiny compared to the cost
+of spawning a ray.  I support un-anti-aliased, and whitted.  I was going to
+add unconditional-supersampling to improve the case when I have fine detail
+textures, but I am not sure it will buy me a noticeable difference if I do.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art13">
+Microcosm,
+</A></FONT>
+by Abe Megahed of Cosmic Software (<A HREF="mailto:cosmic@world.std.com">cosmic@world.std.com</A>)
+</H4>
+[I include this here as there is a free demo and images available.  It's a
+nice system, allowing a wide range of interactive techniques with ray tracing,
+and last I heard they were adding support for native graphics packages (e.g.
+Starbase on HP's), multiple windows, and picking - they're up to version 1.4
+or so by now.
+<P>
+This package was also the easiest system I ever dealt with for rendering on a
+network (not that I've dealt with a lot, but...):  I simply started up the
+daemons, let the software know which computers to use (HP workstations, in my
+case), and let the software suck up resources and render at great speeds.
+Impressively painless.  -EAH]
+<P>
+Microcosm, Version 1.2, New Product Announcement / Free Demonstration Version
+<P>
+A new version of Microcosm is being released for many popular platforms
+including:
+<P>
+<PRE>
+*  IBM PC / MS-DOS
+*  DEC / Alpha
+*  DEC / MIPS
+*  HP 9000 Series 700 (Snake)
+*  Sun Sparkstation
+*  IBM RS 6000
+</PRE>
+<P>
+Microcosm offers the highest quality rendering features such as ray tracing,
+texture mapping, bump mapping, and Phong shading as well as interactive
+animation capabilities.  A free demo version and over 100 example description
+files of animations, simulations, interactive environments, objects, and
+pictures is available via anonymous FTP.
+<P>
+What is Microcosm?
+<P>
+The Microcosm system is composed of a set of advanced 3D graphics routines
+which is controlled by a simple, high level interpreted programming language
+called SMPL for 'Simulation / Modeling Programming Language'.
+<P>
+This gives even the novice programmer the power and flexibility to easily
+create graphics applications which could only previously be done with great
+difficulty and expense in low level languages such as C.  Since the language
+is interpreted, you may change things and immediately re-run your graphics
+program without waiting for the computer to re-compile it.  It's fun and easy
+- like programming an Apple II on steroids!
+<P>
+Most computer graphics intensive programs spend at least 95% their time in
+the rendering, so using the interpreter to control the renderer doesn't slow
+the graphics down by more than 50ver a fully compiled program.
+<P>
+Features of Microcosm
+<P>
+Microcosm incorporates a number of totally new and innovative rendering
+algorithms in a well integrated system.  Some interesting features are as
+follows:
+<P>
+<PRE>
+Rendering Features:
+*       Shading Language
+*       Surface Mapping
+*       Procedural Textures
+*       Real-Time Soft Shadows, Reflections, and Transparency / Refraction
+*       Interactive Coarse Ray Tracing
+*       Clean Line (Silhouette) Rendering Modes
+*       Shaded Rendering Modes
+*       Ray Tracing
+*       A Choice of Projections
+*       Hierarchy
+*       Stereo Rendering
+
+Modeling Features:
+*       Procedural Modeling
+*       Fractals
+*       Variety of Primitives
+*       Extensibility
+
+Programming Features:
+*       Easy-to-Read Syntax
+*       Procedural, Block Structure
+*       Flexible Parameter Passing
+*       Built-in Data Types
+*       Smart Arrays
+*       Nested Comments
+</PRE>
+<P>
+The demonstration version of Microcosm can be obtained by anonymous ftp at:
+<A HREF="ftp://dpls.dacc.wisc.edu/pub/graphics/mcm/mcm_demo.zip">dpls.dacc.wisc.edu</A>:  pub/graphics/mcm/mcm_demo.zip.  The demo version runs for
+1 minute before quitting and also is unable to save files, so it can be used
+only to preview simple renderings or animations.  A number of finished
+renderings are available in mcm/images to illustrate the advanced rendering
+capabilities of Microcosm.  Also provided free are about 100 example
+description files to demonstrate the capabilities of Microcosm.
+<P>
+Please contact us for specific details about these or other platforms.  Any
+other information, including price and/or ordering information can be obtained
+as follows:
+<P>
+<PRE>
+Cosmic Software Corp.
+1413 Mound St.
+Madison, Wisconsin
+53711
+<A HREF="mailto:cosmic@world.std.com">cosmic@world.std.com</A>
+Tel: (608) 259-1776
+FAX: (608) 233-4995
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art14">
+Fisheye Lens Distortion,
+</A></FONT>
+by Greg Ward (<A HREF="mailto:greg@pink.lbl.gov">greg@pink.lbl.gov</A>)
+</H4>
+Almost all wide angle photographic lenses have a bit of this, but in a
+rendering program it is easier to avoid.
+<P>
+In a perfect perspective image, straight lines will always be straight, no
+matter how wide the viewing angle becomes.  Viewing angles can never be equal
+or greater than 180 degrees, however, because the arc tangent blows up.  A
+full view angle close to the maximum will cause the center of the image to all
+but disappear, and the view will be dominated by what surrounds the viewpoint.
+(Try it, I guarantee you won't like it.)
+<P>
+In order to get a view of 180 degrees or greater, it is necessary to adopt
+some sort of perspective distortion.  Most commercial fisheye lenses use a
+distortion that causes distances from the center of the image to be
+proportional to the geometric angle from the central line of sight.  Another
+type of lens creates a view equivalent to taking a hemispherical image and
+projecting it onto a plane, those such lenses are much harder to come by.
+<P>
+Another poster (Benjohn Barnes) mentioned that these effects are easier to
+achieve in a ray tracing program, and he's probably right.  I didn't have too
+much trouble implementing these view types in Radiance, and they come in quite
+handy.  I can even render a 360 degree fisheye view, where the surround of the
+circular image is actually a single point.  Neat trick.
+<P>
+P.S. When it comes right down to it, we all have eyes evolved from fishes.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art15">
+Optical Ray Tracers
+</A></FONT>
+</H4>
+[A common question on sci.optics is what ray tracers there are for lens
+design.  Here are some cullings.  -EAH]
+<P>
+Mark Butterworth (<A HREF="mailto:markb@hpcss01.cup.hp.com">markb@hpcss01.cup.hp.com</A> - address now invalid)
+<P>
+Instead of driving this subject in to the ground, try the library at your
+university and see if they have:
+<P>
+Modern Optical Engineering by Warren J Smith (he taught me) Applied Optics and
+Optical Engineering by Kingslake volume 3 and volume 8 are good for this
+subject
+<P>
+Warren Smith just published a new one (1992) that is a collection of lens
+designs.  I forget the title, something like Optical Engineering:  a resource
+manual.  Published by McGraw Hill.
+<P>
+The lenses in this book are also available on a disk library for the Genesee
+ray tracing program.  Warren designed alot of the lenses used by Panavision,
+just to mention one.
+<P>
+____
+<P>
+On the commercial side, an excellent package is ORA's CODE V (that's a Roman
+numeral 5).  It's highly regarded and we've been happy with it.  They'll let
+you have a free trial account on their dial-up VAX.
+<P>
+Optical Research Associates is in Pasadena,CA at (818) 795-9101
+<P>
+J. Sallay (<A HREF="mailto:sallay@scubed.com">sallay@scubed.com</A>)
+<P>
+____
+<P>
+In article (<A HREF="mailto:ps7Mmch.argil@delphi.com">ps7Mmch.argil@delphi.com</A>), argil@delphi.com says:<BR>
+&gt;Can anyone suggest a good commercial ray tracing program for general<BR>
+&gt;optical design. We are planning on spending a reasonable amount, like<BR>
+&gt;up to $1500.  We have only experience with much more expensive packages.<BR>
+<P>
+I don't think you can beat Zemax in this price range.  See their ad in
+Photonics Spectra (p. 19 of the May '94 issue) or Laser Focus World (p. 7 of
+May).  You can also send email to <A HREF="mailto:focusoft@crl.com">focusoft@crl.com</A> They will send a free demo
+disk which is fully functional except that it won't save lenses.  They plan to
+post it to ftp servers as soon as they get a readme done.  Caution:  Focusoft
+is moving to Arizona and turning into Focus Software.  They hope to be
+operational by 1 June.  The new phone numbers are:  voice:  602/749-5646 fax:
+602/749-0987.  (Ken got tired of the California government.)
+<P>
+Steve Eckhardt (<A HREF="mailto:skeckhardt@mmm.com">skeckhardt@mmm.com</A>)
+<P>
+____
+<P>
+If you have access to Mathematica (Wolfram Research Inc), there is a Notebook
+called LensLab, available at <A HREF="ftp://MathSource.wri.com">MathSource.wri.com</A> in directory
+pub/Applications/Engineering/Other, with the item # 0204-343.  It is a decent
+ray tracing program with an extensive set of functions for lenses, mirrors,
+prisms etc..  It is relatively slow, unless you run Mathematica on a fast
+Workstation, Quadra, Pentium,...  machine.
+<P>
+Rudolf Oldenbourg (<A HREF="mailto:rudolfo@mbl.edu">rudolfo@mbl.edu</A>)
+<P>
+____
+<P>
+A good optical tracer is the new Mac version of Beam, from Stellar Software,
+PO Box 10183, Berkeley, CA 94709, Fax 510-845-2139.  I helped with the beta
+testing, so I know it's good.
+<P>
+A. David Beach (<A HREF="mailto:d.beach@irl.cri.nz">d.beach@irl.cri.nz</A>)
+<P>
+____
+<P>
+For a freeware optics ray tracer, try irt52.zip in /pub/irt at
+herx1.colorado.edu.  Use anonymous ftp to get this software.  It is written
+for MS-DOS window and you need an unzip program to unzip it.
+<P>
+Djamshid Navabi (<A HREF="mailto:djamshid@lasa.com">djamshid@lasa.com</A>)
+<P>
+I've tried it:  can't get past the demo example without a GPF that causes
+Windows to quit to DOS the next time I try to run irt.  If I then try to run
+Windows it tells me something gruesome like "invalid command processor" or
+some such.  I'm trying to compile a more responsible set of actions to send to
+the author but I wanted to mention it here to see if any one else has had the
+experience or if it may be my system.
+<P>
+Neal E. Tornberg (<A HREF="mailto:tornberg@netcom.com">tornberg@netcom.com</A>)
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art16">
+Correcting Normal Direction,
+</A></FONT>
+by Gavin Bell (<A HREF="mailto:gavin@krypton.engr.sgi.com">gavin@krypton.engr.sgi.com</A>)
+</H4>
+[There are a lot of polygonal models out there with inconsistent surfaces.
+The problem is this:  you're given some random set of polygons and you want to
+consistently orient them outwards so that your ray tracer or z-buffer can use
+backface culling (i.e. ignore visible backfaces) and so speed performance.
+Consistent orientation, that is, getting all the faces to be in clockwise
+orientation, is fairly simple:  once you have the mesh of the object, each
+shared edge must be traversed once in both directions.  So if two polygons
+share an edge and traverse it in the same direction, then the order of
+vertices of one of the polygons is reversed.  Continue the process until all
+shared edges are traversed in both directions or until you get stuck (e.g. a
+moebius strip doesn't work).  The next part is to know which side of the
+polygon set is the outside.  This can certainly be done manually, but here's a
+method of doing it automatically.  -EAH]
+<P>
+[someone (sorry, the name was deleted in the posting) writes:]<BR>
+&gt;&gt; The user picks<BR>
+&gt;&gt; a "Seed polygon" and I recursively "grow" a surface starting at<BR>
+&gt;&gt; that polygon, a neighboring (child) polygon is considered to be flipped<BR>
+&gt;&gt; if the child traverses the two shared vertices in the same<BR>
+&gt;&gt; direction as the parent.<BR>
+<P>
+[someone else (sorry, name deleted) writes:]<BR>
+&gt;If you are not able to interactively pick such a seed polygon, there is an<BR>
+&gt;automatic way, but it takes time to write.  The idea is an extension of a<BR>
+&gt;point in polygon algorithm.  Basically, to find if a point is within a<BR>
+&gt;polygon, you can extend a ray from that point to infinity, if the ray crosses<BR>
+&gt;an even number of edges of the polygon, the point is outside (where 0 is<BR>
+&gt;defined to be even).  If it crosses an odd number, it is inside.<BR>
+[I think the concept here was to take a vertex and see which side was outside<BR>
+by ray tracing. -EAH]<BR>
+<P>
+A better method:
+<P>
+Consistently orient all of the polygons (you need to know which edges are
+shared to do this, and this isn't possible for some objects-- e.g. mobius
+strips, Klein bottles, etc).
+<P>
+Now, choose the point 'P' in the middle of the bounding box of the object.
+For each triangle in the object, compute a signed volume for the tetrahedron
+formed by the triangle and P.  Arrange your calculation so that the area will
+be positive if P is left-hand-side of the triangle and negative if P is on the
+right-hand-side of the triangle.  (if your triangle is ABC, then doing
+(AB.cross.BC).dot.P will have this property).
+<P>
+Add up all of the volumes.  If the result is positive, then the normals are
+oriented 'outside'.  If the result is negative, then the normals are oriented
+'inside'.  If the result is zero or very close to zero, then the object is
+flat or has just as many concave parts as convex parts.
+<P>
+This will always work for completely enclosed objects, and does the right
+thing for surfaces-- it chooses the orientation that marks the surface 'most
+convex'.  It works for self-intersecting objects.
+<P>
+<PRE>
+Here's the code I use:
+(If you have Inventor 1, this is in the 'ivnorm' code:)
+</PRE>
+<P>
+<PRE>
+    int i, j;
+
+    int total_v = 0;
+    SbVec3f average(0.0, 0.0, 0.0);
+
+    for (j = 0; j &lt; length(); j++)
+    {
+        Face *f = (*this)[j];
+        if (f-&gt;degenerate) continue;
+
+        for (i = 0; i &lt; f-&gt;nv; i++)
+        {
+            average += verts[f-&gt;v[i]];
+            ++total_v;
+        }
+    }
+    average /= (float) total_v;
+
+    float result = 0.0;
+
+    for (j = 0; j &lt; length(); j++)
+    {
+        Face *f = (*this)[j];
+        if (f-&gt;degenerate) continue;
+
+        for (i = 1; i &lt; f-&gt;nv-1; i++)
+        {
+            SbVec3f v1 = verts[f-&gt;v[0]] - average;
+            SbVec3f v2 = verts[f-&gt;v[i]] - average;
+            SbVec3f v3 = verts[f-&gt;v[i+1]] - average;
+
+            float t = (v1.cross(v2)).dot(v3);
+            if (f-&gt;orientation == Face::CCW)
+            {
+                result += t;
+            }
+            else if (f-&gt;orientation == Face::CW)
+            {
+                result -= t;
+            }
+            else
+            {
+                assert(0);
+            }
+        }
+    }
+    return result &gt; 0;
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art17">
+Graphics Gems IV Table of Contents,
+</A></FONT>
+by Paul Heckbert (<A HREF="mailto:ph@cs.cmu.edu">ph@cs.cmu.edu</A>)
+</H4>
+[I trimmed out the author names for the sake of space.  Incidentally, I've
+found Gems IV to be subtly useful - don't judge the articles just by their
+titles!  For example, "Detecting Intersection of a Rectangular Solid and a
+Convex Polyhedron" by Ned Greene is actually about a method for determining if
+a bounding box is visible within a viewing frustum, a very handy tool.  -EAH]
+<P>
+Below is the table of contents for "Graphics Gems IV".  This table also serves
+as an index to the code in the FTP collection.  Note that every article has
+text that appears in the book but not in the FTP archive, and some articles
+contain no C or C++ code.
+<P>
+<PRE>
+file or         book    chapter title and author
+directory      chapter
+------------------------------------------------------------
+                I       POLYGONS AND POLYHEDRA
+centroid.c      I.1     Centroid of a Polygon
+convex_test/    I.2     Testing the Convexity of a Polygon
+ptpoly_weiler/  I.3     An Incremental Angle Point in Polygon Test
+ptpoly_haines/  I.4     Point in Polygon Strategies
+delaunay/       I.5     Incremental Delaunay Triangulation
+vert_norm/      I.6     Building Vertex Normals from an Unstructured Polygon
+                        List
+                I.7     Detecting Intersection of a Rectangular Solid and a
+                        Convex Polyhedron
+collide.c       I.8     Fast Collision Detection of Moving Convex Polyhedra
+
+                II      GEOMETRY
+                II.1    Distance to an Ellipsoid
+dist_fast.c     II.2    Fast Linear Approximations of Euclidean Distance in
+                        Higher Dimensions
+outcode/        II.3    Direct Outcode Calculation for Faster Clip Testing
+sph_poly.c      II.4    Computing the Area of a Spherical Polygon
+                II.5    The Pleasures of `Perp Dot' Products
+                II.6    Geometry for N-Dimensional Graphics
+
+                III     TRANSFORMATIONS
+arcball/        III.1   Arcball Rotation Control
+                III.2   Efficient Eigenvalues for Visualization
+inv_fast.c      III.3   Fast Inversion of Length- and Angle-Preserving Matrices
+polar_decomp/   III.4   Polar Matrix Decomposition
+euler_angle/    III.5   Euler Angle Conversion
+                III.6   Fiber Bundle Twist Reduction
+
+                IV      CURVES AND SURFACES
+data_smooth/    IV.1    Smoothing and Interpolation with Finite Differences
+                IV.2    Knot Insertion using Forward Differences
+                IV.3    Converting a Rational Curve to a Standard Rational
+                        Bernstein-Bezier Representation
+curve_isect/    IV.4    Intersecting Parametric Cubic Curves by Midpoint
+                        Subdivision
+patch_conv.C    IV.5    Converting Rectangular Patches into Bezier Triangles
+nurb_polyg/     IV.6    Tessellation of NURB Surfaces
+                IV.7    Equations of Cylinders and Cones
+implicit.c      IV.8    An Implicit Surface Polygonizer
+
+                V       RAY TRACING
+                V.1     Computing the Intersection of a Line and a Cylinder
+ray_cyl.c       V.2     Intersecting a Ray with a Cylinder
+vox_traverse.c  V.3     Voxel Traversal along a 3D Line
+multi_jitter/   V.4     Multi-Jittered Sampling
+minray/         V.5     A Minimal Ray Tracer
+
+                VI      SHADING
+                VI.1    A Fast Alternative to Phong's Specular Model
+                VI.2    R.E versus N.H Specular Highlights
+                VI.3    Fast Alternatives to Perlin's Bias and Gain Functions
+                VI.4    Fence Shading
+
+                VII     FRAME BUFFER TECHNIQUES
+                VII.1   XOR-Drawing with Guaranteed Contrast
+                VII.2   A Contrast-Based Scalefactor for Luminance Display
+dyn_range/      VII.3   High Dynamic Range Pixels
+
+                VIII    IMAGE PROCESSING
+emboss.c        VIII.1  Fast Embossing Effects on Raster Image Data
+coons_warp.c    VIII.2  Bilinear Coons Patch Image Warping
+convolve.c      VIII.3  Fast Convolution with Packed Lookup Tables
+thin_image.c    VIII.4  Efficient Binary Image Thinning using Neighborhood Maps
+clahe.c         VIII.5  Contrast Limited Adaptive Histogram Equalization
+mrsfoley.im     VIII.6  Ideal Tiles for Shading and Halftoning
+
+                IX      GRAPHIC DESIGN
+                IX.1    Placing Text Labels on Maps and Diagrams
+graph_layout/   IX.2    Dynamic Layout Algorithm to Display General Graphs
+
+                X       UTILITIES
+trilerp.c       X.1     Tri-linear Interpolation
+interp_fast.c   X.2     Faster Linear Interpolation
+vec_mat/        X.3     C++ Vector and Matrix Algebra Routines
+GraphicsGems.c  X.4     C Header File and Vector Library
+                V       RAY TRACING
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art18">
+Beyond Graphics Gems,
+</A></FONT>
+by Paul Heckbert (<A HREF="mailto:ph@cs.cmu.edu">ph@cs.cmu.edu</A>)
+</H4>
+[From the Preface of Gems IV, which Paul posted to the net. -EAH]
+<P>
+In addition to the "Graphics Gems" series, there are several other good
+sources for practical computer graphics techniques.  One of these is the
+column ``Jim Blinn's Corner'' that appears in the journal "IEEE Computer
+Graphics and Applications".  Another is the book "A Programmer's Geometry", by
+Adrian Bowyer and John Woodwark (Butterworth's, London, 1983), which is full
+of analytic geometry formulas.  A mix of analytic geometry and basic computer
+graphics formulas is contained in the book "Computer Graphics Handbook:
+Geometry and Mathematics" by Michael E.  Mortensen (Industrial Press, New
+York, 1990).  Another excellent source is, of course, graphics textbooks.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art19">
+Radiosity vs. Ray Tracing,
+</A></FONT>
+by Rico Tsang (<A HREF="mailto:csrico@cs.ust.hk">csrico@cs.ust.hk</A>)
+</H4>
+[I made a few minor fixes, but otherwise this was a nice cheat-sheet summary
+of the functional (vs. algorithmic) differences between meshed radiosity and
+classical ray tracing.  -EAH]
+<P>
+<PRE>
+        Radiosity                                    Ray Tracing
+
+work best to model -                    work best to model -
+
+1. Area light sources                   1. Point light sources
+2. Diffuse reflections                  2. Specular reflections
+3. Color bleeding                       3. Refraction effects
+4. Soft shadows                         4. Sharp shadows
+
+Limitations of Radiosity
+========================
+
+1.  All surfaces are assumed to be perfect diffuse reflectors.
+2.  Specular reflections and transparent effects cannot efficiently modelled.
+3.  Time & storage consuming.  For n surface patches in a scene, you need to
+    calculate and store n^2 form factors.  If you use the 'progressive
+    refinement' radiosity method or hierarchical radiosity, you can minimize
+    the storage requirement for storing the form factors.
+
+Advantages of Radiosity
+=======================
+
+1.  The calculation of radiosities is view-independent.  Once it does so, a
+    view of the environment can be generated with relatively little effort
+    (i.e.  via gouraud interpolation) for any camera position.
+
+    ==> provides the capability of interactive walkthrough
+
+2.  With the progressive refinement method, a geometrically correct view of
+    the environment can be displayed almost immediately.
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art20">
+ACM SIGGRAPH Online Bibliography Updated,
+</A></FONT>
+by Frank Kappe (<A HREF="mailto:fkappe@iicm.tu-graz.ac.at">fkappe@iicm.tu-graz.ac.at</A>)
+</H4>
+This is to announce that the well-known ACM SIGGRAPH Online Bibliography (that
+holds some 16,000 references to computer grahics literature) has been updated.
+The ACM SIGGRAPH Online Bibliography Database was compiled by Stephen N.
+Spencer (<A HREF="mailto:spencer@cgrg.ohio-state.edu">spencer@cgrg.ohio-state.edu</A>) with help from various contributors.
+<P>
+The data set is available through the Hyper-G server of the Graz University of
+Technology either by WWW protocol:
+        <A HREF="http://www.tu-graz.ac.at/CSIGGRAPHbib">http://www.tu-graz.ac.at/CSIGGRAPHbib</A>
+<P>
+<PRE>
+or by Gopher protocol:
+        <A HREF="gopher://gopher.tu-graz.ac.at/11SIGGRAPHbib">gopher://gopher.tu-graz.ac.at/11SIGGRAPHbib</A>
+</PRE>
+<P>
+or using a Hyper-G native client such as Harmony (for UNIX/X-Windows), which
+works best, of course. If you are interested in obtaining a copy of Harmony
+please look at
+        <A HREF="ftp://iicm.tu-graz.ac.at/pub/Hyper-G/Harmony">ftp://iicm.tu-graz.ac.at/pub/Hyper-G/Harmony</A>
+<P>
+for downloading instructions. People without clients may also try
+        <A HREF="telnet://info.tu-graz.ac.at">telnet://info.tu-graz.ac.at</A>
+<P>
+to access the Hyper-G server of Graz University of Technology.
+<P>
+More information about the the ACM SIGGRAPH Online Bibliography Project can be
+reached from the URLs mentioned above.
+<P>
+[The bibliography can be FTP'ed from <A HREF="ftp://siggraph.org/publications/bibliography/">siggraph.org</A>: /publications/bibliography
+-EAH]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art21">
+How to be Notified of New POV Releases
+</A></FONT>
+</H4>
+The official POV distribution site is ftp.uwa.edu.au.  This site has become
+quite active and holds many POV scene files and utilities as well as POV
+itself.
+<P>
+As an adjunct to this site, a mailer has been set up which permits file
+requests to be made by email, and which also manages a mailing list.
+<P>
+The site and the list itself is maintained by a member of the POV-Team
+[Chris Cason (<A HREF="mailto:cjcason@yarrow.wt.uwa.edu.au">cjcason@yarrow.wt.uwa.edu.au</A>)].
+<P>
+You can request that your name be placed on one or both of the POV mailing
+lists.  These are not normal mailing lists in that you cannot submit messages
+for them ; only the POV-Team can.  The lists are as follows -
+<P>
+<PRE>
+  ANNOUNCE    Used when new releases of POV are made. This includes POV-related
+              items from the POV-Team, such as the soon-to-be released hypertext
+              help system.
+
+  NEWS        Used to send new issues of POV-News and anything else relevant
+              to POV, such as new publications, magazine articles, etc.
+</PRE>
+<P>
+Volume on both of these lists will be extremely low ; perhaps only one message
+per month if even that.  This is the easiest way for POV users to be informed
+of patches, bug fixes, new releases, new features, release dates for new
+versions and the actual release of new versions.
+<P>
+To join these lists, mail a message to -
+<P>
+<PRE>
+  <A HREF="mailto:povmail@uniwa.uwa.edu.au">povmail@uniwa.uwa.edu.au</A>
+</PRE>
+<P>
+The subject of the message is unimportant.
+<P>
+In the body of the message, place the commands -
+<P>
+<PRE>
+  JOIN ANNOUNCE         (to join the announce mailing list)
+  JOIN NEWS             (to join the news mailing list)
+
+    - or -
+
+  JOIN ALL              (to join both)
+</PRE>
+<P>
+You should receive a reply indicating that your request was successful.
+If you don't, please try again. For more information, please mail the above
+address with a message containing the word -
+<P>
+<PRE>
+  HELP
+</PRE>
+<P>
+on the first line.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art22">
+PoVSB Windows-based Modeler v0.85,
+</A></FONT>
+by Jeff Hauswirth (<A HREF="mailto:jhauswir@carbon.denver.colorado.edu">jhauswir@carbon.denver.colorado.edu</A>)
+</H4>
+What's new-
+<P>
+<PRE>
+        Bezier Surfaces.
+        A help file.
+</PRE>
+<P>
+PoVSB is now shareware at $30.  Everything is functional except saving the
+Bezier objects.  Exporting Bezier objects to PoV is functional.
+<P>
+PoVSB is a Windows based modeler for the Persistence of Vision Raytracer.  The
+goal of PoVSB is to allow users of PoV to quickly and easily design scenes in
+the Windows environment with true camera preview of the scene so no guess work
+is involved.
+<P>
+I would like to collect a bunch of PoVSB example files to include with PoVSB
+and to also make them available via ftp so other people can use them.  If
+anyone is interested, just e-mail me your example files to include with PoVSB.
+<P>
+I have included two example files- teacup and satellite.  Try rendering the
+satellite with and without the MB PoV option.  With the MB option it was 6
+times faster, if I remember right.
+<P>
+I would like to get some feedback from all the people with PoVSB, which I
+think is up near ~350.  I want to know what new features you would like.
+<P>
+PoVSB has been tested on 386-SX-4M up to 486-66-16M.  The 386-SX had trouble
+with loading the teacup example file.  Other than that I have found no
+problems.
+<P>
+Features:
+<P>
+<PRE>
+    Four view of scene:
+        3 ISO views, 1  Camera view
+    Objects supported:
+        Sphere, Box, Plane, Cone, Cylinder, Torus,
+        Height Fields, Bezier Surfaces.
+        CSG:  Union, Merge, Intersection, Difference
+        RAW:  Only flat triangle output available (for now).
+
+    Interactive transformations of objects
+
+    Lights: Point, Spot
+
+    Multiple Layers
+
+    Textures:   Customizable, add your own textures
+</PRE>
+<P>
+How to get PoVSB:
+<P>
+<PRE>
+ftp to: <A HREF="ftp://vincent.iastate.edu">vincent.iastate.edu</A>
+Username: anonymous.jhaus
+Password: <A HREF="mailto:YOUR_USERNAME@YOUR.EMAIL.HOST">YOUR_USERNAME@YOUR.EMAIL.HOST</A>
+</PRE>
+<P>
+If you already have PoVSB you only need to get povsbXX.zip,
+Otherwise you need to get povsb.zip.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art23">
+Porting Rayshade,
+</A></FONT>
+PBM, etc from Unix to DOS, by Mike Castle (<A HREF="mailto:mcastle@mcs213k.cs.umr.edu">mcastle@mcs213k.cs.umr.edu</A>)
+</H4>
+Amazingly enough Jasen M. Mabus said:<BR>
+&gt; Where can I find PBMtools, a preprocessor implementor, and CoProcessor<BR>
+&gt; emulator for 386 in DOS executable?<BR>
+<P>
+I ported pbmplus using djgpp a couple years back.  djgpp is a development
+environment by DJ Delorie that includes a homegrown dosextender called "go32",
+gcc/g++ compilers, flex, bison, assorted binary utilities (ar, ld, nm, etc),
+make, and so on.  This environment is an eclectic mix of unixish and dosish
+calls, but is a very workable environment.
+<P>
+My port of pbmplus can be found on any simtel archive in graphics/pbmpl19d.zip
+(such as <A HREF="ftp://oak.oakland.edu/pub/msdos/graphics/">oak.oakland.edu</A> in pub/msdos/graphics/pbm...).
+<P>
+djgpp can also be found in the djgpp dir (pub/msdos/djgpp on oak).  You could
+scan cpp from the djgpp distribution, and have a working preprocessor.
+<P>
+I included the then current emu387 387 emulator from the djgpp package in my
+pbmplus port, however, that was some time ago.  There are newer and better
+emulators that can be found in the djgpp archives.  Of course, the emu387 and
+wmemu387 (another emulator compatible with go32, but done by someone else)
+will only work with go32 binaries.
+<P>
+The go32 included with my pbmplus port is out of date, and you may want to get
+the most recent go32.exe from the djgpp packages.  you may also have to run a
+program called 'dpmifix' on the pbmplus binaries to get things working
+correctly (i'm not sure as i don't use dos much anymore, having switched to
+os/2, and so i'm not quite up on djgpp and stuff, and i don't even have my own
+copy of my pbmplus port anymore so....).
+<P>
+btw, i used the djgpp package to port rayshade quite some time ago, but as
+there was already a 386 port done using a commercial dos extender, never made
+it available.  The port was very straight forward, and only required the
+normal flex/lex bison/yacc fixes (such as rayshades misuse of the yyline
+action), 8.3 file name fixups, and binary mode stdin/stdout.  It worked very
+well, including support for RLE files (i ported the URT as well), cpp, and so
+on.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art24">
+REYES & Patents,
+</A></FONT>
+William C. Archibald (<A HREF="mailto:billa@entropys.sps.mot.com">billa@entropys.sps.mot.com</A>)
+</H4>
+&gt; Is REYES patented?<BR>
+<P>
+Pixar holds three (at last count) patents (including US Patent Number
+5,025,400) on "Pseudo-random point sampling techniques in computer graphics".
+This includes claims that cover stochastic ray-tracing as well as what you are
+probably referring to by REYES.
+<P>
+&gt; If so, what part of the algorithm?<BR>
+<P>
+Clearly stochastic sampling techniques as they apply to computer graphics.
+<P>
+&gt; Is one allowed to implement the algorithm?<BR>
+<P>
+I believe that in the U.S.A. one is allowed to implement the algorithm for
+the purposes of studying it and trade-offs that may be involved.  One is not
+allowed to redistribute any implementations without permission, as that is the
+very thing that patent law is set up to protect against.
+<P>
+[and in a separate note by the same author:]
+<P>
+In patent 5,025,400 the claims go on for 4.5 pages (9 columns) of legalese,
+and they seem to pretty much make claim to usage w/ respect to lens effects
+(depth of field), motion blur (temporal jitter), penumbra and other soft
+shadow effect, and just about every variation of jittering reflected rays of
+objects for any reason you might imaging.  I've not been able to really pin
+down good, old-fashioned anti-aliasing anywhere in the claims though...
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art25">
+Going from AutoCAD and 3DS into Ray Tracing,
+</A></FONT>
+by Sean Ross (<A HREF="mailto:rosss@CSOS.ORST.EDU">rosss@CSOS.ORST.EDU</A>)
+</H4>
+Well, for starters, saying one raytracer is "better" than the others is
+guaranteed to cause a flame fest of amazing proportions, so I will just tell
+you about my experience so far and let you make your own determinations.
+<P>
+What I discovered, from following this group for a while and reading the
+"Mini-FAQ", is that there are quite a few different raytracers around with
+different capabilities.  I found Vivid a bit rough to get started with, and
+therefore tried PoVray, it's been great so far.  I find it easy to use because
+the language is fairly intuitive.
+<P>
+What has turned out to be easiest for me to create good raytracings with a
+fairly short learning curve is using the following method:
+<P>
+Use AutoCAD Release 12 with AME to create the initial objects.  AME allows
+very easy creation of complex 3d objects using addition, subtraction,
+intersection, etc.
+<P>
+Export the finished objects into 3d Studio (I'm using ver 1) to set the camera
+and lighting.  Assign surfaces to all objects with standard names like
+"surface1" etc.
+<P>
+(If you don't have access to AutoCAD and/or 3D Studio, try using Moray, it's
+shareware ($50) and seems to be easy to use and well supported)
+<P>
+Use 3DS2POV program to convert the 3d studio file to a PoV file and include
+file.
+<P>
+Edit the resulting .pov file and replace 3d studio's surfaces with the much
+better surfaces included with pov.  (I've also found it very simple to modify
+these surfaces to do almost anything.)
+<P>
+Render sample files using a small size (160 x 100) and adjust any settings you
+don't like in the .pov file.
+<P>
+Start the final rendering with high quality, anti-aliasing, and a large size,
+and plan on not using your system for a while if you're using a lowly 486DX266
+w/8MB like me.  My finished quality renderings generally take about 8 hours to
+process for a 2048 x 2048 image, and I consider these images to be fairly
+simple (not too many complex objects).
+<P>
+If the above doesn't sound like too much work, give PoVray a try, it's given
+me very good results with a negligible learning curve.  I plan on trying out
+some of the others available, especially Radiance because of its radiosity
+features, but I haven't got around to it yet.
+<P>
+If anyone else has any suggestions on how I might improve upon the methods I
+described above, I would be greatly interested.
+<P>
+By the way, just one warning:  after I started creating these images, I find
+myself dedicating a pretty good amount of time to it, I think it's pretty
+addictive, so be careful.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art26">
+Computer Lego Modeling,
+</A></FONT>
+by Paul Gyugyi (<A HREF="mailto:paul@gyugyi.win.net">paul@gyugyi.win.net</A>)
+</H4>
+Check out the files on <A HREF="ftp://earthsea.stanford.edu/pub/lego/cad/">earthsea.stanford.edu</A> in the ~ftp/pub/lego/cad/click
+and ~ftp/pub/lego/cad/rayshade directories.  They include:
+<P>
+1) A library of high-detail shape definitions for Rayshade, a 3D modelling/ray
+        tracing program (legolib.ray).
+<P>
+2) A definition of a language, LADEL, for specifying brick types and
+        positions.
+<P>
+3) A compiler to convert LADEL files to rayshade input files that use the
+        above library of brick definitions.
+<P>
+4) A new extension to the compiler that generates a 3D wire-frame image from a
+        LADEL file.  You can fly around and rotate it.  It uses an Xwindows
+        library that is similar to GL, called VOGL, and runs on UN*X machines.
+<P>
+There is _no_ documentation for most of this stuff, but if you want to try it
+out, email me any questions you have and I'll start creating a how-to.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art27">
+Rowe's Ray Tracing World BBS,
+</A></FONT>
+by Harry Rowe (<A HREF="mailto:Harry.Rowe@wedowind.meaddata.com">Harry.Rowe@wedowind.meaddata.com</A>)
+</H4>
+phone: (513) 866 - 8181 v.32bis (Dayton, OH)
+<P>
+I have a new ray tracing BBS.  No fees.  It does require user to have Windows
+3.1 and special client software which can be downloaded on the first call.  It
+is Excalibur (tm) based and is a 100Windows GUI BBS.  I only carry
+DOS/Windows tracers, but also have tons of objects, textures, converters, etc.
+I have most of what Compuserve GRAPHDEV has in the way of RT utilities.  I
+primarily support Polyray v1.7 and Imagine 3.0 for DOS.  We also have expert
+3DS users.
+<P>
+[Harry has recently made a nice 500+ line summary guide to the major POV
+utilities, with 4-15 lines about each one.  I won't put it here, but contact
+him for where it is (or if all else fails, contact me and I'll send you the
+old copy I have).  -EAH]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art28">
+On Using BSP trees,
+</A></FONT>
+by Benton Jackson (<A HREF="mailto:benton@fenriswolf.com">benton@fenriswolf.com</A>)
+</H4>
+[BSP trees are a nice technique for doing 3D and avoiding z-buffering in
+games.  You partition a static environment with a binary-tree hierarchy of
+cutting planes, classifying everything in the node as in front of or behind
+the plane of some given polygon (and splitting things cut by the plane).  Note
+that this is different than the BSP trees used in ray tracing, where the planes
+are independent of the polygons and are essentially a more flexible octree
+like structure.  Worth understanding in general.  -EAH]
+<P>
+&gt;Do I have to build a new BSP tree for all visible polygons at each frame<BR>
+&gt;redraw?  This is what I suspect, but I can't help thinking that there is<BR>
+&gt;something more I could do to improve calculation times if I had separate BSP<BR>
+&gt;trees for each shape.<BR>
+<P>
+I'm surprised that isn't in the FAQ.  That's the whole point of BSP trees!
+Based on the current viewpoint, if it is in front of the root face, draw the
+back tree, then the face, then the front tree.  This works since that face is
+guaranteed to be in front of everything on one side of the tree, and behind
+everything on the other side.  Which way you go depends on the viewpoint.
+Cool, huh?  Like this:
+<P>
+<PRE>
+DrawBSP(tree B) {
+   if (!B) return;
+   if (in_front_of(viewpoint,B-&gt;face) {
+      DrawBSP(B-&gt;back);
+      DrawFace(B-&gt;face);
+      DrawBSP(B-&gt;front);
+   } else {
+      DrawBSP(B-&gt;front);
+      DrawFace(B-&gt;face);
+      DrawBSP(B-&gt;back);
+   }
+}
+</PRE>
+<P>
+This doesn't completely depth sort the faces.  But you don't have to!  You
+just need to ensure that a face that obscures another faces is drawn in the
+correct order.  That's what this does.
+<P>
+If an object moves, then the tree has to be rebuilt.  I think there is a way
+to merge BSP trees, but I don't know how.  Anybody?
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art29">
+Books about Commercial Renderers,
+</A></FONT>
+by Don Lewis, Jimbo and Yury German
+</H4>
+3D Studio 3.0:
+<P>
+Don Lewis (<A HREF="mailto:djlewis@ualr.edu">djlewis@ualr.edu</A>) writes:
+<P>
+Try Inside 3D STUDIO Release 3, comes with a CDROM of sample DXF's and images
+and maps.  Listed as:
+                ISBN 1-56205-075-3
+price $49.95 USA / $65.95 CAN / L46.99 Net U.K. (inc of VAT)
+<P>
+About the CD:<BR>
+Meshes, Texture maps, Bump maps, Graphics file format conversion utility,
+Special effects filters, Utilities for image viewing, printing, and conversion
+(windows and dos), An updated Autodesk animation player, Files for exercises
+in the book, etc ...
+<P>
+I like the book and a lot applies to 3DStudio 2.0 as well.
+<P>
+____
+<P>
+Jimbo (<A HREF="mailto:Jimbo@agdesign.demon.co.uk">Jimbo@agdesign.demon.co.uk</A>) writes:
+<P>
+<PRE>
+Inside 3D Studio:
+-----------------
+</PRE>
+<P>
+<PRE>
+Author(s):      Steven D. Elliott
+                Phillip L. Miller
+                Gregory G. Pyros
+</PRE>
+<P>
+ISBN:           1-56205-075-3
+<P>
+Publishers:     New Riders Publishing.
+<P>
+An excellent book including a CD, unfortunately doesn't include
+the IPAS routines mentioned numerous times throughout.
+<P>
+<PRE>
+3D Studio Applied:
+-------------------
+</PRE>
+<P>
+Author(s):      Nancy Fulton
+<P>
+ISBN:           0-929870-24-7
+<P>
+Publishers:     Advanstar Communications Inc.
+<P>
+________
+<P>
+Imagine system:
+<P>
+&gt;       Question: My uncle has this and would like to know<BR>
+&gt; if there are any other references for IMAGINE that are a<BR>
+&gt; bit easier to understand for those less technologically literate.<BR>
+<P>
+Yury German (<A HREF="mailto:yury@bknight.jpr.com">yury@bknight.jpr.com</A>) writes:
+<P>
+        Yes, there is a great book, it's called Understanding Imagine.  Steve
+Worley is the author.  Now the book is "Understanding Imagine 2.0" for the 2.0
+version.  In a few months the book will be out for "Understanding Imagine 3.0".
+<P>
+        The first book was done with the Amiga computer in mind.  The 3.0 book
+might be done for both computers.  If you want you can email Steve at
+<A HREF="mailto:worley@cup.portal.com">worley@cup.portal.com</A> for information.
+<P>
+        The books are great with alot of humor and all the things needed to
+make manuals easy and understandable.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

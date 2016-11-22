@@ -1,0 +1,1264 @@
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+                        "Light Makes Right"
+
+                           July 16, 2000
+                        Volume 13, Number 1
+
+Compiled by Eric Haines, erich@acm.org, http://www.acm.org/tog/editors/erich/
+All contents are copyright (c) 1999-2000, all rights reserved by the
+        individual authors
+Archive locations:
+    HTML http://www.acm.org/tog/resources/RTNews/html/index.html
+    text version at http://www.acm.org/tog/resources/RTNews/text/
+
+Contents:
+    Introduction
+    Ray Tracing Roundup
+    BART: A Benchmark for Animated Ray Tracing, by Jonas Lext,
+        Ulf Assarsson, and Tomas Moller
+    Global Illumination Test Scenes, by Brian Smits and
+        Henrik Wann Jensen
+    Realtime Techniques for Ray Tracing, by Ádám Nagy, Eric Haines,
+        Russel Simmons, Paul Kahler, Factory, and Bruno Schödlbauer
+    Fastest Way to Generate Eye Rays in Ray Tracing, by Samuel Paik
+    On Transforming Planes, by Steve Hollasch
+    Intersecting a Ray and a Triangle with Plücker Coordinates, by
+        Ray Jones
+    Volumetric Rendering, by Paul Kahler
+    Recent Papers, summarized by Eric Haines and Vlastimil Havran
+
+----------------------------------------------------------------------------
+
+Introduction
+
+First things first: the SIGGRAPH Ray Tracing Roundtable SIG will be held at
+Thursday, 6-8 pm, at the Hilton Riverside, in the Oak Alley room. It's a
+short walk to the Papers/Panels reception from here.
+
+The most significant news in ray tracing this year is the publication of
+Peter Shirley's book, "Realistic Ray Tracing". See it at AK Peters' booth
+(#2621) at SIGGRAPH. Briefly paging through the book, it looks clear and
+precise, with many helpful illustrations and figures - more about it next
+issue. Really, though, you should just buy it; it brings together many
+disparate bits of information, especially on shading, sampling, and
+filtering. Pete says the book's subtitle could have been, "how Pete Shirley
+implements a ray tracer". He's too modest: the book looks like it gives a
+solid education in some of the foundations of the field, and all in 161
+pages. At first I thought this a bit short, but I think that's just a sign
+of the effect of book selling psychology: some publishers like to sell trade
+paperbacks that are 1200+ pages, regardless of usefulness of the text, in
+hopes of looking authoritative. This book focuses on equations, which is a
+more dependable (and compressed) way to explain something than just pure
+text alone (I think of it like code vs. comments; code can be terse, but it
+is a more reliable source for what the program actually does than the
+comments about the code).
+
+Other books I'm looking forward to: Dave Eberly's "Game Engine Design",
+(Morgan-Kaufmann Publishers) which looks to have much useful information and
+code in it, see http://www.magic-software.com/3DGameEngineDesign.html (also,
+Dave's site http://www.magic-software.com/is a national treasure). Mark
+DeLoura's "Game Programming Gems" (no relationship to the Graphics Gems
+series; from Charles River Media) collection sounds interesting, judging
+from the articles I've heard it will contain. "Mathematics for Computer
+Graphics Applications" by Michael Mortenson (Industrial Press) is another
+book which I want to look at. Another I'll definitely consider is David
+Rogers' "An Introduction to NURBS", from Morgan-Kaufmann.
+
+Another relatively new book worth getting is Apodaca and Gritz's "Advanced
+RenderMan" book. Even if you do not have any interest in RenderPerson
+itself, this book has much to recommend it, both from an algorithms
+standpoint and in learning about techniques used in motion pictures. I've
+also been enjoying "Visual Intelligence: How We Create What We See," by
+Donald Hoffman. It gives an overview of results in perceptual psychology for
+us ignoramuses, and does so without dumbing down the material. There are
+also copious references to the research the author draws his text from.
+
+In case you missed it, the coolest graphics-related thing on the web this
+past half year is sodaconstructor: http://www.sodaplay.com/. The most insane
+graphics-related thing is Donkey Kong for the Kodak Digita digital camera:
+http://digita.mame.net/. The best user interface ever is at
+http://www.cs.unm.edu/~dlchao/flake/doom/. The Fantasy Graphics League
+results are at http://www.realtimerendering.com/fgl/. Hardest way to earn a
+million dollars: http://www.ams.org/claymath/. The most useful free web
+service I've found this year has been http://www.spyonit.com/; set up any
+URL you want for it to track, and the service will email you when the page
+has changed. It's great for seeing when a conference schedule gets posted,
+when new software has become available, when an annotated links page has
+been updated, etc. (Thanks to Craig Reynolds for this tip; he's an absolute
+links fanatic: http://www.red3d.com/cwr/links.html).
+
+The other useful goodie has been GuruNet http://www.gurunet.com/, a free
+service that I use only occasionally but is wonderfully unobtrusive. Don't
+know a word, or exactly how to spell it, or just want to know about
+something? Hold down the Alt key and click on it and GuruNet pops up and
+tells you (after a few seconds of obligatory net delay), as well as giving
+thesaurus, encyclopedia, news, business summary, translations, and other
+relevant entries for the word. What's cool is that GuruNet cooperates with
+every program that has text that can be selected, not just web pages, so you
+just have to learn a single, trivial action and it simply works everywhere.
+
+For the first time ever, I've noticeably changed a previous issue of the Ray
+Tracing News. I normally avoid doing this, disliking the "1984" concept of
+rewriting the past (definitely easy to do with web documents). This time it
+made sense to do so: Vlastimil Havran sent some updates to his octree
+summary article in RTNv12n2, and these have been folded in.
+
+A puzzle invented by Paul Strauss: you're given a square sheet of paper, one
+side is blue and the other red. You can make folds in the paper, but the
+rule is that only red can touch red. Red touching blue or blue touching blue
+will destroy the entire universe. Folds are full 180 degree foldovers, so
+some piece of paper will always touch another part of the paper. So, what is
+the maximum number of folds you can make? There are no tricks here, it's
+just a straightforward puzzle. Hint: the answer is > 4 and < infinity.
+
+Last issue's puzzle was: You have a cube and you select at random three
+(different) corners. What is the chance that the triangle formed by these
+corners is acute (all angle < 90 degrees)? is a right triangle (has one
+angle == 90 degrees)?
+
+A quick answer is this (from Spike Hughes): there are 8*7*6 possible
+triangles, and divide by 3*2 since we do not care about the order of the
+vertices. This gives 56 unique triangles formed. Of these, 6 have right
+angles at a given corner: the 3 cube-edge/cube-edge pairs and the 3
+edge/perpendicular-face-diagonal pairs. Each triangle can have at most one
+right angle, so with 6 right triangles at a given corner, then 6*8=48
+triangles must be right triangles. So 48 of 56, i.e. 6 of 7 triangles formed
+are right triangles. This leaves a 1 in 7 chance that a random triangle is
+acute. No obtuse triangles are possible, interestingly enough. Other ways of
+thinking about this problem include proving that acute triangles must be
+formed entirely of cube face diagonals, and using dot products of 0 between
+edges to rule out right triangles.
+
+----------------------------------------------------------------------------
+
+Ray Tracing Roundup
+
+I've been compiling useful formulas and equations in a single document for
+people involved in global illumination research. It now has 34 pages and 86
+items listed:
+
+    http://www.graphics.cornell.edu/~phil/GI/
+
+- Phil Dutre (phil@Graphics.Cornell.edu)
+
+[This thing's amazing, go grab it. -EAH]
+
+-------
+
+3D Object Intersection page
+
+A page giving references a wide variety of 3D object intersection references
+is now available:
+
+    http://www.realtimerendering.com/int/
+
+Also at this site is my personal list of frequently used graphics related
+web sites:
+
+    http://www.realtimerendering.com/portal/
+
+It's geared towards real-time rendering, but has much that applies to
+graphics in general.
+
+--------
+
+Optimizing Ray-Triangle Intersection
+
+If you're interested in optimized ray-triangle intersection code and
+statistics, then take a look at:
+
+    http://www.ce.chalmers.se/staff/tomasm/raytri/
+
+I have optimized my and Trumbore's code from journal of graphics tools, and
+tried it on three different machines and with different percentages of
+triangle hits. The code is also available at the above mentioned site. Let
+me know if you have any suggestions for improvements.
+
+-- Tomas Moller (tompa@acm.org)
+
+--------
+
+Graphics Gems Repository update
+
+The Gems repository has been expanded in two ways. New pages have been
+added:
+
+    http://www.acm.org/tog/GraphicsGems/category.html - by category
+    http://www.acm.org/tog/GraphicsGems/authors.html - by author
+    http://www.acm.org/tog/GraphicsGems/gems.html - in book order
+
+In addition, each of these pages has direct links to the relevant code for
+each gem.
+
+--------
+
+Non-Photorealistic Rendering
+
+Craig Reynolds maintains an excellent annotated links collection on the
+subject of NPR:
+
+    http://www.red3d.com/cwr/npr/
+
+--------
+
+SIGGRAPH has the beginnings of a corrigenda (i.e. corrections) site for
+SIGGRAPH proceedings:
+
+    http://www.siggraph.org/publications/corrigendum.html
+
+If you know of an error in a SIGGRAPH article, please let Stephen Spencer
+(spencer@siggraph.org) know.
+
+This year's SIGGRAPH papers are listed and online versions linked from:
+
+    http://www.cs.brown.edu/~tor/sig2000.html
+
+--------
+
+A mailing list dedicated to realtime raytracing now exists:
+
+You can join this community by going to:
+
+     http://www.onelist.com/subscribe/realtime_raytracing
+
+Or you can join by sending email to:
+
+     realtime_raytracing-subscribe@onelist.com
+
+The archives are at:
+
+    http://www.egroups.com/group/realtime_raytracing
+
+This list has had some interesting discussions (see some later in this
+issue), though traffic has died down in recent months. Many of the
+subscribers are into the demo scene (see
+http://www.acm.org/tog/resources/RTNews/demos/overview.htm).
+
+--------
+
+The Best Efficiency Scheme (BES) Project has its own page at:
+
+    http://www.cgg.cvut.cz/GOLEM/bes.html
+
+The WWW page contains updated version of the project proposal, more than 200
+possible scenes in VRML'97 format of different complexity, and technical
+report describing the first results of the project (testing on 30 SPD scenes
+X 12 acceleration data structures X 4 methods of shooting rays).
+
+By the way, we are still looking for large scale scenes (over 500,000
+primitives).
+
+-- Vlastimil Havran (havran@fel.cvut.cz)
+
+--------
+
+A software tool for interactive visualization of spatial data structures was
+designed to verify the correctness of implementations. Several static images
+from that visualization are available at:
+
+    http://www.cgg.cvut.cz/~havran/vis/visualization.html
+
+-- Vlastimil Havran (havran@fel.cvut.cz)
+
+[This is pretty interesting to look at, in fact. -EAH]
+
+--------
+
+Art of Illusion
+
+Art of Illusion is a free, open source 3D modelling and rendering studio. It
+is written entirely in Java, and should be usable on any Java Virtual
+Machine which is compatible with JDK 1.1 or later.
+
+The current version is 0.4, released May 3, 2000. This is still a fairly
+early version, and some basic functionality is still missing. It is
+progressing quickly, however, and already has a number of advanced features
+including a powerful raytracer, a flexible and easy to use triangle mesh
+editor, and the ability to automatically generate smooth, organic shapes
+from triangle meshes.
+
+    http://drizzle.stanford.edu/~peastman/aoi.html
+
+-- Peter Eastman (peastman@drizzle.stanford.edu)
+
+[Peter also notes that this package has a triangulator in it: "The routine
+is Line.convertToTriangleMesh. I can't guarantee that it's the best
+algorithm, but it seems to work pretty well. Also, it will deal fine with
+concave polygons, but will sometime have trouble with self-intersecting
+ones."]
+
+--------
+
+Real-Time Volumetric Rendering
+
+We did some volumetric rendering with raytracing and then "mixed" that with
+a normal 3d scene (the scene was drawn using 3d acceleration).
+
+Fair enough, it looks a bit blurry but it does give the impression of flying
+through 3d clouds.
+
+Oh you can download the demo from http://www.incognita-hq.com if you're
+curious.  it's called platipus (needs a "multimedia" machine with dx7, ram,
+the whole lot).
+
+In the demo there's also my (now pretty old) rt engine, which is not too
+bad.
+
+-- angel sastre (icg_reboot@bigfoot.com)
+
+[Also, source code is available at the site.]
+
+--------
+
+Year Three (1998/1999) results of the Internet Raytracing Competition are
+now available on CD ROM. The quality of some of the winning entries is
+impressive:
+
+    http://www.irtc.org
+
+--------
+
+The global illumination bibliography now resides on:
+
+    http://www.helios32.com/
+
+as well as other related resources. There's also an image of the very first
+radiosity image ever computed (made with hand-cranked calculators). See
+http://www.helios32.com/resources.htm#History
+
+--------
+
+Some interesting BIBTEX entries of lesser known papers can be found at:
+
+    Ray tracing: http://www.cgg.cvut.cz/~havran/Bib/rtmame.bib
+    Visibility: http://www.cgg.cvut.cz/~havran/Bib/vismame.bib
+    Rendering: http://www.cgg.cvut.cz/~havran/Bib/renmame.bib
+
+The lists are being regularly updated with new papers as they appear.
+
+-- Vlastimil Havran (havran@fel.cvut.cz)
+
+--------
+
+An extensive annotated collection of links to procedural texture synthesis
+is available at:
+
+    http://www.threedgraphics.com/texsynth/
+
+--------
+
+The PVMPOV patch gives POV-Ray the ability to distribute a rendering across
+multiple Unix platforms:
+
+    http://www-mddsp.enel.ucalgary.ca/People/adilger/povray/pvmpov.html
+
+There is also a beta Win32 version at:
+
+    http://netlib2.cs.utk.edu/pvm3/win32/
+
+--------
+
+A nice summary of free L-system software out there is at:
+
+    http://www.cpsc.ucalgary.ca/projects/bmv/software.html
+
+--------
+
+A pleasant page covering free and shareware modeling software:
+
+    http://www.mech.ed.ac.uk/~dom/3d/3d.html
+
+--------
+
+John Morris' lecture notes for his data structures class are nicely done,
+covering the basics of this subject. Worth a look at:
+
+    http://swww.ee.uwa.edu.au/~plsd210/ds/
+
+--------
+
+The mental ray specifications are interesting to read from a standpoint of
+looking at what features are part of a commercial ray tracing renderer:
+
+    http://www.mental.com/p207.html
+
+--------
+
+In response to several requests, we have made available measured skin BRDF
+data from the 1999 EGWR paper,
+
+"Image-Based BRDF Measurement Including Human Skin", by Steve Marschner,
+myself, Eric Lafortune, Ken Torrance, and Don Greenberg.
+
+Data are in gzipped tar archives, each with a lot of binary data files
+containing raw BRDF samples in red, green, and blue channels. Data on the
+spectral response of the camera and the spectral balance of the source are
+included, and two of the three data sets include coefficients for rendering
+with the multi-lobe representation of Lafortune et al. (SIGGRAPH 97).
+
+The URL is http://www.graphics.cornell.edu/online/measurements/
+
+Have fun.
+
+-- Stephen H. Westin (westin@graphics.cornell.edu)
+
+--------
+
+The Mops is a free open source modeler for Unix (Linux, IRIX) systems and
+(sort-of) Windows. Check it out at:
+
+    http://www.informatik.uni-rostock.de/~rschultz/mops/
+
+--------
+
+A great site for information on implicit surfaces is:
+
+    http://implicit.eecs.wsu.edu/
+
+On a related note, Jules Bloomenthal's very useful implicit surface
+polygonizer article from Graphics Gems IV is now also available at his site:
+
+    http://www.unchainedgeometry.com/jbloom/papers/index.html
+
+--------
+
+GraphicsJungle
+
+At:
+
+    http://www.cpsc.ucalgary.ca/Redirect/GJ/index.html
+
+is the Jungle project, run by Przemyslaw Prusinkiewicz and Brian Wyvill. It
+is focussed on modeling, animating and rendering blobbies. The software can
+be found at:
+
+    http://www.cpsc.ucalgary.ca/~jungle/software/jspdoc/index.html
+
+for SGI and Linux systems.
+
+--------
+
+Robert Schneiders maintains an overwhelmingly large annotated links site on
+mesh generation:
+
+    http://www-users.informatik.rwth-aachen.de/~roberts/meshgeneration.html
+
+--------
+
+The NURBS++ Package is source under GPL for manipulating and evaluating
+NURBS curves and surfaces. It includes an OpenGL-based editor, and can
+output POV-Ray, RIB, or VRML files. It's at:
+
+    http://yukon.genie.uottawa.ca/~lavoie/software/nurbs/feature.shtml
+
+--------
+
+A few useful resources are at:
+
+    http://www.cs.utexas.edu/users/atc/downloads.html
+
+A.T. Campbell, III's page. These include a small Java raytracer, a fairly
+complete BSP tree library, and other things.
+
+--------
+
+The POV-Ray SuperPatch is an unofficial collection of extensions to POV-Ray:
+
+  http://www.geocities.com/Athens/Academy/8764/spovraydjgpp.html#superpatch
+
+Extensions include parametric surfaces, isosurfaces, splines, sphere sweeps,
+new pigment mappings, rational bezier surfaces, new mesh type, slope
+dependent textures, variable reflections, light groups, spherical/toroidal/
+(etc)/ warps, and unicode text.
+
+--------
+
+For a rundown of tools for POV-Ray, and other open source modeling and
+rendering software (as well as some nice images), see:
+
+    http://www.linuxgazette.com/issue53/gx/baptista/2.html
+
+--------
+
+ParPov is a library for reading POV-Ray files. The first application of this
+library is Pov2Rib, a (surprise) POV to RenderMan RIB format converter. Open
+source at:
+
+    http://www9.informatik.uni-erlangen.de/~cnvogelg/pov2rib/index.html
+
+The quality of the conversion looks to be quite high, see:
+
+    http://www9.informatik.uni-erlangen.de/~cnvogelg/pov2rib/examples.html
+
+for comparison images.
+
+--------
+
+A basic particle system animator for POV-Ray (with source) is available at:
+
+    http://www.sbox.tu-graz.ac.at/home/a/ahi/particle-system.html
+
+--------
+
+Hugo Elias' "The good-looking textured light-sourced bouncy fun smart and
+stretchy page" has some nicely done tutorials on Perlin noise, clouds,
+physically based animation, and many other tidbits:
+
+    http://freespace.virgin.net/hugo.elias/
+
+--------
+
+OpenDX
+
+Based on IBM's Visualization Data Explorer, this is an open source
+visualization package:
+
+    http://www.opendx.org/
+
+--------
+
+Graphics Course Notes
+
+By Steve Seitz, Paul Heckbert, Andy Witkin, Joel Welling, the notes at:
+
+    http://www.cs.cmu.edu/afs/cs/academic/class/15462/web/notes/notes.html
+
+have some interesting tidbits in them. For example, in the Ray Casting
+section there is a clear explanation of barycentric coordinates, and a cute
+geometric proof of the formula for the area of a triangle (I haven't seen it
+before).
+
+--------
+
+The Graphics Muse columns in the Linux Gazette has all sorts of tidbits:
+
+    http://www.linuxgazette.com/issue46/gm.html
+
+and see the bottom of the page for links to previous issues.
+
+--------
+
+For some pleasing images of fractal terrain, see:
+
+    http://www.fractalworlds.com
+
+--------
+
+Information on IGES, STEP, and other CAD related formats is available at:
+
+    http://www.cadcamcenter.com/cadcam/toc.htm
+
+There are also links to other resources of interest to CAD programmers.
+
+----------------------------------------------------------------------------
+
+BART: A Benchmark for Animated Ray Tracing, by Jonas Lext
+    (lext@ce.chalmers.se), Ulf Assarsson (uffe@ce.chalmers.se), and
+    Tomas Moller (tompa@acm.org)
+
+[The authors have come up with a useful new benchmark for measuring ray
+tracer performance. For static testing, these scenes address a problem the
+SPD/NFF benchmarks had: realistic environments. Little research has been
+done for ray tracing efficiency schemes including the fourth dimension,
+time. Given the growing interest in real-time ray tracing, I see this as an
+area ripe for some interesting work. For example, Reinhard, Smits, and
+Hansen just published a clever "modulo" grid scheme at the Eurographics
+Rendering Workshop this year; see the "Recent Papers" article at the end of
+this issue. - EAH]
+
+Description of BART
+-------------------
+
+Abstract: Due to the advent of ray tracing at interactive speeds and because
+there is an absence of a way to measure and compare performance and quality
+of ray traced scenes that are animated, we present an organized way to do
+this fairly and accurately in this proposal for BART: A Benchmark for
+Animated Ray Tracing. This is a suite of test scenes, placed in the public
+domain, designed to stress ray tracing algorithms, where both the camera and
+objects are animated parametrically. Equally important, BART is also a set
+of rules on how to measure performance of the rendering. We also propose how
+to measure and compare the error in the rendered images when some kind of
+approximation algorithm has been used.
+
+Informal description: We were and still are interested in efficient
+algorithms for computer graphics. In this case we focused on ray tracing
+algorithms for animated scenes. The main reason for this is that real-time
+or interactive ray tracing is quite possible to do on multiprocessor
+computers. So, to be able to compare different acceleration schemes, we set
+out to compile a suite of test scenes for this. We currently have three
+scenes described below that we have put into the public domain. Each scene
+was designed to stress ray tracing algorithms in general. In order for the
+user of BART to make a fast implementation, we provide a simple C-parser for
+the file format (it takes about half a day to implement), and some animation
+code. The benchmark may also be used to: 1) compare algorithms using polygon
+rendering hardware (e.g., OpenGL), 2) compare global illumination and
+radiosity algorithms, 3) compare motion blur algorithms, but was not
+designed specifically for these areas of interest.
+
+The BART benchmarks are at http://www.ce.chalmers.se/BART/.
+
+----------------------------------------------------------------------------
+
+Global Illumination Test Scenes, by Brian Smits (bes@cs.utah.edu) and
+    Henrik Wann Jensen (henrik@graphics.stanford.edu)
+
+Henrik Wann Jensen and I have designed a set of scenes for testing energy
+transport.  Our main goal was simplicity, both for the scenes, and for the
+type of transport tested by each scene.  We wanted a set of very simple
+scenes that would exercise different aspects of rendering algorithms and
+make it fairly obvious when something wasn't working correctly.  They range
+from the fairly simple (direct illumination without occluders) to the fairly
+challenging (reflection of a caustic from a secondary luminaire). We would
+appreciate any feedback you have.
+
+
+Global Illumination Test Scenes
+-------------------------------
+
+University of Utah Technical Report UUCS-00-013
+
+Abstract:
+
+The global illumination community has discussed having a database of scenes
+that could be used to compare and validate different global illumination
+algorithms. We present a set of test scenes for global illumination
+algorithms and propose that they be the beginning of such a database. These
+scenes are designed to be as simple as possible and still test a particular
+aspect of energy transport. The scenes are available on a web site in a
+variety of formats, along with images and pixel radiance data. We feel that
+the simplicity and availability of the models will make it easier for the
+community to use them, and that the field will benefit from a standard set
+of scenes. Additionally, we discuss classes of models with analytic
+solutions.
+
+Tech Report:
+   http://www.cs.utah.edu/~bes/papers/scenes/
+Scene Repository:
+   http://www.cs.utah.edu/~bes/graphics/scenes/
+
+----------------------------------------------------------------------------
+
+Realtime Techniques for Ray Tracing, by Ádám Nagy (nadam@freemail.hu),
+    Eric Haines, Russel Simmons (russ@paypal.com), Paul Kahler
+    (phkahler@oakland.edu), Factory (factory@free.net.au), and
+    Bruno Schödlbauer (bschoedlbauer@gmx.net)
+
+[from the realtime raytracing email list, see the Ray Tracing Roundup in
+this issue. It starts on one topic, evolves to another, and ends with a web
+site. -EAH]
+
+Ádám Nagy writes:
+
+For intersecting decisions I always use 2 kind of 'Intersection'
+calculation:
+
+- First is for rays with 1 fixed point. This is true for eye rays, and
+shadow rays also. This is much simpler for all primitives, because I
+precalculate coefficients which only depends on the fixed point of the ray,
+and the primitive.
+
+- Second is the general intersection calculation, which I use only at
+reflections and refractions.
+
+With a lot of light sources the number of shadow rays + number of eye rays
+can be so great that this kind of optimization is important.
+
+I use basically sphere hierarchy, but for eye rays in addition I use another
+special optimization: I divide the screen into sectors (16*16) pixels: for
+all the sectors I precalculate its own sphere hierarchy which it intersects:
+I don't have to go through all the hierarchy for all the pixels.
+
+I use adaptive techniques: I do full raytracing for some gridpoints on the
+screen, and for other pixels I do some heuristics (determined from the
+neighbor pixel infos) to save costly full hierarchy 'Intersect' calls. I am
+interested what kind of heuristics other guys are using.
+
+My engine is a little bit slow because it is still in C++, but now I am in
+the middle of rewriting the important part to PIII Streaming SIMD based
+assembly code, I'm sure it will help a lot in terms of speed.
+
+My basic idea regarding pIII Streaming SIMD is to maintain an 'Intersecting
+job queue', and I try to solve 4 intersect job in parallel fully using the
+PIII Streaming SIMD extensions. Does anyone have experience regarding to
+optimizing to PIII, or optimizing to Athlon?
+
+Does anyone have experience in doing some part of ray tracing using integers
+instead of floating point?
+
+Do you know better way than hierarchical spheres, and other kind of
+optimization techniques?
+
+--------
+
+Ádám Nagy later adds:
+
+I am trying to experiment with more complex heuristics, and I am interested
+in others' ideas about it. Here I show a very basic one, which is already
+implemented in my engine:
+
+Let's do a classic raytracing for every fourth pixel (I put 1 where I do
+raytracing.)
+
+10101010
+00000000
+10101010
+00000000
+10101010
+
+Let's also store the trace information for those pixel. What does this mean?
+If for a pixel the eye ray intersected object A, and for the two
+lightsources the shadow rays intersected object B and object C, and the
+reflection ray intersected object D, we can store: A(BC)D. After it for the
+remaining pixels we can check its four neighbors, and if all the neighbors
+have the same stored structure, than we can simply assume that structure for
+that pixel without doing any intersecting calculation. In this case the only
+problem is that we sometimes miss some one-pixel objects, but these are not
+important (sometimes it is better not to show 1 pixel objects!)
+
+----
+
+Eric Haines replies:
+
+That's an interesting approach, of knowing in advance what the ray tree is
+and shooting the rays only at those objects. Have you compared shooting the
+rays for the other 3 neighbors vs. just interpolating the already computed
+shade across the four corners? Interpolation would be bad if there are
+textures or a sharp specular highlight, I guess, but otherwise might be
+fine.
+
+----
+
+Ádám Nagy replies:
+
+Actually, the best approach seems to make a compromise: I do not interpolate
+the pixel color directly, but I am not shooting the ray to the object: I am
+interpolating the normal vector (to enable shooting refraction rays...), the
+shade without texture, and the texture coordinates, and I multiply the
+texture color with interpolated shade: The textures look fine!
+
+----
+
+Russel Simmons responds:
+
+You don't really need to interpolate the normal vector.  I believe the
+'standard' approach for grid-based raytracing (and the technique that I use
+in my engine) is just to treat rays that have been reflected no differently
+from other rays.  In other words, your grid-interpolator routine knows
+nothing of rays being reflected rays or not; it merely interpolates shade,
+u, v, across the block.  The higher-level tracing routines handle
+reflections. In addition to shade, u, v, I also store an id for each block.
+The id is essentially a surface id used to determine which texture to use,
+and also whether or not a block can be interpolated. If the 4 id's  at the
+corners don't match, I don't interpolate the texture.  Now, in the case of
+reflections, it would be possible to have 3 corners of a block hit object A,
+but the last corner hit object B, get reflected, finally hitting object A.
+Even though all 4 corners have the same surface id (of object A) we don't
+want to interpolate across (because there is an edge between object A and B
+in there somewhere).  So to solve this problem you can flip some high bits
+in the id value if the surface is hit via a reflection - then the id's won't
+match.  Also, if you want to not interpolate across shadow boundaries (you
+might want to subdivide) then a decent hack is to have a high bit in the id
+values represent in/out of shadow.
+
+Getting back to normal vectors.. interpolating them like you say may have
+some advantages, but in my experience the method described above works and
+looks great.
+
+----
+
+Paul Kahler notes:
+
+I find the following pattern works really well:
+
+00100010001
+00000000000
+10001000100
+00000000000
+00100010001
+
+It's every 8th pixel, but my perception is that it's no worse than the 2x2
+method you mentioned. That varies with texture, of course. At one point I
+did tests with a single object and found a disturbing amount of time being
+spent comparing colors of pixels and interpolating (I just tested color to
+see if more rays were needed, and interpolated just color) than tracing
+rays. I came up with a couple of great macros to compare and interpolate
+colors that cut the time way down - they're like MMX, but in C.
+
+----
+
+Factory responds to Paul's note:
+
+I assume that interpolates along triangles, as opposed to being along
+parallelograms, i.e.
+
+00111110001
+01233321000
+12345432100
+01233321000
+00111110001
+
+and not..
+
+11111110001
+23333321000
+12345432100
+01233333210
+00111111111
+
+
+> I came up with a couple of great macros to compare and interpolate
+> colors that cut the time way down - they're like MMX, but in C.
+
+Hmm, looks like a nasty thing to optimize, I'd prolly try and make special
+case renderers for the four different rows that need to be rendered.
+
+Another thing bad about that approach is that it prolly wouldn't lend itself
+to super sampling, but OTOH, I reckon it would look rather kewl if one was
+to do it with fairly large triangles.. (at least in a demo).
+
+----
+
+Paul replies:
+
+No, actually if I follow your notation correctly it's:
+
+231323132
+343434343  Where the 2's are the average of 4 1's
+132313231  The 3's are the average of a 2 and a 1
+343434343  And the 4's I forgot how they work ;-)
+231323132  probably just an average of 2 pixels (hmm which ones..)
+
+Looking at this little diagram makes me think I'm not even averaging the
+best choices of pixels. OTOH I don't do weighted averages. Also, if the
+threshold for deciding to shoot more rays is low enough it doesn't mater how
+you interpolate. BTW, I'm doing this in windows with a default size of
+512x384, so the pixels are small and the artifacts are not too bad. Shadows
+tend to look low-res because the outline of the shadow doesn't always
+trigger enough additional rays, but at higher speeds you still don't notice.
+The key is to always shoot rays along an objects edge. With solid colors,
+just about any interpolation will do for the interior.
+
+----
+
+Bruno Schödlbauer also responds to Paul's comments:
+
+One thing you might try is not to interpolate, but instead to trace one
+frame every odd pixel, and next frame every even pixel. For every pixel not
+traced use the values of the previous frame. It probably looks strange with
+few frames per second, but with many frames one shouldn't notice it.
+
+----
+
+Paul ends on this note:
+
+I just posted 3 small (72K) programs demonstrating my RTRT progress. Also
+available is an explanation of how I do my pixel interpolation - see the
+page describing DRE linked from the RTRT page
+(http://www.oakland.edu/~phkahler/rtrt/dre.html). All found at:
+
+http://www.oakland.edu/~phkahler
+
+Choose the Realtime Raytracing link. BTW, these are Windoze programs and
+should run on 95,98, or NT unless there is some MFC dll version issue (I've
+seen some problems before).
+
+You'll notice that my focus is not on getting the best possible performance
+on a particular scene, but on making a very high performance ray tracer that
+can be used for all sorts of things. Comments are welcome of course.
+
+----------------------------------------------------------------------------
+
+Fastest Way to Generate Eye Rays in Ray Tracing, by Samuel Paik
+    (paik@webnexus.com)
+
+[I'm sure I've seen this written up somewhere before, but can't seem to find
+it. This is the method I use, and I believe once Paul Heckbert also
+mentioned using something like it. I suspect it's been discovered by many
+others - time to have it written down somewhere. // Searching around,
+I finally found the reference, the poorly named (my fault) "Ray
+Transformation", by Kendall Bennett, RTNv6n1. Still, it's worth repeating.
+-EAH]
+
+Nicolas Delalondre wrote:
+> What is the fastest way to generate eye rays? (I don't want to apply a
+> matrix to each vertex of the scene)
+
+Fastest?  There typically is no single fastest way to do anything in
+computing.  Also, it seems highly unlikely that a single matrix-vector
+multiply is a major cost in your ray tracer.
+
+However, try this:
+
+Take the eye point and the projection plane and transform them into world
+space.  Now simply march along the projection plane for each pixel, this
+gets you one point and the eye point is another for an eye ray. Viola! If
+your model & view transforms are nice (exercise to the student to determine
+what those conditions are...) then you can march along the projection plane
+for the cost of a single vector addition, and generating the eye ray costs
+another vector addition (if you need a normalized eye ray, that costs a
+little extra).
+
+----------------------------------------------------------------------------
+
+On Transforming Planes, by Steve Hollasch (stevehol@microsoft.com)
+
+[From netnews. It's still a common error to transform normals by the
+rotation matrix, instead of its inverse transpose. You can often get away
+with this, see http://www.gignews.com/realtime020100.htm, and this topic was
+covered way back in RTNews1a. That said, I like Steve's little proof of how
+the matrix and its inverse cancel out. -EAH]
+
+    Here's my take on transforming planes that should make everything clear.
+If you represent points as column vectors (that is, translation components
+in the last column of a 4x4 matrix), then you transform a point by
+performing the matrix multiply  M P = P',  where M is the transformation
+matrix and P is the column-vector point.  Given a plane Q, you'd transform
+by the same matrix by performing the matrix multiply  Q M* = Q', where M* is
+the inverse of matrix M, and Q is a row vector [A B C D], where the plane is
+defined by  Ax + By + Cz + D = 0.
+
+    Also note that Q M* = M*t Qt, where M*t is the transpose of M*, and Qt
+is the column vector form of Q.  This is useful if your matrix multiply
+routine is geared to doing column-vector style multiplication.
+
+    If your system uses row-vectors to represent points, then just flip all
+of the matrix equations I've written above:  P' = P M,  Q' = M* Q = Qt M*t.
+
+    For a quick proof, consider that you want the plane equation  Ax+By+Cz+D
+= 0  to hold true both before and after a transform.  That is, for all
+points P that lie on the plane Q, then all of the transformed points P'
+should lie on the transformed plane Q':
+
+    [1]    (Q') (P') = Q P    (it's an exercise to the reader to prove that
+the matrix product of the row vector Q and the column vector P expresses the
+plane equation Ax+By+Cz+D=0)
+
+    [2]    (Q M*) (M P) = Q P    (Q' = transform Q, and P' = transform P)
+
+    [3]    Q (M* M) P = Q P    (Associative law for matrix multiplication)
+
+    [4]    Q P = Q P    (M* M = Identity)
+
+Q.E.D.
+
+----------------------------------------------------------------------------
+
+Intersecting a Ray and a Triangle with Plücker Coordinates, by
+    Ray Jones (rjones@pobox.com)
+
+Testing for ray-triangle intersections with Plücker coordinates [1,2] has
+the benefit of being simple, reasonably efficient, and concise. Its main
+competitors are based on ray-plane intersection combined with barycentric
+tests.  Various people have asserted to me that these methods are better
+because, as side effects of the intersection test, they give:
+  a) the point of intersection
+  b) the barycentric coordinates of the intersection
+both of which are often needed for further computations.
+
+However, the Plücker intersection test can also be used to generate the
+barycentric coordinates.  Paraphrasing from [1], given the Plücker
+coordinate R of a ray through points P0,P1 and the Plücker coordinates
+E0,E1,E2 for the edges of a triangle (A,B,C), the intersection test checks
+the signs of the permuted inner products of R and each of E0,E1,E2.  If the
+signs agree, then the ray intersects the triangle.
+
+The permuted inner product of the Plücker coordinates of two lines, P0->P1
+and Q0->Q1, is related to the volume of the tetrahedron formed by
+(P0,P1,Q0,Q1).  The volume of this tetrahedron (within a constant scale) is
+given by the determinant |P0 P1 Q0 Q1|:
+
+               | P0.x P0.y P0.z 1 |
+               | P1.x P1.y P1.z 1 |
+               | Q0.x Q0.y Q0.z 1 |
+               | Q1.x Q1.y Q1.z 1 |
+
+The Plücker coordinates of the line P0->P1 are the determinants of the six
+2x2 sub-matrices of:
+
+               ( P0.x P0.y P0.z 1 )
+               ( P1.x P1.y P1.z 1 )
+
+The connection between the Plücker coordinates and the volume determinant is
+easy to see, and it can be shown that the permuted inner product is
+equivalent to |P0 P1 Q0 Q1| [3].  (I have assumed that the w coordinates for
+the points are 1, for reasons explained below.)
+
+Getting back to the triangle intersection test, given the ray P0->P1, any
+point P2 on the ray, and an edge Q0->Q1 of the triangle (A,B,C), it can also
+be shown that the volume of the tetrahedron (P0,P1,Q0,Q1) is proportional
+to:
+   - The magnitude of (P0-P1)
+   - The dot product of (P0-P1) and the normal of (Q0,Q1,P2)
+   - The area of the triangle (Q0,Q1,P2)
+
+The first factor above is the same for each edge.  If we assume (without
+loss of generality) that P2 is in the plane of the triangle (A,B,C), then
+the second factor is also the same for each edge, since then the normal of
+(Q0,Q1,P2) is the same as that of (A,B,C).
+
+Therefore, the volume of the three tetrahedra, and by extension the Plücker
+inner products of the edges and the ray, are proportional to the areas of
+the triangles (A,B,P2), (B,C,P2) and (C,A,P2).  If P2 is in the plane of
+(A,B,C), then these are the subtriangles that define the barycentric
+coordinates of P2.  Since the other two factors are the same for each edge,
+the Plücker intersection test gives (directly) the unnormalized
+(homogeneous) barycentric coordinates of the ray-plane intersection point.
+
+There is one caveat: although the Plücker coordinates are homogeneous, for
+the equivalence to hold true, the Plücker coordinates of the edges of the
+triangle cannot be scaled independently.
+
+(Another benefit to using the Plücker intersection test is explained by
+Amanatides and Choi[4], where tests are performed only once per edge and
+shared by adjacent triangles.)
+
+[1] http://www.acm.org/tog/resources/RTNews/html/rtnv10n3.html#art11
+[2] http://www.acm.org/tog/resources/RTNews/html/rtnv11n1.html#art3
+[3] My thanks to Pat Hanrahan, who explained the equivalence of the
+    tetrahedral volume and Plücker inner product as well as the
+    connection to barycentric coordinates after I had found it by
+    other (less clear) means.  He knew of this connection well before
+    I noticed it.
+[4] http://www.cs.yorku.ca/~amana/research/mesh.pdf
+    John Amanatides, Kia Choi "Ray Tracing Triangular Meshes",
+    Proceedings of the Eighth Western Computer Graphics Symposium
+    April 1997, pp 43-52.
+
+----------------------------------------------------------------------------
+
+Volumetric Rendering, by Paul Kahler (phkahler@oakland.edu)
+
+[From the realtime raytracing list.]
+
+I just thought I'd mention that I tried some very limited RT volume
+rendering. I used an oct-tree (however you spell that) and treated it as
+nested bounding *spheres*. A single sphere is circumscribed around the top
+level cube in the tree. Then 8 smaller spheres are circumscribed around the
+8 subcubes. This pattern is repeated down to the smallest size sphere/cube
+to be used.
+
+There really aren't any cubes or spheres defined. Only the orientation of
+the entire hierarchy. Each node in the tree has just 8 pointers to its
+children (NULL if an octant is empty). The bottom level objects have color
+information instead of pointers. You can use the recursive structure to do
+really fast intersection tests on the spheres. The ultimate may be to
+project the ray onto a plane perpendicular to the ray with the bounding
+sphere at the origin. The intersection test is then checking if the point is
+inside a circle, and subsequent tests of the children are just a matter of
+moving that point around the plane (via 8 vectors projected onto the plane).
+
+I never got as far as the plane projection, but I did do a recursive
+intersection test and used one of 8 different orders to test the child
+octants depending on the ray direction (not optimal, but never used the
+worst-case order). I was able to trace a solid block of 64x64x64 balls at
+1fps or so. There was a LOT of aliasing going on because I was using the
+normal vector of each ball where the ray hit rather than some type of
+"surface normal" involving the overall surface geometry.
+
+My conclusion was that each voxel should have a single normal vector
+associated with it (I've used this before in a non-RT voxel renderer
+http://www.oakland.edu/~phkahler) and with more optimization you could get
+good performance and large voxel counts. I've decided to put that aside
+until several gigabytes of ram are available and I have more time. RAM usage
+can be minimized if you can re-use even the smallest subtrees but a complex
+scene will still require a lot of storage and it will be static (those
+blades of voxel grass will not blow in the wind).
+
+----------------------------------------------------------------------------
+
+Recent Papers, summarized by Eric Haines and Vlastimil Havran
+    (havran@fel.cvut.cz)
+
+This section is a collection of notices of some recent papers related to ray
+tracing and global illumination. Please feel free to send me other relevant
+abstracts to publish here.
+
+Vlastimil Havran writes:
+
+Several papers on ray tracing appeared at
+WSCG'2000(http://wscg.zcu.cz/wscg2000/wscg_2000_program.htm),
+SCCG'2000(http://www.dcs.fmph.uniba.sk/~sccg/2000/program.htm), and
+EGWR'2000(http://www.fee.vutbr.cz/egrw2000/program.html), that could be of
+interest. I've selected only those closely related to ray tracing (many more
+of them are related to general rendering, particularly to global
+illumination):
+
+Wilkie,A., Tobler,R.F., Purgathofer,W.: Raytracing of Dispersion Effects in
+Transparent Materials (Austria)
+http://wscg.zcu.cz/wscg2000/Papers_2000/W7.pdf.gz
+
+Havran,V., Dachs,L., ra,J.: VIS-RT: A Visualization System for RT Spatial
+Data Structures (Czech Republic)
+http://wscg.zcu.cz/wscg2000/Papers_2000/X77.ps.gz
+
+Revelles,J., Urena,C., Lastra,M.: An Efficient Parametric Algorithm for
+Octree Traversal (Spain) http://wscg.zcu.cz/wscg2000/Papers_2000/X31.pdf
+
+Poitou,O., Bermes,S., Lecussan,B.: Laziness, a Way to Improve Distributed
+Computation of the Ray Tracing Algorithm
+http://wscg.zcu.cz/wscg2000/Papers_2000/T29.ps.gz
+
+
+EGWR'2000:
+
+Dynamic Acceleration Structures for Interactive Ray Tracing, Erik Reinhard,
+Brian Smits, Chuck Hansen
+
+Direct Ray Tracing of Displacement Mapped Triangles, Brian Smits, Peter
+Shirley, Michael Stark
+
+Ray Tracing Point Sampled Geometry, Gernot Schaufler, Henrik Jensen
+
+Tapestry: A Dynamic Mesh-based Display Representation for Interactive
+Rendering, Maryann Simmons
+
+--------
+
+What follows are abstracts which I (Eric) have collected from email, etc;
+by no means is it a comprehensive list.
+
+Reinhard, E., Smits, B., and Hansen, C., "Dynamic Acceleration Structures
+for Interactive Ray Tracing," in Proceedings Eurographics Workshop on
+Rendering, (Brno, Chzech Republic), June 2000.
+
+My own explanation: The idea of this paper is that as objects move outside
+the grid efficiency structure, they are (cheaply) reinserted into the grid
+itself, with a little resulting inefficiency. How is this possible? The grid
+is treated as a structure that repeats, filling space: now any object can be
+put into the grid, using the grid resolution as a modulus. In other words,
+something moving out through the left face of the grid "enters" the right
+face, and its larger location in the world is also noted. By doing so, the
+whole grid does not have to be recomputed each frame; rather, just the
+moving objects are deleted and reinserted. Only if the ray traveling through
+this grid matches the larger location of the object is the object tested for
+intersection. Paper available at http://www.cs.utah.edu/~reinhard/egwr/
+
+--------
+
+"Interval methods for ray casting implicit surfaces with affine arithmetic,"
+Affonso de Cusatis Junior, Luiz Henrique de Figueiredo, Marcelo Gattass,
+Proceedings of SIBGRAPI'99, p. 65-71. IEEE Computer Press.
+
+Abstract: We study the performance of affine arithmetic as a replacement for
+interval arithmetic in interval methods for ray casting implicit surfaces.
+Affine arithmetic is a variant of interval arithmetic designed to handle the
+dependency problem, and which has improved several interval algorithms in
+computer graphics.
+
+Full text, color images and other links available at http://www.tecgraf.puc-
+rio.br/~lhf/sib99/
+
+--------
+
+"Hierarchical and Stochastic Algorithms for Radiosity", Philippe Bekaert,
+K.U. Leuven, PhD Dissertation, 1999.
+
+The radiosity method is a physically based method to compute the
+illumination in a virtual environment with diffuse (matte) surfaces. It
+allows to generate very realistic images of such environments by computer,
+and it is suitable for quantitative predictions of the illumination.
+
+In the radiosity method, a number of simplifying assumptions are made that
+can however lead to certain image artifacts. In this dissertation, the
+numerical error introduced by these assumptions is analyzed. The analysis
+allows to propose new algorithms in which this error, the discretization
+error, is efficiently controlled during the computations by means of
+hierarchical refinement.
+
+The radiosity method also requires the solution of very large non-sparse
+systems of linear equations (about 100,000 equations is common). Moreover,
+the coefficients of these systems are non-trivial four-dimensional
+integrals. The main part of this dissertation is devoted to an in-depth
+study of how the Monte Carlo method can be applied in this context.
+
+The Monte Carlo method is suitable for reliable computation of the
+coefficients of the systems of equations. It also leads to algorithms that
+do not require explicit computation and storage of these coefficients. A
+systematic overview of such algorithms is presented. Previously proposed
+algorithms of this type are compared and some new algorithms are developed.
+Next, the application of several variance-reduction techniques is described,
+and the use of low-discrepancy sampling in this context is discussed.
+Finally, new ways to incorporate higher-order radiosity approximations and
+hierarchical refinement are proposed.
+
+The resulting Monte Carlo radiosity algorithms do not only appear to be more
+reliable, but also often lead more rapidly to usable images than their
+deterministic counterparts. They require significantly less computer
+storage, and they are more user friendly. It is expected that these
+algorithms will stimulate the use of the radiosity method in a wide spectrum
+of applications.
+
+Overview and thesis at:
+http://www.cs.kuleuven.ac.be/cwis/research/graphics/CGRG.PUBLICATIONS/PHBPHD
+
+--------
+
+"Incoming First-shot for Non-Diffuse Global Illumination," Szirmay-Kalos
+Laszlo, Mateu Sbert, Roel Martinez, Robert Tobler, Spring Conference of
+Computer Graphics, Budmerice, 2000
+
+Abstract:
+
+This paper presents a method that can replace the small and medium size
+lightsources by their effect in non-diffuse global illumination algorithms.
+Incoming first-shot is a generalization of a preprocessing technique called
+the first-shot that was developed for speeding up global diffuse radiosity
+algorithms. In order to reduce the prohibitive memory requirements of the
+original first-shot when it is applied to non-diffuse scenes in a direct
+manner, the proposed new method computes and stores only the incoming
+radiance generated by the lightsources and the reflected radiance is
+obtained from the incoming radiance on-the-fly taking into account the local
+BRDF and whether or not the actual viewing direction is in a highlight.
+Since the radiance function of the reflection is smoother and flatter than
+the original lightsource function, this replacement makes the integrand of
+the rendering equation have significantly smaller variation, which can speed
+up global illumination algorithms. The paper also discusses how the first-
+shot technique can be built into a stochastic iteration algorithm using ray-
+bundles, and provides run-time statistics.
+
+Paper at: http://www.fsz.bme.hu/~szirmay/puba.html
+
+--------
+
+"3D Visibility, analysis and applications", by Fredo Durand, PhD
+Dissertation, Universite Joseph Fourier, Grenoble
+
+This thesis deals with 3D visibility, and also contains a huge survey of
+visibility techniques in different fields such as graphics, vision or
+robotics.
+
+Abstract: Visibility problems are central to many computer graphics
+applications. The most common examples include hidden-part removal for view
+computation, shadow boundaries, mutual visibility of pairs of points, etc.
+In this document, we first present a theoretical study of 3D visibility
+properties in the space of light rays. We group rays that see the same
+object; this defines the 3D visibility complex. The boundaries of these
+groups of rays correspond to the visual events of the scene (limits of
+shadows, disappearance of an object when the viewpoint is moved, etc.). We
+simplify this structure into a graph in line-space which we call the
+visibility skeleton. Visual events are the arcs of this graph, and our
+construction algorithm avoids the intricate treatment of the corresponding
+1D sets of lines. We simply compute the extremities (lines with 0 degrees of
+freedom) of these sets, and we topologically deduce the visual events using
+a catalogue of adjacencies. Our implementation shows that the skeleton is
+more general, more efficient and more robust than previous techniques.
+Applied to lighting simulation, the visibility skeleton permits more
+accurate and more rapid simulations. We have also developed an occlusion
+culling preprocess for the display of very complex scenes. We compute the
+set of potentially visible objects with respect to a volumetric region. In
+this context, our method is the first which handles the cumulative occlusion
+due to multiple blockers. Our occlusion tests are performed in planes using
+extended projections, which makes them simple, efficient and robust. In the
+second part of the document, we present a vast survey of work related to
+visibility in various domains.
+
+Available at http://graphics.lcs.mit.edu/~fredo/THESE/
+
+----------------------------------------------------------------------------
+END OF RTNEWS

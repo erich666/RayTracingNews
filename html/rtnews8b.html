@@ -1,0 +1,1570 @@
+<!-- html version of Volume 2, Number 7 :  -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 2, Number 7</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>October 13, 1989</FONT>
+<P><FONT size=+1>Volume 2, Number 7</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1989, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction
+</A></LI>
+<LI><A HREF="#art2">
+New People and Address Changes
+</A></LI>
+<LI><A HREF="#art3">
+Solid Surface Modeler Information,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art4">
+Minimum Bounding Sphere Program,
+</A></LI>
+by Marshall Levine
+<LI><A HREF="#art5">
+Parallelism & Modeler Info Request,
+</A></LI>
+by Brian Corrie
+</UL>
+========Net News Cullings========
+<UL>
+<LI><A HREF="#art6">
+Ray Tracer Available,
+</A></LI>
+by Craig Kolb
+<LI><A HREF="#art7">
+Source from Roy Hall's Book,
+</A></LI>
+by Tim O'Connor
+<LI><A HREF="#art8">
+More on Texture Mapping by Spatial Position,
+</A></LI>
+by Paul Lalonde
+<LI><A HREF="#art9">
+Procedural Bump-mapping Query,
+</A></LI>
+by Prem Subrahmanyam
+<LI><A HREF="#art10">
+Ray Tracer Performance on Machines,
+</A></LI>
+by Gavin A. Bell, Steve Lamont
+<LI><A HREF="#art11">
+Projective Mapping Explanation,
+</A></LI>
+by Ken "Turk" Turkowski
+<LI><A HREF="#art12">
+Intersection Calculation Problem Request,
+</A></LI>
+Jari Toivanen
+<LI><A HREF="#art13">
+Mathematical Elements for Computer Graphics - Call for Errata,
+</A></LI>
+by David Rogers
+<LI><A HREF="#art14">
+Raytracing on NCUBE Request,
+</A></LI>
+by Ping Kang Hsiung
+<LI><A HREF="#art15">
+Intersection Between a Line and a Polygon (UNDECIDABLE??),
+</A></LI>
+by Dave Baraff, Tom Duff
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction
+</A></FONT>
+</H4>
+    It's October, the time when the air turns chilly, the leaves turn red, and
+people's minds turn towards releasing a public domain version of their ray
+tracer.  Holy smokes there's a lot of them coming out lately!  This month
+Craig Kolb's ray tracer has become available, along with the first PD ray
+tracer from Australia, by David Hook.  Paul Lalonde mentions that his will be
+coming out soon, and will include spline surfaces.  Also, David Kirk and Jim
+Arvo have created a ray tracer which they used in their workshop in Australia,
+and which may be released to the general public soon.  Other code that has
+been made available is that printed in Roy Hall's _Illumination and Color in
+Computer Generated Imagery_ book.
+<P>
+    Next month I hope to collect various timing information from all sorts of
+ray tracers on all sorts of machines.  I hope to do a "trace-off" sometime
+soon, comparing MTV's, Craig's, DBW, QRT, ART, mine, and any others I can get
+up and running.  If anyone else has any timings or observations on performance
+of ray tracers and various machines, please send them to me.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+New People and Address Changes
+</A></FONT>
+</H4>
+<PRE>
+David Hook
+<A HREF="mailto:dgh@munnari.OZ.AU">dgh@munnari.OZ.AU</A>
+</PRE>
+<P>
+<PRE>
+Dept. Of Engineering Computer Resources
+University Of Melbourne
+Parkville, Vic, 3052
+Australia
+</PRE>
+<P>
+G'day.
+<P>
+Our major area of interest in ray tracing is CSG modeling and we have a
+locally developed ray tracer which is a step towards this, as a department we
+are also involved with the Faculty of Architecture at this University, so we
+are starting to look at special effects somewhat more seriously than before.
+This has also led to a greater interest in acceleration techniques.
+<P>
+Personally, I am currently doing a masters degree in the area of CSG and ways
+of introducing patches into the model.  The rendering technique being used is
+ray tracing.
+<P>
+[And a further note from David Hook:]
+<P>
+The mailing list has been set up on munnari, so if you send it to
+<A HREF="mailto:rtnews@munnari.OZ.AU">rtnews@munnari.OZ.AU</A>, it will (should) travel around Oz to the people who want
+it.  I am asking people who subscribe if they wish to be on the contact list,
+etc...
+<P>
+As a bit of additional info, I have written a ray-tracer which does CSG and
+renders algebraic surfaces, (ala Pat Hanrahan), although in this case it's
+built around Sturm Sequences and we occasionally use CSG to take
+cross-sections of the surfaces.  The interest in algebraic surfaces began
+because a friend of mine was struggling with a 6th order surface known as the
+Hunt Surface, getting a good feel for the cusps on it was turning out to be
+awful using polygonal subdivision.  In any case there is a public domain
+version of all this sitting in pub on <A HREF="ftp://munnari.OZ.AU">munnari.OZ.AU</A> (128.250.1.21) which can
+be got by anonymous ftp.  The file is vort.tar.Z.  Knowing a bit more about
+the whole business now, it's a bit of an embarrassment!  Still it may be of
+interest to someone and constructive criticism is always welcome.
+<P>
+[From a README file in his ray tracing distribution:]
+<P>
+By the by, for people who are interested, there are an excellent series of
+papers on ray tracing and computer graphics in general published in the NATO
+ASI Series of books.  The volume in question is in Vol.  40, series F, and is
+titled "Theoretical Foundations of Computer Graphics and CAD".  It was
+published in 1988 Springer-Verlag.  Roman Kuchkuda's paper in it "An
+Introduction To Ray Tracing", would be the best introductory paper we have
+seen to date.  Apart from that it was the first paper we found that actually
+said what a superquadric was!
+<P>
+________
+<P>
+NAME:   Hench, Stephen D.              SNAIL MAIL: 2621-C Stewart Drive
+E MAIL: <A HREF="mailto:hench@csclea.ncsu.edu">hench@csclea.ncsu.edu</A>                      Raleigh, NC  27603
+<P>
+BRIEF: Undergrad in Mathematics and Computer Science at NCSU.
+       Interested in ray tracing (would I want to subscribe
+       if I wasn't?), radiosity, and rendering in general.
+<P>
+________
+<P>
+<PRE>
+Marshall Levine
+136 1937 Hall  Wilson College
+Princeton University
+Princeton, NJ 08544
+(609) 734-6061
+</PRE>
+<P>
+<PRE>
+Home:
+Marshall Levine
+5212 Louise Avenue
+Encino, California 91316
+(818) 995-6528
+(818) 906-7068
+</PRE>
+<P>
+<PRE>
+E-mail:
+(1)  <A HREF="mailto:mplevine@phoenix.princeton.edu">mplevine@phoenix.princeton.edu</A>  or:
+(2)  <A HREF="mailto:mplevine@gauguin.princeton.edu">mplevine@gauguin.princeton.edu</A>   or:
+(3)  <A HREF="mailto:mplevine@bogey.princeton.edu">mplevine@bogey.princeton.edu</A>
+</PRE>
+<P>
+My main interests are helicopters and computer graphics.  Within graphics, I
+am interested in animation and motion control.  While I think it is great to
+see a ray-traced magnifying glass sitting on top of a cicuit board, I would
+rather see the magnifying glass fly smoothly over a spinning board while the
+camera flies smoothly through the scene.  I am currently designing a flexible
+graphics language with a friend of mine, Chris Williams (Princeton U. '92).
+If anyone is interested, I can say more about that later.
+<P>
+________
+<P>
+Cornell Program of Computer Graphics
+<P>
+A ray tracing mailing list has been set up by Tim O'Connor:
+<P>
+<PRE>
+        <A HREF="mailto:ray-tracing-news@wisdom.graphics.cornell.edu">ray-tracing-news@wisdom.graphics.cornell.edu</A>
+</PRE>
+<P>
+<PRE>
+        Program of Computer Graphics
+        120 Rand Hall
+        Cornell University
+        Ithaca, NY 14853
+</PRE>
+<P>
+People on this list who've already been intro'ed here include: Roy Hall,
+Mark Reichert, Ben Trumbore, and Tim O'Connor.
+<P>
+New people and brief bio sketches:
+<P>
+Wash Wawrzynek - <A HREF="mailto:paw@squid.graphics.cornell.edu">paw@squid.graphics.cornell.edu</A>
+<P>
+Current interest are user interfaces and visualization for computational
+mechanics.
+<P>
+________
+<P>
+Len Wanger - <A HREF="mailto:lrw@freedom.graphics.cornell.edu">lrw@freedom.graphics.cornell.edu</A>
+<P>
+My sketch is on a piece of paper, but my interests are:  I am a graduate
+student in the department of computer graphics at Cornell University.  I am
+interested in modeling and visual perception.
+<P>
+________
+<P>
+Filippo Tampieri - <A HREF="mailto:fxt@freedom.graphics.cornell.edu">fxt@freedom.graphics.cornell.edu</A>
+<P>
+Areas of interest:  parallel/distributed ray tracing, fast algorithms for ray
+tracing.
+<P>
+________
+<P>
+Ricardo Pomeranz - <A HREF="mailto:rxp@venus.graphics.cornell.edu">rxp@venus.graphics.cornell.edu</A>
+<P>
+Interests: constructive solid geometry and rendering
+<P>
+________
+<P>
+Paul Wanuga - <A HREF="mailto:phw@neptune.graphics.cornell.edu">phw@neptune.graphics.cornell.edu</A>
+<P>
+Masters student at Cornell's Computer Graphics Lab.  Interests - rendering
+realistic complex environments in realistic times.
+<P>
+________
+<P>
+Kathy Kershaw - <A HREF="mailto:kershaw@hope.graphics.cornell.edu">kershaw@hope.graphics.cornell.edu</A>
+<P>
+I'm Kathy Kershaw.  I did the ray tracing thing once.  Maybe it'll have
+something to do w/ my master's thesis; maybe not.
+<P>
+________
+<P>
+Colin Summers - <A HREF="mailto:colin@scarpa.graphics.cornell.edu">colin@scarpa.graphics.cornell.edu</A>
+<P>
+Just recently interested in computer graphics and heading into the abyss from
+the architecture side, I have a background in personal computers and spent a
+year out of the design studio to computer consult in Manhattan.  Glad to be
+back in the world of academia.  As soon as someone comes across with a
+Macintosh like text processor for xWindows, let me know.
+<P>
+________
+<P>
+Ted Himlan - <A HREF="mailto:thh@squid.Graphics.Cornell.EDU">thh@squid.Graphics.Cornell.EDU</A>
+<P>
+<PRE>
+Color science, radiometric measurement, array camera.
+interest:  detailed measurements on an environment
+         for comparison to simulation.
+</PRE>
+<P>
+________
+<P>
+Julie O'Brien Dorsey - <A HREF="mailto:job@hope.graphics.cornell.edu">job@hope.graphics.cornell.edu</A>
+<P>
+Computer aided design applications, radiosity, lighting design
+<P>
+________
+<P>
+Francois Sillion - <A HREF="mailto:fxs@bruno.graphics.cornell.edu">fxs@bruno.graphics.cornell.edu</A>
+<P>
+I am currently on a Post-Doc position at Cornell, after having completed my
+PhD at the 'Ecole Normale Superieure' in Paris, France, where my work included
+the development of a two-pass method for lighting calculations, combining ray
+tracing and radiosity.
+<P>
+My interests are illumination models (local and global), animation and
+interactivity.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Solid Surface Modeler Information,
+</A></FONT>
+by Eric Haines
+</H4>
+The Solid Surface Modeler from NASA finally came out.  The disappointing news
+is that even though it's "a non-profit unit of the University of Georgia," the
+thing is priced at $1250 for a cartridge tape and documentation (which is $43
+separately).  The reason I mention it is this newsletter is that it was used
+for some rather elaborate databases that were both modeled and ray traced on
+the AT&T Pixel Machine.  Unfortunately, it's unclear whether the Pixel Machine
+driver program is included in the distribution.  The modeler itself sounds
+reasonable, source code comes on the tape, and there seems to be no
+restrictions on the use of the software.  It's a pity that it's pricey when
+compared to, say, FSF stuff, but I guess someone has to pay for those glossy
+advertisement folders.
+<P>
+From their literature:  "SSM was written in standard C with Silicon Graphic's
+Iris Graphics Library calls and AT&T PicLib calls....  The program is
+available for the Silicon Graphics IRIS workstation running version 3.1 of
+IRIX, and a Sun Workstation with AT&T PXM964 running 4.2 BSD."
+<P>
+<PRE>
+For more information contact:
+COSMIC
+The University of Georgia
+382 East Broad Street
+Athens, GA  30602
+(404)-542-3265
+</PRE>
+<P>
+<I>(Followup article in <A HREF="rtnv15n1.html#art9">RTNv15n1</A>.)</I>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Minimum Bounding Sphere Program,
+</A></FONT>
+by Marshall Levine
+</H4>
+I think you will be interested in the following program.  It is a
+minimum-bounding-sphere program.  As the explained in the header comments, the
+main algorithm seems to solve the problem in linear time.  Please let me know
+what you think.
+<P>
+{ clusters.p
+<P>
+<PRE>
+Written by Marshall Levine  (Princeton University '92)
+e-mail:  <A HREF="mailto:mplevine@phoenix.princeton.edu">mplevine@phoenix.princeton.edu</A>
+Algorithm designed by Marshall Levine and Chris Williams (Princeton U. '92)
+</PRE>
+<P>
+This program searches through a 3-dimensional space of randomly distributed
+points for a cluster of 10 stars within the smallest radius possible.
+<P>
+I first implemented a "pri" list.  This is a linked list of real numbers
+(representing distances).  The list is kept in order.  However, when a number
+that would go farther into the list than the number of points per sphere
+(NUMINSPHERE) tries to go into the list, the insert procedure stops it.  This
+is done because the distance is useless.  For example, if NUMINSPHERE is 5 and
+a number would be inserted into the 7th slot in the list, it is not inserted.
+The minimum radius of a sphere with 5 points would be determined by the 5th
+element of the list (not including the header), so any number inserted after
+the 5th element is useless and is therefore not inserted.  If there are not
+NUMINSPHERE elements in the pri, then there are not enough points to fill the
+sphere.
+<P>
+The brute-force algorithm loops through every point in space.  For each point,
+the algorithm finds the distance between that point and every other point and
+puts that distance into the pri.  When all points have been compared against
+this point, the NUMINSPHERE'th element is taken to be the minimum radius of a
+sphere centered at this point containing NUMINSPHERE points.  However, points
+are not compared against themselves, so the exact number of comparisons is
+N^2-N, making this an N^2 algorithm.
+<P>
+The efficient algorithm designed by Chris Williams and me divides the space
+into a 3-dimensional grid.  If the grid is divided into NUMPOINTS/NUMINSPHERE
+sectors, then at least one of the sectors must have at least NUMINSPHERE
+points.  Now, make spheres with the same volume as the sectors.  At least one
+sphere surrounding one point will have at least NUMINSPHERE points.  It turns
+out that the tradeoff between fewer computations and more overhead is
+minimized by choosing the grid to have enough sectors such that each sector is
+r/2 on each side (where r is the radius of the aforementioned sphere).  Our
+algorithm starts with a sphere radius equal to the distance from one corner of
+the unit cube to another (3^.5).  Given the first point in the list, we
+compare that point against every other point in sectors touching the sphere
+(In this case, every other point in space!)  By storing the distances and then
+taking the NUMINSPHERE'th number from the pri list, as in the brute algorithm,
+we frequently reduce the size of the sphere.  Then, we check the next point
+with the new, smaller sphere size and continue in this way until we have
+tested every point.  As we go along, the minimum sphere size keeps shrinking
+until for any given point, we only check a few neighboring sectors, if any.
+In practice, this radius shrinks so quickly that the algorithm displays LINEAR
+BEHAVIOR!
+<P>
+NOTE:  This program was written for clarity, not for efficiency.  If it is to
+be used in any real applications, there are many ways to speed it up.
+<P>
+<PRE>
+                  Bruteforce:                     Our algorithm:
+                                               (Average of 3 runs)
+Points:   #Comparisons:  comps/points:     #Comparisons:  comps/points:
+     50            2450         49.000               958         19.160
+     75            5550         74.000              1241         16.547
+    100            9900         99.000              2111         21.110
+    150           22350        149.000              2785         18.567
+    200                                             3689         18.445
+    250                                             5120         20.480
+    300                                             6010         20.033
+    350                                             7149         20.426
+    400                                             7658         19.145
+    600                                            11404         19.007
+    800                                            16781         20.976
+   1000                                            20438         20.438
+</PRE>
+<P>
+<PRE>
+Testing 50 points.
+Brute-force:
+   Best sphere:    0.3067962678
+   Number of comparisons:     2450
+Efficient Algorithm:
+   Best sphere:    0.3067962678
+   Number of comparisons:      946
+</PRE>
+<P>
+<PRE>
+ %time  cumsecs  #call  ms/call  name
+  31.6     0.10      1   100.01  _brutecluster      &lt;====
+  10.5     0.18      1    33.34  _elegantcluster    &lt;====
+   5.3     0.25    101     0.17  _clearprilist
+   5.3     0.27    581     0.03  _insertprilist
+   5.3     0.28      1    16.67  _makespace
+</PRE>
+<P>
+<PRE>
+Testing 300 points.
+Brute-force:
+   Best sphere:    0.1569231423
+   Number of comparisons:    89700
+Efficient Algorithm:
+   Best sphere:    0.1569231423
+   Number of comparisons:     5617
+</PRE>
+<P>
+<PRE>
+ %time  cumsecs  #call  ms/call  name
+  44.2     3.27      1  3267.00  _brutecluster      &lt;====
+   2.9     6.82      1   216.69  _elegantcluster    &lt;====
+   1.1     7.00   2358     0.04  _insertprilist
+   0.2     7.33    601     0.03  _clearprilist
+   0.0     7.38      1     0.00  _makespace
+}
+</PRE>
+<P>
+<PRE>
+{==========================================================================}
+
+program clusters(input,output);
+
+const
+  MAXNUMPOINTS = 501;    { The maximum # of points we can handle  }
+  NUMINSPHERE = 10;      { # stars to find inside sphere          }
+  INFINITY = 999999.9;   { Larger than largest distance possible  }
+  MAXUSESPACE = 20;      { Maximum length per edge of space-grid  }
+  PI = 3.1415926535;
+
+type
+  datatype = real;
+  point = record         { The type of a point }
+            x : real;
+            y : real;
+            z : real;
+            data : datatype;
+          end;
+  ptr = ^node;
+  node = record          { Linked list for a distances list called "pri" }
+           data : real;
+           next : ptr;
+         end;
+  sptr = ^spacenode;     { Linked list for each sector in the space-grid }
+  spacenode = record
+                index : integer; { Stores index of that point in points[] }
+                next : sptr;
+              end;
+
+
+var
+  rndnm : integer;       { Needed for the random number generator }
+  points : array [1..MAXNUMPOINTS] of point;   { All points in space }
+  listhead : ptr;        { List head for distances list called "pri" }
+  space : array[0..MAXUSESPACE, 0..MAXUSESPACE, 0..MAXUSESPACE] of sptr;
+                         { The space-grid (hereafter called 'grid') }
+  spacesize, usespace : integer;  { Size per edge of grid }
+  NUMPOINTS : integer;   { The number of points we have in space }
+
+
+{ **************** Support routines for random generators ************** }
+
+procedure seed;        { Seed the random number generator }
+begin
+  writeln('seed:');
+  readln(rndnm);
+end;
+
+function rndom(scale : integer) : real; { Make random real from 0 to scale }
+begin
+  rndnm := abs(abs((rndnm*921+1)) mod 32749);
+  rndom := (rndnm*scale/32749)
+end;
+
+procedure randompoint(var pt : point);  { Generate a random point within }
+begin                                   {   a unit cube.                 }
+  pt.x := rndom(1);
+  pt.y := rndom(1);
+  pt.z := rndom(1)
+end;
+
+procedure generatepoints;           { Generate NUMPOINTS points in space }
+var x : integer;
+begin
+  for x := 1 to NUMPOINTS do
+    randompoint(points[x])
+end;
+
+
+{ *************** Support routines for the "pri" list ******************** }
+
+procedure initprilist;    { Initialize the pri list }
+begin
+  new(listhead);
+  listhead^.data := 0.0;
+  new(listhead^.next);
+  listhead^.next^.data := INFINITY;
+  listhead^.next^.next := nil
+end;
+
+procedure clearprilist;   { Clear the pri list }
+var p,oldp : ptr;
+begin
+  p := listhead;
+  while p &lt;&gt; nil do
+  begin
+    oldp := p;
+    p := p^.next;
+    dispose(oldp)
+  end;
+  new(listhead);
+  listhead^.data := 0.0;
+  new(listhead^.next);
+  listhead^.next^.data := INFINITY;
+  listhead^.next^.next := nil
+end;
+
+
+procedure insertprilist(r : real);  { Insert a distance into pri list    }
+var p,oldp,temp : ptr;       { "pri" is just a linked list of distances  }
+    x : integer;             { kept in low -&gt; high order. The catch is   }
+begin                        { that if a number should be inserted after }
+  x := 1;                    { the NUMINSPHERE'th node, we don't bother  }
+  p := listhead^.next;       { inserting it, because it isn't in the     }
+  oldp := listhead;          { smallest sphere with NUMINSPHERE points.  }
+  while (r &gt; p^.data) and (x &lt;= NUMINSPHERE) do
+  begin
+    oldp := p;
+    p := p^.next;
+    x := x + 1
+  end;
+  if x &lt;= NUMINSPHERE then
+  begin
+    new(temp);
+    temp^.data := r;
+    temp^.next := p;
+    oldp^.next := temp
+  end
+end;
+
+function getbiggestinsphere : real;  { Returns value of the NUMINSPHERE'th }
+var x : integer;                     { element in pri list, or INFINITY    }
+    p : ptr;                         { if the list isn't that long.        }
+begin
+  x := 1;
+  p := listhead^.next;
+  while (x &lt; NUMINSPHERE) and (p &lt;&gt; nil) do
+  begin
+    x := x + 1;
+    p := p^.next
+  end;
+  if (x &lt; NUMINSPHERE) or (p = nil) then getbiggestinsphere := INFINITY
+  else getbiggestinsphere := p^.data
+end;
+
+procedure printprilist;              { Print the pri list, for debugging }
+var p : ptr;
+begin
+  p := listhead;  { DO print the head }
+  while p &lt;&gt; nil do
+  begin
+    writeln(p^.data:15:10);
+    p := p^.next
+  end;
+  writeln('nil')
+end;
+
+
+{ ******************* Miscellaneous support routines ******************** }
+
+procedure printpoint(pt : point);   { Print out a point }
+begin
+  writeln('(',pt.x:8:5,',',pt.y:8:5,',',pt.z:8:5,')')
+end;
+
+
+function cube(x : real) : real;     { Return cube root of a number }
+begin
+  cube := exp((1/3)*ln(x))
+end;
+
+
+{ *********************** Brute Force algorithm ************************* }
+
+procedure brutecluster;    { Find minimum sphere containing NUMINSPHERE }
+                           {   points by testing the distance between   }
+                           {   every point.                             }
+var distx,disty,distz,dist : real;      { Find distance between two points }
+    bestsphere,trysphere : real;        { Find minimum sphere              }
+    numcomps : integer;                 { # comparisons                    }
+    thispoint,againstpoint : integer;   { Counters                         }
+begin
+  clearprilist;                           { Kill the priority list          }
+  bestsphere := INFINITY;
+  numcomps := 0;
+  for thispoint := 1 to NUMPOINTS do      { Test every point...             }
+  begin
+    clearprilist;
+    for againstpoint := 1 to NUMPOINTS do { ...against every other point    }
+      if thispoint &lt;&gt; againstpoint then   { Don't compare point against self}
+      begin
+        distx := points[thispoint].x - points[againstpoint].x;
+        disty := points[thispoint].y - points[againstpoint].y;
+        distz := points[thispoint].z - points[againstpoint].z;
+        dist := sqrt(distx*distx + disty*disty + distz*distz);
+        numcomps := numcomps + 1;
+        if dist &lt; bestsphere then       { If dist less than smallest sphere,}
+          insertprilist(dist)           {   insert distance into pri list   }
+      end;
+    trysphere := getbiggestinsphere;   { Get 'NUMINSPHERE'th item from list }
+    if trysphere &lt; bestsphere then     { If this radius is the smallest yet,}
+      bestsphere := trysphere;         {   then remember it.                }
+  end;
+  writeln('Brute-force:');
+  writeln('   Best sphere: ',bestsphere:15:10);
+  writeln('   Number of comparisons: ',numcomps:8)
+end;
+
+
+{ **************************** My algorithm *********************** }
+
+procedure makespace;        { Build the space-grid.  See documentation at }
+var x,y,z : integer;        { beginning of program for details.           }
+    temp : sptr;
+    thispoint : integer;
+begin
+  spacesize := trunc(cube(8*PI*NUMPOINTS/NUMINSPHERE));
+  usespace := spacesize-1;
+  if usespace &gt; MAXUSESPACE then writeln('****** NOT ENOUGH MEMORY FOR GRID');
+  for x := 0 to usespace do
+    for y := 0 to usespace do
+      for z := 0 to usespace do
+        space[x,y,z] := nil;     { Clear the grid }
+  for thispoint := 1 to NUMPOINTS do     { Go through every point... }
+  begin
+    new(temp);
+    temp^.index := thispoint;
+    x := trunc(points[thispoint].x * spacesize);
+    y := trunc(points[thispoint].y * spacesize);
+    z := trunc(points[thispoint].z * spacesize);
+    temp^.next := space[x,y,z];          { Put this point into proper }
+    space[x,y,z] := temp;                {   sector in grid.          }
+  end
+end;
+
+
+procedure elegantcluster;    { Find smallest sphere containing NUMINSPHERE }
+                             {   points by looping through every point,    }
+                             {   checking ROUGHLY only the points within   }
+                             {   a radius less than or equal to the        }
+                             {   minimum radius found so far.              }
+var bestsphere,trysphere : real;
+    xmin,xmax,ymin,ymax,zmin,zmax : integer; { Dimensions of box to check }
+    thispoint : integer;              { The current point to test against }
+    x,y,z : integer;                  { The current grid we are testing   }
+    distx,disty,distz,dist : real;    { For computing distances           }
+    numcomps : integer;               { # comparisons                     }
+    cpindex : sptr;          { Pointer into point list for a grid sector  }
+begin
+  makespace;
+  bestsphere := 1.732050808;    { Start with radius of distance from one }
+  numcomps := 0;                {   corner of unit cube to other: 3^.5   }
+  for thispoint := 1 to NUMPOINTS do    { Loop for every point }
+  begin
+    clearprilist;
+    xmin := trunc((points[thispoint].x - bestsphere) * spacesize);
+    xmax := trunc((points[thispoint].x + bestsphere) * spacesize);
+    ymin := trunc((points[thispoint].y - bestsphere) * spacesize);
+    ymax := trunc((points[thispoint].y + bestsphere) * spacesize);
+    zmin := trunc((points[thispoint].z - bestsphere) * spacesize);
+    zmax := trunc((points[thispoint].z + bestsphere) * spacesize);
+    if xmin &lt; 0 then xmin := 0;
+    if ymin &lt; 0 then ymin := 0;               { Get dimensions of box      }
+    if zmin &lt; 0 then zmin := 0;               { containing every sector in }
+    if xmax &gt; usespace then xmax := usespace; { grid that we want to check }
+    if ymax &gt; usespace then ymax := usespace; { against the current point  }
+    if zmax &gt; usespace then zmax := usespace;
+    for x := xmin to xmax do
+      for y := ymin to ymax do
+        for z := ymin to ymax do   { Loop through every sector in this box }
+        begin
+          cpindex := space[x,y,z];
+          while cpindex &lt;&gt; nil do  { Test against every point in this sector}
+          begin
+            if thispoint &lt;&gt; cpindex^.index then  { Don't test point against }
+            begin                                {   itself.                }
+              distx := points[thispoint].x - points[cpindex^.index].x;
+              disty := points[thispoint].y - points[cpindex^.index].y;
+              distz := points[thispoint].z - points[cpindex^.index].z;
+              dist := sqrt(distx*distx + disty*disty + distz*distz);
+              numcomps := numcomps + 1;
+              if dist &lt; bestsphere then  { If dist less than smallest sphere}
+                insertprilist(dist)      {   insert distance into pri list  }
+            end;
+            cpindex := cpindex^.next     { Get next point in this sector }
+          end
+        end;
+    trysphere := getbiggestinsphere;
+    if trysphere &lt; bestsphere then
+      bestsphere := trysphere
+  end;
+  writeln('Efficient Algorithm:');
+  writeln('   Best sphere: ',bestsphere:15:10);
+  writeln('   Number of comparisons: ',numcomps:8)
+end;
+
+
+begin
+  seed;
+  writeln('How many points?');
+  readln(NUMPOINTS);
+  if NUMPOINTS &lt; NUMINSPHERE then
+    writeln('***** Must have at least ',NUMINSPHERE:1,' points.')
+  else
+  begin
+    writeln('Testing ',NUMPOINTS:1,' points.');
+    initprilist;
+    generatepoints;
+    brutecluster;
+    elegantcluster
+  end
+end.
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Parallelism & Modeler Info Request,
+</A></FONT>
+by Brian Corrie (<A HREF="mailto:bcorrie@uvicctr.UVic.ca">bcorrie@uvicctr.UVic.ca</A>)
+</H4>
+[soon to be a posting on USENET, but it hadn't reached my node yet.]
+<P>
+Howdy folks....
+<P>
+    It's survey time again, and I would appreciate your participation in this
+version of twenty questions.
+<P>
+I am interested in parallel algorithms for ray tracing, and I am curious about
+a couple of things.  Please note that I have most of the "standard references"
+that get cited in the literature, but I am interested in some of the OTHER
+stuff that is out there.
+<P>
+The papers that I have:
+<P>
+Cleary et al.  "Multiprocessor Ray Tracing", Internal Report, 83/128/17,
+Department of Computer Science, University of Calgary, Calgary, Alberta,
+Canada.
+<P>
+Dippe et al "An Adaptive Subdivision Algorithm and Parallel Architecture for
+Realistic Image Synthesis", Computer Graphics, Volume 18, Number 3.
+<P>
+Gaudet et al "Multiprocessor Experiments for High Speed Ray Tracing", ACM
+TOG, Volume 7, Number 3.
+<P>
+etc.....
+<P>
+What I am interested in are references to some of the goodies that are out
+there in the real world.  Are there any papers on the hardware Pixar uses.
+How about the AT&T pixel machine, the Connection Machine (there is a piece on
+it in Scientific American, Volume 256, Number 6 that I already have), and
+other bizarre architectures.  Dave Jevans from the University of Calgary (Hi
+Dave, remember me?  I met you at SIGGRAPH this year) mentioned at one point he
+implemented some stuff on a BBN Butterfly (I think).  Any more info on that
+Dave?  Did you write it up?  Anybody else doing anything similar?
+<P>
+Here is the info I want....
+<P>
+<PRE>
+1) What architecture do you run on?
+2) Parallel, vectorized etc?
+</PRE>
+<P>
+For parallel systems:
+<P>
+<PRE>
+3) How many processors do you use?
+4) How tightly coupled are they?
+5) Do you perform any load balancing, and if so how?
+6) Architectural requirements (memory/node, communications etc)?
+7) Anything else you can think of that might be useful.
+</PRE>
+<P>
+Thanks in advance for any help you can give me.  Replies by email are of
+course the best route to take, but I read comp.graphics every morning, so a
+reply here will be seen.  I will post a summary to the net if I get enough
+information.
+<P>
+========
+<P>
+Question number two....
+<P>
+This should be quick and easy.  I would like to know what kind of modelling
+software people use out there in the real world.
+<P>
+We have all seen the pretty pictures, but how do they get created?  I would
+appreciate a quick or not so quick review of what kind of software is used at
+your site to model 3D scenes.
+<P>
+For those of you in the RT News mailing list and don't read the net like I do,
+I will send a copy of both this and the summary to Eric.
+<P>
+<PRE>
+        Thanks,
+</PRE>
+<P>
+<PRE>
+        Brian
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<P>
+======== USENET cullings follow =====================
+<P>
+<H4><FONT size=+1><A NAME="art6">
+Ray Tracer Available,
+</A></FONT>
+by Craig Kolb
+</H4>
+<P>
+<PRE>
+From: <A HREF="mailto:craig@weedeater.math.yale.edu">craig@weedeater.math.yale.edu</A>
+Newsgroups: comp.graphics
+Organization: Math Department, Yale University
+</PRE>
+<P>
+All of this talk of solid texturing and the like has convinced me to pull
+together my raytracer for public consumption.  Although I'm calling this a
+beta release, relatives of this version of rayshade have been making pretty
+pictures for about a year now.  For examples, see slides 32 and 57 from the
+SIGGRAPH '89 technical slide set and slides 67/68 from the stereo slide set.
+<P>
+If there's enough interest, I'll post rayshade to comp.sources.unix once the
+bugfixes stop rolling in.
+<P>
+[I would like to add that Craig's ray tracer is fairly nice, and most of the
+portability problems and minor bugs have been fixed since its release.  Its
+input language is much more full featured than NFF (which, I'll say again, was
+made only for testing ray tracers, not photorealism) and looks more mainstream
+than some of the other public domain ray tracers I've seen.  If you're looking
+for a reasonable input language, check his out.  His latest and greatest
+version (i.e. newer that 2.21) might be available via ftp by now. - EAH]
+<P>
+--
+<P>
+Rayshade, a raytracing program, is available for "Beta" testing.  Rayshade
+reads a multi-line ASCII file describing a scene to be rendered and produces a
+Utah Raster RLE format file of the raytraced image.
+<P>
+Features:
+<P>
+<PRE>
+        Primitives:
+                boxes
+                cones
+                cylinders
+                height fields
+                planes
+                polygons
+                spheres
+                triangles       (flat- or Phong-shaded)
+                [he forgot to mention there are also superquadrics! - EAH]
+</PRE>
+<P>
+<PRE>
+        Composite objects
+</PRE>
+<P>
+<PRE>
+        Point, directional, and extended (area) light sources
+</PRE>
+<P>
+<PRE>
+        Solid texturing and bump mapping of primitives, objects, and
+                individual instances of objects
+</PRE>
+<P>
+<PRE>
+        Antialiasing through adaptive supersampling or "jittered" sampling
+</PRE>
+<P>
+<PRE>
+        Arbitrary linear transformations of primitives,
+                instances of objects, and texture/bump maps
+</PRE>
+<P>
+<PRE>
+        Use of uniform spatial subdivision and/or hierarchy of
+                bounding volumes to speed rendering
+</PRE>
+<P>
+<PRE>
+        Options to facilitate rendering of stereo pairs
+</PRE>
+<P>
+<PRE>
+        Support for the Linda parallel programming language
+</PRE>
+<P>
+An awk script is provided to translate NFF format scripts to rayshade format.
+<P>
+Rayshade is written in C with parsing support provided through lex and yacc.
+The C, lex and yacc files comprise approximately eight thousand lines of
+code.  Sites without lex and yacc can make use of the C source files produced
+by lex and yacc which are included in this distribution.
+<P>
+Rayshade has been tested on a number of UNIX-based machines, including
+Vaxes, Sun Workstations, Iris 4D Workstations, Encore Multimax, AT&T 3B2/310,
+Cray XMP, and IBM RTs.  In addition, support is provided for the Amiga using
+the Aztec C compiler.
+<P>
+Rayshade makes use of the Utah Raster toolkit, a package consisting of a
+large number of useful image manipulation programs, test images, and a
+library to read and write images written using the toolkit's RLE format.  The
+toolkit is available via anonymous FTP from <A HREF="ftp://cs.utah.edu">cs.utah.edu</A> or from
+weedeater.math.yale.edu.
+<P>
+Those sites that cannot or do not want to use the Utah Raster toolkit can
+make use of a compile-time option to produce images written using a generic
+file format identical to that used in Mark VandeWettering's "MTV" raytracer.
+<P>
+This version of rayshade is a "beta" release.  The first "real" release will
+include an updated manual page and additional documentation as well as
+any bugfixes or extensions born out of this release.
+<P>
+Rayshade is copyrighted in a "Gnu-like" manner.
+<P>
+Rayshade is available via anonymous ftp from <A HREF="ftp://weedeater.math.yale.edu">weedeater.math.yale.edu</A>
+(192.26.88.42) in pub/Rayshade.2.21.tar.Z.  The Utah Raster toolkit
+is available in pub/UtahToolkit.tar.Z.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+Source from Roy Hall's Book,
+</A></FONT>
+by Tim O'Connor
+</H4>
+<PRE>
+From: <A HREF="mailto:toc@batcomputer.tn.cornell.edu">toc@batcomputer.tn.cornell.edu</A>
+Newsgroups: comp.graphics
+</PRE>
+<P>
+Straight from the dragon's mouth (so to speak) comes the source from
+"Illumination and Color in Computer Generated Imagery" by Roy Hall.  It's now
+available via anonymous ftp from:
+<P>
+<PRE>
+        <A HREF="ftp://freedom.graphics.cornell.edu">freedom.graphics.cornell.edu</A> (128.84.247.85)
+</PRE>
+<P>
+It's under pub/Hall and comes in two files:  1) README (of course) which also
+contains some code necessary to convert 2) code.tar.Z.a which contains the
+actual code.  So, as always, read README first.
+<P>
+Those of you who do not have ftp access may wish to drop me a short line (a
+Subject:  of "gimme roy's source" is adequate).  If there's enough interest
+I'll post to this group, if not I'll (shudder!)  attempt to mail it right to
+you.
+<P>
+Also of interest on freedom are the Ray Tracing News archives (under
+pub/RTNews) and the Xcu Widget Set.  (Sorry, this code available only in
+stores, no mailing.)
+<P>
+<PRE>
+        fishing in McElligot's Pool,
+                to'c
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art8">
+More on Texture Mapping by Spatial Position,
+</A></FONT>
+by Paul Lalonde
+</H4>
+<PRE>
+From: <A HREF="mailto:lalonde@ug.cs.dal.ca">lalonde@ug.cs.dal.ca</A>
+Newsgroups: comp.graphics
+Organization: Math, Stats & CS, Dalhousie University, Halifax,NS, Canada
+</PRE>
+<P>
+[This is a continuation of last issue's discussion.  The idea here I would
+consider the most popular solution to the problem.  I published most all of
+the discussion because some of the answers were more interesting for the ideas
+they generated than for practicality. - EAH]
+<P>
+In article [...] <A HREF="mailto:ranjit@grad1.cis.upenn.edu.UUCP">ranjit@grad1.cis.upenn.edu.UUCP</A> (Ranjit Bhatnagar) writes:
+<P>
+&gt;  [Talk about 3-d texture maps deleted for brevity]<BR>
+<P>
+&gt;I haven't seen discussed before: as generally proposed, it's highly<BR>
+&gt;unsuited to _animation._  The problem is that you generally define one<BR>
+&gt;texture function throughout all of space.  If an object happens to move,<BR>
+&gt;its texture changes accordingly.  It's a neat effect - try it - but it's<BR>
+&gt;not what one usually wants to see.<BR>
+<P>
+&gt;The obvious solution to this is to define a separate 3-d texture for<BR>
+&gt;each object, and, further, _cause the texture to be rotated, translated,<BR>
+&gt;and scaled with the object._  DBW does not allow this, so if you want<BR>
+&gt;to do animations of any real complexity with DBW, you can't use the nice<BR>
+&gt;wood or marble textures.<BR>
+<P>
+I get around this be keeping not only the general texture stored with the
+object, but also an (x,y,z) triple pointing to where the texture is to
+be evaluated.  I also keep some orientation information with the object.
+The texturing routine then only has to translate the scene coordinate of the
+point being textured into texture coordinates.  It comes down to keeping
+the textures in object coordinates.  This allows you to carve more than
+one object out of the same chunk of marble, which can be quite pleasing.
+It also requires very little extra manipulation of the texture.  For shape
+changes you just keep track of your deformation function and apply it to
+the point whose texture you are evaluating.
+<P>
+[Another congruent way of describing this is to use modeling matrices to
+describe the location (and even deformation) of animated objects.  Since the
+object itself without the modeling matrix does not move, the texturing of its
+surface does not change. - EAH]
+<P>
+<PRE>
+        -Paul
+</PRE>
+<P>
+(Ps. My raytracer implementing this (and other goodies) should be available
+as soon as I finish up my spline surfaces...Real Soon Now)
+<P>
+Paul A. Lalonde         UUCP: ...{uunet|watmath}!dalcs!dalcsug!lalonde
+Phone: (902)423-4748    BITNET: <A HREF="mailto:05LALOND@AC.DAL.CA">05LALOND@AC.DAL.CA</A>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art9">
+Procedural Bump-mapping Query,
+</A></FONT>
+by Prem Subrahmanyam
+</H4>
+<PRE>
+From: <A HREF="mailto:prem@geomag.fsu.edu">prem@geomag.fsu.edu</A>
+Newsgroups: comp.graphics
+Organization: Florida State University Computing Center
+</PRE>
+<P>
+I am going to attempt to employ a few procedural bump-map textures to
+DBW_Render (I have no idea how they will turn out).  I would like to start
+with some basics, like maybe a "golf-balling" algorithm that will give the
+surface small, spherical pits.  Also, a "cross- hatching" one would be nice as
+well, one that would produce furrows in a surface.  These should work for both
+planar surfaces as well as spherical ones.  So, here's the basic
+request....given a point, the normal to the surface at that point as well, how
+can I perturb the normal, position of the point, etc.  to create reasonable
+bump-maps.
+<P>
+One that I'd particularly like to reproduce is found in an old issue of IEEE
+Computer Graphics & Applications....the one with the Martian Magnolia in it.
+Well, there's this cross-hatching on the spheres on the previous page.  These
+would be very nice to try to implement in DBW_Render.  Can anyone point me to
+real code (or at least pseudocode) that will tell me how to generate these
+types of textures?  Eventually, with all these textures, bump-mapping, etc.
+in tow, DBW will be the most kick-butt ray-tracer available to the general
+public.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art10">
+Ray Tracer Performance on Machines,
+</A></FONT>
+by Gavin A. Bell, Steve Lamont
+</H4>
+[Note: Didier Badouel's timings will appear next issue, as I will be focussing
+on metrics then]
+<P>
+<PRE>
+From: <A HREF="mailto:gavin@krypton.sgi.com">gavin@krypton.sgi.com</A> (Gavin A. Bell)
+Newsgroups: comp.graphics
+</PRE>
+<P>
+In article [...], <A HREF="mailto:pkh@vap.vi.ri.cmu.edu">pkh@vap.vi.ri.cmu.edu</A> (Ping Kang Hsiung) writes:<BR>
+&gt; <BR>
+&gt; Does anyone have a collection of performance (timing) data based <BR>
+&gt; on running a raytracer (preferably a publicly available raytracer, <BR>
+&gt; e.g. mtv or qrt) on various machines? <BR>
+&gt; <BR>
+<P>
+I believe that the BRL-CAD ray-tracer is sometimes used as a standard
+benchmark (with specific input files).  A number is generated which they call
+the 'Ray-tracing figure of merit'; the higher the number, the better.  The
+whole BRL-CAD package is public domain [it's not - see below], but big,
+crufty, and pretty ancient as ray-tracing packages go.
+<P>
+I know all this because I'm in the Demo/Benchmarks group here at Silicon
+Graphics, and this ray-tracing benchmark is one of the few in which our 4D/280
+outperformed a Cray (ray-tracing being an easily multi-processed, but not
+vectorizable, application).
+<P>
+If people are interested, I could send them the results.
+<P>
+________
+<P>
+From: <A HREF="mailto:phil@sem.BRL.MIL">phil@sem.BRL.MIL</A> (Phil Dykstra)
+<P>
+The BRL-CAD package is *not* public domain.  It is Copyright by the U.S.Army
+in order to control commercialization of it.  We do distribute the source code
+at no charge however as long as the recipient agrees, in writing, to the
+conditions.
+<P>
+&gt; but big, crufty, and pretty ancient as ray-tracing packages go.<BR>
+<P>
+Being one of the authors, I had to put in at least two cents worth of defense.
+Big - yes.  Crufty - parts of it.  Pretty ancient - some of it.  But I
+wouldn't call things like CSG NURBs, arbitrary bounding planes, non-uniform
+space partitioning, parallel *and* network distributed capability very
+ancient.
+<P>
+________
+<P>
+<PRE>
+From: <A HREF="mailto:spl@mcnc.org">spl@mcnc.org</A> (Steve Lamont)
+Subject: Re: Raytracer performance on machines?
+Organization: Foo Bar Brewers Cooperative
+</PRE>
+<P>
+In article (<A HREF="mailto:6224@pt.cs.cmu.edu">6224@pt.cs.cmu.edu</A>) pkh@vap.vi.ri.cmu.edu (Ping Kang Hsiung) writes:<BR>
+&gt;For example, my experience indicates that mtv runs on a<BR>
+&gt;Cray Y-MP (-hintrinsic,o_level3) ~2.6x than on a PMAX, is this<BR>
+&gt;(Cray time) the fastest turn-around one can expect?<BR>
+&gt;Will a Connection Machine do better than this? What about an Intel iPSC?<BR>
+&gt;The Meiko transputer array? Silicon Graphics's Power series?<BR>
+<P>
+Well, it depends on what other things you feel prepared to do.  I have both an
+IRIS 4D/120 and a Y-MP here (we just installed a Stardent Titan yesterday,
+also) and see the same sort of numbers.  I'll run a couple of experiments
+today and get back to you with actual bench marks, if you'd like.
+<P>
+I am currently working on a parallelized version of MTV and should be able to
+give you some results from that in a couple of days, barring getting blown
+away by Hurricane Hugo, that is :-).
+<P>
+In any case, in order to take advantage of any parallelism on an MPP like a
+CM, you'll probably have to do a lot of recoding.  The CM is a SIMD machine
+which does not really lend itself *directly* to ray tracing.  I understand
+that TMC has done some interesting algorithmic development to actually *do*
+ray tracing, but the code certainly would not look anything like MTV as it
+stands right now.  Barry, are you out there lurking?  Any comments?
+<P>
+The iPSC and Meiko systems would probably be more straightforward.
+<P>
+If you're interested in results, contact me by private email and I'll be glad
+to share my thoughts with you.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art11">
+Projective Mapping Explanation,
+</A></FONT>
+by Ken "Turk" Turkowski
+</H4>
+<PRE>
+From: <A HREF="mailto:turk@Apple.COM">turk@Apple.COM</A>
+Newsgroups: comp.graphics
+Organization: Advanced Technology Graphics, Apple Computer, Cupertino, CA
+</PRE>
+<P>
+In article [...] <A HREF="mailto:ccoprrm@pyr.gatech.edu">ccoprrm@pyr.gatech.edu</A> (ROBERT E. MINSK) writes:<BR>
+&gt; I am currently trying to add texture mapping to my ray tracer. The problem<BR>
+&gt; I am having is texture mapping and normal interpolation to convex<BR>
+&gt; quadrilaterals and triangles.  The situation is as follows:<BR>
+&gt;  Given 4 points forming a convex planer quadrilateral,the texture vertices<BR>
+&gt; associated with each point, and the intersection point on the quadrilateral,<BR>
+&gt; find the associated (u,v) mapping coordinates for the intersection point.<BR>
+&gt; For example:<BR>
+&gt;  4 points       the associated texture vertices<BR>
+&gt;  p1=(-5, 1, 2)  t1=(.2,.4)<BR>
+&gt;  p2=(-2,-3, 6)  t2=(.4,.2)<BR>
+&gt;  p3=( 2,-1, 4)  t3=(.8,.3)<BR>
+&gt;  p4=( 1, 4,-1)  t4=(.7,.5)<BR>
+&gt; intersection point = (-2,-1, 4)<BR>
+&gt; find the (u,v) mapping coordinates<BR>
+&gt;<BR>
+&gt; I assume a triangle will be the same mapping with two vertices sharing the<BR>
+&gt; same points and mapping coordinates.<BR>
+<P>
+For suitably well-behaved texture mappings (i.e.  no bowtie quadrilaterals),
+there is a projective mapping, that maps quadrilaterals to quadrilaterals.
+This is represented by a 3x3 matrix, unique up to a scale factor.
+<P>
+<PRE>
+        [x y z] = [uw vw w] [M]                                         (1)
+</PRE>
+<P>
+where w is a homogeneous coordinate, and [M] is the 3x3 matrix.  Since the 4
+points must obey (1), we have the nonlinear system of equations:
+<P>
+<PRE>
+        |x0 y0 z0|   |u0*w0 v0*w0 w0|
+        |x1 y1 z1|   |u1*w1 v1*w1 w1|
+        |x2 y2 z2| = |u2*w2 v2*w2 w2| [M]                               (2)
+        |x3 y3 z3|   |u3*w3 v3*w3 w3|
+</PRE>
+<P>
+This represents 12 equations in 13 unknowns, but one of the w's may be
+arbitrarily chosen as 1.
+<P>
+System (2) can be solved for the matrix [M] by any nonlinear system equation
+solver, such as those available in the Collected Algorithms of the ACM.
+<P>
+When this matrix is inverted, it gives the mapping you desire:
+<P>
+<PRE>
+                               -1
+        [uw vw w] = [x y z] [M]                                         (3)
+</PRE>
+<P>
+You just plug the desired [x y z] into (3), and divide by w.
+<P>
+For triangles, the mapping (1) is affine:
+<P>
+<PRE>
+        [x y z] = [u v 1] [M]                                           (4)
+</PRE>
+<P>
+and the resulting system is linear:
+<P>
+<PRE>
+        |x0 y0 z0|   |u0 v0 1|
+        |x1 y1 z1| = |u1 v1 1| [M]                                      (5)
+        |x2 y2 z2|   |u2 v2 1|
+</PRE>
+<P>
+This linear equation (9 equations in 9 unknowns) can easily be solved by LU
+decomposition.
+<P>
+Note that this matrix computed in (2) and (5) depends only on the
+parametrization, so its only needs to be computed once, offline, at the time
+the texture is assigned.
+<P>
+Take note that the texture parameters are not interpolated linearly (or
+bilinearly), but projectively.  Also note that, unlike standard bilinear
+interpolation (such as that used for Gouraud interpolation) this method of
+interpolation is rotation invariant.
+<P>
+For more information on projective mappings, see the the book "Projective
+Geometry and Applications to Computer Graphics" by Penna and Patterson.  (I
+hope this reference is correct -- I'm doing it from memory).
+<P>
+For more detail on this approach to texture-mapping, including texture-mapping
+by scan-conversion, request a copy of the following paper:
+<P>
+<PRE>
+Turkowski, Ken
+The Differential geometry of Texture Mapping
+Apple Technical Report No. 10
+May 10, 1988
+</PRE>
+<P>
+from
+<P>
+<PRE>
+Apple Corporate Library
+Apple Computer, Inc.
+20525 Mariani Avenue
+Mailstop 8-C
+Cupertino, CA 95014
+</PRE>
+<P>
+The e-mail address for the library is: corp.lib1@applelink.apple.com,
+but the gateway is one-way, so don't expect an electronic reply.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art12">
+Intersection Calculation Problem Request,
+</A></FONT>
+Jari Toivanen
+</H4>
+<PRE>
+From: <A HREF="mailto:toivanen@tukki.jyu.fi">toivanen@tukki.jyu.fi</A>
+Newsgroups: comp.graphics
+Organization: University of Jyvaskyla, Finland
+</PRE>
+<P>
+I would like to know is there any simple and effective solution to following
+problem:
+<P>
+I have curve c:[0,1] -&gt; R*R. Curve c is cubic and it's following form
+<P>
+             3       2                   3       2
+c(t) = (a * t + b * t + c * t + d , a * t + b * t + c * t + d )
+         x       x       x       x   y       y       y       y
+<P>
+Now I rotate curve c around vector v so that I get surface (or what ever I
+should call it).  Let vector v be
+<P>
+<PRE>
+v = (x  , y  , z  )
+      up   up   up
+</PRE>
+<P>
+Now I should calculate intersection of this surface and given line l.  Let
+line l be
+<P>
+<PRE>
+l = (k * u + x , k * u + y , k * u + z ),  u &gt;= 0
+      x       0   y       0   z       0
+</PRE>
+<P>
+This should be done as fast as possible, because it would be part of ray
+tracer.  I also need surface's normal in the intersection point.
+<P>
+I've been calculating this, but the solution seems to be quite complicated.
+Is there any other easier way to do something like this?
+<P>
+Could anyone tell me good books which would help me deal with this kind of
+problems and bicubic surfaces and stuff like that?
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art13">
+Mathematical Elements for Computer Graphics - Call for Errata,
+</A></FONT>
+by David Rogers
+</H4>
+<PRE>
+From: <A HREF="mailto:dfr@usna.MIL">dfr@usna.MIL</A>
+Newsgroups: comp.graphics
+Organization: U.S. Naval Academy, Annapolis, MD
+</PRE>
+<P>
+<PRE>
+MATHEMATICAL ELEMENTS FOR COMPUTER GRAPHICS 2nd edition
+David F. Rogers & J. Alan Adams
+McGraw-Hill Book Co. 1990
+</PRE>
+<P>
+hardcover -- ISBN 0-07-053529-9
+<P>
+My own interest is in asking those of you who use the book for some
+assistance.  No matter how careful the authors and proofreaders are all books
+have typos.  If you use the book and find a typo (or something that you think
+is wrong) please [send a bug report and] tell me about it.  I will have a
+chance to correct these typos in about June 1990.  In a few months, I'll
+summarize those that I have received and publish an errata list to the net.
+<P>
+Thanks in advance.
+<P>
+Dave Rogers
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art14">
+Raytracing on NCUBE Request,
+</A></FONT>
+by Ping Kang Hsiung
+</H4>
+<PRE>
+From: <A HREF="mailto:pkh@vap.vi.ri.cmu.edu">pkh@vap.vi.ri.cmu.edu</A>
+Newsgroups: comp.graphics
+Organization: Carnegie-Mellon University, CS/RI
+</PRE>
+<P>
+Has anyone had ported/run raytracing on NCUBE?  I would like to learn about
+your experience; including raytracer name, NCUBE node number (NCUBE 2 or 1?),
+port time, performance, features/tricks, etc.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art15">
+Intersection Between a Line and a Polygon (UNDECIDABLE??),
+</A></FONT>
+ by Dave Baraff, Tom Duff
+</H4>
+<PRE>
+From: <A HREF="mailto:deb@charisma.graphics.cornell.edu">deb@charisma.graphics.cornell.edu</A>
+Newsgroups: comp.graphics
+Keywords: P, NP, Jordan curve separation, Ursyhon Metrization Theorem
+Organization: Program of Computer Graphics
+</PRE>
+<P>
+In article [...] <A HREF="mailto:ncsmith@ndsuvax.UUCP">ncsmith@ndsuvax.UUCP</A> (Timothy Lyle Smith) writes:<BR>
+&gt;<BR>
+&gt;  I need to find a formula/algorithm to determine if a line intersects<BR>
+&gt;  a polygon.  I would prefer a method that would do this in as little<BR>
+&gt;  time as possible.  I need this for use in a forward raytracing<BR>
+&gt;  program.<BR>
+<P>
+I think that this is a very difficult problem.  To start with, lines and
+polygons are semi-algebraic sets which both contain uncountable number of
+points.  Here are a few off-the-cuff ideas.
+<P>
+First, we need to check if the line and the polygon are separated.  Now, the
+Jordan curve separation theorem says that the polygon divides the plane into
+exactly two open (and thus non-compact) regions.  Thus, the line lies
+completely inside the polygon, the line lies completely outside the polygon,
+or possibly (but this will rarely happen) the line intersects the polyon.
+<P>
+Now, the phrasing of this question says "if a line intersects a polygon", so
+this is a decision problem.  One possibility (the decision model approach) is
+to reduce the question to some other (well known) problem Q, and then try to
+solve Q.  An answer to Q gives an answer to the original decision problem.
+<P>
+In recent years, many geometric problems have been successfully modeled in a
+new language called PostScript.  (See "PostScript Language", by Adobe Systems
+Incorporated, ISBN # 0-201-10179-3, co. 1985).
+<P>
+So, given a line L and a polygon P, we can write a PostScript program that
+draws the line L and the polygon P, and then "outputs" the answer.  By
+"output", we mean the program executes a command called "showpage", which
+actually prints a page of paper containing the line and the polygon.  A quick
+examination of the paper provides an answer to the reduced problem Q, and thus
+the original problem.
+<P>
+There are two small problems with this approach.
+<P>
+<PRE>
+        (1) There is an infinite number of ways to encode L and P into the
+        reduced problem Q.  So, we will be forced to invoke the Axiom of
+        Choice (or equivalently, Zorn's Lemma).  But the use of the Axiom of
+        Choice is not regarded in a very serious light these days.
+</PRE>
+<P>
+<PRE>
+        (2) More importantly, the question arises as to whether or not the
+        PostScript program Q will actually output a piece of paper; or in
+        other words, will it halt?
+</PRE>
+<P>
+<PRE>
+        Now, PostScript is expressive enough to encode everything that a
+        Turing Machine might do; thus the halting problem (for PostScript) is
+        undecidable.  It is quite possible that the original problem will turn
+        out to be undecidable.
+</PRE>
+<P>
+I won't even begin to go into other difficulties, such as aliasing, finite
+precision and running out of ink, paper or both.
+<P>
+A couple of references might be:
+<P>
+1. Principia Mathematica.  Newton, I.  Cambridge University Press, Cambridge,
+   England.  (Sorry, I don't have an ISBN# for this).
+<P>
+2. An Introduction to Automata Theory, Languages, and Computation.  Hopcroft, J
+   and Ulman, J.
+<P>
+3. The C Programming Language. Kernighan, B and Ritchie, D.
+<P>
+4. A Tale of Two Cities. Dickens, C.
+<P>
+________
+<P>
+<PRE>
+From: <A HREF="mailto:td@alice.UUCP">td@alice.UUCP</A> (Tom Duff)
+Summary: Overkill.
+Organization: AT&T Bell Laboratories, Murray Hill NJ
+</PRE>
+<P>
+The situation is not nearly as bleak as Baraff suggests (he should know
+better, he's hung around The Labs for long enough).  By the well known
+Dobbin-Dullman reduction (see J. Dullman & D. Dobbin, J. Comp. Obfusc.
+37,ii:  pp. 33-947, lemma 17(a)) line-polygon intersection can be reduced to
+Hamiltonian Circuit, without(!) the use of Grobner bases, so LPI (to coin an
+acronym) is probably only NP-complete.  Besides, Turing-completeness will no
+longer be a problem once our Cray-3 is delivered, since it will be able to
+complete an infinite loop in 4 milliseconds (with scatter-gather.)
+<P>
+________
+<P>
+From: <A HREF="mailto:deb@svax.cs.cornell.edu">deb@svax.cs.cornell.edu</A> (David Baraff)
+<P>
+Well, sure its no worse than NP-complete, but that's ONLY if you restrict
+yourself to the case where the line satisfies a Lipschitz condition on its
+second derivative.  (I think there's an '89 SIGGRAPH paper from Caltech that
+deals with this).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

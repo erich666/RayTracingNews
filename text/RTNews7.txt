@@ -1,0 +1,2085 @@
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+                        "Light Makes Right"
+
+                           May 12, 1989
+                        Volume 2, Number 3
+
+Compiled by Eric Haines, 3D/Eye Inc, 2359 Triphammer Rd, Ithaca, NY 14850
+    607-257-1381, hpfcla!hpfcrs!eye!erich@hplabs.hp.com
+All contents are US copyright (c) 1989 by the individual authors
+
+Contents:
+    Introduction
+    New People (Carl Bass, Paul Wanuga)
+    QRT Ray Tracer (and five other Amiga Ray Tracers) (Steve Koren)
+    New Version of MTV Ray Tracer (Mark VandeWettering)
+    Minimal Sphere Containing Three Points (Earl Culham)
+    Noise and Turbulence Function Code, Pascal and C (Jon Buller,
+	William Dirks)
+
+-----------------------------------------------------------------------------
+
+Introduction
+
+Well, we're now at the point where there are six ray tracers for the Amiga.
+Interestingly, none of them have implicit efficiency schemes (i.e. where the
+user does not have to intervene and create the efficiency structure himself).
+Admittedly, efficiency schemes are more code, but I've found that I was getting
+a factor of three speed up for a simple scene (a ten ball sphereflake) by using
+an efficiency scheme vs. not using one.  When your computer is the speed of an
+Amiga, efficiency schemes become vital.
+
+Next time I'll include "Tracing Tricks", an article I "edited" for the latest
+(and last) "Introduction to Ray Tracing" course notes.  The article is a "best
+of the RT News" compendium of efficiency tricks.  By the way, the course notes
+should be quite a bargain: they'll consist of the book of our notes by Academic
+Press, plus some new tidbits and reprints of "classic" articles.
+
+I would like to put the "Ray Tracing News" back issues somewhere that people
+can FTP them.  Personally I don't have a computer that has an FTP site, so if
+there are any volunteers that would like to store the back issues, please
+contact me.  The entire archive is about 448K at this point (not including this
+issue), broken into 5 parts.  Can you volunteer?
+
+-----------------------------------------------------------------------------
+
+# Carl Bass - hybrid shading models and quick(er) hidden surface methods
+# Ithaca Software
+# 902 West Seneca Street
+# Ithaca, NY 14850
+# 607-273-3690
+alias	carl_bass	carl@mssun1.msi.cornell.edu
+
+Carl is the co-founder of Ithaca Software Inc (once upon a time called "Flying
+Moose Inc"), which sells the HOOPS package for all kinds of computers.  This is
+an object-oriented system which I don't know much about beyond that their
+debugger is called WHOOPS.
+
+--------
+
+#
+# Paul Wanuga
+# Cornell Program of Computer Graphics
+# 120 Rand Hall
+# Ithaca, NY 14853
+# (607)-255-4880
+alias	paul_wanuga	phw@love.tn.cornell.edu
+Erich:
+ 
+     Could you please include me in your list of wiz-bango ray tracers?  It
+appears Don has me slated for research in ray-tracing complex, realistic,
+non-procedural environments.
+
+-----------------------------------------------------------------------------
+
+QRT Ray Tracer (and five other Amiga Ray Tracers), Steve Koren
+
+	This package appeared on comp.graphics a few months back.  I believe
+the latest version of the package is available from Mark VandeWettering's FTP
+site (see next article).  Write to Steve for more info:
+
+	hpfela!koren@hplabs.hp.com
+
+The software is written in C and worked just fine on my system.  Below is an
+excerpt of the UserMan.doc file of the QRT system (which Steve extensively
+documented).
+
+
+QRT is a ray tracing  image  rendering  system  that runs under a
+variety  of  operating  systems.   It  has  a  free  format input
+language   with   extensive   error   detection   and   reporting
+capabilities.
+    
+QRT was developed on the Amiga  personal  computer, so it will
+be compared to  other  Amiga  ray  tracers.  There  are, to my
+knowledge, five other  Amiga  ray  tracers,  each with its own
+strengths  and  weaknesses.    I  will  describe  each  system
+briefly, and compare it to QRT.  All the Amiga ray tracers can
+operate in HAM (4096 color) mode.
+
+  RT: RT was the first ray  tracer  written for the Amiga, by
+      Eric    Graham.  It will model  a universe made of only
+      spheres, a   sky, and a checkered  or solid ground.  It
+      is  relatively  fast,  but  not  generally  useful  for
+      realistic modeling   because  of the sphere limitation.
+      The input language  is  cryptic,  although  some  error
+      checking is done.  The  system  will  only generate low
+      resolution images.
+
+ SILVER: I have never seen SILVER, so I cannot say much about
+      this system.
+
+ SCULPT-4D: This package  incorporates  an interactive editor
+      for  creating  objects,   and  is  capable  of  quickly
+      generating a preliminary  image  of  the scene by using
+      hidden surface techniques.  However, every primitive is
+      made of polygons, and some  primitives  such as spheres
+      require hundreds of  polygons  for a smooth texture, so
+      the ray tracing is very slow.   Also, the package takes
+      a large amount of memory to run, and is prone to system
+      crashes.  Its chief  feature  is  the ability to create
+      arbitrary shaped objects  using  a series of triangles.
+      Mirrored, dull, or shiny objects are supported.
+
+ CLIGHT: This ray tracer also has  an interactive editor, but
+      produces very poor quality  images.   It is not capable
+      of any patterning or reflection characteristics.
+
+ DBW: This is possibly the most  complete  ray tracer for the
+      Amiga.  It will support objects  with arbitrary degrees
+      of reflection and gloss,  depth  of field effects, some
+      texturing,   wavy   surfaces,   fractals,   transparent
+      surfaces, diffuse  propagation  of light from object to
+      object,  and  5  primitive   types  (sphere,  triangle,
+      parallelogram, fractal, and ring).  The input language,
+      however,   is    so    cryptic    as   to   be   nearly
+      incomprehensible, and  if  there  is  any  error in the
+      input file,  it  will  crash  the  system.   It is also
+      painfully slow;  some  images  take  16  to 24 hours to
+      complete.
+
+QRT is meant to be a  compromise  between the fast, simple ray
+tracers and the slow powerful systems.   It compares favorably
+in speed to RT, and in power  to  Sculpt-3d  or DBW.  It has a
+very friendly input language  with  extensive  error checking.
+Here are some features of QRT:
+
+   o  Multiple primitive types, including user defined
+      quadratic surfaces
+
+   o  Arbitrary levels of diffuse reflection, spectral
+      reflection, transmission, ambient lighting, and gloss
+
+   o  User defined pattern information for objects
+
+   o  Bounding boxes for groups of objects
+
+   o  Shadows
+
+   o  Multiple light sources with different characteristics
+
+   o  Arbitrary Phong spectral reflection coefficients
+
+   o  Color dithering to increase the apparent number of
+      colors
+
+   o  Easy to use, free format input language with error
+      checking.  Parameters are by keyword and may appear in
+      any order.
+
+   o  Supports medium resolution (128k dots/screen)
+
+-----------------------------------------------------------------------------
+
+New Version of MTV Ray Tracer, Mark VandeWettering
+
+Mark VandeWettering's nice little ray tracer (polygons, spheres, cones and
+cylinders, Kay/Kajiya efficiency scheme, yacc/lex parser for NFF format,
+otherwise written in C) was released on USENET in three parts on March 27.
+Others have interesting features, but the selection of primitives and the speed
+of the code of the MTV ray tracer is a big plus.  It's currently my favorite
+public domain ray tracer (the amazing BRL package I consider private).
+
+The package is available at the usual comp.sources.unix archive sites or from
+Mark via anonymous ftp at drizzle.cs.uoregon.edu.  Mark's address is:
+
+    markv@drizzle.cs.uoregon.edu
+
+-----------------------------------------------------------------------------
+
+Subject: Re: Ray Traced Bounding Spheres
+From: ECULHAM@UALTAVM.BITNET (Earl Culham)
+Organization: University of Alberta VM/CMS
+
+In article <17241@versatc.UUCP>, ritter@versatc.UUCP (Jack Ritter) writes:
+ 
+>Given a cluster of points in 3 space, is there
+>a good method for finding the minimum radius
+>sphere which encloses all the points?  If not
+>minimum, at least "small"?  Certainly it should
+>be tighter than the sphere which encloses the
+>minimum bounding box.
+>
+>I have a feeling the solution is iterative. If
+>so, I could provide a good initial guess for the
+>center & radius.
+ 
+The solution is not iterative. A simple solution is available in a two step
+process, and is characterized by whether three, or only two of the points are
+on the surface of the optimal sphere.
+ 
+Given the points, A, B, and C.
+Searching for the center of the optimal sphere, P, with the smallest
+radius, R.
+ 
+Checking the midpoints.
+ 
+set P = point halfway between A and B
+set R = 1/2 of length from A to B
+If length from C to P is less than or equal to R ---> done
+Repeat with line A-C, and B-C if needed.
+ 
+Extending the midpoints at right angles.
+ 
+build the line which intersects A-B at a right angle through the midpoint
+  of A-B, call the line D.
+build the line which intersects A-C at a right angle through the midpoint
+  of A-C, call it E.
+P is the point where D and E intersect. (Solve the simultaneous equations;
+  R is the length A-P)
+
+-----------------------------------------------------------------------------
+
+From: bullerj@handel.colostate.edu (Jon Buller)
+Subject: Re: Pixar's noise function
+Organization: Colorado State University, Ft. Collins CO 80523
+
+In article <3599@pixar.UUCP> aaa@pixar.UUCP (Tony Apodaca) writes:
+>In article <2553@ssc-vax.UUCP> coy@ssc-vax.UUCP (Stephen B Coy) writes:
+>>          ...My question:  Does anyone out there know what this
+>>noise function really is?
+>
+>	Three-dimensional simulated natural textures using pseudorandom
+>functions were simultaneously and independently developed by Darwyn
+>Peachey and Ken Perlin in 1984-5.  Both have papers in the 1985
+>Siggraph Proceedings describing their systems.  Perlin, in particular,
+>describes in detail how noise() is implemented and can be used creatively
+
+   [A description of the properties of the noise function goes here...]
+
+>	If you have ever been interested in realistic computer graphics, do
+>whatever it takes to get a look at Perlin's paper.  In 1985, his pictures
+>were absolutely astounding.  In 1989, they are STILL astounding.
+
+	No kidding, some of those pictures are INCREDIBLE.
+
+     Here is my code for a look-alike to the Pixar Noise function, and while I
+can't say anything about exactly what Pixar's looks like, I think this is
+probably close.  After reading the 1985 SIGGRAPH papers on 3d texturing, (and
+seeing my prof's code to do a similar thing) I wrote this.  It uses a quadratic
+B-Spline instead of the cubic Hermite interpolant implied in the paper.  Also
+note that DNoise is just the x, y, and z derivatives of Noise (which are also
+B-Splines).  The hashing functions are from Knuth's Art of Computer Programming
+(I don't remember which volume though).
+
+I know the code is Pascal, and all of you will hate it, but I believe I write
+better Pascal than C...  One final note, this was Lightspeed Pascal 2.0 for the
+Macintosh, but things have been reformatted slightly to get it on the net.  I
+hope this is what you all wanted.
+
+--------
+
+More:
+
+One other thing you might notice, Noise is C1 continuous, DNoise is only C0.
+This means that DNoise will have creases in it (along the planes of the random
+grid.  To see this, crank out a square: 0<X<5, 0<Y<5, Z=0.  You will see smooth
+regions within each unit square, and creases between squares.  To avoid this,
+use a cubic B-Spline, or cubic Hermite (as hinted to in the SIGGRAPH
+proceedings) the problem there, is that you either need more data points (64
+instead of 27) for the B-Spline, or derivative info at each point of the grid
+(a normal plane, 4 floats instead of 1).  This would take too muh time for me
+to code up to be worth it, and would probably run too much slower (10min for a
+200x200 pixel picture now, ug.)  If somebody wants to give me a cray-3 to play
+with, I'll write more accurate (and slower) code, until then... 8-)
+
+Jon
+bullerj@handel.cs.colostate.edu          ...!ncar!ccncsu!handel!bullerj
+(These are my ideas (and code), nobody else SHOULD want these bugs)
+I'm just trying to graduate.  Apple, Pixar, HP, etc. take note, I would like
+your job offers, I have tired of the university life.
+
+
+[NOTE: I have attached the Pascal code for the Turbulence functions.  The Noise
+functions are in the next message in "C".  Sorry about the mixed languages, but
+I haven't nicely translated these. -- EAH]
+
+(* ---------- cut here ---------- cut here ---------- cut here ---------- *)
+
+const
+   MaxPts = 512;  { Must be 2^n}
+   MPM1 = MaxPts - 1;
+type
+   PtsTyp = array[0..MaxPts] of Extended;
+var
+   Points: PtsTyp;
+
+
+function Turb (Size: Integer;
+               ScaleFactor: Extended;
+               Loc: Vect;
+               Pts: PtsTyp): Extended;
+   var
+      Scale, Result: Extended;
+      Cur: Integer;
+begin
+   Result := Noise(Loc, Pts);
+   Scale := 1.0;
+
+   Cur := 1;
+   while Cur < Size do begin
+      Cur := BSL(Cur, 1);          {Cur := Cur * 2}
+      Scale := Scale * ScaleFactor;
+      Loc := Scale_Vect(2.0, Loc);
+      Result := Result + Noise(Loc, Pts) * Scale;
+   end;
+   Turb := Result;
+end;
+
+
+function DTurb (Size: Integer;
+                ScaleFactor: Extended;
+                Loc: Vect;
+                Pts: PtsTyp): Vect;
+   var
+      Result: Vect;
+      Scale: Extended;
+      Cur: Integer;
+begin
+   Result := DNoise(Loc, Pts);
+   Scale := 1.0;
+
+   Cur := 1;
+   while Cur < Size do begin
+      Cur := BSL(Cur, 1);
+      Scale := Scale * ScaleFactor;
+      Loc := Scale_Vect(2.0, Loc);
+      Result := Add_Vect(Result, Scale_Vect(Scale, DNoise(Loc, Pts)));
+   end;
+   DTurb := Result;
+end;
+
+-----------------------------------------------------------------------------
+
+And the C Version...
+
+From: dirks@oak.cis.ohio-state.edu (william r dirks)
+Subject: C Versions of Noise and DNoise Routines
+Organization: Ohio State University Computer and Information Science
+
+
+It was suggested to me that some of you would be interested in my 
+translated-into-C-and-corrected versions of noise() and Dnoise().
+
+So, here they are.  
+
+Note that this is only noise and Dnoise.  The turbulence routines are
+not included 'cause I haven't translated them yet.
+
+Oh yeah, initnoise() fills the pts[] array with random numbers between
+0 and 1.  Don't forget to initialize, or noise will always return 0.
+(That's been experimentally verified! :-))
+
+--Bill--
+
+[Note that you should look over the rand() function if you use this stuff.
+Some rand()'s need initialization (srand()), and some give numbers from 0
+to 32767, and so should use this as a divisor. -- EAH]
+
+
+---------cut-here------------------------------------cut-here--------
+/*
+**	Noise and Dnoise routines
+*
+*	Many thanks to Jon Buller of Colorado State University for these
+*	routines.
+*/
+
+
+typedef struct vector {
+   double x, y, z;
+} Vector;
+
+
+#define NUMPTS	512
+#define P1	173
+#define P2	263
+#define P3	337
+#define phi	0.6180339
+
+
+static double pts[NUMPTS];
+
+
+void initnoise()
+{
+   int i;
+   
+   for (i = 0; i < NUMPTS; ++i)
+      pts[i] = rand() / 2.147483e9;
+}
+
+
+double noise(p)
+Vector *p;
+{
+   int xi, yi, zi;
+   int xa, xb, xc, ya, yb, yc, za, zb, zc;
+   double xf, yf, zf;
+   double x2, x1, x0, y2, y1, y0, z2, z1, z0;
+   double p000, p100, p200, p010, p110, p210, p020, p120, p220;
+   double p001, p101, p201, p011, p111, p211, p021, p121, p221;
+   double p002, p102, p202, p012, p112, p212, p022, p122, p222;
+
+   xi = floor(p->x);
+   xa = floor(P1 * (xi * phi - floor(xi * phi)));
+   xb = floor(P1 * ((xi + 1) * phi - floor((xi + 1) * phi)));
+   xc = floor(P1 * ((xi + 2) * phi - floor((xi + 2) * phi)));
+
+   yi = floor(p->y);
+   ya = floor(P2 * (yi * phi - floor(yi * phi)));
+   yb = floor(P2 * ((yi + 1) * phi - floor((yi + 1) * phi)));
+   yc = floor(P2 * ((yi + 2) * phi - floor((yi + 2) * phi)));
+
+   zi = floor(p->z);
+   za = floor(P3 * (zi * phi - floor(zi * phi)));
+   zb = floor(P3 * ((zi + 1) * phi - floor((zi + 1) * phi)));
+   zc = floor(P3 * ((zi + 2) * phi - floor((zi + 2) * phi)));
+
+   p000 = pts[xa + ya + za & NUMPTS - 1];
+   p100 = pts[xb + ya + za & NUMPTS - 1];
+   p200 = pts[xc + ya + za & NUMPTS - 1];
+   p010 = pts[xa + yb + za & NUMPTS - 1];
+   p110 = pts[xb + yb + za & NUMPTS - 1];
+   p210 = pts[xc + yb + za & NUMPTS - 1];
+   p020 = pts[xa + yc + za & NUMPTS - 1];
+   p120 = pts[xb + yc + za & NUMPTS - 1];
+   p220 = pts[xc + yc + za & NUMPTS - 1];
+   p001 = pts[xa + ya + zb & NUMPTS - 1];
+   p101 = pts[xb + ya + zb & NUMPTS - 1];
+   p201 = pts[xc + ya + zb & NUMPTS - 1];
+   p011 = pts[xa + yb + zb & NUMPTS - 1];
+   p111 = pts[xb + yb + zb & NUMPTS - 1];
+   p211 = pts[xc + yb + zb & NUMPTS - 1];
+   p021 = pts[xa + yc + zb & NUMPTS - 1];
+   p121 = pts[xb + yc + zb & NUMPTS - 1];
+   p221 = pts[xc + yc + zb & NUMPTS - 1];
+   p002 = pts[xa + ya + zc & NUMPTS - 1];
+   p102 = pts[xb + ya + zc & NUMPTS - 1];
+   p202 = pts[xc + ya + zc & NUMPTS - 1];
+   p012 = pts[xa + yb + zc & NUMPTS - 1];
+   p112 = pts[xb + yb + zc & NUMPTS - 1];
+   p212 = pts[xc + yb + zc & NUMPTS - 1];
+   p022 = pts[xa + yc + zc & NUMPTS - 1];
+   p122 = pts[xb + yc + zc & NUMPTS - 1];
+   p222 = pts[xc + yc + zc & NUMPTS - 1];
+
+   xf = p->x - xi;
+   x1 = xf * xf;
+   x2 = 0.5 * x1;
+   x1 = 0.5 + xf - x1;
+   x0 = 0.5 - xf + x2;
+
+   yf = p->y - yi;
+   y1 = yf * yf;
+   y2 = 0.5 * y1;
+   y1 = 0.5 + yf - y1;
+   y0 = 0.5 - yf + y2;
+
+   zf = p->z - zi;
+   z1 = zf * zf;
+   z2 = 0.5 * z1;
+   z1 = 0.5 + zf - z1;
+   z0 = 0.5 - zf + z2;
+
+   return   z0 * (y0 * (x0 * p000 + x1 * p100 + x2 * p200) +
+                  y1 * (x0 * p010 + x1 * p110 + x2 * p210) +
+                  y2 * (x0 * p020 + x1 * p120 + x2 * p220)) +
+            z1 * (y0 * (x0 * p001 + x1 * p101 + x2 * p201) +
+                  y1 * (x0 * p011 + x1 * p111 + x2 * p211) +
+                  y2 * (x0 * p021 + x1 * p121 + x2 * p221)) +
+            z2 * (y0 * (x0 * p002 + x1 * p102 + x2 * p202) +
+                  y1 * (x0 * p012 + x1 * p112 + x2 * p212) +
+                  y2 * (x0 * p022 + x1 * p122 + x2 * p222));
+}
+
+
+
+Vector Dnoise(p)
+Vector *p;
+{
+   Vector v;
+   int xi, yi, zi;
+   int xa, xb, xc, ya, yb, yc, za, zb, zc;
+   double xf, yf, zf;
+   double x2, x1, x0, y2, y1, y0, z2, z1, z0;
+   double xd2, xd1, xd0, yd2, yd1, yd0, zd2, zd1, zd0;
+   double p000, p100, p200, p010, p110, p210, p020, p120, p220;
+   double p001, p101, p201, p011, p111, p211, p021, p121, p221;
+   double p002, p102, p202, p012, p112, p212, p022, p122, p222;
+
+   xi = floor(p->x);
+   xa = floor(P1 * (xi * phi - floor(xi * phi)));
+   xb = floor(P1 * ((xi + 1) * phi - floor((xi + 1) * phi)));
+   xc = floor(P1 * ((xi + 2) * phi - floor((xi + 2) * phi)));
+
+   yi = floor(p->y);
+   ya = floor(P2 * (yi * phi - floor(yi * phi)));
+   yb = floor(P2 * ((yi + 1) * phi - floor((yi + 1) * phi)));
+   yc = floor(P2 * ((yi + 2) * phi - floor((yi + 2) * phi)));
+
+   zi = floor(p->z);
+   za = floor(P3 * (zi * phi - floor(zi * phi)));
+   zb = floor(P3 * ((zi + 1) * phi - floor((zi + 1) * phi)));
+   zc = floor(P3 * ((zi + 2) * phi - floor((zi + 2) * phi)));
+
+   p000 = pts[xa + ya + za & NUMPTS - 1];
+   p100 = pts[xb + ya + za & NUMPTS - 1];
+   p200 = pts[xc + ya + za & NUMPTS - 1];
+   p010 = pts[xa + yb + za & NUMPTS - 1];
+   p110 = pts[xb + yb + za & NUMPTS - 1];
+   p210 = pts[xc + yb + za & NUMPTS - 1];
+   p020 = pts[xa + yc + za & NUMPTS - 1];
+   p120 = pts[xb + yc + za & NUMPTS - 1];
+   p220 = pts[xc + yc + za & NUMPTS - 1];
+   p001 = pts[xa + ya + zb & NUMPTS - 1];
+   p101 = pts[xb + ya + zb & NUMPTS - 1];
+   p201 = pts[xc + ya + zb & NUMPTS - 1];
+   p011 = pts[xa + yb + zb & NUMPTS - 1];
+   p111 = pts[xb + yb + zb & NUMPTS - 1];
+   p211 = pts[xc + yb + zb & NUMPTS - 1];
+   p021 = pts[xa + yc + zb & NUMPTS - 1];
+   p121 = pts[xb + yc + zb & NUMPTS - 1];
+   p221 = pts[xc + yc + zb & NUMPTS - 1];
+   p002 = pts[xa + ya + zc & NUMPTS - 1];
+   p102 = pts[xb + ya + zc & NUMPTS - 1];
+   p202 = pts[xc + ya + zc & NUMPTS - 1];
+   p012 = pts[xa + yb + zc & NUMPTS - 1];
+   p112 = pts[xb + yb + zc & NUMPTS - 1];
+   p212 = pts[xc + yb + zc & NUMPTS - 1];
+   p022 = pts[xa + yc + zc & NUMPTS - 1];
+   p122 = pts[xb + yc + zc & NUMPTS - 1];
+   p222 = pts[xc + yc + zc & NUMPTS - 1];
+
+   xf = p->x - xi;
+   x1 = xf * xf;
+   x2 = 0.5 * x1;
+   x1 = 0.5 + xf - x1;
+   x0 = 0.5 - xf + x2;
+   xd2 = xf;
+   xd1 = 1.0 - xf - xf;
+   xd0 = xf - 1.0;
+
+   yf = p->y - yi;
+   y1 = yf * yf;
+   y2 = 0.5 * y1;
+   y1 = 0.5 + yf - y1;
+   y0 = 0.5 - yf + y2;
+   yd2 = yf;
+   yd1 = 1.0 - yf - yf;
+   yd0 = yf - 1.0;
+
+   zf = p->z - zi;
+   z1 = zf * zf;
+   z2 = 0.5 * z1;
+   z1 = 0.5 + zf - z1;
+   z0 = 0.5 - zf + z2;
+   zd2 = zf;
+   zd1 = 1.0 - zf - zf;
+   zd0 = zf - 1.0;
+
+   v.x        = z0 * (y0 * (xd0 * p000 + xd1 * p100 + xd2 * p200) +
+                      y1 * (xd0 * p010 + xd1 * p110 + xd2 * p210) +
+                      y2 * (xd0 * p020 + xd1 * p120 + xd2 * p220)) +
+                z1 * (y0 * (xd0 * p001 + xd1 * p101 + xd2 * p201) +
+                      y1 * (xd0 * p011 + xd1 * p111 + xd2 * p211) +
+                      y2 * (xd0 * p021 + xd1 * p121 + xd2 * p221)) +
+                z2 * (y0 * (xd0 * p002 + xd1 * p102 + xd2 * p202) +
+                      y1 * (xd0 * p012 + xd1 * p112 + xd2 * p212) +
+                      y2 * (xd0 * p022 + xd1 * p122 + xd2 * p222));
+                                  
+   v.y        = z0 * (yd0 * (x0 * p000 + x1 * p100 + x2 * p200) +
+                      yd1 * (x0 * p010 + x1 * p110 + x2 * p210) +
+                      yd2 * (x0 * p020 + x1 * p120 + x2 * p220)) +
+                z1 * (yd0 * (x0 * p001 + x1 * p101 + x2 * p201) +
+                      yd1 * (x0 * p011 + x1 * p111 + x2 * p211) +
+                      yd2 * (x0 * p021 + x1 * p121 + x2 * p221)) +
+                z2 * (yd0 * (x0 * p002 + x1 * p102 + x2 * p202) +
+                      yd1 * (x0 * p012 + x1 * p112 + x2 * p212) +
+                      yd2 * (x0 * p022 + x1 * p122 + x2 * p222));
+                                  
+   v.z        = zd0 * (y0 * (x0 * p000 + x1 * p100 + x2 * p200) +
+                       y1 * (x0 * p010 + x1 * p110 + x2 * p210) +
+                       y2 * (x0 * p020 + x1 * p120 + x2 * p220)) +
+                zd1 * (y0 * (x0 * p001 + x1 * p101 + x2 * p201) +
+                       y1 * (x0 * p011 + x1 * p111 + x2 * p211) +
+                       y2 * (x0 * p021 + x1 * p121 + x2 * p221)) +
+                zd2 * (y0 * (x0 * p002 + x1 * p102 + x2 * p202) +
+                       y1 * (x0 * p012 + x1 * p112 + x2 * p212) +
+                       y2 * (x0 * p022 + x1 * p122 + x2 * p222));
+   return v;
+}
+
+-----------------------------------------------------------------------------
+
+END OF RTNEWS
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+			"Light Makes Right"
+
+			   June 21, 1989
+		        Volume 2, Number 4
+
+Compiled by Eric Haines, 3D/Eye Inc, 2359 Triphammer Rd, Ithaca, NY 14850
+    607-257-1381, hpfcla!hpfcrs!eye!erich@hplabs.hp.com, cornell!eye!erich
+All contents are US copyright (c) 1989 by the individual authors
+
+Contents:
+    Introduction
+    Hardcopy News (Andrew Glassner)
+    New People (Stuart Green, Craig Kolb (and Ken Musgrave), Kaveh Kardan)
+    Comments on "Free" Ray Tracers and on Renderman (Kaveh Kardan)
+    Minimum Bounding Sphere, continued (Jack Ritter)
+    Comments on "A Review of Multi-Computer Ray-Tracing" (Thierry Priol)
+    ======== USENET cullings follow ========
+    Query: Dataflow Architectures and Ray Tracing (George Kyriazis)
+    More on Pixar's Noise Function (Jon Buller)
+    DBW_render for Sun 3 (Tad Guy)
+    Steel Colors (Eugene Miya)
+    Dirty Little Tricks (Jack Ritter)
+    Obfuscated Ray Tracer (George Kyriazis)
+    Contents of FTP archives, skinner.cs.uoregon.edu (Mark VandeWettering)
+
+-----------------------------------------------------------------------------
+
+Introduction
+------------
+
+First off, please note that I now have a second mail address:
+
+	eye!erich@wrath.cs.cornell.edu
+
+This is a lot more direct than hopping the HP network through Palo Alto and
+Colorado just to get to Ithaca.  We have the connection courtesy of the
+Computer Science Dept at Cornell, and they have asked us to try to keep our
+traffic down.  So, please don't be a funny guy and send me image files or
+somesuch.
+
+I just noticed that Andrew and I are out of sync: his hardcopy version is on
+Volume 4, and I'm on Volume 3.  One excuse is that the first year of the email
+edition is labeled "Volume 0", since it wasn't even called "The Ray Tracing
+News" at that point.  An alternate excuse is that I program in "C", and so
+start from 0.  Anyway, until maybe the new year, I'll stick with the current
+scheme (hey, no one even noticed that last issue was misnumbered (and corrected
+on the USENET copy)).
+
+-----------------------------------------------------------------------------
+
+Hardcopy News
+-------------
+
+by Andrew Glassner
+
+
+The latest issue of the hardcopy Ray Tracing News (Volume 3, Number 1, May
+1989) goes into the mail today, 31 May.  Everyone who is on the softcopy
+mailing list should receive a copy.  If you don't get a copy in a week or two,
+please let me know (glassner.pa@xerox.com).  It would help if you include your
+physical mailing address, so I can at least confirm that your issue was
+intended to go to the right place.
+
+Contributions are now being solicited for Vol. 4, No. 2.  Start working on
+those articles!
+
+-----------------------------------------------------------------------------
+
+New (and Used?) People
+----------------------
+
+The Cornell Program of Computer Graphics computers have all changed their
+addresses.  Any computer with the name "*.tn.cornell.edu" is now
+"*.graphics.cornell.edu".
+
+------------
+
+Stuart Green            - multiprocessor systems for realistic image synthesis
+Department of Computer Science
+University of Bristol
+Queen's Building
+University Walk
+Bristol.  BS8 1TR
+ENGLAND.
+green@uk.ac.bristol.compsci
+
+I am working on multiprocessor implementations of algorithms for realistic
+image synthesis.  So far, this has been restricted to straightforward ray
+tracing, but I hope to look at enhanced ray tracing algorithms and radiosity.
+I've implemented a ray tracer on a network of Inmos Transputers which uses
+mechanisms for distributing both computation and the model data amongst the
+processors in a distributed memory MIMD system.
+
+------------
+
+Craig Kolb (and Ken Musgrave)
+
+My primary interests include modeling natural phenomena, realistic image
+synthesis, and animation.
+
+I can be reached at:
+Dept. of Mathematics
+Yale University
+P.O. Box 2155
+Yale Station
+New Haven, CT  06520-2155
+(203) 432-7053
+
+alias	craig_kolb	craig@weedeater.math.yale.edu
+alias	ken_musgrave	musgrave-forest@yale.edu
+
+...I've just started looking into ray/spline intersection.  We do a lot of
+heightfield-tracing 'round here, and in the past have rendered them using a
+triangle tessellation.  I'm giving splines a shot in order to render some
+pictures of eroded terrain for our SIGGRAPH talk.  I notice that you list
+spline intersection among your primary interests.  What sort of methods have
+you investigated?  At the moment I've implemented (what I assume is) the
+standard Newton's method in tandem with a DDA-based cell traversal scheme (as
+per our SIGGRAPH paper).  Although this works, it's not exactly blindingly
+fast...  Do you know of any 'interesting' references?
+
+------------
+
+Kaveh Kardan
+Visual Edge Software Ltd.
+3870 Cote Vertu
+Montreal, Quebec H4R 1V4
+(514)332-6430
+larry.mcrim.mcgill.edu!vedge!kaveh
+
+I graduated with a BS in Math from MIT in 1985, did some work in molecular
+graphics at the Xerox Research Centre of Canada (XRCC), wrote the renderer at
+Neo-Visuals (now known as SAS Canada) -- which included a raytracer --, and the
+animation stuff at Softimage.  I'm currently working at Visual Edge on the UIMX
+package: an X Windows user interface design system.
+
+Regarding the Softimage raytracer: it was written by Mike Sweeney (who used
+to be at Abel, and who did "Crater Lake" at Waterloo).
+
+I will also be acting as a mail forwarder for Mike, as Softimage is not on any
+networks.  So in effect, you should probably include Mike in the mailing list
+as well, with my address -- or somehow let people know that he can be reached
+tc/o me.
+
+If I may make some comments about the stuff I have read so far in the back
+issues:
+
+====================
+
+Jeff Goldsmith writes:
+
+>    I don't get it.  Why doesn't every CG Software vendor supply a
+>ray tracer.  It's definitely the easiest renderer to write.  Yes,
+>they are slo-o-o-o-o-o-w, but they sound glitzy and (I bet) would
+>stimulate sales, even if buyers never used them.
+
+Having worked at two CG Software companies, I know firsthand how the "to do"
+list grows faster than you can possibly implement features (no matter how many
+programmers you have -- c.f."The Mythical Man-Month").
+
+Jeff is right that ray tracing sounds glitzy, and, yes, it is another factor to
+toss into the sales pitch -- but it is not at all clear that it is worth the
+effort.
+
+Most (if not all) ray tracers assume either infinite rendering time or infinite
+disk space.  In the real world (a 68020 and a 144Meg disk) this is not the
+case.  The raytracer I wrote at Neo Visuals was written in Fortran -- ergo no
+dynamic memory allocation -- so I had to work on optimizing it without
+significantly increasing the memory used.  This mostly involved intelligently
+choosing when to fire rays.  The renderer performs a Watkins-style rendering,
+and fires secondary rays from a pixel only if the surface at that pixel needs
+to be raytraced.  Memory constraints prevented me from using any spatial
+subdivision methods.
+
+Yes, ray traced images are great sales tools.  They are also sometimes not
+entirely honest -- novice users ("I want a system to animate Star Wars quality
+images, about ten minutes of animation a day on my XT") are not aware of the
+expense of raytracing, and very few salesmen go out of their way to point this
+out.  However, these same users, unsure of the technology, put together a list
+of buzzwords (amongst them "raytracing") and go out to find that piece of
+software which has the most features on their list.  Hence I coined the phrase
+"buzzword compatible" while at Neo-Visuals (and also "polygons for polygons
+sake" -- but that's another story).
+
+I have also seen demos, animations, and pictures at trade shows, presented by
+hardware and software vendors, which were extremely and deliberately
+misleading.  A very common example is to show nice animation that was not
+really created with your software product.  The animation having been typically
+created by special programs and add-ons.  An obvious example was Abel,
+marketing their "Generation 2" software with "Sexy Robot", "Gold", "Hawaiian
+Punch", etc.  I only mention Abel because they are no longer in business -- I
+don't want to mention any names of existing companies.
+
+I hadn't intended this to be a flame.  But that sums up why not all software
+vendors bother with raytracing, and how it can be abused if not handled
+carefully.
+
+====================
+
+On Steve Upstill's remarks on the Renderman standard:
+
+Disclaimer: I have not read the Renderman specs, and have spoken to people who
+liked it and people who didn't.
+
+I would like to say that while I was at Neo-Visuals, Tom Porter and Pat
+Hanrahan did indeed drop by to ask us about our needs, and to ensure that the
+interface would be compatible with our system.  As I recall, we asked that the
+interface be able of handling arbitrary polygons (n vertices, concave, etc).
+As I recall, I was playing devil's advocate at the meeting, questioning
+whether rendering had settled down enough to be standardized.  So yes, at
+least Neo-Visuals did get to have a say and contribute to the interface.
+
+I spoke to one rendering person at Siggraph who didn't appreciate the way Pixar
+had handed down the interface and said "thou shalt enjoy."  Well the
+alternative would be a PHIGS-like process: years spent in committees trying to
+hash out a compromise which will in all likelihood be obsolete before the ink
+is dry.  In fact, two hardware vendors decided to take matters into their own
+hands and came up with PHIGS+.
+
+Yes, the interface is probably partly a marketing initiative by Pixar.  Why
+would they do it otherwise?  Why should they do it otherwise?  I would guess
+that Pixar hopes to have the standard adopted, then come out with a board which
+will do Renderman rendering faster than anyone else's software.  This seems a
+natural progression.  More and more rendering features have been appearing in
+hardware -- 2D, 3D, flat shaded, Gouraud, and now Phong and texture maps.  It
+is very probable that in a few years, "renderers" will be hardware, except for
+experimental, research, and prototype ones.
+
+-----------------------------------------------------------------------------
+
+Minimum Bounding Sphere, continued
+----------------------------------
+
+    by Jack Ritter, {ames,apple,sun,pyramid}!versatc!ritter
+
+I noticed in "The Ray Tracing News" an answer to my query about minimum
+bounding spheres. The answer following my question assumes there are 3 points.
+(Search for "Ray Traced Bounding Spheres").  This is wrong; I meant n points in
+3 space.  Since then, Lyle Rains, Wolfgang Someone and I have arrived at a fast
+way to find a tight bounding sphere for n points in 3 space:
+
+1) Make 1 pass through pts. Find these 6 pts:
+	pt with min x, max x, min/max y, min/max z.
+	Pick the pair with the widest dimensional span. This describes the
+	diameter of the initial bounding sphere. If the pts are anywhere near
+	uniform, this sphere will contain most pts.
+
+2) Make 2nd pass through pts: for each pt still outside current sphere, update
+	current sphere to the larger sphere passing through the pt on 1 side,
+	and the back side of the old sphere on the other side.  Each new sphere
+	will (barely) contain its previous pts, plus the new pt, and probably
+	some new outsiders as well. Step 2 should need to be done only a small
+	fraction of total num pts.
+
+The following is code (untested as far as I know) to increment sp:
+
+typedef double Ordinate;
+typedef double Distance;
+typedef struct { Ordinate x; Ordinate y; Ordinate z; } Point;
+typedef struct { Point center; Distance radius; } Sphere;
+
+
+Distance separation(pa, pb)
+  Point *pa;
+  Point *pb;
+{
+  Distance delta_x, delta_y, delta_z;
+
+  delta_x = pa->x - pb->x;
+  delta_y = pa->y - pb->y;
+  delta_z = pa->z - pb->z;
+  return (sqrt(delta_x * delta_x + delta_y * delta_y + delta_z * delta_z));
+}
+
+
+Sphere *new_sphere(s, p)
+  Sphere *s;
+  Point *p;
+{
+  Distance old_to_p;
+  Distance old_to_new;
+
+  old_to_p = separation(&s->center, p);
+  if (old_to_p > s->radius) { /* could test vs r**2 here */
+    s->radius = (s->radius + old_to_p) / 2.0;
+    old_to_new = old_to_p - s->radius;
+    s->center.x =
+      (s->radius * s->center.x + old_to_new * p->x) / old_to_p;
+    s->center.y =
+      (s->radius * s->center.y + old_to_new * p->y) / old_to_p;
+    s->center.z =
+      (s->radius * s->center.z + old_to_new * p->z) / old_to_p;
+  }
+  return (s);
+}
+
+   Jack Ritter, S/W Eng. Versatec, 2710 Walsh Av, Santa Clara, CA 95051
+   Mail Stop 1-7.  (408)982-4332, or (408)988-2800 X 5743
+   UUCP:  {ames,apple,sun,pyramid}!versatc!ritter
+
+[This looks to be a good quick algorithm giving a near-optimal solution.  Has
+anyone come up with an absolutely optimal solution?  The "three point" solution
+(in last issue) gives us a tool to do a brute force search of all triplets, but
+this is insufficient to solve the problem.  For example, a tetrahedron's
+bounding sphere cannot be found by just searching all the triplets, as all such
+spheres would leave out the fourth point. - EAH]
+
+-----------------------------------------------------------------------------
+
+Comments on "A Review of Multi-Computer Ray-Tracing"
+---------------------------------------------------
+
+by Thierry Priol
+
+
+I read with a great interest in the hardcopy "Ray Tracing News (May 1989)" "A
+Review of Multi-Computer Ray-Tracing".  But, D.A.J. Jevans said that our work
+presented in CGI "may even serve to cloud the important issues in
+multi-computer ray-tracing"!  I do not agree with this remark.  The
+presentation at CGI describes only a first step in using multi-processor ray
+tracing algorithms.  It is true that there were no interesting results in this
+paper.  D.A.J. Jevans also said that a hypercube architecture is hardware
+specific.  I do not agree.  This kind of architecture represents a great part
+of distributed memory architectures.  Our algorithm is not specific for this
+topology and can work on a SYMULT-2010 which uses a mesh topology.  However, I
+agree when he said that our algorithm provides little in the way of new
+algorithms, since we used Cleary's algorithm.  But we think that for the
+moment, the main problem is not to create new algorithms but to make
+experiments with some algorithms presented by several authors because most of
+them have been simulated but not implemented.  Our experiments show that many
+problems due to distributed computing (not only load and memory balancing) were
+not solved by the authors.
+
+At present, our algorithm has been modified to take into account load balancing
+and we have several results not yet published.  These new results may give some
+important conclusions about the Cleary approach (processor-volume association).
+We are working now on a new algorithm based on a global memory on distributed
+memory architectures!  For my mind it is the best solution to obtain load and
+memory balancing.  The ray coherence property is a means to have a sort of
+locality when data is read in the global memory (best use of caches).
+
+We are very interested (D. Badouel, K. Bouatouch and myself) in submitting to
+the "Ray-tracing News" a short paper which summarizes our work in parallel
+ray-tracing algorithm for distributed memory architecture.  This contribution
+should present two ray tracing algorithms with associated results.  This work
+has not been yet published outside France.
+
+======== USENET cullings follow ===============================================
+
+Subject: Dataflow architectures and Ray Tracing
+From: kyriazis@rpics (George Kyriazis)
+Newsgroups: comp.arch,comp.graphics
+Organization: RPI CS Dept.
+
+Hi!  I am wondering if anybody knows if there have been any attempts to port a
+ray tracing algorithm on a dataflow computer, or if there has been such a
+machine especially built for ray tracing.
+
+I am posting to both comp.arch and comp.graphics since I think that it concerns
+both newsgroups.
+
+It seems to me that a dynamic dataflow architecture is more appropriate to this
+problem because of the recursiveness and parallelism of the algorithm.
+
+Thanks in advance for any info...
+
+-----------------------------------------------------------------------------
+
+Subject: Re: Pixar's noise function
+Summary: my noise, better described (I hope)
+Reply-To: bullerj@handel.colostate.edu.UUCP (Jon Buller)
+Organization: Colorado State University, Ft. Collins CO 80523
+
+In article <...> jamesa@arabian.Sun.COM (James D. Allen) writes:
+>In article <...>, aaa@pixar.UUCP (Tony Apodaca) writes:
+>> In article <...> coy@ssc-vax.UUCP (Stephen B Coy) writes:
+>> >          ...My question:  Does anyone out there know what this
+>> >noise function really is?
+>> 
+>> ... Conceptually, noise()
+>> is a "stochastic three-dimensional function which is statistically
+>> invariant under rotation and translation and has a narrow bandpass
+>> limit in frequency" (paraphrased from [Perlin1985]).  This means that
+>> you put three-space points in, and you get values back which are basically
+>> random.  But if you put other nearby points in, you get values that are
+>> very similar.  The differences are still random, but the maximum rate of
+>> change is controlled so that you can avoid aliasing.  If you put a set
+>> of points in from a different region of space, you will get values out
+>> which have "the same amount" of randomness.
+>
+>       Anyone willing to post a detailed description of such an
+>       algorithm?  (Jon Buller posted one, but I couldn't figure it out:
+>       what is `Pts'?)
+
+Sorry about not really describing my program to anyone, I know what it does,
+and I never expected anyone else to see it (isn't it obvious) :-)
+
+What it does is: pass a location in space, and an array of random numbers (this
+is 'Pts').  I fill the array with 0.0 .. 1.0 but any values or range will work.
+(I have other textures which color based on distance to the nearest point of a
+random set, hence the name, It has 4 values per entry at times.)
+
+Step 1: change the location to a group of points to interpolate.  This is where
+xa,xb,xc,...zc come in, any location with the same coords (when trunc'ed) will
+produce the same xa...zc values, making the same values for the interpolation
+at the end.  These xa..zc are then hashed in to the 'Pts' array to produce
+p000...P222, these 27 random numbers are then interpolated with a Quadratic 3d
+B-Spline (the long ugly formula at the end).  The variables based on xf,yf, and
+zf (I believe they are x0..z2) are the B-Spline basis functions (notice to get
+DNoise, just take the (partial) derivatives of the basis functions and
+re-evaluate the spline).
+
+Step 2: now you have a value that is always smaller than the largest random
+number in 'Pts' (equal to in the odd case that major bunches of the numbers are
+also the maximum in the range).  By the same argument, all numbers returned are
+larger than the smallest number in the array. (this can be handy if you don't
+want to have to clip your values to some limit.)
+
+I hope this explains the use of the routine better.  Sorry I didn't realize
+that earlier.  If you have any other questions about it, mail them to me, and
+I'll do my best to explain it.
+
+Jon
+
+-----------------------------------------------------------------------------
+
+From: tadguy@cs.odu.edu (Tad Guy)
+Newsgroups: comp.graphics
+Subject: Re: DBW_render for SUN 3 ?
+Organization: Old Dominion University, Norfolk, VA
+
+daniel@unmvax.unm.edu writes:
+>Has anyone converted the public domain ray trace program called DBW_render
+>to run on a SUN workstation?
+
+Ofer Licht <ofer@gandalf.berkeley.edu> has done just that.  His modified
+DBW_Render is available via anonymous ftp from xanth.cs.odu.edu as
+/amiga/dbw.zoo.  It is also designed to use ``DistPro'' to distribute the
+computations between many machines (this is available as well as
+/amiga/distpro.zoo).
+
+His address:
+
+	Ofer Licht  (ofer@gandalf.berkeley.edu)
+	1807 Addison St. #4
+	Berkeley, CA 94703
+	(415) 540-0266
+
+-----------------------------------------------------------------------------
+
+From: eugene@eos.UUCP (Eugene Miya)
+Newsgroups: comp.graphics
+Subject: Re: Steel colors
+Organization: NASA Ames Research Center, Calif.
+
+In article <...> jwl@ernie.Berkeley.EDU.UUCP (James Wilbur Lewis) writes:
+>In article <...> jep@oink.UUCP (James E. Prior) writes:
+>>I've noticed that when I look closely at reasonably clean bare steel in good
+>>sunlight that it appears to have a very fine grain of colors.  
+>>
+>>What is this due to?
+>
+>Probably a diffraction-grating type effect due to scratches, roughness, or
+>possibly crystalline structure at the surface.
+
+Funny you should mention this.  I was sitting with my officemate, George
+Michael, he says Hi Kelly, and we were talking about stuff and he brought up
+the subject of polish.  He said there were people at Livenomore who were
+researching the issue of polish for big mirrors, but that polish really isn't
+well understood, still open interesting physical science questions.  Polish
+consists of minute "scratches" which have a set of interesting properties.  You
+can probably [write] to them and get TRs on the topic.  Polish is more than
+iridescence.
+
+Also, since somebody asked, the date on the Science article by Greenberg on
+Light reflection models for graphics is 14 April 1989, page 166.  It will
+provide simple models for this type of stuff.
+
+-----------------------------------------------------------------------------
+
+From: ritter@versatc.UUCP (Jack Ritter)
+Newsgroups: comp.graphics
+Subject: Dirty Little Tricks
+Organization: Versatec, Santa Clara, Ca. 95051
+
+I've come up with a fast approximation to
+3D Euclidean distance ( sqrt(dx*dx+dy*dy+dz*dz) ).
+  (It's probably not original, but .....)
+
+1) find these 3 values: abs(dx), abs(dy), abs(dz).
+
+2) Sort them (3 compares, 0-3 swaps)
+
+3) Approx E.D. = max + (1/4)med + (1/4)min.
+                        (error: +/- 13%) 
+
+        max +  (5/16)med + (1/4)min has  9% error.
+        max + (11/32)med + (1/4)min has  8% error.
+
+As you can see, only shifts & adds are used, and it can be done with integer
+arithmetic.  It could be used in ray tracing as a preliminary test before using
+the exact form.
+
+We all have our dirty little tricks.
+
+-----------------------------------------------------------------------------
+
+From: kyriazis@turing.cs.rpi.edu (George Kyriazis)
+Newsgroups: comp.graphics
+Subject: Obfuscated ray tracer
+Organization: RPI CS Dept.
+
+A while ago, while it was still snowing, I was feeling adventurous, and a nice
+weekend I decided to write an obfuscated ray tracer.  A friend of mine told me
+that is not too obfuscated for the "Obfuscated C Contest", I had already wasted
+one whole day, so I gave up.  Today, I was cleaning up my account, and I
+thought it would be a very appropriate posting for comp.graphics.
+
+It is a hacker's approach to ray tracing; produces a text image on the screen.
+No shading; different characters represent different objects.  The source code
+is 762 bytes long.  I KNOW that I'll get flamed, but who cares! :-)
+
+Have fun people!
+
+So, here it is:
+
+Compile with  cc ray.c -o ray -lm
+
+
+/* (c) 1988 by George Kyriazis */
+#include <math.h>
+#define Q "
+#define _ define
+#_ O return
+#define T struct
+#_ G if
+#_ A(a,b) (a=b)
+#define D double
+#_ F for
+#define P (void)printf(Q
+#define S(x) ((x)*(1/*p-"hello"[6])/*comment*/*x))
+T oo{D q,r,s,t;};int m[1]={2};T oo o[2]={{10,10,10,18},{15,15,17,27}};int x,y;D
+I(i){D b,c,s1,s2;int*p=0,q[1];b=i/*p+1["_P]+(1-x*x)*erf(M_PI/i)/1*/**q+sin(p);{
+{b=2*-(i+o)->s;c=S(x-i[o].q)+S(y-o[i].r)+S(i[o].s)-(o+i)->t;}A(s1,S(b));}{G((s2
+=(S(b)-4*c)<0?-1:sqrt(-4*c+S(b)))<0){O(b-(int)b)*(i>=0-unix);}}s1=(-b+s2)/2;s2=
+s1-s2;s1=s1<=0?s2:s1;s2=s2<=0?s1:s2;O s1<s2?s1:s2;}main(){D z,zz;int i,ii;F(A(y
+,0);y<24;y-=listen(3,0)){F(x-=x;x<40;x++){F(z=!close(y+3),A(i,0);i<*m*(y>-1);i=
+A(i,i+1))G(z<(A(zz,I(i))))z=zz,ii=i;G(!!z)P%d",ii);else P%c",32-'\0');}P\n");}}
+
+-----------------------------------------------------------------------------
+
+Subject: Contents of FTP archives, skinner.cs.uoregon.edu
+From: markv@tillamook.cs.uoregon.edu (Mark VandeWettering)
+Newsgroups: comp.graphics
+Organization: University of Oregon CIS Dept.
+
+Recently, the ftp archive of raytracing stuff was moved from our dying
+VAX-750 (drizzle.cs.uoregon.edu) to our new fileserver, which is called
+skinner.cs.uoregon.edu, or just cs.uoregon.edu.
+
+There is more diskspace available, and I have expanded the archives to contain
+several new items.  I thought I would post the README here to let people know
+of its availability.
+
+skinner.cs.uoregon.edu contains information largely dealing with the subject of
+raytracing, although a radiosity tracer or solid modeler would be a welcome
+addition to the contents there.  I am always busy looking for new software
+aquisitions, so if you have anything you wish to put there, feel free to send
+me a note.
+
+Mark VandeWettering
+
+-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut-cut
+
+The old README was dated, so I thought I would update this new one...
+
+dr-xr-xr-x  2 ftp           512 Feb 11 18:53 bibs
+
+        contains bibliographies for fields that I am interested in,
+        such as graphics and functional programming.
+
+drwxrwxr--  2 ftp           512 May 13 23:44 gif.fmt
+
+        descriptions of the gif format.  Too many people wanted this, so I 
+        thought I would make it available.
+
+drwxrwxr-x  2 root          512 May 24 22:25 grafix-utils
+
+        Utilities for converting among graphics formats etc.
+        Now includes fuzzy bitmap, should also include pbm
+        and utah raster toolkit soon.
+
+drwxrwxr--  2 ftp          1024 May 14 15:45 hershey
+
+        The Hershey Fonts.  Useful PD fonts.
+
+drwxrwxr-x  2 root          512 May 24 22:26 mtv-tracer
+
+        My raytracer, albeit a dated version.
+
+dr-xr-xr-x  2 ftp           512 Feb 16 17:24 musgrave
+
+        Copies of papers on refraction by Kenton Musgrave.
+
+drwxrwxr-x  2 root          512 May 24 22:26 nff
+        
+        Haines SPD raytracing package, with some other NFF images
+        created by myself & others.  Useful for the mtv raytracer.
+
+drwxr-xr-x  2 ftp          1536 May 24 11:44 off-objects
+
+        Some interesting, PD or near PD images from the OFF distribution.
+
+dr-xr-xr-x  2 ftp           512 Feb 15 22:48 polyhedra
+
+        Polyhedra from the netlib server.  I haven't done anything with 
+        these...
+
+dr-xr-xr-x  2 ftp           512 Mar  6 17:45 qrt
+
+        The popular raytracer for PCs.
+
+dr-xr-xr-x  2 ftp           512 May 24 22:26 rayfilters
+
+        Filters to convert the MTV output to a number of devices...
+
+drwxrwxr-x  2 root          512 May 24 22:26 raytracers
+
+        Other raytracers....
+
+-rw-r--r--  1 ftp        323797 May 24 01:47 sunrpc.tar.Z
+
+        SUN RPC v.3.9
+
+[All issues of the email version of "The RT News" have been put in the
+directory "RTNews" since this posting.]
+
+-----------------------------------------------------------------------------
+END OF RTNEWS
+
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+			"Light Makes Right"
+
+			   August 29, 1989
+			 Volume 2, Number 5
+
+Compiled by Eric Haines, 3D/Eye Inc, 2359 Triphammer Rd, Ithaca, NY 14850
+    hpfcla!hpfcrs!eye!erich@hplabs.hp.com, wrath.cs.cornell.edu!eye!erich
+    [distributed by Michael Cohen <m-cohen@cs.utah.edu>, but send
+    contributions and subscriptions requests to Eric Haines]
+All contents are US copyright (c) 1989 by the individual authors
+
+Contents:
+    Introduction
+    A SIGGRAPH Report, by Eric Haines
+    Ray Tracing Poll, from the roundtable discussion
+    _An Introduction to Ray Tracing_, Announcement and Errata
+    _Graphics Gems_ Call for Contributions, by Andrew Glassner
+    New People and Address Changes
+    Bugs in MTV's Ray Tracer, by Eric Haines
+    Bug in SPD, from Pete Segal
+    Solid Textures Tidbit, by Roman Kuchkuda
+    Sundry Comments, by Jeff Goldsmith
+    Texture Mapping Question, by Susan Spach
+    ======== USENET cullings follow ========
+    Ray Traced Image Files, by Prem Subramanyan
+    Image Collection, by Paul Raveling
+    MTV-Raytracer on ATARI ST - precision error report, by Dan Riley
+    Question on Ray Tracing Bicubic Parametric Patches, by Robert Minsk
+
+-------------------------------------------------------------------------------
+
+Introduction
+
+	Now that the "RT News" is posted on comp.graphics, I'd like to make a
+few changes.  First of all, you really don't need to get on the subscription
+list of the RT News if you're an avid reader of comp.graphics.  However, I do
+want to maintain an emailing list of people interested in ray tracing.
+
+	So, I'll be keeping a single address list of interested people (which
+I will call the "contact list"), and only some of the people on this list need
+to be sent copies of the RT News.  Furthermore, it would be nice if various
+schools, etc, would make a single email address the place where they will
+receive the RT News.  For example, Duke has "raycasting@duke.cs.duke.edu" as
+the address to which I should send the RT News.  They also have individuals on
+the address list, but individual copies are not sent to them.  Instead, the
+"raycasting" account they have remails the RT News to all people that are
+interested at Duke.  In this way I can cut down on having issues sent out
+unnecessarily, of worrying about bounced mail, of maintaining a long mailing
+list (currently about 100 people), etc etc.
+
+	To summarize, there are then a few different ways you can be listed.
+
+	1) Individual subscriber - You don't read comp.graphics and want to
+	   get the RT News.  Your name is put on the subscriber list and the
+	   contact list.  To subscribe, simply send me your name, email and
+	   snail mail addresses, and a one line summary (that I'll put next to
+	   your name) describing any special areas you're interested in (e.g.
+	   "parallelism, radiosity, filtering" might be one).  You might also
+	   send me a few paragraphs about what you're up to nowadays, and I'll
+	   include this in the News.
+
+	2) Group subscriber - Like Duke.  This way you have full control over
+	   who will automatically get an issue, and I won't have to change my
+	   subscriber list each time someone else wants to get the RT News.
+
+	   Some people have already switched over.  I just received this:
+
+	   We went ahead and implemented the local alias.  It's "raytrace",
+	   which you can reach as raytrace@cpsc.ucalgary.ca or
+	   calgary!raytrace.  At the moment Dave Jevans and I (Bill Jones) are
+	   the only subscribers.
+
+	3) Contact list only - You read comp.graphics and so do not need to
+	   subscribe.  However, you want to be on the list of people interested
+	   in ray tracing.  Another advantage of the contact list is that
+	   people may send you mail - for instance, I wrote all the people on
+	   the list and invited them to come to a get-together for ray tracers
+	   at SIGGRAPH (more on this later).  Everyone who is a subscriber is
+	   also automatically on the contact list, but not vice versa.  You
+	   can also be listed as an individual on the contact list if you're a
+	   group subscriber.
+
+	4) The silent majority - You don't need to be on any list, and are
+	   happy just reading comp.graphics (or have hit the "n" key by now).
+
+	Currently almost everyone on the contact list is also a subscriber.
+So, if you read comp.graphics fairly constantly and are on the subscriber list,
+please tell me to put you on only the contact list.  Clear as mud?  Good.  I'll
+probably send the above to all people asking for subscriptions just to make
+sure they know what's what, so don't be offended if you get one.
+
+	Whew!  Well, with that done, I should mention that anyone can ask for
+a copy of the contact list.  If you want to subscribe to the RT News, hardcopy
+edition, that's another coastline entirely - contact Andrew Glassner at
+glassner.pa@xerox.com for details, as he's the editor of that one.  The email
+and hardcopy journals are mostly non-overlapping, so it's worth your while to
+get both if you're seriously interested in the subject.
+
+	I can't afford to send out the back issues of the email RT News, but
+they are available via anonymous FTP from:
+
+	cs.uoregon.edu - in /pub, also has lots of other ray tracing stuff, etc
+	freedom.graphics.cornell.edu - in /pub, also has Xcu menu creator
+
+	One other resource: I've been updating Paul Heckbert's ray tracing
+bibliography while he's been busy at grad school.  If you would like the latest
+copy of this list, or have anything to add or change in it, just write me.  I
+also will be posting it to the two ftp sites realsoonnow.
+
+-------------------------------------------------------------------------------
+
+A SIGGRAPH Report, by Eric Haines
+
+	Another SIGGRAPH has come and gone, and I had a good time.  My only
+frustration was meeting many researchers for a minute and not getting to talk
+with them.  I noticed that although the ray tracing session had but three
+papers, there were about nine others throughout the proceedings that used ray
+tracing techniques in various ways.  Ray tracing (and ray casting) as a
+graphics tool has come into its own.
+
+	A few more ray tracers are out on the market, such as "Sculpt 3D" by
+Byte by Byte for the Macintosh and Amiga and "LazerRays" by Lazerus.  Hewlett
+Packard is now shipping radiosity and ray tracing software bundled in with
+every high-end graphics workstation.  Intergraph has been getting a fair bit
+of airplay out of their new ray tracing package, though I haven't gotten
+details yet.  Alias should be offering a ray tracer sometime soon.
+
+	Ray tracing researchers got together informally for a "ray tracing
+roundtable" for an hour and some.  Like last year, it was a large gathering,
+with around 50 people attending.  We went around the group, with each person
+giving a brief introduction.  I took an informal poll on a few questions,
+Andrew noted that the ray tracing book was out, and asked for contributions to
+"Graphics Gems" (more later), then we broke up and talked about this and that.
+
+	Given the size of the gathering, it was a bit frustrating:  there are
+all these people that I've wanted to meet and talk with in the same room, and
+after half an hour they're all gone and I've spoke with only a few.
+Basically, the roundtable meeting is too big for my tastes.  One possibility
+that you all might consider is to invite people in your own special interest
+to a lunch or dinner.  For example, I went to a pleasant "global illuminators"
+lunch this SIGGRAPH, where there were about twelve people - a good size.
+
+	Oh, some nice books came out this SIGGRAPH.  I'll plug the ray tracing
+book later.  Others worth note (i.e. I bought them) are _Mathematical Elements
+for Computer Graphics, Second Edition_ by Rogers and Adams, which has been
+expanded to more than twice its original length, and _The RenderMan Companion_
+by Steve Upstill, which looks like a nice book no matter what your feelings on
+RenderMan itself.  I'm looking forward to the much expanded second edition of
+Foley & Van Dam's _Fundamentals of Interactive Computer Graphics_, which should
+be out early next year.
+
+-------------------------------------------------------------------------------
+
+Ray Tracing Poll, from the roundtable discussion
+
+
+At the roundtable people were polled on a few questions.
+
+1.  What efficiency schemes have you used?
+
+	Grids			   - 20
+	Octree/BSP		   - 26 (4 were specifically BSP)
+	Bounding Volume Hierarchy  - 22
+	Hybrid			   - 17
+	Greater than 3D (4D or 5D) - 13
+	Other			   -  5 (what were these, anyway?)
+
+2.  How many processors have you used?
+
+	One processor		   - 21.1
+	Multiprocessor		   - 29.1
+	More than 10 processors	   - 21
+	More than 100 processors   -  4
+
+	The most processors used was 1024 (2 people).
+
+3.  How long do you usually wait for a picture?
+
+	Less than a minute	  -  1
+	Less than ten minutes	  -  6
+	Less than an hour	  - 13
+	Less than ten hours	  - 25
+
+4.  What is your favorite background color?
+
+	UNC "Carolina Blue"	  - 12
+	Black			  - 15
+
+-------------------------------------------------------------------------------
+
+_An Introduction to Ray Tracing_, Announcement and Errata
+
+
+	Well, the book is finally out.  It is edited by Andrew Glassner, and
+sells for $49.95 from Academic Press.  It includes sections by Andrew, Pat
+Hanrahan, Rob Cook, Paul Heckbert, Jim Arvo, Dave Kirk, and myself.  The book
+is essentially the same as the 1988 SIGGRAPH Course Notes, with the addition
+of some figures and images and some minor corrections.  Incidentally, if you
+have the book and find any glaring errors, please notify Andrew Glassner;
+enough copies sold at SIGGRAPH that another edition will be printed soon.
+Considering that the authors are scattered around the country, the book flows
+fairly well and covers most areas of ray tracing theory and practice.  Also,
+there's finally a text to suggest when someone wants to know whether a point
+is inside a polygon (Sedgewick's _Algorithms_ didn't solve it efficiently).
+If you don't have a copy, buy a few and make us all fabulously wealthy beyond
+our wildest dreams (i.e. then I could afford the Sears' hibachi instead of
+the K-Mart version).
+
+	Incidentally, the 1989 "Intro to RT Course Notes" included the book
+and some additional notes.  The notes included reprints of classic articles,
+the code for the SPD package (God forbid that anyone have to type it in,
+though), and an article I whipped off called "Tracing Tricks", which I'll post
+sometime soon, maybe during a slow month.
+
+	Some bugs have already been reported to me about my section, so I'll
+pass them on:
+
+
+From Tim O'Connor:
+
+If you'll flip to page 66 you'll note a little algorithm for ray/box testing.
+About halfway through you say:
+
+	If T1 > Tnear, set T1 = Tnear
+	If T2 > Tfar, set T2 = Tfar
+
+Then you never use T1, or T2 again in that loop.  The example bears out my
+suspicion that one should actually "set Tnear = T1" and "set Tfar = T2".
+
+
+From Ehood Baratz <{world}!hpbbn!hputlaa!ehood>:
+
+In chapter 2 page 52 on formula (C9) it is written:
+
+		If Pn * Rd  < 0
+		(in other words, if Vd > 0)
+		   then ....
+
+	I think it should be "if Vd < 0" because Pn*Rd is Vd (look at page 51
+after (C4)).
+
+-------------------------------------------------------------------------------
+
+_Graphics Gems_ Call for Contributions, by Andrew Glassner
+
+
+CONTRIBUTE TO A NEW BOOK FOR COMPUTER GRAPHICS PROGRAMMERS!
+
+Contributions are solicited for a new book, tentatively titled GRAPHICS GEMS.
+This book will be a collection of short notes by and for computer graphics
+programmers and researchers.  The basic idea is to create a book similar to
+the CRC Mathematics Handbook, only tailored to the subject of computer
+graphics.
+
+The motivation for Graphics Gems comes from a desire to document and share the
+many techniques that are a necessary part of every graphics programmer's
+toolbox, yet don't appear in the standard literature.  Each Gem represents a
+solution to a problem:  not necessarily a research result, nor even a deep
+observation, but simply a good, practical technique for dealing with a typical
+computer graphics programming problem.  A typical Gem may be a code fragment,
+a short analysis of an interesting problem, a bit of mathematics, a data
+structure, or a geometric relationship.
+
+Here are some appropriate topics for Gems - this list contains only a few
+suggestions for topics that might be covered by interesting Gems, and is far
+from complete:
+
+Two Dimensions:  Fill, smooth, blur, dither, 2d plots, line drawing, curve
+drawing, bounding boxes, overlapping boxes, efficient bitblit (example:
+automatic selection of tick marks on a plot).
+
+Three Dimensions:  Scan conversion, highlight detection, shading, isosurfaces,
+ray intersection, form factor calculation, visibility, texturing,
+transformations, deformations, smoothing, 3d plotting, parameterizations,
+surface subdivision, texturing functions, bounding boxes (example:  fast
+shading formulae).
+
+Graphics:  Colormap hacking, object manipulations, sampling, filtering,
+optics, interaction techniques, modelling primitives, efficient rendering,
+edge detection (example:  reconstruction from stochastic sampling).
+
+General Math:  Algebra, calculus, geometry (e.g.  why normals don't move under
+the same transformations as surfaces).
+
+Programming:  Numerical integration, root finding, root polishing, data
+structures (objects), data structures (programs), inner loops, interactive
+debugging, graphical debugging, color map hacking, over- and under-flow
+detection and correction, unusual functions (e.g.  polynomial root-finding).
+
+Most Gems will be about 1 or 2 final printed pages (4 or 5 pages of
+typewritten, double-spaced manuscript), though if you choose to include source
+code the listings may run longer.  Rough figures and equations will be
+professionally redrawn by the publisher.  Each contributor will have a chance
+to review the final copy for his or her Gems before publication.  Each Gem
+will be clearly identified with the name and affiliation of its
+contributor(s).
+
+If you have developed a nice solution to a problem that others might
+encounter, be it a data structure, an inner loop, or even an algebraic
+simplification that makes your programs shorter and more robust, then it would
+probably make a splendid Graphics Gem.  Write it up and send it to the editor
+at the address below, either in hardcopy or electronic mail.  Acceptable
+formats are plain text, nroff, TeX, MacWrite, and Microsoft Word (Macintosh).
+I would like to receive a rough draft of all Gems by November 1989.
+
+Contribute and share your favorite tricks and techniques with the rest of the
+community!  Send your Graphics Gems to:
+
+Andrew Glassner
+Editor, Graphics Gems
+Xerox PARC
+3333 Coyote Hill Road
+Palo Alto, CA  94304  USA
+email: glassner.pa@xerox.com
+phone: (415) 494 - 4467
+
+-------------------------------------------------------------------------------
+
+New People and Address Changes
+
+
+There were many new people at the roundtable at SIGGRAPH.  In the interest of
+brevity, only new people who've sent an intro are listed.  If any of you (or
+anyone else out there) would like to send in a paragraph or two of
+introduction, it will be printed here.  You can always request the latest
+contact list from me.
+
+--------
+
+We just received the 7 editions of "The Ray Tracing News" you posted recently
+at USENET.  This is exactly the kind of information we need in our research
+project an rendering software.  Not just the latest research news, but also
+discussion on the results of them.
+
+So PLEASE put us on your mailing list!
+
+Just let me describe our past and future work to justify the costs for you.
+We are a working group at the Institute for Interactive Graphic Systems at the
+University of Tuebingen (West Germany) and are part of the faculty of physics.
+The main future research aspect will go in direction of combining raytracing
+and radiosity.  We come from the background of geometric modelling and
+graphics hardware (here Phong shading in realtime).  I will start working on
+this project 4Q89 as my PhD.
+
+If you can give any additional information that might be interesting to us
+(including other research going on in this area) please let us know.
+
+Surface mail: Wilhelm-Schickard-Institut fuer Informatik
+              Graphisch Interaktive Systeme
+              z.Hd. Philipp Slusallek
+              Auf der Morgenstelle 10
+              D-7400 Tuebingen
+Email       : philipp@infotue.uucp
+Tel         : x49 7071 296356
+
+--------
+
+(internet)  zmel02@trc.amoco.com
+(usenet)    uunet!apctrc!mlee
+(snail mail)    Mark Lee
+                Amoco Production Company
+                Tulsa Research Center
+                PO Box 3385
+                Tulsa, OK  74102
+        (phone) (918)-660-3556  or (918)-660-3000 for operator
+
+A short introduction.  My interests lie in the areas of illumination models,
+faster ray tracing, photorealism, numerical and statistical methods.  My real
+work is more in the area of rendering algorithms and scientific visualization.
+The areas that I enjoy working in, I pursue whenever I can squeeze it in.
+
+Incidentally, did you find a copy of the article by Levner, Tassinari, and
+Marini, "A Simple Method for Ray Tracing Bicubic Surfaces"?  [no] Is this in a
+textbook or such?  How could I find of copy of this paper?  [Can anyone help?
+Has anyone seen it, and can at least summarize?]
+
+Some questions to post to the mailing list...
+
+Did the paper "The Ray Tracing Kernel" by Jim Arvo, Dave Kirk and Olin Lathrop
+ever get published?
+
+Does anyone have a copy of Blinn's notes from the Siggraph '84 tutorial notes
+on "The Mathematics of Computer Graphics" that they could send to me?  [hey,
+I'd like one, too: I was a student volunteer at this course, and they ran out
+of course notes and I never got a copy.]
+
+--------
+
+I am now doing a dissertation on realistic rendering for complex scenes, with
+extensions for nonisotropically scattering gasses.  I am also part of a
+project that uses raytracing for visualization of volumes of scalar data.
+
+Peter Shirley
+University of Illinois at Urbana-Champaign
+
+
+        shirley@cs.uiuc.edu
+	{pur-ee,convex,inhp4}!uiucdcs!shirley
+        816 E. Oakland, #206
+        Urbana, IL  61801
+        (217) 328-6494
+
+--------
+
+Mike Sweeney - rendering, splines, object-oriented languages
+Softimage Inc.
+3510 Blvd St. Laurent, Suite 214
+Montreal, Canada H2X 2V2
+(514) 845-1636
+[write to Kaveh Kardan at larry.mcrcim.mcgill.edu!vedge!kaveh to reach Mike]
+
+Hello net-land, it's been a while.  Eric says he wants an introduction so here
+goes....
+
+I've been writing renderers for the last 6 years.  The Waterloo CGL Raytracing
+Package was your basic naive ray tracer.  It did contain an iterative solution
+to ray/bspline intersection, but I no longer believe in this approach - it's
+much faster to break the spline into triangles.  My second attempt, the Alias
+renderer, war a raycaster.  It was slow period.
+
+Then came Abel, where I started playing with octrees.  The code was about
+twice as fast as any implementation of Kay/Kajiya slabs I could come up with,
+and at least ten times as fast as my implementation of Fujimoto's algorithm.
+After Abel folded, I wound up at Softimage.  I added a modified Watkin's front
+end, and rewrote the tracer to make the maximum use of empty space.
+
+I've not tried to implement the Kirk/Arvo algorithm yet, but have an
+instinctive distrust of anything that mixes preprocessing with the rendering
+(the cost will go up with the sampling rate).  What is the group's experience
+with this method?
+
+--------
+
+# Jerry Quinn - PhD research in raytracing at Dartmouth
+# Dartmouth College
+# Department of Math & Comp Sci
+# Hanover, NH 03755
+# (603) 646-2565
+quinn@sunapee.dartmouth.edu
+
+I am a PhD student in computer science at Dartmouth and am in my second year.
+I'm currently interested in increasing efficiency in raytracing.  I'm also
+looking at parallelism in RT, radiosity, and the combination of both.
+
+--------
+
+I have taken a job at Princeton, and thought I'd send you my new address for
+the purposes of the RT News.  
+
+Mark VandeWettering (markv@acm.princeton.edu)
+c/o Program in Applied and Computational Math
+Fine Hall
+Princeton University, Princeton NJ, 08544
+
+Another question you might know off the top of your head:  Alvy Ray Smith has
+written a tech memo on Volumetric Rendering at Pixar.  Do you have his e-mail
+address, or otherwise know how I might request Pixar Tech Memos?  [does anyone
+else know?  - EAH]
+
+The ray tracing archive on skinner.cs.uoregon.edu still will remain there.  I
+have permission from the higher-ups at the U of O to keep it there.  If I lose
+that permissions at some future date, it will probably move to Princeton
+somewhere....
+
+--------
+
+Pat Hanrahan has also moved to Princeton, and is now at:
+
+	hanrahan@princeton.edu
+
+--------
+
+And one more for Princeton:
+
+alias	marshall_levine mplevine@phoenix.princeton.edu
+
+[I asked about the ray tracing demo at SGI:]
+
+The ray-tracing demo that you saw on an IRIS at SIGGraph is called Flyray.  It
+was written by Benjamin Garlick in June-August 1988.  The underlying voxel
+ray-tracer was written by Paul Haeberli in July 1983.  The demo is standard
+around here; it should be on every demo machine.  I would guess that it would
+be in the /usr/src/cmd/demo directory on most demo machines, but it depends on
+that particular machine's configuration.  It is easily accessible through
+Buttonfly, the SGI menu program.  Buttonfly displays menus of demos on 3D
+buttons that twist, flip, and fly towards the screen when selected (with text
+on them!).  You will probably find Flyray on Buttonfly under the
+SGI/CPU-Intensive button (it will be listed as Ray-Tracer or Flyray).  If you
+have any questions or want a description of the demo, just let me know and
+I'll send you any information that I can dig up.  While you're at SIGGraph,
+you should take a look at the newest version of Flight (By Rob Mace, one of
+the guys in my group) on the IRIS 4D computers.  Take a look at the F-14.
+I'll let it be a surprise, and trust me, you'll be very surprised!
+
+--------
+
+Please change my email address to palmer@ncsc.org (was palmer@ncifcrf.gov).
+
+Thomas C. Palmer		North Carolina Supercomputing Center
+Cray Research, Inc.		Phone: (919) 248-1117
+PO Box 12732			Arpanet: palmer@ncsc.org
+3021 Cornwallis Road
+Research Triangle Park, NC
+27709
+
+--------
+
+Another address change:
+
+# Mark Reichert
+# Program of Computer Graphics
+# 120 Rand Hall
+# Cornell University
+# Ithaca, NY 14853
+alias   mark_reichert   mcr@venus.graphics.cornell.edu
+
+-------------------------------------------------------------------------------
+
+Bugs in MTV's Ray Tracer, by Eric Haines
+
+
+	Craig Kolb mentioned that he was having problems with Mark
+VandeWettering's ray tracer.  Since I've been touting it all this time (but
+having run it only once), I felt obligated to find the bugs.  There were two:
+one was that the up vector was sometimes not perpendicular to the view vector,
+which results in the "balls" image having a "comin' at ya" kind of distortion
+(kind of interesting, but incorrect).  The other was that the frustum width
+was affected by the distance to the hither, which it should not be.  One
+result is that the "mountain" scene would get zoomed in on something fierce.
+Finally, I changed the statistics output a bit to give information that I like
+(e.g.  the number of reflected and refracted rays actually shot are counted
+separately).  Anyway, at least apply the fixes to main.c and the first part of
+screen.c.
+
+
+diff old/main.c new/main.c
+109c112
+< 	printf("number of rays cast:	   %-6d\n", nRays);
+---
+> 	printf("number of eye rays:	   %-6d\n", nRays);
+diff old/screen.c new/screen.c
+50d49
+< 	VecNormalize(upvec) ;
+66a66,72
+> 	 * Make sure the up vector is perpendicular to the view vector
+> 	 */
+> 
+> 	VecCross(viewvec, leftvec, upvec);
+> 	VecNormalize(upvec);
+> 
+> 	/*
+71c77
+< 	frustrumwidth = (view -> view_dist) * ((Flt) tan(view -> view_angle)) ;
+---
+> 	frustrumwidth = ((Flt) tan(view -> view_angle)) ;
+129c135
+< 			Trace(0, 1.0, &ray, color);
+---
+> 			Trace(0, 1.0, &ray, color, &nRays);
+173c179
+< 			Trace(0, 1.0, &ray, color);
+---
+> 			Trace(0, 1.0, &ray, color, &nRays);
+238c244
+< 				Trace(0, 1.0, &ray, color);
+---
+> 				Trace(0, 1.0, &ray, color, &nRays);
+diff old/shade.c new/shade.c
+112d111
+< 		nReflected ++ ;
+115c114,115
+< 		Trace(level + 1, surf -> surf_ks * weight, &tray, tcol);
+---
+> 		Trace(level + 1, surf -> surf_ks * weight, &tray, tcol,
+> 			&nReflected);
+120d119
+< 		nRefracted ++ ;
+125c124,125
+< 		Trace(level + 1, surf -> surf_kt * weight, &tray, tcol) ;
+---
+> 		Trace(level + 1, surf -> surf_kt * weight, &tray, tcol,
+> 			&nRefracted) ;
+diff old/trace.c new/trace.c
+19c19
+< Trace(level, weight, ray, color) 
+---
+> Trace(level, weight, ray, color, nr) 
+23a24
+>  int *nr ;
+34c35
+< 	nRays ++ ;
+---
+> 	(*nr) ++ ;
+
+-------------------------------------------------------------------------------
+
+Bug in SPD, from Pete Segal <pls@pixels.att.com>
+
+Pete Segal reported a particularly subtle bug in my Standard Procedural
+Databases package.  Turns out a "w" component needs to be initialized.  If you
+have a machine that initializes everything to 0, you'd never notice it.  The
+patches to the README and lib.c files are below.  I should be putting the
+latest and greatest version on cs.uoregon.edu soon.
+
+
+diff old/README new/README
+4,5c4,5
+< Version 2.5, as of 10/19/88
+<     address: 3D/Eye, Inc., 410 East Upland Road, Ithaca, NY 14850
+---
+> Version 2.6, as of 8/28/89
+>     address: 3D/Eye, Inc., 2359 N. Triphammer Rd, Ithaca, NY 14850
+22a23,24
+> Version 2.6 released August, 1989 - lib_output_cylcone fix (start_norm.w was
+>     not initialized).
+68a71,72
+> 
+>     The SPD package is also available via anonymous FTP from cs.uoregon.edu.
+diff old/lib.c new/lib.c
+5c5
+<  * Version:  2.2 (11/17/87)
+---
+>  * Version:  2.6 (8/28/89)
+437a438
+> 	start_norm.w = 0.0 ;
+
+-------------------------------------------------------------------------------
+
+Solid Textures Tidbit, by Roman Kuchkuda <ucsd.edu!kuchkuda%megatek.UUCP>
+
+
+One piece of research that you might mention in RTN:
+
+I had used procedural wood textures for a while and wondered whether you could
+use "real" wood textures.  Through some connections at the UNC hospital I had
+a block of pine CT scanned.
+
+Sure enough, the grain showed up very well.  The resulting pictures were more
+"interesting" than procedural texture.  The structure is more complex than the
+procedural model.
+
+There were a few problems though:
+1) There is a lot of data in the CT scans and memory paging slows down the 
+   ray tracing like crazy.
+
+2) Reality doesn't look nearly as "real" as a neat clean procedural model
+   of it does.
+
+The results were so mixed that I never tried to get this published anywhere.
+
+-------------------------------------------------------------------------------
+
+Sundry Comments, by Jeff Goldsmith <jeff@Iago.Caltech.Edu>
+
+About the ray-tracing-as-a-sleazy-sales-gimmick idea:
+
+    The whole point about my suggestion to include a ray tracer as part of a
+CG system is that it is, in fact, mostly useless, and most buyers don't know
+that.  Thus, it works as a great gimmick, which is exactly "promising someone
+something that they think they want, but don't really."  No one will use it
+after finding out how long it takes, so it doesn't have to have as many
+features as the rest of the system.  Yes, this is a very cynical view, but
+sales is a non-technical problem, and (at least around here) expensive systems
+are usually purchased by people who know nothing about them, so it ought to be
+an effective technique with not a whole lot of resource expenditure.  Besides,
+most CG programmers enjoy hacking ray tracers so you boost morale at the
+company at the same time.  ...by the way, this is not entirely a joke, but...
+
+    Euclidean distance calculation:  Iterative approaches work great on this
+problem.  A short summary (and code for one) is in Tom Duff's SIGGRAPH '84
+Tutorial on Numerical Analysis (a terrific article, by the way, as is his
+spline piece in the same place) most of which he got from Moler and Morrison's
+"Replacing Square Roots by Pythagorean Sums" IBM Journal of Research and
+Development, 27/6, Nov. 1983.  The method he describes has cubic convergence,
+so it works well to unroll the loop and do a set number of iterations.  4
+iterations (2/, 4*, 2+) yield 62 digits of precision.
+
+-------------------------------------------------------------------------------
+
+Texture Mapping Question, by Susan Spach <hpfcla!hplabs!spach>
+
+What are good techniques for implementing texture mapping within raytracing?
+Is point sampling with a good sampling strategy most commonly used?  Has
+mipmapping been extended to secondary rays?  [I'm interested, too]
+
+
+======== USENET cullings follow ===============================================
+
+Ray Traced Image Files, Prem Subramanyan
+
+Reply-To: prem@geomag.UUCP (Prem Subramanyan)
+Organization: Florida State University Computing Center
+
+
+We have quite a collection of rasterfiles of all sizes here at geomag.  You
+can use the fbm package by Michael Mauldin to convert from Sun rasterfiles to
+GIF files.  The main reason why I have chosen to keep them as rasterfiles,
+rather than convert them to GIF is that on the Sun the rasterfile viewers are
+neater.  In any case.  anonymous ftp to geomag.gly.fsu.edu (128.186.10.2) cd
+to pub/pics and download any pics you want.  In the future, once I get the
+latest fbm package, I will post it there as well.  We have a good collection
+of files ray-traced on the eta-10g with QRT by Steve Koren.  The longest time
+taken (for blue.rst.Z) was 1 1/2 hrs.  The small ones (640x400) went in
+usually under 15 minutes.  In any case, they are quite interesting.
+
+-------------------------------------------------------------------------------
+
+Image Collection, by Paul Raveling
+
+From: raveling@venera.isi.edu (Paul Raveling)
+Organization: USC-Information Sciences Institute
+
+With gobs of satisfaction, I'd like to announce the addition of some pictures
+of my own to the "Img" collection available on venera.isi.edu.  Along with
+this go sincere thanks to Nic Lyons and HPLabs for the opportunity to digitize
+these photos.
+
+venera's pub directory now contains 2 compressed files to facilitate retrieval
+of images in this collection and of the imglib code.  These are:
+
+	pub/img_ls-RAlF.Z       Directory listing of everything
+				in the [~ftp/] images hierarchy
+
+	pub/img.tar.Z           Code for imglib and the various
+				simple programs using it.
+
+The "root" directory, [~ftp/]images, and each of the four subdirectories
+containing images has its own README file with additional info.
+
+Credits for 2 images that weren't from my own pictures are:
+
+	Window Rock:    My wife spotted and captured the natural
+		spiral pattern at Window Rock, Arizona.
+
+	Solings:        This is from the 1982 International Soling
+		Association calendar.  I used to own and race one
+		of these, but wouldn't risk taking a camera aboard.
+
+
+Here's a subject summary of the new images in images/color_mapped:
+
+aspens          Aspens in San Juan Mts, between Ouray & Silverton
+blue_tigers     Blue Angels, in F11F Tigers
+ds_train        Durango & Silverton narrow-gauge train
+elk             An elk in Banff National Park
+ghost_house     House in ghost town, somewhere between Ouray and Silverton
+graycard        Kodak gray card, grayscale, and color patches
+halfdome        Halfdome in polarized infrared light (Yosemite Nat'l Park)
+harvey          Harvey, an African lion who lived at the L.A. Zoo
+high_line       Durango & Silverton narrow gauge train on the high line
+model           Model at one of Frank's photo day shows, probably in 1978
+model_fullscale Model at one of Frank's photo day shows, probably in 1978
+old497          Old 497:  One of Durango & Silverton's narrow gauge steamers
+porcupine       Porcupine @ ranger cabin, Mosquito Flats, Banff
+puff1 - puff2   Puff (the cat, not the dragon)
+san_juans       San Juan Mountains, between Ouray and Silverton
+smurf1 - smurf4 Whitesmith, aka "The Smurf"  [another cat]
+snake           Non-digital snake (not an adder)
+solings         Solings, from 1982 International Soling Association calendar
+stream          Stream in San Juan Mountains, between Ouray and Silverton
+tbirds          Thunderbirds
+window_rock     Window Rock
+x-1e            X-1E at NASA Ames Dryden Flight Research Center, Edwards AFB
+
+-------------------------------------------------------------------------------
+
+MTV-Raytracer on ATARI ST - precision error report, by Dan Riley
+
+From: riley@batcomputer.tn.cornell.edu (Daniel S. Riley)
+Organization: Cornell Theory Center, Cornell University, Ithaca NY
+
+
+In article <1171@laura.UUCP> wagener@unidocv.UUCP (Roland Wagener) writes:
+>I have ported the MTV-Raytracer on the ATARI ST using the Turbo-C-
+>Compiler. The Program works fine and it uses about 3 hours CPU-Time
+>to create the Balls-Picture in 320x200 Resolution.
+
+>But there is a bug somewhere in the program. There are white spots in
+>all reflecting surfaces. This bug does not appear on a IBM-PC programmed
+>with Zortech-C++. But the PC needs 5 hours for a 200x200-Picture ...
+
+This sounds like a floating point precision problem.  I've been playing
+with a number of ray tracers, including MTV, on my Amiga.  I've seen
+white spots and other sorts of splotches if I use the Motorola ffp format
+floating point routines, which are single precision (32 bit) only.  They 
+go away if I use IEEE math libraries (all calculations done with 64 bit
+doubles).  3 hours cpu for a 320x200 picture on an 8 MHz 68000 sounds like
+single precision to me, but I don't know the ST or Turbo-C that well.
+
+I suppose there must be papers on controlling round-off errors in
+ray tracing algorithms, but none of the ray-tracers I've seen make any
+special efforts in that regard.  Of course, all the ones I have source
+code to are meant to be clean and simple, not fast and convoluted...:-)
+
+-Dan Riley (riley@tcgould.tn.cornell.edu, cornell!batcomputer!riley)
+-Wilson Lab, Cornell U.
+
+-------------------------------------------------------------------------------
+
+Question on Ray Tracing Bicubic Parametric Patches, by Robert Minsk
+
+From: ccoprrm@pyr.gatech.edu.UUCP (Robert E. Minsk)
+Organization: Georgia Institute of Technology
+
+  Does anyone have a routine of know of any pointers to articles to find a
+intersection between a ray and a bicubic parametric patch besides a recursive
+subdivision algorithm?  I am trying to speed things up a bit in my ray tracer.
+
+-------------------------------------------------------------------------------
+END OF RTNEWS

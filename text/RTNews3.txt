@@ -1,0 +1,1215 @@
+
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+                        "Light Makes Right"
+
+                         April 6, 1988
+
+Compiled by Eric Haines, 3D/Eye Inc, ...!hplabs!hpfcla!hpfcrs!eye!erich
+All contents are US copyright (c) 1988 by the individual authors
+
+
+New Distributor Address
+-----------------------
+
+I have been trying to switch over to something faster, cheaper, and more
+reliable than uucp mail.  As you (hopefully) know, I have sent you test
+messages, to which about 2/3rds the mailing list has replied.  If you receive
+this issue of the RT News with a return address of "...!eye!erich", then I have
+NOT received your reply.  Write to:
+
+	saponara@tcgould.tn.cornell.edu
+
+Those who have successfully replied will get it with the "saponara" return
+address.  Please consider "...!eye!erich" to still be my mailing address - the
+other account is "on loan" and may disappear someday.  By the way, the new
+mailing list is attached at the end of this issue.
+
+-- Eric
+
+-----
+
+Contents:
+    RT News, hardcopy form (Andrew Glassner)
+    node changes (Paul Heckbert & Brian Barsky, Darwyn Peachey)
+    new members (Cary Scofield, Michael Cohen, John Chapman)
+    question for the day (Rod Bogart)
+    Re: Linear-time voxel walking for BSP (Erik Jansen)
+    some thoughts on the theory of RT efficiency (Jim Arvo)
+    Automatic Creation of Object Hierarchies for Ray Tracing (Eric Haines)
+    Best of USENET (Tait Cyrus, Todd Elvins)
+
+-----------------------------------------------------------------------------
+
+from: Andrew Glassner
+subject: RT News, hardcopy form
+
+I was surprised that there are still some folks on the softcopy list
+not on the hardcopy list.  On the next mailing, please ask anyone on
+the electronic list who isn't getting the hardcopy (but wants to) to
+drop me a line, electronically (glassner@cs.unc.edu) or physically
+at the Department of Computer Science, UNC-CH, Chapel Hill, NC 27599-3175.
+
+-Andrew
+
+-----------------------------------------------------------------------------
+
+subject: node changes
+
+[the gist:  change the net addresses of Brian Barsky, Paul Heckbert, Don Marsh,
+and Michael Hohmeyer's "degas" node to "miro".  Change Darwyn Peachey to Pixar]
+
+
+from: Paul Heckbert
+
+My net address is changing from ph@degas.berkeley.edu to ph@miro.berkeley.edu
+(we're switching from an impressionist to a more modern artist)
+
+Although the machine "degas" is being phased out, mail to my old address
+should continue to reach me, but the new address is faster and more reliable.
+
+
+from: Brian Barsky
+
+Degas is going away.  Mail should get to me as "barsky@berkeley.edu" on
+the ARPAnet and as "...ucbvax!barsky" on Usenet.  My machine is "beta",
+but that shouldn't be necessary in the address.
+
+
+from: Darwyn Peachey
+
+Change of address:
+
+    pixar!peachey@ucbvax.Berkeley.EDU
+	    - or -
+    {sun,ucbvax}!pixar!peachey
+
+-----------------------------------------------------------------------------
+
+subject: new people
+
+from: Cary Scofield
+
+    Please add my name to the Ray Tracing News mailing list. You can
+use the same address(es) you use for Jim Arvo or Olin Lathrop or the
+one I give you below.  I really enjoy reading RTN -- very enlightening
+stuff!
+
+                                    Thanks, 
+
+                                        Cary Scofield
+                                        Apollo Computer Inc.
+                                        270 Billerica Rd.
+                                        Chelmsford MA 01824
+
+                                        apollo!scofield@eddie.mit.edu
+
+> Could you please write up a paragraph about yourself which I
+> could include next issue as an introduction?
+
+I don't know that there is much about myself worth talking about, but here
+goes ...
+
+I've been working off-and-on with 3D graphics applications and systems
+for about 9 years ... started at Apollo 4 1/2 years ago ... been
+working on  Apollo's 3dGMR and Raytracer packages ... presently in
+part-time pursuit of an MS in Systems Engineering at Boston Univ. ...
+my prevailing interests nowadays are in finding and developing a
+suitable software architecture for an image sythesis system that is
+network-distributable and user-extensible.
+
+                                        - Cary Scofield
+
+-------
+
+from: John Chapman
+
+[John is presently doing grad. work in computer graphics]
+
+Yes I'd like to be on the list - getting the back issues would be great,
+thanks!  The most stable email address for me is:
+ ...!ubc-cs!fornax!sfu_cmpt!chapman
+although this may change shortly nothing sent to it will be lost.
+Fastest response address for short notes is still ...fornax!bby-bc!john
+
+
+--------
+
+from: Eric Haines
+
+Michael Cohen has also been added to the list.  He should be well known to
+anyone who has read anything about radiosity, and has also done work in
+ray tracing (his latest efforts with John Wallace resulting in an algorithm
+for combining radiosity and ray tracing [Siggraph '87, last article]).  In
+1983 we both entered the Program of Computer Graphics at Cornell, and after
+graduation he stayed on as a professor.  Embarrassingly enough, I thought
+that he was on the RT News mailing list (most of the PCG staff are) - anyway,
+he's been added:
+
+	cohen@squid.tn.cornell.edu
+
+-----------------------------------------------------------------------------
+
+subject: question for the day
+from: Rod Bogart
+
+I actually do have a ray tracing question.  There has been mucho
+noise on the net about "point in poly".  Around here, we raytrace
+triangles.  So, what is the fastest reliable way to intersect a
+ray with a triangle and also get back barycentric coordinates?
+
+We subdivide our B-spline patches into a hierarchy of bounding
+volumes with triangles at the leaves.  We preprocess the triangles
+by calculating a matrix to aid the intersection process.  The problem
+is, the matrix must be inverted, and doesn't always cooperate (this
+usually fails for triangles nearly aligned with a coordinate plane).
+Is there a favorite way of storing a triangle (instead of our failing
+matrix) so that the intersection returns barycentric coordinates
+(r,s,t) all 0 to 1?
+
+You don't need to bother the rest of the RT gang, if you have solution
+of which you are confident.
+
+Thanks,
+RGB
+
+-----------------------------------------------------------------------------
+
+From: erik jansen
+Subject: Re: Linear-time voxel walking for BSP
+
+I have some experience with the 'recursive' ray traversal (as I called it)
+described by Jim Arvo. The first implementation dates from fall'83 (as 
+mentioned in the previous RT news). I presented the idea during the 
+workshop 'Data structures for raster graphics' (June 1985) and I compared
+it there with the 'sequential' traversal and did the suggestion that both
+methods can also be applied to a hierarchical box structure. See:
+ 
+  F.W. Jansen, 'Data structures for ray tracing', 
+  In: 'Data structures for raster graphics', Proceedings workshop,
+  Kessener, L.R.A, Peters, F.J., Lierop, M.L.P. van, eds., 57-73,
+  Eurographics Seminars, Springer Verlag, 1986.
+
+In my thesis 'Solid modeling with faceted primitives', (Sept. 1987) it is 
+discussed on the pages 63-66. 
+I agree that these sources are rather obscure and not known to people
+(let say) outside the Netherlands. Here follows a summary of the pages of
+my thesis:
+
+The (sequential) ray tracing algorithm for the (BSP) cell structure
+proceeds by local access. First the intersection of the ray with the total 
+structure is calculated, then the cells are stepwise traversed by calculating 
+the intersection of the ray with the cell planes and determining which cell 
+is traversed next. The spatial index (directory) is used to access the data
+in the cell. (..).
+The index in the directory is found by an address computation on the 
+coordinates of a query point (for all points within a cell, the address 
+computation function gives the same index value) (This is the EXCELL 
+directory method see Tamminen Siggraph'83). A similar method is described 
+in [Fujimoto et al., 1986] for traversing an octree space subdivision: a 
+neighbour finding technique on the basis of octree indexes. Both methods 
+are better than the method described in [Glassner, 1984], which classifies 
+each point by descending the complete octree. 
+(..)
+Another method is feasible: a tree traversal method for the cell structure.
+This method uses a cell structure that is created by a binary subdivision.
+This recursive ray traversal method intersects the cell structure and 
+recursively subdivides the ray and proceeds with the partitioning (collection 
+of cells) first intersected. If the ray interval only intersects a single 
+cell then the data in that cell is tested for intersection with the ray.
+(..)
+Both algorithms have been implemented but no clear differences in 
+performance could be found: the average number of cells traversed for 
+each ray is more than two or three, which would be beneficial for the 
+sequential traversal, but it is not large enough to justify the initial
+cost of the recursive ray traversal. (..).
+(..)
+The total processing time for the ray tracing breaks down into the following
+components: cell traversal, intersection and shading.
+Their contributions are depicted in fig.(..), which shows that the intersection
+is still the major time-consuming activity.
+The constant time performance is confirmed by the results of fig. (..).
+Unfortunately, the constant time is constantly very high. (sigh)
+
+So far my thesis and exactly what was predicted by Jim. In some test examples
+(for instance a simple set up with five elementary volumes (a few thousand
+polygons)) the average number of cells traversed was about 5.
+
+The original idea was not to eliminate the number of internal nodes that
+are traversed (because I use the EXCELL indexing method) but to avoid the
+cell plane intersections. First I calculate the intersection of the ray with
+the six bounding planes of the world box. I put xmin, xmax, ymin, ymax, zmin
+and zmax on a stack and I half each time the ray segment for x, y and z 
+alternatively. Further, while subdividing the ray I also half the directory
+index range of the EXCELL directory (this requires another filling of the 
+directory than in the original method) and when the range contains only
+one index then the leaf level has been reached and the ray intersection
+with the cell data can be done. (If this is unclear I can give a more 
+elaborated explanation next time).
+It will be clear that I can not use with my method arbitrary partitioning
+planes.
+
+An important point is the actual coding. My implementation was in Pascal
+and I can imagine much better programs than I can write. 
+
+-----------------------------------------------------------------------------
+
+from: Jim Arvo
+subject: some thoughts on the theory of RT efficiency
+
+[Jim is writing the course notes on efficiency for the "Introduction to
+Ray Tracing" course at this year's Siggraph.  He sent this on to me
+and mentioned I could pass them on to all.  Enjoy! - EAH]
+
+    Yes, I did receive the latest RT news with my octree stuff in it.  By
+    the way, it occured to me that you mentioned something about walking up 
+    an octree to find the nearest common ancestor between a voxel and its 
+    neighbor.  Olin and I have been discussing this, and I'm quite sure that
+    it's equivalent to the algorithm I described (but it's NOT immediately
+    obvious).  The important fact is that neighboring voxels in an octree
+    have a common ancestor which is two steps up (on average) regardless of
+    the depth of the octree.  This is what gets rid of the log N factor.
+
+    With respect to "A Characterization of Ten Ray Tracing Efficiency 
+    Algorithms", I'm hoping that my section of the course notes will
+    take a good first step toward filling this need.  There's obviously an
+    infinite amount of work to be done here, especially considering that
+    ray tracing is on very shaky theoretical grounds as it stands.
+    Not that we have any doubts that it works!  We just can't say 
+    anything very convincing about how good our optimizations are at 
+    this point.  We clearly have to do some of the things you suggested
+    in your last message, or possibly go back to square one and try to
+    create a formal "ray tracing calculus" which we can actually prove
+    things about.  And, of course, I agree totally that we need to get a 
+    good handle on the strengths of the various techniques in order for 
+    something like annealing to have any chance at all.
+
+    By the way, while writing the course notes I realized that there is a 
+    nice connection between the light buffer, the "ray coherence theorem" 
+    [Ohta/Maekawa 87], and ray classification.  If you start with a 
+    "direction cube" (like the hemicube of radiosity) and cross it with 
+    (i.e. form the cartesian product with) different "sets", you get the 
+    central abstractions which these algorithms are based upon.  Like so:
+
+
+    light buffer  -----  ray coherence theorem  -----  ray classification
+
+     directions              directions                    directions
+         x                        x                            x
+       points                 "objects"                     "space"  
+
+
+    This is a very simple observation, but I think it makes the different
+    uses of direction easier to visualize, and certainly easier to explain.
+    All three use sorted object lists associated (directly or indirectly) 
+    with "cells" of a subdivided direction cube.  I think these three 
+    algorithms form a nice well-rounded section on "directional techniques."
+
+    Well, back to the salt mine...
+
+                                                                   -- Jim
+
+--------more
+
+    I want to get your opinion concerning the correspondence between 
+    the light buffer, the "ray coherence" algorithm, and ray classification
+    which I mentioned previously.  In particular, I have the following
+    chart which I'd like to include in my section of the course notes and,
+    since the light buffer is your baby, I'd like you to tell me
+
+        1) If I've represented it fairly
+
+        2) If there are other criteria which you think might 
+           be helpful to add to the chart
+
+    Here is the chart (which is actually just a figure in the context of
+    a more detailed discussion):
+
+
+                    Light Buffer     Ray Coherence      Ray Classification
+                    ------------     -------------      ------------------
+
+    Directions      Points            Objects           Space
+    crossed with    (representing     (including        (bounding the
+    ------------    light sources)    light sources)    environment)
+
+
+    Applied to      shadowing rays    all rays          all rays
+    ----------
+
+    Type of         polygonal         unrestricted      unrestricted
+    environment   (can be extended)
+    -----------
+
+    When data
+    structure       preprocessing     preprocessing     lazily during
+    is built                                            ray tracing
+    ---------
+
+    Direction       uniform           uniform           adaptive
+    subdivision                                         via quadtree
+    -----------
+
+    Construction    modified          "coherence        "object class-
+    of item list    polygon ras-      theorem" applied  ification" using
+    ------------    terization        to all pairs of   hierarchy of
+                                      objects           beams
+
+    Parameters      number of         number of         max tree depth,
+    ----------      direction         direction         max item list size,
+                    cells             cells             truncation size, etc.
+
+    Item list       constant time     constant time     Traversal of 2D or
+    Lookup                                              5D hierarchy and   
+    ---------                                           caching.
+
+
+    Also, have you given any thought to adaptive subdivision or lazy
+    evaluation?  Are there other interesting extensions that you'd care
+    to mention?
+
+    [I still haven't replied - soon! (tonight, if I can help it)]
+
+-----------------------------------------------------------------------------
+
+from: Eric Haines
+
+Automatic Creation of Object Hierarchies for Ray Tracing
+--------------------------------------------------------
+
+This document is an explanation of the ideas presented by Goldsmith and Salmon
+in their May '87 paper in IEEE CG&A.  Some changes to their algorithm have been
+made for additional efficiency during ray tracing (though additional cost for
+the preprocess).  
+
+The problem is that you are given a list of objects and wish to create a near
+optimal hierarchy of bounding volumes to contain these objects.  The basic idea
+is to create the tree as we go, adding each node at whatever location seems
+most optimal.  To avoid searching through the whole tree, we work from the top
+down and figure out which child branch is most worth looking at.
+
+
+The Algorithm
+-------------
+
+As G&S note, the form of the tree created is order dependent.  One good
+method of ensuring a better tree is to shuffle the order of the list.  This can
+be done by:
+
+	given a list of objects OBJ[1..N],
+	for I = 1 to N {
+	    R = random integer from 1 to N
+	    swap OBJ[I] and OBJ[R]
+	}
+
+Given the list of N objects, form bounding boxes for each and calculate the
+area.  The area of the bounding box enclosing an object is proportional to:
+
+	Probability of hit == P = X*(Y+Z)+Y*Z
+
+and this is all we need to calculate, since we're using these areas relative
+to one another.
+
+The first object is considered as a root node of a tree structure, simply:
+
+	{OBJ[1]}		Tree #1 - the initial tree
+
+and the other nodes are added to this tree one by one in optimal places.
+
+
+Node Placement
+--------------
+
+Start with the second node and look at the root of the tree.  The root will
+be either an object or a bounding volume (well, for the second node it will
+be an object, after that it'll be a bounding volume.  We're presenting this
+algorithm in this fashion because this section will be used recursively
+throughout the root's children).
+
+Root node is an object: In this case, the new object (call it OBJ[2]) will form
+a binary tree with the root node, as follows.
+
+		{BV[1]}		Tree #2 - adding an object to tree #1
+		   |			  (First Method)
+	+----------+----------+
+	|                     |
+    {OBJ[1]}		  {OBJ[2]}
+
+A bounding volume was created which contains both objects, and the bounding
+volume became the root node.
+
+Root node is a bounding volume: In this case, three different possible paths
+can be taken when adding a new object to the tree. 
+
+The first is simply to add a binary tree structure as above, with one child
+being the old root and the other child being the new object.  For example,
+adding a new object (OBJ[3]) in this fashion to tree #2 above yields:
+
+			   {BV[2]}	Tree #3 - Adding object #3 to tree #2
+			      |			  (First Method)
+		   +----------+----------+
+		   |			 |
+		{BV[1]}		     {OBJ[3]}
+		   |
+	+----------+----------+
+	|                     |
+    {OBJ[1]}		  {OBJ[2]}
+
+Again a new bounding volume has been created and made the root node.
+
+The second method for adding to a bounding volume root node is to simply
+add the new object as a new child (leaf) node:
+
+		{BV[1']}	Tree #4 - adding an object to tree #1
+		   |			  (Second Method)
+	+----------+----------+---------------------+
+	|                     |			    |
+    {OBJ[1]}		  {OBJ[2]}		{OBJ[3]}
+
+Note that the bounding volume root node may increase in size.  This new
+bounding volume is noted as BV[1'] to note this possible change.
+
+The third method is to not add the new object as a sibling or a child of
+the root, but rather to add it as a grandchild, great-grandchild or lower.
+In this case, some child is picked as the most efficient to accomodate the new
+object.  This child then acts like the root node above and the new object is
+added in the same fashion, by choosing one of the three methods (or, if it is
+a leaf node, automatically selecting the first method).  The next section deals
+with deciding which method is the most efficient.
+
+
+Selection Process
+-----------------
+
+The goal behind creating the tree is to minimize the average number of
+intersection tests which must be performed.  By looking at the extra costs
+added by adding an object at various points we can select the least expensive
+option.
+
+The costs are based on the area of the objects, which represents the
+probability of the objects being hit by a ray.  The scheme is to test what
+the additional cost is for method one and for method two and record which is
+better.  This cost is termed the "local best cost".  For the root node this
+cost is also saved as the "best cost", and the method and item are also saved.
+Then method three is used, selecting the child thought to be most efficient for
+adding the new object.  An "inheritance cost" is calculated for method three,
+which is passed on to the child.  This cost is essentially the expense to the
+parents of adding the object to the tree.  It occurs only when the parent
+bounding volume must increase in size to accomodate the new object.  The term
+"inheritance cost" will mean the cost addition calculated at the level, which
+is the sum of the "parent inheritance cost", inherited from above, and the
+"local inheritance cost", the extra cost due to this level.
+
+The child selected is then checked for its cost using methods one and two.  If
+the local best cost plus the parent inheritance cost is better than the best
+cost of earlier parents, the best cost, method, and location are updated.  We
+now check method three to look for an efficient child of this child.  If the
+inheritance cost (which will be the sum of the local inheritance cost found at
+this level plus the parent inheritance cost from earlier) is greater than the
+best cost, method three does not have to be pursued further on down the tree.
+This halting is valid because no matter where the node would be added further
+down the tree, the cost will never be better than the best cost.
+
+Otherwise, this whole procedure continues recursively on down the tree until
+method three can no longer be performed, i.e. the inheritance cost is higher
+than the best cost or the selected testing node is an object (leaf) node.  At
+this point, whichever node has been chosen as the best node is modified by
+method one or two.  Note that method three is not a true modification, but
+rather is just a recursive mechanism, pushing the testing by methods one and
+two down the tree.  After performing the changes to the tree structure, the
+parent boxes are increased in volume (if need be) to accomodate the new
+object.
+
+
+Efficiency Criteria
+-------------------
+
+Well, we've been talking in a vacuum up to now about how to calculate the
+average number of ray intersections performed for a tree.  We perform the same
+calculations as G&S to determine the average--see that article for a
+good explanation.  We also take their advice and not worry about the probability
+of hitting the root node, and so multiply our probability equation by the
+proportional volume of the root node.  The practical effect is that this avoids
+a number of pointless divisions, since we just want to calculate relative
+costs of adding the object to the structure and don't really want the actual
+average ray/tree intersection value.
+
+The cost for method one: what happens here is that a bounding volume is
+created and its two children are the original test node and the new object.
+We will use trees #1 and #2 to derive the cost calculations.  The initial
+probability cost of hitting OBJ[1] are simply:
+
+	old cost = 1
+
+This is the because the topmost node is always tested.
+
+The new probability cost is the cost of hitting the bounding volume and
+intersecting the two objects inside the bounding volume.  Essentially:
+
+	new cost = 1 + 2 * P(BV[1])
+
+This formula can be interpreted as follows.  One ray intersection is done to
+intersect the bounding volume.  If this volume is hit, two more ray intersection
+tests must be done to check the two objects contained within.  From these two
+equations we can calculate the difference, which is:
+
+	cost difference = 2 * P(BV[1])
+
+
+The cost for method two: what happens here is that the new object is added to
+the existing bounding volume.  Using trees #2 and #4 for demonstration, the old
+cost is:
+
+	old cost = 1 + k * P(BV[1])
+
+where k is the number of children (in our example, it's 2).  The new cost is:
+
+	new cost = 1 + (k+1) * P(BV[1'])
+
+with P(BV[1']) being the new area of the bounding volume.  The difference is:
+
+	cost difference = ( P(BV[1']) - P(BV[1]) ) * k + P(BV[1'])
+
+
+The inheritance cost for method three: the cost incurred will be the difference
+between intersecting children times the old parent's area and intersecting
+children times the new parent's volume.  The old cost is:
+
+	old cost = 1 + k * P(BV[1])
+
+The number of children is the same for the new cost (i.e. the new object will
+be added on down the line by method one or two, which always ends up with one
+root node), so the only thing that can change is the volume:
+
+	new cost = 1 + k * P(BV[1'])
+
+The difference:
+
+	cost difference = ( P(BV[1']) - P(BV[1]) ) * k
+
+With these criteria in hand, we can now actually try the method out.
+
+
+Example
+-------
+
+There are four tiles of a checkerboard to be ray traced, which, after
+shuffling, are as shown:
+
+	+---+---+
+	| 1 | 3 |
+	+---+---+
+	| 4 |
+	+---+
+	| 2 |
+	+---+
+
+We start with a tree consisting of tile #1, with area 1.
+
+Adding tile #2, we automatically come up with a tree:
+
+		BV* (area 3)
+		 |
+	+--------+----------+
+	|		    |
+	1 (area 1)	    2 (area 1)
+
+Note: BV* means the new BV being added, BV' means an old BV possibly increasing
+in size.
+
+Looking at tile #3, we try out method one:
+
+			   BV* (area 6)
+			    |
+		 +----------+----------+
+		 |		       |
+		BV (area 3)	       3 (area 1)
+		 |
+	+--------+----------+
+	|		    |
+	1 (area 1)	    2 (area 1)
+
+The cost difference is simply 2 times the new BV area, i.e. 12.
+
+We also look at the cost of method 2:
+
+			   BV' (area 6)
+		 	    |
+	+-------------------+---------------------+
+	|		    |			  |
+	1 (area 1)	    2 (area 1)		  3 (area 1)
+
+The cost is (new area - old area) * 2 children + new area = (6-3)*2 + 6 = 12.
+Since this is the same as method one, either method one or method 2 can be
+selected, with the best cost being 12.
+
+Method 3 is now applied, looking at each child and using methods one and two
+on them.  The inheritance cost is (new area - old area) * 2 children =
+(6-3)*2 = 6.  Each child is an object (leaf) node, so only method one can be
+used.  Trying this on object 1:
+
+			   BV' (area 6)
+			    |			inheritance = 6
+		 +----------+----------+
+		 |		       |
+		BV* (area 2)	       2 (area 1)
+		 |
+	+--------+----------+
+	|		    |
+	1 (area 1)	    3 (area 1)
+
+The local cost is 2 * new area, i.e. 4.  The cost including the inheritance
+is 4 + 6 = 10, which is lower than our earlier best cost of 12, so performing
+method one on object 1 is now the best solution.
+
+Trying method 1 on object 2 we get:
+
+			   BV' (area 6)
+			    |			inheritance = 6
+		 +----------+----------+
+		 |		       |
+		 1 (area 1)	      BV* (area 6)
+		  		       |
+	                    +----------+----------+
+			    |			  |
+			    2 (area 1)		  3 (area 1)
+
+The increase in cost is 2 * new area, i.e. 12.  This plus the inheritance of
+6 is 18, which is certainly horrible (as we would expect).  So, we end out
+with the best solution being replacing the node for object 1 with a BV which
+contains objects 1 and 3, shown earlier.
+
+For object 4, we again test method one:
+
+				      BV* (area 6)
+				       |
+			    +----------+----------+
+			    |			  |
+			   BV (area 6)	          4 (area 1)
+			    |
+		 +----------+----------+
+		 |		       |
+		BV (area 2)	       2 (area 1)
+		 |
+	+--------+----------+
+	|		    |
+	1 (area 1)	    3 (area 1)
+
+The local cost is 2 * new area, i.e. 12.  Trying out method two:
+
+			   	      BV (area 6)
+			    	       |
+		 +---------------------+---------------------+
+		 |		       |		     |
+		BV (area 2)	       2 (area 1)	     4 (area 1)
+		 |
+	+--------+----------+
+	|		    |
+	1 (area 1)	    3 (area 1)
+
+The cost is (new area - old area) * 2 children + new area = (6-6)*2 + 6 = 6.
+This is the better of the two methods, so method two applied to the root is
+noted as the best cost of 6.
+
+Method 3 is now applied, looking at each child and using methods one and two
+on them.  The inheritance cost is (new area - old area) * 2 children =
+(6-6)*2 = 0.  The first child is the BV containing objects 1 and 3, so we try
+method 1:
+
+				      BV (area 6)
+				       |		inheritance = 0
+			    +----------+----------+
+			    |			  |
+			   BV* (area 4)		  2 (area 1)
+			    |
+		 +----------+----------+
+		 |		       |
+		BV (area 2)	       4 (area 1)
+		 |
+	+--------+----------+
+	|		    |
+	1 (area 1)	    3 (area 1)
+
+The cost is 2 * new area + inheritance = 8, which is not better than our
+previous best cost of 6.  Method two yields:
+
+				        BV (area 6)
+				         |		inheritance = 0
+			      +----------+----------+
+			      |			    |
+			     BV' (area 4)	    2 (area 1)
+			      |
+	+---------------------+---------------------+
+	|		      |			    |
+	1 (area 1)	      3 (area 1)	    4 (area 1)
+
+The cost is (new area - old area) * 2 children + new area = (4-2)*2 + 4 = 8,
+which, plus the inheritance cost of 0, is not better than our previous best
+cost of 6.
+
+Now we try method one on the second node of the tree, i.e. object 2:
+
+			   	     BV (area 6)
+			    	      |
+		 +--------------------+--------------------+
+		 |		       			   |
+		BV (area 2)	       			  BV* (area 2)
+		 |					   |
+	+--------+----------+			+----------+----------+
+	|		    |			|		      |
+	1 (area 1)	    3 (area 1)		2 (area 1)	      4 (area 1)
+
+Again, the cost is 2 * new area + inheritance = 2 * 2 + 0 = 4.  This beats
+our best cost of 6, so this is the optimal insertion for object 4 so far.
+Since this cost is also better than the best cost of 8 for the first child,
+this branch is the best child to pursue further on down (though we can't go
+further).  This means that we do not have to try methods one for object 4 on
+the first child's children (objects 1 and 3).  Confused?  Well, that's life.
+Try examples of your own to see how the algorithm works.
+
+
+Improvements
+------------
+
+G&S say they check which child node will be tested further by which has
+the smallest increase in area when the new object is added to it.  In case of
+ties (which occur mostly when the area doesn't increase at all), they give a
+few possible sub-criteria for choosing.  However, by the logic of bounding
+volumes, the real test that should be done is to pick the bounding volume which
+gives the best result when methods one and two are applied to it.
+
+To prove this by example, imagine a bounding volume containing two other
+bounding volumes, one huge (say it has 50% of the area of its parent) and one
+tiny (say it's 1%).  Let's say an object is inserted which would not increase
+the size of the 50% BV but would triple the size of the 1% BV to 3%.  By
+Goldsmith's criterion we must pick the 50% BV to insert the object into.  Now
+if we intersect the root node we will hit the 50% BV half the time, and so must
+then do the other object intersection half the time.  If instead we had picked
+the 3% BV, this would be hit 3% of the time, meaning that we would have to do
+the object test only 3% of the time.  In both cases we had to test each BV, but
+it was smarter of us to put the object in the smaller BV in order to avoid
+testing.  This case will be caught by testing the increases for methods one and
+two for the BV's.  Method one for the larger would yield 50%*2 and method two
+50%*1, giving 50% as the best cost.  For the tiny BV, method one yields
+3%*2 = 6% and method two (3%-1%)*2 + 3% = 7%, giving 6% as the best cost,
+obviously much better.  Even though we have increased the chance of having to
+open the smaller box, it's still cheaper to do this than to add the object to
+a box which is much more likely to be hit.
+
+-----------------------------------------------------------------------------
+
+Best of USENET:
+
+From: cyrus@hi.unm.edu (Tait Cyrus)
+Newsgroups: comp.graphics
+Subject: images
+Organization: U. of New Mexico, Albuquerque
+
+It seems that once a month someone asks where they can get
+ahold of some images to play with.  Well, for those of you
+looking for images to "play" with, I have some images
+available that you can have.  They are available via
+anonymous ftp on hc.dspo.gov (26.1.0.90).  The images are
+in pub/images.  There are two directories 'old' and 'new'.
+Both contain images as well as a README.  The README's
+describe the sizes of the images and basically what the
+images are of.  Because of disk space constraints, all of the
+images are compressed.  All of the images, but one, are
+grey scale.  The other is an image of a mandrill in color.
+Three files make up the madrill, one for green, red and
+blue.
+
+Currently there are 20 images.  As time goes on this number
+will be increasing (I hope), so if you are interested in
+images, you might want to check once a month or so to see
+if there are any new ones.
+
+If you have any images which you would like to make available,
+please let me know.  I would like to put them with the ones
+I currently have (kind of like a repository).
+
+More:
+
+Several people have asked me for some more details concerning the images
+I have made available on hc.dspo.gov (26.1.0.90).  Again, the images
+are available via anonymous ftp and are in /pub/images.  There are 2
+directories, 'new' and 'old' which contain the 20 or so images.
+Both have README's which describe the images and the sizes of the images.
+
+The images are compressed, the README's are NOT.  If your system does
+not have uncompress (you might check with your system manager first
+to make sure) I have put the source for compress/uncompress in /pub
+of the same machine.
+
+The images are all grey scale, except for mandrill.  The grey
+scale images are such that each pixel is represented by one
+byte (value of 0 = black, 255 = white).
+
+Hope this helps any of you who were confused or were having troubles.
+
+
+>From: todd@utah-cs.UUCP (Todd Elvins)
+Newsgroups: comp.graphics
+Subject: New model of an espresso maker
+Organization: University of Utah CS Dept
+
+I have installed a file called 'espresso.polys' on the ftp directory
+at cs.utah.edu
+
+It is a model of one of those aluminum italian made espresso makers.
+
+T. Todd Elvins  IFSR
+({ucbvax,ihnp4,decvax}!utah-cs!todd, todd@cs.utah.edu)
+"Eat, drink, and be merry, for tomorrow you might be in Utah."
+
+END OF RTNEWS
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+			"Light Makes Right"
+
+			 June 20, 1988
+
+Compiled by Eric Haines, 3D/Eye Inc, ...!hplabs!hpfcla!hpfcrs!eye!erich
+All contents are US copyright (c) 1988 by the individual authors
+
+Contents:
+    New people and addresses (David Lister, Pete Segal, Paul Heckbert)
+    Non-article on RenderMan and Dore' (Eric Haines)
+    Ray Tracing Bibliography Update (Paul Heckbert & Eric Haines)
+    Commercial Ray Tracing Software (Eric Haines)
+    Benchmarks (Jeff Goldsmith)
+
+So, I've regained the desire to type again a mere month after the SIGGRAPH
+course notes deadlines.  Not much in the queue, but I thought I'd pass on what
+little there is.  The most interesting developments which affect ray tracing
+are the release of the RenderMan (tm) interface by Pixar and the publication
+of Ardent's Dore' (tm) Programmer's Guide and Reference Manual.
+
+Andrew Glassner's hardcopy "RT News" is coming out soon - if you're not on the
+mailing list, write him.
+
+SIGGRAPH Ray Tracers Roundtable:  in case you don't know, this is an informal
+get-together during SIGGRAPH where we talk about ray tracing techniques and
+trends.  Personally, I'd like to aim for about the same time as last year:
+Thursday, sometime after 5 pm (with people then hitting the technical reception
+for food afterwards).  Same as last year, we'll leave notes at the message
+center to all subscribers as to exactly where and when.  If you're not planning
+to attend SIGGRAPH, please save me some note-writing effort by telling me.
+Otherwise, see you there.
+
+-----------------------------------------------------------------------------
+
+New people and addresses
+------------------------
+
+Paul Heckbert's summer address (at Xerox PARC):
+
+	heckbert.pa@xerox.com
+
+Mail will still (slowly but surely) reach Paul at his old Berkeley address.
+
+
+# David Lister
+# Data General Corp.
+# 62 T. W. Alexander Drive
+# Research Triangle Park, NC   27709
+# (919) 248-6223
+alias	david_lister	hpfcrs!hpfcla!hplabs!lister@dg-rtp.dg.com
+
+From David:
+
+I have been working on Ray Tracing since 1984 while I was a graduate
+student at The Ohio State University.  I am still working on my thesis
+for my MSEE on parallelism and algorithm improvements for Ray Tracing.
+My areas of Ray Tracing interest include the following:
+
+1). algorithm efficency
+2). simulation of natural phenomenon (optical characteristics of materials)
+
+and,
+
+3). parallelism.
+
+David Lister
+
+
+# Pete Segal
+# AT&T Pixel Machines
+# Room 4K-208
+# Crawfords Corner Road
+# Holmdel, NJ  07733
+# (201)-949-1244
+alias	pete_segal	hpfcrs!hpfcla!ihnp4!homxc!pixels!pls
+
+From Pete:
+
+   I'm not real big on introductions, but here goes...
+
+   I was born the son of a poor black sharecropper... wait, wrong story....
+   
+   I started in the Computer graphics lab at RPI in 1979, got my Master's
+in '82 and came to Bell Labs doing graphics for CAD systems.  I moved to 
+Pixel Machines in early 1987 and have been working there since.  I am 
+interested in 3d rendering and animation, and I am currently working on
+the Ray tracing library for the Pixel Machine, RAYlib.
+
+-----------------------------------------------------------------------------
+
+Non-article on RenderMan and Dore' (by Eric Haines)
+
+What follows is a non-review of RenderMan and Dore'.  If you've been looking
+for a chance to contribute to the RT News, here's your chance - I'm not
+planning on reviewing either of these in depth, but would love to hear others'
+opinions (even anonymous ones) of these packages.
+
+I just received a copy of Pixar's "RenderMan" interface.  To quote the
+preface:
+
+	The RenderMan interface is designed so that the information needed to
+	specify a photorealistic image can be passed to different rendering
+	programs compactly and efficiently. ... In order to achieve this,
+	the interface does not specify how a picture is rendered, but instead
+	what picture is desired. ... The RenderMan interface is a collection
+	of procedures to transfer the description of a scene to the rendering
+	program.
+
+The interface for the ray tracer is wonderfully short, as it is simply another
+command in Pixar's shading language.  I include it here in full:
+
+18.4.5 RAY TRACING
+
+color trace( point R )
+
+	"trace" returns the incident light falling on a surface in a given
+	direction R.  If a particular implementation does not support ray
+	tracing, and cannot compute the incident light arriving from an
+	arbitrary direction, trace will return 0 (black).
+
+That's it.  I don't see any way this command can support shadowing or
+filtering, but I haven't read through the document carefully (Pixar seems
+to want to go with their "Shadow Depth Maps" instead - SIGGRAPH 87 paper).
+
+Anyway, this interface is "endorsed" by Apollo, DEC, Stellar, Ardent, and
+Sun, so it seems to be a happening something.  I'm not sure what "endorsement"
+means, exactly, but one thing it means is that you should probably check it out.
+
+
+Dore':  well, I received the two preliminary manuals yesterday.  As such,
+about all I can commit myself to is: "nice packaging - very artsy binders".
+Reviews, please?
+
+-----------------------------------------------------------------------------
+
+Ray Tracing Bibliography Update (Paul Heckbert & Eric Haines)
+
+Paul Heckbert's "Ray Tracing Bibliography" has been updated for May, 1988.
+It will appear in the next issue of the hardcopy "Ray Tracing News" and in the
+SIGGRAPH '88 "Introduction to Ray Tracing" course notes.  If you would like to
+see it before then, or would just like to have an electronic version on hand,
+please write Eric Haines and I'll mail you the latest version.  Also, if you
+do get a copy, please tell us of any errata or addenda you may have for it.
+
+-----------------------------------------------------------------------------
+
+Commercial Ray Tracing Software, by Eric Haines
+-------------------------------
+
+I'm collecting information for the "Consumer's and Developer's Guide to Image
+Synthesis" course at SIGGRAPH this year - namely, companies selling ray tracers.
+The bare bones info is at the end of this issue.  I'm in the midst of ordering
+manuals, but that's about as far as I'm going.  So, I would like to hear from
+anyone who knows anything about these packages.  I will keep all reviews
+confidential, unless you explicitly state otherwise.
+
+Below is a partial list of groups (in alphabetical order) offering ray tracing
+packages.  If you know of any others, please clue me in (I'm particular
+ignorant when it comes to software for animators & advertising, such as
+Wavefront.  For now, I have left them off the list below).  The "Contact"
+section first lists the person who I have dealt with, followed by the official
+contact address and/or phone number.  I believe the only company that won't
+have representation on the floor at SIGGRAPH is Ray Tracing Corp (though UCS
+probably will, in some form).  Oh, just to dispell rumors, "Numerical Designs
+Ltd", Turner Whitted's company, is not planning on announcing a ray tracer
+by SIGGRAPH 88.  Instead, they are marketing a package based on using pipes
+and filters for rendering (beyond this, I do not know...).
+
+
+
+AT&T, Pixel Machines "RAYlib".  Available only on the Pixel Machine.
+
+	Cost: ???, manuals available realsoonnow.
+
+	Contact: Ken Krause, 201-563-2274.
+		 AT&T Pixel Machines
+		 1-800-544-0097
+
+
+Ardent, "Dore'".  Available on Ardent's Titan superworkstation.  Source
+	available in C, portable to other machines.
+
+	Cost: $250 for universities, research sites.  $15000/$5000 per year
+	for commercial sites.  Binary license $200 per copy.  Programmer's
+	Guide and Reference Manual preliminary versions are $25 each.
+
+	Contact: Ardent Computer Corporation,
+		 880 West Maude Avenue,
+		 Sunnyvale, CA  94086
+		 408-732-0400
+
+
+Hewlett Packard.  Add-on to their existing "Starbase" graphics package,
+	which will also include radiosity software.  Announced at NCGA 1988.
+	Available with the TurboSRX come the end of the year (?).
+
+	Cost: ???
+
+	Contact: Hewlett Packard Co.
+		 1-800-752-0900, Ext. 782A
+
+
+Integra (via Mitsubishi, via Enimax), "Turbo Beam Tracing".  Available on IBM
+	PC/AT or compatible.
+
+	Cost: ??? (will be shown at SIGGRAPH)
+
+	Contact: Gregory Szewczyk
+		 Enimax International Inc.
+		 113 Martin Grove Road
+		 Etobicoke, Ontario M9B 4K7
+		 CANADA
+		 416-234-9120
+
+
+Ray Tracing Corp, "TRACER" and "TRACER PC".  Source available in FORTRAN 77.
+	"TRACER" runs on Cray, VAX, and many Unix-based systems.  "TRACER PC"
+	is for the IBM PC, 640K memory, 20 Mb hard disk, math co-processor,
+	and Targa or Number Nine card.  "TRACER PC" includes a modeler.
+
+	Cost: $3000 for source and first year of updates.  Manual for $25.
+
+	Contact: Mark Franklin
+		 Ray Tracing Corporation
+		 2516 Via Tejon, Suite 316
+		 Palos Verdes Estates, CA  90274
+		 213-373-0520
+
+
+United Computer Systems, Inc, "Ray Tracer".  Available on Apollo, IBM, and
+	Mac.  Evidentally selling well on Mac and IBM: 4x sales than Apollo
+	sales since intro post-SIGGRAPH '87.  It turns out that this product
+	is actually made by Ray Tracing Corp.
+
+	Cost: ???, manual available for $25.
+
+	Contact: Alan Brown (at TMAC (sp?)), 213-475-1067
+		 United Computer Systems, Inc
+		 Graphics Development Group
+		 10564 Progress Way
+		 Cypress, CA  90630
+		 714-220-2931
+
+
+Wavefront Technologies, Inc, "3-D Dynamic Imaging System".  Their system has
+	"production speed ray tracing" as a feature.
+
+	Cost: ???
+
+	Contact: Wavefront Technologies
+		 530 East Montecito Street
+		 Santa Barbara, CA  93103
+		 (805)-962-8117
+
+-----------------------------------------------------------------------------
+
+Benchmarks, by Jeff Goldsmith
+
+[This recently appeared in the email newsletter on scientific visualization
+that Jeff Goldsmith has been editing.  If you're interested in subscribing
+and contributing to the SciVi discussion group, contact him at:
+jeff@hamlet.caltech.edu .  I thought it of interest because of the bounding
+box intersector statistics. - EAH]
+
+I did an interesting micro-project this winter/spring.  We were
+interested in porting some programs to PCs and/or Workstations, so
+I compared the performance of a few chunks of graphics code on a bunch
+of machines.  The code was supposed to represent some of the typical
+cpu and I/O intensive things that graphics programs tend to do.
+
+The benchmarks are:
+	Faults:	randomly accesses a huge array (>16 Megabytes)
+		(I know--not huge to you Cray users, but it is
+		to PCs)  Obviously, tests virtual memory usage.
+	Shade: typical shading routine.  Tests floating point
+		very strongly.
+	Bbox: highly optimized bounding box intersection routine
+		for a ray tracer.  (actually, this one has become
+		somewhat unoptimized for the testing, but you get
+		the idea)  Was intended to test floating point
+		performance and if-then-else branching.  Actually,
+		tests floating point and caching.
+	Clear: sequentially clears a large memory array.  Tests
+		compiler, MIPS, and memory usage.
+	Sub: calls an empty subroutine repeatedly.  Tests MIPS.
+	Fread: formatted reads and writes.  Tests I/O speed, floating
+		point performance and MIPS.
+	Uread: binary reads and writes.  Tests raw I/O speed.
+
+
+Machine	faults	shade	bbox	clear	sub	fread	uread
+------- ------  -----	----	-----	---	-----	-----
+VAX780	12.5	16.9	12.3	11.8	19.3	17.4	23.2
+uVAX II 22.2	18.5	15.6	12.9	18.9	24.0	29.1
+HP320	*	10	45	4	8	5	6
+HP350	4	5	28	3	4	3	4
+Sun 3/1	*	9	34	4	6	5	5
+Sun 3/2 *	9	48	3	3	2	4
+Sun 386 *	9.5	16	2	5	3	1
+Mac II	* 	31.3	44.3	*	4.3	13	5.3
+PC/AT	* 	70	180	*	39	17	6
+PS 2/80 *	9.4	49.7	*	11.1	11.4	7.3
+Compaq	~	~	~	~	19.0	13.1	5.5
+Iris	*	30	59	4	5	15	3
+IrisFPA *	11	13	4	5	6	3
+
+All entries are in seconds to run specified benchmark.
+* indicates that operating system not set up to allow
+   program to run.
+~ indicates benchmark not attempted.
+
+The machines tested:
+	VAX780:	Vax 11/780 with FPA and 32 Mbytes memory
+	uVAX II:  Microvax II, VMS, 16 Mbytes memory
+	HP320: Unix
+	HP350: SRX, Unix, 32 Mbytes memory
+	Sun 3/1: Sun 3/160, 68881 co-processor
+	Sun 3/2: Sun 3/260, 68881 co-processor
+	Sun 386: Sun 386i/250, 80386/80387, Unix
+	Mac II: MPW, 68881
+	PC/AT: Xenix, 80287
+	PS 2/80: OS2, 80387 co-processor
+	Compaq: Compaq 386, Unix, no coprocessor
+	Iris: SGI IRIS 3030 without FPA
+	IrisFPA: SGI IRIS 3030 with FPA
+	(Iris 3130 performance was identical to 3030.)
+
+
+What did I learn from all this?  One thing is obvious: if a 
+FPA is available for your machine and you can afford it (they
+are usually cheap) buy it even if you don't do alot of floating
+point.  It affects all sorts of performance characteristics.
+Another important point: it is not possible to evaluated computer
+performance as one number.  Different computers do different things
+well.  
+
+-----------------------------------------------------------------------------
+END OF RTNEWS

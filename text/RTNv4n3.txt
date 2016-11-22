@@ -1,0 +1,869 @@
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+                        "Light Makes Right"
+
+                         November 18, 1991
+                        Volume 4, Number 3
+
+Compiled by Eric Haines, 3D/Eye Inc, 2359 Triphammer Rd, Ithaca, NY 14850
+	erich@acm.org
+All contents are US copyright (c) 1991 by the individual authors
+Archive locations: anonymous FTP at weedeater.math.yale.edu [130.132.23.17],
+	/pub/RTNews, and others.
+UUCP archive access: write Kory Hamzeh (quad.com!avatar!kory) for info.
+
+Contents:
+    Introduction
+    New People, Address Changes, etc
+    ElectroGig Free Software Offer
+    Spectrum: A Proposed Image Synthesis Architecture, by Andrew Glassner
+    Spline Intersection, Texture Mapping, and Whatnot, by Rick Turner
+    Satellite Image Interpretation, by Andy Newton
+    Material Properties, by Ken Turkowski
+    New Library of 3D Objects Available via FTP, by Steve Worley
+    Object Oriented Ray Tracing Book
+    New and Updated Ray Tracing and Radiosity Bibliographies
+    DKBTrace 2.12 Port to Mac, by Thomas Okken
+    Graphics Gems II Source Code
+    Radiance Digest Archive, by Greg Ward
+    Model Generation Software, by Paul D. Bourke
+    Rayshade 4.0 Release, Patches 1 & 2, and DOS Port, by Craig Kolb and
+	Rod Bogart
+    RayShade Timings, by Craig Kolb
+    RayShade vs. DKBtrace Timings, by Iain Dick Sinclair
+    PVRay Beta Release, by David Buck
+    Vort 2.1 Release, by Eric H. Echidna
+    BRL-CAD 4.0 Release, by Michael J. Muuss and Glenn M. Gillis
+
+-------------------------------------------------------------------------------
+
+Introduction
+
+    Well, it's been awhile - RealWork (TM) has been getting in the way of
+putting out an issue of the Ray Tracing News.  So, rewind your brains back to
+August...
+
+    SIGGRAPH was interesting, as usual.  Las Vegas is an amusing place; now
+that I've seen it once, I don't ever need to go back.  To my surprise, there
+was quite a turnout for the ray tracing roundtable get together at SIGGRAPH.
+The roundtable is a nice excuse for people to get in a room and put faces to
+names, and I finally got to meet some people who had been just authors with
+email addresses before this.
+
+    Some papers of note at SIGGRAPH which directly affect ray tracing were
+Kirk & Arvo's paper on unbiased sampling techniques and Mitchell's on optimal
+sampling for ray tracing.  The first warns that re-using initial samples
+results in bias when adaptively supersampling; the last talks of image
+sampling strategies.  Other papers of interest include those on new procedural
+texturing methods, which all look fairly easy to implement in their simpler
+forms.
+
+    Chen et al presented "A Progressive Multi-Pass Method for Global
+Illumination", which does about every trick in the book to attempt to achieve
+maximum realism.  Xiao He et al presented "A Comprehensive Physical Model for
+Light Reflection", which is just that; it seems about the most realistic
+shading model I've seen, with some very serious mathematics behind it.  Another
+paper from Cornell, "A Global Illumination Solution for General Reflectance
+Distributions" by Sillion et al, gives an interesting method of storing
+reflectance functions by using spherical harmonics.
+
+    The most theoretically significant radiosity paper was done by Hanrahan et
+al, who presented a method of limiting the amount of computation by use of
+hierarchy and error limits.  This method opens up interesting new lines of
+thought and research in radiosity.
+
+    I did not spend a lot of time on the floor, but did run across an
+interesting demo at the Intergraph booth.  They had a cute ray tracing program 
+that implemented parameterized ray tracing (Sequin & Smyrl, SIGGRAPH '89),
+where you essentially store the shading equation parameters for each pixel.
+Changing colors, applying textures, etc then becomes pleasantly fast, as all
+you have to do is substitute the proper parameter values and reevaluate,
+getting a new full ray traced image in seconds.
+
+    Other new ray tracing products I noticed were from Ray Dream and Strata.
+Ray Dream has a ray tracer for the Mac, with the program LightForge for
+modeling surfaces and SceneBuilder for scene description.  They have also
+added a distributed computing feature to poll Macs on a network for idle CPU
+time and uses it for rendering.  Strata offers StrataVision 3d, again for the
+Mac.  They claim ray tracing and radiosity rendering and gave us a demo disk -
+the radiosity images are no great shakes, but it's interesting to see the word
+"radiosity" making its way into the microcomputer market.
+
+    AT&T Pixel Machines has been adding radiosity capabilities to their
+rendering library set.  Silicon Graphics is still demoing radiosity, though no
+product seems in the offing.  They did have a good tutorial film showing the
+ideas behind the progressive radiosity algorithm, and Baum et al had a
+worthwhile paper in the Proceedings on making radiosity usable.  This paper is
+indispensable for anyone designing a robust radiosity system for general use
+(i.e.  you plan on rendering more that a few axis aligned boxes in a room).
+HP demoed their radiosity rendering product (ARTCore) with a room designer
+demonstration, and had a movie in the film show (positive adjectives avoided,
+since I worked on both projects).
+
+    One of the more clever tricks I learnt from the room designer was how to
+get reasonable wallpaper, floor covering, and other such textures scanned in
+using a flatbed scanner.  In the past I went to building supply places and
+borrowed or bought samples ("Yes, I want to see how this will look in my
+kitchen", not mentioning that the kitchen existed only in the computer).
+However, with a flatbed scanner you can get stuck:  the samples can be bigger
+than the scanning surface.  Even if small enough, repetition of the texture
+can lead to unrealistic effects (for example, a brick pattern is obviously
+tiled if the brick colors keep repeating in a too regular fashion).  I've also
+tried photographing large areas of a surface (e.g. a brick wall), but then
+variations in the scene's lighting often appear and make for patterning or odd
+shading artifacts.
+
+    Tamar Cohen, who developed the room designer, realized that there was an
+excellent solution to these problems:  dollhouse supplies!  Dollhouse
+wallpaper and floor coverings easily fit on a flatbed scanner, and all the
+repetition and lighting problems go away.
+
+    For those of you who are deeply into texturing, you should consider
+looking into the Khoros image processing system (ftp from pprg.eece.unm.edu
+[129.24.24.10]:  /pub/khoros - check release first).  It's a huge (~100 Meg)
+system, but from my minimal exposure seems extremely powerful and easy to use.
+It has a visual programming language, so you can interactively attach various
+function boxes together to perform operations.  This makes the system easy to
+quickly start using for simple manipulations, though I think I'm going to have
+to break down and read the documentation at this point.  The system is X based
+and has been ported to most major workstations on up, and the group at the
+University of New Mexico are enthusiastic and willing to help.  Recommended.
+
+    I've also finally scratched the surface of Greg Ward et al's Radiance
+package.  I was impressed first off by the portability:  one of his displayers
+was the first serious X program I've ever compiled and linked without having
+to diddle around with something to make it go.  In fact, I didn't even know it
+was an X program until I ran it and a window popped up on the screen!  If you
+want physically based rendering, this is the only package I know that even
+attempts it.  It also seems to be a fine renderer, and I enjoy the progressive
+ray tracing feature (the image refines while you watch it).
+
+    As far as speed goes, Rich Marisa at the Cornell Theory Center kindly gave
+me an explanation and demonstration of their Ray Casting Engine.  Duke and
+Cornell have been developing this piece of hardware for some time, and it
+embodies an interesting approach:  represent the CSG model as a network of
+processors, then, given a direction of view, convert the model into sets of
+spans.  These spans can then be used for analysis, rendering, etc.  For more
+information, see the Feb. 1991 issue of Mechanical Engineering, or Kedem and
+Ellis' article in _Parallel Processing of Computer Vision and Display_ (ed.
+by Dew, Heywood & Earnshaw).
+
+-------------------------------------------------------------------------------
+
+New People, Address Changes, etc
+
+
+# Andy Newton - physical radiance modelling, natural scenes, rays with solid
+#	angle
+# Remote Sensing Research, University College London
+# Photogrammetry,
+# UCL, Gower Street
+# London, ENGLAND
+# +44 71 387 7050 x2742
+alias andy_newton	anewton@ps.ucl.ac.uk
+alias andy_newton	anewton%uk.ac.ucl.ps@uk.ac.ucl.cs
+
+Although the graphics is more fun than the Remote Sensing this is what I'm
+supposed to be doing ...
+
+Applying ray tracing to the understanding of remote sensed images of the
+natural world, mainly satellite imagery. Much more interested in physical
+accuracy than efficiency. Also how to correctly model, and sample, very large
+and non-uniform light sources (the sky!) in ray tracing. How to relate the
+point sampling paradigm of the infinitesimal ray to light energy transport.
+Physical reflectance models like BRDF. Doing distance attenuation and variable
+light source sampling properly (probably) using solid angle.
+
+I'd be really interested in any references anyone has to ray tracing for
+physical process simulations or radiance calculations using solid angle as
+a ray property.
+
+On offer: a realistic sky radiance model based on atmospheric scattering.
+
+--------
+
+# Denise Blakeley
+# 1455 Runaway Bay Dr. #2B
+# Columbus, OH 43204
+# (614) 487-8442
+blakeley@cis.ohio-state.edu
+
+Ray-tracing interests: general
+
+What I'm doing these days: I'm trying to finish my MS in Computer Science
+  (concentrating in graphics) here at Ohio State December '91.  I'd like to
+  finish the program with at least one fairly complete project to show for
+  it, so I'm trying to expand my basic ray-tracer into a more complete
+  rendering system.  Nothing ground-breaking; I'm just trying to learn as
+  much as I can at this point, and have fun doing it!
+
+--------
+
+# Rick Turner - weird primitives, non-Euclidean raytracing, textures
+# IBM UK Science Centre
+# Athelstan House, St. Clement Street, Winchester SO23 9DR, England.
+ricky@venta.iinus1.ibm.com
+
+I'm a scientist at UKSC, working in the area of remote sensing and the
+application of image and visualisation techniques to earth science problems.
+Raytracing is a spare time activity.  I've written one raytracer, as well as a
+substantial part of a second.  These use all the common CSG primitives, and
+for the large tracer (called RT), I've added support for bicubic spline
+patches (bezier, b-spline, ..., continuous beta-splines) and implicit
+functions as well.  Currently I'm playing around with texture and image
+mapping and volume objects.
+
+--------
+
+Matthew Williams
+501 Chapel Drive #1417
+Tallahassee, Fl  32304
+(904)681-0873
+fudd@fsunuc.physics.fsu.edu
+
+Interests: Anything and everything
+
+At the moment I am a student at Florida State University majoring in Russian
+Language with minors in Math, Physics, and Computer Science.  All the time
+that I am not in class (including some times when I should be in class) I am
+on my PC playing around with DKBTrace (or should I say PVRay).  One of my
+larger projects that I want to attempt is translating the C source for DKB to
+assembly and hopefully gain some speed.  I would also like to add a fractal
+section to it so I can have vines and stuff growing on different objects.
+
+-------------------------------------------------------------------------------
+
+ElectroGig Free Software Offer
+
+[I don't know much about GIG, except that they have a CSG ray tracer.  Sounds
+like quite a deal, though! - EAH]
+
+From Communications of the ACM, Nov. 1991:
+
+In an effort to enhance computer graphics education on a national level, GIG
+USA is offering a limited number of complete 3D graphics packages free of
+charge to accredited universities, colleges and schools throughout the U.S.
+The ElectroGIG system, which lists for $30,000, includes retracing [sic -
+should be ray-tracing] and animation applications and runs on Silicon Graphics
+and DEC 5000 workstations.  Written requests must be mailed (phone calls or
+faxes will not be accepted) on official school letterhead by staff or faculty
+members only to GIG USA, Inc., 7380 Sand Lake Rd., Suite 390, Orlando, FL
+32819, attention:  GIG Educational Software Program.
+
+-------------------------------------------------------------------------------
+
+Spectrum: A Proposed Image Synthesis Architecture, by Andrew Glassner
+	(glassner.pa@xerox.com)
+
+Andrew Glassner is currently working on a proposal called "Spectrum", which is
+a new ray tracer architecture.  The document outlining this design was made
+available in the "Frontiers in Rendering" course notes.  The idea is to make a
+flexible public domain ray tracer available among researchers and educators.
+
+-------------------------------------------------------------------------------
+
+Spline Intersection, Texture Mapping, and Whatnot, by
+	Rick Turner (ricky@venta.iinus1.ibm.com) and Eric Haines
+
+The code that I developed is based essentially on algorithms developed by
+Kajiya and extended by Marini et al (the paper is in one of the Eurographics
+procs; I can dig out a reference for you if you're interested).  Basically, we
+model the ray as a pair of orthogonal planes.  Each of these is intersected
+with the spline surface, giving a pair of space curves.  You intersect the
+space curves giving the ray/surface intersection.
+
+Intersecting curves is a manageable problem, so it works quite well.  The same
+basic method is employed for all types of bicubic spline surface.  It actually
+turns out that splines having a constant basis matrix (eg b-spline, power
+splines, hermites, Catmull-Rom splines etc) are cheaper to compute if you
+first do a basis transformation to bezier splines.  Beta splines and so on
+that have a variable basis matrix require special treatment, which is quite
+complex.
+
+I run the code on an i860 based accelerator card to get it to work in
+reasonable time; a 1024*1024 image with a few hundred primitives takes 5-10
+minutes to compute.  Spline surfaces can increase this considerably.
+
+The raytracer in question was originally developed by IBM Poughkeepsie as part
+of a system called GDP (Geometric Design Processor).  This was essentially a
+CSG system and was used to design parts of IBM mainframes.  It ran on a
+mainframe and was written in PL/I and Assembler.  The mainframe code was
+hacked out as a standalone module some years ago, and was then re-written in
+'C' in peoples spare time.  Most of the basics were done in Burlington, Va.,
+though extensions were done all over the place.
+
+I'm currently working with mapping images and textures onto objects.  Yes, I
+know this is a largely solved problem nowadays, but there are some interesting
+'gotchas'.  I'm particularly interested in singular mappings, where you don't
+have a one-to-one correspondence.  This overlaps in some ways with my 'real'
+work, which often involves rendering some earth science dataset.  I'm
+currently fooling around with Magellan data from JPL, rendering combinations
+of terrain and image data in various ways.
+
+--------
+
+My reply:
+
+I know the two-plane intersection method you refer to, in fact I coded it up
+once long ago (though I don't know the Marini paper - maybe he solves the
+problem of sometimes converging on the farther intersections instead of the
+closest?  Seems like I remember that guaranteeing the right root is found was
+a headache, though I recall Kajiya's solution was something like "use
+Laguerre's method and find them all" or somesuch - I'm probably mixing this
+up, as I haven't looked at these numerical methods in years...)
+
+As far as texture mapping, that's something I'm still playing with here, too.
+Solved?  Well, how does adaptive sampling work along with textures and mipmaps
+and so on (mipmaps sample area, but what do you do if more sample rays are
+shot in a pixel?) - there was a paper on this topic in Eurographics '91, so
+it's of interest.  Also, specifying parameterizations for sets of primitives
+is easy enough in theory (e.g. define some projection (spherical, conical,
+plane) in space and use this to determine xyz -> uv), but this kind of thing
+can look really bad in some cases.  I've been playing with other
+parameterization functions, with some interesting results (my VW bug covered
+with straw weave is certain to become a style trend soon, I'm sure).  Have you
+run across any interesting parameterization papers/techniques lately?
+
+--------
+
+Reply from Rick:
+
+In my code, the patches are subdivided, though not by very much.  Each
+'mini-patch' has its own bounding box, and both are built into a tree
+structure.  The more curvature the patch has, the greater the subdivision that
+will be used; this reduces the chances of having a local maximum or minimum in
+the middle of the patch go outside the bounding box.  It also allows you to
+fit the bounding boxes much more tightly to the surface, so cuts down the
+number of false intersections where the ray intersects the bounding box but
+not the surface.  One interesting side effect of the subdivision is that by
+making the bounding box smaller than the surface, you get disconnected pieces
+of surface floating in space.  A nice example of this is on the cover of the
+Bartels/Beatty/Barsky book on splines.  I've done the teapot in a similar way,
+and it looks rather neat.  I went further and mapped the baboon onto each
+disconnected patch, and it's quite eye catching.
+
+Basically, the convergence method is a hybrid of multi-dimensional conjugate
+gradient and quasi-Newton techniques.  This offers speed plus reasonable
+stability (although you can always find a pathological case to defeat the
+algorithms).  One thing about it is that the iterations happen in (u,v) space
+rather than in (x,y,z) space; this ensures that the iterations will always
+converge to a valid solution; if either u or v go outside the range valid for
+the particular mini-patch that you're testing against you can immediately
+reject the solution, as there will be no intersection with that patch.
+Typically false intersections such as this are rejected on the first (or
+sometimes the second) iteration, which improves the performance a bit.
+
+Ray tracing splines is tedious though, so I've given my code an option to
+render the bounding boxes for the mini-patches.  This gives a pretty good
+first look at what you're going to get out, and takes a couple of orders of
+magnitude less time.
+
+Texture mapping people may want to look through the cartographic literature.
+Map makers have similar problems in projective geometry when it comes to
+changing map (or image) coordinate systems - eg, from Lat/Long to UTM for
+example.  Much effort has been devoted to solving the mapping (in the
+mathematical sense) problem; less on resampling.  Almost always the resampling
+used are standard bi-linear or bi-cubics with the attendant problems.  On the
+whole though, digital cartography can be a useful source on information that
+is often overlooked by graphics people.  A good reference to start with is
+USGS Professional Paper 1395, 'Map Projections, a Working Manual' by John
+Snyder.  In the US you can get a copy from any Government bookstore - when I
+got mine I think that it cost me about 25 dollars.
+
+-------------------------------------------------------------------------------
+
+Satellite Image Interpretation, by Andy Newton (anewton@ps.ucl.ac.uk)
+
+I work in a satellite image interpretation research group. Our interest in 
+ray tracing is for simulating all parts of the process of the formation of 
+satellite images - optics, camera motion, atmosphere, surface scattering and
+global (as in hemispherical!) light source illumination. We do work at two
+scales - where the basic scene is a DEM (height grid) and for very complicated
+3-d scenes for plant canopy reflectance simulation.
+
+So ray tracing is a really powerful tool to allow us to simulate as many parts
+of these complex processes as we can model but what we need to do is not quite
+computer graphics. What I mean by this is that what we need out of our models 
+are accurate, truthful, energies (in real units) not measures of visual
+brightness. We need physical results. One example of this is wavelength sampling
+by importance sampling a spectral response curve as opposed to treating light as
+an RGB 'colour'. (Though I can't recall any references to doing exactly this it
+is proposed in Cook's original stochastic sampling papers and my implementation
+is very similar to his for reflected ray direction).
+
+Our main problems are (i) illumination from such a big light source (the sky
+hemisphere) with 'diffuse' reflectors (ii) ensuring that we model energies
+correctly and (iii) using physical directional reflectances. I may be going out
+on a bit of a limb here so please excuse me if I do - I'm not as familiar as I
+ought to be with general CG practice - but I'll try to explain what I mean.
+
+I've spent the better part of 3 years supporting and trying to add to a tracer
+I inherited when I came to work here. Now that has turned out not to be 
+particularly smart as its been a lot harder to modify and bug fix than if it was
+my own work. Anyway the point is that through out most of that time we had no
+good model for the directional and spectral variation of that thing outside the
+window - the sky. As our main interest is _supposed_ to be the satellite work,
+not the graphics, I felt we couldn't come to grand conclusions from our results
+if the illumination function was simply not representative of the real world.
+Now I've managed to solve this problem by implementing a model of atmospheric
+scattering processes due to Zibordi and Voss so its time to make the physics
+correct and BTW write a fresh tracer. I have seen some work on CG models of the
+sky which are functional and not physical. This model is quite fast enough to
+create a sky radiance LUT at any resolution required on a per scene basis so if
+you know of anyone out there who needs a model of the sky's irradiance maybe I
+could help.
+
+The thing about any such illumination model is, of course, that the energy
+results are per steradian of solid angle of illuminating source.  With the
+point sampling infinitesimally thin ray what solid angle does a ray reaching
+the sky have?  If it's a primary ray then OK it can have some solid angle
+associated with the pixel but how should ray solid angles be transformed by
+reflection etc?  The only work I've seen that is remotely like this is
+Amantide's cones.  However that doesn't use the geometric concept of a solid
+angle.  One plus point of considering solid angle is of course that the
+effects of distance attenuation by divergence are implicitly included.  So I'm
+very interested in how much solid angle is used as yet another ray parameter
+in more general CG work.  Is this really common, or unheard of?
+
+There's a reflectance concept in remote sensing called Bi-Directional
+Reflectance Distribution Function (BRDF), which may also be use in CG or have
+a parallel, that defines directional reflectance as a 5-d array of pairwise
+directional spectral reflectance coefficients.  For each wavelength
+(quantized, of course), for each incident direction (over the 2 Pi
+hemisphere), for each emergent direction, define a reflectance coefficient.
+Such things can be used as reflectance LUTs or integrated, subdivided and
+importance sampled.  Are similar things done for interesting material
+reflectances in the main stream?
+
+-------------------------------------------------------------------------------
+
+Material Properties, by Ken Turkowski (turk@apple.com)
+
+[I edited Ken's notes into a coherent whole. - EAH]
+
+>Does anyone know where I can pick up a list of material properties for
+>different metals and other objects? 
+>
+>I need to know refractive index, diffuse component, specular component and
+>specular exponent.
+
+Purdue has a catalog of transmissive, reflective, absorptive and emissive
+spectral data for conductors, dielectrics, pigments, emulsions, and light
+sources.  From this you can calculate the refractive index and diffuse
+spectrum.  It's called _Thermophysical Properties of Matter_ by the Purdue
+University Thermophysical properties research center.  There are multiple
+volumes.  We have found volumes 6, 7, and 8 most useful.  These contain data
+for dielectrics, conductors, and surface coatings.
+
+Unfortunately, this book is out of print.  We got our copy by photocopying one
+that Purdue had.
+
+Specular data is a function of the finish (i.e. rough, smooth), and can be
+calculated by the method of He (SIGGRAPH '91) given surface statistics.
+
+Roy Hall's book, _Illumination and Color in Computer Generated Imagery_,
+points to some other sources of reflective data.  The reflective spectrum *is*
+the diffuse "color".  Specular properties are a function on the finish, not
+the material.
+
+-------------------------------------------------------------------------------
+
+New Library of 3D Objects Available via FTP, by Steve Worley
+	(worley@updike.sri.com)
+
+On the ftp site cs.uoregon.edu (128.223.4.13), I have assembled a set of over
+150 3D objects in a binary format called TDDD in the directory
+/incoming/TDDDobjs.  These objects range from human figures to airplanes, from
+semi-trucks to lampposts.  These objects are all freely distributable, and most
+have READMEs that describe them.  There are over six megabytes of these binary
+objects.
+
+In order to convert these objects to a human-readable format, a file with the
+specification of TDDD is included in the directory with the objects.  There is
+also a shareware utility called TDDDconv that will convert the binary objects
+into either OFF, NFF, Rayshade, or vort objects.  This utility is also found
+on cs.uoregon.edu, in the file /incoming/TDDDconv.tar.Z.
+
+[There are some interesting things here.  You might have to diddle a bit, and
+I noticed that some databases don't translate, but good stuff for the price!
+One very cute thing in the package is "tddd2ps", which "converts" a TDDD file
+to a printable set of four orthogonal views - nice touch!  - EAH]
+
+-------------------------------------------------------------------------------
+
+Object Oriented Ray Tracing Book
+
+> I am looking for a book named "Object-oriented ray_tracing" by Melcher,
+> and published by Wiley 91.
+
+This is, in fact, an article by Karl Melcher and G. Scott Owen, more fully
+entitled "Object Oriented Ray Tracing: A Comparison of C++ Versus C
+Implementations" which will appear in a Wiley book early in 1992 (and which
+was in the Wiley booth at SIGGRAPH '91).  The title of the book will be
+"Computer Graphics Using Object-Oriented Programming" and the editors are
+Cunningham, Craighill, Fong, and Brown.
+
+-------------------------------------------------------------------------------
+
+New and Updated Ray Tracing and Radiosity Bibliographies
+
+At weedeater (see the header of this issue) via anonymous FTP are a number of
+new or updated ray tracing and radiosity bibliographies.  I've updated the
+ray tracing bibliography (pub/Papers/RayBib.09.91.Z) and radiosity bib
+(RadBib.09.91) from last year's version.  Rick Speer has provided a postscript
+(only) version of his extensively cross-referenced ray tracing bibliography
+(speer.raytrace.bib.ps).  Tom Wilson's fine ray tracing abstract collection is
+also available, with June 1 being the latest version (rtabs.6.91.shar.Z).
+Also, the file "NetPapers" lists a number of worthwhile articles and theses
+available on the net and where to get them.
+
+-------------------------------------------------------------------------------
+
+DKBTrace 2.12 Port to Mac, by Thomas Okken (thomas@duteca.et.tudelft.nl)
+
+The public-domain raytracer DKBTrace, which runs on FPU-equipped Macs, has
+been made available for anonymous ftp from "alfred.ccs.carleton.ca", files
+/pub/dkbtrace/dkb2.12/other_ports/MacPort1.0.2.*.
+
+-------------------------------------------------------------------------------
+
+Graphics Gems II Source Code
+
+FTP from:
+
+weedeater.math.yale.edu [130.132.23.17]
+gondwana.ecr.mu.oz.au [128.250.1.63]
+
+file: pub/GraphicsGems/GemsII/GGemsII.tar.Z
+
+-------------------------------------------------------------------------------
+
+Radiance Digest Archive, by Greg Ward (greg@lesosun1.epfl.ch)
+
+I have just made back issues of the Radiance Digest available from anonymous
+ftp at hobbes.lbl.gov (128.3.12.38) in the pub/digest directory.  Those of you
+who have limited network access can still ask me to send back issues to you
+directly.
+
+-------------------------------------------------------------------------------
+
+Model Generation Software, by Paul D. Bourke (pdbourke@ccu1.aukuni.ac.nz)
+
+[Paul has a facet based modeller for the Mac called VISION-3D, which can be
+used to generate models directly in the RayShade and Radiance file formats.
+He wrote telling me of other programs that might be of interest - EAH]
+
+I have some other "niche" model generators that also export to Radiance and
+RayShade.
+
+A brief description of some of them follows:
+
+FracHill - generates the old fractal landscapes using the spatial subdivision
+           technique (ie: not the fourier method) It has all the usual
+           settings for roughness, sea level, seed, land/sea colour, etc
+
+3D LSystems - allows the user to generate 3D LSystems (0L). Uses all the
+              standard symbols from the literature, an extension of my 
+              2D LSystem which I wrote years ago.
+
+Triangulate - takes a set of randomly distributed samples on a surface and
+              generates either a triangulated (Delaunay) of gridded mesh
+              representing the surface. We use it for our landscape
+              Architecture course. Note: surfaces (functions) only, not
+              solids!
+
+Anyway, these and other applications can be obtained from my FTP directory
+   ccu1@aukuni.ac.nz (130.216.1.5)
+located in the
+   architec
+directory. Because we pay for FTP to the US people should be asked to FTP
+the README file in the above directory, it will inform them of alternative
+sites in the US.
+
+-------------------------------------------------------------------------------
+
+Rayshade 4.0 Release, Patches 1 & 2, and DOS Port, by Craig Kolb and Rod Bogart
+	(rayshade@weedeater.math.yale.edu)
+
+Rayshade 4.0 is now available.  This version is extremely different from 3.0,
+and is very different from 4.0beta.
+
+Rayshade 4.0 features include:
+	+ Eleven primitives (blob, box, cone, cylinder, height field,
+		plane, polygon, sphere, torus, flat- and Phong-shaded triangle)
+	+ Aggregate objects
+	+ Constructive solid geometry
+	+ Point, directional, extended, spot, and quadrilateral light sources
+	+ Solid procedural texturing, bump mapping, and
+		2D "image" texture mapping
+	+ Antialiasing through variable-rate "jittered" sampling
+	+ Arbitrary linear transformations on objects and texture/bump maps.
+	+ Use of uniform spatial subdivision or hierarchy of bounding
+		volumes to speed rendering
+	+ Options to facilitate rendering of stereo pairs
+	+ Rudimentary animation support and motion blur
+	+ Numerous bug fixes and syntax changes
+
+Apologies to all the folks who felt that their Rayshade 4.0beta questions were
+not handled in a timely fashion.  Both Rod and Craig have had to deal with
+Real Life and did not have as much time for Rayshade as we had hoped.  We
+still feel that Rayshade is the best Un*x raytracing package for the price.
+
+Rayshade 4.0 is available via anonymous ftp from weedeater.math.yale.edu
+(130.132.23.17) in pub/rayshade.4.0.  The shar files will be posted to
+alt.sources and submitted to comp.sources.misc.
+
+--------
+
+Patches 1 and 2 to rayshade 4.0 are now available through
+anonymous ftp from weedeater.math.yale.edu (130.132.23.17)
+as pub/rayshade.4.0/patches/patch{1,2}.  The patches have
+also been posted to comp.sources.misc.
+
+--------
+
+Tom Hite managed to port rayshade to DOS, and was kind enough to send me
+a set of diffs, a couple of configuration files, and a short note describing
+what one needs to do in order to coax rayshade into running on PCs.
+
+I haven't had the courage yet to find myself a PC and to verify that Tom's 
+instructions are idiot-proof.  In addition, Tom's diffs were for rayshade 4.0
+patchlevel 0, and the new patches will undoubtedly cause some minor problems
+when it comes to applying Tom's diffs.
+
+The files are available from weedeater.math.yale.edu (130.132.23.17) as
+pub/rayshade.4.0/raydiffs.dos.
+
+-------------------------------------------------------------------------------
+
+RayShade Timings, by Craig Kolb
+
+Below for your amusement(?)  are timings for the latest version of rayshade
+running on an HP-730.
+
+I suspect that rayshade is a good bit less efficient than it used to be, but
+I have yet to actually put this suspicion to the test.
+
+
+Rayshade v4.0, patchlevel 1, on an HP-730 running HPUX-8.05, ?? MB memory.
+Wed Oct  9 13:50:29 EDT 1991
+
+         Setup       Total     |  Polygon   Sphere    Cyl/Cone    Bounding
+             (seconds)         |   Tests     Tests      Tests    Box Tests
+--------------------------------------------------------------------------
+balls     3.18       116.24    |    356K     1564K        0        2763K
+gears    15.79       705.25    |   8345K       0          0       11260K
+mount     6.13       165.03    |   1035K     2096K        0        2991K
+rings     5.44       235.37    |    103K      206K      4883K      5536K
+teapot   13.49       126.43    |   1677K       0          0        2761K
+tetra     2.96        31.93    |    578K       0          0         694K 
+tree      4.94       103.28    |    716K       16K       366K      1467K
+
+All timings are sum of user and system time.  Setup includes time to read
+the database and initialize all appropriate data structures.  Total time
+is setup time plus rendering time.  Test figures are rounded upwards.
+
+Uniform spatial subdivision, employing 22^3 voxels, is used to accelerate
+rendering.  In the balls, gears, and tree databases, the ground plane
+is moved outside of the 22^3 grid in an attempt to generate a more uniform
+object distribution within the grid.
+
+-------------------------------------------------------------------------------
+
+RayShade vs. DKBtrace Timings, by Iain Dick Sinclair (axolotl@socs.uts.edu.au)
+
+>	In your posting on RayShade vs. DKBtrace you mention doing timings
+>on them using the SPD.  Any chance you have the timings sitting around?
+
+A friend here did the comparison, but it was by no means thorough -- it only
+used one benchmark (the balls?).  In any event, the results of his quick
+experiment seem to have been discarded (apparently it was a slight pain to
+translate NFF -> DKB's verbose input format).  I seem to remember him saying
+that Rayshade completed the scene about 20% quicker.  Unfortunately, SPD
+wasn't used exhaustively, though it may be in the near future.
+
+-------------------------------------------------------------------------------
+
+PVRay Beta Release, by David Buck (dbuck@ccs.carleton.ca)
+
+The freely distributable raytracer PVRay (Persistence of Vision) is
+available for BETA testing from alfred.ccs.carleton.ca (134.117.1.1)
+in the directory pub/dkbtrace/pvraybeta.  This program has been
+developed by the "Persistence of Vision" group on CompuServe and is
+built on top of DKBTrace version 2.12 with my permission and blessing.
+
+Please note that this is a BETA release, so it may exhibit some bugs or
+portability problems to different platforms.  Please refer any
+problems to Drew Wells at 73767.1244@compuserve.com.  Also, this
+version does not contain some of the ports which were previously
+available for DKBTrace.  This situation is being rectified.  However,
+you should find that the product-specific modules developed for
+DKBTrace should be easily adaptable to PVRay.
+
+Program Synopsis:
+-----------------
+
+PVRay is a Freely Distributable raytracer built on top of DKBTrace.  New
+additions include:
+
+   - Bezier surfaces
+   - Height Fields (GIF only at this time)
+   - Bump maps
+   - Improved Quartic surface support
+   - Input language can now optionally accept lowercase keywords
+   - New textures: Onion, Leopard
+   - C-style comments accepted (  /* */ and //)
+   - Algebraic surfaces
+   - Sphere, Cylinder, and Torus image mappings
+
+Please direct inquiries to Drew Wells at 73767.1244@compuserve.com.
+
+-------------------------------------------------------------------------------
+
+Vort 2.1 Release, by Eric H. Echidna
+
+	gondwana.ecr.mu.oz.au [128.250.1.63] pub/vort.tar.Z
+	munnari.oz.au [128.250.1.21] pub/graphics/vort.tar.Z
+	uunet.uu.net [192.48.96.2] graphics/vogle/vort.tar.Z
+	 (uucp access as well ~ftp/graphics/vogle/vort.tar.Z)
+
+Australian ACSnet sites may use fetchfile:
+	fetchfile -dgondwana.ecr.mu.oz pub/vort.tar.Z
+
+The major changes are to the ray-tracer which now allows orthographic
+projections, lights to be in composite objects, provides a transform operator,
+a few other odds and sods plus the usual set of bug fixes.  There are also a
+couple of utilities for starting art up via inetd to help simplify the
+generation of animations across networks.
+
+It runs on IBM PC's, VMS, and a variety of UNIX boxes.
+
+Contributed scene files for the ray-tracer can be found in contrib/artscenes
+on gondwana.  Apart from the scene files the tar files in this directory also
+includes some useful tile patterns and geometry files.
+
+Anyone with anything they'd like to add is welcome to put it in gondwana's
+incoming directory and send us mail.
+
+Includes [among much else]:
+
+art	- a ray tracer for doing algebraic surfaces and CSG models.
+
+-------------------------------------------------------------------------------
+
+BRL-CAD 4.0 Release, by Michael J. Muuss and Glenn M. Gillis
+
+The U. S. Army Ballistic Research Laboratory (BRL) is proud to announce
+the availability of Release 4.0 of the BRL-CAD Package.
+
+The BRL-CAD Package is a powerful Constructive Solid Geometry (CSG) based
+solid modeling system.  BRL-CAD includes an interactive geometry editor, a ray
+tracing library, two ray-tracing based lighting models, a generic framebuffer
+library, a network-distributed image-processing and signal-processing
+capability, and a large collection of related tools and utilities.  Release
+4.0 is the latest version of software which has been undergoing continuous
+development since 1979.
+
+The most significant new feature for Release 4.0 is the addition of n-Manifold
+Geometry (NMG) support based on the work of Kevin Weiler.  The NMG software
+converts CSG solid models into approximate polygonalized boundary
+representations, suitable for processing by subsequent applications and
+high-speed hardware display.
+
+BRL-CAD is used at over 800 sites located throughout the world.  It is
+provided in source code form only, and totals more than 280,000 lines of "C"
+code.
+
+BRL-CAD supports a great variety of geometric representations, including an
+extensive set of traditional CSG primitive solids such as blocks, cones and
+tori, solids made from closed collections of Uniform B-Spline Surfaces as
+well as Non-Uniform Rational B-Spline (NURBS) Surfaces, purely faceted
+geometry, and n-Manifold Geometry (NMG).  All geometric objects may be
+combined using boolean set-theoretic operations such as union, intersection,
+and subtraction.
+
+Material properties and other attribute properties can be associated with
+geometry objects.  This combining of material properties with geometry is a
+critical part of the link to applications codes.  BRL-CAD supports a rich
+object-oriented set of extensible interfaces by means of which geometry and
+attribute data are passed to applications.
+
+A few of the applications linked to BRL-CAD include:
+
+*) Optical Image Generation (including specular/diffuse reflection,
+	refraction, multiple light sources, and articulated animation)
+*) An array of military vehicle design and evaluation V/L Codes
+*) Bistatic laser analysis
+*) Predictive Synthetic Aperture Radar Codes (including codes due to ERIM)
+*) High-Energy Laser Damage
+*) High-Power Microwave Damage
+*) Weights and Moments-of-Inertia
+*) Neutron Transport Code
+*) PATRAN [TM] and hence to ADINA, EPIC-2, NASTRAN, etc.
+	for structural/stress analysis
+*) X-Ray image calculation
+
+BRL-CAD requires the UNIX operating system and is supported on more than a
+dozen product lines from workstations to supercomputers, including:  Alliant
+FX/8 and FX/80, Alliant FX/2800, Apple Macintosh II, Convex C1, Cray-1, Cray
+X-MP, Cray Y-MP, Cray-2, Digital Equipment VAX, Gould/Encore PN 6000/9000, IBM
+RS/6000, Pyramid 9820, Silicon Graphics 3030, Silicon Graphics 4D ``Iris'',
+Sun Microsystems Sun-3, and the Sun Microsystems Sun-4 ``SparcStation''.
+Porting to other UNIX systems is very easy, and generally only takes a day or
+two.
+
+You may obtain a copy of the BRL-CAD Package distribution materials in one of
+two ways:
+
+1.  FREE distribution with no support privileges:  Those users with online
+access to the DARPA InterNet may obtain the BRL-CAD Package via FTP file
+transfer, at no cost, after completing and returning a signed copy of the
+printed distribution agreement.  A blank agreement form is available only via
+anonymous FTP from host ftp.brl.mil (address 128.63.16.158) from file
+"brl-cad/agreement".  There are encrypted FTP-able files in several countries
+around the world.  Directions on how to obtain and decrypt the files will be
+sent to you upon receipt of your signed agreement.  One printed set of BRL-CAD
+documentation will be mailed to you at no cost.  Note that installation
+assistance or telephone support are available only with full service
+distributions.
+
+2.  FULL SERVICE distribution:  The Survivability/Vulnerability Information
+Analysis Center (SURVIAC) administers the supported BRL-CAD distributions and
+information exchange programs for BRL.  Full service distributions cost
+US$500, and include a copy of the full distribution materials on your choice
+of magnetic tape media.  You may elect to obtain your copy via network FTP.
+One printed set of BRL-CAD documentation will be mailed to you.  BRL-CAD
+maintenance releases and errata sheets will be provided at no additional
+charge, and you will have access to full technical assistance by phone, FAX,
+letter, or E-mail.  Agencies of the U.S.  Federal Government may acquire the
+full service distribution with a simple MIPR or OGA funds transfer.
+
+For further details, call Mr. Glenn Gillis at USA (410)-273-7794, send E-mail
+to <gillis@brl.mil>, FAX your letter to USA (410)-272-7413, or write to:
+
+	BRL-CAD Distribution
+	SURVIAC Aberdeen Satellite Office
+	1003 Old Philadelphia Road
+	Suite 103
+	Aberdeen MD  21001  USA
+
+Note that USA area code 410 will not go into effect until 1-Nov-91.  Prior to
+that date, please use area code 301.
+
+Those sites selecting the free distribution may upgrade to full service status
+at any time.  All users have access to the BRL-CAD Symposia, workshops, user's
+group, and E-mail mailing list.
+
+Sincerely,
+
+Michael J. Muuss			Glenn M. Gillis
+Advanced Computer Systems		SURVIAC
+Ballistic Research Lab			Aberdeen Satellite Office
+
+-------------------------------------------------------------------------------
+END OF RTNEWS

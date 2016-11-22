@@ -1,0 +1,1096 @@
+<!-- html version of Volume 2, Number 1 :  -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 2, Number 1</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>January 6, 1989</FONT>
+<P><FONT size=+1>Volume 2, Number 1</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1988,1989, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art2">
+New Members,
+</A></LI>
+by David Jevans, Subrata Dasgupta, Darwin Thielman,
+Steven Stadnicki, Mark Reichert
+<LI><A HREF="#art3">
+Multiprocessor Visualization of Parametric Surfaces,
+</A></LI>
+by Markku Tamminen,
+comments from many others
+<LI><A HREF="#art4">
+Miscellany,
+</A></LI>
+by K.R.Subramanian, David F. Rogers, Steven Stadnicki,
+Joe Smith, Mark Reichert, Tracey Bernath
+<LI><A HREF="#art5">
+Supersampling Discussion,
+</A></LI>
+by David Jevans, Alan Paeth, Andrew Woo,
+Loren Carpenter
+<LI><A HREF="#art6">
+Distributed Ray Tracer Available,
+</A></LI>
+by George Kyriazis
+<LI><A HREF="#art7">
+Ray Tracing Program for 3b1,
+</A></LI>
+by Sid Grange
+<LI><A HREF="#art8">
+Map Archive,
+</A></LI>
+by Gary L. Crum
+<LI><A HREF="#art9">
+Index of Back Issues,
+</A></LI>
+by Eric Haines
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction
+</A></FONT>
+</H4>
+        Well, this has been a busy time around here.  First of all, note my
+change of address (it's in the header).  We've moved to a larger building with
+much better environmental controls (i.e. we don't have to cool the machines in
+the winter by opening the windows).  In the meantime I've been trying to
+actually finish a product and maybe even make some money from it.  There's
+also those SIGGRAPH deadlines on January 10th....  Busy times, so excuse the
+long delay in getting this issue out.
+<P>
+        The other great struggle has been to try to get my new Cornell account
+to talk with the outside world.  DEC's EUNICE operating system has foiled me so
+far, so this issue is being distributed by Michael Cohen, who's now at the
+University of Utah.  Many thanks, Michael.
+<P>
+        Due to the length between issues, my cullings from USENET have
+accumulated into an enormous amount of material.  As such, the condensed
+version of these will be split between this and the next issue.  This issue
+contains what I felt was the best of the supersampling discussion.  If this
+material is old hat, please write and tell us of your experiences with
+supersampling: what algorithm do you use? are you satisfied with it? what kind
+of filtering is used, and what are your subdivision criteria?
+<P>
+        This issue is the first one that has a "Volume X, Number Y" in the
+header.  This has been added partly for ease of reference, but also (more
+importantly) for avoiding dropouts.  If you get "Number 1", then "Number 3",
+you know you've missed something (probably due to email failure).  At the end
+of this issue is a list of all the past issues.  If you are missing any, please
+write and I'll send them on.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+New Members
+</A></FONT>
+</H4>
+From: David Jevans (hpfcla!<A HREF="mailto:jevans@cpsc.UCalgary.CA">jevans@cpsc.UCalgary.CA</A>)
+<P>
+I can be reached at the U of Calgary.  I work days at Jade Simulations
+International, ph # 403-282-5711.
+<P>
+        My interests in ray tracing are in multi-process (networks of SUNS, BBN
+Butterfly, and Transputers) ray tracing, space subdivision, and ray tracing
+functionally defined iso-surfaces.
+<P>
+        I am working on optimistic multi-processor ray tracing and combining
+adaptive and voxel spatial subdivision techniques.  I have implemented a
+parallel ray tracer on the University of Calgary's BBN Butterfly.  My ray
+tracers handle a variety of object types including polygons, spline surfaces,
+and functionally defined iso-surfaces.  My latest projects are using TimeWarp
+to speed up multi-processor ray tracing, adding a texture language, frame
+coherence for ray tracing animation, and developing the ray tracing answer to
+radiosity.
+<P>
+David Jevans, U of Calgary Computer Science, Calgary AB  T2N 1N4  Canada
+uucp: ...{ubc-cs,utai,alberta}!calgary!jevans
+<P>
+________
+<P>
+# Subrata Dasgupta - raycasting of free-form surfaces, surface representations<BR>
+# Duke University<BR>
+# Dept. of Computer Science<BR>
+# Durham, NC 27706<BR>
+# (919)-684-5110<BR>
+alias   subrata_dasgupta        <A HREF="mailto:sdg@cs.duke.edu">sdg@cs.duke.edu</A><BR>
+<P>
+I am relatively new the field of ray tracing. I am involved in the design of a
+raycasting system based on the original design by Gershon Kedem and John Ellis
+[Proc. 1984 Int'l conference on Computer Design]. The original design uses
+Constructive Solid Geometry for building up a complex object out of simple
+primitives like cones, cylinders, and spheres. The main drawback of such a
+system is that representing an object with cubic or higher order surfaces
+require numerous quadratic primitives and even then is at best an approximation
+to the original surface.
+<P>
+The raycasting machine uses an array of parallel rays and intersects them with
+primitives. The applications of such a machine are potentially large like:
+modeling surfaces for NC machines, calculating volume and moment of inertia,
+finding fast surface intersections, to name just a few. At present there are 2
+working models of the raycasting machine, one of which is in the Dept. of
+Mechanical Engg. at Cornell. The other one is our experimental m/c which is
+located at the U. of N. Carolina at Chapel Hill (The operative word in this
+sentence is "located" :-) ). Although my input may not be very frequent at the
+beginning I will be an avid reader of the raycasting news. Thanks for inviting
+me in.
+<P>
+________
+<P>
+<PRE>
+From: Darwin G. Thielman (hpfcla!<A HREF="mailto:thielman@cs.duke.edu">thielman@cs.duke.edu</A>)
+Subject: Duke ray casting group
+</PRE>
+<P>
+# Darwin Thielman - Writing software to control the raycasting machine at Duke<BR>
+# Duke University<BR>
+# Computer Science Dept.<BR>
+# Durham, NC. 27706<BR>
+# (919) 684-3048 x246<BR>
+alias   darwin_thielman         <A HREF="mailto:thielman@duke.cs.duke.edu">thielman@duke.cs.duke.edu</A><BR>
+<P>
+At Duke we have designed a system that does ray casting on many primitives in
+parallel.  This is achieved with 2 types of processors, a primitive classifier
+(PC) and a combine classifier (CC).  The PC's solve systems of quadratic
+equations and the CC's combine these results.
+<P>
+I am the system software person, I am writing micro code for an Adage 3000
+machine.  The micro code is responsible for controlling the ray casting board
+and creating images from the output of the board.
+<P>
+In addition the following people also work on the ray casting system at Duke.
+<P>
+<PRE>
+Gershon Kedem
+John Ellis
+Subrata Dasgupta
+Jack Briner
+Ricardo Pantazis
+Sanjay Vishin
+</PRE>
+<P>
+Also at UNC Chapel Hill there is a eng. who is working on the hardware design
+of the system he is Tom Lyerly.
+<P>
+Since I do not want to attempt to explain what each one of these people is
+doing (with the possibility of getting it wrong) I will not try.  All of the
+above people will have access to the RTN and if any of them are interested they
+may respond.  Also If anyone want to get a hold of any of them just send me a
+message and I will forward it to the proper person.
+<P>
+We also have one of our boards at Cornell, there is a group there that is
+working on solid modeling, and hopes to use our hardware.  If you want you can
+contact Rich Marisa (607) 255-7636 for more information on what they are doing.
+His mail address is <A HREF="mailto:marisa@oak.cadif.cornell.edu">marisa@oak.cadif.cornell.edu</A>.  Also I have talked to him
+and if you want to see a demo of our system he would be glad to show it to you.
+<P>
+If you have any questions or comments please feel free to contact me.
+<P>
+<PRE>
+                                        Darwin Thielman
+</PRE>
+<P>
+________
+<P>
+From: Steven Stadnicki (hpfcla!<A HREF="mailto:stadnism@clutx.clarkson.edu">stadnism@clutx.clarkson.edu</A>)
+<P>
+Steven Stadnicki - shadowing from reflected light sources, tracing atomic
+                   orbitals, massively parallel ray tracing
+212 Reynolds Dormitory
+Clarkson University
+Potsdam, NY 13676
+(315) 268-4079
+<A HREF="mailto:stadnism@clutx.clarkson.edu">stadnism@clutx.clarkson.edu</A>
+<P>
+Right now, I'm working on writing a simple ray tracer to implement my reflected
+shadowing model (see the E-mail version of RTNews, Nov. 4), and then I'll be
+trying a few texture models.  (Texture mapping on to atoms... the marble
+P-orbital!)
+<P>
+________
+<P>
+From: hpfcla!sunrock!kodak!supra!reichert@Sun.COM (Mark Reichert x25948)
+Subject: RT News intro
+<P>
+#<BR>
+# Mark Reichert - diffuse interreflections<BR>
+# Work:<BR>
+#       Eastman Kodak Company<BR>
+#       Advanced Systems Group<BR>
+#       Building 69<BR>
+#       Rochester, NY 14650<BR>
+#       716-722-5948<BR>
+#<BR>
+# Home:<BR>
+#       45 Clay Ave.<BR>
+#       Rochester, NY 14613<BR>
+#       716-647-6025<BR>
+#<BR>
+    I am currently interested in global illumination simulation using ray<BR>
+tracing with auxiliary data structures for holding illuminance values.<BR>
+<P>
+    I am also interested in ray tracing from the lights into the environment -
+maybe just a few bounces, then storing illuminance as above.
+<P>
+    What I would really like is a ray tracer (or whatever) that would do a nice
+job of modeling triangular glass prisms.
+<P>
+alias   mark_reichert   hpfcrs!hpfcla!hplabs!sun!sunrock!kodak!supra!reichert
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Multiprocessor Visualization of Parametric Surfaces
+</A></FONT>
+</H4>
+From: Markku Tamminen (hpfcla!mit%hutcs.hut.fi@CUNYVM.CUNY.EDU)
+<P>
+I obtained the Ray-Tracing News from Panu Rekola, and sent the message below to
+some people on your distribution list interested in related matters.
+<P>
+I have done research in geometric data structures and algorithms in 1981-84. A
+practical result was the EXCELL spatial index (like an octree with binary
+subdivision, together with a directory allowing access by address computation).
+<P>
+My present interests are described below.
+<P>
+Charles Woodward has developed a new and efficient method for ray-tracing
+parametric surfaces using subdivision for finding the ray/patch intersection.
+<P>
+============================================================================
+<P>
+I am putting together a project proposal with the abstract below.  I would be
+interested in obtaining references to any new work you have done in ray-tracing
+and hardware, and later in an exchange of ideas.  I will send an
+acknowledgement to any message I get, so if you don't see one something has
+gone wrong.  (Email has often been very unreliable.)
+<P>
+Looking forward to hearing something from you,
+<P>
+<PRE>
+        Markku Tamminen
+        Helsinki University of Technology
+        Laboratory of Information Processing Science
+        02150 ESPOO 15, FINLAND
+        Tel: 358-0-4513248 (messages: 4513229, home: 710317)
+        Telex: 125161 HTKK SF
+        Telefax:        358-0-465077
+        ARPANET:        mit%hutcs.uucp%fingate.bitnet@cunyvm.cuny.edu
+        INTERNET:       mit@hutcs.hut.fi
+        BITNET:         mit%hutcs.uucp@fingate
+        UUCP:           mcvax!hutcs!mit
+</PRE>
+<P>
+<PRE>
+       Multiprocessor visualization of parametric surfaces
+                        Project proposal
+</PRE>
+<P>
+<PRE>
+               Markku Tamminen (mit@hutcs.hut.fi)
+               Charles Woodward (<A HREF="mailto:cwd@hutcs.hut.fi">cwd@hutcs.hut.fi</A>)
+                Helsinki University of Technology
+          Laboratory of Information Processing Science
+              Otakaari 1 A, SF-02150 Espoo, Finland
+</PRE>
+<P>
+ABSTRACT
+<P>
+The proposed research aims at an  efficient  system  architecture
+and  improved  algorithms  for realistic visualization of complex
+scenes described by parametric surfaces.
+<P>
+The  key  components  of such  a  system are a spatial index  and
+a surface patch intersector.  For both very efficient  uniproces-
+sor  solutions  have  been developed  by the authors at the  Hel-
+sinki  University  of  Technology.  However, to obtain sufficient
+speed, at least the latter should be based on a specialized   ar-
+chitecture.
+<P>
+We  propose obtaining a balanced complete system by gradually as-
+cending  what we call a specialization hierarchy.   At its bottom
+are solutions based on multiprocessors or networks of independent
+computing units (transputers). In this case an important research
+problem is how to avoid duplicating the data base in the  proses-
+sors. At  the top of the hierarchy are specialized processors im-
+plemented in VLSI.
+<P>
+The research will produce general insight into the  possibilities
+of    utilizing  concurrency   and   specialized   processors  in
+geometric search and computation.
+<P>
+PREVIOUS WORK
+<P>
+M. Mantyla and M. Tamminen , ``Localized Set Operations for Solid
+Modeling ,'' Computer Graphics , vol. 17, no. 3, pp. 279-289 ,
+1983.
+<P>
+M. Tamminen , The EXCELL Method for Efficient Geometric Access to
+Data , Acta Polytechnica Scandinavica, Ma 34 , 1981.
+<P>
+Markku Tamminen, Olli Karonen , and Martti Mantyla, ``Ray-
+Casting and Block Model Conversion Using a Spatial Index,''
+Computer Aided Design, vol. 16, pp. 203 - 208, 1984.
+<P>
+C. Woodward, ``Skinning Techniques for Interactive B-Spline
+Surface Interpolation,'' Computer-Aided Design, vol. 20, no. 8,
+pp. 441-451, 1988.
+<P>
+C. Woodward, ``Ray Tracing Parametric Surfaces By Subdivision in
+Viewing Plane,'' to Appear in Proc. Theory and Practice of
+Geometric Modelling, ed. W. Strasser, Springer-Verlag, 1989.
+<P>
+________
+<P>
+[a later message from Markku Tamminen:]
+<P>
+I thought I'd send this summary of responses as feedback, because some answers
+may not have found their way through the network. I think mit@hutcs.hut.fi
+might be the safest address to use for me.
+<P>
+Our project has not yet started - I have just applied for funding with the
+proposal whose abstract I sent to you. Also, I am a software person, but hope
+to get somebody hardware-oriented involved in the project. We will be using
+transputers to start with, but so far I have just made some small experiments
+with them.
+<P>
+Our ray/patch intersection method is based on subdivision. It is a new method
+developed by Charles Woodward, and quite a bit more efficient than Whitted's
+original one. However, it takes 3 ms for a complete ray/patch intersection on a
+SUN4. Thus, we'd like to develop a specialized processor for this task - the
+algorithm is well suited for that.
+<P>
+Our spatial index is EXCELL, which I originally published in 1981, and whose 3D
+application was described in SIGGRAPH'83 by Martti Mantyla and me. I have
+lately tuned it quite a bit for ray-tracing, and we are very satisfied with its
+performance. (EXCELL uses octree-like, but binary, subdivision. It has a
+directory, which is an array providing direct access by address computation,
+and a data part, which corresponds to the leaf cells of an octree. Binary
+subdivision leads to fewer leaf-cells than 8-way. There is an overflow
+criterion that decides when subdivision will be discontinued.)
+<P>
+We have obtained best results when we store in the spatial index for each patch
+the bounding box of its control points, and further cut it with a "slab"
+defined by two planes parallel to a "mean normal" of the patch. Using this
+method we have to perform, on the average, less than 2 complete patch/ray
+intersection tests.
+<P>
+Our method has not been as efficient as that of subdividing the patches to all
+the way to triangles. However, as much less storage is required, we consider
+our technique more suited for distributed architectures.
+<P>
+In the proposed project we want to look both into developing a specialized
+(co)processor for the ray/patch intersection task and into distributing the
+whole computation on several processors. I think that the most difficult
+research problem is the partitioning of the data base in a loosely coupled
+system. In our case the ray/patch intersection task is so time consuming that
+it would help (to begin with) to keep the ray/database traversal on the
+workstation and jost distribute the intersection task to other processors.
+<P>
+Some questions:
+<P>
+<PRE>
+    Does anybody know of HW work in the ray/patch intersection area; e.g.,
+    as a continuation of Pulleyblank & Kapenga's article in CG&A?
+</PRE>
+<P>
+<PRE>
+    Does anybody know of somebody working with transputers in ray-tracing? (We
+    do know of the INMOS ray-tracing demo.)
+</PRE>
+<P>
+<PRE>
+    How enthusiastic are you about the approach of using digital signal
+    processors? What other off-the shelf processors would be specially suited
+    as a basis for a ray-tracing coprocessor?
+</PRE>
+<P>
+<PRE>
+    What would be the specific computation to offload to a coprocessor?
+</PRE>
+<P>
+I don't know what more to write now about our project. Below is a short summary
+of the responses I got:
+<P>
+<PRE>
+    From: <A HREF="mailto:kyriazis@yy.cicg.rpi.edu">kyriazis@yy.cicg.rpi.edu</A> (George Kyriazis)
+</PRE>
+<P>
+Works with pixel machine, and will transport RPI's ray-tracer to it.  Main
+problem: duplication of code and data.
+<P>
+<PRE>
+    From: <A HREF="mailto:jeff@CitIago.Bitnet">jeff@CitIago.Bitnet</A> (Jeff Goldsmith)
+</PRE>
+<P>
+Has implemented ray-tracer with distributed database on hypercube.
+Communication between parts of database by RPC. With 128 processors 50%
+utilization. (Ref: 3rd Hypercube Concurrent Computation Proc.)  A proposal to
+build custom silicon for intersection testing. In this case the rest of the
+system could reside on a ordinary PC or workstation.
+<P>
+<PRE>
+    From: <A HREF="mailto:gray@rhea.cray.com">gray@rhea.cray.com</A> (Gray Lorig)
+</PRE>
+<P>
+"Your abstract sounds interesting."
+<P>
+<PRE>
+    From: Frederik Jansen (<A HREF="mailto:JANSEN@ibm.com">JANSEN@ibm.com</A>)
+</PRE>
+<P>
+Mike Henderson at Yorktown Heights is working on ray/patch intersection problem
+(software approach).
+<P>
+<PRE>
+    From: Mark VandeWettering (<A HREF="mailto:markv@drizzle.cs.uoregon.edu">markv@drizzle.cs.uoregon.edu</A>)
+</PRE>
+<P>
+"As to HW implementation, my advice is NOT to take the path that I took, but to
+implement one simple primitive: a bilinear interpolated triangular patch."
+"Take a look at AT&T's 12 DSP chip raytracing board."  Would like to experiment
+with implementing an accelerator based on Motorola DSP56001.
+<P>
+<PRE>
+    From: tim%ducat.caltech.edu@Hamlet.Bitnet (Tim Kay)
+</PRE>
+<P>
+"I am interested how fast a *single* general purpose processor can raytrace
+when it is assisted by a raytracing coprocessor of some sort. there seems to be
+tremendous potential for adding a small amount of raytracing HW to graphics
+work stations." "I am quite capable of ray tracing over our TCP/IP network."
+<P>
+<PRE>
+    From: <A HREF="mailto:priol@tokaido.irisa.fr">priol@tokaido.irisa.fr</A>
+</PRE>
+<P>
+"I work on ray-tracing on a MIMD computer like the Hypercube." Partitions scene
+boundary as suggested by Cleary. To do it well sub-samples image before
+parallel execution. With 30-40 processors 50% efficiency. Part of work
+published in Eurographics'88.
+<P>
+<PRE>
+    From: <A HREF="mailto:toc@wisdom.TN.CORNELL.EDU">toc@wisdom.TN.CORNELL.EDU</A> (Timothy F. O'Connor)
+</PRE>
+<P>
+"Abstract sounds interesting. My main interest is in radiosity approach."
+<P>
+<PRE>
+    From: Russ Tuck (<A HREF="mailto:tuck@cs.unc.edu">tuck@cs.unc.edu</A>)
+</PRE>
+<P>
+"My work is summarized in hardcopy RTnews vol.2, no. 2, June '88, "Interactive
+SIMD Ray Tracing."
+<P>
+That's it for now. I hope there has been some interest in this multi-feedback.
+I'll get more meat of my own in the messages when our new work starts.
+<P>
+Thanks to you all! / Markku
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Miscellany
+</A></FONT>
+</H4>
+<PRE>
+From: hpfcla!<A HREF="mailto:subramn@cs.utexas.edu">subramn@cs.utexas.edu</A>
+Subject: Ray Tracing articles.
+</PRE>
+<P>
+I would like you to bring this to the attention of the RT news group (if you
+consider it appropriate).
+<P>
+There are lots of conference proceedings and journals other than SIGGRAPH &
+CG&A which contain ray tracing articles. At least, here, at our university we
+don't get all those journals (for example, the Visual Computer) due to budget
+constraints.  It would be nice for someone to post relevant articles on ray
+tracing so that all of us will be aware of the work going on in ray tracing
+every where. For instance, I have found several articles in the Visual Computer
+that were relevant to what I was doing after being pointed at by someone else.
+If these can be listed by someone who gets these journals, then it would make
+it easier to get access to these articles.
+<P>
+<PRE>
+K.R.Subramanian
+Dept. of Computer Sciences
+The University of Texas at Austin
+Austin, Tx-78712.
+<A HREF="mailto:subramn@cs.utexas.edu">subramn@cs.utexas.edu</A>
+{uunet}!cs.utexas.edu!subramn
+</PRE>
+<P>
+________
+<P>
+[My two cents: we don't get "Visual Computer" around here, either.  I've been
+helping to keep Paul Heckbert's "Ray Tracing Bibliography" up to date and would
+like to obtain relevant references (preferably in REFER format) for next year's
+copy for use in SIGGRAPH course notes. See SIGGRAPH '88 notes from the
+"Introduction to Ray Tracing" course for the current version to see the state
+of our reference list. - Eric]
+<P>
+________________________________________
+<P>
+<PRE>
+From: "David F. Rogers" (hpfcla!<A HREF="mailto:dfr@USNA.MIL">dfr@USNA.MIL</A>)
+Subject:  Transforming normals
+</PRE>
+<P>
+Was skimming the back issues of the RT News and your memo on transforming
+normals caught my eye. Another way of looking at the problem is to recall that
+a polygonal volume is made up of planes that divide space into two parts. The
+columns of the volume matrix are formed from the coefficients of the plane
+equations. Transforming a volume matrix requires that you premultiply by the
+inverse of the manipulation matrix. The components of a normal are the first
+three coefficients of the plane equation. Hence the same idea should apply.
+(see PECG Sec. 4-3 on Robert's algorithm pp 211-213).  Surprising what you can
+learn from Roberts' algorithm yet most people discount it.
+<P>
+________________________________________
+<P>
+&gt;From: <A HREF="mailto:stadnism@clutx.clarkson.edu">stadnism@clutx.clarkson.edu</A> (Steven Stadnicki,212 Reynolds,2684079,5186432664)<BR>
+Subject: Some new thoughts on how to do caustics, mirrored reflection, etc.<BR>
+[source: comp.graphics]<BR>
+<P>
+Here's a new idea I came up with to do caustics, etc. by ray tracing: from your
+point on some surface, shoot out some number (say ~100) in "random" directions
+(I would probably use a jittered uniform distribution on the sphere).  For each
+light source, keep track of all rays that come within some "distance" (some
+angle) from the light source.  Then, for each of these rays, try getting closer
+to the light source using some sort of Newton-type iteration method... for
+example, to do mirrored reflection:
+<P>
+<PRE>
+           \|/
+           -o-   Light source
+           /|\
+                               |
+                +---+          | M
+                | O |          | i
+                | b |          | r
+                | j |          | r
+                | e |          | o
+                | c |          | r
+                | t |          |
+----------------+---+--X-------+
+</PRE>
+<P>
+&gt;From point X, shoot out rays in the ~100 "random" directions mentioned above;<BR>
+say one of them comes within 0.05 radians of the light source.  Do some sort of<BR>
+update procedure on the ray to see if it keeps getting closer to the light<BR>
+source; if it does, then you have a solution to the "mirrored reflection"<BR>
+problem, and you can shade X properly.  This procedure will work for curved<BR>
+mirrors as well as planar ones (unlike the previous idea I mentioned), and will<BR>
+also handle caustics well.  It seems obvious to me that there will be bad cases<BR>
+for the method, and it is certainly computationally expensive, but it looks<BR>
+like a useful method.  Any comments?<BR>
+<P>
+<PRE>
+                                         Steven Stadnicki
+                                         Clarkson University
+                                         <A HREF="mailto:stadnism@clutx.clarkson.edu">stadnism@clutx.clarkson.edu</A>
+                                         <A HREF="mailto:stadnism@clutx.bitnet">stadnism@clutx.bitnet</A>
+</PRE>
+<P>
+________________________________________
+<P>
+&gt;From: <A HREF="mailto:jms@antares.UUCP">jms@antares.UUCP</A> (joe smith)<BR>
+Organization: Tymnet QSATS, San Jose CA<BR>
+Subject: Re: Ray Tracing Novice Needs Your Help<BR>
+[source: comp.graphics]<BR>
+<P>
+In article (<A HREF="mailto:2399@ssc-vax.UUCP">2399@ssc-vax.UUCP</A>) dmg@ssc-vax.UUCP (David Geary) writes:<BR>
+&gt;  What I'd really like is to have the source in C to a *simple*<BR>
+&gt;ray-tracer - one that I could port to my Amiga without too much <BR>
+&gt;difficulty.<BR>
+&gt;~ David Geary, Boeing Aerospace,               ~ <BR>
+<P>
+My standard answer to this question when it comes up is to locate the May/June
+1987 issue of Amiga World.  It's the one that has the ray-traced robot juggler
+on the cover.  The article "Graphic Scene Simulations" is a great overview of
+the subject, and it includes the program listing in C.  (Well, most of the
+program.  Details such as inputting the coordinates of all the objects are
+omitted.)
+<P>
+________________________________________
+<P>
+From: hpfcla!sunrock!kodak!supra!reichert@Sun.COM (Mark Reichert x25948)
+Subject: A call for vectors.....
+<P>
+Imagine a unit sphere centered at the origin.
+<P>
+Imagine a vector, the "reference vector", from the origin to any point on the
+surface of this sphere.
+<P>
+I would like to create n vectors which will evenly sample the surface of our
+sphere, within some given angle about that "reference vector".
+<P>
+I need to be able to jitter these vectors in such a way that no two vectors in
+a given bunch could be the same.
+<P>
+This appears to be a job for spherical coordinates, but I can't seem to find a
+formula that can treat the surface of a sphere as a "uniform" 2D surface (ie.
+no bunching up at the poles).
+<P>
+I desire these vectors for generating soft shadows from spherical light
+sources, and for diffuse illumination guessing.
+<P>
+I have something now which is empirical and slow - neither of which trait I
+find very desirable.
+<P>
+I will have a need for these vectors often, and seldom will either the
+angle or the number of vectors needed be the same across consecutive requests.
+<P>
+Can anyone help me?
+<P>
+________________________________________
+<P>
+&gt;From: <A HREF="mailto:hoops@watsnew.waterloo.edu">hoops@watsnew.waterloo.edu</A> (HOOPS Workshop)<BR>
+Subject: Needing Ray Tracing Research Topic<BR>
+[source: comp.graphics]<BR>
+<P>
+As a System Design Engineeering undergrad at University of Waterloo, I am
+responsible for preparing a 'workshop' paper each term.  I am fascinated with
+ray tracing graphics, but what I really need is a good application that I can
+work into a workable research topic that can be completed in 1 or 2 terms.
+<P>
+If anyone in netland can offer any information on an implementation of ray
+tracing graphics for my workshop please email me.
+<P>
+Thanks in advance folks,
+<P>
+<PRE>
+Tracey Bernath
+System Design Engineering
+University of Waterloo
+Waterloo, Ontario, Canada
+</PRE>
+<P>
+<PRE>
+              <A HREF="mailto:hoops@watsnew.uwaterloo.ca">hoops@watsnew.uwaterloo.ca</A>
+ Bitnet:      <A HREF="mailto:hoops@water.bitnet">hoops@water.bitnet</A>
+ CSNet:       <A HREF="mailto:hoops@watsnew.waterloo.edu">hoops@watsnew.waterloo.edu</A>
+ uucp:        {utai,uunet}!watmath!watsnew!hoops
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Supersampling Discussion
+</A></FONT>
+</H4>
+[A flurry of activity arose when someone asked about doing supersampling in a
+ray tracer.  Below are some of the more interesting and useful replies. - Eric]
+<P>
+_________________________________
+<P>
+&gt;From: <A HREF="mailto:jevans@cpsc.ucalgary.ca">jevans@cpsc.ucalgary.ca</A> (David Jevans)<BR>
+[source: comp.graphics]<BR>
+Summary: blech<BR>
+<P>
+In article (<A HREF="mailto:5548@thorin.cs.unc.edu">5548@thorin.cs.unc.edu</A>), brown@tyler.cs.unc.edu (Lurch) writes:<BR>
+&gt; In article (<A HREF="mailto:5263@cbmvax.UUCP">5263@cbmvax.UUCP</A>) steveb@cbmvax.UUCP (Steve Beats) writes:<BR>
+&gt; >In article (<A HREF="mailto:1351@umbc3.UMD.EDU">1351@umbc3.UMD.EDU</A>) bodarky@umbc3.UMD.EDU (Scott Bodarky) writes:<BR>
+&gt; >If you sample the scene using one pixel per ray, you will get<BR>
+&gt; >pretty severe aliasing at high contrast boundaries.  One trick is to sample<BR>
+&gt; >at twice the vertical and horizontal resolution (yielding 4 rays per pixel)<BR>
+&gt; >and average the resultant intensities.  This is a pretty effective method<BR>
+&gt; >of anti-aliasing.<BR>
+<P>
+&gt; From what I understand, the way to achieve 4 rays per pixel is to sample at<BR>
+&gt; vertical resolution +1, horizontal resolution +1, and treat each ray as a<BR>
+&gt; 'corner' of each pixel, and average those values.  This is super cheap compared<BR>
+&gt; to sampling at twice vertical and horizontal.<BR>
+<P>
+Blech!  Super-sampling, as suggested in the first article, works ok but is very
+slow and 4 rays/pixel is not enough for high quality images.  Simply rendering
+vres+1 by hres+1 doesn't gain you anything.  All you end up doing is blurring
+the image.  This is VERY unpleasant and makes an image look out of focus.
+<P>
+Aliasing is an artifact of regular under-sampling.  Most people adaptively
+super-sample in areas where it is needed (edges, textures, small objects).
+Super-sampling in a regular pattern often requires more than 16 rays per
+anti-aliased pixel to get acceptable results.  A great improvement comes from
+filtering your rays instead of simply averaging them.  Even better is to fire
+super-sample rays according to some distribution (eg. Poisson) and then filter
+them.
+<P>
+Check SIGGRAPH proceedings from about 84 - 87 for relevant articles and
+pointers to articles.  Changing a ray tracer from simple super-sampling to
+adaptive super-sampling can be done in less time than it takes to render an
+image, and will save you HUGE amounts of time in the future.  Filtering and
+distributing rays takes more work, but the results are good.
+<P>
+David Jevans, U of Calgary Computer Science, Calgary AB  T2N 1N4  Canada
+uucp: ...{ubc-cs,utai,alberta}!calgary!jevans
+<P>
+________________________________________
+<P>
+&gt;From: <A HREF="mailto:awpaeth@watcgl.waterloo.edu">awpaeth@watcgl.waterloo.edu</A> (Alan Wm Paeth)<BR>
+Subject: Re: raytracing in || (supersampling speedup)<BR>
+[source: comp.graphics]<BR>
+<P>
+In article (<A HREF="mailto:5548@thorin.cs.unc.edu">5548@thorin.cs.unc.edu</A>) brown@tyler.UUCP (Lurch) writes:<BR>
+&gt;<BR>
+&gt;From what I understand, the way to achieve 4 rays per pixel is to sample at<BR>
+&gt;vertical resolution +1, horizontal resolution +1, and treat each ray as a<BR>
+&gt;'corner' of each pixel, and average those values.  This is super cheap compared<BR>
+&gt;to sampling at twice vertical and horizontal.<BR>
+<P>
+This reuses rays, but since the number of parent rays and number of output
+pixels match, this has to be the same as low-pass filtering the output produced
+by a raytracer which casts the same number of rays (one per pixel).
+<P>
+The technique used by Sweeney in 1984 (while here at Waterloo) compares the
+four pixel-corner rays and if they are not in close agreement subdivides the
+pixel.  The recursion terminates either when the rays from the subpixel's
+corners are in close agreement or when some max depth is reached. The subpixel
+values are averaged to form the parent pixel intensity (though a more general
+convolution could be used in gathering up the subpieces).
+<P>
+This approach means that the subpixel averaging takes place adaptively in
+regions of pixel complexity, as opposed to globally filtering the entire output
+raster (which the poster's approach does implicitly).
+<P>
+The addition can be quite useful. For instance, a scene of flat shaded polygons
+renders in virtually the same time as a "one ray per pixel" implementation,
+with some slight overhead well spent in properly anti-aliasing the polygon
+edges -- no time is wasted on the solid areas.
+<P>
+<PRE>
+   /Alan Paeth
+   Computer Graphics Laboratory
+   University of Waterloo
+</PRE>
+<P>
+________________________________________
+<P>
+&gt;From: <A HREF="mailto:andreww@dgp.toronto.edu">andreww@dgp.toronto.edu</A> (Andrew Chung How Woo)<BR>
+Subject: anti-aliasing<BR>
+[source: comp.graphics]<BR>
+<P>
+With all these discussions about anti-aliasing for ray tracing, I thought I
+would get into the fun also.
+<P>
+As suggested by many people, adaptive sampling is a good way to start dealing
+with anti-aliasing (suggested by Whitted).  For another quick hack on top of
+adaptive sampling, you can add jitter (suggested by Cook).  The jitter factor
+can be controlled by the recursive depth of the adaptive sampling.  This
+combination tends to achieve decent quality.
+<P>
+Another method which nobody has mentioned is "stratified sampling".  This is
+also a rather simple method.  Basically, the pixel is divided into a N-size
+grid.  You have a random number generator to sample a ray at (x,y) of the grid.
+Then shoot another ray, making sure that the row x and column y are discarded
+from further sampling, etc.  Repeat this for N rays.  Note, however, no sharing
+of point sampling information is available here.
+<P>
+Andrew Woo
+<P>
+________________________________________
+<P>
+&gt;From: <A HREF="mailto:loren@pixar.UUCP">loren@pixar.UUCP</A> (Loren Carpenter)<BR>
+Subject: Re: anti-aliasing<BR>
+[source: comp.graphics]<BR>
+<P>
+[This is in response to Andrew Woo's article - Eric]
+<P>
+Rob Cook did this too.  He didn't call it "stratified sampling", though.  The
+idea is suggested by the solutions to the "8 queens problem".  You want N
+sample points, no 2 of which are in the same column, and no 2 of which are in
+the same row.  Then you jitter on top of that....
+<P>
+p.s.  You better not use the same pattern for each pixel...
+<P>
+<PRE>
+                        Loren Carpenter
+                        ...!{ucbvax,sun}!pixar!loren
+</PRE>
+<P>
+________________________________________
+<P>
+[By the way, what kind of adaptive supersampling have people been using?  We've
+had fairly good results with the simple "check four corners" algorithm and box
+filtering the values generated.  We find that for complex scenes an adaptive
+algorithm (which shoots 5 more rays if the subdivision criteria is met) shoots
+about 25% more rays overall (a result that Linda Roy also obtained with her
+ray-tracer).  What the subdivision criteria are affects this, of course.  We've
+been using 0.1 as the maximum ratio of R,G, or B channels of the four pixel
+corners.  How have you fared, and what kinds of filtering have you tried?
+- Eric]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Distributed Ray Tracer Available
+</A></FONT>
+</H4>
+&gt;From: kyriazis@rpics (George Kyriazis)<BR>
+[source: comp.graphics]<BR>
+<P>
+        During the last week I put myself together and managed to pull out a
+second version of my ray tracer (the old one was under the subject: "Another
+simple ray tracer available").  Tis one includes most of the options described
+in R. Cook's paper on Distributed ray tracing.
+<P>
+<PRE>
+Capabilities of the ray tracer are:
+        Gloss (blurred reflection)
+        Translucency (blurred refraction)
+        Penumbras (area light sources)
+        Motion Blur
+        Phong illumination model with one light source
+        Spheres and squares
+        Field of view and arbitrary position of the camera
+</PRE>
+<P>
+The ray tracer has been tested on a SUN 3 and SUN 4.  I have it available under
+anonymous ftp on <A HREF="ftp://life.pawl.rpi.edu">life.pawl.rpi.edu</A> (128.113.10.2) in the directory pub/ray
+under the name ray.2.0.shar.  There are some older version there if you want to
+take a look at them.  If you can't ftp there send me mail and I'll send you a
+copy.  I also have a version for the AT&T Pixel Machine (for the few that have
+access to one!).
+<P>
+No speed improvements have been made yet, but I hope I will have Goldsmith's
+algorithm running on it soon.  I know that my file format is not standard, but
+people can try to write their own routine to read the file.  It's pretty easy.
+<P>
+Hope you have fun!
+<P>
+<PRE>
+  George Kyriazis
+  <A HREF="mailto:kyriazis@turing.cs.rpi.edu">kyriazis@turing.cs.rpi.edu</A>
+  <A HREF="mailto:kyriazis@ss0.cicg.rpi.edu">kyriazis@ss0.cicg.rpi.edu</A>
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+Ray Tracing Program for 3b1
+</A></FONT>
+</H4>
+&gt;From: <A HREF="mailto:sid@chinet.UUCP">sid@chinet.UUCP</A> (Sid Grange)<BR>
+Subject: v05i046: ray tracing program for 3b1<BR>
+[source: comp.sources.misc]<BR>
+Posting-number: Volume 5, Issue 46<BR>
+Archive-name: tracer<BR>
+<P>
+[This was posted to comp.sources.misc.  I include some of the documentation so
+you can get a feel for it. Nothing special, but it might be fun if you have a
+3b1 (it's supposed to work on other UNIX systems, too). - Eric]
+<P>
+<PRE>
+NAME
+     tracer- run a simple ray tracing procedure
+</PRE>
+<P>
+<PRE>
+DESCRIPTION
+     Tracer is a program developed originally to study how
+     ray tracing works, and was later modified to the present state
+     to make it more compatible for animated film production.
+</PRE>
+<P>
+<PRE>
+     It is capable of depicting a number of balls (up to 150)
+     and a plane that is covered with a tiling of any bitmapped picture.
+</PRE>
+<P>
+<PRE>
+PROGRAM NOTES
+     This program generates a file containing a header with x and y sizes,
+     followed by the data in 8-bit greyscale, one pixel to a character, in
+     scanlines.
+     There are two necessary input files: ball data, and a pattern bitmap.
+     The tiling bitmap can be digitized data, it must be in the form of
+     scan lines no longer than 512 bytes followed by newlines.
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art8">
+Map Archive
+</A></FONT>
+</H4>
+&gt;From: <A HREF="mailto:crum@lipari.usc.edu">crum@lipari.usc.edu</A> (Gary L. Crum)<BR>
+Subject: DB:ADD SITE <A HREF="ftp://panarea.usc.edu">panarea.usc.edu</A> (Internet archive for maps)<BR>
+[source: comp.archive, and ftp]<BR>
+<P>
+An Internet archive for maps of geographic-scale maps has been set up, starting
+with data from the United States Geological Survey (USGS) National Cartographic
+Information Center (NCIC), specifically a map of terrain in USGS Digital
+Elevation Model (DEM) format.
+<P>
+The archive is on host <A HREF="ftp://panarea.usc.edu">panarea.usc.edu</A> [128.125.3.54], in anonymous FTP
+directory pub/map.  Gary Crum (<A HREF="mailto:crum@cse.usc.edu">crum@cse.usc.edu</A>) is maintainer.
+<P>
+The pub/map directory is writable by anonymous ftp.  Approximately 50M bytes
+are available for the map archive as of this writing.
+<P>
+NOTES:
+<P>
+* Files ending in the .Z extension have been compressed with the "compress"
+program available on comp.sources archives such as j.cc.purdue.edu.  They
+should be transferred using the "binary" mode of ftp to UNIX systems.  Send
+mail to the maintainer to request format changes (e.g., to uuencoded form split
+into small pieces).
+<P>
+* Some maps, e.g., DEM files from USGS, contain long lines which have been
+observed to cause problems transferring with some FTP implementations.  In
+particular, a version of the CMU TCP/IP package for VAX/VMS did not support
+these long lines.
+<P>
+* Source code for UNIX tools that manipulate ANSI labeled tapes and VMS tapes
+is available as pub/ansitape.tar.Z on the map archive host.
+<P>
+_________________
+<P>
+Index for Map Archive on Internet Host <A HREF="ftp://panarea.usc.edu">panarea.usc.edu</A> [128.125.3.54].<BR>
+version of Mon Nov 14 09:41:10 PST 1988
+<P>
+NOTE:  This INDEX is descriptive to only the directory level in many cases.
+<P>
+<PRE>
+-rw-r--r--  1 crum      1090600 May 26 09:33 dem/MAP.N0009338
+-rw-r--r--  1 crum       278140 Nov 11 14:16 dem/MAP.N0009338.Z
+        Digital Elevation Model 7.5 minute quad (see dem/README).
+        Ft. Douglas quadrangle, including part of Salt Lake City, UT.
+        Southeast corner has coordinates 40.75 N 111.75 W
+<P>
+drwxrwxrwx  2 crum          512 Nov  1 19:23 terrain-old-format/MAP.37N112W
+drwxrwxrwx  2 crum          512 Nov  1 19:23 terrain-old-format/MAP.37N119W
+drwxrwxrwx  2 crum          512 Nov  1 19:24 terrain-old-format/MAP.38N119W
+        USGS NCIC terrain maps in "old" format before DEM was introduced.
+        Files in these directories ending in extensions .[a-s] should be
+        concatenated together after transfer.
+<P>
+-rw-rw-rw-  1 45         777251 Nov 11 11:10 world-digitized/world-digitized.tar.Z
+drwxrwxr-x  7 crum          512 Nov 11 10:56 world-digitized/extracted
+        The "extracted" directory is produced from the tar file.
+        From world-digitized/expanded/doc/read.me :
+                The World Digitized is a collection of more than 100,000
+        points of latitude and longitude.  When connected together, these
+        co-ordinates form outlines of the entire world's coastlands, islands,
+        lakes, and national boundaries in surprising detail.
+<P>
+drwxrwxrwx  2 crum         1024 Nov 12 19:10 dlg/35N86W
+        Digital Line Graph of area with top-left coordinates 35 N 86 W.
+        See dlg/README.  From <A HREF="mailto:roskos@ida.org">roskos@ida.org</A> (Eric Roskos).
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art9">
+Index of Back Issues,
+</A></FONT>
+by Eric Haines
+</H4>
+This is a list of all back issues of the RT News, email edition.  I'm
+retroactively giving these issues numbers for quick reference purposes.
+Topics are fully listed in the first issue in which they are discussed, and
+follow-up material is listed in braces {}.  I've tried to summarize the
+main topics covered, not the individual articles.
+<P>
+[Volume 0, August-December 1987] - Standard Procedural Databases, Spline
+        Surface Intersection, Abnormal Normals
+<P>
+[Volume 1, Number 1,] 1/15/88 - Solid Modelling with Faceted Primitives,
+        What's Wrong [and Right] with Octrees, Top Ten Hit Parade of Computer
+        Graphics Books, Comparison of Efficiency Schemes, Subspaces and
+        Simulated Annealing.
+<P>
+[Volume 1, Number 2,] 2/15/88 - Dore'
+<P>
+[Volume 1, Number 3,] 3/1/88 - {comments on Octrees, Simulated Annealing},
+        Efficiency Tricks, More Book Recommendations, Octree Bug Alert
+<P>
+[Volume 1, Number 4,] 3/8/88 - Surface Acne, Goldsmith/Salmon Hierarchy
+        Building, {more Efficiency Tricks}, Voxel/Quadric Primitive Overlap
+        Determination
+<P>
+[Volume 1, Number 5,] 3/26/88 - {more on Efficiency, Voxel/Quadric}, Linear
+        Time Voxel Walking for Octrees, more Efficiency Tricks, Puzzle,
+        PECG Correction
+<P>
+[Volume 1, Number 6,] 4/6/88 - {more on Linear Time Voxel Walking}, Thoughts
+        on the Theory of RT Efficiency, Automatic Creation of Object
+        Hierarchies (Goldsmith/Salmon), Image Archive, Espresso Database
+        Archive
+<P>
+[Volume 1, Number 7,] 6/20/88 - RenderMan & Dore', Commercial Ray Tracing
+        Software, Benchmarks
+<P>
+[Volume 1, Number 8,] 9/5/88 - SIGGRAPH '88 RT Roundtable Summary, {more
+        Commercial Software}, Typo in "Intro to RT" Course Notes, Vectorizing
+        Ray-Object Intersections, Teapot Database Archive, Mark
+        VandeWettering's Ray Tracer Archive, DBW Render, George Kyriazis
+        Ray Tracer Archive, Hartman/Heckbert PostScript Ray Tracer (source),
+<P>
+[Volume 1, Number 9,] 9/11/88 - {much more on MTV's Ray Tracer and utilities},
+        Archive for Ray Tracers and databases (SPD, teapot), Sorting on Shadow
+        Rays for Kay/Kajiya, {more on Vectorizing Ray-Object Intersection},
+        {more on George Kyriazis' Ray Tracer}, Bitmaps Library
+<P>
+[Volume 1, Number 10,] 10/3/88 - Bitmap Utilities, {more on Kay/Kajiya},
+        Wood Texture Archive, Screen Bounding Boxes, Efficient Polygon
+        Intersection, Bug in Heckbert Ray Tracer (?), {more on MTV's Ray
+        Tracer and utilities}, Neutral File Format (NFF)
+<P>
+[Volume 1, Number 11,] 11/4/88 - Ray/Triangle Intersection with Barycentric
+        Coordinates, Normal Transformation, {more on Screen Bounding Boxes},
+        {comments on NFF}, Ray Tracing and Applications, {more on Kay/Kajiya
+        and eye rays}, {more on Wood Textures}, Virtual Lighting, Parallel
+        Ray Tracing, RenderMan, On-Line Computer Graphics References Archive,
+        Current Mailing List
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

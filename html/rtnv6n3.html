@@ -1,0 +1,2901 @@
+<!-- html version of Volume 6, Number 3 :  -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 6, Number 3</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>September 28, 1993</FONT>
+<P><FONT size=+1>Volume 6, Number 3</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1993, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction
+</A></LI>
+<LI><A HREF="#art2">
+New People
+</A></LI>
+<LI><A HREF="#art4">
+Free Ray Tracer Summary,
+</A></LI>
+compiled by Eric Haines
+<LI><A HREF="#art5">
+Ray Tracer Races, Round 2,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art6">
+An Enhanced Standard Procedural Databases Package,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art7">
+Shadows from Refractive Objects,
+</A></LI>
+by Steven Collins
+<LI><A HREF="#art8">
+Shadows Through Transmitters,
+</A></LI>
+by Eric Haines, Greg Ward,
+Alexander Enzmann, Stephen Coy, and David Hook
+<LI><A HREF="#art9">
+Faster Bounding Volume Hierarchies,
+</A></LI>
+by Brian Smits and Eric Haines
+<LI><A HREF="#art10">
+Simple Sun Position Program,
+</A></LI>
+by James Ashton
+<LI><A HREF="#art11">
+Sphere and Cylinder/Cone/Disc/Annulus Definition,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art12">
+Ray Tracing Roundup
+</A></LI>
+<LI><A HREF="#art13">
+Simple Sphere Tessellation,
+</A></LI>
+by Mike Castle
+<LI><A HREF="#art14">
+Syndesis CD-ROM Review,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art15">
+Ray Tracing Related Abstracts from the Proceedings of Graphics Interface '93
+</A></LI>
+<LI><A HREF="#art16">
+Ray Tracing Papers in the First Bilkent Computer Graphics Conference,
+</A></LI>
+ATARV-93, Ankara, Turkey, July 1993
+<LI><A HREF="#art17">
+Fourth Eurographics Workshop on Rendering,
+</A></LI>
+Paris, France June 14-16, by
+Francois Sillion
+<LI><A HREF="#art18">
+Gamma Correction Frequently Asked Questions,
+</A></LI>
+by Graeme Gill
+<LI><A HREF="#art19">
+3D Studio Rendering,
+</A></LI>
+by Chris Williams
+<LI><A HREF="#art20">
+Ray-Bezier Patch Intersection,
+</A></LI>
+by Chuck McKinley, Max Froumentin
+<LI><A HREF="#art21">
+Turbulence and Noise,
+</A></LI>
+by Ken Perlin
+<LI><A HREF="#art22">
+Ray Tracing Research Ideas,
+</A></LI>
+by Klaus Lisberg Kristensen
+& Christian Gautier
+<LI><A HREF="#art23">
+POV-Ray Utilities,
+</A></LI>
+by Dan Farmer
+<LI><A HREF="#art24">
+SPD Platform/Compiler Results,
+</A></LI>
+by David Hook
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction
+</A></FONT>
+</H4>
+Another SIGGRAPH has come and gone, and it was pretty fun for me from a Ray
+Tracing News perspective.  I got to meet some of the creators of POV, the ray
+tracer derived from DKB that's been taking the CompuServe (CIS for short)
+world by storm.  The CIS world is a different kind of place than the Internet.
+There be demigods there that can give you various free privileges if they
+deign that what you are doing is entertaining to the masses (and so generates
+connect time revenues).
+<P>
+The ray tracing technology available on CIS seems a bit old-fashioned, with
+things like QRT and DBW still in active existence there and in the general BBS
+world among some users.  POV 1.0 doesn't have an automatic efficiency scheme,
+something that dates back at least five years with MTV's introduction on the
+Internet.  However, I suspect POV 2.0 and onwards will rule the earth.  2.0
+has a built in efficiency scheme, and while most of the other free ray tracers
+out there are still faster, this scheme at least brings POV into the same
+league.  What will make POV the most popular free renderer is that there are a
+ton of utilities out there to support it [see Dan Farmer's article this
+issue].  One of the most significant is MORAY, a shareware modeling and scene
+composition program that's very nice (available only on the IBM PC).
+<P>
+Right now Rayshade has more features than POV and is faster, and there are
+some programs which output data in Rayshade format, so it's got many users.
+But Craig Kolb is a busy guy and there doesn't look to be any new version
+coming out soon.  There will still be people out there using Rayshade for its
+speed and for its multiprocessing utilities (e.g.  the separate Inetray
+utility runs Rayshade on a network of processors/machines).  Rayshade will be
+just fine for many people.  The "art" ray tracer from Australia has a slightly
+brighter future; it has many of the features of Rayshade, plus its developers
+have time to actively support it.
+<P>
+Radiance will still have its users, too - anyone dealing with lighting in a
+true physical sense will use this package.  Unfortunately, Greg Ward tells me
+that the DOE (who funded the development of Radiance) may not release newer
+versions for free; keep your fingers crossed.
+<P>
+BRLCAD has its devoted users, but takes more work than just downloading to get
+(you must be a US citizen, you sign some agreement, etc etc).  So even though
+it's free if you qualify, it's much more for the serious user and so has nil
+"hacker momentum".
+<P>
+There are some other free ray tracers out there (RTrace, VIVID/BOB, etc), each
+with some advantages, but in the main the large number of people using POV and
+creating utilities for it will make these others of peripheral interest in the
+long run.  90% of the utilities developed for POV might be clunky junk, but
+there will be enough hits (such as MORAY) that this renderer is made usable by
+the masses.  Whether this is good or bad or whatever, well, I don't really
+know, but this is my current impression of the short-term future of free ray
+tracing software out there.
+<P>
+Anyway, this is an incredibly long issue, as I finally caught up with the
+backlog from March onwards.  Given its length, I hope you'll take it all in
+(hey, use "split" and "at" and send yourself this issue in installments...).
+There's a summary of the features and speeds (in two separate articles) of
+most of the free ray tracers out there.  I've also started listing new papers
+that might be overlooked (i.e. weren't in SIGGRAPH).  Something for everyone,
+I hope (or if nothing else, at least all this stuff is organized so that I can
+find it again).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+New People
+</A></FONT>
+</H4>
+<PRE>
+# J. Eric Townsend - massively parallel engines, vr
+# NAS, NASA Ames
+# M/S 258-6
+# Moffett Field, CA 94035-1000
+# 415.604.4311
+</PRE>
+<P>
+I'm supposed to be administrating a CM-5, but I spend as much of my time as
+possible working on parallel ray tracers.  My current project uses SEADS
+decomposition with cells distributed over the nodes.  Cells are requested
+asynch and cached locally.  Performance numbers coming soon.
+<P>
+What's the *biggest* thing you've ray traced so far in terms of sheer number
+of objects/size of database?
+<P>
+I'm (still) working on my massively parallel raytracer, but I've gotten
+official approval to work on it as part of my job, so I'm getting a lot done
+these days.  One thing I've realized, is that I'll be able to trace some
+*huge* numbers of objects, or at least I think it's a large number...
+<P>
+Right now, an sphere+surface characteristics takes up about 512bytes of
+storage in my system (actually, any object takes up about that much space
+because the Object type is just a union of all the objects I support).  Yes,
+that's a lot.  I haven't tried optimizing for size yet.  As I mucked about on
+our CM-5, I realized 'hey, I've got a *lot* of free ram for storage, even with
+a sizable local cache.'
+<P>
+Each node on our CM-5 has 2 banks of 16MB each.  Assuming one bank is taken up
+with OS, code, object cache, data structures, generic BS, that leaves
+16MB/node for permanent object storage.  16MB*32nodes (smallest partition one
+can grab)/512bytes/sphere==1M (1Kx1K, actually) spheres.  Using all 128 nodes,
+I can easily have 4M spheres in my permanent object storage.
+<P>
+That's an awful lot, it seems to me.  4 million spheres is roughly
+equal to:
+ - 568 sphereflakes(4)
+ - 7 sphereflakes(6)
+ - a single sphereflake(7) (5.3M spheres, actually).
+<P>
+Maybe it isn't a lot of objects. Regardless, I sat around trying to
+figure out how to use 4M spheres, and I came up with a few ideas:
+<P>
+<PRE>
+ - particle methods run on another machine (when we get hippi going,
+        we could run code on one machine and trace on another)
+ - use spheres as voxels, try some volume ray tracing
+ - bad abstract animation using too many spheres
+</PRE>
+<P>
+Another probability is that'll I'll try some stuff with a 'special' object
+that has very simple parameters:  position, pointer to an object definition
+and a pointer to a color index.  That'd make it *quite* easy to get another
+few million objects floating about in the big database.
+<P>
+So, am I completely off my rocker?
+<P>
+________
+<P>
+<PRE>
+Name:           Steven G. Blask
+Fancy title:    Research Associate
+But I'm really: PhD candidate/serf
+                (will hack computer vision/graphics/image processing/AI
+                 under UNIX/C(++)/X Windows environment for food)
+Affiliation:    Robot Vision Laboratory
+Snail-mail:     School of Electrical Engineering
+                1285 Electrical Engineering Building
+                Purdue University
+                West Lafayette, IN 47907-1285
+Voice:          (317) 494-3502
+FAX:            (317) 494-6440
+E-mail:         <A HREF="mailto:blask@ecn.purdue.edu">blask@ecn.purdue.edu</A>
+</PRE>
+<P>
+Interests:      In short, I am doing my part to get ignorant computers to
+                visually interpret their environment, initially for (but not
+limited to) robotic applications.  Specifically, I am doing expectation-based
+image understanding, integrating a number of related research areas into a
+single unified system.  I have created a B-rep solid model of the hallways
+outside our lab which is used as an internal map by our mobile robot.  Based
+on where the robot thinks it is, an expected view of the environment is
+rendered via a (not-yet-so-)fast ray tracing algorithm which incorporates
+illumination effects.
+<P>
+While most rendering systems are focused on obtaining pretty pictures as
+quickly as possible, my application must also maintain links back to the
+underlying solid model so that, in addition to the appearance information, the
+3D geometry and topology stored in the B-rep is efficiently made available to
+the scene interpretation process.  This brings up many issues not normally
+addressed in the graphics literature which prevent me from taking advantage of
+some of their proposed speed-ups.  However, it has caused me to re-examine
+some of the "solved" problems of computer graphics from a new perspective,
+which has yielded much dissertation fodder, and has allowed me to propose new
+speed-ups based on a slightly modified architecture.
+<P>
+Related non-graphics areas I have addressed include:  low level image
+processing to remove noise from digitized images or enhance rendered images;
+robust segmentation and symbolic conversion of digitized greyscale video
+images and distance images produced by a range sensor; integration of these
+symbolic conversion routines into the solid modeler/sensor modeler/ray tracer
+which also has facilities for the interactive construction, examination, and
+modification of objects; an evidential reasoning scheme that organizes and
+utilizes the rich structural and appearance information in an efficient manner
+during the image understanding process.  Artificial intelligence techniques
+such as evidence accumulation, uncertainty management, and symbolic reasoning
+must be utilized since there is a huge amount of input data and it will be
+noisy, the expectation will not be exact due to errors in mobile robot
+odometry (indeed, vision is intended to be its position updating mechanism),
+and it is impractical or impossible to completely or accurately model all of
+the environment and its many aspects.  By processing both expected and
+observed scenes with the same greyscale or range image segmentation routines,
+the integrated system can predict the detectability of various structural
+features and appearance artifacts, and determine their usefulness w.r.t. the
+image interpretation process.
+<P>
+Obviously, I have taken a big bite out of a large apple, so please excuse me
+if I talk with my mouth full :-) I hope this tome makes the ray-tracing
+community more aware of the vast usefulness of this rendering paradigm to
+those who would do model-based interpretation of video and range sensor
+images.  Ray tracing is a natural fit for my particular application since it
+tells me what object I hit, how far away it is, and what ``color'' it is.
+Computer vision & computer graphics are two sides of the same coin, and it is
+once again time to flip it over & see if the other guy has solved your problem
+yet.  It is also probably time for the two communities to start working on an
+integrated modeling system that can drive the image formation/generation
+process both ways.  I was forced to implement the aforementioned system myself
+since I could find no existing system that gave me the access I needed in
+order to efficiently integrate everything that needs to be done.
+<P>
+Sorry this is so long, but I thought you might find it interesting and
+possibly motivating.  I encourage anyone interested in the further development
+of an integrated vision/graphics system to contact me.  I am racing to defend
+my dissertation by December, so I may be slow to respond until then.
+<P>
+P.S.    I am obliged to say that Purdue Robot Vision Lab is a diverse group of
+        researchers investigating all aspects of sensory-based robotics,
+        including:  planning for sensing, robot motion, grasping, and
+        assembly; object and sensor modeling; computer vision; image
+        processing; range data processing; object recognition; symbolic and
+        geometric reasoning; uncertainty management and evidence accumulation;
+        learning.  Smart, aware, easy-to-program robots are our goal.  Prof.
+        Avinash C. Kak is our fearless leader.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Free Ray Tracer Summary,
+</A></FONT>
+compiled by Eric Haines
+</H4>
+Here are some of the better ray tracers out there (and most can be found at
+<A HREF="ftp://wuarchive.wustl.edu">wuarchive.wustl.edu</A> in graphics/graphics somewhere, or ask me):
+<P>
+RayShade - a great ray tracer for workstations on up, also for PC, Mac & Amiga.
+POV - son and successor to DKB trace, written by Compuservers.  Also see PV3D.
+        (For more questions call Drew Wells --
+        <A HREF="mailto:73767.1244@compuserve.com">73767.1244@compuserve.com</A> or Dave Buck -- david_buck@carleton.ca)
+Radiance - see "Radiosity", below.  A very physically based ray tracer.
+ART - ray tracer with a good range of surface types, part of VORT package.
+RTrace - Portugese ray tracer, does bicubic patches, CSG, 3D text, etc. etc.
+        An MS-DOS version for use with DJGPP DOS extender (GO32) exists also,
+        as well as a Mac port.
+VIVID2 - A shareware raytracer for PCs - binary only (286/287).  Author:
+        Stephen Coy (<A HREF="mailto:coy@ssc-vax.boeing.com">coy@ssc-vax.boeing.com</A>).  The 386/387 (no source) version
+        is available to registered users (US$50) direct from the author.
+        "Bob" is a subset of this ray tracer, source available only through
+        disks in "Photorealism and Raytracing in C" by Christopher Watkins
+        et al, M&T Books.
+<P>
+Which one's the best?  Here's a ray tracer feature comparison of some of the
+more popular ones.  I assume some basics, like each can run on a Unix
+workstation, can render a polygon, has point lights, highlighting, reflection
+& refraction, etc.
+<P>
+A "." means "no".  Things in parentheses mean "no, but there's a workaround".
+For example, POV 1.0 has no efficiency scheme so takes forever on scenes with
+lots of objects, but there are programs which can generate efficiency
+structures for some POV objects (also, in this case, POV 2.0 will fix this
+deficiency).
+<P>
+<PRE>
+                       Rayshade  POV 1.0  RTrace  Radiance     Bob       ART
+IBM PC version?            Y        Y       Y      in 2.2       Y         Y
+Amiga version?             Y        Y       .         Y         .        (Y)
+Mac version?               Y        Y       Y       A/UX        .         Y
+
+Sphere/Cylinder/Cone       Y        Y       Y         Y         Y         Y
+Torus primitive            Y        Y       Y         .         .         Y
+Spline surface prim.       .        Y       Y         .         .         Y
+Arbitrary Algebraic prim.  .        Y       .         .         .         Y
+Heightfield primitive      Y        Y       .         .         .         Y
+Metaball primitive         Y        Y       .         .         .         Y
+Modeling matrices          Y        Y       Y         .         .         Y
+Constructive Solid Geo.    Y        Y       Y   (antimatter) (clipping)   Y
+Efficiency scheme?       grids  (user/2.0) ABVH    octtree     ABVH    kdtree+
+
+2D texture mapping         Y        Y       Y         Y         Y         Y
+3D solid textures          Y      strong    Y         Y         Y         Y
+Advanced local shading     .        Y       Y       Much!       .         .
+Atmospheric effects        Y        Y       .         .         Y         Y
+Radiosity effects          .        .       Y         Y         .         .
+Soft shadows               Y      (2.0)     Y         Y         Y         Y
+Motion blur                Y        .       .         .         .         .
+Depth of field effects     Y        .       Y         .         Y         .
+Stereo pair support        Y        .       Y         .         .         .
+Advanced filter/sample     Y        .       Y         Y         Y         .
+Animation support          Y      (S/W)     Y      (some)       .         Y
+Alpha channel output       Y        .       Y         .         .         Y
+
+Modeler                 lib/P3D   IBM+  (convert)  on Mac    w/code      P3D
+Model converters from     NFF     Many!   Many!     some        .      NFF,OFF
+Network rendering       Inetray     .       .      in 2.2       .     dart,nart
+User support           maillist maillist  good     digest+   little     good
+Other S/W support        some     Much!   a bit     some      a bit     some
+</PRE>
+<P>
+For timing comparisons, see the next article.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Ray Tracer Races, Round 2,
+</A></FONT>
+by Eric Haines
+</H4>
+After running timings of the various ray tracers out there in the
+<A HREF="rtnv6n2.html#art3">last issue</A>,
+I received various comments from authors.  David Hook and Bernie Kirby went so
+far as to run a bunch of the ray tracers on different platforms under
+different compiler options; see their results at the
+<A HREF="#art24">
+end of this issue</A>.  The
+POV developers sent me a beta of POVRAY 2.0 so that the snail's pace of 1.0
+could be (massively) improved.  Also, there were some interesting comments on
+how shadows for transmitters are computed; see the relevant articles on this
+topic.  Without further ado, here are the current results.
+<P>
+Timings - default size SPD databases (i.e. up to 10,000 objects in a scene),
+time in seconds on HP 720 workstation, optimized and gprof profiled code.
+Includes time to read in the ASCII data file and set up.  Note that profiling
+slows down the execution times, so real times would be somewhat faster in all
+cases (about 30%); plus, the profiler itself is good to +-10%.  Also, these
+timings are purely for this machine - results will vary considerably depending
+on the platform (see <A HREF="#art24">David Hook's article</A>).
+Now that I've explained why these are useless, here goes:
+<P>
+<PRE>
+                balls   gears   mount   rings   teapot  tetra   tree
+
+Art/Vort         478    1315     239     595      235     84     381
+Art/Vort +float  415    1129     206     501      203     72     327
+Rayshade w/tweak 188     360     174     364      145     61     163
+Rayshade w/grid 1107     412     174     382      145     61    1915
+Radiance         289     248     165     601      150     42     197
+Bob              402     747     230     831      245     50     266
+RTrace           664    1481     813    1343      341    153     372
+RTrace c6 m0     652    1428     811    1301      331    155     363
+POV 2.0beta+     588    1895     668    1113      306     56     542
+POV 1.0        191000 1775000  409000  260000    45000  31000  250000
+</PRE>
+<P>
+The gears and mount tests are probably worth ignoring because everyone handles
+shadows for transparent objects differently.  Some consider them opaque to
+shadows, others handle it differently.
+<P>
+Here are timing ratios (i.e. 1 is the fastest time for a given test, with
+the other timings normalized to this value):
+<P>
+<PRE>
+                balls   gears   mount   rings   teapot  tetra   tree
+
+Art/Vort         2.54    5.30    1.45    1.63    1.62    2.00    2.34
+Art/Vort +float  2.21    4.55    1.25    1.38    1.40    1.71    2.01
+Rayshade w/tweak  1      1.45    1.05     1       1      1.45     1
+Rayshade w/grid  5.89    1.66    1.05    1.05     1      1.45   11.75
+Radiance         1.54     1       1      1.65    1.03     1      1.21
+Bob              2.14    3.01    1.39    2.28    1.69    1.19    1.63
+RTrace           3.53    5.97    4.93    3.69    2.35    3.64    2.28
+RTrace c6 m0     3.47    5.76    4.92    3.57    2.28    3.69    2.23
+POV 2.0beta+     3.13    7.64    4.05    3.06    2.11    1.33    3.33
+POV 1.0       1015.96 7157.26 2478.79  714.29  310.34  738.10 1533.74
+</PRE>
+<P>
+Art/Vort was compiled with and without a "+f" compiler option; with it on
+floating point numbers are not promoted to doubles during expression
+evaluation (and so things runs noticeably faster).  Other packages may benefit
+from such compiler options.
+<P>
+Rayshade had some minor user intervention.  The ceiling of the cube root of
+the number of objects in the scene was used as the efficiency grid resolution.
+For example, balls has 7382 objects:  cube root is 19.47, ceiling is then 20,
+so a 20 x 20 x 20 grid was used.  Rayshade needs hand tweaking of the grid
+structures for extra efficiency (esp. with balls and tree), though this is
+fairly simple for the SPD tests (i.e. leave the background polygon out of the
+grid structure).  Tweaking in these cases means leaving ground plane polygon
+(if it exists) out of the grid structure.
+<P>
+Radiance is quite different in its approach, as it is more physically based.
+Efficiency structures are built in a separate program (so the time spent doing
+this is not included in the above stats).  Also, Radiance outputs in a
+floating point format (which can be quite handy).
+<P>
+RTrace is often a bit faster when the "c6 m0" options are used.
+<P>
+POV 2.0 has an efficiency scheme built in and so is comparable to the others,
+so don't get freaked out by the POV 1.0 performance numbers.
+<P>
+____
+<P>
+Notes from Antonio Costa on RTrace:
+<P>
+Let me make just some small remarks about RTrace.  Perhaps you haven't
+explored its options, but I think it could perform slightly better (at least
+8% better, according to some simple tests I did).
+<P>
+Please run it with options 'c6 m0':
+c6 -&gt; enclose at least 6 objects per enclosing box (default is c4)
+m0 -&gt; use simple lighting model (default is m1, which uses a model
+      developed by Paul Strauss of SGI; it's much more complex!)
+<P>
+When scenes have a larger amount of simple primitives like spheres and
+boxes the enclosing strategy isn't as efficient as when they have cones,
+patches, triangles, letters, etc. The value c4 is a compromise (normally
+the user shouldn't change it, but sometimes some tuning can be done).
+<P>
+[c6 turns out to be a bit better in most cases, but using both options
+improved performance by at most 4% maximum on my machine.  -EAH]
+<P>
+The Strauss' model uses some math functions that unfortunately make the
+rendering somewhat slower then the standard Phong model (this is an area
+where I think good improvements can be done -- approximating functions
+like power(), sqrt(), acos()).
+<P>
+You can also avoid the problem with the 'rings' scene using an option
+that increases the number of surfaces -- option '+S2000' means 2000
+surfaces (default is 256). To increase the number of objects or lights
+you can also use '+Sn' or '+Ln'.
+<P>
+____
+<P>
+For those of you who want to know the particulars of the tests, read on:
+<P>
+Here are the command lines I used for the various tracers.  I tried to use the
+fastest method available for shadows for transparent objects - each tracer does
+this a bit different.  Mostly I would say "ignore the results for gears and
+mount" because of the way the methods differ.  I used the enhanced Standard
+Procedural Database package (next article) to test the ray tracers.
+<P>
+<PRE>
+POV: time povray +ms5000 +i$dog.pov +ft +w1 +h1 -odummy.tga
+ART: time art $dog.art 512 512
+RAYSHADE: time rayshade $dog.ray -o -R 512 512 -O $dog.rle
+RTRACE: time rtrace c6 m0 +S2000 w512 h512 O1 $dog.rt $dog.ppm
+BOB:
+        sed -f vivid2bob.sed $dog.b &gt; /tmp/junk
+        mv /tmp/junk $dog.b
+        time bob -s $dog
+RADIANCE:
+        # uses a converter Greg Ward sent, which I call NFF2Radiance
+        ../../$dog -r 1 | NFF2Radiance -vf $dog.vp &gt; $dog.rad
+        oconv $dog.rad &gt; test.oct
+        time rpict -vf $dog.vp test.oct &gt; $dog.pic
+</PRE>
+<P>
+[<I>Addendum:</I> more timings are available from Andrew Woo in
+<A HREF="rtnv10n3.html#art9">RTNv10n3</A>]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+An Enhanced Standard Procedural Databases Package,
+</A></FONT>
+by Eric Haines
+</H4>
+Alexander Enzmann and Eduard Schwan took the SPD package (which, as you may
+know, generates procedural models for testing ray tracer speed) and added a
+ton of code to it.  The new code now outputs to these formats:
+<P>
+<PRE>
+        NFF (used by MTV ray tracer; but the SPD always output using this)
+        POV-Ray 1.0
+        Polyray v1.4, v1.5
+        Vivid 2.0
+        Rayshade
+        RTrace 8.0.0
+        Art 2.3
+        QRT 1.5
+        POV-Ray 2.0 (no, it's not officially out yet: format subject to change)
+        PLG format for use with "rend386"
+        Raw triangle output
+</PRE>
+<P>
+It can also output the models as line drawings to the screen for previewing:
+IBM, Mac, and HPUX drivers are provided, and new drivers are trivial to write
+(i.e. draw a line).
+<P>
+There is also a program, showdxf, which will convert or display DXF files
+(actually, a limited subset of these - just 3DFACE entities).  There are two
+sample DXF files, a skull and an f117, included.
+<P>
+There's also a sample code file which can be used as a template for writing
+your own output programs.  What's nice about this package is that by writing a
+program representing your model (or interpreting your model as input a la
+showdxf.c), you can then convert it to a wide number of formats.  I'd love to
+see more show*.c interpreters (e.g. one for Wavefront obj format so that the
+cool Viewpoint models at <A HREF="ftp://avalon.chinalake.navy.mil">avalon.chinalake.navy.mil</A> can be converted) and other
+output formats.
+<P>
+I did some polishing and whatnot to the distribution and have placed the whole
+thing at <A HREF="ftp://weedeater.math.yale.edu">weedeater.math.yale.edu</A>'s /incoming directory as SPDup31.tar.Z and
+SPDup31.zip .  Hopefully I didn't futz things too badly (I suspect there needs
+to be some file renaming for the Mac version), but let me know if I did.
+Anyway, I hope that the permanent home of the code will be
+<A HREF="ftp://princeton.edu/pub/Graphics">princeton.edu:/pub/Graphics</A> somewhere.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+Shadows from Refractive Objects,
+</A></FONT>
+by Steven Collins (<A HREF="mailto:steve@crl.hitachi.co.jp">steve@crl.hitachi.co.jp</A>)
+</H4>
+<A HREF="mailto:gophcide@cs.montana.edu">gophcide@cs.montana.edu</A> (Brett Donahue) writes:<BR>
+&gt;After tracing a ray from the view plane and hitting an objects surface, you<BR>
+&gt;cast a ray from that point to the light source.  What do you do if there is<BR>
+&gt;a total transparent object with an index of refraction on the path to the<BR>
+&gt;light source?  Once this ray is refracted, it will not hit the light source.<BR>
+&gt;Do you just ignore the object?  That is what I think POV ray is doing.  I<BR>
+&gt;put a transparent object between a plane and the light source; and there<BR>
+&gt;was no shadowed areas.  There should be some areas on the plane where the<BR>
+&gt;refracted light would not hit. <BR>
+<P>
+A moot point indeed.  Not many ray-tracers handle this problem correctly.
+Most take the "easy way out" of either a) ignoring the ray if _any_ obstacle
+is encountered between the surface and the lightsource or b) if the ray passes
+through transparent objects only, then attenuate the lighting according to
+some scattering approximation function.  a) always gives rise to completely
+dark shadows, whereas b) is an improvement in that it gives rise to lighter
+regions of shadow where the light has been attenuated proportional to the
+distance of refractive material passed through.
+<P>
+Either of these approaches do not capture the caustics effects.  There seems
+to be 2 methods around to do this:  either a) send out _lots_ of rays from the
+surface in the hope that some of them will hit the light source.  i.e.:
+sample the hemisphere above the point of intersection and trace these rays.
+For better results the hemi-sphere may be importance sampled by determining
+the solid angle subtended by all light sources.  This is of course incredibly
+expensive computationally and leads to very noisy caustic effects.  The
+alternative approach is to shoot rays from the light sources in a pre-
+processing step.  A number of approaches to this exist.  Heckbert proposed
+shooting may rays from the light sources and storing the intersections of
+these rays with surfaces as a "texture map" of sorts.  Thus when executing the
+secondary phase, intersections with surfaces use these texture maps as an
+estimate of the light incident on the surface.  Another approach is that of
+Watt & Watt where a beam tracing first phase performs a similar operation but
+this time only polygonally defined surfaces are catered for (due to the
+beam-tracing approach).  Here, light beams are traced through the scene and
+the intersections of these beams with surfaces are stored as polygon feature
+polygons and used in the "eye-phase" to estimate the caustic light energy.
+Finally, more recent work (I've just shipped my Siggraph '92 procs.  over
+3,000 miles away so forgive not being able to give the exact reference)
+published in Siggraph '92 (was it Kirk and Barr or Snyder...?  or Arvo...
+these guys do so much excellent stuff its hard to keep track) [no, it was
+Mitchell and Hanrahan -EAH], which involved a more analytic approach to
+determine the location of the caustic effects by analytically estimating the
+wave-fronts and caustic cusps resulting from light interacting with a surface
+of gaussian curvature.
+<P>
+This is, as you can probably guess, an area of interesting on-going research.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art8">
+Shadows Through Transmitters,
+</A></FONT>
+by Eric Haines, Greg Ward, Alexander Enzmann, Stephen Coy, and David Hook
+</H4>
+In doing the SPD timings tests on the various ray tracers available, I found
+that each renderer does shadowing of transmitters its own way.  This is fair
+enough:  when a transmitter "blocks" a light, there are many ways to handle
+the situation.  One is to treat the transmitter as opaque and simply block
+any light.  Another is to filter the color of the light by the transmitter's
+surface color.  A more elaborate method is to actually compute the length of
+the ray inside the transmitter and then also attenuate the color using this
+distance (e.g. Radiance does this).  For my tests I tried to pick the fastest
+option available with the ray tracer.
+<P>
+Some comments from the designers:
+<P>
+____
+<P>
+From Greg Ward (the main author of Radiance):
+<P>
+As for the shadow under a refracting sphere or such, I just follow the rays
+through the object to the light source following a refracted path, and if I
+hit it, I get it, if I don't, I don't.  It's not the correct thing to do, but
+it's better than throwing the contribution away or pretending it's not there,
+and it does give the appearance of light concentration in some cases.  To be
+honest, I don't care that much about refracting objects as they rarely turn up
+in architectural scenes.  Windows, yes -- crystal balls, no.
+<P>
+Yes, the refracted path source testing depends on the size of the light
+source among other things, so it's not a correct approach (as I said).
+But it's easy, and strikes me as better than nothing.  I don't do any special
+type of sampling with regards to ray direction -- I just shoot assuming that
+there's nothing in the way, and if I hit a dielectric surface, I continue
+to follow the refracted (but not the reflected) ray.  Works great for planar
+surfaces, so it makes most of my users happy.
+<P>
+____
+<P>
+From Alexander Enzmann (an author of POV-Ray):
+<P>
+Another thing to consider with POV-Ray (especially in gears) is that diffuse
+shadows are computed for all surfaces.  Several tracers have an option for how
+many surfaces will have shadows computed (Rayshade and RTrace have several
+options), some tracers don't ever compute shadows for an "interior" surface of
+a transparent object (Vivid/BOB).  POV-Ray always does the maximum work.  The
+high ratio you got on the gears benchmark comes from that to a great extent
+and from the fact that POV-Ray doesn't do polygons (has to have the gears
+broken down into triangles).
+<P>
+____
+<P>
+From Stephen Coy (an author of the Vivid/Bob ray tracers):
+<P>
+There actually seem to be two issues here.  The first is how the intersection
+with an "interior" surface is shaded.  The second is how shadow colors are
+calculated.
+<P>
+When Vivid/Bob intersects an interior surface the only component that is taken
+into account is the transparency.  This implies that the surface doesn't have
+a diffuse component (hence no shadows), it doesn't have a specular highlight
+and there are no reflected rays generated.  I've come to believe that my
+handling of the specular rays and highlights is wrong.  As far as the diffuse
+component goes I think the correct solution is quite a bit tougher.  I think
+that the proper solution would involve the effects of the light all along the
+ray as it passes through the transparent material.  In effect, transparent
+materials should be treated like participating media where you actually have a
+diffuse contribution and shadows cast throughout the volume.
+<P>
+When it comes to calculating the color of shadows Vivid/Bob gives you a couple
+of options.  With the no_exp_trans flag set, the light color is simply
+filtered by the transparent component of the material.  When this flag is not
+set (the default) the amount of the filtering is attenuated exponentially
+based on the distance the ray travels through the material.  Note that this
+has the side-effect of making the material definition scale dependent.
+Additionally Vivid/Bob also supports fake caustics.  For these, the color of
+the shadow ray is further tweaked based on the angle between the surface
+normal and the direction of the shadow ray.  This was inspired by Andrew
+Pearce's trick in Graphics Gems I.
+<P>
+____
+<P>
+From David Hook (an author of the "art" ray tracer):
+<P>
+Art traces the ray straight through the object checking for texturing and
+modifying the light passed through accordingly.  Apart from the texturing it
+doesn't seem to cause to much heartache computationally, although, as Greg
+Ward points out, going straight through without taking into account effects
+due to refraction fails to produce any caustics, which are the things that
+make refractive light the most interesting.  On the satisfaction-with-the-image
+side, we have another program using the same shading model that is used by
+architects, and the lack of caustics has never caused any problems.  I
+sometimes wonder if computer graphics people are the only ones who notice them!
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art9">
+Faster Bounding Volume Hierarchies,
+</A></FONT>
+by Brian Smits (<A HREF="mailto:bes@graphics.cornell.edu">bes@graphics.cornell.edu</A>) and Eric Haines
+</H4>
+[I'm writing up this idea that Brian passed on to me.  It turns out to be
+quite old, mentioned in Goldsmith's article and in Arvo & Kirk's section of
+_An Introduction to Ray Tracing_.  For whatever reason, I didn't know about it
+until Brian filled me in (guess I should read things a bit more carefully!).
+I haven't seen the idea applied to Kay & Kajiya's scheme, nor have I seen any
+test data about it or seen it used in any free ray tracing software.  It's
+pretty trivial to implement, so I recommend it. -EAH]
+<P>
+This article presents a simple way to improve the performance of automatic
+bounding volume hierarchy schemes.  Automatic bounding volume hierarchy
+methods are one way to improve the efficiency of ray tracing.  By putting
+objects in a nested hierarchy of bounding boxes and testing each ray against
+these, most of the objects in a scene can be quickly rejected as not
+intersecting the ray.  Goldsmith/Salmon & Scherson/Caspary explored methods of
+building up a hierarchy of bounding volumes automatically, as did Kay/Kajiya.
+<P>
+Kay & Kajiya simply built a hierarchy of boxes by sorting the object set by
+the object centroid locations in X, then Y, then Z.  For example, with a
+hundred objects in a scene the objects' 3D center points would be sorted by X,
+and then this sorted list would be split into two sublists of fifty objects
+each, with a box put around each list.  Each sublist in turn would be sorted
+by their Y centroid values and split into two subboxes with twenty-five
+objects each, on down until boxes with two objects are created at the bottom
+of the hierarchy.
+<P>
+Goldsmith & Salmon wished to group objects more tightly.  Splitting a list of
+objects may not be such a great strategy:  imagine that of our hundred
+objects, fifty one made up a light fixture and forty nine made up a stapler
+that the light shines upon.  Splitting into two groups of fifty means that one
+box will include all of the stapler and one piece of the light, and so giving
+a box which contains a large amount of empty area between the light and the
+stapler.  A tighter bound, e.g. having a box around the stapler and another
+around the light, would yield better timings.  Goldsmith & Salmon's strategy
+is to randomize the list of objects and feed these into a hierarchy, placing
+each new object in the hierarchy so as to minimize the overall growth in size
+of the boxes in the tree.  By randomizing the list the first few primitives
+will tend to create a "skeleton" upon which the rest of the primitives can
+efficiently become a part.  [See the <A HREF="rtnews2.html">RTNews2</A> file at princeton.edu for more
+information.]
+<P>
+Brian Smits implemented this scheme in his ray tracer, and Jim Arvo pointed
+out a simple speed up (mentioned in Goldsmith's article).  By trying different
+randomized lists, various different configurations of the hierarchy occur.
+These hierarchies can be analyzed by examining their efficiency.  The criterion
+Brian used is the internal cost of the root node (see p. 212 of
+_An Intro to RT_).  Another simple criterion is to sum up the areas of all of
+the bounding volumes.  Each configuration will generate a different value;
+using the hierarchy with the best value will generally improve performance,
+since fewer bounding volumes should be intersected overall.  So time can be
+saved overall by spending a little extra time up front generating a few
+different configurations using different random number seeds.  The best random
+number seed can be saved for a particular scene and reused later to generate
+this best hierarchy.  This is quite a nice thing for fly through animations in
+particular:  one can spend a lot of time up front getting a good hierarchy and
+then store just one number (the seed) for the best efficiency scheme for the
+scene.
+<P>
+Brian notes:  "I found that on some environments that a good hierarchy could
+take half to a third of the time of a bad hierarchy.  `Average' hierarchies
+tended to be closer to good hierarchies than bad hierarchies, though."
+<P>
+____
+<P>
+(Eric Haines) I have a few comments:
+<P>
+This same idea could be used on Kay and Kajiya.  Which axis is sorted first,
+and which order the axes are sorted (e.g. XYZ or XZY), gives six different
+generation combinations when using Kay and Kajiya.  By examining the fitness
+criterion of the boxes generated for each of these six, the tightest of the
+six can then be used.
+<P>
+I have a copy of POV 2.0beta sitting around which does Kay/Kajiya, so I hacked
+it to try the various combinations.  POV 2.0beta actually uses a different
+scheme than pure Kay/Kajiya:  it sorts each box along the longest axis.  For
+example, if you had 8 spheres in a row along the Z axis, it would come up
+(reasonably enough) with a hierarchy with each box's contents sorted along the
+Z axis.
+<P>
+Timings for Kay/Kajiya:
+<P>
+<PRE>
+        balls   gears   mount   rings   teapot  tetra   tree     shells
+
+longest  588    1895     668    1113      306     56     542      1464
+  area:    5214   881      205    30995     1514    74     74548    604068
+
+XYZ      513-   2019     639+   1158+     288+    54-    516      1661-
+  area:    4420-  938      195    29174+    1367    72     74361+   688388
+YZX      512    2316-    644    1188      292     52     531      1605
+  area:    4399  1071-     211    29944     1343    72     74402    686440
+ZXY      513-   1735+    659-   1215-     298     52     549      1554+
+  area:    4388   764+     233-   30936-    1334    72     85085-   649846+
+YXZ      507+   1916     656    1182      301-    52     514+     1658
+  area:    4420-  884      190+   29583     1456-   72     74557    696927-
+ZYX      513-   2006     658    1183      289     52     532      1572
+  area:    4385+  869      226    30254     1321+   72     74382    651506
+XZY      508    1892     642    1187      293     52     552-     1579
+  area:    4402   910      215    30066     1373    72     74616    673416
+</PRE>
+<P>
+"longest" is the "sort on the longest axis" scheme which comes with POV 2.0.
+"XYZ" means sort on the topmost level along X, then the subboxes along Y, then
+Z, etc.  The lowest value in a column (among the simple orderings) and
+category is marked with "+", the highest with "-".
+<P>
+As Brian notes, there's usually one bad hierarchy among the lot next to a
+bunch of reasonable ones.  There is some correlation between the area summation
+and the resulting rendering time:  "gears", in particular, has significantly
+different results and the best area summation is 1.33 times as fast as the
+worst (and the area of the best is 1.4 times smaller than the worst).  Most of
+the models have a fair bit of similarity along each axis.  Tetra's symmetry is
+a great example:  the axes' order just does not matter.  Gears does not, and
+so different schemes have significantly different results.  Using more
+realistic scenes would be interesting and probably give larger variances in
+results.
+<P>
+What's also interesting is that many of the simple XYZXYZ orderings beat the
+"pick the longest axis" method in overall timing.  In the "mount" and "shells"
+models the longest axis method is always better (in both timing and area
+summation), and in the "balls" and "teapot" models the longest axis is always
+the worst strategy.
+<P>
+Another scheme which deserves exploration is to sort on each axis, XYZ, and
+compare results:  using the axis which creates two boxes with the smallest
+total area would be an interesting strategy which should give fairly low area
+summations overall.
+<P>
+I suspect there is also not much difference between schemes because of the
+nature of the databases:  there's usually one object cluster instead of a few
+objects separated by distances (as would occur in a room, say), so the
+different schemes don't make too much difference.  I would also suspect wider
+variations when using Goldsmith/Salmon, as there is a lot more randomness and
+opportunity to seriously improve (or degrade) performance.  As it stands, for
+these models doing multiple hierarchies for Kay/Kajiya and picking the best
+doesn't save much time (maybe 4% on average) - kind of disappointing.  Using
+the absolutely longest axis doesn't seem to be a win for these scenes, though
+for other less homogeneous scenes it might perform better.  I don't know why
+it performs consistently worse for some databases; if nothing else, it does
+show that intuition is not always a good guide when designing new efficiency
+schemes.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art10">
+Simple Sun Position Program,
+</A></FONT>
+by James Ashton (<A HREF="mailto:jaa101@deakin.anu.edu.au">jaa101@deakin.anu.edu.au</A>)
+</H4>
+Guy Carpenter asks:<BR>
+&gt;I'd like to be able to specify lon, lat, elev, date, time and get an<BR>
+&gt;accurate position for the sun, and position, phase and orientation for<BR>
+&gt;the moon.  I think I have all the necessary alg's kicking around, so it<BR>
+&gt;shouldn't be too hard.<BR>
+&gt;<BR>
+&gt;- has anyone already done this?<BR>
+<P>
+I haven't done it very accurately but I did scrape together a quick and dirty
+Sun position generator in C.  It's only a rough approximation with no attempt
+to model the equation of time or lesser effects.  You provide latitude (in
+degrees), month (Jan 0th = 1.0, Dec 15th = 12.5, etc) and local time of day
+(midnight = 0.0, midday = 12.0) and it gives the (x, y, z) coordinates for a
+rayshade light source direction.  Z is up but I forget which axis I made
+North.  It was designed to aid in designing a `Solar house' and I'm sure it's
+accurate enough for that purpose.  It's a model of inefficiency but who cares!
+<P>
+<PRE>
+#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+
+#define DTOR(d) ((d) * M_PI / 180.0)
+#define SEASON_ANGLE(month) (sin(((month) - 9.7) / 6 * M_PI) * 0.41)
+#define HOUR_ANGLE(hour) ((hour) / -12 * M_PI)
+#define POSITION_ANGLE(latitude) (DTOR(latitude))
+
+double latitude, month, hour;
+
+main()
+{
+        double x, y, z;
+
+        for (;;)
+        {
+                if (scanf(" %lf %lf %lf", &latitude, &month, &hour) != 3)
+                {
+                        fprintf(stderr, "bad floats read\n");
+                        exit(1);
+                }
+                x = (-cos(SEASON_ANGLE(month)) * sin(HOUR_ANGLE(hour))),
+                y = (-sin(SEASON_ANGLE(month)) * cos(POSITION_ANGLE(latitude)) +
+                    cos(SEASON_ANGLE(month)) * cos(HOUR_ANGLE(hour)) *
+                    sin(POSITION_ANGLE(latitude))),
+                z = (-sin(SEASON_ANGLE(month)) * sin(POSITION_ANGLE(latitude)) -
+                    cos(SEASON_ANGLE(month)) * cos(HOUR_ANGLE(hour)) *
+                    cos(POSITION_ANGLE(latitude)));
+                printf("%f\t%f\t\t%f\n", x, y, z);
+        }
+}
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art11">
+Sphere and Cylinder/Cone/Disc/Annulus Definition,
+</A></FONT>
+by Eric Haines
+</H4>
+Jonathan Roy asked me what I liked for quadric definitions.  I worked on this
+question professionally a few years back, and thought I'd pass on what I found.
+<P>
+I like for a sphere:
+<P>
+<PRE>
+        radius, origin, axis for north pole, axis for start point on equator
+                (and optionally right or left-handedness)
+</PRE>
+<P>
+The axes are important when you're applying a texture to a surface (otherwise
+can be ignored).  Of course, the user doesn't have to see it this way.  For
+defining ellipsoids, no one bothers with defining the foci - you simply need
+to non-uniformly scale (e.g. stretch) a sphere with a transformation matrix.
+You have to be sure to stretch the normal equation for the sphere by the
+transpose of the adjoint of this matrix to get the normals right (see An Intro
+to Ray Tracing in Pat Hanrahan's section for a little more on this, and see
+old issues of this newsletter).
+<P>
+I like for cylinders/cones/annuli (i.e. "washers"):
+<P>
+<PRE>
+        base origin, axis vector, base radius, apex radius, height, axis for
+                starting texture point on equator
+</PRE>
+<P>
+This is real general and gives you three different primitives all in one.  In
+the code you will probably want separate intersectors for them, though (i.e.
+height of 0.0 means it's a washer and the cone equation will tend to explode
+at this height).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art12">
+Ray Tracing Roundup
+</A></FONT>
+</H4>
+Watt & Watt's book, _Advanced Rendering and Animation Techniques:  Theory
+and Practice_, is a good unified guide to advanced rendering in general and I
+highly recommend it.  Think of it as a condensed and simplified "Best of
+SIGGRAPH" for the past decade and you won't be too far wrong.  (Eric Haines)
+<P>
+________
+<P>
+The 3rd edition of the cross-indexed bibliography on ray-tracing and related
+topics is available.  Included in this edition will be some 600 citations,
+papers from all the major graphics conferences and full keywording of
+citations.  Cross-reference files (by keyword and author) and a glossary of
+the 120 keywords used are also slated for inclusion.  (Rick Speer,
+<A HREF="mailto:speer@cs.colorado.edu">speer@cs.colorado.edu</A>)
+<P>
+________
+<P>
+Texture Library Site
+<P>
+The beginning of a texture library for rendering applications is being
+started on
+        <A HREF="ftp://wuarchive.wustl.edu">wuarchive.wustl.edu</A>
+located in the
+        mirrors/architec
+<P>
+directory.  Please FTP the README file first.  There are around 100 texture
+images stored in compressed TIFF format.
+(Paul David Bourke, <A HREF="mailto:pdbourke@ccu1.aukuni.ac.nz">pdbourke@ccu1.aukuni.ac.nz</A>)
+<P>
+[I looked at the initial 40 of these.  Good idea, but only a very few of
+them were tileable (i.e. could be repeated seamlessly over a surface). -EAH]
+<P>
+________
+<P>
+Inventor 3D File Format, by Gavin Bell (<A HREF="mailto:gavin@sgi.com">gavin@sgi.com</A>)
+<P>
+You can do a great service to everybody if you avoid creating yet another 3D
+object file format and at least adopt Inventor's ASCII file format for your
+system.  If not the objects, at least the syntax, to make translation easy.
+Documentation on the file format is free-- you can anonymously ftp it from
+sgi.com:sgi/inventor/Doc.tar.Z.
+<P>
+________
+<P>
+Ray Traced Church Interiors
+<P>
+There is a series of five images of the interior of the Renaissance church "Il
+Redentore" in Venice.  The original (huge) Utah RLE images are available from:
+        <A HREF="ftp://cad0.arch.unsw.edu.au/pub/rayshade/images/Il_Redentore">cad0.arch.unsw.edu.au:/pub/rayshade/images/Il_Redentore</A>
+<P>
+The images were produced using Rayshade, the images and the model
+were created by Nathan O'Brien as part of his undergraduate dissertation
+"Building Preservation and Three Dimensional Computer Modelling" at UNSW.
+<P>
+These images are extremely good IMHO, and well worth the effort of getting!
+(Stephen Peter, <A HREF="mailto:steve@keystone.arch.unsw.edu.au">steve@keystone.arch.unsw.edu.au</A>)
+<P>
+____
+<P>
+You may ftp jpeg versions of them (perhaps for a limited time only) from:
+<A HREF="ftp://services.more.net/pub/jpg/Il_Redentore/">services.more.net</A> 128.206.20.15 (Columbia, Missouri, USA) in
+/pub/jpg/Il_Redentore.
+<P>
+These are not the jpegs which appeared on alt.binaries.whatever but
+were jpegs recreated from the original .rle files by me.
+(David Drum, <A HREF="mailto:UC512052@mizzou1.missouri.edu">UC512052@mizzou1.missouri.edu</A>)
+<P>
+________
+<P>
+My book is coming out in October and is called "Adventures in Raytracing,"
+published by QUE.  It covers Polyray from "top to bottom".  The book is
+dedicated to raytracing (with Polyray), 3d modeling (with POVCAD - my program)
+and animation.  The book has an almost complete reference on Polyray and it
+even includes a tear-out card with the command lines, language syntax, etc.
+It includes a disk with Polyray 386 (no 387) and 386/486 (+387) version,
+POVCAD (windows and Dos version) and CompuShow (image file viewer utility).
+<P>
+Right now I've also written a small utility called CLAY.ZIP which does free
+form deformation on RAW data files.  The output comes out as RAW also.  In
+addition I've written another utility to tween 2 RAW data files in Polyray -
+the good thing about it is that it can do linear, quadratic or cubic
+interpolation...  and the output from the utility is just 1 file independently
+of how many frames are required.  (Alfonso Hermida, <A HREF="mailto:afanh@stdvax.gsfc.nasa.gov">afanh@stdvax.gsfc.nasa.gov</A>)
+<P>
+________
+<P>
+I've just completed a book on 3D graphics animation with Dave Mason called
+"Making Movies on Your PC".  Lots of pretty pictures, mostly beginners tips on
+creating FLI/FLC format animations on IBM clones.  (Alexander Enzmann,
+<A HREF="mailto:70323.2461@compuserve.com">70323.2461@compuserve.com</A>)
+<P>
+[This book also includes Polyray and 2D morphing software. -EAH]
+<P>
+________
+<P>
+YART 0.40 - a Fast Growing Framework for Obj.Or.Graphics, Ekkehard Beier
+        (<A HREF="mailto:ekki@prakinf.tu-ilmenau.de">ekki@prakinf.tu-ilmenau.de</A>)
+<P>
+The time is good for a new graphics system, including both ray-tracing and
+gouraud shading facilities!  This system should be object-oriented, highly
+extensible and highly interactive (Real-time raytracing or real-time shading
+and raytracing if explicitly wanted).  Using SGI GL/PHIGS[PEX]...-shading for
+built-in modelling and direct interaction, and Raytracer for HiQuality final
+images.
+<P>
+<PRE>
+        * YART - Yet Another Ray Tracer *
+</PRE>
+<P>
+is a first implementation of such a system.
+<P>
+*there is a mailing list: <A HREF="mailto:yart@prakinf.tu-ilmenau.de">yart@prakinf.tu-ilmenau.de</A>
+<P>
+*PLATFORMS: SGI Iris, SUN Sparc, Linux-PC, [MS Windows - in work]
+<P>
+ftp from <A HREF="ftp://metallica.prakinf.tu-ilmenau.de">metallica.prakinf.tu-ilmenau.de</A> [141.24.12.29] : pub/PROJECTS
+(login as "ftp", password "HARLEY FUCKIN' DAVIDSON").
+<P>
+*PRECONDITIONS: C++ (At&T cfront 2.1), Tcl, GL or X11 or PHIGS PLUS.
+<P>
+[There's lots more text, contact the author for more info. -EAH]
+<P>
+________
+<P>
+General software:
+<P>
+3DS2POV is a utility that converts 3D Studio files to POV-Ray, Vivid, Polyray,
+or raw triangle formats.  A bounding volume hierarchy is added to the POV-Ray
+files.  The latest version converts from the binary .3DS format where previous
+versions used the ascii format.  If you've got the time (or a Cray) it'll
+convert whole animation sequences as well.  This program is on the YCCMR BBS
+and the TGA BBS as 3DSPOV17.ZIP.  Both DOS binaries and C source are included.
+(Steve Anger, <A HREF="mailto:70714.3113@CompuServe.COM">70714.3113@CompuServe.COM</A>)
+<P>
+________
+<P>
+[I haven't mentioned BRLCAD for awhile, so here's a blurb:]
+<P>
+The US Army BRLCAD package (<A HREF="mailto:brl@cad.mil">brl@cad.mil</A>) -- Ballistic Research Laboratory
+  is available as encrypted source code via anonymous ftp from:
+       <A HREF="ftp://ftp.brl.mil/brl-cad/">ftp.brl.mil:/brl-cad/</A>*
+  FAX a completed copy of the 'agreement' file to BRL for the 'crypt' key.
+  BRLCAD is very mature -- also runs in parallel on a heterogeneous mixture
+    of systems -- image quality is good -- but perhaps not extraordinary.
+  (Alexander-James Annala)
+<P>
+[It really does look like an amazing system, worth checking out if you plan
+on doing any "serious" modeling, esp. CAD related. - EAH]
+<P>
+________
+<P>
+Radiance related:
+<P>
+A fellow by the name of Georg Mischler of ETH in Zurich, Switzerland, has
+written a new translator for exporting Radiance files from within AutoCAD.
+This new AutoLISP program seems to be quite capable, and he has installed
+it in the pub/translators directory on the anonymous ftp account of
+<A HREF="ftp://hobbes.lbl.gov">hobbes.lbl.gov</A> (128.3.12.38).  I invite users with AutoCAD to try it out.
+(Gregory J. Ward, <A HREF="mailto:greg@hobbes.lbl.gov">greg@hobbes.lbl.gov</A>)
+<P>
+________
+<P>
+Rayshade related:
+<P>
+I have just compiled the 'Enhanced' version of Rayshade (patchlevel 6) for a
+PC running MSDOS and it appears work fine.  You can get it from
+        <A HREF="ftp://telva.ccu.uniovi.es/pub/graphics/raytrace/rayshade/MSDOS/">telva.ccu.uniovi.es</A> (156.35.31.31):
+        /pub/graphics/raytrace/rayshade/MSDOS/Erayshade.for.PC.zip.
+You'll need a 486 ( yeah, you'll can run it on a 386, but S...L...O...W ).
+Also I packed a shower and a converter from/to the RLE file format.
+(Raul y Quique, nuevos%hp400.ccu.uniovi.es@Princeton.EDU)
+<P>
+____
+<P>
+I am placing in <A HREF="ftp://weedeater.math.yale.edu/incoming">weedeater.math.yale.edu:/incoming</A> 3 executables:
+        getX11, <A HREF="ftp://rayshade.4.0.6">rayshade.4.0.6</A>, raypaint.4.0.6
+which have been ported to SCO UNIX & Univel SVR.  They will run in both
+environments.
+<P>
+These have been optimized for INTEL 486 & Pentium processors to use on-chip
+FPU & cache memory.  (Robert Walsh, SCO (<A HREF="mailto:robertwa@sco.com">robertwa@sco.com</A>))
+<P>
+____
+<P>
+I have just uploaded a port of rayshade 4.0.6enh2 to OS/2 2.1 to
+weedeater.math.yale.edu.  Most of the patches posted through July 20, 1993 to
+this list have been added.  (David C.  Browne, <A HREF="mailto:DBROWNE@diamond.kbsi.com">DBROWNE@diamond.kbsi.com</A>)
+<P>
+____
+<P>
+Check out the June issue of Omni Magazine, page 52.
+<P>
+The "computer-generated image of HIV created on a Cray Super Computer"
+was done with Rayshade.  It really looks much larger in person :-):-).
+A larger version of this image may be found on:
+<P>
+<PRE>
+        <A HREF="ftp://fconvx.ncifcrf.gov">fconvx.ncifcrf.gov</A>
+</PRE>
+<P>
+in tmp/rayshade as virion.rle.Z.  For more info you can contact me at
+<A HREF="mailto:mcgregor@ncifcrf.gov">mcgregor@ncifcrf.gov</A> or Connor McGrath at mcgrath@ncifcrf.gov.  (Please see
+the acknowledgment.txt file for a few more details).
+<P>
+________
+<P>
+RTrace/Radiosity related:
+<P>
+The "lightR" radiosity program from Bernard Kwok (<A HREF="mailto:ae140@freenet.carleton.ca">ae140@freenet.carleton.ca</A>)
+is now available to run in a PC with DOS DJGPP GO32 extender.  You can ftp a
+working version with some scenes and utils at <A HREF="ftp://asterix.inescn.pt">asterix.inescn.pt</A>
+[192.35.246.17] in directory pub/LightR/PC-386 (lightr12.arj) The source code
+is in pub/LightR/PC-386/src (lightr.arj) I found the program very interesting
+and it helped me to learn a lot about Radiosity (a rendering algorithm).  I
+have also adapted its output to the RTrace ray tracer so that nice images
+could be produced:
+<P>
+<PRE>
+             lightr          scn2sff         rtrace
+   PAT, VW ----------&gt; SCN ----------&gt; SFF ----------&gt; PIC PPM
+</PRE>
+<P>
+I included minimal docs and specs, but I intend to improve this area in the
+future...  Please feel free to contact me.  (Antonio Costa,
+<A HREF="mailto:acc@asterix.inescn.pt">acc@asterix.inescn.pt</A>)
+<P>
+____
+<P>
+There is a new version of the RTrace ray-tracing package (8.3.2) at
+<A HREF="ftp://asterix.inescn.pt">asterix.inescn.pt</A> [192.35.246.17] in directory pub/RTrace.  Check the README
+file.
+<P>
+RTrace now can use the SUIT toolkit to have a nice user interface.  Compile it
+with -DSUIT or modify the Makefile.  SUIT is available at
+<A HREF="mailto:suit@uvacs.cs.virginia.edu">suit@uvacs.cs.virginia.edu</A>
+<P>
+____
+<P>
+I have put in pub/RTrace here 2 PostScript docs describing the syntax of both
+SFF and SCN.  I would many people to read them and send me comments, if
+possible...  The files are sffv8-p?.ps.Z and scn15-p?.ps.Z
+(Antonio Costa, <A HREF="mailto:acc@asterix.inescn.pt">acc@asterix.inescn.pt</A>)
+<P>
+[There are undoubtedly a large number of other changes and additions to RTrace
+by this time; Antonio seems to have unlimited time and energy for this thing!
+For example, I noticed he now has an IRIS Inventor input interpreter.  Check
+with him for the latest.  -EAH]
+<P>
+________
+<P>
+Vivid/Bob related:
+<P>
+<PRE>
+Triangular Glob Generator v1.0
+copyright 1993, Dov Sherman
+</PRE>
+<P>
+(For use with Stephen Coy's Vivid Raytracer v1.0 or higher)
+<P>
+GLOB is a handy utility for creating more realistic, rounded objects without
+relying on bezier patches (which are still good but hard to work out on
+paper).
+<P>
+GLOB takes an ASCii file containing the coordinates and radii of a series of
+spheres and creates smooth connections between each sequential pair,
+connecting the first and third spheres in each sequential triple, and placing
+a triangular polygon over the gap created by a sequential triple.  I'll try to
+explain this better later.
+<P>
+The output is in the form of an include file for Stephen Coy's Vivid
+Raytracer.  Other raytracer formats may be supported in future versions if I
+ever manage to figure out the other ones.
+<P>
+GLOB10.ZIP is available from wuarchive.wustl.edu.  I just put it in
+/pub/MSDOS_UPLOADS/graphics.  Also available on the You Can Call Me Ray BBS.
+<P>
+(Dov Sherman, <A HREF="mailto:DS5877@CONRAD.APPSTATE.EDU">DS5877@CONRAD.APPSTATE.EDU</A>)
+<P>
+________
+<P>
+POV related:
+<P>
+<PRE>
+Ray Tracing Creations
+Drew Wells, Chris Young, Dan Farmer
+The Waite Group
+1993
+ISBN 1-878739-27-1
+</PRE>
+<P>
+This book covers the POV ray tracer from soup to nuts, with lots of examples
+and whatnot.  Essentially, it's a users manual for POV, and it comes with
+POV 1.0 on disk.  (Eric Haines)
+<P>
+____
+<P>
+There's a new GUI modeller call MORAY out for POV-Ray. This is the most
+complete modeller for POV-Ray I've seen so far. It supports most of POV-Ray's
+primitives, CSG, hierarchical linking, and has an nice bezier patch editor.
+Here's a short description from the docs:
+<P>
+MORAY V1.3 is an easy-to-use GUI modeller for use with POV-Ray 1.0 (and 2.0
+when released). It supports the cube, sphere, cylinder, torus, cone,
+heightfield and bezier patch primitive, as well as adding conic, rotational
+and translational sweeps. You can add (spot)lights, bounding boxes, textures
+and cameras, which show the scene in wireframe 3D. Shareware US$59.
+Not crippled.  Requires 286 or higher, mouse, runs on VGA and SVGA/VESA.
+<P>
+MORAY version 1.3 is available at <A HREF="ftp://ftp.informatik.uni-oldenburg.de/pub/">ftp.informatik.uni-oldenburg.de</A> in
+/pub/dkbtrace/incoming.  (Steve Anger, <A HREF="mailto:70714.3113@CompuServe.COM">70714.3113@CompuServe.COM</A>)
+<P>
+____
+<P>
+No, POV 2.0 is not out yet.  To whet your appetite:
+<P>
+POV 2.0 includes automatic bounding boxes, better textures, recursive
+antialiasing, primitives for finite cylinders & cones.  The parser will now
+accept mathematical expressions for vectors and floating point numbers.  It
+also has some bugfixes.
+<P>
+____
+<P>
+When using PoV on a X window based Unix system as f.i. Linux, you may use
+my x256q Previewer code instead of the xwindows code that comes with PoV.
+<P>
+It resides on <A HREF="ftp://irz301.inf.tu-dresden.de:pub/gfx/ray/misc/x256q">irz301.inf.tu-dresden.de:pub/gfx/ray/misc/x256q</A>
+(Andre Beck, <A HREF="mailto:beck@irzr17.inf.tu-dresden.de">beck@irzr17.inf.tu-dresden.de</A>)
+<P>
+____
+<P>
+Check out the 3d l-system generator (ms-dos) for POV-Ray raytracer I found on
+the graphics alternative bbs 510-524-2780.  the qbasic source makes a raw
+coordinate file for input to raw2pov for smooth_triangle output.  3 examples
+from 'algorithmic beauty of plants' provides about 8 variables that one can
+fuss with to produce diff shape trees/bushes.  uploaded as treebas.zip to
+<A HREF="ftp://ftp.informatik.uni-oldenburg.de:pub/dkbtrace/incoming/">ftp.informatik.uni-oldenburg.de:pub/dkbtrace/incoming/</A> (mirrored on
+wuarchive.wustl.edu:graphics/graphics/mirrors/ftp.infor...)  (Tony Audas,
+<A HREF="mailto:taudas@umcc.umcc.umich.edu">taudas@umcc.umcc.umich.edu</A>)
+<P>
+____
+<P>
+I use POVRAY and the small Makeanim program to do animation - using makeanim
+you create a file with a series of movement variables - and it #defines them
+into the .pov code and raytraces them all in sequence.  So if you want a
+camera pan diagonally upward, your .anm file should look like:
+        pan_x,  pan_y
+        0,      0
+        1,      1
+        2,      2
+etc...  It will define these for you, and they should be used instead of x
+and y in your camera definition.  Makanim will only handle 20 variables,
+unfortunately, so you can really only make 20 or less things move - but if
+you move the camera around, this can make up for things.
+(Dane Jasper, <A HREF="mailto:dane@nermal.santarosa.edu">dane@nermal.santarosa.edu</A>)
+<P>
+____
+<P>
+RAW2POV is a utility that converts triangle data listed in xyz triplets to
+POV-Ray smooth triangles.  It automatically adds its own bounding volume
+hierarchy to overcome POV-Ray's lack of an efficiency scheme.  This program is
+on the YCCMR BBS and the TGA BBS as RAWPOV17.ZIP.  Both DOS binaries and C
+source are included.  [Also see 3DSPOV writeup above] (Steve Anger,
+<A HREF="mailto:70714.3113@CompuServe.COM">70714.3113@CompuServe.COM</A>)
+<P>
+____
+<P>
+If you have any comments or suggestions about POVCAD please let me know.  The
+home of POVCAD is Pi Square BBS (301)725-9080 in Maryland USA.  You may
+download POVCAD (DOS or Windows version) and get the latest info on it.
+[POVCAD is up to version 2.0b for Windows by now, and has more features than
+the non-Windows version); there are also rumors that an X-Windows version may
+be forthcoming.  -EAH] (Alfonso Hermida, <A HREF="mailto:afanh@stdvax.gsfc.nasa.gov">afanh@stdvax.gsfc.nasa.gov</A>)
+<P>
+____
+<P>
+A lot of developers (A. Hermida, Lutz Kretschmar, Dan Farmer, Stephen Coy)
+also hang out the PCG (Professional CAD Graphics Net).  You can get access to
+this net via the BBS'es mentioned in the PoV docs, and in Europe via BBS
+Bennekom, fido node 2:281/283, telephone 31-8389-15331.  Using Bluewave, I can
+read and write in the echos for free.
+(Han-Wen Nienhuys, <A HREF="mailto:hanwen@STACK.URC.TUE.NL">hanwen@STACK.URC.TUE.NL</A>)
+<P>
+____
+<P>
+In the PC world, I have use a program called VVFONT.  It uses the stroke fonts
+in borland and produces the characters as unions of spheres, codes, planes,
+boxes, cylinders, etc.  It produces very good results and allows for rounded,
+block, and beveled format for POV, DKB, and Vivid ray tracers.  If I don't see
+it on the net, I will check with the author and download it somewhere and post
+the location if there is any interest shown.
+(Mike Hoyes, <A HREF="mailto:hoyes@rock.concert.net">hoyes@rock.concert.net</A>)
+<P>
+____
+<P>
+I've uploaded my (uppercase only) alphabet to
+<A HREF="ftp://ftp.informatik.uni-oldenburg.de:pub/dkbtrace/incoming">ftp.informatik.uni-oldenburg.de:pub/dkbtrace/incoming</A> (or some such place...
+you know the one I mean).  The letters consists of cylinders and torii,
+suitably bounded for performance reasons.  There is also a utility for writing
+strings, and two sample .pov files.  Oh yes, almost forgot.  The file is
+called 'beta.zip' (as there is already an alpha.zip...  Imaginative, huh?)
+(Reidar "Radar" Husmo, <A HREF="mailto:radar@cs.keele.ac.uk">radar@cs.keele.ac.uk</A>)
+<P>
+____
+<P>
+There are a few other ways to render text.  Look in
+<A HREF="ftp://ftp.informatik.uni-oldenburg.de">ftp.informatik.uni-oldenburg.de</A>: pub/dkbtrace, there are two alphabet pov
+files, alpha.zip and beta.zip, examples of using pov shape_types in
+creating 3D text.  Another way I can think of is to use the
+connect-the-dots utility to create letters. Further possibilities include
+using Vision 3D's extruder to extrude the text and output DXF, then convert
+to pov triangles.  A third method I think may work is to use Paul Bourke's
+"BitSurface" utility which converts bit-maps to DXF, and again convert to pov.
+(Helmut Dotzlaw, <A HREF="mailto:dotzlaw@CCU.UMANITOBA.CA">dotzlaw@CCU.UMANITOBA.CA</A>)
+<P>
+____
+<P>
+I produce fonts for PoV commercially [see <A HREF="rtnv6n2.html">RTNv6n2</A> for more info.  -EAH].
+For a demo, and some sample letters, have a look in
+<A HREF="ftp://ftp.informatik.uni-oldenburg.de/pub/">ftp.informatik.uni-oldenburg.de</A> pub/dkbtrace/incoming or pub/dkbtrace/utils
+for some of these:
+<P>
+<PRE>
+avantest.zip    38988  21/10/92   5:14
+fntbench.zip    33628  21/02/93  17:25
+fntsamp.zip    132164  23/07/93   5:58
+tms_rom.jpg     27560  21/02/93  17:28
+</PRE>
+<P>
+Kirk2.jpg illustrates the use of the fonts in a more professional capacity.
+(Andrew Haveland-Robinson, <A HREF="mailto:andy@OSEA.DEMON.CO.UK">andy@OSEA.DEMON.CO.UK</A>)
+<P>
+____
+<P>
+  One of the best utilties I've found for POV is called SP - Dave's Spline-
+Path Generator.  You can find this on the You Can Call Me Ray BBS.  Basically,
+you make a data file of a number of points and some other information, and
+SP will calculate position and rotations for your camera.  You can do
+acceleration/deceleration, etc... with it as well.  Its downfall (at least
+as of version 0.3) is that it only does one frame at a time (you tell it
+which of the N frames to compute).  It's relatively easy to make a batch
+file for this, though.  (Jason Barile, <A HREF="mailto:barilejb@ctrvax.vanderbilt.edu">barilejb@ctrvax.vanderbilt.edu</A>)
+<P>
+____
+<P>
+A good many of the utilities for POV-Ray have been designed to use what we
+call ".raw" format (bare vertex data) which can be bound very tightly in a
+hierarchical structure of bounding boxes by a utility by Steve Anger, called
+RAW2POV.  RAW2POV can also do Phong interpolation on the triangles if desired.
+Any serious raytracing of large triangle databases in POV 1.0 is done with
+data that has been processed by RAW2POV.  (Nobody tries it twice without it!)
+(Dan Farmer CIS[70703,1632])
+<P>
+____
+<P>
+POV on Mac utilities:
+<P>
+Thanks to "The Evil Tofu", I was recently made aware of a collection of
+utilites for POV which have been ported to the Mac by Eduard [esp] Shwan,
+of the Compuserve Group, called POV Mac Utilities 1.1.  With kind permission
+of the author, it has been uploaded to the Internet.
+<P>
+<PRE>
+The application contains the following utilities:
+Coil Generator - Bill Kirby
+Connect the Dots (CDTS) - Truman Brown
+Dat2POV - Drew Wells
+DXF2POV - Aaron A. Collins
+"Lissa" Lissajous Generator - Eduard [esp] Schwan
+POV Suds Generator - Sam Hobbs & Dan Farmer
+Raw2POV - Steve Anger
+Shell Generator - Dan Farmer
+Sponge Generator - Stephen Coy
+Swoop - Douglas Otwell
+</PRE>
+<P>
+Also I think worthy of mention is that Paul D. Bourke's Vision-3D modeller
+for the Mac, which can export DXF files, supports lathing and extruding
+capabilities. Hmm, I wonder if I lathed something and used  Mac POV Utils to
+generate a DXF -&gt; POV?  Paul has also recently written a program,
+BitSurface, which will generate DXF from bitmap files.  Hmm, again....
+<P>
+Mac POV Utils 1.1 can be found at <A HREF="ftp://summex-aim.stanford.edu/info-mac/grf/util/">summex-aim.stanford.edu</A>,
+/info-mac/grf/util/pov-utilities-11.hqx    Freeware.
+<P>
+Vision-3D and BitSurface can be found at <A HREF="ftp://wuarchive.wustl.edu/mirrors/architec/">wuarchive.wustl.edu</A>,
+/mirrors/architec    Shareware.
+<P>
+(Helmut Dotzlaw, <A HREF="mailto:dotzlaw@CCU.UMANITOBA.CA">dotzlaw@CCU.UMANITOBA.CA</A>)
+<P>
+____
+<P>
+&gt;    Does anyone have a leaf generator ?  a tree generator ? flowers ?<BR>
+Look at treebas (tree generator in qbasic (msdos))<BR>
+<P>
+&gt;    Is there a technique for getting that rainbow effect that you see on a<BR>
+&gt;      Compact Disc ?<BR>
+Look at the texture in bubble.pov (an iridescent, shimmering rainbow smear).<BR>
+<P>
+Both are available by anonymous ftp in
+<A HREF="ftp://ftp.informatik.uni-oldenburg.de:pub/dkbtrace/incoming">ftp.informatik.uni-oldenburg.de:pub/dkbtrace/incoming</A>
+mirrored on wuarchive.wustl.edu:graphics/graphics/mirrors/ftp.infor...
+(Tony Audas, <A HREF="mailto:taudas@UMCC.UMICH.EDU">taudas@UMCC.UMICH.EDU</A>)
+<P>
+________
+<P>
+Xmgf 1.1 Motif based 3D Object Viewer
+<P>
+<PRE>
+xmgf can be found on
+        <A HREF="ftp://export.lcs.mit.edu/contrib/">export.lcs.mit.edu</A> in /contrib
+files:
+        xmgf.README
+        xmgf.1.1.tar.Z
+You'll need MOTIF and patience (:-))
+Have fun and feedback will be welcomed (good and bad!:-(
+(Paul Hoad, P.Hoad@ee.surrey.ac.uk)
+</PRE>
+<P>
+________
+<P>
+SIGGRAPH May issue on-line
+<P>
+By popular demand, we have created a tar'ed and compress'ed version of the
+May '93 experimental online edition of the SIGGRAPH "Computer Graphics"
+newsletter.  It is in file
+<P>
+<PRE>
+   ~ftp/publications/May_93_online/May_93_online.tar.Z
+</PRE>
+<P>
+available via anonymous ftp from siggraph.org.  This file contains the
+PostScript version of the newsletter.  It is 3.2MB in size compressed and
+uncompresses to 15MB.  (Sue Mair, <A HREF="mailto:mair@ucs.ubc.ca">mair@ucs.ubc.ca</A>)
+<P>
+________
+<P>
+A friend of mine Jason Wilson created a very basic radiosity package.
+This package runs on the Next Platform(version 3.0 or higher).
+<P>
+<PRE>
+   <A HREF="ftp://ftp.cs.rose-hulman.edu/pub/">ftp.cs.rose-hulman.edu</A>
+  under
+    pub/CS_dept
+  file
+    NeXtrad.tar.Z
+</PRE>
+<P>
+(Leslie Donaldson, <A HREF="mailto:Donaldlf@cs.rose-hulman.edu">Donaldlf@cs.rose-hulman.edu</A>)
+<P>
+________
+<P>
+MacCubeView 1.0.0
+<P>
+A 3D image display programme for the Macintosh is now available via anonymous
+ftp from <A HREF="ftp://ftp.hawaii.edu/mirrors/info-mac/sci/mac-cube-view-16.hqx">
+ftp://ftp.hawaii.edu/mirrors/info-mac/sci/mac-cube-view-16.hqx</A>.
+This programme is suitable for
+viewing 3D eight bit medical images.  A 3D MR image of the author's head is
+included.  (Daniel W. Rickey,
+<A HREF="mailto:physics@escape.ca">physics@escape.ca</A>)
+<P>
+________
+<P>
+Some weeks ago we sent a public message with the press-release of Real-Light
+1.0, a radiosity based rendering package.  People interested in watching some
+RGB image of environments created by Real-Light can take them by anonymous ftp
+at:
+<P>
+<PRE>
+        <A HREF="ftp://ftp.iunet.it/">ftp.iunet.it</A> (192.106.1.6)
+</PRE>
+<P>
+in the directory:
+<P>
+<PRE>
+        ~ftp/vendor/Atma
+</PRE>
+<P>
+(Cristiano Palazzini, <A HREF="mailto:atma@relay1.iunet.it">atma@relay1.iunet.it</A>)
+<P>
+________
+<P>
+There is an interesting 3D Space Shuttle model database in .dxf (AutoCad),
+.nff (neutral file format for Sense8) and .vid (amiga VideoScape)
+<P>
+<PRE>
+ftp anonymous:  <A HREF="ftp://artemis.arc.nasa.gov">artemis.arc.nasa.gov</A>  (128.102.115.149)
+in /sig-wtk/models directory
+(Emerico Natonek, <A HREF="mailto:natonek@imtsg5.epfl.ch">natonek@imtsg5.epfl.ch</A>)
+</PRE>
+<P>
+________
+<P>
+|> Is there any public domain code out there for generating polygonal models
+|> of human faces given a small set of parameters?
+<P>
+There are some things available by anonymous ftp to <A HREF="ftp://wuarchive.wustl.edu">wuarchive.wustl.edu</A>,
+under graphics/graphics/misc/facial-animation.
+(James R. (Jim Bob) Bill, <A HREF="mailto:jimbob@rainier.ucsc.edu">jimbob@rainier.ucsc.edu</A>)
+<P>
+________
+<P>
+Thanx to Juhana the PostScript version of my thesis can be obtained from:
+        <A HREF="ftp://nic.funet.fi:pub/sci/papers/graphics/suma93.tar.gz">nic.funet.fi:pub/sci/papers/graphics/suma93.tar.gz</A>
+                (1115072 bytes)
+<P>
+<PRE>
+He promises that it will be made available from:
+        <A HREF="ftp://princeton.edu:pub/Graphics/Papers/suma93.tar.gz">princeton.edu:pub/Graphics/Papers/suma93.tar.gz</A>
+</PRE>
+<P>
+The file is GNU zip compressed.  (He says GNU zip gives him better
+compression.)  So `gunzip' has to be used for uncompression.
+(Sumanta N. Pattanaik, <A HREF="mailto:sumant@saathi.ncst.ernet.in">sumant@saathi.ncst.ernet.in</A>)
+<P>
+<PRE>
+%A Sumanta N. Pattanaik
+%T Computational Methods for Global Illumination and Visualisation of Complex
+3D Environments
+%R PhD thesis
+%I Birla Institute of Technology & Science, Computer Science Department,
+Pilani, India
+%D November 1990
+%K adjoint illumination equations, particle model of light, random walk,
+importance sampling
+</PRE>
+<P>
+________
+<P>
+Given the number of modelers coming out for ray tracers (IRIT 4.0 should be
+out soon, by the way), I thought I should give a plug to Ken Shoemake's
+wonderful ArcBall technique for interactive rotations of objects.  The
+original paper is:
+<P>
+<PRE>
+AUTHOR       = "Ken Shoemake",
+TITLE        = "ARCBALL: A User Interface for Specifying Three-Dimensional
+Orientation Using a Mouse",
+PROCEEDINGS  = Graphics Interface '92,
+YEAR         = 1992,
+PAGES        = pp151
+</PRE>
+<P>
+It's a very intuitive, easy to implement technique which can be used for
+unconstrained or constrained rotations.  I needed one hint to understand the
+full functionality of the technique; other than that, it was obvious to use.
+The short paper (available on the net for the Mac, see below) explains it all.
+(Eric Haines)
+<P>
+____
+<P>
+An example written for the Mac by Shoemake is available on <A HREF="ftp://linc.cis.upenn.edu">linc.cis.upenn.edu</A>
+in the directory /pub/graphics/arcball.  The file arcball is the example,
+while the arcball-paper is the GI paper.
+<P>
+Note: to decode the files, you need to use BinHex 4.0.  BinHex 5.0
+will not work for these files, unless you are willing to edit off
+the heading portion of them.
+(Duanfeng He (Jackson), Duanfeng.He@AtlantaGa.NCR.com)
+<P>
+____
+<P>
+I have a version of Shoemake's ArcBall I wrote and I'm making it available.
+You'll have to do some work, however, as it uses my graphics library.  You
+have to know enough about programming in your own 3d library to be able to
+convert some types and routines, although it will be _really_ simple ...  a
+matter of finding equivalents for types such as vectors and matrices, and
+using your own draw routines.  If you use something like GL, it will be
+trivial, as that's what my graphics library is based on.
+<P>
+<PRE>
+It's available on
+        <A HREF="ftp://cs.columbia.edu:pub/bm/arcball">cs.columbia.edu:pub/bm/arcball</A>
+</PRE>
+<P>
+That said, I'd like to thank Ken for his excellent paper.  The ARCBALL concept
+aside, the arc drawing routines are pretty darn cool.  :-)
+<P>
+(Blair MacIntyre, <A HREF="mailto:bm@shadow.columbia.edu">bm@shadow.columbia.edu</A>)
+<P>
+________
+<P>
+Hidden surface renderer (well, it's not really ray tracing related, but I'm
+not a purist):
+<P>
+&gt;I'm after a Gourand Z-buffer polygon scanline example. The one in<BR>
+&gt;Gems I (PolyScan) looks pretty good but as poly_scan.c is dated<BR>
+&gt;1985 and 1989, I was wondering if any improvements or optimizations<BR>
+&gt;have been made (or bug fixes). I haven't used the code as it is<BR>
+&gt;but am looking around before writing my own redering library.<BR>
+<P>
+You may want to grab libXG-2.0.tar.Z from
+<A HREF="ftp://ftp.ai.mit.edu/pub/users/sundar/">
+ftp.ai.mit.edu
+</A>
+down
+(pub/users/sundar).  It has examples of sutherland-hodgman clipping, z-buffer
+scanline code etc.  The doc directory contains a postscript manual which
+documents all the functions.  (This is a 3-d graphics library that runs under
+X).
+<P>
+It doesn't aim to be super-fast, but it does handle multiple-polygons with
+loops (or holes), inter-penetrating polygons, polygons with cyclical overlap
+etc.  (Sundar Narasimhan, <A HREF="mailto:sundar@ai.mit.edu">sundar@ai.mit.edu</A>)
+<P>
+________
+<P>
+Least impressive ray tracer dept:
+<P>
+A recent issue of RS/Magazine has an article on using the IBM RS/6000 for
+mechanical CAD and they found it worthwhile to include a picture of an RX/6000
+displaying a ray traced picture of a first level sphereflake.  They liked it
+so much they used it three times!  But, since it's only first level (a big
+sphere surrounded by several spheres just a bit smaller) it doesn't exactly
+cry out that the RS/6000 is a power cruncher, does it.  (Tim O'Connor)
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art13">
+Simple Sphere Tessellation,
+</A></FONT>
+by Mike Castle (<A HREF="mailto:mcastle@cs.umr.edu">mcastle@cs.umr.edu</A>)
+</H4>
+How sphere.c works (at wustl and other places):
+<P>
+Start off with 6 points on a unit sphere (1,0,0), (-1,0,0), (0,1,0),
+(0,-1,0), (0,0,1), (0,0,-1). These form a octahedron.  Each of the 8 triangles
+is taken one at a time.
+Take one triangle, and choose its midpoint (by averaging the coordinates of
+the three points).  Normalize that point, so it's now projected back onto the
+unit sphere.  Replace the original triangle with 3 triangles, based on the
+original 3 points, and the new 4th point.  Recurse.  (the level of recursion
+is user specified).
+<P>
+Voila, tessellated sphere.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art14">
+Syndesis CD-ROM Review,
+</A></FONT>
+by Eric Haines
+</H4>
+This is the CD-ROM mentioned last issue.  It contains more than 600 models and
+more than 400 textures, and costs $200.  I received a review copy during
+SIGGRAPH, and it's an interesting collection.  The collection was made as a
+way of publicizing Syndesis' InterChange Plus software, which converts 3D
+model data in various formats.
+<P>
+Though it's ISO-9660 and all that, I still had problems reading it on the
+Gateway CDROM drive next to me.  I don't know where the problem lay, but our
+systems administrator said such problems are fairly common.  I was able to
+read the CDROM on other drives just fine.
+<P>
+There are, of course, a ton of files on the disk.  There should also be more
+disks in the future, and Mr. Foust has a policy in which contributors whose
+creations are accepted get a free disk; contact him for more information.  In
+fact, if you can identify yourself as the author of any of the works on this
+first disk, you can get a free disk (a bit of a "key locked in the treasure
+chest" situation, admittedly, since you pretty much need the disk to see if
+your creation is on it).
+<P>
+The book that comes with the disk is quite useful, as it has thumbnail
+grayscale images of some of the textures and some of the models included on the
+disk.  Unfortunately, not all of them are shown; only about 160 of the 600
+models are displayed, and the synthesized textures are not shown.  However,
+the models are all listed with descriptive titles, and there is also an index
+which can be pretty helpful.  On the disk there are summary images of the
+textures available, showing thumbnail sketches of all textures available.
+<P>
+The models come in 3D Studio, Autocad DXF, Imagine IOB, Wavefront OBJ, and
+Lightwave formats.  (I should note that it's pretty easy to convert from IOB
+to many formats by using the converter at <A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/objects/TDDD/">wuarchive.wustl.edu</A> in
+/graphics/graphics/objects/TDDD).  The models vary in quality, of course, but
+the disk is not a collection of every free model ever made; while limited to
+what was out there for free, there are few trivial or poorly modeled objects.
+The scope is quite amazing, and Syndesis has done quite a job in making this
+collection.
+<P>
+On the disk there are some interesting models from Viewpoint which were
+supposed to be in their SIGGRAPH '93 free distribution, but in fact were not
+distributed there (they distributed a bunch of beach related models instead):
+a car, Big Ben, a deer head, elbow bones, and various military hardware.
+<P>
+The textures are all tileable and in TIFF/GIF/IFF formats.  It's a little
+annoying that the tiff images do not have the standard "*.tif" suffix.  The
+textures overall are usable, but nothing fantastic.  The synthetic textures
+(some 262 of these) are 256x256 and some are pretty interesting, but they tend
+to have the same feel to them.  The other textures (about 150 of these,
+described below) are fairly low resolution, 128x128 at very best.  Some of
+these are tileable simply by doing mirroring along the x and y axes.  All in
+all, some cute stuff, but don't expect a professional quality tileable wood or
+marble here.
+<P>
+In addition, in a demos directory there are a bunch of stills and FLI
+animations for the various companies whose work is on the disk.  There is also
+a text area with an archive of the Imagine and Lightwave electronic mailing
+lists - literally megabytes of advice here.
+<P>
+All in all, this is a great resource for amateurs and professionals who make
+3D images.  Some of the models are incredible, and the textures, while not
+particularly fantastic in and of themselves, I consider pure icing.  There's a
+lot to explore here.  Considering that a single model from Viewpoint can cost
+much more than this entire disk, if you're a professional and use even just a
+few models from this CDROM you're ahead of the game.
+<P>
+____
+<P>
+John Foust notes:
+<P>
+About 135 of the textures were captured and massaged from hand-made, public
+domain Macintosh desktop textures - PPAT resources, they call them.  The
+others were generated by a super Mac program called Texture Synth, which uses
+a few basic seed textures, recombined with color and multiple sine-wave
+textures.  They look very nice, a little synthetic at times, but in an
+organic-synthetic sort of way...
+<P>
+Contact: John Foust / Syndesis Corporation (<A HREF="mailto:76004.1763@CompuServe.COM">76004.1763@CompuServe.COM</A>)
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art15">
+Ray Tracing Related Abstracts from the Proceedings of Graphics Interface '93
+</A></FONT>
+ (May 19-21, 1993, Toronto, Ont. CA).
+</H4>
+These proceedings are available from Morgan Kaufmann Publishers, 415-965-4081.
+ISBN 0-9695338-2-9
+<P>
+<PRE>
+%A Alain Fournier
+%A Pierre Poulin
+%T A Ray Tracing Accelerator Based on a Hierarchy of 1D Sorted Lists
+</PRE>
+<P>
+<PRE>
+%A Jon Genetti
+%A Dan Gordon
+%T Ray Tracing With Adaptive Supersampling in Object Space
+</PRE>
+<P>
+<PRE>
+%A David P. Dobkin
+%A Don P. Mitchell
+%T Random-Edge Discrepancy of Supersampling Patterns
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art16">
+Ray Tracing Papers in the First Bilkent Computer Graphics Conference,
+</A></FONT>
+ATARV-93, Ankara, Turkey, July 1993
+</H4>
+"A Parallel Implementation of a Ray Tracer on a Shared Memory Multiprocessor"
+E. Camahort, G. Quintana, R. Vivo, and A. M. Vidal,
+Departamento de Sistemas Informaticos y Computacion,
+Universidad Politecnica de Valencia, SPAIN.
+<P>
+"An Efficient Parallel Spatial Subdivision Algorithm for Parallel Ray Tracing
+Complex Scenes"
+V. Isler, C. Aykanat, and B. Ozguc,
+Dept. of Computer Eng. and Information Science, Bilkent University, TURKEY.
+<P>
+"Modelling Rodin's Thinker: A Case Study Combining PHIGS and Ray-tracing"
+G. Williams, A. Murta, and T. Howard,
+Dept. of Computer Science, University of Manchester, U.K.
+<P>
+"A File Format for Interchange of Realistic Scene Descriptions"
+P. Guitton and C. Schlick,
+LaBRI, Talence, FRANCE.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art17">
+Fourth Eurographics Workshop on Rendering,
+</A></FONT>
+Paris, France June 14-16, by Francois Sillion (<A HREF="mailto:sillion@dmi.ens.fr">sillion@dmi.ens.fr</A>)
+</H4>
+[There may be some proceedings left for sale, contact Francois for information]
+<P>
+The program included 24 contributed papers on a variety of topics and three
+invited presentations.
+<P>
+<PRE>
+        Dynamic Stratification
+                Andrew Glassner
+        Progressive Ray Refinement for Monte Carlo Radiosity
+                Martin Feda, Werner Purgathofer
+        Invited: Realism in real-time ?
+                Erik Jansen
+        Making Shaders More Physically Plausible
+                Robert Lewis
+        Illumination of Dense Foliage Models
+                Christopher Patmore
+        A Customizable Reflectance Model for Everyday Rendering
+                Christophe Schlick
+        Importance and Discrete Three Point Transport
+                Larry Aupperle, Pat Hanrahan
+        A Continuous Adjoint Formulation for Radiance Transport
+                Per Christensen, David Salesin, Tony DeRose
+        Wavelet Projections for Radiosity
+                Peter Schroeder, Steven Gortler, Michael Cohen, Pat Hanrahan
+        Continuous Algorithms for Visibility: The Space Searching Approach
+                Jenny Zhao, David Dobkin
+        Invited paper : Viewpoint Analysis of Drawings and Paintings
+        Rendered Using Multiple Viewpoints: Cases Containing Rectangular Objects
+                Yoshihisa Shinagawa, Saeko Miyoshi, Tosiyasu Kunii
+        Constant-Time Filtering by Singular Value Decomposition
+                Craig Gotsman
+        Measuring the Quality of Antialiased Line Drawing Algorithms
+                Terence Lindgren, John Weber
+        Invited: "How to solve it ?"
+                Pat Hanrahan
+        Numerical Integration for Radiosity in the presence of Singularities
+                Peter Schroeder
+        Optimal Hemicube Sampling
+                Nelson Max, Roy Troutman
+        Fast Calculation of Accurate Form Factors
+                Georg Pietrek
+        Grouping of Patches in Progressive Radiosity
+                Arjan Kok
+        Blockwise Refinement -- A New Method for Solving the Radiosity Problem
+                Gunther Greiner, Wolfgang Heidrich, Philipp Slusallek
+        Analysis and Acceleration of Progressive Refinement Radiosity Method
+                Min-Zhi Shao, Norman Badler
+        Texture Mapping as a fundamental Drawing Primitive
+                Paul Haeberli, Mark Segal
+        A Methodology for Description of Texturing Methods
+                Pascal Guitton, Christophe Schlick
+        Visualization of Mixed Scenes based on Volumes and Surfaces
+                Dani Tost, Anna Puig, Isabel Navazo
+        Physically Realistic Volume Visualization for Interactive Image Analysis
+                H.T.M. Van der Voort, H.J. Noordmans, J.M. Messerli,
+                A.W.M. Smeulders
+        Reconstruction of Illumination functions using Bicubic Hermite
+        Interpolation
+                Rui Manuel Bastos, Antonio Augusto de Sousa,
+                Fernando Nunes Ferreira
+        Mesh Redistribution in Radiosity
+                Miguel P.N. Aguas, Stefan Muller
+        Accurate Rendering of Curved Shadows and Interreflections
+                G.R. Jones, C.G. Christou, B.G. Cumming, A.J. Parker
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art18">
+Gamma Correction Frequently Asked Questions,
+</A></FONT>
+by Graeme Gill (<A HREF="mailto:graeme@labtam.labtam.oz.au">graeme@labtam.labtam.oz.au</A>)
+</H4>
+I get regular questions about gamma correction since I go to great pains to
+deal with it properly in xli (the image loader program I maintain).
+<P>
+Here is an explanation I often use to answer these questions.
+<P>
+########
+<P>
+"A note on gamma correction and images"
+<P>
+<PRE>
+Author: Graeme W. Gill
+        <A HREF="mailto:graeme@labtam.oz.au">graeme@labtam.oz.au</A>
+</PRE>
+<P>
+Date: 93/5/16
+<P>
+<PRE>
+"What is all this gamma stuff anyway?"
+--------------------------------------
+</PRE>
+<P>
+Although it would be nice to think that "an image is an image", there are a
+lot of complications.  Not only are there a whole bunch of different image
+formats (gif, jpeg, tiff etc etc), there is a whole lot of other technical
+stuff that makes dealing with images a bit complicated.  Gamma is one of those
+things.  If you've ever downloaded images from BBS or the net, you've probably
+noticed (with most image viewing programs) that some images look ok, some look
+too dark, and some look too light.  "Why is this?" you may ask.  This, is
+gamma correction (or the lack of it).
+<P>
+<PRE>
+Why do we need gamma correction at all?
+---------------------------------------
+</PRE>
+<P>
+Gamma correction is needed because of the nature of CRTs (cathode ray tubes -
+the monitors usually used for viewing images).  If you have some sort of real
+live scene and turn it into a computer image by measuring the amount of light
+coming from each point of the scene, then you have created a "linear" or
+un-gamma-corrected image.  This is a good thing in many ways because you can
+manipulate the image as if the values in the image file were light (i.e.
+adding and multiplying will work just like real light in the real world).  Now
+if you take the image file and turn each pixel value into a voltage and feed
+it into a CRT, you find that the CRT _doesn't_ give you an amount of light
+proportional to the voltage.  The amount of light coming from the phosphor in
+the screen depends on the the voltage something like this:
+<P>
+Light_out = voltage ^ crt_gamma
+<P>
+So if you just dump your nice linear image out to a CRT, the image will look
+much too dark.  To fix this up you have to "gamma correct" the image first.
+You need to do the opposite of what the CRT will do to the image, so that
+things cancel out, and you get what you want.  So you have to do this to your
+image:
+<P>
+gamma_corrected_image = image ^ (1/crt_gamma)
+<P>
+For most CRTs, the crt_gamma is somewhere between 1.0 and 3.0.
+<P>
+The problem is that not all display programs do gamma correction. Also not
+all sources of images give you linear images (Video cameras or video signals
+in general). Because of this, a lot of images already have some gamma
+correction done to them, and you are rarely sure how much. If you try and
+display one of those images with a program that does gamma correction for you,
+the image gets corrected twice and looks way to light. If you display one of
+those images with a program that doesn't do gamma correction, then it will
+look vaguely right, but not perfect, because the gamma correction is not
+exactly right for you particular CRT.
+<P>
+<PRE>
+Whose fault is all this?
+------------------------
+</PRE>
+<P>
+It is really three things.  One is all those display programs out there that
+don't do gamma correction properly.  Another is that most image formats don't
+specify a standard gamma, or don't have some way or recording what their gamma
+correction is.  The third thing is that not many people understand what gamma
+correction is all about, and create a lot of images with varying gamma's.
+<P>
+At least two file formats do the right thing.  The Utah Graphics Toolkit .rle
+format has a semi-standard way of recording the gamma of an image.  The JFIF
+file standard (that uses JPEG compression) specifies that the image to be
+encoded must have a gamma of 1.0 (i.e. a linear image - but not everyone
+obeys the rules).
+<P>
+Some image loaders (for instance xli - an X11 image utility) allow you to
+specify not only the gamma of the monitor you are using, but the individual
+gamma values of image you are trying to view.  Other image viewers (e.g. xv,
+another X11 image program) and utilities (e.g. the pbm toolkit) provide ways
+of changing the gamma of an image, but you have to figure out the overall
+gamma correction yourself, allowing for undoing any gamma correction the image
+has, and then the gamma correction you need to suite your CRT monitor.
+<P>
+[Note that xv 2.21 doesn't provide an easy way of modifying the gamma of an
+image.  You need to adjust the R, G and B curves to the appropriate gamma in
+the ColEdit controls.  Altering the Intensity in the HSV controls doesn't do
+the right thing, as it fails to take account of the effect gamma has on H and
+S.  This tends to give a tint to the image.]
+<P>
+The simplest way to do that is to try loading the file chkgamma.jpg (provided
+with xli distribution), which is a JFIF jpeg format file containing two
+grayscale ramps. The ramps are chosen to look linear to the human eye, one
+using continuous tones, and the other using dithering. If your viewer does the
+right thing and gamma corrects images, then the two ramps should look
+symmetrical, and the point at which they look equally bright should be almost
+exactly half way from the top to the bottom. (To find this point it helps if
+you move away a little from the screen, and de-focus your eyes a bit.)
+<P>
+If your viewer doesn't do gamma correction, then left hand ramp will have
+a long dark part and a short white part, and the point of equal brightness
+will be above the center.
+<P>
+If your viewer does have a way of setting the right amount of gamma correction
+for a display, then if the equal brightness point is above center increase the
+gamma, and decrease it if it is below the center. The value will usually be
+around 2.2.
+<P>
+[with xli for instance, you can adjust the display gamma with the -dispgamma
+flag, and once you've got it right, you can set the DISPLAY_GAMMA environment
+variable in your .profile]
+<P>
+This is the most tricky bit. As a general rule it seems that a lot of true
+color (i.e. 24 bit, .ppm .jpg) images have a gamma of 1.0 (linear), although
+there are many about that have some gamma correction. It seems that the
+majority of pseudo color images (i.e. 8 bit images with color maps - .gif etc.)
+are gamma corrected to some degree or other.
+<P>
+If your viewer does gamma correction then linear images will look good, and
+gamma corrected images will look too light.
+<P>
+If your viewer doesn't do gamma correction, then linear images will look too
+dark, and gamma corrected images will ok.
+<P>
+One of the reason that many high quality formats (such as Video) use gamma
+correction is that it actually makes better use of the storage medium. This is
+because the human eye has a logarithmic response to light, and gamma correction
+has a similar compression characteristic. This means images could make better
+use of 8 bits per color (for instance), if they used gamma correction. The
+implication, though, is that every time you want to do any image processing you
+should convert the 8 bit image to 12 or so linear bits to retain the same
+accuracy. Since little popular software does this, and none of the popular
+image formats can agree on a standard gamma correction factor, it is difficult
+to justify gamma corrected images at the popular level.
+<P>
+If some image formats can standardize on a particular gamma, and if image
+manipulation software takes care to use extra precision when dealing with
+linearized internal data, then gamma corrected distribution of images would be
+a good thing.
+<P>
+(I am told that the Kodak PhotoCD format for instance, has a standard gamma
+correction factor that enables it to get the highest quality out of the bits
+used to hold the image).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art19">
+3D Studio Rendering,
+</A></FONT>
+by Chris Williams (<A HREF="mailto:chrisw@fciad2.bsd.uchicago.edu">chrisw@fciad2.bsd.uchicago.edu</A>)
+</H4>
+&gt;     I've read numerous times in this newsgroup that Autodesk 3d Studio v2 <BR>
+&gt;doesn't support ray-tracing. I'm just wondering how one renders images<BR>
+&gt;with lights/objects casting shadows as well as reflection mapping materials<BR>
+&gt;without raytracing. Can someone tell me what I'm missing here?<BR>
+<P>
+   Shadows are done via Z-buffering.  Imagine that you wish to have an object
+cast a shadow on a floor.  Render the scene once from the point of view of the
+shadow-casting spotlight.  The areas that are obscured in that image (the
+underside of the object and part of the floor) will be in shadow when rendered
+from the regular camera.  When the scene is actually rendered that image
+(which also contains depth information i.e.  how far each surface was from the
+shadow-spot) is used to to determine what is and isn't in shadow.
+<P>
+   Reflections are done with reflection maps or cubic environment maps.  Take
+the example of a chrome ball on a checkered floor (please).  Place the camera
+*inside* the chrome ball.  Render six images, one in each of the cardinal
+directions, square.  These six (pos X, neg X, pos Y, neg Y, pos Z and neg Z)
+are combined into one image that is "wrapped around" the ball.  It usually
+works pretty well.  Frankly, most people pay little attention to the content
+of a reflection, and it's possible to cheat like a professional wrestling
+villian.  One other advantage of reflection maps, once the reflected items are
+in the map, if they aren't otherwise visible in the scene, they no longer need
+to be in the scene.  In raytracing, every reflected object has to be there,
+and costs quite a bit.  If your object is a brushed metal, for instance, you
+can just paint blobs of color and blur the whole thing and use *that* as your
+reflection map.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art20">
+Ray-Bezier Patch Intersection,
+</A></FONT>
+by Chuck McKinley, Max Froumentin (<A HREF="mailto:mckinley@fed3005.ne1300.ingr.com">mckinley@fed3005.ne1300.ingr.com</A>, froument@lifl.lifl.fr)
+</H4>
+Chuck McKinley writes:
+<P>
+If some kind person has access to a mathematical package such as Mathematica,
+Maple,... I would like to ask you for the solution to the following problem.
+I sometimes have algebra problems like this where I would like a simplified
+symbolic solution. Is there a FTP-able package out there that can handle such
+beasts?
+<P>
+I would like to solve the following ray - Bezier patch intersection
+for the scalar constant t in:
+<P>
+<PRE>
+P                    + t * V                =  Q(u,w)
+ (origin point in 3D)       (dir vector 3D)
+</PRE>
+<P>
+_____
+<P>
+Max Froumentin replies:
+<P>
+Well, there is a formula.  But you probably don't want to know it:  One usual
+method is to write the Bezier parametric equation (Q(u,v)=...)  in the form of
+an implicit surface (f(x,y,z)=0 where f is a polynomial).  You can then insert
+the parametric equations of your ray and get a equation in t, giving you the
+intersection points.  That's all right for low degree surfaces like planes or
+quadrics.  But for a Bezier patch of parametric degree n, the resulting
+implicit equation is of degree 2n^2.  As you use degree 3 Bezier patches, you
+will get an implicit equation of degree 18!  Even if you type the whole
+formula in your program, you probably know of the extremely low accuracy of
+high-degree polynomials in computers...
+<P>
+Instead, people use approximation methods, like two-dimensional Newton
+iteration.  See the book by Glassner on ray-tracing for further details, or
+look at the POV source code.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art21">
+Turbulence and Noise,
+</A></FONT>
+by Ken Perlin
+</H4>
+[Since course notes are so hard to get, I thought I would reprint this.
+Bernie Kirby sent this to Thomas Setzer, who posted it, and now it's here.]
+<P>
+<PRE>
+                  EXCERPTED FROM SIGGRAPH 92, COURSE 23
+                           PROCEDURAL MODELING
+</PRE>
+<P>
+<PRE>
+                               Ken Perlin
+                           New York University
+</PRE>
+<P>
+3.6 TURBULENCE AND NOISE
+<P>
+3.6.1 The turbulence function
+<P>
+The turbulence function, which you use to make marble, clouds, explosions,
+etc., is just a simple fractal generating loop built on top of the noise
+function.  It is not a real turbulence model at all.  The key trick is the use
+of the fabs() function, which makes the function have gradient discontinuity
+"fault lines" at all scales.  This fools the eye into thinking it is seeing
+the results of turbulent flow.  The turbulence() function gives the best
+results when used as a phase shift, as in the familiar marble trick:
+<P>
+<PRE>
+    sin(point + turbulence(point) * point.x);
+</PRE>
+<P>
+Note the second argument below, lofreq, which sets the lowest desired
+frequency component of the turbulence.  The third, hifreq, argument is used by
+the function to ensure that the turbulence effect reaches down to the single
+pixel level, but no further.  I usually set this argument equal to the image
+resolution.
+<P>
+<PRE>
+float turbulence(point, lofreq, hifreq)
+float point[3], freq, resolution;
+{
+        float noise3(), freq, t, p[3];
+
+        p[0] = point[0] + 123.456;
+        p[1] = point[1];
+        p[2] = point[2];
+
+        t = 0;
+        for (freq = lofreq ; freq &lt; hifreq ; freq *= 2.) {
+                t += fabs(noise3(p)) / freq;
+                p[0] *= 2.;
+                p[1] *= 2.;
+                p[2] *= 2.;
+        }
+        return t - 0.3; /* readjust to make mean value = 0.0 */
+}
+</PRE>
+<P>
+3.6.2 The noise function
+<P>
+noise3 is a rough approximation to "pink" (band-limited) noise, implemented by
+a pseudorandom tricubic spline.  Given a vector in 3-space, it returns a value
+between -1.0 and 1.0.  There are two principal tricks to make it run fast:
+<P>
+- Precompute an array of pseudo-random unit length gradients g[n].
+<P>
+- Precompute a permutation array p[] of the first n integers.
+<P>
+Given the above two arrays, any integer lattice point (i,j,k) can be quickly
+mapped to a pseudorandom gradient vector by:
+<P>
+<PRE>
+    g[ (p[ (p[i] + j) % n ] + k) % n]
+</PRE>
+<P>
+By extending the g[] and p[] arrays, so that g[n+i]=g[i] and p[n+i]=p[i], the
+above lookup can be replaced by the (somewhat faster):
+<P>
+<PRE>
+    g[ p[ p[i] + j ] + k ]
+</PRE>
+<P>
+Now for any point in 3-space, we just have to do the following two steps:
+<P>
+(1) Get the gradient for each of its surrounding 8 integer lattice points as
+above.
+<P>
+(2) Do a tricubic hermite spline interpolation, giving each lattice point the
+value 0.0.
+<P>
+The second step above is just an evaluation of the hermite derivative basis
+function 3 * t * t - 2 * t * t * t in each by a dot product of the gradient at
+the lattice.
+<P>
+Here is my implementation in C of the noise function.  Feel free to use it, as
+long as you reference where you got it.  :-)
+<P>
+<PRE>
+/* noise function over R3 - implemented by a pseudorandom tricubic spline */
+
+#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+
+#define DOT(a,b) (a[0] * b[0] + a[1] * b[1] + a[2] * b[2])
+
+#define B 256
+
+static p[B + B + 2];
+static float g[B + B + 2][3];
+static start = 1;
+
+#define setup(i,b0,b1,r0,r1) \
+        t = vec[i] + 10000.; \
+        b0 = ((int)t) & (B-1); \
+        b1 = (b0+1) & (B-1); \
+        r0 = t - (int)t; \
+        r1 = r0 - 1.;
+
+float noise3(vec)
+float vec[3];
+{
+        int bx0, bx1, by0, by1, bz0, bz1, b00, b10, b01, b11;
+        float rx0, rx1, ry0, ry1, rz0, rz1, *q, sy, sz, a, b, c, d, t, u, v;
+        register i, j;
+
+        if (start) {
+                start = 0;
+                init();
+        }
+
+        setup(0, bx0,bx1, rx0,rx1);
+        setup(1, by0,by1, ry0,ry1);
+        setup(2, bz0,bz1, rz0,rz1);
+
+        i = p[ bx0 ];
+        j = p[ bx1 ];
+
+        b00 = p[ i + by0 ];
+        b10 = p[ j + by0 ];
+        b01 = p[ i + by1 ];
+        b11 = p[ j + by1 ];
+
+#define at(rx,ry,rz) ( rx * q[0] + ry * q[1] + rz * q[2] )
+
+#define surve(t) ( t * t * (3. - 2. * t) )
+
+#define lerp(t, a, b) ( a + t * (b - a) )
+
+        sx = surve(rx0);
+        sy = surve(ry0);
+        sz = surve(rz0);
+
+        q = g[ b00 + bz0 ] ; u = at(rx0,ry0,rz0);
+        q = g[ b10 + bz0 ] ; v = at(rx1,ry0,rz0);
+        a = lerp(sx, u, v);
+
+        q = g[ b01 + bz0 ] ; u = at(rx0,ry1,rz0);
+        q = g[ b11 + bz0 ] ; v = at(rx1,ry1,rz0);
+        b = lerp(sx, u, v);
+
+        c = lerp(sy, a, b);          /* interpolate in y at lo x */
+
+        q = g[ b00 + bz1 ] ; u = at(rx0,ry0,rz1);
+        q = g[ b10 + bz1 ] ; v = at(rx1,ry0,rz1);
+        a = lerp(sx, u, v);
+
+        q = g[ b01 + bz1 ] ; u = at(rx0,ry1,rz1);
+        q = g[ b11 + bz1 ] ; v = at(rx1,ry1,rz1);
+        b = lerp(sx, u, v);
+
+        d = lerp(sy, a, b);          /* interpolate in y at hi x */
+
+        return 1.5 * lerp(sz, c, d); /* interpolate in z */
+}
+
+static init()
+{
+        long random();
+        int i, j, k;
+        float v[3], s;
+
+/* Create an array of random gradient vectors uniformly on the unit sphere */
+
+        srandom(1);
+        for (i = 0 ; i &lt; B ; i++) {
+                do {                            /* Choose uniformly in a cube */
+                        for (j=0 ; j&lt;3 ; j++)
+                                v[j] = (float)((random() % (B + B)) - B) / B;
+                        s = DOT(v,v);
+                } while (s &gt; 1.0);              /* If not in sphere try again */
+                s = sqrt(s);
+                for (j = 0 ; j &lt; 3 ; j++)       /* Else normalize */
+                        g[i][j] = v[j] / s;
+        }
+
+/* Create a pseudorandom permutation of [1..B] */
+
+        for (i = 0 ; i &lt; B ; i++)
+                p[i] = i;
+        for (i = B ; i &gt; 0 ; i -= 2) {
+                k = p[i];
+                p[i] = p[j = random() % B];
+                p[j] = k;
+        }
+
+/* Extend g and p arrays to allow for faster indexing */
+
+        for (i = 0 ; i &lt; B + 2 ; i++) {
+                p[B + i] = p[i];
+                for (j = 0 ; j &lt; 3 ; j++)
+                        g[B + i][j] = g[i][j];
+        }
+}
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art22">
+Ray Tracing Research Ideas,
+</A></FONT>
+by Klaus Lisberg Kristensen (<A HREF="mailto:lisberg@daimi.aau.dk">lisberg@daimi.aau.dk</A>) & Christian Gautier
+</H4>
+[Some of these ideas have already been researched a bit, some ideas I don't
+understand, but I thought I'd pass on the list. -EAH]
+<P>
+We put a request out for research topics in ray tracing.  We have received a
+lot of good ideas, articles etc., and we are now going through all of them.
+<P>
+The areas suggested are (in very short terms):
+<P>
+- Methods to model the colors using spectral curves for the light sources.
+  This could help problems like color-aliasing and machine dependency.
+<P>
+- Modelling reflections from oil in a water puddle, turbulent water stream,
+  human bodies(or dinosaurs :)) by modelling every muscle.
+<P>
+- Modelling dirt was suggested by several people.
+<P>
+- Alternative ray-tracing methods.
+<P>
+- Non-realistic rendering.
+<P>
+- Don Mitchell's interval arithmetic approach to intersection.
+<P>
+- A memory-efficient algorithm for discrete ray-tracing.
+<P>
+- Radiosity simulation by stochastic ray-tracing.
+<P>
+- Optically correct lens emulators.
+<P>
+- Modelling clouds, misty nights or a river in the mountains.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art23">
+POV-Ray Utilities,
+</A></FONT>
+by Dan Farmer (<A HREF="mailto:70703.1632@CompuServe.COM">70703.1632@CompuServe.COM</A>)
+</H4>
+(This listing is about a year out-of-date)
+<P>
+[I thought I would include this old list to give a sense of the support out
+there for POV.  There's lots more out there than just this - anyone with a
+current list, please do send it on.  -EAH]
+<P>
+<PRE>
+Object Creation Utilities
+-------------------------
+CHAIN101.ZIP = Chain generator.
+CHEMCONV.ZIP = Convert data from Larry Puhl's CHEM molecular modeller.
+CM.ZIP       = CircleMaster - Truman Brown - allows you to create clipped
+               spheres and ellipses that can cap your hyperboloids of two
+               sheets perfectly giving the illusion of quartic blobs.
+WORM02.ZIP   = Paint with spheres to generate points for CTDS.
+CTDS.ZIP     = Connect The Dots Smoother - Truman Brown.  Raytrace sources.
+               makes your WORM output POV compatible.  Writes a file using
+               the WORM data, with your choice of spheres or ellipsoids, and
+               will either connect the spheres with cones and cylinders, or
+               just output the "dots."
+FONT2DAT.ZIP = Converts GRASP .fnt and .set font files to POV-Ray text.
+               Fonts included.
+FRGEN13.ZIP  = Midsection triangular displacement fractal surface generator.
+LISS152.ZIP  = Generate 3D Lissajous traces with spheres.
+LISSAJ.ZIP   = Another Lissajous path generator, w/graphics preview.
+PICKSHEL.ZIP = Make snail shells from spheres.
+POVCOIL2.ZIP = Hard to describe twisted coil objects.  POV Sources
+POVTORUS.ZIP = Makes torus-like objects using cylindrical sections. SHADE1.ZIP
+  = "Lampshade" generator.
+SPIKE.ZIP    = Generate shapes with radial projection.
+SPRING12.ZIP = Generates and animates springs.
+SUDS.ZIP     = Generates a "glob" of tangent spheres, rather like suds.
+TTG.ZIP      = Creates POV-Ray torus data, the easy way - Truman Brown
+TWISTER.ZIP  = Twisted objects such as Archimedes spirals.
+SWOOP.ZIP    = Hard to describe extrusion generator.  Very versatile.
+</PRE>
+<P>
+<PRE>
+Miscellaneous Utilities
+-----------------------
+CRNDR        = CRENDER
+               allows you to drop in and design that elusive color/lighting
+               combination that you are looking for - it shines when it
+               comes to designing just the right surface qualities.  Lets
+               you interactively play with many texture variables and see
+               them rendered almost instantly on screen, then dump the
+               texture to a POV file.  Highly recommended for learning about
+               textures.  POV sources.
+MAKETILE.ZIP = Actually a PICLAB script.  Great for making imagemaps.
+SPLITPOV.ZIP = Run a POV-Ray image in sections on multiple computers
+               and glue them back together automatically.  Best
+               for use over a network.  Generates batchfiles.
+TCE201  .ZIP = The Color Editor - Dan Farmer.  A color viewer/editor.
+               Create/edit your colors.inc file.
+</PRE>
+<P>
+<PRE>
+Animation Utilities
+-------------------
+ACCEL.ZIP    = Generate acceleration data for use in an animation.
+
+ANIMK05B.ZIP = Excellent animation generator.
+
+CAMPATH1.ZIP = Generate circular, lemniscate, polar, and other camera path
+               data.
+
+RTAG.ZIP     = Special animation language (shareware)
+
+ANIBATCH.ZIP = Simple linear motion, generates a single batch file that
+               creates frame data at runtime.
+
+AWKBLOB.AWK  = Converts raw sphere data in the form of x y z r into blob
+               components for POV-Ray.
+
+HSM2POV.AWK  = Convert data from Mira Imaging's "Hyperspace" format to
+               POV-Ray triangle data.
+
+HSM2RAW.AWK  = Convert data from Mira Imaging's "Hyperspace" format to raw
+               triangle data. By adding a sphere radius to the output vector
+               and running the output through AWKBLOB.AWK, you could also
+               convert "Hyperspace" data to blobs.
+
+Data Conversion Utilities
+-------------------------
+RAW2POV.ZIP  = Steve Anger - raw triangle vector data to well-bounded
+    POV-Ray format as either normal, or Phong-shaded triangles.  Very useful
+    with other programs, but it doesn't really do anything by itself.
+3DS2POV.ZIP  = AutoDesk 3D-Studio ASCII data to POV-Ray files.
+3D2POV15.ZIP = Amiga Sculpt3D to POV-Ray format.
+3D2-POV      = Cyber Sculpt (Atari) 3D2 files.
+DXF2POV.ZIP  = AutoCAD and other DXF file data to POV-Ray files.
+SA2POV.ZIP   = Sculpt-Animate data to POV-Ray files.
+SNDPPR.ZIP   = raw triangle data to Phong-shaded.
+VCAD2POV.ZIP = Versa-CAD to POV-Ray.
+</PRE>
+<P>
+As I mentioned above, this listing is old, and is very definitely only a
+sampler of what is available.  Almost all of these are free, the rest are
+inexpensive shareware.  Most are available on CIS (GO GRAPHDEV), YCCMR BBS
+(Chicago. (708) 358-5611, or TGA BBS (510) 524-2780 as well as many of the
+nodes of the PCGNet, of which TGA is a hub.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art24">
+SPD Platform/Compiler Results,
+</A></FONT>
+by David Hook (<A HREF="mailto:dgh@ecr.mu.oz.au">dgh@ecr.mu.oz.au</A>)
+</H4>
+[many thanks to David and Bernie Kirby for running the SPD test on a variety
+of platforms with various compiler options.  Most of you will be bored to
+tears by this stuff, but I include it mostly so it gets archived somewhere.
+The things that are most noticeable are how performance varies between
+machines.  Also, Rayshade does everything in doubles and most of the other ray
+tracers do everything in floats, so machines that can't or don't override the
+double&lt;-&gt;float conversions that C requires tend to take a hit on these others.
+-EAH]
+<P>
+<PRE>
+About the benchmarks run:
+        a) The Standard Benchmarks are run using the best available
+           NFF to &lt;program&gt; converter available. For example, this
+           means that the awk script for rayshade was used as it
+           supplied a default grid of 22x22x22, where as the "other"
+           converter didn't. The rational behind this is that if the
+           rayshade people have it in their converter, then it is the
+           preferred option.
+
+        b) The "tweaked" benchmarks are run with various grids and with
+           the ground or backing polygon removed thus:
+
+           balls:  20x20x20        - take background out of grid structure.
+           gears:  21x21x21        - take background out of grid structure.
+           mount:  21x21x21
+           rings:  21x21x21        - take background out of grid structure.
+           teapot: 22x22x22        - The floor IS kept!
+           tetra:  16x16x16
+           tree:   21x21x21        - take background out of grid structure.
+
+           These pertain only to the ART/rayshade results, where the tweaking
+           could be easily done. I hate to be the one to say this, but, it
+           looks as if in some cases this actually slows the renderer down.
+
+           These results are presented in a separate table as it didn't
+           seem realistic (or fair) to compare the different ray tracers
+           by massaging the input files. In any case they are only relevant
+           to balls, gears, rings, and tree. The figures for art using a
+           kdtree, where provided, indicate that taking the backing polygon
+           out results in a nicely distributed data set in the subdivision
+           and using a non-uniform subdivision is more a hindrance than a
+           help (which is basically what you'd expect...).
+
+           [There are art/kd results, where art uses a KD-tree for efficiency,
+           and art/ug results, where art uses a uniform grid.  Both versions of
+           the code are available on the net. -EAH]
+
+        c) All programs are compiled with Maximum optimization/and appropriate
+           floating point. In the case of Art/Vort/*/dp this means that the
+           -float, -fsingle or whatever was not used but that everything was
+           compiled with -Dfloat=double.
+
+        d) The Bob/Vivid raytracer had its "robust" memory allocation
+           scheme replaced with "standard" malloc's as the robust scheme caused
+           core dumps on SGI and RS6000 machines.
+
+        e) All Benchmarks include the time taken to read the scene in.
+
+        f) All times are in CPU seconds.
+
+        g) We don't own any SGI, RS6000 or HP machines. The use of these
+           machines was kindly allowed by their respective owners/admins.
+           As such, we couldn't run every raytracer as we were wearing
+           out our welcome as it was.
+
+        h) All runs were done to completion at 512x512 pixels.
+
+        i) We DID try to run POV, but as it was taking over 24 hours of CPU
+           time we simply had to stop.  Perhaps there is an NFF converter
+           that inserts some bounding boxes automatically?
+
+        j) Ratios calculated below for the Standard SPDs are done on the
+           basis of Art/Vort/kd == the base line (it's the first in alphabetical
+           order).
+
+        k) In all cases we used the latest available versions of the software
+           (hence the difference in Rtrace).
+
+[I have added "*" after the fastest ratio for easy visual comparison. -EAH]
+
+                                Standard SPDs
+                                -------------
+Machine: SGI PI.
+----------------
+                        balls   gears   mount   rings   teapot  tetra   tree
+Art/Vort/kd             761.7   2296    414.6   1042    393.6   118.3   640.5
+Art/Vort/ug             5958    1093    312.4   620.1   235.2   68      5761
+Rayshade                2847    1950    899.5   1228    464     116     5602
+Bob/Vivid               811     1369    446     1854    495     93.5    511
+Rtrace8                 1779    6236    2957    4840    1199    291     933
+
+Ratios:
+------
+Art/Vort/kd             1.0 *   1.0     1.0     1.0     1.0     1.0     1.0
+Art/Vort/ug             7.8     0.47 *  0.75 *  0.6 *   0.6 *   0.57 *  8.99
+Rayshade                3.7     0.85    2.17    1.18    1.18    0.98    8.75
+Bob/Vivid               1.06    0.6     1.08    1.78    1.26    0.79    0.79 *
+Rtrace8                 2.33    2.71    7.13    4.64    3.05    2.45    1.46
+
+Machine: IBM RS6000
+-------------------
+                        balls   gears   mount   rings   teapot  tetra   tree
+Art/Vort/kd             591.7   1847    325     812     334     107     534
+Art/Vort/ug             3537    815     234     454     187     55      3215
+Rayshade                1410    846     406     548     230     70      2418
+Bob/Vivid               506     909     309     1095    323     68      348
+Rtrace8                 861     4684    1414    2267    587     145     469
+
+Ratios:
+------
+Art/Vort/kd             1.0     1.0     1.0     1.0     1.0     1.0     1.0
+Art/Vort/ug             5.98    0.44 *  0.72 *  0.56 *  0.56 *  0.51 *  6.02
+Rayshade                2.38    0.46    1.25    0.67    0.68    0.65    4.53
+Bob/Vivid               0.86 *  0.49    0.95    1.35    0.97    0.64    0.65 *
+Rtrace8                 1.45    2.54    4.35    2.79    1.76    1.35    0.88
+
+Machine: SUN SPARCstation2
+--------------------------
+                        balls   gears   mount   rings   teapot  tetra   tree
+Art/Vort/kd             705     1900    389     951     369     112     574
+Art/Vort/ug             5768    974     319     570     231     71      5327
+Rayshade                2422    1309    671     940     366     106     4473
+Bob/Vivid               715     1181    392     1419    412     87      429.6
+Rtrace8                 1084    3151    1991    2950    765     204     573
+
+Ratios:
+-------
+                        balls   gears   mount   rings   teapot  tetra   tree
+Art/Vort/kd             1.0 *   1.0     1.0     1.0     1.0     1.0     1.0
+Art/Vort/ug             8.18    0.51 *  0.82 *  0.6 *   0.62 *  0.63 *  9.28
+Rayshade                3.43    0.69    1.72    0.99    0.99    0.95    7.8
+Bob/Vivid               1.01    0.62    1.01    1.49    1.11    0.78    0.75 *
+Rtrace8                 1.54    1.66    5.12    3.10    2.07    1.82    0.99
+
+Machine: HP 720
+---------------
+                        balls   gears   mount   rings   teapot  tetra   tree
+Art/Vort/kd             308     915     156     400     155     58.1    252
+Rayshade                870     507     203     292     122     41.7    2079
+
+Ratios:
+-------
+                        balls   gears   mount   rings   teapot  tetra   tree
+Art/Vort/kd             1.0 *   1.0     1.0 *   1.0     1.0     1.0     1.0 *
+Rayshade                2.82    0.55 *  1.3     0.73 *  0.78 *  0.72 *  8.25
+
+                                Tweaked SPDs
+                                ------------
+
+In cases where xxx appears, for one reason or another, we were unable to
+run the benchmark.
+
+Machine: SGI PI.
+----------------
+                        balls   gears   mount   rings   teapot  tetra   tree
+Art/Vort/ug/twk         208.4   1259    312.3   478.3   334.1   67.9    97.8
+Rayshade/twk            377.7   2647    937     877     548     141     171
+
+Ratios:
+------
+Art/Vort/ug/twk         1.0 *   1.0 *   1.0 *   1.0 *   1.0 *   1.0 *   1.0 *
+Rayshade/twk            1.8     2.1     3.00    1.83    1.64    2.07    1.75
+
+Machine: IBM RS6000
+-------------------
+                        balls   gears   mount   rings   teapot  tetra   tree
+Art/Vort/kd/twk         353     1970.5  333.7   739.6   423.7   56.5    111.1
+Art/Vort/ug/twk         153.4   887     238     352     269     56      75
+Rayshade/twk            183     1078    407     428     292     88      88
+
+Ratios:
+------
+Art/Vort/kd/twk         1.0     1.0     1.0     1.0     1.0     1.0     1.0
+Art/Vort/ug/twk         0.43 *  0.45 *  0.71 *  0.48 *  0.63 *  1.0 *   0.67 *
+Rayshade/twk            0.52    0.55    1.22    0.58    0.68    1.56    0.79
+
+Machine: SUN SPARCstation2
+-------------------
+                        balls   gears   mount   rings   teapot  tetra   tree
+Art/Vort/kd/twk         417     2130    389     846     369     112     128
+Art/Vort/ug/twk         202     1081    319     436     366     72      103
+Rayshade/twk            293     1635    675     750     467     130     148
+
+Ratios:
+-------
+                        balls   gears   mount   rings   teapot  tetra   tree
+Art/Vort/kd/twk         1.0     1.0     1.0     1.0     1.0     1.0     1.00
+Art/Vort/ug/twk         0.48 *  0.51 *  0.89 *  0.51 *  0.99 *  0.64 *  0.80 *
+Rayshade/twk            0.70    0.77    1.74    0.89    1.27    1.16    1.16
+
+Machine: HP 720
+---------------
+                        balls   gears   mount   rings   teapot  tetra   tree
+Art/Vort/kd/twk         186     1029    156     xxx     155     58.1    91
+Art/Vort/ug/twk         89      527     xxx     168     138.7   41.4    39.7
+Rayshade/twk            99      676     202     237     161     51.4    51.2
+
+Ratios:
+-------
+                        balls   gears   mount   rings   teapot  tetra   tree
+Art/Vort/kd/twk         1.0     1.0     1.0     xxx     1.0     1.0     1.0
+Art/Vort/ug/twk         0.48 *  0.51 *  xxx     1.0 *   0.89 *  0.70 *  0.42 *
+Rayshade/twk            0.53    0.65    1.29    1.41    0.96    0.88    0.56
+
+[My figures do not seem to match these that well:  in my tests on the HP 720
+Rayshade seemed to always outperform art.  We're not sure why there's a
+mismatch. -EAH]
+
+                        *  *  *  *  *  *  *  *  *
+
+                        A comparison of float vs. doubles
+                where float promotion to double can be disabled.
+
+                As art seems to be the only one that declares most
+                things as floats, this is the subject of these runs.
+
+Machine: SGI PI.
+----------------
+        Option: Single precision -float
+                Double precision -Dfloat=double
+
+                        balls   gears   mount   rings   teapot  tetra   tree
+Art/Vort/kd             761.7   2296    414.6   1042    393.6   118.3   640.5
+Art/Vort/kd/dp          978     3000    xxxx    1365    520     152     777
+
+Art/Vort/ug/twk         208.4   1259    312.3   478.3   334.1   67.9    97.8
+Art/Vort/ug/twk/dp      295     1882    449     681     514     109     141
+
+Ratios:
+------
+Art/Vort/kd             1.0     1.0     1.0     1.0     1.0     1.0     1.0
+Art/Vort/kd/dp          1.28    1.3     ....    1.3     1.32    1.27    1.21
+
+Art/Vort/ug/twk         1.0     1.0     1.0     1.0     1.0     1.0     1.0
+Art/Vort/ug/twk/dp      1.4     1.49    1.43    1.42    1.53    1.6     1.44
+
+Machine: IBM RS6000
+-------------------
+        No such option. The times were much the same.
+
+Machine: SUN SPARCstation2
+-------------------
+        Option: Single precision -fsingle
+                Double precision -Dfloat=double
+
+                        balls   gears   mount   rings   teapot  tetra   tree
+Art/Vort/kd             705     1900    389     951     369     112     574
+Art/Vort/kd/dp          791     xxx     413     1034    428     127     625
+
+Art/Vort/ug/twk         202     1081    319     436     366     72      103
+Art/Vort/ug/twk/dp      214     1219    341     476     1027    78      114
+
+Ratios:
+-------
+                        balls   gears   mount   rings   teapot  tetra   tree
+Art/Vort/kd             1.0     1.0     1.0     1.0     1.0     1.0     1.0
+Art/Vort/kd/dp          1.12    xxx     1.06    1.08    1.16    1.13    1.08
+
+Art/Vort/ug/twk         1.0     1.11    1.0     1.0     1.58    1.01    1.0
+Art/Vort/ug/twk/dp      1.06    1.13    1.07    1.09    2.8     1.08    1.1
+
+Machine: HP 720
+---------------
+        Option: Single precision +f
+                Double precision -Dfloat=double
+
+                        balls   gears   mount   rings   teapot  tetra   tree
+Art/Vort/kd             308     915     156     400     155     58.1    252
+Art/Vort/kd/dp          300     926     138     390     155     60.3    244
+
+Art/Vort/ug/twk         89      527     xxx     168     139     41.4    39.7
+Art/Vort/ug/twk/dp      117     560     xxx     234     168     43.1    46
+
+Ratios:
+-------
+                        balls   gears   mount   rings   teapot  tetra   tree
+Art/Vort/kd             1.0     1.0     1.0     1.0     1.0     1.0     1.0
+Art/Vort/kd/dp          0.97    1.01    0.88    0.975   1.0     1.03    0.97
+
+Art/Vort/ug/twk         1.0     1.0     xxx     1.0     1.0     1.0     1.0
+Art/Vort/ug/twk/dp      1.31    1.06    xxx     1.39    1.2     1.04    1.15
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,986 @@
+<!-- html version of Volume 1, Number 8 :  -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 1, Number 8</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>September 5, 1988</FONT>
+<P><FONT size=+1>Volume 1, Number 8</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1988, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Intro
+</A></LI>
+<LI><A HREF="#art2">
+Capsule Biographies
+</A></LI>
+<LI><A HREF="#art3">
+SIGGRAPH '88 RT Roundtable Summary,
+</A></LI>
+by Paul Strauss and Jeff Goldsmith
+<LI><A HREF="#art4">
+Commercial Ray Tracing Software and SIGGRAPH,
+</A></LI>
+by Eric Haines and others
+<LI><A HREF="#art5">
+A Letter,
+</A></LI>
+by Jeff Goldsmith
+<LI><A HREF="#art6">
+Best of USENET
+</A></LI>
+<LI><A HREF="#art7">
+Postscript Ray Tracer,
+</A></LI>
+John Hartman and Paul Heckbert
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Intro
+</A></FONT>
+</H4>
+Well, I'm back from my honeymoon, I've just moved into a new house, and
+I have returned to work and am confronted with a heavy duty schedule.
+However, the workstation's on the fritz for a few hours so here's my
+chance to compile an issue of the RT News.
+<P>
+Other major changes around here are that Michael Cohen (of radiosity
+fame, and a subscriber) has begun his cross-country drive from Ithaca
+to Salt Lake City.  He'll be continuing his education at the University
+of Utah's computer graphics facility.  Roy Hall is taking over Michael's
+place at the Cornell Program of Computer Graphics, and should be added to
+this mailing list soon.  Andrew Glassner is now with Xerox PARC, and his
+new address should be available by next issue, too.
+<P>
+I plan to get another issue out within a week, as there is also an
+interesting research idea that I need to talk about with a few people
+before presenting it here.  Stay tuned...and please feel free to submit to
+the next issue.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+Capsule Biographies
+</A></FONT>
+</H4>
+What follows are short self-descriptions by various new people at the
+roundtable at SIGGRAPH.  These are simply in the order I received them.
+The latest address list (email and physical) is attached at the end of
+this issue.
+<P>
+By the way, if you never submitted an autobiographical sketch, (or if you
+are doing something that's different from your last sketch) please feel
+free to send one on to me for the next issue.
+<P>
+# Russ Tuck - SIMD parallel algorithms and architectures for ray tracing<BR>
+# Computer Science Dept, Univ. of North Carolina
+<P>
+My dissertation research is on parallel methods of programming SIMD parallel
+computers.  I have developed a measure of program portability, and a system
+which lets the programmer specify in advance how portable a program must be.
+The compiler can then provide (and enforce) this amount of portability.  I
+call this an "optimally portable" programming system.  I'll be presenting my
+work at "Frontiers 88: The 2nd Symp. on the Frontiers of Massively Parallel
+Computation" in October.  Thinking about ways to do ray tracing (and radiosity)
+on massively parallel SIMD machines is a fun sidelight.  (Some of my ideas
+were in the June '88 hardcopy Ray Tracing News.)
+<P>
+# Greg Ward - accuracy and realism, daylight, efficient light sources.<BR>
+# Lawrence Berkeley Laboratory
+<P>
+The purpose of my work is the development of more accurate calculations
+for lighting design and engineering.  Electric lighting contributes
+directly or indirectly to about 20% of the nation's energy
+consumption.  Although significant progress has been made in the area
+of energy-efficient light sources, wasteful installations frequently
+result from poor building design rather than low fixture efficiency.
+It is hoped that with better computational tools, architects and
+engineers will produce more energy-efficient designs.  I am currently
+working on a validated reflection model and method for measuring
+surface properties using a digitizing camera.  By streamlining the
+measurement process, it should be possible to obtain accurate
+simulations of designs using a realistic variety of construction
+materials.  I am also comparing the accuracy and applicability of
+different classes of lighting calculation, and exploring the use of
+animation in design visualization.
+<P>
+# Pete Litwinowicz -- realistic image sythesis, etc.<BR>
+# Apple Computer, INC
+<P>
+Working on 3D animation, rendering and modelling at Apple.
+<P>
+# Tom Malley - parallelism, complex scenes, space subdiv., shading methods<BR>
+# Evans & Sutherland Computer Corporation
+<P>
+My interests are primarily in how to make ray traced images that are
+significantly more realistic than the computer generated images we
+often see now. The complexity of the models must increase for realism.
+If we want to ray trace large databases on many processors, we must
+determine efficient ways to make pieces of the data set available
+dynamically to processors as they perform intersection searches.
+Additionally, I'm interested in analysis of reflection models to see
+where the typical simplifying assumptions steer us wrong, and what the
+alternatives may be.  I'd also like to see more closed loop
+comparisons of computer generated images with real scenes.
+<P>
+# Chuck Grant - tracing fewer rays, coherency, antialiasing<BR>
+# Lawrence Livermore National Laboratory
+<P>
+I am interested in algorithms and data structures for most areas of image
+synthesis: visible surface algorithms, volumetric visualization, antialiasing,
+texturing, shading, etc., etc... Ray tracing is a big part of my interests but
+not all. I am currently working on a comparison of all existing visible surface
+algorithms, and have invented several new ones as a result. I am not interested
+in "Scientific Data Visualization" but the demands of my job make me spend a
+lot of time doing just that. I am finishing my PhD. in computer graphics at the
+University of California at Davis.
+<P>
+# Steve Stepoway -- efficient intersection calc., parallelism
+<P>
+My interests in ray tracing these days are centering around finding more
+efficient ray-object intersection calculations, as well as issues of
+parallelism in rendering. I am working with Sam Uselton (U. Tulsa) and
+Mark Lee (AMOCO) on developing some new space sub-division techniques
+(next year's SIGGRAPH paper).
+<P>
+# Daniel Bass - Realism, diffraction & wavelength effects<BR>
+# Apollo Computer Inc.
+<P>
+[no autobiographical note]
+<P>
+# Ken Joy - intersection tests, efficiency, coherency<BR>
+# Computer Graphics Research Lab, Computer Science Division,<BR>
+# University of California, Davis
+<P>
+[no autobiographical note]
+<P>
+# Fred Fisher - realism, radiosity enhancements, ray tracing manufacturing<BR>
+#   databases
+<P>
+Hello. I'm now working at DEC doing electronics design for a
+geometry pipeline. My interest in ray tracing has involved rendering
+polygonal databases (presumably ones similar to those used in
+a quick-Gouraud-render CAD environment ). I've been writing a lot
+of software on my own (ray-tracing and otherwise) to understand the
+image synthesis process better, with the intent of designing hardware
+to help the rendering phase.
+<P>
+# Pierre Poulin - illumination models, natural phenomenon<BR>
+# University of Toronto<BR>
+# Department of Computer Science
+<P>
+I am a graduate student working right now on a model for anisotropic reflection
+that would save the world and computing time. This should be my introduction in
+the fascinating science of the simulation of natural phenomenon (or how to
+deceive the eye with less than 1 million polygons...).
+<P>
+# Andrew C. Woo - intersection culling algorithms and complexity<BR>
+# University of Toronto<BR>
+# Department of Computer Science
+<P>
+I am currently a first year (fast approaching second year) master's student
+at the University of Toronto.  My current thesis work is on a new approach
+to shadow acceleration (beyond trans-warp drive, of course) and comparing
+it to existing shadow accelerators (eg. the impulse-power "light buffer"
+--&gt; just kidding, Eric).
+<P>
+# Chuan Chee  -  natural phenomena, ray tracing, animation<BR>
+# University of Toronto<BR>
+# Department of Computer Science
+<P>
+I am finishing my first year as a master's student at the University of
+Toronto.  I currently do not have a thesis topic.
+<P>
+# Robert E. Webber, Prof. - ray tracing large databases of volume density data.<BR>
+# Computer Science Department<BR>
+# Rutgers University, Busch Campus
+<P>
+Am currently tuning a ray tracer that handles hierarchically arranged
+voxel data.  The basic unit of organization is a 16 by 16 by 16
+``voxel'' block where each voxel contains 32 bits of information.
+This information is interpreted as either a density description of the
+contents of that voxel or a pointer to another voxel block
+representing a recursive decomposition of the current block.  16 by 16
+by 16 times 4 bytes means that my basic block is 16k, which is a size
+that fits our local disk system rather well from the point of view of
+i/o overhead.  The program is organized to allow the database to be
+spread over a number of files (max 255) thus avoiding the 4 gigabyte unix file
+size problem (since the pointers only have to be able to address the
+start of each 16k block, 32 bit pointers can address a terabyte of
+data -- should we ever be lucky enough to have it) as well as the
+problem of finding alot of space inside of a single disk partition.
+Rutgers currently organizes its computing around a cluster of a
+hundred networked Sun workstations including 2's, 3's, and 4's.
+<P>
+The current status of the system is that 5 megabyte scenes (roughly
+400 blocks) representing densities at the 256 by 256 by 256 level have
+been ray traced.  Surface interpolation permitted images of
+demonstrating shadows, shading, and inter-reflection to be generated.
+Various techniques for determining the surface represented by a local
+cluster of voxel densities are being experimented with.  Will soon be
+running the ray tracer in parallel (don't expect much bus contention
+as the system is currently extremely cpu bound).  We are also
+installing some WORM drives locally and so soon expect to have yet
+another layer of memory hierarchy to fiddle with.
+<P>
+# Michael Natkin<BR>
+# Brown University
+<P>
+No current paragrapho for now, as i'm rewriting our whole environment
+at the moment, no time for ray-tracing.
+<P>
+_________
+<P>
+That's all for now, with about 6 people who are new but haven't contacted
+me yet.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+SIGGRAPH '88 RT Roundtable Summary,
+</A></FONT>
+by Paul Strauss and Jeff Goldsmith
+</H4>
+<PRE>
+0.  Women don't talk about ray tracing.
+1.  It would be nice to have something that does both ray tracing and
+    radiosity.
+2.  It would be nice to have caustics.
+3.  It would be nice to do analytical anti-aliasing.
+4.  Motion blur is a Good Thing.
+5.  Adaptive subsampling don't work good.
+6.  There are many ways to minimize ray-object intersection tests.
+7.  Hardware would be nice.  Maybe later.
+8.  We should use ray tracing for real applications.
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Commercial Ray Tracing Software and SIGGRAPH,
+</A></FONT>
+by Eric Haines and others
+</H4>
+    Last issue I listed all the commercially available ray tracers I knew as of
+SIGGRAPH.  There were a few new entries I saw this year:
+<P>
+<PRE>
+        - ElectroGIG, from England, shown at the Meiko booth, is the first
+          commercial ray tracer based on using constructive solid geometry
+          that I've seen.
+</PRE>
+<P>
+<PRE>
+        - SoftImage, (the people with the nice rocks image) from Montreal,
+          had a nice looking Wavefront/Alias/etc-looking package with a ray
+          tracer.  They claim it was the fastest ray tracer on the floor (it
+          runs on a number of machines) and seemed to use octree subdivision.
+          I never got to see the demo, but people tell me that it was fast,
+          and that the programmer is a very careful and efficient coder.
+</PRE>
+<P>
+<PRE>
+        - Shima-Seiki, from Japan.  They claim to have a ray-tracer with
+          hardware assistance (whatever that means), though they're not
+          marketing it yet and couldn't tell us anything about it.  The
+          realtime texturing system from Mars, with lots of cool buttons and
+          knobs, was pretty impressive though.  System cost is $500K, $300K,
+          or "we haven't decided", depending on when you talked with them.
+</PRE>
+<P>
+<PRE>
+        - Ray Tracing Corp is now Ray Tracing Research Corp, and they released
+          a ray tracer for the Mac II for $895.
+</PRE>
+<P>
+<PRE>
+        - Apollo: not a product, but their ray tracer was fun to watch as a
+          demo of both the speed of their new DN10000 (not sure about the
+          number of zeros in that one) super-mini-super-workstation and of
+          Apollo's networking abilities.  Darn fast.
+</PRE>
+<P>
+<PRE>
+        - Silicon Graphics: also not a product, they had a very nice demo
+          (which, sadly, a number of their marketing people didn't know about)
+          showing a scene from a god's-eye point of view, with rays shooting
+          through the image plane and bouncing around.  The image would build
+          up scan line by scan line on both the image plane in the scene and
+          in a separate window.  You could also change the god's-eye view
+          interactively as the scene was being ray-traced.  Nice.
+</PRE>
+<P>
+Other things of interest:  AT&T Pixel Machines' ray tracer is now even faster,
+purely due to software tuning.  They plan to cut even more time by further
+changes.  "Sphereflake", which ran at about 30 seconds last year, now runs
+at around 16 seconds.  There is a public domain modeller which should be
+out in mid-October which will run on the Iris 3130 and on the Pixel Machine.
+It was developed by NASA (demoed at AT&T), and since they're governmental they
+can't make it a for-profit product.  In a month and a half contact their
+distributor, "COSMIC" (which stands for something), at 404-542-3265.  They
+won't really know much about it until then.
+<P>
+SGI showed radiosity images on the floor, though there is no announced product
+yet.  They seemed to have developed their own adaptive refinement technique.
+HP showed ray tracing film loops and stills, and radiosity images and on-the-fly
+adaptive refinement (which will be a product sometime this winter).  The new
+radiosity technique introduced by Cornell this year has the promise of being
+"radiosity for the rest of us".
+<P>
+Those were my major impressions (other than the usual "the art show was better
+this year", "course lunches were worse", etc) - anyone else care to add their
+two cents?
+<P>
+Jeff Goldsmith points out:
+<P>
+    Cray Research has "Oasis," Gray Lorig's ray tracer, available,
+I think, for free.  Of course, you have to buy a Cray at $20 million
+first....
+<P>
+    I don't get it.  Why doesn't every CG Software vendor supply a
+ray tracer.  It's definitely the easiest renderer to write.  Yes,
+they are slo-o-o-o-o-o-w, but they sound glitzy and (I bet) would
+stimulate sales, even if buyers never used them.
+<P>
+Gray Lorig responded to my query for info on Oasis:
+<P>
+  The current status of the Oasis package, which is basically a
+raytracing animation package, is it's an unsupported product.
+What that really means is that we will give it to Cray customers
+for free, give them updates every once and a while, and provide
+support only when I feel like it.
+<P>
+John Peterson says:
+<P>
+  I would add RenderMan to your list of commercial ray tracers - I think you
+can explicitly implement classical ray tracing by writing some code in their
+magic shading language.
+<P>
+Also, the ray tracer I wrote at Utah is (or at least may be) commercially
+available.  It specializes in ray tracing NURB (B-spline) surfaces, and
+supports the usual suspects of features (refract/flection, shadows (with
+penumbra), texture mapping, anti-aliasing (with stochastic sampling) and
+motion blur).  It comes bundled with a geometric modelling system called
+Alpha_1, distributed by Engineering Geometry Systems in Salt Lake City.
+<P>
+<PRE>
+The contact is:
+        Engineering Geometry Systems
+        275 East South Temple, Suite 305
+        Salt Lake City, UT, 84111
+</PRE>
+<P>
+I think the price is something like $10K for commerical sites and &lt; $1K for
+government or university sites.  The ray tracer isn't available separately,
+but the modelling package is so full of goodies it's worth looking at in its
+own right.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+A Letter,
+</A></FONT>
+by Jeff Goldsmith
+</H4>
+[my response is in brackets]
+<P>
+   1) A student of mine found a typographical error in
+your "Intro to Ray Tracing" notes.  (I gave him some
+pages from same to teach him about texture mapping; good
+job!)  In Equation set E11, the third line should
+read: Qvy = -Nb/Dv2 rather than Nc.  I noted that you didn't
+catch it in this years' issue.  (Better typesetting, though.)
+Thanks for publishing that.
+<P>
+[Thanks!  If anyone else notices typoes, omissions, or anything else that bugs
+them in the "Intro" SIGGRAPH notes, please contact Andrew Glassner or me
+or the individual author ASAP.]
+<P>
+    2) Does anyone know where I can obtain 2D wood texture maps?
+FTP, email, tape, disc, whatever, is fine.
+<P>
+[Any leads, anyone?  I'm interested, too.]
+<P>
+-- Jeff Goldsmith
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Best of USENET
+</A></FONT>
+</H4>
+[What follows are things posted to USENET that might be of interest here.
+Many readers either don't receive USENET or haven't the time to perform chaff
+separation.  What follow are my own winnowings. - EAH]
+<P>
+_________________________
+<P>
+Thomas Palmer writes:
+<P>
+Has anyone done any work on vectorizing ray-object intersection
+calculations?  The vectorizing C compiler on a Cray X/MP will not
+(automatically) vectorize loops smaller than about 5 or 6 iterations
+(nor should it - the vector register load time outweighs the gain).
+Typical ray tracing vector operations involve vectors of length 3 or 4.
+<P>
+<PRE>
+  -Tom
+</PRE>
+<P>
+<PRE>
+ Thomas C. Palmer       NCI Supercomputer Facility
+ c/o PRI, Inc.          Phone: (301) 698-5797
+ PO Box B, Bldg. 430    Uucp: ...!uunet!ncifcrf.gov!palmer
+ Frederick, MD 21701    Arpanet: <A HREF="mailto:palmer@ncifcrf.gov">palmer@ncifcrf.gov</A>
+</PRE>
+<P>
+_____
+<P>
+&gt;From: <A HREF="mailto:spencer@tut.cis.ohio-state.edu">spencer@tut.cis.ohio-state.edu</A> (Stephen Spencer)<BR>
+Subject: Re: Vectorizing ray-object intersection calculations<BR>
+Organization: Ohio State Computer & Info Science<BR>
+<P>
+There was an article in IEEE CG&A about four years ago about vectorizing
+ray-sphere intersections on a Cyber which included an algorithmic workup
+of how it worked.
+<P>
+As far as ray-polygon intersection goes, the article in SIGGRAPH '87 dealing
+with tesselation of polygonal objects (it had the pictures of grass and the
+Statue of Liberty in it) included the algorithm for fast ray-polygon
+intersection, and I did implement it and it did vectorize quite nicely.
+I unfortunately no longer seem to have that piece of code, but it wasn't
+difficult.  Of course you still have to do the sorting of the intersection
+points but the heavy intersection calculations can be done quickly.
+<P>
+_________________
+<P>
+&gt;From: u-jmolse%sunset.utah.edu@utah-cs.UUCP (John M. Olsen)<BR>
+Newsgroups: comp.graphics<BR>
+Subject: Polygon teapot ftp'able<BR>
+Summary: Come 'n get it.<BR>
+Organization: University of Utah, Computer Science Dept.<BR>
+<P>
+One of the kind and generous People In Charge compressed the Utah Teapot
+and has made it available (for a week or so) as ~ftp/pub/teapot.Z so those
+who want the polygon version of it can get it now.  It compressed to about
+270K from 990K, so it's not too bad to transfer.  The machine name is
+cs.utah.edu.  Have fun with it, and let me know if you have any problems
+getting it transferred.
+<P>
+Just so I don't get hate mail, and you don't think your software is
+broken:  The Utah teapot
+was designed with a hole in the bottom.  I had forgotten about this,
+but was reminded by someone (Jean Favre?) who rendered it.
+<P>
+_________________
+<P>
+<PRE>
+From: <A HREF="mailto:markv@uoregon.uoregon.edu">markv@uoregon.uoregon.edu</A> (Mark VandeWettering)
+Newsgroups: comp.graphics
+Subject: Ray Tracer: Part 01/01
+Organization: University of Oregon, Computer Science, Eugene OR
+Lines: 2353
+</PRE>
+<P>
+Here is the first release of my totally whiz-bang ray tracer.  Okay, so
+it isn't TOTALLY whiz bang, but it does have some nice features.  It
+uses bounding volumes, has cones, spheres, polygons and cylinders as
+primitives, reads Eric Haines NFF file format images and more....
+<P>
+Use it, abuse it, sell it, but be sure to have fun with it.  I had alot
+of fun hacking on it.   If any of you find bugs, or better yet fix bugs
+and add features, send them to me, and I will try to get them worked
+into a future release which I hope might make it into comp.sources.unix.
+<P>
+[ code not included here:  either get it from USENET, or you can write Mark
+or myself for a copy.  The source weighs in at about 55K bytes.]
+<P>
+_________________
+<P>
+<PRE>
+Reply-To: <A HREF="mailto:kjohn@richp1.UUCP">kjohn@richp1.UUCP</A> (John K. Counsulatant)
+Organization: RICH Inc. , Franklin Park,IL
+</PRE>
+<P>
+    If anyone is interested in *other* ray tracers, I
+have source to DBW Render (an excellent ray tracer ported from the VAX to
+the Amiga) and Tracer (a crude spheres only (but a good starter :-) tracer
+for the Amiga).  I am in the process of obtaining QRT (quick ray tracer (if
+there is such a thingee ;-)) source (also for the Amiga).
+<P>
+I can be reached at:
+<P>
+RealTime (prefered):  1(312)418-1236  (6pm to 10:30pm central time)
+<P>
+USmail:               John Kjellman             E-Mail: <A HREF="mailto:kjohn@richp1.UUCP">kjohn@richp1.UUCP</A>
+                      17302 Park Ave.
+                      Lansing IL 60438
+<P>
+_________________
+<P>
+Reply-To: <A HREF="mailto:sean@ms.uky.edu">sean@ms.uky.edu</A> (Sean Casey)
+Organization: The Leaning Tower of Patterson Office @ The Univ. of KY
+<P>
+In article (<A HREF="mailto:2660@uoregon.uoregon.edu">2660@uoregon.uoregon.edu</A>) markv@drizzle.UUCP (Mark VandeWettering) writes:<BR>
+&gt;       Isn't DBW Render copyrighted?  I believe the source code may not<BR>
+&gt;       be redistributed, I tried to obtain the sources, but aborted<BR>
+&gt;       because of the restriction on use/redistribution.<BR>
+<P>
+The first release of DBW Render was freely redistributable. I believe it
+even found it's way to a Fish disk. The story I hear is of an evil employer
+seeing $$$ and telling Dave that since he wrote it on the company computer
+it belongs to the company and that no further releases may be given away.
+<P>
+The current release uses "Look Up A Word In The Manual" type copy
+protection, the most annoying kind I have experienced to date.
+<P>
+If someone really wants to pay for an Amiga ray tracer, I'd send him in the
+direction of one of Turbo Silver, Videoscape 3D, or Sculpt 3D, all excellent
+products. These products are in fierce competition with each other, and get
+better all the time. I saw a pamphlet in Turbo Silver that had an ad for a
+fascinating terrain generator module.  Just think, combine a high quality
+terrain generator and the logistics of a board wargame...
+<P>
+Oh yeah, I hear that some of the commercial Amiga ray tracing software is
+being ported to the Mac II. These products have been around for a while, so
+it's a good chance for Mac users to get their hands on some already-evolved
+ray-tracing software.
+<P>
+<PRE>
+Sean
+--
+***  Sean Casey                        <A HREF="mailto:sean@ms.uky.edu">sean@ms.uky.edu</A>,  sean@ukma.bitnet
+***  (Looking for his towel)           {backbone|rutgers|uunet}!ukma!sean
+***  U of K, Lexington Kentucky, USA   Internet site? "talk <A HREF="mailto:sean@g.ms.uky.edu">sean@g.ms.uky.edu</A>"
+***  ``With a name like Renderman, you know it's good jam.''
+</PRE>
+<P>
+_________________
+<P>
+<PRE>
+Reply-To: <A HREF="mailto:kyriazis@turing.cs.rpi.edu">kyriazis@turing.cs.rpi.edu</A> (George Kyriazis)
+Organization: RPI CS Dept.
+</PRE>
+<P>
+        Hello world!  I have been using ray tracers for quite some time now,
+and I have made many changes to some of them, so I though it was time for
+me to write a ray tracer.  So there it is!  It is not supposed to be fast
+or anything, but I think it is well commented and easy to understand.
+It is very simple also.
+        I am willing to give it to anyone that wants it.  Unfortunately,
+I don't think I can put it in a place where people can ftp to, so if you
+want it, please send me mail.  I'm sure I can put it in some public place
+later.
+        The ray tracer currently supports only spheres, with ambient,
+diffuse, specular lighting, together with reflections and refractions.
+I don't use any in-line code for the vector routines, but subroutines, for
+readability.
+        Hope someone will want to play around with it.
+<P>
+  George Kyriazis
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+Postscript Ray Tracer,
+</A></FONT>
+John Hartman and Paul Heckbert
+</H4>
+[This was published in the last hardcopy RT News.  Here it is again, for those
+not inclined to type a lot]<BR>
+Reply-To: <A HREF="mailto:jhartman@miro.Berkeley.EDU">jhartman@miro.Berkeley.EDU</A> (John H. Hartman)<BR>
+Organization: University of California, Berkeley
+<P>
+  Ever worry about all those cycles that are going to waste every night when
+you shut off your laserwriter? Well, now you can put them to good use.
+Introducing the world's first PostScript ray tracer. Just start it up, wait
+a (long) while, and out comes an image that any true graphics type would
+die laughing over. As it is currently set up it will trace a scene with
+three spheres and two lights. The image resolution is 16x16 pixels.
+<P>
+  Warning: the code is a real kludge. I'm not sure there is much you can
+change without breaking it, but you're welcome to try. If, by chance, you
+are able to improve the running time please send us the improved version.
+<P>
+psray.ps is the ray tracer. result.ps is what a 16x16 image should look
+like.
+<P>
+  Have fun.
+<P>
+John H. Hartman jhartman@ernie.berkeley.edu<BR>
+ UCB/CSD ucbvax!ernie!jhartman
+<PRE>
+# to unpack, cut here and run the following shell archive through sh
+# contents: psray.ps result.ps
+#
+echo extracting psray.ps
+sed 's/^X//' &lt;&lt;'EOF10807' &gt;psray.ps
+X%!
+X% Copyright (c) 1988  John H. Hartman and Paul Heckbert
+X%
+X% This source may be copied, distributed, altered or used, but not sold for
+X% profit or incorporated into a product except under licence from the authors.
+X% This notice should remain in the source unaltered.
+X%   John H. Hartman jhartman@ernie.Berkeley.EDU
+X%   Paul Heckbert   ph@miro.Berkeley.EDU
+X
+X%    This is a PostScript ray tracer. It is not a toy - don't let the kids
+X%  play with it. Features include: shadows, recursive specular reflection
+X%  and refraction, and colored surfaces and lights (bet you can't tell!).
+X%  To use this thing just send it to your favorite Postscript printer.
+X%  Then take a long nap/walk/coffee break/vacation. Running time for
+X%  a recursive depth of 3 and a size of 16x16 is about 1000 seconds
+X%  (roughly 20 minutes) or 4 seconds/pixel.
+X%    There are a few parameters at the beginning of the file that you can
+X%  change.  The rest of the code is pretty indecipherable. It is translated
+X%  from a C program written by Paul Heckbert, Darwyn Peachey, and Joe Cychosz
+X%  for the Minimal Ray Tracing Programming Contest in comp.graphics in
+X%  May 1987.  Some changes have been made to improve the running time.
+X%  Don't even bother trying to figure out how this works if you are looking
+X%  for a good example of a ray tracer.
+X%
+X/starttime usertime def
+X/DEPTH 3 def   % recursion depth
+X/SIZE 16 def   % image resolution
+X/TIMEOUT SIZE dup mul 10 mul cvi 120 add def  % approximately 10 sec/pixel
+X/NUM_SPHERES 5 def
+X/AOV 25.0 def    % angle of view
+X/AMB [0.02 0.02 0.02] def  % ambient light
+X% list of spheres/lights in scene
+X%            x    y    z     r   g   b   rad  kd   ks  kt   kl  ir
+X/SPHERES [[[ 0.0  6.0  0.5] [1.0 1.0 1.0] 0.9 0.05 0.2 0.85 0.0  1.7]
+X          [[-1.0 8.0 -0.5] [1.0 0.5 0.2] 1.0 0.7  0.3 0.0  0.05  1.2]
+X          [[ 1.0 8.0 -0.5] [0.1 0.8 0.8] 1.0 0.3  0.7 0.0  0.0   1.2]
+X         [[ 3.0 -6.0 15.0] [1.0 0.8 1.0] 7.0 0.0  0.0 0.0  0.6  1.5]
+X         [[-3.0 -3.0 12.0] [0.8 1.0 1.0] 5.0 0.0  0.0 0.0  0.5  1.5]
+X        ] def
+X
+Xstatusdict begin
+XTIMEOUT setjobtimeout
+X/waittimeout TIMEOUT def
+Xend
+X/initpage {
+X   /Courier findfont
+X   10 scalefont setfont
+X} def
+X
+X/X 0 def
+X/Y 1 def
+X/Z 2 def
+X/TOL 5e-4 def
+X/BLACK [0.0 0.0 0.0] def
+X/WHITE [1.0 1.0 1.0] def
+X/U 0.0 def
+X/B 0.0 def
+X% index of fields in sphere array
+X/cen 0 def
+X/col 1 def
+X/rad 2 def
+X/kd 3 def
+X/ks 4 def
+X/kt 5 def
+X/kl 6 def
+X/ir 7 def
+X/NEG_SIZE SIZE neg def
+X/MATRIX [SIZE 0 0 NEG_SIZE 0 SIZE] def
+X/vec {3 array} def
+X/VU vec def
+X/vunit_a 0.0 def
+X
+X% dot product, two arrays of three reals
+X/vdot {
+X   aload pop
+X   4 -1 roll
+X   aload pop
+X   4 -1 roll mul
+X   2 -1 roll 4 -1 roll mul add
+X   3 -2 roll mul add
+X} def
+X
+X% vcomb, sa, a, sb, b  returns new array of sa*a + sb*b
+X
+X/vcomb {
+X   aload pop
+X   4 -1 roll dup dup
+X   5 1 roll 3 1 roll mul
+X   5 1 roll mul
+X   4 1 roll mul 3 1 roll
+X   5 -2 roll aload pop
+X   4 -1 roll dup dup
+X   5 1 roll 3 1 roll mul
+X   5 1 roll mul
+X   4 1 roll mul 3 1 roll
+X   4 -1 roll add 5 1 roll
+X   3 -1 roll add 4 1 roll
+X   add 3 1 roll
+X   vec astore
+X} def
+X
+X/vsub {
+X   aload pop
+X   4 -1 roll aload pop
+X   4 -1 roll sub 5 1 roll
+X   3 -1 roll sub 4 1 roll
+X   exch sub 3 1 roll
+X   vec astore
+X} def
+X
+X/smul {
+X   aload pop
+X   4 -1 roll dup dup
+X   5 1 roll 3 1 roll mul
+X   5 1 roll mul
+X   4 1 roll mul 3 1 roll
+X   vec astore
+X} def
+X
+X/vunit {
+X   /vunit_a exch store
+X   1.0 vunit_a dup vdot sqrt div vunit_a smul
+X} def
+X
+X/grayscale {
+X   % convert to ntsc, then to grayscale
+X   0.11 mul exch
+X   0.59 mul add exch
+X   0.30 mul add
+X   255.0 mul
+X   cvi
+X} def
+X
+X
+X/intersect { % returns best, tmin, rootp
+X   7 dict begin
+X   /d exch def
+X   /p exch def
+X   /best -1 def
+X   /tmin 1e30 def
+X   /rootp 0 def
+X   0 1 NUM_SPHERES 1 sub {
+X      /i exch def
+X      /sphere SPHERES i get def
+X      /VU sphere cen get p vsub store
+X      /B d VU vdot store
+X      /U B dup mul VU dup vdot sub sphere rad get dup mul add store
+X      U 0.0 gt
+X      {
+X        /U B U sqrt sub store
+X        U TOL lt
+X        {
+X           /U 2.0 B mul U sub store
+X           /B 1.0 store
+X        }
+X        { /B -1.0 store }
+X        ifelse
+X        U TOL ge
+X        U tmin lt and
+X        {
+X           /best i store
+X           /tmin U store
+X           /rootp B store
+X        }
+X        if
+X      }
+X      if
+X   } for
+X   best tmin rootp
+X   end
+X} def
+X
+X/trace {
+X   13 dict begin
+X   /d exch def
+X   /p exch def
+X   /level exch def
+X   /saveobj save def
+X   /color AMB vec copy def
+X   /level level 1 sub store
+X   p d intersect
+X   /root exch def
+X   /v exch def
+X   /s exch def
+X   -1 s ne
+X   {
+X      /sphere SPHERES s get def
+X      /p 1.0 p v d vcomb store
+X      /n
+X      sphere cen get p
+X      root 0.0 lt { exch } if
+X      vsub vunit def
+X      sphere kd get 0.0 gt
+X      {
+X        0 1 NUM_SPHERES 1 sub
+X        {
+X           /i exch def
+X           /light SPHERES i get def
+X           light kl get 0.0 gt
+X           {
+X              /VU light cen get p vsub vunit store
+X              /v light kl get
+X              n VU vdot
+X              mul store
+X              v 0.0 gt
+X              p VU intersect
+X              /B exch store
+X              /nd exch def
+X              i eq
+X              and
+X                 { /color 1.0 color v light col get vcomb def }
+X              if
+X           } if
+X        } for
+X      } if
+X      color aload pop
+X      sphere col get aload vec copy /VU exch store
+X      4 -1 roll mul
+X      5 1 roll
+X      3 -1 roll mul
+X      4 1 roll
+X      mul
+X      3 1 roll
+X      color astore pop
+X      /nd d n vdot neg store
+X      /color
+X      sphere ks get
+X      sphere kd get color sphere kl get VU vcomb
+X      0 level eq
+X        { BLACK vec copy}
+X        { level p 1.0 d 2 nd mul n vcomb trace vec astore }
+X      ifelse
+X      1.0 3 -1 roll vcomb store
+X      root 0.0 gt
+X        { /v sphere ir get store }
+X        { /v 1.0 sphere ir get div store }
+X      ifelse
+X      /U 1 v dup mul 1 nd dup mul sub mul sub store
+X      U 0.0 gt
+X      {
+X        /color
+X        1.0 color sphere kt get
+X        0 level eq
+X           { BLACK vec copy}
+X           { level p v d v nd mul U sqrt sub n vcomb trace vec astore }
+X        ifelse
+X        vcomb store
+X      } if
+X   } if
+X   color aload pop
+X   saveobj restore
+X   end
+X} def
+X
+X/main {
+X   initpage
+X   /data SIZE dup mul string def
+X   /half SIZE 0.5 mul def
+X   /i 0 def
+X   /dy half AOV cvr 0.5 mul dup cos exch sin div mul def
+X   /temp vec def
+X   0 1 SIZE 1 sub
+X   {
+X      /y exch def
+X      0 1 SIZE 1 sub
+X      {
+X        /x exch def
+X         data i
+X        /saveobj save def
+X        VU X x cvr half sub put
+X        VU Y  dy put
+X        VU Z half y cvr sub put
+X        DEPTH BLACK VU vunit trace
+X         grayscale
+X        saveobj restore
+X        put
+X     /i i 1 add store
+X      } for
+X   } for
+X   gsave
+X   100 300 translate 400 400 scale SIZE SIZE 8 MATRIX {data} image
+X   grestore
+X   100 200 moveto
+X   (Statistics: ) show
+X   100 190 moveto
+X   (Size: ) show SIZE 10 string cvs show
+X   100 180 moveto
+X   (Depth: ) show DEPTH 3 string cvs show
+X   100 170 moveto
+X   (Running time: ) show usertime starttime sub 1000 div 20 string cvs show
+X   showpage
+X} def
+X/main load bind
+Xmain
+Xstop
+EOF10807
+echo extracting result.ps
+sed 's/^X//' &lt;&lt;'EOF10808' &gt;result.ps
+X%!
+X/picstr 16 string def
+X100 300 translate
+X400 400 scale
+X16 16 8 [16 0 0 -16 0 16]
+X{currentfile picstr readhexstring pop} image
+X0505050505050d0e1114140505050505
+X050505050518231c1136472c05050505
+X0505050528231b262729364b58050505
+X05050525251c0e2528280e3a52550505
+X050505241b0c0d0d0d0d0d0c3c540505
+X050505080a0b0b0c0c0b0b0b0a080505
+X0505620608090a0a0a0a090908072805
+X056873170607070808080707060c2e2a
+X57676e94050505060606060505752d29
+X525e6456310505050505050514722825
+X45512f2e2b0a06050505050111141420
+X35402726240b0b0b0509040410111119
+X1e2c1e1d1b0b0b0b050904040c0d0d0c
+X0b121312100b0b0b0504040407080807
+X050b0b0b0b0b0b050505040404040404
+X05050505050505050505050505050505
+Xshowpage
+EOF10808
+exit
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

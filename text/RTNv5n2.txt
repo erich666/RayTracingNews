@@ -1,0 +1,1865 @@
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+                        "Light Makes Right"
+
+                          August 26, 1992
+                        Volume 5, Number 2
+
+Compiled by Eric Haines, 3D/Eye Inc, 2359 Triphammer Rd, Ithaca, NY 14850
+	erich@acm.org
+All contents are copyright (c) 1992 by the individual authors
+Archive locations: anonymous FTP at princeton.edu (128.112.128.1)
+	/pub/Graphics/RTNews, wuarchive.wustl.edu:/graphics/graphics/RTNews,
+	and many others.
+UUCP archive access: write Kory Hamzeh (quad.com!avatar!kory) for info.
+
+Contents:
+    Introduction - SIGGRAPH roundtable, etc
+    New People, New Addresses, etc
+    BSP Traversal Errata, by Kelvin Sung
+    The Art of Noise, by Steve Worley
+    Ray Tracing Roundup, by Eric Haines
+    Graphics Gems III Residency Mask errata, by Joe Cychosz
+    Any Future for Efficiency Research?, by Eric Haines
+    NuGrid Update, by Mike Gigante
+    ======== USENET cullings follow ========
+    Spline Patch Ray Intersection Routines, by Sean Graves
+    Xdart, from Mark Spychalla
+    4D Space Viewing Software, by Steve Hollasch
+    BYU Modelling and Visualization Package - Free Demo, by Stacey D. Son
+    New Radiosity Program Available, by Guy Moreillon
+    Optics Lab Information, by Anthony Siegman
+    Ray Tracing (or Casting) Applications, by Tom Wilson
+    Goofy (?) Idea, Gary McTaggart
+    Constant Time Ray Tracing, by Tom Wilson, Eric Haines, Brian Corrie, and
+	Masataka Ohta
+    VLSI for Ray Tracing, by Kenneth Cameron, George Kyriazis, Peter De Vijt,
+	Jon Leech, Sam Uselton, Thierry Priol, and "Dega Dude"
+    The Moon Revisited, by Tom Duff
+    Soft Shadow Ideas, compiled by Derek Woolverton
+    Book Announcement: Multiprocessor Methods for Computer Graphics Rendering,
+	    by Scott Whitman
+
+-------------------------------------------------------------------------------
+
+Introduction
+
+Before you hit that "next article" key, at least check out Steve Worley's
+article "The Art of Noise".  This is one of the better articles that's been in
+the Ray Tracing News, full of interesting bits of advice on using the noise
+function effectively for texturing.
+
+As usual, SIGGRAPH was fun this year.  Ray tracing is becoming fairly common,
+with many rendering packages having it available.  The idea of saving each ray
+intersection tree at each pixel is spreading:  Intergraph has had this for
+years, and now TDI has added it to their renderer (see Sequin & Smyrl,
+SIGGRAPH '89, for the basic technique).  We'll undoubtedly see more of this in
+years to come, given that main memory is increasing much faster than screen
+resolution.
+
+My favorite product was Fractal Painter, which is the most paint-like paint
+program I've seen yet.  Nothing to do with ray tracing, but it was cool...
+
+One interesting business has arisen in the past year or so:  selling digitized
+models.  Viewpoint Animation Engineering has a nice glossy catalog of models
+ranging from pterodactyls to spinal cords to eighteen wheelers (and I dare you
+to render a scene with all three).  At the show they were giving out demo
+disks of Al Capone related datasets:  a '32 Packard, a violin case, a
+tommygun, an antique lamp, and a cartoon Al.  No normals per vertex (it's
+unclear if their other models have these or not) and no normal per polygon
+(most polygons were consistently one way, though I found a few were reversed -
+ugh).  Prices listed are in the hundreds of $$$, but these seem fairly
+variable, partially depending on your use:  one folder puts various vehicles
+at $300-$500 a piece, but another folder offered 20 vehicles for $395 total.
+You figure it out:  call them at 1-800-DATASET.  They also do custom
+digitizing, running around $1000 per model.  Another company that sells 3D
+models (primarily architectural related items, geographic data, and people)
+and does digitizing is Acuris at 415-329-1920.
+
+Graphics Gems III is out, and contains some nice tidbits on ray tracing and
+many other topics.  I particularly like Ben Trumbore's gem for computing tight
+bounding volumes for quadrics and tori.  There are some truly gem-like, sharp
+thoughts, like Andrew Woo's clever method of avoiding epsilon problems when
+using shadow maps.  Plus lots of other great stuff.  And at last, you can find
+out what the Gems III code on princeton.edu:/pub/Graphics/GraphicsGems/GemsIII
+actually does!  Gems IV will be edited by Paul Heckbert, and is due out in two
+years.  Academic Press would like to have one out every year, but the editors
+felt that this might lead to diminishing overall quality.
+
+One of my recent discoveries in Graphics Gems II (reprinted in Gems III) is
+Steve Hollasch's set of macro routines for vector manipulation.  They're easy
+to overlook, but quite compact and useful:  two of them (Vec2Op and Vec3Op)
+replaced dozens of macros in our old vector manipulation macro library.  Check
+them out!  The Gems series is interesting in that there is a lot of knowledge
+crammed into each book, and it sometimes takes a little exploration to find
+(or stumble upon) some of the wonderful ideas and tricks therein.
+
+Two nice things have been happening in ray tracing over the past year.  One is
+that wuarchive.wustl.edu:/graphics/graphics has become a good collection site
+for various graphics information.  It includes Radiance, a good chunk of the
+NCSA programs, many object databases, 31 megs of ray-tracing stuff and the
+milton.u.washington.edu virtual worlds archive.  wuarchive recently got a new
+drive, which allowed the graphics archive to hop to over 300 megs.  Write to
+George Kyriazis <kyriazis@rdrc.rpi.edu>, who is maintaining the graphics
+area, if you see something that's old or missing.
+
+The other trend is that Rayshade is becoming a testbed for other researchers'
+efficiency schemes.  Erik Jansen (fwj@duticg.tudelft.nl) and Wim de Leeuw have
+made their BSP traversal code publicly available (see RTNv5n1), Mike Gigante
+plans on releasing his NuGrid code as soon as his research paper is accepted,
+and there is one researcher who has implemented Arvo & Kirk's 5D scheme using
+Rayshade as a base.  This is a wonderful development, in that good code for
+various efficiency schemes for one ray tracer are becoming available and so
+can be used as the basis for meaningful timing tests.  Such things as
+simulated annealing may become easier to explore, since a variety of
+interchangeable efficiency schemes will become commonly available.
+
+To wrap it up, here is the first paragraph of the Acknowledgements of David
+Jevans' interesting Master's thesis (which uses nested grids for efficiency),
+"Adaptive Voxel Subdivision for Ray Tracing," Dept. of Computer Science,
+Univ. of Calgary, 1990:
+
+	As a young, overfunded graduate student, I would often pass idle
+	hours drinking medicinal alcoholic concoctions, and firing shotgun
+	blasts at pieces of paper nailed to the side of the university's
+	orgone accumulator outhouse.  Imagine my surprise when I discovered
+	that the performance graphs of my ray tracing algorithms exactly
+	matched the patterns blasted into those pellet ridden sheafs!
+	Seeing this as a sign of divine acceptance, of some kind of grand
+	conjunction of information, I collected my results into the volume
+	of forbidden knowledge that you hold before you.
+
+-------------------------------------------------------------------------------
+
+New People, New Addresses, etc
+
+Rob LaMoreaux
+907 Wisconsin Ave.
+St. Joseph, MI 49085
+(616)-982-3187 work
+(616)-983-1743 Home
+r.lamoreaux@mi04.zds.com
+Raytracing Interest: Creating pictures and eventually short animations
+
+I'm using POV to create scenes, and would eventually like to create short
+animations.  I try not to program much, but I have been thinking about a
+Visual basic front end to launch POV (depends on time (not much available),
+ambition and whether someone does it first).  Interested in object files and
+object creation utilities (I'm too lazy and impatient to hand assemble things
+out of triangles).  Some of the objects I am interested in are:  Cars
+(especially racing), houses, landscaping, bicycles, sailboards, a sewing
+machine, and anything else interesting to look at.
+
+
+# Abe Megahed - interested in issues of scene complexity,
+#  global illumination, ray tracing data structs in animation
+# University of Wisconsin
+# 1413 Mound St
+# Madison, Wisconsin 53711
+# (608) 256-6306
+
+-------------------------------------------------------------------------------
+
+BSP Traversal Errata, by Kelvin Sung (ksung@cs.uiuc.edu)
+
+The Gem we wrote for GemsIII ("Ray Tracing with The BSP Tree", pp.  271-274)
+did not reflect enough credit from Erik Jansen's past work.  Erik Jansen
+pointed out to me that the algorithm (in our Gem) is exactly the same (except
+for some small details) as the method suggested in Jansen(1986) and therefore
+the sentence on page 272 (of GemIII):
+
+   (...) the recursive ray traversal algorithm introduced independently by
+   Jansen (1986) is a different implementation of the same tree walking idea.
+
+should be removed. The sentence on page 271 should be read as:
+
+   It is straightforward to implement the Recursive Ray Traversal Algorithm as
+   proposed by Jansen(1986) and Arvo(1988) on a BSP tree.
+
+I thought the date of the work (Jansen 1986 vs Arvo 1988) shows that Erik
+Jansen was the one who first introduced the algorithm.  The fact that his work
+was referenced later than Arvo's in that Gem may cause confusion and thus may
+not reflect enough credit from Jansen's past work.  This is a mistake and
+should be corrected.
+
+[Note:  Erik Jansen and Wim de Leeuw have made their BSP code for Rayshade
+publicly available.  Write fwj@duticg.tudelft.nl for details. - EAH]
+
+-------------------------------------------------------------------------------
+
+The Art of Noise, by Steve Worley (spworley@netcom.com)
+
+Using Perlin style 3D solid textures for algorithmic generation of surfaces
+can be very effective.  (The Perlin paper in '85 SIGGRAPH is the only
+reference you really need to implement them.)  Perlin describes an algorithm
+for fractal noise generation, the basis of MANY types of surfaces.  The big
+advantage of this method is that it is U-V independent:  it is a solid texture
+that takes (object) absolute coordinates.
+
+Implementing this algorithm is really quite easy, but there are some small
+tweaks that can enhance the quality of the surface.  Assuming you have a
+noise-generation function (a smooth 3D interpolator given a lattice of values
+and derivatives:  Graphics Gems II has the code for a routine by Greg Ward to
+do just this) you will often want to make "fractal" noise by summing over many
+scales of the noise function.  By decreasing the characteristic size of each
+scale as well of the amplitude of those summed scales, after about 5 or 6
+scales you'll have a function that will have details on many different size
+ranges.  This function (when expressed as a greyscale or even thresholded)
+has a cloudy appearance:  there are blobs of diffuseness with soft, ragged
+edges.
+
+How to use these noise fields to make textures is pretty straightforward:
+Perlin gives many examples and there was even an entire course at '92
+SIGGRAPH.  I've implemented nearly 50 textures that use fractal noise, and
+I've learned some tricks.
+
+The biggest problem with the algorithm described above is that there are
+artifacts.  You are interpolating over a cubic lattice, and you'll be able to
+SEE that lattice especially if you look at just one scale function.  One trick
+I use to remove these artifacts is to make the fractal noise more isotropic by
+rotating each summed scale to a random orientation.  Since the lattices of the
+different scales don't line up, the artifacts will at least be uncorrelated
+and a lot less noticeable.  I do this by rotating each scale with a random,
+precomputed, rotation matrix.  If you want to return derivatives (for bump
+mapping) you'll have to post-multiply the result from each scale with the
+appropriate inverse rotation matrix before you add them.
+
+I made these matrices by generating random rotation matrices, and taking only
+those that point inside a single octant of a sphere.  Since a 90 degree
+rotation (or 180 or 270) will still let the lattices match up, a single octant
+is the most rotation that is necessary.  [Note that these are full 3D
+rotations, not 2D, but you know what I mean.]  Keeping the rotations to this
+smaller angle lets you see that there are not two similar rotations for
+different scales.  (Remember this is a one-time precompute:  you can manually
+sort through about 10 of these and you're done.)  To test what octant a
+rotation matrix maps to, just pump the vector (1 0 0) through the matrix and
+look for a vector with all positive components.  You can generate the rotation
+matrices using the algorithm(s) in Graphics Gems III by Ken Shoemake and Jim
+Arvo.
+
+This rotation trick is most useful when bump mapping, since the
+differentiation really exposes the lattice artifacts:  there are sharp
+discontinuities of the second derivatives along the lattice lines.  When you
+differentiate for bump mapping, these second derivatives become FIRST
+derivatives and are visible.
+
+----
+
+When you are summing the scales, each scale will have a size and amplitude
+which is a fixed ratio of the scale size and amplitude of the previous scale.
+The natural scale to use is 0.5, but DON'T USE THIS.  Better to use
+0.4857463537 or 0.527849474673 which will give you the same effective ratio.
+A ratio of exactly 0.5 will help the different scales "register" more
+effectively (the small scale repeats exactly twice on top of the larger
+scale,) so artifacts can appear periodically.  By using the odd number, the
+periodicity is broken.
+
+----
+
+A couple of other tricks also makes more useful noise.  MAKE A SPECIAL CASE.
+Half of the time when you use noise, it is on a flat surface, like woodgrain
+on a table top.  If you make a 2D version of fractal noise, it will be over
+twice as fast as a 3D version (which basically computes two "layers" of noise
+and interpolates.)  I have a special case that checks for the Y (vertical)
+component to be 0, and branches off into a special case subroutine.  If you're
+clever, you can even make the 2D special case be a perfect subset of the 3D
+case:  that is, the SIDES of the tabletop will call the 3D noise routine but
+they will mesh up with the 2D version which is called for the TOP of the
+table.  [Easiest way to be clever:  take your original code, globally replace
+the variable "Y" with 0, then have fun in Emacs removing all the terms that
+vanish.  This guarantees that your special case will match up with your
+general 3D routine, but you won't have to think too hard about how to
+implement it.]  Only one disadvantage to this technique:  the rotation
+matrices (from the previous idea) will make even a flat tabletop have Y!=0.
+You can either change your rotation matrices to be only 2D (spins around the Y
+axis), live without the rotation enhancement, or live with the slower
+computation.  Your call.  My implementation let the user decide, with the
+default being NOT to use rotations.
+
+----
+
+Yet another trick.  NORMALIZE your noise.  Ideally, you want the fractal
+noise, no matter how many scales or what scale size or ratio you use, to
+return a value over the same range.  This is easy to do:  just divide the
+final sum by the square root of the sum of the squares of all the amplitudes
+of the scales.  This makes it a lot nicer when you are tweaking textures:  the
+relative amounts of colors or size of the bumps won't be affected when you
+change the scale or amplitude ratio or number of summed scales.
+
+----
+
+For user convenience, you might even want to make another type of
+normalization.  One common use of the fractal noise value is to feed the value
+into a color spline.  If a user sets the "levels" of the color spline, it can
+be VERY difficult for them to set the levels right in order to get the
+"coverage" they need.  If they want to make white clouds on a mostly blue sky,
+what value does they choose for the threshold where white starts being added?
+I solved this problem by computing 25,000,000 values of noise and making a
+probability distribution (just a histogram.)  By recording the different
+percentiles (5% of the noise values are under this number, 10% under this
+one....  95% under this one..)  I was able to get a PERCENTAGE mapping of the
+distribution.  When a user wants the sky to be 90% blue, they say that the
+white color should be added starting at 0.90.  The program maps this value
+0.90 back into the corresponding noise value, and the user gets the 90%
+coverage they asked for.  (I have noise that returns a value from -1 to 1, but
+most values are clustered around 0.  90% corresponds to a value of 1.442 in my
+implementation.)  This convenience is no real computational load, but for the
+user, it makes using the texture a LOT more intuitive.
+
+Using Perlin fractal noise is an art, but it is a very effective way to make
+complex surfaces.  Good luck!
+
+And for the curious, my textures are a commercial product, sorry, I can't give
+you the code.  :-)
+
+-------------------------------------------------------------------------------
+
+Ray Tracing Roundup, by Eric Haines
+
+The computer graphics archive that is resident on iear.arts.rpi.edu is being
+moved to wuarchive.wustl.edu.  The FTP directory is graphics/graphics.  In
+that directory there is a CONTENTS file that gives a roadmap of the
+directories, and also an ls-lR file giving exact pathnames.  Note that a book
+errata directory has started here - authors, please send George your errata.
+Currently errata for "An Introduction to Ray Tracing" and "Digital Image
+Warping" are available, with more expected.  In case you don't know, you can
+NFS mount the wuarchive directories if you'd like.  Right now there are more
+than 500 systems mounting it.  Contact:  George Kyriazis
+<kyriazis@rdrc.rpi.edu>.
+
+
+The fabled POV v1.0 ray tracer (a.k.a. son of DKBtrace) is finally available,
+being released just before SIGGRAPH.  It's available on alfred.ccs.carleton.ca
+[134.117.1.1]:pub/pov-ray, on the BBS 'You Can Call Me Ray' in North Chicago
+suburbs (708-358-5611), and on Compu$erve.
+
+There is also a mailing list for POV and DKBtrace.  To subscribe, send a mail
+containing the body:
+	subscribe dkb-l <Your full name>
+to listserv@trearn.bitnet  (yes, that's in Turkey).  You will then be added to
+the list, and every mail that you send to
+	dkb-l@trearn.bitnet
+goes to anyone else subscribed on the list.
+
+
+GIF and JPEG images of the SPD databases and some of my old thesis images are
+stored at ftp.ipl.rpi.edu [128.113.14.50] sigma/erich, nic.funet.fi (somewhere)
+and at gondwana.ecr.mu.oz.au [128.250.70.62] pub/images/haines.
+
+
+Lee Butler is attempting to create a texture library at his FTP site.  His
+interest is in 2 and 3 dimensional textures of materials suitable for surface
+texturing.  He is mostly interested in photographic quality textures and
+bump-maps.  He accepts data in most popular formats (TIFF, GIF, JPEG, etc),
+but may convert data in order to conserve disk space.  He'd like a little
+descriptive text to go with any textures you send, i.e.  just enough to
+identify what the subject matter is, what the image dimensions are, etc.
+Please make sure what you send is in the public domain (e.g.  scanned in
+pictures from books are not allowed, including Brodatz's well-known "Textures"
+book, which is copyright).  (contact Lee A.  Butler <butler@BRL.MIL>)
+
+
+On hanauma.stanford.edu is a 720x360 array of elevation data, containing one
+ieee floating point number for every half degree longitude and latitude.
+[This is quite nice! - EAH] (from Ken Chin-Purcell <ken@msc.edu>)
+
+
+Some scanned in Brodatz textures are available from cicero.cs.umass.edu:
+/texture_temp.  They are 512x512 grayscale.  (from Julien Flack
+<julien@scs.leeds.ac.uk>).
+
+
+
+Colby Kraybill has placed texture maps from Hans du Buf
+(dubuf@ltssun1.epfl.ch) on pioneer.unm.edu [129.24.9.217]:  pub/texture_maps
+(from Colby Kraybill <opus@pioneer.unm.edu>) [these include aerial swatches,
+Brodatz textures, and synthetic swatches. - EAH]
+
+
+The Chapel Hill Volume Rendering Test Datasets, Volumes I and II are available
+for FTP from omicron.cs.unc.edu in pub/softlab/CHVRTD.  These include a 3D
+volume set for two heads, a brain, a knee, electron density maps for RNA and
+other molecules, etc.
+
+
+T3DLIB (the TTDDD model conversion package) is now at version 34 and is at
+hubcap.clemson.edu [130.127.8.1]:pub/amiga/incoming/imagine/TTDDDLIB.  There
+are 3D models in .../imagine/objects.  The converter now supports DXF format
+output.
+
+
+Version 4 of the collection of ray tracing abstracts is ready.  I've put it in
+several ftp sites (wuarchive.wustl.edu:graphics/graphics/ray or maybe bib).
+To get it, do the following:  get rtabs.11.91.shar.Z using binary mode,
+uncompress it, and then unshar it (sh rtabs.11.91.shar).  Then read READ.ME.
+The abstracts (RTabs) can be converted to two forms:  Latex (preferred) or
+troff -me.  The filters I've included may help you write your own if you need
+something else.  A second file (RTnew) contains just the added abstracts if
+you don't want to print the whole thing again.  There are now 306 abstracts.
+(from Tom Wilson <wilson@cs.ucf.edu>)
+
+
+After listening in on the fast rotation / wireframe discussion in
+comp.graphics.  I decided to release a simple 3D wireframe viewer that I wrote
+myself that runs under X11.  It is available via anonymous ftp at
+castlab.engr.wisc.edu (128.104.52.10) and is found as /pub/x3d.1.1.tar.Z .
+MIFF files of rendered objects are on castlab in /pub/rendered_objs.  More
+objects are on castlab in /pub/more_objs.  (from Mark Spychalla
+<spy@castlab.engr.wisc.edu>)
+
+
+The shadow buffer algorithm is now implemented in the SIPP rendering library.
+Version 3.0 is available from isy.liu.se (130.236.1.3), pub/sipp/sipp-3.0.tar.Z
+
+
+As part of Guy Moreillon's diploma project (Interactive Radiosity), he has
+created a scene made out of objects in OFF format.  It represents the inside
+of a house, with one big room and a smaller one, stairs going up, a couple of
+armchairs, a table, a kitchen chair, a fridge, and so on.  He uploaded it on
+gondwana.ecr.mu.oz.au as well as cs.uoregon.edu in the incoming directory
+(file house.tar.Z).  (from Guy Moreillon <moreillo@disuns1.epfl.ch>)
+
+
+fractint v17 will output a few raytrace formats (dkb/pvray, vivid, raw
+triangle mesh) from the 3d mapping function.  fraint17.exe will be on
+wuarchive.wustl.edu. (from Tony Audas <taudas@ais.org>)
+
+
+There is an enhanced version of Rayshade available at weedeater.math.yale.edu:
+incoming/ray406enh2.tar.Z.  It adds new blobbies, swept spheres, and all sorts
+of other things to the original (from Larry Coffin
+<lcoffin@clciris.chem.umr.edu>)
+
+An Amiga version of Rayshade 4.0.6 is up for FTP at ab20.larc.nasa.gov
+(/incoming/amiga/Rayshade) and at weedeater.math.yale.edu
+(/incoming/AmigaRayshade).  Bug reports to me and I'll see who they originally
+belong to.  If they're mine, I'll fix'em, eh? (by Colin DeWolfe,
+<dewolfe@ug.cs.dal.ca>)
+
+A distributed version of Craig Kolb's Rayshade 4.0 is available
+on ftp site princeton.edu as pub/Graphics/rayshade.4.0/etc/rayshade-rrlib.tar.Z
+It makes raytracing very much faster by dividing a frame or animation into
+squares, which are distributed on a unlimited number of servers. (from
+Wilfried Koch <bj030@aix370.rrz.uni-koeln.de>).
+
+
+The "art" raytracer has undergone some changes and now includes the addition
+of heightfields (as output by programs such as fracland), some additional
+capabilities for rendering algebraic surfaces, several new textures, a couple
+of speed ups and the usual collection of bug fixes.  Contributed scenes are
+available in pub/contrib/artscenes on gondwana and /graphics/graphics/echidna
+on wuarchive.wustl.edu.  Anyone wishing to contribute can place files in
+incoming on gondwana.  (from Eric H. Echidna <echidna@ecr.mu.oz.au>)
+[wuarchive.wustl.edu has this in graphics/graphics/echidna]
+
+
+There are new versions of the RTrace ray-tracer (version 7.3.2) and the scene
+translator SCN2SFF (version 1.3) at asterix.inescn.pt [192.35.246.17] in
+directory pub/RTrace.  Some bugs were fixed and new features added:
+    - 3D text (fonts, orientation, spacing, etc - high quality)
+    - CSG objects
+An MS-DOS version for use with DJGPP DOS extender (GO32) is in
+pub/RTrace/PC-386/rtrace.zip.  The pub/RTrace directory has been reorganized.
+There are new subdirectories with new images (medical, molecular, etc), scene
+converters and other tools.  [There have been further bug fixes and new
+features since then, but you get the idea - EAH] (from Antonio Costa
+<acc@basinger.inescn.pt>)
+
+
+Some more notes on reaction-diffusion textures (see last issue, this column):
+do a lint on Greg Turk's code before you run it, and you might also want to
+make sure your "random()" function works as he thinks it does (mine didn't - I
+changed to drand48()).  Note that Witkin & Kass's equation #5 also has a typo:
+it should be C(t+ delta t) - C(t) on the left side of the equation.  Also,
+Andrew Witkin says section 6.1's R function is a bit unstable.  I haven't got
+it to work, but Greg Turk's code does pretty much the same thing in a
+different way.
+
+
+Other new things (later in this issue) include spline patch ray intersection
+routines, 4D space viewing software, a distributed ray tracer, a free trial
+version of a modelling and visualization package from BYU, and a new radiosity
+program.
+
+-------------------------------------------------------------------------------
+
+Graphics Gems III Residency Mask errata, by Joe Cychosz
+	(3ksnn64@ecn.purdue.edu)
+
+The following is a correction to "Use of Residency Masks and Object Space
+Partitioning to Eliminate Ray-Object Intersection Calculations"
+
+Page 285 should read:
+
+  By updating the ray mask as it passes from cell to cell, a quick
+determination of whether an object within the cell needs to be intersected can
+be made by simply ANDing the residency mask of the object with the (not the
+complement of) residency mask for the ray.
+
+The process goes something like this:
+
+ray_mask = 0
+
+foreach (cell the ray passes through) {
+    foreach (object in the cell) {
+	if  (ray_mask & object_mask == 0) {
+	    compute the ray-object intersection
+	}
+    }
+    update ray_mask marking for cell
+}
+
+The important thing here is to mark the cell after it is processed.
+
+-------------------------------------------------------------------------------
+
+Any Future for Efficiency Research?, by Eric Haines
+
+As far as the SIGGRAPH papers committee is concerned, efficient ray tracing
+seems to be pretty much a solved problem (i.e. no efficiency papers have been
+accepted in years).  To be fair, SIGGRAPH tends to present papers which break
+new ground; lately there haven't been any radical breakthroughs in efficiency
+research.  The research in this area has taken on more of an engineering feel,
+where there are incrementally better methods developed over time.
+
+On one level, I tend to agree that efficiency is "solved":  grids,
+octrees/BSP, and automatic bounding volume hierarchy are all in the same
+ballpark.  However, Mike Gigante points out that raw speed is not the best
+qualification for a scheme.  Yes, if you tweak grid placement and run it at a
+variety of resolutions, you'll usually find that scheme is very fast, possibly
+faster than any other scheme.  The problem is that a typical user does not
+want to deal with efficiency tweaking at all, and so the best efficiency
+scheme may not be the fastest, but rather something near optimal that is
+automatic and will work in a wide range of environments without serious
+degradations in speed or memory usage.
+
+As far as future research goes, I've yet to see much work on Jim Arvo's idea
+of simulated annealing applied to efficiency schemes (see the RTNews/RTNews1
+file).  His idea is that sometimes one scheme is significantly better than the
+others for a particular scene or part of an environment (see Kirk & Arvo's
+"Ray Tracing Kernel" paper from Ausgraph '88 for using multiple efficiency
+schemes).  For a single 1280x1024 image it may not be worth doing much
+analysis to determine which is the best efficiency scheme, but if you're doing
+an animation or an extremely high resolution image it may be worth spending
+more time up front to save time later.  Hybrid approaches may be the best
+overall solution, where objects or volumes have different efficiency schemes
+depending on predicted performance.  There's an interesting paper:
+
+ H. K. Choi, C. M. Kyung, "PYSHA: a shadow-testing acceleration scheme for ray
+ tracing", Computer-aided design, vol. 24, no. 2, Feb. 1992
+
+which talks about deciding which efficiency scheme to use on the fly by having
+a cost function approximate which will be cheaper.
+
+It seems that the way in which space is filled is the main determinant of
+which scheme is most efficient.  Grids, for example, excel when the
+distribution of primitives is uniform.  Being able to quickly characterize how
+space is filled could allow choosing the best efficiency scheme.  Determining
+what the correlation between some distribution statistics and which scheme is
+fastest is probably trickier than characterizing the space itself.  There is
+also the problem of platform independence and attempting to determine what
+"fastest" means in a general sense (minimizing the number of intersection
+tests is a good start, but the costs of each scheme needs to be factored in).
+
+Some interesting work is being done on speeding up ray-tracing for animation by
+using temporal coherence.  For example, Jevans paper in Graphics Interface '92:
+
+	%A David Jevans
+	%T Object Space Temporal Coherence for Ray Tracing
+	%J Proceedings of Graphics Interface '92
+	%I Canadian Information Processing Society
+	%C Toronto, Ontario
+	%D May 1992
+	%P 176-183
+
+is one of the latest in this area of research.
+
+Another topic of interest which has not been explored much is efficient
+ray-casting for non-rendering related tasks.  Saul Youssef (see the ray
+tracing bibliography on the net) has researched shooting rays for high energy
+physics work, John Wallace and I wrote a paper about ray-casting for radiosity
+visibility testing, and there has been some work done for volume visualization
+ray tracing.  The assumption has been that "what's good for ray tracing is
+good for everything else" and that the current popular efficiency schemes are
+sufficient.  In our work on radiosity we have seen different sources of
+coherence which can be exploited in interesting ways.  If someone is doing a
+mass-properties study of an object by casting rays the problem can be
+restructured to minimize ray-object testing that is not normally available to
+a ray tracer, since we know in advance where all the rays will be traveling.
+
+-------------------------------------------------------------------------------
+
+NuGrid Update, by Mike Gigante (mg@godzilla.cgl.citri.edu.au):
+
+Since I last sent you all mail about the performance tests on NUgrid [see last
+issue. -EAH], I have been burning the midnight oil and made some significant
+new developments (IMHO of course).
+
+I was actually writing a paper (for SIGGRAPH) with the results as well as a
+better criteria for building the NUgrid (rather than the end of the bbox),
+when I worked out a technique for the totally automatic construction of
+NUgrids.  That is right -- even tho' NUgrid was much much less sensitive than
+grids in the selection of the grid resolution, it now builds a close to optimal
+NUgrid automatically.  In fact in many cases, the result is better than the
+best case performance in previous NUgrid versions.  All this was absolute last
+minute stuff!  Since we are so far away, the damn couriers wanted 4 working
+days to get it to pixar!!!  I only came up with the method 3 days before the
+paper had top leave (as I was starting to write up the previous stuff!!!).  I
+actually managed to crank all the code out and do a set of test cases.  I had
+the courier waiting by while I pasted in the results!!  Why do ideas come at
+awkward times?
+
+I have spent the last couple of days cleaning up the paper and stuff, even
+tho' it won't get to the siggraph committee, I wanted to finish it off now
+while it was all fresh in my mind.  I am disappointed that the copy I sent
+was fairly rough, but boy were the results good!  I am now working on making
+the automatic method work even better.
+
+I have included a couple of tables below.
+
+BTW, we actually got the Octree stuff implemented also, it uses Samet's
+neighbour following stuff so traversal is very fast.  NUgrid still whips it in
+most cases and is very competitive in the other cases.  From these results,
+the uniform grid should be a dead duck.
+
+BTW, I have tested over 60 datasets with each of the methods below, ranging
+from a few dozen polygons up to 880,000 independent phong triangles.
+
+I plan to make all the code available after I know what is happening with the
+paper, if the results don't make up for the rather hurried nature of the
+paper, then I already have in my hands a very publishable newer version and I
+have no doubt it will get in somewhere.
+
+Here are some results, all this was in rayshade, with
+
+1) Uniform grid (as per vanilla rayshade)
+2) NUgrid 1 (as described in Ausgraph 90 paper, but with ray counter and
+raybounds optimizations (which rayshade's uniform grid had))
+3) NUgrid 2 (as described in my paper submission - a different
+criteria for where to drop the dividing planes)
+4) AutoNUgrid
+5) Octree.
+
+the first 3 were tested with resolution 4x4x4 -> 36x36x36 in increments of 2,
+AutoNUgrid had only 1 test config of course, Octree was tested with
+subdivision depth 2 (equiv to 4x4x4 grid/NUgrid) through to depth 10 (where we
+didn't run out of memory!!!).
+
+Some of the bigger cases are still finishing their timings now, so within
+another week or so I can complete the tables.  Even so, the trend is very
+clear from the plots I have done of all the tests.  I am completing the test
+cases for completeness only.
+
+Anyhow, here are the tables...
+
+Best and worst case performance for SPD model Balls:
+      |      Grid  |     NUgrid 1  |     NUgrid 2  |     Auto  |   Octree
+Best  |    1286.75 |      476.09   |      421.30   |    737.32 | 21695.24
+Worst |   10510.54 |      2755.95  |      2895.47  |           |   895.49
+
+
+... for SPD model Gears:
+      |      Grid  |     NUgrid 1  |     NUgrid 2  |     Auto  |   Octree
+Best  |    1935.06 |       2225.37 |     2129.30   |  2475.14  |  1844.92
+Worst |   25870.45 |      12116.60 |     7039.23   |           | 68208.26
+
+
+... for SPD model Mount:
+      |      Grid  |     NUgrid 1  |     NUgrid 2  |     Auto  |   Octree
+Best  |     505.69 |      455.84   |     436.91    |  512.24   | 451.99
+Worst |    2059.52 |      1479.85  |    1326.74    |           | 9281.84
+
+
+... for SPD model Rings:
+      |      Grid  |     NUgrid 1  |     NUgrid 2  |     Auto  |   Octree
+Best  |    799.76  |      918.94   |      767.40   |  811.32   |    760.52
+Worst |   4852.32  |     5376.37   |     4284.81   |           |  13688.93
+
+
+... for SPD model Teapot:
+      |      Grid  |     NUgrid 1  |     NUgrid 2  |     Auto  |   Octree
+Best  |    345.39  |      344.60   |      336.09   |  491.06   |   357.74
+Worst |   3617.02  |     2492.49   |     2672.95   |           | 17756.98
+
+
+... for SPD model Tetra:
+      |      Grid  |     NUgrid 1  |     NUgrid 2  |     Auto  |   Octree
+Best  |    79.13   |      77.45    |      75.45    |    98.29  |  123.64
+Worst |   348.72   |     242.01    |     245.11    |           | 1699.55
+
+
+... for SPD model Tree:
+      |      Grid  |     NUgrid 1  |     NUgrid 2  |     Auto  |   Octree
+Best  |    5013.27 |      667.20   |    502.07     |    833.47 |   565.85
+Worst |   18763.96 |     5019.25   |   3670.67     |           | 25418.44
+
+
+======== USENET cullings follow ===============================================
+
+Spline Patch Ray Intersection Routines, by Sean Graves (sean@cs.tamu.edu)
+
+I wrote some routines for raytracing patches.  They are based on a paper by:
+
+Levner G, Tassinari P, Marini D (1987) A simple method for ray tracing bicubic
+surfaces.  In: Kunii TL (ed) "Theoretical Foundations of Computer Graphics and
+CAD", 1987, Springer, Tokyo, pp 805-814.
+
+These routines can work with any bicubic patch such as a bezier, b-spline,
+cardinal, beta-spline, etc.  These are the routines that are in the library:
+
+ *     NewPatch - Allocates the patch data structures and returns a pointer.
+ *     DefPatch - Defines a patch, given a patch pointer.
+ *     IsectPatch - Intersects a ray and a patch. Returns u, v, t, pnt.
+ *     NormalPatch - Given a patch and a u, v position, returns the normal.
+ *     FreePatch - Deallocates a patch.
+ *
+ *   Additionally, there is one useful routine not specific to patches:
+ *     BoxIntersect - Given a ray and a box, returns the intersection point.
+
+These should give you the capability to raytrace a patch.  I have used them
+successfully in a raytracing package I wrote.  You can use them as is or
+use them as an example for your own code.
+
+[these are in wuarchive in the ray subdirectory, spline-patch.tar.Z]
+
+-------------------------------------------------------------------------------
+
+Xdart, from Mark Spychalla (spy@castlab.engr.wisc.edu)
+
+xdart, a distributed raytracer that runs under X11, is available via anonymous
+ftp at castlab.engr.wisc.edu (128.104.52.10) The clients are distributed as
+binaries and C source.  The servers are distributed as binaries ONLY for the
+following systems:
+
+   DECstation
+   SPARCstation
+   NeXT
+   HP Snake (710)
+
+You MUST have one of the above machine types in order to run the program.  I
+wrote the client and encourage anyone who wishes to modify the source and
+experiment with it.  Abe Megahed wrote the raytrace engine and does not wish
+to release its source code; thus, source for the server will not be
+distributed.
+
+-------------------------------------------------------------------------------
+
+4D Space Viewing Software, by Steve Hollasch (hollasch@kpc.com)
+
+    I'm releasing to the public domain two packages for 4D viewing.  These
+packages were developed in conjunction with my master's thesis at Arizona
+State University, entitled "Four-Space Visualization of 4D Objects", written
+May 1991.
+
+    wire4 is a 4D wireframe package that takes geometry information from input
+files, and has such features as PostScript output, colored edges, depth-cued
+edges, real-time 3D and 4D rotations, and other little features.  wire4 uses
+the GL interface, so it runs on most GL platforms and quite a few others that
+support the GL interface.
+
+    ray4 uses 4D raytracing to render hyperspheres, hypertetrahedra,
+hyperplanes, and hyperparallelepipeds.  ray4 runs on any platform that
+supports C with floating-point arithmetic, but the current package only has
+the display program for SGI workstations.  I have a display program for the
+Amiga, but it's not ready for release yet (I haven't yet uploaded it to work).
+In addition, Mark Craig has written a sunraster output file display program; I
+hope to release that soon also (let me know if you're interested).  The
+software is available by ftp from ftp.kpc.com /pub/graphics/holl91,
+/pub/graphics/ray4, /pub/graphics/wire4.
+
+-------------------------------------------------------------------------------
+
+BYU Modelling and Visualization Package - Free Demo, by Stacey D. Son
+
+CQUEL.BYU (pronounced "sequel") is a brand new modelling and visualization
+package for the UNIX workstation.  Some of it's features include:  animation,
+raytracing, scientific visualization, interactive modelling and editing,
+quadric primitives, Bezier and NURBS surfaces, constructive solid geometry,
+texture mapping, graphical user interface, and free-form deformation to name a
+few.
+
+The Engineering Computer Graphics Laboratory at Brigham Young University is
+offering a 30-day demonstration of this new software.  CQUEL.BYU will run on
+the following workstations under X-Windows:  SGI 4D, DEC Station 3100/5000,
+HP9000 700/800 series, SUN4/Sparc Station, and IBM RS6000.  Just send a tape
+or a $20 (US dollars) check to:
+
+	Engineering Computer Graphics Laboratory
+	Brigham Young University
+	368 Clyde Building
+	Provo, UT  84602
+	PHONE:  801-378-2812
+	E-Mail: cquel@byu.edu
+
+Also, please specify your machine type and operating system.
+
+Stacey D. Son                           459 Clyde Building
+Operations Manager                      Provo, UT 84602
+Brigham Young University                Voice:(801)378-5950 FAX:(801)378-6586
+College of Engineering & Technology     Email: sson@ee.byu.edu
+
+-------------------------------------------------------------------------------
+
+New Radiosity Program Available, by Guy Moreillon (moreillo@disuns2.epfl.ch)
+
+	There is a new radiosity program available on the network (one of the
+very few... radiosity seems to be less popular than ray-tracing...).
+
+	Rad (as it is called) allows real-time walkthrough and interactive
+modification of the scene during computation. Textures are supported when
+hardware allows. The computation algorithm is based on progressive radiosity,
+and uses automatic patch subdivision to refine the solution.
+
+	There is one small catch though: Rad only runs on SGI Workstations.
+Sorry about that, but I wasn't gonna rewrite a whole GL for X11.
+
+	Rad is currently available on the following anonymous ftp sites:
+gondwana.ecr.mu.oz.au	in	pub/rad.tar.Z
+wuarchive.wustl.edu	in	pub/rad.tar.Z
+
+-------------------------------------------------------------------------------
+
+Optics Lab Information, by Anthony Siegman (siegman@EE.Stanford.EDU)
+
+>Does anybody know of any public domain ray tracing program
+>i.e. for simulation of image formation through a user definable
+>lens.
+
+"Optics Lab", an educational program available for about $35 from
+
+	Intellimation Library for the Macintosh
+	P. O. Box 1530
+	Santa Barbara  CA  93116-1530
+
+	800-346-8355
+	805-968-8899 (fax)
+
+is not a super-high-powered lens design program but might be adequate for your
+application.  Includes a "lens cabinet" of user adjustable lenses, mirrors,
+and stops; click and drag to position elements on screen; use the mouse to
+launch individual rays or ray bundles, and see them propagate or bounce on
+screen.
+
+-------------------------------------------------------------------------------
+
+Ray Tracing (or Casting) Applications, by Tom Wilson
+
+I'm curious about the number of areas that ray tracing can be used. Here's
+an initial list of applications that I know. Please add to it if you can.
+I've stuck to papers/research that I know about.
+
+Image Synthesis (Rendering)
+  Advertising
+  Film Production
+Lighting Design
+Medical Imaging
+Molecular Modeling
+Relativity
+Acoustic Simulation
+Seismic Simulation
+Simulation and Training (flight/tank simulators, etc.)
+
+----
+
+Howard Lo (hlo@sgi.com) adds:
+
+Antenna analysis
+Radar Cross Section analysis
+
+----
+
+Davyd Norris (daffy@vaxc.cc.monash.edu.au) adds:
+
+Attenuation and Multiple Scattering corrections for Neutron Diffraction
+
+----
+
+Eric Haines adds:
+
+Monte Carlo simulation of particle interactions in High Energy Physics -
+    Saul Youssef has a number of papers related to this topic.
+
+----
+
+Steve Hollasch (hollasch@kpc.com) comments:
+
+> Lighting Design
+
+    Raytracing is only of limited use in lighting design.  It's good for
+casting shadows and dealing with reflections of light sources, but it
+fails for diffuse interreflection.  For this reason, radiosity is usually
+a better approach for lighting design, since it propagates light more
+realistically than raytracing.  The "best" approaches that I've seen
+attempt to marry the methods of ray tracing with radiosity.
+
+> Medical Imaging
+> Molecular Modeling
+> Simulation and Training (flight/tank simulators, etc.)
+
+    In my opinion, these areas are NOT best met with ray tracing, since
+they are better implemented in a dynamic fashion.  In fact, I don't
+believe I've _ever_ seen a simulator that uses a ray tracing method.  If
+you've got one up your sleeve, we'd LOVE to see it.  =^)
+
+> Relativity
+
+    This is a very good one.  Ray tracing has the advantage that of all
+other methods, it (IMHO) extends most easily to alternate geometries.
+This in fact is a good area to explore further.  I used ray tracing to
+render 4D geometry for my thesis, and was surprised by how straight-
+forward the implementation was.  Implementing the display of 4D objects
+with scanline (scanplane?) methods is anything but trivial, but raytracing
+4D is delightfully simple.
+
+    Other possible areas include:
+
+    Rendering Translucent Densities
+	(clouds, gasses, liquids, etc.)
+
+    Simple Optic Design
+	(using the refractive capabilities of raytracing).
+
+    Mathematical Graphics
+	Since it is often easier to just intersect a surface via implicit
+	equations, rather than to tessellate some sort of representation of
+	the object.
+
+----
+
+Iain Sinclair (axolotl@socs.uts.edu.au) comments:
+
+Greg Ward's Radiance software does raytracing with diffuse interreflection,
+doesn't it?  It all depends on what you're trying to light (or design).
+
+Straight radiosity looks strange in some circumstances, or simply
+isn't suitable. As you say, combinatory approaches are probably best.
+
+>In fact, I don't
+>believe I've _ever_ seen a simulator that uses a ray tracing method.  If
+>you've got one up your sleeve, we'd LOVE to see it.  =^)
+
+There are real-time auditory simulators which use raytracing.
+
+-------------------------------------------------------------------------------
+
+Goofy (?) Idea, Gary McTaggart (gmt@cis.ufl.edu)
+
+Here's a really goofy brainstorm I had for distributed raytracing:
+
+Why not incorporate into the proprietary communication programs that are used
+for such online services as Prodigy a simple raytracer which can calculate a
+very small number of pixels/frame?  First, when users first log on, you could
+upload a scene description to their computers.  While they are online, you
+could send escape codes to them for viewpoint changes and object
+repositioning, and have them return the value of a pixel or a small group of
+pixels.  The computers at the Prodigy-like company could shell out the scene
+information and collect the results to make for a very fast distributed
+raytracer.  This is assuming that the time spent sending scene information is
+not too substantial.
+
+-------------------------------------------------------------------------------
+
+Constant Time Ray Tracing, by Tom Wilson, Eric Haines, Brian Corrie, and
+	Masataka Ohta
+
+
+Tom Wilson posted to comp.graphics.research:
+
+This is something that has been bugging me for a long time, but I'm glad I
+waited until now to bring it up. Whilst writing a paper and reading old issues
+of the RTNews (or is that RTOlds 8-), I was reminded of it.
+
+Constant Time Ray Tracing: Theory OR Practice?
+
+Two things I will refer to are:
+
+OHT87 "Ray Coherence Theorem and Constant Time Ray Tracing Algorithm"
+      Masataka Ohta and Mamoru Maekawa
+      Computer Graphics 1987, Proc. of CGI '87, p. 303-314.
+
+OHT90 "Algorithm Order Discussion"
+      Masataka Ohta and Pete Shirley
+      Ray Tracing News, Vol. 1, #4, 1990
+
+You might also read the Intro. to Ray Tracing by Glassner, et al., for a
+summary of OHT87. I'm hoping Ohta may be reading, but I thought I would post
+it for all to read.
+
+THEORY
+
+In theory, is constant time ray tracing as in OHT87 possible? Sure. Given a
+sufficient 3D subdivision and a fine enough division of ray directions, each
+list in the structure will contain fewer than some constant number of objects.
+For a given ray, mapping the origin to the grid is constant time, mapping the
+ray direction to one of the subdirections is constant time, and intersecting
+the ray against a constant number of objects is constant time.
+
+In theory, is constant time ray tracing on a 3D grid possible? Yes, given a
+very huge grid. Suppose the grid is so large that tracing a ray through it
+will result in less than a constant number of ray-object intersections, then
+yes, right? Wait! What about the traversal of the grid? Well, if the grid
+size is not a function of the number of objects, then the traversal time is
+constant. Well, this can't be done. Even if you scale the grid size as a
+function of the screen resolution, it can't be done. You can always make a
+scene that will cause some rays to cause a lot of intersections.
+
+OHT87 - yes
+3D grid - no
+
+What does the OHT87 method do that the 3D grid doesn't? Perhaps the answer
+lies in the preprocessing. The ray tracing is constant time, but is the
+preprocessing? Of course not, but maybe that's still ok. I'll discuss that in
+the next part.
+
+REALITY
+
+How much preprocessing is allowed? SUPER-SILLY EXAMPLE: Preprocessing consists
+of computing all shade trees, and the ray tracing process consists of a table
+look up based on the primary ray! Talk about asking a lot! Well, the ray
+tracing sure is constant time, but the preprocessing isn't. Any technique that
+processes the objects to build a data structure, won't be constant time, of
+course. However, that still leaves the question of how much is allowed.
+
+Consider this example: A scene consists of many parallel polygons that are
+parallel to the image plane (like a stack of paper). These aren't run of the
+mill 4-sided rectangles. They have holes in them. A lot of the holes line up
+with rays through the view plane and they are really small. Now, suppose we
+preprocess using the OHT87 algorithm. *I* think that no matter how many ray
+directions you allow, you might not be able to eliminate enough objects to
+make the list for that direction be smaller than a constant number. Remember,
+we're not talking theory here, you can't have billions of ray directions.
+There is some limit on the number of ray directions. I'm pretty sure this
+falls under the no-coherence clause 8-) (p. 308 - "Because the algorithm
+utilizes the coherence of the image, the efficiency of the algorithm heavily
+depends on the coherence of the image. If there is no coherence, no
+performance will be gained."). So ---> it's not constant time then!
+
+FURTHER DISCUSSION
+
+Now I'm not trying to shoot down the work done in OHT87. I don't know how it
+compares to other schemes in implementation either. The problem I have is one
+of terminology. Ray tracing has very little theory behind it. In the early
+80's, it seemed most algorithms we're "hacked together implementations" done
+at the terminal (I hope that doesn't sound demeaning, since I don't mean it
+that way). Of late, research is turning toward some theory since most of the
+"good ideas" have been done already 8-): meaning we need to analyze what
+exists to see what's wrong with it. However, there is still little theory
+supporting the field. So "Constant Time..." is misleading since you can't
+really do it, and who wants to generate theoretical images.
+
+A somewhat unrelated thought arises from a comment in OHT90: "My algorithm
+may consume possibly long and computationally complex pre-processing time to
+analyze a scene. But, the important fact is that the time for pre-processing
+is dependent only on the scene and not on the number of rays."
+
+My first reaction is "GNNNAAARRRR?" The number of rays in a scene is bounded
+above by a constant: total number of pixels * maximum size of a ray tree
+(unless we assume an infinite ray tree -> unrealistic). Neither of these
+factors is a function of the number of objects. Preprocessing is dependent
+upon the scene and THAT is what is important. How much preprocessing of the
+scene is ok? My SUPER-SILLY EXAMPLE does too much preprocessing.
+
+Suppose we make a super-general assumption that preprocessing time can be no
+greater than k% of the ray tracing time. Make k whatever you want, but in
+OHT87 preprocessing is O(f(N)) (i.e. some function of N) and tracing is O(1).
+So the preprocessing demands are too high using this k% assumption. Maybe it's
+a bad assumption, but it's the one I see in the literature.
+
+Finally this leads me to another point, support of a claim via testing.
+Too often assumptions are made about the scene which are just too convenient.
+Not only in this case, but in many, a sphere is just too simple an object to
+support a proof. Again, I don't doubt the theory here (the proof itself is
+sufficient), I doubt the reality. In this case, the reality is supported by
+convenient scenes, which make it appear that the reality is sound (and thus
+constant time). What I'm getting at is, give me some really ugly objects,
+e.g. GEARS database.
+
+Depending upon the response to this article, I might post another about
+assumptions for algorithm testing. If I get flamed badly or there are no
+followups, then I won't.
+
+A little something to think about: No computer in the world, no matter what
+its word size, no matter its memory size, no matter what its architecture, can
+prevent overflow <--> no ray tracer in the world, no matter what the internal
+data structure, can perform in constant time (you just can't ignore
+preprocessing, as in the case of the SUPER-SILLY EXAMPLE).
+
+I would like to reiterate that I am not claiming that the work in OHT87 is
+incorrect. I just think that a theoretical concept is misleading in a
+realistic research world. No mudslinging, and keep name-calling to four letter
+words 8-).
+
+----
+
+Eric Haines responds:
+
+>REALITY
+>
+>How much preprocessing is allowed? SUPER-SILLY EXAMPLE: Preprocessing consists
+>of computing all shade trees, and the ray tracing process consists of a table
+>look up based on the primary ray!
+
+I agree, "constant" time is a provocative, fun thing to say (and Ohta is not
+the first to say it, Kaplan's "Space-Tracing, A Constant Time Ray-Tracer" from
+SIGGRAPH 85 course notes is the first instance I know).  If your efficiency
+scheme can, in theory, guarantee that given a ray, you know exactly which
+object is hit by just performing some simple (non-recursive) look-up, then
+you'll have constant time ray tracing.  The problem with such "in theory"
+statements are that they can't be backed up in practice.  Either the scheme
+takes an infinite amount of memory, or finding the actual object to intersect
+in the efficiency structure takes O(log n) time, or some other catch.  So,
+getting "near constant time" is more interesting in practice.
+
+Many people make use of this kind of thing for rays from the eye:  do a hidden
+surface preprocess (which is much faster than ray tracing in most situations,
+and is constant with the number of objects) to find what is at each screen
+sample.  This truly is "constant time" ray tracing because we know exactly
+where all the rays are going to go (through the pixels in the screen), so we
+can indeed store all these directions in a grid and easily walk through them
+to find what's visible.  The look up time is constant, and there is at most one
+object at each pixel.  The preprocess time is O(n) with the number of objects.
+
+The intersections of rays from the eye then need just a look-up to get what's
+hit.  Ohta & Maekawa, Arvo & Kirk's 5D idea, and my own shadow buffer try to
+further this directional preprocessing.  Arvo & Kirk have a nice table
+comparing the three in their chapter of "An Intro to RT".  From my own
+experience it's impossible to solve the problem of, given an arbitrary ray,
+doing an immediate look-up (i.e.  we don't have to traverse a hierarchy to
+find our object, we just translate the ray information into a table index)
+combined with always having at most a single object on the list.  By being
+willing to not have all three elements we can often come up with schemes that
+do the other two perfectly and the third fairly well.
+
+Like the shadow buffer, Ohta creates grids containing candidate lists.  The
+lists are not bounded in size, so the testing time is not a constant.  In his
+defense, Ohta's scheme gives almost constant times for his sparse spheres case
+and near constant for his dense spheres case.  It's impressive that it can do
+so well, and this was back in 1987.  The cost is that you need a direction
+cube structure for _each_ object in the scene, which is costly in
+preprocessing time and memory.
+
+
+>Consider this example: A scene consists of many parallel polygons that are
+>parallel to the image plane (like a stack of paper). These aren't run of the
+>mill 4-sided rectangles. They have holes in them. A lot of the holes line up
+>with rays through the view plane and they are really small.
+
+I agree, this case will make preprocessing schemes no longer constant.
+You can do LOTS of preprocessing to try to resolve the indeterminate
+areas, and you may have to get down to a ridiculous resolutions to attempt to
+resolve these, and you still will have places where things fall apart.
+
+Another approach is to work from the objects themselves to split up 5D space
+and determine what object is visible for what set of positions and directions.
+I recall seeing some computational geometry paper on doing something like
+this, where you preprocess all 5D space into volumes, each of which is
+associated with one object.  Aha, found it:
+
+%A Marco Pellegrini
+%T Stabbing and Ray Shooting in 3 Dimensional Space
+%J Proceedings of the 6th Annual Symposium on Computational Geometry
+%I Berkeley, CA
+%D June 1990
+%P 177-86
+
+Since you were interested in theoretical papers, this is an interesting one to
+check out.  To quote:  "The result presented in this paper, although not yet
+practical because of the huge constants involved, is the first example of a
+ray shooting algorithm with a sublinear cost per ray, for any set of triangles
+and rays."  He proves that given a ray one can determine in O(log n) worst
+case time which is the first triangle hit, with O(n^5) preprocessing (truly
+the record for preprocessing time).  His results are interesting in that the
+best he claims is O(log n), not O(1), because he knows pathological cases can
+kill all the other schemes out there.  His bias is towards worrying about the
+worst case performance, which most of the rest of us blithely ignore.  What's
+interesting about his scheme is that he could maintain it's constant in
+intersection testing time (in fact, the constant is zero), since he never
+tests any rays against any triangles:  the scene is entirely encoded in a
+structure, and he gets a ray and merely looks up what triangle (if any) is hit
+by that ray.  It's accessing the structure and finding where the ray is in it
+that takes O(log n).
+
+Another good pathological case is the shell database (Introduction of Ray
+Tracing News, volume 3, number 3).  Try it on your favorite ray tracer
+sometime and see what happens:  many overlapping spheres bring most ray
+tracers to their knees (mine included).  Most efficiency schemes are good
+overall, but when a large number of the surfaces of complex objects overlap a
+given volume of space, preprocessing that space well is impossible or very
+costly.  It would be interesting to see how Ohta's scheme works on the shell
+data, since it's entirely spheres.  Ohta's ray tracer is at various FTP sites,
+though I haven't tried it out.
+
+
+>Suppose we make a super-general assumption that preprocessing time can be no
+>greater than k% of the ray tracing time. Make k whatever you want, but in
+>OHT87 preprocessing is O(f(N)) (i.e. some function of N) and tracing is O(1).
+>So the preprocessing demands are too high using this k% assumption. Maybe it's
+>a bad assumption, but it's the one I see in the literature.
+
+Good point - no matter what k% you assign, if tracing is really O(1) then you
+can never in theory fulfill the k% ratio, since the number of objects can be
+arbitrarily high.  The "k%" is just a rule of thumb working assumption in the
+literature, not some theoretical limit that cannot be exceeded ("it'd be nice
+if the preprocessing time was some percentage less than the ray tracing time"
+is all "k%" is, after all).
+
+What's interesting about preprocessing schemes is that once they're done you
+can reuse them.  If you're making an animation of flying around a static
+scene, that's a heck of a lot of pixels to compute, which massively amortizes
+the cost of the one-time preprocess.  Because of this I think we'll see more
+time spent preprocessing as the years go by (though if CPU speed increases
+faster than memory size, then it might not be possible to store the preprocess
+structures around for a large scene...).
+
+
+>A little something to think about: No computer in the world, no matter what
+>its word size, no matter its memory size, no matter what its architecture, can
+>prevent overflow <--> no ray tracer in the world, no matter what the internal
+>data structure, can perform in constant time (you just can't ignore
+>preprocessing, as in the case of the SUPER-SILLY EXAMPLE).
+
+Yep, "constant time" is an attention grabber, and saying "near constant time"
+would be a bit more realistic.  If your efficiency structure has any hierarchy
+in it, then you're not constant.  If you have a simple lookup structure like
+an evenly spaced grid or somesuch, you're constant time lookup, but short of
+infinite resolution you won't get a single object to test at _every_ spot in
+the structure.
+
+Well, that was certainly long-winded!  Anyway, I thought it was worth
+mentioning the Pellegrini paper, since it's pretty obscure and one of the few
+I've seen that really tries to tackle the theoretical aspects.  Hopefully I
+didn't say anything too stupid here...
+
+----
+
+Brian Corrie responds:
+
+>Suppose we make a super-general assumption that preprocessing time can be no
+>greater than k% of the ray tracing time. Make k whatever you want, but in
+>So the preprocessing demands are too high using this k% assumption. Maybe it's
+>a bad assumption, but it's the one I see in the literature.
+
+I have just run into an interesting result similar to this.  I am working on a
+MIMD parallel machine made by Fujitsu, the AP1000.  It has 128 processing
+nodes, each processor being a SPARC chip running at 25 MHz.  Needless to say,
+this thing is fast.  I have just gone through the process of parallelizing my
+Ray Tracer on this machine.  Let me clarify that, I parallelized the
+rendering, NOT the preprocessing.  I use Glassner's Space Subdivision
+acceleration technique.  Guess what, in some cases, the preprocessing actually
+takes longer than the rendering on this architecture.  Giving a demo just
+isn't too satisfying when the boss is looking over my shoulder saying:
+
+Boss: "whats it doing now?"
+ME:   "Oh, preprocessing."
+Boss: "Whats it doing now?"
+ME:   "Still preprocessing.. ahhhh, now its rendering, oh there, its done."
+
+This certainly doesn't fit the k% model that you state above.  It always
+seemed that the preprocessing stage was insignificant compared to the
+rendering time, but it really isn't.  You just need some strange circumstances
+or some serious thought to see that the preprocessing time can not be ignored.
+
+----
+
+Masataka Ohta responds:
+
+>I would like to reiterate that I am not claiming that the work in OHT87 is
+>incorrect. I just think that a theoretical concept is misleading in a
+>realistic research world. No mudslinging, and keep name-calling to four letter
+>words 8-).
+
+Well, at the presentation of OHT87, I received silly questions from those
+who can not understand the difference between realtime and constant time.
+
+But it is not my problem. Any paper is misleading to those who can not
+understand basic terminologies in it.
+
+Constant timeness is a purely theoretical property. Remember it.
+
+>THEORY
+
+>OHT87 - yes
+>3D grid - no
+
+I agree.  Note that implicit simplification is that multiplication, addition
+and address arithmetic are all O(1).
+
+When I wrote OHT87, many (including me) believed 3D grid is O(log(N)) and
+some even claimed O(1) without knowing what O(1) means.
+
+>REALITY
+
+>Remember,
+>we're not talking theory here, you can't have billions of ray directions.
+>There is some limit on the number of ray directions.
+
+It is pointless.  Constant timeness is a purely theoretical property.
+Theoretically, you can have billions of ray directions.  There is no limit on
+the number of ray directions.
+
+>I'm pretty sure this
+>falls under the no-coherence clause 8-)
+
+No.  Constant timeness of your case is covered by a sentence (p. 308) "It is
+worthwhile to note that nearly all images can be calculated in this very fast
+manner, if we can use unlimited pre-processing time and space".
+
+>(p. 308 - "Because the algorithm
+>utilizes the coherence of the image, the efficiency of the algorithm heavily
+>depends on the coherence of the image. If there is no coherence, no
+>performance will be gained."). So ---> it's not constant time then!
+
+No, of course.  What my no-coherence clause means is that with insufficient D
+(the number of directions) or M (the number of origins) it's not constant
+time.
+
+With large enough D and M determined by the coherence of scene, it will be
+constant time again.
+
+>FURTHER DISCUSSION
+
+>A somewhat unrelated thought arises from a comment in OHT90: "My algorithm
+>may consume possibly long and computationally complex pre-processing time to
+>analyze a scene. But, the important fact is that the time for pre-processing
+>is dependent only on the scene and not on the number of rays."
+
+I said "analyze a scene", not "generate an image". OK?
+
+>My first reaction is "GNNNAAARRRR?" The number of rays in a scene is bounded
+>above by a constant: total number of pixels * maximum size of a ray tree
+>(unless we assume an infinite ray tree -> unrealistic). Neither of these
+>factors is a function of the number of objects.
+
+You misunderstand basic terminologies.
+
+An image have fixed number of pixels, but a scene itself has no resolution.  A
+scene can be rendered into images with various resolutions and various
+quality.
+
+The number of rays to generate an image depends on required resolution and
+quality (if you need antialiased but precise RGB value, you often must fire
+large number of rays within a pixel), and not limited by any constant.
+
+>Too often assumptions are made about the scene which are just too convenient.
+>Not only in this case, but in many, a sphere is just too simple an object to
+>support a proof. Again, I don't doubt the theory here (the proof itself is
+>sufficient), I doubt the reality.
+
+I used spheres in measurement because it is most unfavourable to the
+				                 ^^^^^^^^^^^^
+implementation of my algorithm. If you use complex shapes, possible
+startup time for constant timeness might be masked. Implementation of
+my algorithm might have required large constant time comparable to
+ray bicubic patch intersection, which could have been masked if I
+used a scene with bicubic patches.
+
+See Fig. 4 for unbelievably small overhead (nearly equals to the time for ray
+sphere intersection) of the implementation.
+
+>In this case, the reality is supported by
+>convenient scenes, which make it appear that the reality is sound (and thus
+>constant time). What I'm getting at is, give me some really ugly objects,
+>e.g. GEARS database.
+
+Then, we can have beautiful but theoretically meaningless images.
+
+What I want to show is constant time property.  To do so, we must be able to
+control the number of objects in the scene up to several hundreds (or more,
+see Fig. 8).
+
+----
+
+and further comments from Masataka Ohta:
+
+>This certainly doesn't fit the model that you state above. It always
+>seemed that the preprocessing stage was insignificant compared to the
+>rendering time, but it really isn't. You just need some strange circumstances
+>or some serious thought to see that the preprocessing time can not be ignored.
+
+When tracing state-of-the-art realistic scenes with state-of-the-art
+complex shading, anti-aliasing and so on, tracing and shading time become
+much much longer than when tracing sphere-only simply-shaded non-anti-aliased
+scenes.
+
+Hints for serious thought:
+
+	1) the preprocessing time to achieve constant time property
+	   is constant once a scene is fixed.
+
+	2) the preprocessing time to achieve constant time property
+	   is less than or nearly equal to tracing time for sphere-
+	   only images in my paper.
+
+	3) the preprocessing time to achieve minimal total (preprocessing
+	   +tracing+shading) time to render an image of a scene need not be
+	   the preprocessing time to achieve constant time property for the
+	   scene. With the increase of the tracing+shading time, the trade-off
+	   shifts toward increasing tracing time complexity and reducing
+	   preprocessing time complexity.
+
+----
+
+Brian Corrie responds:
+
+It is true, once the scene is fixed, then pre-processing is fixed, so multiple
+frames can be produced without that overhead in certain situations.  That is,
+if the camera moves, lights go on and off, attributes change, then the
+preprocessing does not need to be re-computed.  Only if the geometry changes
+is this step needed.
+
+It is also true that if I render complex images with complex shading and
+scene interaction (reflection/refraction), the preprocessing time can
+rapidly become insignificant again. Insignificance is all in the eye of
+the renderer I suppose.
+
+-------------------------------------------------------------------------------
+
+VLSI for Ray Tracing, by Kenneth Cameron et al
+
+Kenneth Cameron <kc@dcs.ed.ac.uk> asks:
+
+I'm currently trying to get my Honours project sorted out for next year.
+The idea is to produce some kind of raytracing/radiosity rendering chip.
+Yup, thats right, put the whole rendering system on a single piece of
+silicon. I've been trying to track down any past work on this. So far the
+only mention I've found is that of Ullner's work in "An Introduction to
+Raytracing".  Can anyone suggest any papers I should be looking for?
+
+----
+
+George Kyriazis (kyriazis@rdrc.rpi.edu) writes:
+
+Oh boy..  I'll be a bit negative on this.  This is only my opinion, so
+I'd like to get some feedback from other people to see how much this
+makes sense..
+
+Ray-tracing and radiosity is a VERY computational intensive job.  Additionally,
+it's a bit unhomogeneous.  What I mean by that is that there are lots of
+different algorithms that need to be done:  Traversing the space subdivision
+hierarchy, various intersection algorithms, (possibly) various shading
+algorithms, etc.  Not to mention the immense amount of data that has to be
+fed in those poor processing elements.
+
+In the past the market tried to provide special-purpose hardware that is
+perfect for just one problem, but has REAL trouble for others..  For example,
+the Pixel Machine was great doing ray-tracing, but it had problems with
+interactive graphics.  An SGI-style graphics pipeline is perfect for
+interactive 3-D applications, but it just was not designed for ray-tracing
+or radiosity-type applications.  On the other hand, general-purpose floating
+point accelerators are getting faster and faster..  So, my guess is that
+a whole bunch of fast, general purpose machines will eventually win, 'cause
+the can provide more functionality and a smaller overall design cost.
+
+Now, let's try to be constructive a bit here..  As I said before, doing
+raytracing the traditional way is unstructured.  You are tracing a ray
+who knows how many levels of reflections deep, but you don't really know
+what type of primitive you are going to hit, so the rendering algorithm
+should be ready for anything.  There has been some work a couple of years
+ago (I could be mistaken, but I think at UIUC) about using an SIMD machine
+for ray-tracing.  Now, if you think of normal ray-tracing as a depth-first
+algorithm (we go as many levels deep as possible on the first pixel, then
+go ahead on the next pixel, etc.), you can think of the SIMD work as
+implementing ray-tracing in a breadth-first kind of way.  Finish up the
+first level of intersections for all pixels in the image, then the ones
+who survive go on to the second level of reflection, etc.  This brings
+some more structure into the algorithm.
+
+----
+
+Peter De Vijt (devijt@imec.be) writes:
+
+A number of people did some studies on implementing a part of the algorithm
+(the intersection calculations) in silicon.  No real silicon has been
+demonstrated upto now.  Here are some refs.
+
+%A Ron Pulleyblank
+%A John Kapenga
+%T The Feasibility of a VLSI Chip for Ray Tracing Bicubic Patches
+%J IEEE Computer Graphics and Applications
+%V 7
+%N 3
+%D March 1987
+%P 33-44
+%O also appears as "A VLSI Chip for Ray Tracing Bicubic Patches"
+in Advances in Computer Graphics Hardware I, W. Strasser (ed.), 1987,
+p. 125-140 and in
+Tutorial: Computer Graphics Hardware: Image Generation and Display,
+Computer Society Press, Washington, 1988, p. 328-339
+
+%A Kadi Bouatouch
+%A Yannick Saouter
+%A Jean Charles Candela
+%T A VLSI Chip for Ray Tracing Bicubic Patches
+%J Eurographics '89
+%I Elsevier Science Publishers
+%C Amsterdam, North-Holland
+%D Sept. 1989
+%P 107-24
+
+%A Alle-Jan van der Veen
+%T Intersection Test for NURBS
+%B Proc. of the IEEE Symp. on Computer Architecture & Real Time Graphics
+%D June 1989
+%C Delft, The Netherlands
+%P 101-14
+
+Implementing a complete raytracing/radiosity algorithm on one chip is IMHO not
+possible.  The problem is that the algorithm itself is quite complex.  You'll
+have to calculate intersection points for various primitives, reduce the
+search space for the primitives you are going to calculate the intersections
+with, do shading calculations, ...
+
+Given the huge amount of work you'll have to perform, you will still need a
+multiprocessor solution to get the images at a reasonable rate (After all
+you've put a lot of effort in it, so you want some performance back) You need
+a very good scheduling mechanism to get more than an impressive number of
+Mythical FLOPS.
+
+The basic algorithm for ray-tracing is pretty simple.  The intelligent
+implementation isn't.  If you put the basic algorithm in silicon, an
+intelligent software version will easily outperform your system.  A good vlsi
+implementation will have to implement the more elaborate and complex
+algorithm.  (Yeah such is life)
+
+The kind of parallelism you need for vlsi is different than the one you need
+for software.  On a general purpose multiprocessor system you can use all
+kinds of parallelism, in vlsi you can't.  An ASIC can only be better than a uP
+if it can take advantage of some specific aspects of an algorithm.  If the
+algorithm is too complex, you can not take advantage of that, and the ideal
+implementation looks pretty much like an ordinary general purpose uP.  (We
+better leave that to the big R&D teams).  So forget about doing it on one
+chip.
+
+The only thing you can do is to break the algorithm apart and implement each
+part or only the most interesting parts (= inner loops ) that will give you a
+performance gain (such as the intersection calculations).
+
+Here at IMEC we're doing just that as a sort of design exercise.  We're
+planning to implement a part of the algorithm on a couple processors.
+
+The algorithm is split in three big pieces:  rendering, narrowing the search
+space for the intersection calculations and the intersection calculations
+themselves.  The rendering will be done on general purpose processors for
+flexibility.  Data base search and spline intersection calculations on two
+custom processors.  The other intersection calculations will again be done on
+GP uP's for flexibility.  Also a special processor is being built for
+scheduling the operations in a multiprocessor environment.
+
+The whole system is designed in such a way that each of these processors can
+be replaced by a general purpose one and that some operations can be modified
+(eg.  more primitives than we planned a specific processor for).  This way we
+can build the system in different stages (first the intersection processor,
+the scheduler, the data base searcher, and last an optional MMU) First
+versions of the intersection processor and the scheduler should be ready
+around july.
+
+I must agree with George Kyriazis that eventually a GP machine will win, but
+again this is only a design exercise and it's FUN.
+
+----
+
+Jon Leech (leech@cs.unc.edu) writes:
+
+    I think the original poster would be better off doing some regular part of
+a rendering kernel, perhaps a ray-tracing hierarchy traversal chip.
+
+----
+
+Sam Uselton (uselton@nas.nasa.gov) writes:
+
+Two comments to add on the previous discussion.......
+
+(1) the SIMD parallel ray tracing I know of, was done at Thinking Machines on
+a Connection Machine by Hubert Delaney, who recently was kind enough to send
+me 2 tech reports, which I haven't had time to read yet.
+
+(2) Gershon Kedem (and probably some other folks) were working on VLSI support
+for ray tracing of CSG defined objects several years ago.  The work was being
+done at Duke University, although other NC Research Triangle entities were
+probably involved.  I discussed the project with him in his office something
+like 3 years ago.  Sorry, I don't have a reference.  [Cornell is also involved.
+See ray tracing bibliography under Kedem or Ellis. - EAH]
+
+----
+
+Thierry Priol (priol@irisa.fr) writes:
+
+I agree with you, ray-tracing is so irregular (data driven) that designing a
+VLSI processor for ray-tracing algorithms is a hard task.  We have done some
+works on MIMD machine.  General purpose parallel MIMD machines are able to
+produce very high efficiency for ray-tracing algorithms especially if you are
+using a shared virtual memory on these kinds of machines!  (see "Ray Tracing
+on Distributed Memory Parallel Computers:  Strategies for Distributing
+Computation and Data" in "Parallel Algorithms and architectures for {3D} Image
+Generation", ACM Siggraph'90 Course 28).
+
+----
+
+From: rkaye@polyslo.csc.calpoly.edu (Dega Dude):
+
+I would suggest to approach the problem from a different angle.  While it
+would be an extreme job to implement an entire ray tracing/radiosity system in
+silicon, you could implement some generic routines that usually take a lot of
+CPU time quite easily.
+
+You could code intersection and normal calculation routines for the basic
+primitives you would like to have in your system.  Some other things to code
+would be generic routines required by your acceleration techniques, such as
+voxel-object intersection routines or bounding volume routines.
+
+There are many 'generic' CPU intensive routines that can be implemented in
+silicon.  The software can then adapt around the chip's capabilities, giving
+you the flexibility to change the system.
+
+-------------------------------------------------------------------------------
+
+The Moon Revisited, by Tom Duff (td@alice.att.com)
+
+zap@lysator.liu.se (Haakan Andersson) wonders about the moon's reflection
+function, and why Phong shading doesn't render it well.  (I won't quote any
+details.)
+
+The most important thing to remember about the moon is that while it is
+spectacularly un-specular, it is by no means a Lambertian reflector -- this is
+why Phong shading can't model it well, contrary to hollasch@kpc.com (Steve
+Hollasch @ Kubota Pacific Computer, Inc.).
+
+An ideal full moon is equally bright everywhere -- its brightness does not
+drop off toward the edges!  (The real moon differs from the ideal moon only in
+that its albedo is non-uniform.  For example, the maria are darker than the
+mountains.)
+
+A model that works well for the moon is to think of it as covered in a dust of
+microscopic Lambertian reflectors.  When viewed from the light source
+direction, the dust particles will reflect light equally, regardless of the
+direction of the moon's surface normal.
+
+When viewed from some other direction (i.e. when the moon is not full), the
+dust particles still reflect light equally, but some of them are shadowed by
+others.  Shadowing increases when the angle between the light and the viewing
+direction increases so that the reflected light travels through more dust, and
+when the angle between the surface normal and the light direction increases,
+so that the incident light travels through more dust.  Of course, the total
+light reflected from the dust particles varies with viewing angle as well
+because they are only lit on one side.
+
+There are many ways to convert this qualitative description into an analytic
+model, depending on exactly how you model self-shadowing of dust.  Jim Blinn
+has a paper on illumination functions for clouds of dust (in 1979 Siggraph
+proceedings, I think -- I don't have the precise reference at my fingertips)
+that describes this in fair detail and gives a lunar reflection model that
+works really well.
+
+I suspect that even people without my astigmatism have trouble telling by
+looking at its shape whether the moon is exactly full or one day away from it.
+The difference in shading, however, is fairly dramatic.  When its full, the
+moon looks like a silver dollar in the sky.  Even one day away and still looks
+like a perfect circle, it shades off to one side or the other by a noticeable
+amount.
+
+-------------------------------------------------------------------------------
+
+Soft Shadow Ideas, compiled by Derek Woolverton (woolstar@gumby.cs.caltech.edu)
+
+   Could anyone suggest any open solutions (i.e. ones that I could implement
+without owing royalties, I heard that the Pixar noise algo. was patented.)
+
+[Derek sent me his responses, some of which are below. - EAH]
+
+--------
+
+From Samuel P. Uselton (uselton@wk207.nas.nasa.gov)
+
+I'm pretty sure that general Monte Carlo evaluation of an integral of a
+function is a general, well known mathematical idea, and as such not
+patentable.  If the PIXAR patent is valid, it must patent some particular
+method (=implementation) for doing this evaluation.  I assume it is the jitter
+sampling idea presented in papers by Cook, et al.
+
+I think our implementation of the integral evaluation is sufficiently
+different that it is OK.  See Redner, Lee, Uselton, "Statistically Optimised
+Sampling for Distributed Ray Tracing", SIGGRAPH '85.
+
+Sorry I can't supply code.  The original source code we wrote (actually mostly
+written by Lee) belongs to Amoco, and is in Fortran for an IBM 3090 anyway.
+There is a plan to create a "liberated" version, but it is not available
+at least from us.
+
+If you, or anyone, wants to convince me I'm wrong and that we really DO
+infringe the patent, or that an arguable case could be made, please let me
+know, because we ARE extending our results.
+
+--------
+
+From Lawrence Kesteloot (lkestel@gmuvax2.gmu.edu)
+
+The method you describe can be easily modified to make the lamp a rectangle
+instead of a sphere.  This makes the light into a fluorescent tube.
+
+This method is quite good and realistic but, as you said, the noise is fairly
+bad for low n's (<64).  Another way which I thought about (and I don't know if
+anyone's done it yet), but haven't actually implemented yet, is to use some
+kind of approximation formula.  For example, if you've got a sphere sitting on
+a surface and you're trying to evaluate the darkness of that shadow at some
+point below the sphere, you can run a ray from the point on the surface to the
+light, find the two roots of the intersection, and use the DISTANCE between
+the two roots, in some kind of formula which would involve the radius of the
+sphere and lamp and distance to the lamp and surface, to determine the
+darkness at that point.  It is not scientific, but points that intersect close
+to the edge of the sphere will get two roots that are close together and this
+would make that shadow lighter.  I haven't even implemented this or thought of
+a formula, but if you get any kind of results with it please let me know.  It
+would be very fast, as you can imagine.  It will most likely fail in strange
+circumstances such as points that are shadowed by two objects at once.  I
+guess that's the penalty for getting away from pure ray-tracing...
+
+I can also think of another way to do it, but much harder to explain in
+writing.  It is similar to yours but would probably reduce the noise.  Imagine
+that you run a ray from the point in question to the light center.  You then
+find a circle, centered at the light, radius of the light, which is
+perpendicular to the ray.  You then pick <n> equidistant points on the edge of
+that circle and run rays through them.  This will give you good soft shadows
+and low noise (because there is no randomness), but might turn the shadow into
+"rings" of shades (this would depend on the number of points, obviously).
+Also, the process of finding that circle might be quite slow.  Maybe an
+approximation to the angle of the circle in 30 degree increments could be done
+(30 degrees would be enough I suppose).  But that might make the "ring" effect
+worse.
+
+[This was tried by Brigitta Lange, and is in her paper "The Simulation of
+Radiant Light Transfer with Stochastic Ray-Tracing", Second Eurographics
+Workshop on Rendering, Barcelona, Spain, May 1991.  Proceedings should be
+published by Springer-Verlag realsoonnow.  Anyway, her results were mixed,
+giving "ring" artifacts as I recall.  - EAH]
+
+Let me know what you think.
+
+Oh!  I almost forgot.  This is very important:  Don't sent <n> rays from
+every point on the surface.  Before you start the picture, use the
+position of the light and the spheres to make rectangles on the surface
+where the shadow is likely to fall for each object.  Then send 1 or 2
+rays outside the rectangles, and <n> inside any rectangle.  If you need
+the formula for finding that rectangle I can send you that piece of code
+from my tracer.
+
+----
+
+John responds:
+
+> You then pick <n> equidistant points on the edge of that circle
+> and run rays through them.  This will give you good soft shadows
+> and low noise.
+
+   And very visible banding.  Oh well.  What I am looking for is finding the
+plane perpendicular to the ray at the light, and using a pre-computed table of
+random offsets with a poisson distribution.
+
+   I still don't have a quick and elegant system of finding the plane and two
+basis vectors.
+
+--------
+
+From: philip@bigben.dle.dg.com (Philip Gladstone)
+
+The standard trick is to do adaptive sampling.  In my ray-tracer, I shoot a
+number of rays through each pixel, and then randomly select a point on the
+surface of the light source to for shadow calculations.  After a few rays have
+been cast, the standard deviation of the values returned is calculated to see
+if more rays need to be cast.  [This is oversimplifying quite a lot, as the
+points are not really chosen at random as there is a nearness check.  Further,
+subsampling only takes place in an area of high standard deviation.]
+
+This also buys you antialiasing on edges etc.  This gives a very nice output
+for very little increase in cost -- I start out with four rays per pixel
+(though this should probably be increased somewhat) with a limit of 200 rays.
+This givs an average number of rays per pixel of a reasonable picture of about
+6, with a few pixels having 200!
+
+--------
+
+From: shirley@iuvax.cs.indiana.edu (peter shirley)
+
+Just like pixel sampling, light source sampling works better is the "random"
+points are replaced by "quasi-random" points.  Quasi-random points can be
+generated by making sure no two points are too close, or by hand generating
+them for storage in lookup tables.
+
+See the ray tracing book under jittering or Poisson disk sampling for further
+details.
+
+PS- I think you'll have better luck choosing points on the projected area
+of the light source.  Choosing from within the sphere would be correct if
+the light originated throughout the sphere.
+
+-------------------------------------------------------------------------------
+
+Book Announcement: Multiprocessor Methods for Computer Graphics Rendering,
+	by Scott Whitman (slim@tazdevil.llnl.gov)
+
+Multiprocessor Methods for Computer Graphics Rendering, by Scott Whitman,
+Jones and Bartlett Publishers, March 1992.  ISBN 0-86720-229-7.
+
+The book can be ordered by mail directly from Jones and Bartlett Publishers,
+20 Park Plaza, Boston, MA 02116, or by phone, 1-800-832-0034 or by e-mail,
+kpeters@math.harvard.edu.  Prepaid orders (MC, VISA or check) will not be
+charged postage or handling.
+
+The problem of quickly generating three-dimensional synthetic imagery has
+remained challenging for computer graphics researchers due to the large amount
+of data which is processed and the complexity of the calculations involved.
+This book involves a thorough investigation into the problem of using a
+massively parallel computer to perform three-dimensional computer graphics
+rendering.  The algorithms which are analyzed in this monograph present
+several alternative approaches to image space decomposition as well as remote
+memory access.  A number of pointers are given so that researchers intending
+to develop their own parallel rendering algorithm will be able to obtain high
+performance and good speedup from a variety of multiprocessor architectures.
+
+Table of Contents:
+
+1. Introduction
+    1.1. Problem Description
+    1.2. Overview of Accelerated Rendering Techniques
+    1.3. Research Context
+    1.4. Document Overview
+2. Overview of Parallel Methods for Image Generation
+    2.1. Criteria for Evaluation of Parallel Graphics Display Algorithms
+    2.2. Taxonomy of Parallel Graphics Decompositions
+    2.3. Conclusions
+3. Issues in Parallel Algorithm Development
+    3.1. Architectural Choices
+    3.2. Comparison of MIMD Methodologies
+    3.3. The BBN Programming Environment
+    3.4. Summary
+4. Overview of Base Level Implementation
+    4.1. Design of the Basis Algorithm
+    4.2. Testing Procedures
+    4.3. Performance Analysis
+    4.4. Summary
+5. Comparison of Task Partitioning Schemes
+    5.1. Data Non-Adaptive Partitioning Scheme
+    5.2. Data Adaptive Partitioning Scheme
+    5.3. Task Adaptive Partitioning Scheme
+    5.4. Conclusions
+6. Characterization of Other Parameters on Performance
+    6.1. Shared Memory Storage and Referencing
+    6.2. Machine Parameters
+    6.3. Scene Characteristics
+    6.4. Conclusions
+7. Conclusion
+    7.1. Summary
+    7.2. Future Work
+References
+Appendix
+    A. Information on Test Scenes
+    B. Data for Various Algorithms
+    C. Supplementary Graphs
+Index
+
+-------------------------------------------------------------------------------
+END OF RTNEWS

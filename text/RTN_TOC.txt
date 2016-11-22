@@ -1,0 +1,1021 @@
+Herein are all the tables of contents of all issues of the Ray Tracing News,
+originally compiled by Joe Cychosz, 3ksnn64@ecn.purdue.edu (Thanks, Joe!), and
+updated since by me.
+
+Enjoy,
+
+Eric Haines
+
+------------------ starts here -----------
+
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+                        "Light Makes Right"
+
+                         Table of Contents
+
+Compiled by Eric Haines, erich@acm.org;
+    opinions expressed are mine, not my employer's
+All contents are copyright (c) 1988-2008 by the individual authors
+Archive locations:
+    HTML http://www.raytracingnews.org
+    text version at:
+    http://www.acm.org/tog/resources/RTNews/text/
+
+Introduction:
+It seems that RTNews has been around long enough and definitely has enough
+useful information in it to warrant an overall table of contents to make
+searching for past articles of interest easier.  The contents is assembled
+by file name (i.e, RTNv6n2.txt) and is presented in inverse chronological
+order with issue date.
+
+RTNv23n1:    July 20, 2010            ------------------------------------
+    Introduction
+    Ray Tracing Roundup
+    Marcos and Arnold, by Eric Haines and Marcos Fajardo
+    Sorted BVHs, by Solomon Boulos and Eric Haines
+    Branch Prediction for Ray Tracing, by Eric Haines
+    How Often Do Shadow Rays Hit? by Solomon Boulos
+    More SSE Ray/box Code Optimization, by Manny Ko
+    Puzzle Answer: Triangle/Bounding Box Ratio, by Eric Haines
+    Where's the Rest of the Issue? by Eric Haines
+
+RTNv21n1:    November 8, 2008            ------------------------------------
+    Introduction
+    Ray Tracing Roundup
+    Puzzle Answer: Plane Intersection with Spheres vs. Boxes, by Eric Haines
+    Puzzle: Triangle/Bounding Box Ratio, by Eric Haines
+    Terminology for Ray Tracing, by Peter Shirley
+    Another Opinion of "Foundations of Multidimensional and Metric Data Structures", by Bretton Wade
+    Bounding Volume Hierarchy Formation: Two New Ways, by Eric Haines
+    NVIDIA Ray Tracing Demo, by Steven Parker and David Luebke
+    Tactical Optimization of Ray/Box Intersection, by Graham Fyffe
+    Radians versus Degrees, by Eric Haines
+    Random Number Generators: Faster, Smaller, Randomer, by Thatcher Ulrich and John Stone
+    Subconscious Debugging, by Ian Ashdown
+
+
+RTNv20n1:    May 19, 2007            ------------------------------------
+    Introduction
+    Ray Tracing Roundup
+    Puzzle: Plane Intersection with Spheres vs. Boxes, by Eric Haines
+    You Don't Know Jack, from Nicolas Holzschuch and Jack Bresenham
+    New Book: "Ray Tracing from the Ground Up", preview by Eric Haines
+    Rant about Free-ish Code, by Eric Haines
+    POV-Ray News, from Chris Cason and Eric Haines
+    Pick-up Sticks and the Room of Dice, by Eric Haines
+    SIMD Ray/Box Intersection, by Thierry Berger-Perrin
+    Random Numbers, Efficiency, and Other Things, by John Stone
+    Review of "Foundations of Multidimensional and Metric Data Structures",
+        by Eric Haines
+
+RTNv19n1:    September 30, 2006            ------------------------------------
+    Introduction
+    Ray Tracing Roundup
+    Notes on Efficient Ray Tracing, by Solomon Boulos and Eric Haines
+    Ray-Box Sorting, by Solomon Boulos and Eric Haines
+    BVHs and Memory Coherence, notes by Christer Ericson and Sung-Eui Yoon
+    "So long and thanks for all the fish...", from Michael Ashikhmin,
+        comments by Eric Haines
+    Ray/Box Intersection Optimization, by Eric Haines, Solomon Boulos,
+        and Pete Shirley
+    SIGGRAPH 2006 Report, by Eric Haines
+
+RTNv18n1:    December 12, 2005            ------------------------------------
+    Introduction
+    Ray Tracing Roundup
+    Newish Books, by Eric Haines
+    More on Randomly Sampling Bounding Volumes, by Mateu Sbert
+    Image Comparison, by Chris Cason, Eric Haines, and Greg Ward
+    Real-Time GPU Spheres, by John Stone
+    Plane Equations of a Tetrahedron, by Paul Kahler
+    Ray/Tetrahedron Intersection, by Paul Kahler
+    K-d Tree Comments, by Ingo Wald, Gordon Stoll, Vlastimil Havran, and Eric Haines
+    Processor Level Optimization Verification, by Paul Kahler and Anonymous
+    SIGGRAPH 2005 Report, by Eric Haines
+
+RTNv17n1:    May 11, 2004            ------------------------------------
+    Introduction
+    Ray Tracing Roundup
+    OpenEXR and Radiance Floating Point Image File Formats, by Simon Bunker,
+        Steve Westin, and Greg Ward
+    Raytraced Games, by Greg Alt
+    Randomly Sampling Bounding Volumes, by Philipp Slusallek, Pete Shirley,
+        Fredo Durand, and more
+    Ray Tracing's Roots, by Juan Rayces, Andrew Glassner, Jonathan Maxwell,
+        Phil Dutre, and Chris Trendall
+    Faster Yet Point in Polygon Test? by Stephen Bridgett
+    BSP Plane Cost Function Revisited, by Eric Haines
+    RTNews Errata, by Nikos Platis
+
+RTNv15n1:    October 21, 2002         ------------------------------------
+    Introduction
+    Ray Tracing Roundup
+    RealStorm: A Realtime Raytracing Engine, by Michael Piepgras
+    Efficient Bounding Box Intersection, by Brian Smits
+    Array Good, Linked List Bad, by Matt Pharr
+    Questions and Answers, by Vlastimil Havran
+    Scanline vs. Ray Tracing, by Piero Foscari, Paul Kahler, and Matt Pharr
+    13th Annual Eurographics Workshop on Rendering, by Nelson L. Max
+    SSM and OOM Become Enigma, by Mark Manning
+    A Simple Ray-Triangle Pluecker Optimization, by Jeffrey Mahovsky
+    Recovering a Triangle's Surface Normal from the Pluecker Coordinates
+        of its Edges, by Jeffrey Mahovsky
+
+RTNv14n1:    August 9, 2001           ------------------------------------
+    Introduction
+    Ray Tracing Roundup
+    Octree Implementation and RTRT Speeds, by Paul Kahler,
+         Vlastimil Havran, Ingo Wald, John Stone, and Nick Chirkov
+    Loose Octrees for Dynamic Raytracing, by Eric Haines
+    Processor and Compiler Comparison as of August 2001, by John Stone
+    Triangles per Vertex, by Eric Haines
+    Bounding Box Intersection via Origin Location, by Eric Haines
+
+RTNv13n1:    July 16, 2000            ------------------------------------
+    Introduction
+    Ray Tracing Roundup
+    BART: A Benchmark for Animated Ray Tracing, by Jonas Lext,
+        Ulf Assarsson, and Tomas Moller
+    Global Illumination Test Scenes, by Brian Smits and
+        Henrik Wann Jensen
+    Realtime Techniques for Ray Tracing, by Ádám Nagy, Eric Haines,
+        Russel Simmons, Paul Kahler, Factory, and Bruno Schödlbauer
+    Fastest Way to Generate Eye Rays in Ray Tracing, by Samuel Paik
+    On Transforming Planes, by Steve Hollasch
+    Intersecting a Ray and a Triangle with Plücker Coordinates, by
+        Ray Jones
+    Volumetric Rendering, by Paul Kahler
+    Recent Papers, summarized by Eric Haines and Vlastimil Havran
+
+RTNv12n2:    December 21, 1999        ------------------------------------
+    Introduction
+    Ray Tracing Roundup
+    The Ups and Downs of Multithreaded Ray Tracing and Optimization, by
+        John Stone
+    A Summary of Octree Ray Traversal Algorithms, by Vlastimil Havran
+    Additional Octree Traversal Notes, by John Spackman, Erik Jansen, and
+        Joel Welling
+    Z-buffer and Raytracing, by Sam Paik
+    Ray Tracing Procedural & Parametric Surfaces, by Mark VandeWettering,
+        Stephen Westin, and Matt Pharr
+    Raytracing Gloss/Translucency, by Peter Eastman, Matt Pharr, and
+        Stephen Westin
+    Importance for Ray Tracing? by Per Christensen
+    Good Computer Graphics Books, by Brent McPherson
+
+RTNv12n1:    June 25, 1999        ------------------------------------
+    Introduction
+    Ray Tracing Roundup
+    Comparison of Hierarchical Grids, by Vlastimil Havran and Filip Sixta
+    Great Shadow Hack, summarized by Eric Haines
+    Octree Traversal and the Best Efficiency Scheme, by Ben Hutchison,
+	Eric Haines, Hanan Samet, and Erik Jansen
+    Quicker Grid Generation via Memory Allocation, by Eric Haines
+
+RTNv11n1:    July 11, 1998        ------------------------------------
+    Introduction
+    Ray Tracing Roundup
+    Pluecker Coordinate Tutorial, by Ken Shoemake
+    A Short Note on Kalra and Barr's Algorithm, by Andrei Sherstyuk
+    Origins of Point In Polygon, Take 10..., by Neil Stewart
+    Info on REYES Algorithm, by Robert Speranza and Tom Duff
+    Polygon Shrinking, by Dave Rusin and Jeff Erickson
+    Correcting Normals on "Flipped" Polygons, by Kev, Duncan Colvin,
+        Steve Baker, John Nagle, Dennis Jiang, Alejo Hausner, and
+        Eric Haines
+    What's Mesa? by Brian Paul
+    Multithreading Mesa, by John Stone
+    Recent Ray Tracing European Conference Papers
+    Attenuation in Water, by Bretton Wade and Ian Ashdown
+
+RTNv10n3:    December 2, 1997        ---------------------------------
+    Introduction
+    New People
+    Ray Tracing Roundup
+    Two New Graphics Books plus One, by Eric Haines
+    Ray Classification for Animation, by Matt Quail
+    Raytracker Tricks, by Hakan "Zap" Andersson
+    Even Faster Crossings Test, by Philip Brown
+    Additional Notes on Nested Grids, by Kris Klimaszewski, Andrew Woo,
+        Frederic Cazals, and Eric Haines
+    Recursive Grids and Ray Bounding Box Comments and Timings, by
+        Andrew Woo
+    CD-ROM: The Internet Raytracing Competition, Year One,
+        review by Eric Haines
+    Plucker Coordinates, by Jeff Erickson
+    Errors of Commission and Omission, by Eric Haines
+    Cyrus-Beck as a Ray/Polygon Tester, by David Rogers
+    Mirror Reflectivity, by Greg W. Larson
+    Testing a Matrix for Uniform Scaling, by Charles Iliya Krempeaux and
+        Eduardo Marreiros
+    Declassified CIA BRDFs now available, by Greg Ward Larson
+    Lifting the Monkey's Paw Curse, by Jeff Goldsmith
+    Eccentricity Effects in Blobs, by Alfonso Hermida
+
+RTNv10n2:    June 26, 1997        ------------------------------------
+    SIGGRAPH Roundtable
+    Introduction
+    New People: Marcos Fajardo Orellana
+    Ray Tracing Roundup
+    Illuminated by Black Light, by Dan Wexler
+    What's Wrong with Monte-Carlo Methods? by D.C. Nguyen (JuHu),
+        Pete Shirley, Stephen Westin, and Eric Veach
+    More on Rendering Bugs, by Eric Haines
+    The Curse of the Monkey's Paw, by Eric Haines
+    Global Illumination "Bible"? by Ian Ashdown
+    Megahedron
+    Detecting Points on the Edge of a Polygon, by Eric Haines
+    Rendering Unflat Polygons, by Eric Haines
+    Free Polygon Tessellators, by Eric Haines
+    Octree Neighbor Finding, by Andrew Glassner, Francois Sillion, and
+        Paul Heckbert
+    Author Sues Publisher, by Ralph Grabowski
+    European Graphics Tour, by Nelson Max
+    Fast Shadow Testing Bibliography, by Slawomir Kilanowski
+
+RTNv10n1:    January 21, 1997    -------------------------------------
+    Introduction
+    New People: Jim Roedder
+    Faster Refraction Formula, and Transmission Color Filtering, by
+        Xavier Bec
+    Results of Sphere in Box Ratio Contest, by Han-Wen Nienhuys, Jim Arvo,
+        and Eric Haines
+    Ray Tracing Roundup
+    Papers of Interest, by Eric Haines
+    Synthetic Textures and Genetic Algorithms, by Steve Worley
+    Ray Tracing, What is it Good For? by Arijan Siska
+    Fast Soft Shadows, by Steve Worley
+    Progressive Ray Tracing and Fast Previews, by Eric Haines
+    Free Radiosity Renderer (inc. C++ source code), by Ian Ashdown
+    Cells and Portals Resources, by Randy Stiles
+    New Books, by Eric Haines
+
+RTNv9n2:    January 24, 1996    --------------------------------------
+    Introduction
+    Advice to Authors, by Anonymae
+
+RTNv9n1:    January 18, 1996    --------------------------------------
+    Introduction
+    Results of the Name that Area Ratio Contest, by Eric Haines and
+        Arijan Siska
+    Another Contest: Sphere in Box ratio, by Eric Haines
+    Ray Tracing Roundup
+    A Freeware modeller supporting VRML, by Stephen Chenney
+    3D Point Hashing, by Steve Worley
+    5D vs. BSP and ABVH, by Nguyen Duc Cuong aka "JuHu"
+    Interacting with Ray Traces, by Bert Peers
+    Hierarchical Techniques for Glossy Global Illumination, by
+        Per Christensen
+    Global Illumination SIGGRAPH meeting, by Greg Ward
+    Total Internal Reflection, by Eric Haines, Greg Ward, and Chris Larson
+    Pretemporal Imaging Systems, by Ken Musgrave and Eric Haines
+    PNG Status, by Tim Wegner and Tom Lane
+    Cinematography References, by Dan Wexler
+    Getting Rid of the Divide, by Frank Compagner and Bob Pendleton
+
+RTNv8n3:    August 2, 1995    ----------------------------------------
+    Introduction
+    Contest: Name that Area Ratio
+    Ray Tracing Roundup
+    On-Line Computer Science Bibliography Collection, by Alf-Christian
+        Achilles
+    Comments on RTNv8n1, by Alexander Enzmann
+    Dore' Now Free, and Dore' Mailing List, by Len Wanger
+    Fooling Around, by Eric Haines
+    Beware of VIDEA! by W. Purgathofer, E. Groeller, M. Feda
+    Still More on Optical Ray Tracing, by Dan Reiley
+    Raytracing and 3D Studio, by Michael Adams and Brian Hoffman
+    Testing SIPP versus Raytraces under DOS, by Alexander Enzmann
+
+RTNv8n2:    May 16, 1995    ------------------------------------------
+    Introduction
+    Ray Tracing Roundup
+    Scanline vs. Ray Tracing, by Loren Carpenter and Sam Richards
+    Pyramid Clipping, by Erik Reinhard and Erik Jansen
+    Copyrighting Raytraced Images, by J Edward Bell, Benton Holzwarth,
+        and Keith
+    Octrees and Whatnot, by Steve Worley and Eric Haines
+    Learning Radiance, by Kevin Matthews
+    Radiance vs. Pov, by "Cloister Bell"
+    Overlapping Refractors, by Steve Worley and Eric Haines
+    Raytracing Particle Systems, by Jos Stam
+    Answers/References on Cone Tracing, by Brent Baker
+    Dumb Radiosity Question, by Steve Worley and Eric Haines
+    Good Book on 3d Animation, by Scott McCaskill
+    Animation Books, by Dave DeBry
+    Fast Algorithms for 3D Graphics, by Glaeser: Any Good? by Brian Hook
+    Order of Rendering and Fast Texturing, by Bruno Levy, Dan Piponi,
+        and Bernie Roehl
+    FREE E-Mag on VR, Computer Graphics, et al: Issue 2, by David Lewis
+    Color Quantization Bibliography, by Ian Ashdown
+
+RTNv8n1:    January 23, 1995    --------------------------------------
+    Introduction
+    People
+    Fetishes and Perversions, by Doug Andersen
+    Ray Tracing Roundup
+    New Web Sites of Note, by Eric Haines
+    MGF:  Materials and Geometry Format, by Greg Ward
+    Blue Moon Rendering Tools RenderMan Implementation, by Larry Gritz
+    RenderMan Implementation Paper On-Line, by Philipp Slusallek
+    TGA BBS CD ROM review, by Eric Haines
+    Review of Syndesis Avalon CDROM, by Keith Rule
+    SIRDS/SIS/stereograms/Holusions/whatever, by Eric Haines
+    Two Books on Stereograms, by Eric Haines
+    Siggraph Report: The Exhibits, by Techs Avery
+    Scanline Rendering Previewer, by Eric Haines due to Chris Cason
+    Raysmith, by Eduardo Bustillo Iceta
+    Terminology Survey Results, by Peter Shirley
+    Radiosity Online: A Bibliography, by Ian Ashdown
+    Jevans' Temporal Coherence for Ray Tracing, by Eric Haines
+    Reviews of _Encyclopedia of Graphics File Formats_, from Steve Lamont,
+        John Grieggs, Tom Lane, Brian Erwin, and Andy Key
+    SDSC Image Tools library, by Matt Hughes
+    LUG Library v1.0, by Raul Rivero
+
+RTNv7n5:    October 13, 1994    --------------------------------------
+    Introduction
+    New People
+    Ray Tracing Roundup
+    Recent Ray Tracing Papers
+    Rumor Mill
+    AERO Animation/Simulation System version 1.5.1, by Thomas Braeunl
+    A Brief Review of [an old] AERO, by Dave Negro
+    Photon Tracing, by Chris Thornborrow and Greg Ward
+    Faster Than POV-RAY 2.1, by Dieter Bayer
+    Z Buffer Based Rendering Program, by Raghu Karinthi
+    Gossamer, a Free Macintosh VR/3D Renderer, by Jon Blossom
+    Antialiasing Issues, by Arijan Siska
+    Microcosm, by Abe Megahed of Cosmic Software
+    Fisheye Lens Distortion, by Greg Ward
+    Optical Ray Tracers
+    Correcting Normal Direction, by Gavin Bell
+    Graphics Gems IV Table of Contents, by Paul Heckbert
+    Beyond Graphics Gems, by Paul Heckbert
+    Radiosity vs. Ray Tracing, by Rico Tsang
+    ACM SIGGRAPH Online Bibliography Updated, by Frank Kappe
+    How to be Notified of New POV Releases
+    PoVSB Windows-based Modeler v0.85, by Jeff Hauswirth
+    Porting Rayshade, PBM, etc from Unix to DOS, by Mike Castle
+    REYES & Patents, William C. Archibald
+    Going from AutoCAD and 3DS into Ray Tracing, by Sean Ross
+    Computer Lego Modeling, by Paul Gyugyi
+    Rowe's Ray Tracing World BBS, by Harry Rowe
+    On Using BSP trees, by Benton Jackson
+    Books about Commercial Renderers, by Don Lewis, Jimbo and Yury German
+
+RTNv7n4:    July 14, 1994    -----------------------------------------
+    Introduction and Announcement
+    Call For Participation:  POV Ray Tracing CD ROM, by Christopher Cason
+    Tracers and Tracings #1, by Tom Hoover
+    Review of Tracers and Tracings CD ROM, by Eric Haines
+    Ray Tracer Comparison, by Amanda L. Osborne
+    Blob Sculptor, by Alfonso Hermida
+    Book Announcements, and Modeler vs. Scripting Language, by Mitch Waite
+    A Quick Writeup of Ray Tracing for the Macintosh CD, from notes by
+        Eduard Schwan
+    Ray Tracing Roundup
+    POV-Help, by Chris Cason
+    Lenticular 3D, by Keith Rule
+    POV Official News, Issue #1, POV Team
+    A Quick Explanation of Radiosity Computation vs. Output, by
+        Steve Hollasch
+    A Grand Unified Modeller (GUM), by Lex van der Sluijs
+    New (at least to me) Bulletin Boards, collected by Eric Haines
+    GemCAD Review, by Greg Prior
+    A Summary of the Reyes Algorithm, by Steve Demlow
+    Version 1.7 of Polyray Available, by Alexander Enzmann
+    Use of External Program Calling for Polyray, by Alexander Enzmann
+    POV-Ray Legal Stipulations Correction, by Dan Farmer
+    3D Graphics Book List, by Brian Hook
+
+RTNv7n3:    July 6, 1994    ------------------------------------------
+    Introduction
+    Ray Tracing Roundtable at SIGGRAPH '94, by Eric Haines
+    Books at SIGGRAPH '94, by Eric Haines
+    Radiosity: A Programmer's Perspective, by Ian Ashdown
+    Computational Geometry in C, by Joseph O'Rourke
+    Simple Databases Available For Rendering (Global Illumination), by
+        Peter Shirley
+    Radiance Version 2.4 Available, by Greg Ward
+    Faster Ray-Torus Intersection, by Eric Haines
+    RAT PACK:  Free Ray Tracing Research Software, by Tom Wilson
+    Light Beams Tricks, by Chris Thornborrow
+    On-Line Ray Tracing Bibliography, by Ian Grimstead
+    Polynomials, by Han-Wen Nienhuys
+    Shadow Caching Observation, by Han-Wen Nienhuys
+    Small Comment on GGems III bsp.c, by Han-Wen Nienhuys
+    Fogsources, by Han-Wen Nienhuys
+    The Rayce Ray Tracer, by Han-Wen Nienhuys
+    Ray Tracing Roundup
+    A Storage Trick for 3D Polygons, by Eric Haines
+    Illumination-Related Abstracts from the Proceedings of Graphics
+        Interface '93
+    Design and Aims of the YART Graphics Kernel, by Ekkehard 'Ekki' Beier
+    Distribution Ray Tracing, by Marc Levoy
+    Ray Tracing, Antialiasing, and What To Do Instead, Steven Demlow
+    Yet Another Illumination Ph.D., by George Drettakis
+
+RTNv7n2:    February 2.01, 1994    -----------------------------------
+    Introduction
+    Ray Tracing Roundup
+    A Note on SPD Platform/Compiler Results (SPARC II), by David Hook
+    OORT - Object Oriented Ray Tracer, by Nicholas Wilt [and Eric Haines]
+    Partial Evaluation Applied to Ray Tracing, by P.H. Andersen
+    Comparison of Ray Traversal Methods, by Erik Jansen
+    Sphere Tessellation//Gamma Correction, by Olin Lathrop
+    Computational Geometry On-Line Bibliography, by Bill Jones
+    Summary of Advanced Rendering Papers from Eurographics '93, by
+        Erik Jansen
+    RAT, Another Ray Tracer, by Tom Wilson
+    Fast Raytracing via SEADS, by John Chapman and Wilfrid Lefer
+    Parallel Ray Tracing Schemes, by Rainer Menes
+    Notes on Parallel Ray Tracing, by Hsiu Lin and Sam Uselton
+    Parallel Texturing, by Jon Leech and Brian Corrie
+    Mapping Texture on a Sphere, by Ron Capelli
+    Computational Geometry in C, by Joseph O'Rourke
+    Programming for Graphics Files in C and C++, by John R Levine
+    Point in Polygon, the Quick Answer, by Wm. Randolph Franklin and
+        Eric Haines
+    Elib and NetNews Information, by Eric Haines
+    CFP: 5th Eurographics Workshop on Rendering, by Georgios Sakas
+    CFP: 5th EG workshop on Animation & Simulation, by Gerard Hegron
+    Morphology Digest, by Henk Heijmans
+    Position of the Sun, by Joe Cychosz
+
+RTNv7n1:    February 2, 1994    --------------------------------------
+    Introduction
+    Quick Book Reviews, by Eric Haines
+    Ray Tracing Roundup
+    3D Artist Magazine Information, by Tim Riley
+    Updated Graphics CD-ROM from Knowledge Media, by Paul A. Benson
+    The Desert Isle List, by Amanda Osborne
+    Raytrace Utilities List for DOS (and Windows), by Amanda Osborne
+    Brief Reviews of a Bunch of Useful PC Stuff, by Tim Lister
+    Tree and Plant Image Generation, by Phil Drinkwater and Jason Weber
+    POV-Ray 2.0 Released, by Dave Buck
+    JPEG Texture Maps, by Petri Nordlund
+    ArchiCAD Model Translator, and other notes, by Paul D. Bourke
+    New Radiance Version Available, by Greg Ward
+    Previewer Program for Radiance, by Greg Ward
+    IRIT Solid Modeller Version 4.0, by Gershon Elber
+    Object-Oriented Graphics: GOOD 0.50, by Ekkehard Beier
+    GFX News, by Eric Hsiao
+    New Wavefront Listserv, by George H. Otto
+    Optimized POV 2.0 version, by Peter K. Campbell
+    Errata for "Adventures in Ray Tracing", by Alfonso Hermida
+
+RTNv6n3:    September 28, 1993    ------------------------------------
+    Introduction
+    New People
+    Ray Tracing Roundup
+    Free Ray Tracer Summary, compiled by Eric Haines
+    Ray Tracer Races, Round 2, by Eric Haines
+    An Enhanced Standard Procedural Databases Package, by Eric Haines
+    Shadows from Refractive Objects, by Steven Collins
+    Shadows Through Transmitters, by Eric Haines, Greg Ward,
+        Alexander Enzmann, Stephen Coy, and David Hook
+    Faster Bounding Volume Hierarchies, by Brian Smits and Eric Haines
+    Simple Sun Position Program, by James Ashton
+    Sphere and Cylinder/Cone/Disc/Annulus Definition, by Eric Haines
+    Ray Tracing Roundup
+    Simple Sphere Tessellation, by Mike Castle
+    Syndesis CD-ROM Review, by Eric Haines
+    Ray Tracing Related Abstracts from the Proceedings of
+        Graphics Interface '93
+    Ray Tracing Papers in the First Bilkent Computer Graphics Conference,
+        ATARV-93, Ankara, Turkey, July 1993
+    Fourth Eurographics Workshop on Rendering, Paris, France June 14-16, by
+        Francois Sillion
+    Gamma Correction Frequently Asked Questions, by Graeme Gill
+    3D Studio Rendering, by Chris Williams
+    Ray-Bezier Patch Intersection, by Chuck McKinley, Max Froumentin
+    Turbulence and Noise, by Ken Perlin
+    Ray Tracing Research Ideas, by Klaus Lisberg Kristensen
+        & Christian Gautier
+    POV-Ray Utilities, by Dan Farmer
+    SPD Platform/Compiler Results, by David Hook
+
+RTNv6n2:    July 1, 1993        --------------------------------------
+    Introduction
+    New People
+    Ray Tracer Races, Round 2, by Eric Haines
+    Simple, Fast Triangle Intersection, part II, by John Spackman
+    Review: _Photorealism and Ray Tracing in C_ (and others), by Eric Haines
+    Comments on Various Ray Tracing Speedups, by Andrew Woo
+    Errata to _Photorealism and Ray Tracing in C_, compiled by Eric Haines
+    InterChange Plus Model/Texture Data CD-ROM, by John Foust
+    Ray Tracing Roundup
+    ==== Net cullings follow ===============================================
+    Re: Intersection Between a Line and a Polygon (UNDECIDABLE??), by Allen B
+    Obfuscated Postscript Ray Tracer, by Takashi Hayakawa
+
+RTNv6n1:    January 27, 1993    --------------------------------------
+    Introduction
+    New People, New Places, etc
+    An Easily Implemented Ray Tracing Speedup, by Steve Worley
+    Color Storage, by Greg Ward
+    Bounding Areas for Ray/Polygon Intersection, by Steve Worley and
+        Eric Haines
+    Simple, Fast Triangle Intersection, by Chris Green and Steve Worley
+    Ray Tracing Roundup
+    Spectrum Overview, edited by Nick Fotis
+    Comments on the Glazing Trick, by Eric Haines
+    ==== Net cullings follow ===============================================
+    Announcing the ACM SIGGRAPH Online Bibliography Project, by Stephen Spencer
+    A Brief History of Blobby Modeling, by Paul Heckbert
+    Cool Raytracing Ideas, Karen Paik
+    Optical Effects and Accuracy, by Sam Uselton
+    Map Projections Reference Book, by Mike Goss
+    A Brief Review of Playmation, by Chris Williams
+    PV3D Quick Review, by David Anjo
+    Bounding Volumes (Sphere vs. Box), by Tom Wilson
+    Raytracing Swept Objects, by Mark Podlipec
+    Ray Transformation, by Kendall Bennett
+
+RTNv5n3:    September 2, 1992    -------------------------------------
+    Introduction
+    Intersection Between a Line and a Polygon (UNDECIDABLE??), by Dave Baraff,
+    Tom Duff
+    Fastest Point in Polygon Test, by Aladdin Nassar, Philip Walden, Eric
+    Haines, Tom Dickens, Ron Capelli, Sundar Narasimhan, Christopher Jam,
+    and (last but not least) Stuart MacMartin
+    Polygon Intersection via Barycentric Coordinates, by Peter Shirley
+    Many-Sided Polygon Intersection, by Eric Haines, Benjamin Zhu
+    Code for Point in Polygon Intersectors, by Eric Haines
+
+RTNv5n2:    August 26, 1992        -----------------------------------
+    Introduction - SIGGRAPH roundtable, etc
+    New People, New Addresses, etc
+    BSP Traversal Errata, by Kelvin Sung
+    The Art of Noise, by Steve Worley
+    Ray Tracing Roundup, by Eric Haines
+    Graphics Gems III Residency Mask errata, by Joe Cychosz
+    Any Future for Efficiency Research?, by Eric Haines
+    NuGrid Update, by Mike Gigante
+    ======== USENET cullings follow ========
+    Spline Patch Ray Intersection Routines, by Sean Graves
+    Xdart, from Mark Spychalla
+    4D Space Viewing Software, by Steve Hollasch
+    BYU Modelling and Visualization Package - Free Demo, by Stacey D. Son
+    New Radiosity Program Available, by Guy Moreillon
+    Optics Lab Information, by Anthony Siegman
+    Ray Tracing (or Casting) Applications, by Tom Wilson
+    Goofy (?) Idea, Gary McTaggart
+    Constant Time Ray Tracing, by Tom Wilson, Eric Haines, Brian Corrie, and
+    Masataka Ohta
+    VLSI for Ray Tracing, by Kenneth Cameron, George Kyriazis, Peter De Vijt,
+    Jon Leech, Sam Uselton, Thierry Priol, and "Dega Dude"
+    The Moon Revisited, by Tom Duff
+    Soft Shadow Ideas, compiled by Derek Woolverton
+    Book Announcement: Multiprocessor Methods for Computer Graphics Rendering,
+        by Scott Whitman
+
+RTNv5n1:    July 10, 1992        -------------------------------------
+    Introduction - SIGGRAPH roundtable, etc
+    New People, New Addresses, etc
+    Texturing Parameterization, by Haakan "Zap" Andersson
+    NuGrid results, by Mike Gigante
+    Recursive Ray Traversal, by Erik Jansen and Wim de Leeuw,
+    Response by Kelvin Sung
+    Ideal Grid/Object Densities, by Dan Gehlhaar, Marc Andreessen
+    BVH Traversal Results, by Nicholas Wilt
+    Ray Tracing Roundup, by Eric Haines
+    Mail Based 3D File Server, by Bob Lindabury
+    Imagine That, by Steve Worley
+    Correct Roots for Torus Intersection, by Haakan "Zap" Andersson
+    Information on Taos Parallel Processor, by Paul Wain
+    The Glazing Trick, by Haakan "Zap" Andersson
+    Bug in Ray-Convex Polyhedron Intersector in Graphics Gems II, Eric Haines
+
+RTNv4n3:    November 18, 1991        ---------------------------------
+    Introduction
+    New People, Address Changes, etc
+    ElectroGig Free Software Offer
+    Spectrum: A Proposed Image Synthesis Architecture, by Andrew Glassner
+    Spline Intersection, Texture Mapping, and Whatnot, by Rick Turner
+    Satellite Image Interpretation, by Andy Newton
+    Material Properties, by Ken Turkowski
+    New Library of 3D Objects Available via FTP, by Steve Worley
+    Object Oriented Ray Tracing Book
+    New and Updated Ray Tracing and Radiosity Bibliographies
+    DKBTrace 2.12 Port to Mac, by Thomas Okken
+    Graphics Gems II Source Code
+    Radiance Digest Archive, by Greg Ward
+    Model Generation Software, by Paul D. Bourke
+    Rayshade 4.0 Release, Patches 1 & 2, and DOS Port, by Craig Kolb and
+        Rod Bogart
+    RayShade Timings, by Craig Kolb
+    RayShade vs. DKBtrace Timings, by Iain Dick Sinclair
+    PVRay Beta Release, by David Buck
+    Vort 2.1 Release, by Eric H. Echidna
+    BRL-CAD 4.0 Release, by Michael J. Muuss and Glenn M. Gillis
+
+RTNv4n2:    July 15, 1991        -------------------------------------
+    Introduction - SIGGRAPH get-together, etc
+    New People, Address Changes, etc
+    Ray Tracing Related FTP sites, compiled by Eric Haines
+    Ray Tracing, the way I do it, by Haakan 'Zap' Andersson
+    More Thoughts on Anti-Aliasing, by John Woolverton
+    Spatial Measures for Accelerated Ray Tracing, by John Spackman
+    Barcelona Workshop Summary, by Arjan Kok
+    Book Announcement, from Stuart Green
+    Spiral Scene Generator, by Tom Wilson
+    An Announcement From The 'Paper Bank' Project, by Juhana Kouhia
+    Radiance 1.4 via FTP, by Greg Ward
+    Proceedings of Graphics Interface '91 Availability, by Irene Gargantini
+    NFF Previewers, by Bernie Kirby, Patrick Flynn, Mike Gigante, Eric Haines
+    RayTracker Demos Available, by Jari Kahkonen
+    RayTracker Info, by Zap Andersson
+
+RTNv4n1:    March 1, 1991        -------------------------------------
+    Introduction
+    New People, Address Changes, etc
+    Ray Tracing Abstract Collection, by Tom Wilson
+    Report on Lausanne Hardware Workshop, by Erik Jansen
+    New Version of SPD Now Available, by Eric Haines
+    Teapot Timings, by John Spackman
+    The Very First Point in Polygon Publication, by Chris Schoeneman
+    The Acne Problem, by Christophe Schlick
+    Shirley Thesis Available via Anonymous FTP, by Pete Shirley
+    Some Thoughts On Anti-aliasing, by Zap Anderssen, Eric Haines
+    New VORT Release, and the VORT Chess Set, by Eric H. Echnida, David Hook
+    Best (or at least Better) of RT News, by Tom Wilson
+    At Long Last, Rayshade v4.0 is Available for Beta-testing, by Craig Kolb
+    Parallel Ray Tracer, by Kory Hamzeh, Mike Muuss, Richard Webb
+    Distributed DKB, by Jonas Yngvesson
+    Quadrangle Tessellation, by Christophe Schlick
+    New Release of Radiance Software & Bug Fixes, by Greg Ward
+    Radiance Timings on a Stardent, by Eric Ost
+    RTSYSTEM Fast Ray Tracer, by Patrick Aalto
+    DKBTrace Beta Available, by David Buck
+    "Computer Graphics" 2nd Edition Corrections, Software, etc by Brown Emailer
+    Papers which are currently available from the Net via anon. FTP, J. Kouhia
+    ======== USENET cullings follow ========
+    Ray-Cylinder Intersection Tutorial, by Mark VandeWettering
+    C++ Fractal and Ray Tracing Book, by Fractalman
+    Ray/Spline Intersection Reference, by Spencer Thomas
+    Superquadric Intersection, by Rick Speer, Michael B. Carter
+    Comments on Interval Arithmetic, by Mark VandeWettering, Don Mitchell
+    Platonic Solids, by Alan Paeth
+    Moon Problems, by Ken Musgrave, Pete Shirley
+    Ken gave another problem with rendering the moon:
+    Shadow Testing Simplification, by Tom Wilson
+    SIMD Parallel Ray Tracing, by George Kyriazis, Rick Speer
+    Rayscene Animator, by Jari K{hk|nen [sic]
+    SIPP 2.0 3d Rendering Package, by Jonas Yngvesson and Inge Wallin
+    3DDDA Comments, by John Spackman
+    Radiosity Implementation Available via FTP, by Sumant
+    Dirt, by Paul Crowley
+    Thomson Digital Images University Donation Program, by Michael Takayama
+    A Brief Summary of Ray Tracing Related Stuff, Angus Y. Montgomery
+
+RTNv3n4:    October 1, 1990        -----------------------------------
+    Introduction
+    New People, Address Changes, etc
+    Photorealism, and the color Pink (TM), from Andrew Glassner
+    DKBTrace v2.0 and Ray Tracing BBS Announcement, by David Buck, Aaron Collins
+    Article Summaries from Eurographics Workshop, by Pete Shirley
+    Convex Polyhedron Intersection via Kay & Kajiya, by Eric Haines
+    New Radiosity Bibliography Available, by Eric Haines
+    A Suggestion for Speeding Up Shadow Testing Using Voxels, by Andrew Pearce
+    Real3d, passed on by Juhana Kouhia, "Zap" Andersson
+    Utah Raster Toolkit Patch, by Spencer Thomas
+    NFF Shell Database, by Thierry Leconte
+    FTP list update and New Software, by Eric Haines, George Kyriazis
+    ======== USENET cullings follow ========
+    Humorous Anecdotes, by J. Eric Townsend, Greg Richter, Michael McCool,
+    Eric Haines
+    Graphics Interface '91 CFP
+    Parametric Surface Reference, by Spencer Thomas
+    Solid Light Sources Reference, by Steve Hollasch, Philip Schneider
+    Graphics Gems Source Code Available, by Andrew Glassner, David Hook
+    Graphics Gems Volume 2 CFP, by Sari Kalin
+    Foley, Van Dam, Feiner and Hughes "Computer Graphics" Bug Reports,
+    by Steve Feiner
+    Radiosity via Ray Tracing, by Pete Shirley
+    Algorithm Order Discussion, by Masataka Ohta, Pete Shirley
+    Point in Polygon, One More Time..., by Mark Vandewettering, Eric Haines,
+    Edward John Kalenda, Richard Parent, Sam Uselton, "Zap" Andersson,
+    and Bruce Holloway
+    Quadrant Counting Polygon In/Out Testing, by Craig Kolb, Ken McElvain
+    Computer Graphics Journals, by Juhana Kouhia
+
+RTNv3n3:    July 13, 1990        -----------------------------------
+    Introduction
+    Ray Tracing Roundtable Announcement
+    New People, Address Changes, etc
+    Jarke van Wijk Thesis Availability, by Erik Jansen
+    New Name For "Distributed Ray Tracing", by Paul Heckbert et al
+    NFF Files from Thierry Leconte
+    RADIANCE Software Available, by Greg Ward
+    Rayshade Updates & SPD Bug, by Craig Kolb
+    New Version of Vort Ray Tracer, by David Hook
+    Graphics Interface '90, by Eric Haines
+    Real3d Review, Haakan "ZAP" Andersson
+    Bits From a Letter by David Jevans
+    On Antialiasing, & Light and Such, by Haakan "ZAP" Andersson
+    ======== USENET cullings follow ========
+    Summary: Uniform Random Distribution of Points on Sphere's Surface,
+    Marshall Cline
+    Ray Tracing & Radiosity, by Frank Vance, Mark VandeWettering
+    Ray-Tracing the Torus, by Prem Subrahmanyam, Bob Webber
+    Need Help on Superquadrics, by Wayne McCormick, Robert Skinner
+    Ray Tracing Penumbral Shadows, Prem Subrahmanyam
+    Ray with Bicubic Patch Intersection Problem, Wayne Knapp, John Peterson,
+    Lawrence Kesteloot, Mark VandeWettering, Thomas Williams
+    Rendering Intersecting Glass Spheres, by John Cristy, Craig Kolb
+    DKBPC Raytracer, by Tom Friedel
+    New release of IRIT solid modeller, by Gershon Elber
+    Easier Use of Ray Tracers, by Philip Colmer, Mark VandeWettering,
+    Jack Ritter
+    Raytracer Glass, by F. Ken Musgrave, Michael A. Kelly
+    Ray Intersection with Grid, by Alasdair Donald Robert McIntyre, Rick Speer
+    Database for DBW-Render, by Prem Subrahmanyam
+
+RTNv3n2:    March 20, 1990        -----------------------------------
+    Introduction
+    New People, Address Changes, etc
+    FTP Site List, by Eric Haines
+    RayShade Posting and Patches and Whatnot, by Craig Kolb
+    Common Rendering Language, by Eric Haines
+    Avoiding Re-Intersection Testing, by Eric Haines
+    Torus Equation Correction, by Pat Hanrahan
+    "Introduction to Ray Tracing" Shading Model Errata, by Kathy Kershaw
+    Comments on Last Issue, by Mark VandeWettering
+    An Improvement to Goldsmith/Salmon, by Jeff Goldsmith
+    Fiddling with the Normal Vector, by H. 'ZAP' Anderson
+    A Note on Texture Sampling, by Eric Haines
+    Unofficial MTV Patches, by Eric Haines
+    ======== USENET cullings follow ========
+    OFF Databases, by Randi Rost
+    VM_pRAY is now available, by Didier Badouel
+    Superquadrics, by Prem Subrahmanyam, Patrick Flynn, Ron Daniel, and
+    Mark VandeWettering
+    Graphics Textbook Recommendations, by Paul Heckbert, Mark VandeWettering,
+    and Kent Paul Dolan
+    Where To Find U.S. Map Data, by Dru Nelson
+    References for Rendering Height Fields, Mark VandeWettering
+    RayShade 3.0 Released on comp.sources.unix, by Craig Kolb
+    Bibliography of Texture Mapping & Image Warping, by Paul Heckbert
+    More Texturing Functions, by Jon Buller
+    Ray/Cylinder Intersection, by Mark VandeWettering
+    C Code for Intersecting Quadrics, by Prem Subrahmanyam
+    Parallel Ray Tracing on IRISs, collected by Doug Turner
+
+RTNv3n1:    January 2, 1990        -----------------------------------
+    Introduction
+    New People
+    Archive Site for Ray Tracing News, by Kory Hamzeh
+    Ks + T > 1, by Craig Kolb and Eric Haines
+    Quartic Roots, and "Intro to RT" Errata, by Larry Gritz and Eric Haines
+    More on Quartics, by Larry Spence
+    Question: Kay and Kajiya Slabs for Arbitrary Quadrics?
+    by Thomas C. Palmer
+    Ambient Term, by Pierre Poulin
+    Book Reviews on Hierarchical Data Structures of Hanan Samet,
+    by A. T. Campbell, III
+    Comparison of Kolb, Haines, and MTV Ray Tracers, Part I, by Eric Haines
+    Raytracer Performance of MTV, by Steve Lamont
+    BRL-CAD Ray Tracer Timings, by Gavin Bell
+    BRL-CAD Benchmarking and Parallelism, by Mike Muuss
+    ======== USENET cullings follow ========
+    Rayshade Patches Available, by Craig Kolb
+    Research and Timings from IRISA, by Didier Badouel
+    Concerning Smart Pixels, by John S. Watson
+    Input Files for DBW Render, by Tad Guy
+    Intersection with Rotated Cubic Curve Reference, by Richard Bartels
+    Needed: Quartz surface characteristics, by Mike Macgirvin
+    Solution to Smallest Sphere Enclosing a Set of Points, by Tom Shermer
+    True Integration of Linear/Area Lights, by Kevin Picott
+
+RTNews9 - v2n8:    October 27, 1989    -------------------------------
+    Introduction
+    Tracing Tricks, edited by Eric Haines
+    Ambient Light
+    Efficiency Schemes
+    Bounding Volume Hierarchy
+    Octree
+    Bounding Box Intersection
+    Spline Surface Intersection
+    Acknowledgements
+    Bibliography
+
+RTNews8 - v2n7:    October 13, 1989    --------------------------------
+    Introduction
+    New People and Address Changes
+    Solid Surface Modeler Information, by Eric Haines
+    Minimum Bounding Sphere Program, by Marshall Levine
+    Parallelism & Modeler Info Request, by Brian Corrie
+    ======== USENET cullings follow ========
+    Ray Tracer Available, by Craig Kolb
+    Source from Roy Hall's Book, by Tim O'Connor
+    More on Texture Mapping by Spatial Position, by Paul Lalonde
+    Procedural Bump-mapping Query, by Prem Subrahmanyam
+    Ray Tracer Performance on Machines, by Gavin A. Bell, Steve Lamont
+    Projective Mapping Explanation, by Ken "Turk" Turkowski
+    Intersection Calculation Problem Request, Jari Toivanen
+    Mathematical Elements for Computer Graphics - Call for Errata,
+    by David Rogers
+    Raytracing on NCUBE Request, by Ping Kang Hsiung
+    Intersection Between a Line and a Polygon (UNDECIDABLE??),
+    by Dave Baraff, Tom Duff
+
+RTNews8- v2n6:    September 20, 1989    -------------------------------
+    Introduction
+    New People and Address Changes
+    Q&A on Radiosity Using Ray Tracing, by Mark VandeWettering and John Wallace
+    Dark Bulbs, by Eric Haines
+    MTV Ray Tracer Update and Bugfix, by Mark VandeWettering
+    DBW Ray Tracer Description
+    ======== USENET cullings follow ========
+    Wanted: Easy Ray/Torus Intersection, by Jochen Schwarze
+    Polygon to Patch NFF Filter, by Didier Badouel
+    Texture Mapping Resources, by Eric Haines, Prem Subrahmanyam,
+        Ranjit Bhatnagar, and Jack Ritter
+
+RTNews7 - v2n5:    August 29, 1989    ---------------------------------
+    Introduction
+    A SIGGRAPH Report, by Eric Haines
+    Ray Tracing Poll, from the roundtable discussion
+    _An Introduction to Ray Tracing_, Announcement and Errata
+    _Graphics Gems_ Call for Contributions, by Andrew Glassner
+    New People and Address Changes
+    Bugs in MTV's Ray Tracer, by Eric Haines
+    Bug in SPD, from Pete Segal
+    Solid Textures Tidbit, by Roman Kuchkuda
+    Sundry Comments, by Jeff Goldsmith
+    Texture Mapping Question, by Susan Spach
+    ======== USENET cullings follow ========
+    Ray Traced Image Files, Prem Subramanyan
+    Image Collection, by Paul Raveling
+    MTV-Raytracer on ATARI ST - precision error report, by Dan Riley
+    Question on Ray Tracing Bicubic Parametric Patches, by Robert Minsk
+
+RTNews7 - v2n4:    June 21, 1989    -----------------------------------
+    Introduction
+    Hardcopy News
+    New (and Used?) People
+    Minimum Bounding Sphere, continued, by Jack Ritter
+    Comments on "A Review of Multi-Computer Ray-Tracing", by Thierry Priol
+    Query: Dataflow architectures and Ray Tracing, by George Kyriazis
+    ======== USENET cullings follow ========
+    Re: Pixar's noise function, by Jon Buller
+    Re: DBW_render for SUN 3 ? by Tad Guy
+    Re: Steel Colors, by Eugene Miya
+    Dirty Little Tricks, by Jack Ritter
+    Obfuscated Ray Tracer, by George Kyriazis
+    Contents of FTP archives, skinner.cs.uoregon.edu, by Mark VandeWettering
+
+RTNews7 - v2n3:    May 12, 1989        --------------------------------
+    Introduction
+    New People, by Carl Bass, Paul Wanuga
+    QRT Ray Tracer (and five other Amiga Ray Tracers), by Steve Koren
+    New Version of MTV Ray Tracer, by Mark VandeWettering
+    Re: Ray Traced Bounding Spheres, by Earl Culham
+    Noise and Turbulence Function Code, Pascal and C, by Jon Buller,
+    William Dirks
+
+RTNews6 - v2n2:    February 20, 1989    -------------------------------
+    Introduction, by Eric Haines
+    New Subscribers, by Turner Whitted, Mike Muuss
+    The BRL CAD Package, by Mike Muuss
+    New Book: _Illumination and Color in Computer Generated Imagery_, Roy Hall
+    (Eric Haines)
+    Uniform Distribution of Sample Points on a Surface
+    Depth of Field Problem, by Marinko Laban
+    Query on Frequency Dependent Reflectance, by Mark Reichert
+    "Best of comp.graphics" ftp Site, by Raymond Brand
+    Notes on Frequency Dependent Refraction
+    Sound Tracing
+    Laser Speckle
+
+RTNews6 - v2n1:    January 6, 1989        -----------------------------
+    Introduction, by Eric Haines
+    New Members, by David Jevans, Subrata Dasgupta, Darwin Thielman,
+    Steven Stadnicki, Mark Reichert
+    Multiprocessor Visualization of Parametric Surfaces, by Markku Tamminen,
+    comments from many others
+    Miscellany, by K.R.Subramanian, David F. Rogers, Steven Stadnicki,
+    Joe Smith, Mark Reichert, Tracey Bernath
+    Supersampling Discussion, by David Jevans, Alan Paeth, Andrew Woo,
+    Loren Carpenter
+    Distributed Ray Tracer Available, by George Kyriazis
+    Ray Tracing Program for 3b1, by Sid Grange
+    Map Archive, by Gary L. Crum
+    Index of Back Issues, by Eric Haines
+
+RTNews5 - v1n11: November 4, 1988    ----------------------------------
+    Intro
+    New People
+    Ray/Triangle Intersection with Barycentric Coordinates, by Rod Bogart,
+        Jeff Arenberg
+    Transforming normals, by David F. Rogers
+    2D box-test, by Jack van Wijk
+    Re: Neutral File Format, by Jeff Goldsmith
+    RT and Applications, by Cary Scofield
+    Re: Goldsmith and Eyes, by K.R.Subramanian
+    Wood Textures, by Rod Bogart
+    Shadows, Mirrors, and "Virtual Lighting", by Steve Stadnicki
+    Re: Basics of Raytracing, by David Jevans
+    Re: What is Renderman Standard?, by Steve Upstill
+    Free On-Line Computer Graphics References
+    Latest Mailing List, Short Form, by Eric Haines
+
+RTNews5 - v1n10: October 3, 1988    -----------------------------------
+    Intro
+    New Addresses and People
+    Bitmap Stuff, by Jeff Goldsmith
+    More Comments on Kay/Kajiya
+    Questions and Answers (for want of a better name)
+    More on MTV's Public Domain Ray Tracer (features, bug fixes, etc)
+    Neutral File Format (NFF), by Eric Haines
+
+RTNews4 - v1n9: September 11, 1988    ---------------------------------
+    Intro
+    Capsule Autobiographies, by more new people
+    The Continuing Saga of MTV's Raytracer, by Mark VandeWettering
+    Public Domain Ray Tracer Q & A, by Mark VandeWettering
+    Public Domain Ray Tracer Utilities, by Tom Vijlbrief
+    Sorting Unnecessary on Shadow Rays for Kay/Kajiya?
+    by Eric Haines and Mark VandeWettering
+    Summary of Replies to Vectorizing Ray-Object Intersection Query,
+    by Tom Palmer
+    The Ray Tracer I Wrote, by George Kyriazis
+    New Bitmaps Library Available, Jef Poskanzer
+
+RTNews4 - v1n8:    September 5, 1988    -------------------------------
+    Intro
+    Capsule Biographies
+    SIGGRAPH '88 RT Roundtable Summary, by Paul Strauss and Jeff Goldsmith
+    Commercial Ray Tracing Software and SIGGRAPH, by Eric Haines and others
+    A Letter, by Jeff Goldsmith
+    Best of USENET
+    Postscript Ray Tracer, John Hartman and Paul Heckbert
+
+RTNews3 - v1n7: June 20, 1988    --------------------------------------
+    Introduction
+    New People and Addresses
+    Non-article on RenderMan and Dore', by Eric Haines
+    Ray Tracing Bibliography Update, by Paul Heckbert and Eric Haines
+    Commercial Ray Tracing Software, by Eric Haines
+    Benchmarks, by Jeff Goldsmith
+
+RTNews3 - v1n6: April 6, 1988        ----------------------------------
+    RT News, Hardcopy Form, by Andrew Glassner
+    New People
+    Question for the Day, by Rod Bogart
+    Re: Linear-time Voxel Walking for BSP, by Erik Jansen
+    Some Thoughts on the Theory of RT Efficiency, by Jim Arvo
+    Automatic Creation of Object Hierarchies for Ray Tracing, by Eric Haines
+    Best of USENET
+
+RTNews2 - v1n5: March 26, 1988        ---------------------------------
+    Intro, Eric Haines
+    Mailing list changes and additions: Kuchkuda, Lorig, Rekola
+    More on shadow testing, efficiency, etc., Jeff Goldsmith
+    More comments on tight fitting octrees for quadrics, Jeff Goldsmith
+    LINEAR-TIME VOXEL WALKING FOR OCTREES, Jim Arvo
+    Efficiency Tricks, Eric Haines
+    A Rendering Trick and a Puzzle, Eric Haines
+    PECG correction, David Rogers
+
+RTNews2 - v1n4:    March 8, 1988        -------------------------------
+    Surface acne, by Eric Haines
+    Goldsmith/Salmon hierarchy building
+    Efficiency tricks followup, by Ohta, Goldsmith, Haines
+    ======== USENET cullings follow ========
+    Spatial Subdivision, by Ruud Waij, Paul Heckbert, Andrew Glassner
+
+RTNews2 - v1n3: March 1, 1988        ----------------------------------
+    Mailing list updates
+    Another Dore' article
+    Teapot in a football stadium, by Glassner, Arvo, Haines
+    Efficiency Tricks, by Jeff Goldsmith
+    More book recommendations, by Jeff Goldsmith
+    Bug for the day, by Eric Haines
+    A pet peeve, by Jeff Goldsmith
+
+RTNews2 - v1n2: Februrary 15, 1988    ---------------------------------
+    Dore'
+
+RTNews1 - v1n1: January 15, 1988    -----------------------------------
+    Introduction
+    Subdivision and CSG, by Erik Jansen
+    Spline surface rendering, and what's wrong with octrees, by Eric Haines
+    Top ten hit parade of computer graphics books, by Eric Haines
+    Normal vectors and octree relies, by Olin Lathrop and Eric Haines
+    Subspaces and simulated annealing, by Jim Arvo
+
+RTNews1 - the start: Sometime after Siggraph '87    -------------------
+    Introduction
+    SPD and NETLIB, by Eric Haines
+    Spline Surfaces, by John Peterson, Haines, Goldsmith, Kay
+    Abnormal Normals, by Eric Haines
+
+---- END

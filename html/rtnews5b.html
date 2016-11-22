@@ -1,0 +1,1476 @@
+<!-- html version of Volume 1, Number 11 :  -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 1, Number 11</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>November 4, 1988</FONT>
+<P><FONT size=+1>Volume 1, Number 11</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1988, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Intro
+</A></LI>
+<LI><A HREF="#art2">
+New People
+</A></LI>
+<LI><A HREF="#art3">
+Ray/Triangle Intersection with Barycentric Coordinates,
+</A></LI>
+by Rod Bogart,
+Jeff Arenberg
+<LI><A HREF="#art4">
+Transforming normals,
+</A></LI>
+by David F. Rogers
+<LI><A HREF="#art5">
+2D box-test,
+</A></LI>
+by Jack van Wijk
+<LI><A HREF="#art6">
+Re: Neutral File Format,
+</A></LI>
+by Jeff Goldsmith
+<LI><A HREF="#art7">
+RT and Applications,
+</A></LI>
+by Cary Scofield
+<LI><A HREF="#art8">
+Re: Goldsmith and Eyes,
+</A></LI>
+by K.R.Subramanian
+<LI><A HREF="#art9">
+Wood Textures,
+</A></LI>
+by Rod Bogart
+<LI><A HREF="#art10">
+Shadows, Mirrors, and "Virtual Lighting",
+</A></LI>
+by Steve Stadnicki
+<LI><A HREF="#art11">
+Re: Basics of Raytracing,
+</A></LI>
+by David Jevans
+<LI><A HREF="#art12">
+Re: What is Renderman Standard?
+</A></LI>
+by Steve Upstill
+<LI><A HREF="#art13">
+Free On-Line Computer Graphics References,
+</A></LI>
+by Eugene Miya
+<LI><A HREF="#art14">
+Latest Mailing List,
+</A></LI>
+Short Form, by Eric Haines
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Intro
+</A></FONT>
+</H4>
+For a switch, there are no articles on MTV's ray tracer!  The major stuff
+this time is Rod Bogart's triangle intersector, and the announcement of
+Baldev Singh's computer graphics reference resource.  There are also many
+letters and short articles, along with the usual cullings of USENET.
+Enjoy.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+New People
+</A></FONT>
+</H4>
+# Professor David F. Rogers<BR>
+# Aerospace Engineering Department<BR>
+# U.S. Naval Academy<BR>
+# Annapolis, MD 21402<BR>
+# USA<BR>
+# Tel: 301-267-3283/4/5<BR>
+# ARPANET: <A HREF="mailto:dfr@usna.mil">dfr@usna.mil</A><BR>
+# UUCP:    ~uunet!usna!dfr<BR>
+alias   david_rogers    <A HREF="mailto:dfr@cad.usna.mil">dfr@cad.usna.mil</A><BR>
+<P>
+# Kelvin Thompson - hierarchy schemes, procedural objects, animation<BR>
+# The University of Texas at Austin<BR>
+# 4412 Ave A. #208<BR>
+# Austin, TX  78751-3622<BR>
+alias   kelvin_thompson <A HREF="mailto:kelvin@cs.utexas.edu">kelvin@cs.utexas.edu</A><BR>
+<P>
+I'm a PhD student in graphics at the University of Texas.  I received a BSEE
+from Rice University in 1983, and a Master's in EE from UT in 1984.  My
+doctoral project is on hierarchical, multi-scale databases for computer
+graphics, and I'm building a ray-tracer as part of my work on that project.
+I'm also interested in motion and animation.  I never plan on becoming
+President of the United States of America.
+<P>
+<PRE>
+-- Kelvin Thompson, Lone Rider of the Apocalypse
+   <A HREF="mailto:kelvin@cs.utexas.edu">kelvin@cs.utexas.edu</A>  {...,uunet}!cs.utexas.edu!kelvin
+</PRE>
+<P>
+# A. T. Campbell, III - shading models, animation<BR>
+# Department of Computer Sciences<BR>
+# University of Texas<BR>
+# Austin, Texas 78712<BR>
+# (512) 471-9708<BR>
+alias   at_campbell     <A HREF="mailto:atc@cs.utexas.EDU">atc@cs.utexas.EDU</A><BR>
+<P>
+I am in the PhD program in Computer Sciences at the University of Texas.  My
+research area is developing a more sophisticated illumination model than those
+currently in widespread use.  A modified form of distributed ray tracing is one
+of the methods I am considering to evaluate my model.
+<P>
+Animation is another of my interests.  I am putting myself through school by
+producing computer graphics animations for a small engineering company.
+Sometimes I am called upon to create special effects such as motion blur and
+atmospheric effects.  Based on what I heard at this year's ray tracing round
+table at SIGGRAPH, it looks as if ray tracing can solve most of my problems.
+<P>
+# Tim O'Connor<BR>
+# Staff, Cornell Program of Computer Graphics<BR>
+# 120 Rand Hall<BR>
+# Ithaca, NY 14853<BR>
+alias   tim_oconnor     <A HREF="mailto:toc@wisdom.tn.cornell.edu">toc@wisdom.tn.cornell.edu</A><BR>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Ray/Triangle Intersection with Barycentric Coordinates,
+</A></FONT>
+by Rod Bogart, Jeff Arenberg
+</H4>
+From: hpfcla!bogart%<A HREF="mailto:gr@cs.utah.edu">gr@cs.utah.edu</A> (Rod G. Bogart)
+<P>
+A while back, there was a posting concerning ray/triangle intersection.  The
+goal was to determine if a ray intersects a triangle, and if so, what are the
+barycentric coordinates.  For the uninitiated, barycentric coordinates are
+three values (r,s,t) all in the range zero to one.  Also, the sum of the values
+is one.  These values can be used as interpolation parameters for data which is
+known at the triangle vertices (i.e. normals, colors, uv).
+<P>
+The algorithm presented previously involved a matrix inversion.  The math went
+something like this: Since (r,s,t) are interpolation values, then the
+intersection point (P) must be a combination of the triangle vertices scaled by
+(r,s,t).
+<P>
+<PRE>
+    [ x1 y1 z1 ] [ r ]   [ Px ]   [ r ]   [ Px ]
+    [ x2 y2 z2 ] [ s ] = [ Py ]   [ s ] = [ Py ]  ~V
+    [ x3 y3 z3 ] [ t ]   [ Pz ]   [ t ]   [ Pz ]
+</PRE>
+<P>
+So, by inverting the vertex matrix (V -&gt; ~V), and given any point in the plane
+of the triangle, we can determine (r,s,t).  If they are in the range zero to
+one, the point is in the triangle.
+<P>
+The only problem with this method is numerical instability.  If one vertex is
+the origin, the matrix won't invert.  If the triangle lies in a coordinate
+plane, the matrix won't invert.  In fact, for any triangle which lies in a
+plane through the origin, the matrix won't invert.  (The vertex vectors don't
+span R3.)  The reason this method is so unstable is because it tries to solve a
+2D problem in 3D.  Once the ray/plane intersection point is known, the
+barycentric coordinates solution is a 2D issue.
+<P>
+Another way to think of barycentric coordinates is by the relative areas of the
+subtriangles defined by the intersection point and the triangle vertices.
+<P>
+<PRE>
+        1         If the area of triangle 123 is A, then the area of
+       /|\        P23 is rA.  Area 12P is sA and area 1P3 is tA.
+      / | \       With this image, it is obvious that r+s+t must equal
+     /  |  \      one.  If r, s, or t go outside the range zero to one,
+    / t | s \     P will be outside the triangle.
+   /  _-P-_  \
+  / _-     -_ \
+ /_-    r    -_\
+2---------------3
+</PRE>
+<P>
+By using the above are relationships, the following equations define r, s and
+t.
+<P>
+<PRE>
+        N = triangle normal = (vec(1 2) cross vec(1 3))
+            (vec(1 P) cross vec(1 3)) dot N
+        s = -------------------------------
+                     (length N)^2
+            (vec(1 2) cross vec(1 P)) dot N
+        t = -------------------------------
+                     (length N)^2
+        r = 1 - (s + t)
+</PRE>
+<P>
+In actual code, it is better to avoid the divide and the square root.  So, you
+can set s equal to the numerator, and then test if s is less than zero or
+greater than sqr(length N).  For added efficiency, preprocess the data and
+store sqr( length N) in the triangle data structure.  Even for extremely long
+thin triangles, this method is accurate and numerically stable.
+<P>
+RGB                         Living life in the fast lane, eight items or less.
+({ihnp4,decvax}!utah-cs!bogart, <A HREF="mailto:bogart@cs.utah.edu">bogart@cs.utah.edu</A>)
+<P>
+________
+<P>
+From: <A HREF="mailto:arenberg@trwrb.UUCP">arenberg@trwrb.UUCP</A> (Jeff Arenberg)<BR>
+Subject: Re: Ray/Triangle Intersection with Barycentric Coordinates
+[from USENET]
+<P>
+Ok, here is how I handle this calculation in my ray tracing program.  I think
+it is quite efficient.
+<P>
+Let a triangle be represented in the following manner :
+<P>
+<PRE>
+                   |\
+                   |  \
+                p1 |    \
+                   |      \
+  O ------------&gt;  |________\
+       p0              p2
+</PRE>
+<P>
+where p0 is the vector from the origin to one vertex and p1, p2 are the vectors
+from the first vertex to the other two vertices.
+<P>
+<PRE>
+Let N =   p1 X p2  be the normal to the triangle.
+          -------
+        | p1 X p2 |
+</PRE>
+<P>
+Construct the matrices
+<P>
+<PRE>
+    b =  |  p1  | ,  bb = inv(b) = | bb[0] |
+         |  p2  |                  | bb[1] |
+         |  N   |                  | bb[2] |
+</PRE>
+<P>
+and store away bb.
+<P>
+Let the intersecting ray be parameterizes as
+<P>
+<PRE>
+    r = t * D + P
+</PRE>
+<P>
+Now you can quickly intersect the ray with the triangle using the following
+pseudo code. ( . means vector dot product)
+<P>
+<PRE>
+    Den = D . bb[2]
+    if (Den == 0) then ray parallel to triangle plane, so return
+</PRE>
+<P>
+<PRE>
+    Num = (p0 - P) . bb[2]
+</PRE>
+<P>
+<PRE>
+    t = Num / Den
+    if (t &lt;= 0) then on or behind triangle, so return
+</PRE>
+<P>
+<PRE>
+    p = t * D + P - p0
+</PRE>
+<P>
+<PRE>
+    a = p . bb[0]
+    b = p . bb[1]
+</PRE>
+<P>
+<PRE>
+    if (a &lt; 0.0 || b &lt; 0.0 || a + b &gt; 1.0) then not in triangle and return
+</PRE>
+<P>
+<PRE>
+    b1 = 1 - a - b     /* barycentric coordinates */
+    b2 = a
+    b3 = b
+</PRE>
+<P>
+The idea here is that the matrix bb transforms to a coordinate frame where the
+sides of the triangle form the X,Y axes and the normal the Z axis of the frame
+and the sides have been scaled to unit length.  The variable Den represents the
+dZ component of the ray in this frame.  If dZ is zero, then the ray must be
+parallel to the X,Y plane.  Num is the Z location of the ray origin in the new
+frame and t is simply the parameter in both frames required to intersect the
+ray with the triangle's plane.  Once t is known, the intersection point is
+found in the original frame, saved for latter use, and the X,Y coordinates of
+this point are found in the triangle's frame.  A simple comparison is then made
+to determine if the point is inside the triangle.  The barycenter coordinates
+are also easily found.
+<P>
+I haven't seen this algorithm in any of the literature, but then I haven't
+really looked either.  If anyone knows if this approach has been published
+before, I'd really like to know about it.
+<P>
+<PRE>
+Jeff Arenberg
+--------------------------------
+UUCP : ( ucbvax, ihnp4, uscvax ) !trwrb!csed-pyramid!arenberg
+GEnie: shifty
+--------------------------------
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Transforming normals,
+</A></FONT>
+by David F. Rogers (hpfcla!<A HREF="mailto:dfr@USNA.MIL">dfr@USNA.MIL</A>)
+</H4>
+G'day Eric,
+<P>
+Was skimming the back issues of the RT News and your memo on transforming
+normals caught my eye. Another way of looking at the problem is to recall
+that a polygonal volume is made up of planes that divide space into two
+parts. The columns of the volume matrix are formed from the coefficients of
+the plane equations. Transforming a volume matrix requires that you
+premultiply by the inverse of the manipulation matrix. The components of a
+normal are the first three coefficients of the plane equation. Hence the
+same idea should apply. (see PECG Sec. 4-3 on Robert's algorithm pp 211-213).
+Surprising what you can learn from Roberts' algorithm yet most people
+discount it.
+<P>
+Dave Rogers
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+2D box-test,
+</A></FONT>
+by Jack van Wijk
+</H4>
+From: mcvax!ecn-nlerf.com!jack@uunet.UU.NET (Jack van Wijk)
+<P>
+An answer to the question of Jack Ritter, RT-News October 3, 1988,
+    by Jack van Wijk
+<P>
+Jack Ritter proposes a method to improve the efficiency by testing the
+ray-point against a 2-D box. This method has been published before:
+<P>
+Bronsvoort, W.F., J.J. van Wijk, and F.W. Jansen, "Two methods for Improving
+the Efficiency of Ray Casting in Solid Modelling", Computer-Aided Design,
+16(1), January 1984, pp. 51-55.
+<P>
+The method is used hierarchically here for CSG-defined models, in the spirit of
+Roth. The gain of the method is significant, but not dramatically.  Probably in
+our system the cost of the floating point intersection calculations was much
+bigger than the box-test.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Re: Neutral File Format,
+</A></FONT>
+by Jeff Goldsmith
+</H4>
+   Yuk.  I don't think that the world needs another ugly scene description
+language unless it does something special.  I haven't seen renderman, but other
+people seem to like it, so maybe that'll be better.  Yours looks a lot like
+Wavefront's, with the disadvantage that it doesn't support a binary
+representation.
+<P>
+    I hate to say it, but I use my own (less, I feel, but still ugly) text
+format that does have a binary format as well as an ascii numerical format.
+You are welcome to it if you want, but I would doubt it.  It's different in
+that algebraic expressions are possible in place of any constant, plus it
+includes flow control, tests, some computer algebra-type primitives and macros.
+Plus, a historyer, command line editing, etc.  It looks a lot like an
+interactive F77 interpreter with massive numbers of bizarre graphics commands.
+<P>
+    Perhaps you can instigate an effort to create a sensible object description
+language and (maybe) supply an interpreter and some compiled formats.  It would
+be worthwhile.  Perhaps just setting up an effort to spec one out would be good
+enough.  Whatever.
+<P>
+________
+<P>
+Reply From: Eric Haines
+<P>
+        I guess I didn't make it clear - NFF has been in use about a year now.
+It's the format that the SPD benchmarking package uses.  I should have written
+a better preface, obviously: I wanted to get the point across that this is
+supposed to be absolutely minimal, and that no one should be using it for
+modeling, but only for transferring the final database to a renderer.  There
+could indeed be an NFF++ language which would not be user hostile, like NFF is.
+Essentially, I see NFF as incredibly stupid and brain damaged.  This makes it
+accessible to almost anyone who simply wants to read in a scene database
+without too much hassle (even now, though, I'm getting questions like "what's
+hither?" from people on USENET).
+<P>
+        Anyway, I like your ideas for algebraic expressions - I could use it
+right now in my other language, which is a tad more user friendly and is what I
+use when I want to munge around by hand.
+<P>
+________
+<P>
+Reply From: Jeff Goldsmith
+<P>
+    Hmmm.  If you are trying to find an interface that can be used by
+professionals, then it is probably not the same interface that might be used by
+USENET-types.  Both problems might be worth addressing, but I'd say (from gross
+personal bias) that the high-end problem is worth doing more.  Simply so that I
+can trade databases more easily.  Simply so that code can be shared more
+easily.  I'm really not all that concerned about getting computer graphics
+capabilities out to high schoolers and other randoms quite yet.  In fact, I
+doubt that graphics will have that sort of distribution in its current
+"modeler-renderer" form.  I suspect that Mac interface and high-quality
+user-interfaces will be the medium for that type of technology dissemination.
+Eventually, we'll have programs that are called "Graphics Processors" or some
+other nonsense and will be transmitting reasonably complex graphics
+capabilities to anyone who wants to do it.  Artists will be the primary users,
+though managers and engineers will use them in both technical and non-
+technical efforts.  Joe six-pack just doesn't have that much
+use/interest/capacity for generating pictures out of thin air.
+<P>
+    It would be really nice if there were a standardish graphics language
+kernel.  Since just about everybody has their own interpreter that does just
+about the same set of very basic things, plus, of course, their set of
+enhancements, why not create a spec that would still allow all the
+enhancements, but cover the basics thoroughly.  It might stifle creativity a
+bit, but I doubt it.
+<P>
+    For transmission between modelers and renders, why not use the same
+language as input to modelers?  Remove some options (or don't) and keep the
+files the same.  If you are worried about speed, then a binary complied version
+is necessary in any event.  (Case in point: my current project is Hubble Space
+Telescope.  The uncompiled model takes 17! minutes to read in.  The compiled
+one takes about 35 seconds.)  It might also be worth considering that some
+people out there do use Fortran and that some things are hard to parse (NFF,
+for example) in Fortran.  In fact, it's hard to parse anything that isn't fixed
+field formatted in Fortran.  (I've got an ugly version like that, too.  Really
+ugly.  .7 Fixmans maybe even.)
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+RT and Applications,
+</A></FONT>
+by Cary Scofield
+</H4>
+K.R.Subramanian (UTexas at Austin) asks:
+<P>
+&gt; On the RT news: I would like to see practical applications of ray tracing<BR>
+&gt; described here. What applications really require mirror reflections,<BR>
+&gt; refraction etc. Haven't seen applications where ray tracing was the way<BR>
+&gt; to go.<BR>
+<P>
+Applications for ray tracing (besides "realistic" image synthesis):
+<P>
+<PRE>
+    MCAD (3D solids modeling)
+</PRE>
+<P>
+<PRE>
+    Material property calculations (mass, center of gravity,
+        moments of inertia, etc.)
+</PRE>
+<P>
+<PRE>
+    Lens design (geometric optics)
+</PRE>
+<P>
+<PRE>
+    Toolpath planning for numerical-controlled milling
+</PRE>
+<P>
+<PRE>
+    Weapons research (ballistics analysis)
+</PRE>
+<P>
+<PRE>
+    Vulnerability assessments (collision detection between a
+        projectile and an object)
+</PRE>
+<P>
+<PRE>
+    Nuclear reactors (determination of neutron distributions
+        in reactor cores)
+</PRE>
+<P>
+<PRE>
+    Astrophysics (eg., diffusion of light through stellar
+        atmospheres; penetration of light through planetary
+        atmospheres)
+</PRE>
+<P>
+IN SUMMARY: Just about anything that requires solving a linear (and non-linear
+w/restrictions) particle transport problem is a candidate application for
+ray-tracing/ray-casting algorithms.
+<P>
+Cary Scofield - Apollo Computer Inc. - Graphics Software R&D
+UUCP: [decwrl!decvax,mit-eddie,attunix]!apollo!scofield
+ARPA: <A HREF="mailto:scofield@apollo.com">scofield@apollo.com</A>
+USMAIL: 270 Billerica Rd., Chelmsford, MA 01824  PHONE: (508)256-6600 x7744
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art8">
+Re: Goldsmith and Eyes,
+</A></FONT>
+by K.R.Subramanian (<A HREF="mailto:subramn@cs.utexas.edu">subramn@cs.utexas.edu</A>)
+</H4>
+on the automatic hierarchy scheme of Goldsmith and Salmon:
+<P>
+     Somewhere in the RT news you mentioned that the hierarchy is optimized
+only for primary rays from the eye?
+<P>
+        In their paper, they mention that the probability of hitting a bounding
+volume is proportional to the solid angle of the bounding volume presented at
+the eye and if the eye is sufficiently far away, then this can be approximated
+by the surface area of the bounding volume of the object(s).
+<P>
+        Is this the reason that the hierarchy is not the best for secondary
+rays?  If that is so, what if the eye is somewhere within the scene?  In this
+case, the assumption is again violated.
+<P>
+<PRE>
+K.R.Subramanian
+Department of Computer Sciences
+The University of Texas at Austin
+Austin, Tx-78712.
+<A HREF="mailto:subramn@cs.utexas.edu">subramn@cs.utexas.edu</A>
+{uunet}!cs.utexas.edu!subramn
+</PRE>
+<P>
+________
+<P>
+Reply From: Eric Haines
+<P>
+        Jeff Goldsmith and I were discussing in the latest RT News whether the
+eye location might be used to help out the hierarchy made by the Goldsmith/
+Salmon algorithm.  Essentially, Jeff finds that since so many of his rays are
+eye rays, he might want to try to test intersection of the objects closer to
+the eye first.  In other words, after the G-S hierarchy is created, go through
+and sort the sons of each bounding volume by the additional criterion of
+distance to the eye.  This is an added fillip to the G-S algorithm: normally
+(i.e. in the original article) they do not pay attention to the order of the
+sons of a bounding volume.  The idea is that if you test the closer object
+first and hit it, you can often quickly reject the further object when it is
+tested (since you now have a maximum bound on the distance the ray is shot).
+For example, say you have a list: polygon, sphere.  The closest approach (or
+the center, or whatever criterion you decide to use) of the sphere is closer
+than that of the polygon, so you reorder the son list: sphere, polygon.  If you
+now test a ray against this list you get four possibilities:
+<P>
+<PRE>
+        1) Sphere missed, polygon missed - no savings is accrued by sorting.
+        2) Sphere missed, polygon hit - no savings is accrued by sorting.
+        3) Sphere hit, polygon missed - by hitting the sphere, we now have
+           a maximum bound on the ray's (really the line segment's) length.
+           Now when the polygon is tested it might be quickly rejected. Say
+           we hit the polygon plane beyond the maximum distance.  In this
+           case, we can stop testing the polygon without doing the inside-
+           outside testing.  If we had intersected in the order "polygon,
+           sphere", we would have had to do this inside-outside test, then
+           gone on to test the sphere - extra work we could have avoided.
+        4) Sphere hit, polygon hit - Pretty much the same as case (3), except
+           even more so:  in this case time is saved by (a) not having to
+           to do the inside-outside test, (b) not having to store information
+           about the intersected polygon, and (c) it is all the more likely
+           that a polygon beyond the sphere which is actually hit has the
+           intersection distance beyond the sphere's intersection distance
+           (vs. a missed polygon, where the intersection distance is somewhere
+           on an infinite plane which could easily be in front of the sphere).
+</PRE>
+<P>
+        My idea for ordering the son lists was simply object size: within a son
+list, sort from largest to smallest area, on the theory that larger objects
+will tend to get hit more often and so get you an intersection point quickly.
+The savings are based more on probability of hits, but the idea makes for G-S
+hierarchy trees that are not eye-dependent (I use item buffering, so eye rays
+are minimized).  Another idea is to order the lists by difficulty of
+calculation: test spheres before splines, test triangles before 100-sided
+polygons, etc.
+<P>
+        The idea of ordering lists by either size or difficulty is valid for
+other efficiency schemes, too.  Octree lists and SEADS might benefit from
+ordering the lists in a sensible fashion.  Has anyone else out there tried such
+schemes?
+<P>
+________
+<P>
+Reply From: <A HREF="mailto:subramn@cs.utexas.edu">subramn@cs.utexas.edu</A> (K.R.Subramanian.)
+<P>
+Yes, I understood these discussions and they are all valid.  Somehow just
+trying to optimize the eye rays doesn't impress me very much because you
+yourself have mentioned the item buffer for eye rays and the light buffer for
+doing shadow rays from the first level intersections.  It is not very clear to
+me if the above schemes you mention will bear a great improvement.  Anyhow, I
+am really interested in secondary rays since that's what ray tracing is all
+about. In very complex scenes like the Cornell rings or Cornell mountain
+databases (SPD data bases) its the secondary rays that are dominant.
+<P>
+My real question was trying to figure out if Jeff's approximation in using the
+surface area of the bounding volumes to figure out the conditional
+probabilities was valid for all rays, primary and secondary.  There he said
+something like 'if you are far away, you can approximate ........'. Does this
+refer to the ray length ?
+<P>
+<PRE>
+K.R.Subramanian
+Department of Computer Sciences
+The University of Texas at Austin
+Austin, Tx-78712.
+<A HREF="mailto:subramn@cs.utexas.edu">subramn@cs.utexas.edu</A>
+{uunet}!cs.utexas.edu!subramn
+</PRE>
+<P>
+________
+<P>
+Reply From: Eric Haines
+<P>
+        Indeed, Jeff's optimization for eye rays doesn't thrill me.  But how do
+you feel about optimizing on size or on intersection complexity (or both)?
+Seems like this has a good chance of validity for secondary rays, too.
+<P>
+        I will pass on your comments to Jeff and see how he responds.  You
+might just want to write him directly at:
+<P>
+alias   jeff_goldsmith  <A HREF="mailto:jeff@hamlet.caltech.edu">jeff@hamlet.caltech.edu</A>
+<P>
+        I should clear up an important point: the SPD databases are in no way
+connected with Cornell.  I designed them in August 1987, more than a year and a
+half after leaving Cornell.  I hope that nowhere in the document I imply that
+Cornell is associated with these.  Why the fuss?  Partly because Don Greenberg,
+my president (at 3D/Eye Inc) is very firm about separating work done at 3D/Eye
+and work done at the Cornell graphics lab (which he also runs).  Another reason
+is that Cornell doesn't "endorse" these databases - Don would be pretty bugged
+at me if it was said that they did.  So, please just refer to the SPD
+databases, or the 3D/Eye SPD databases.  'Nuff said, and thanks.
+<P>
+________
+<P>
+Reply From: KR Subramanian
+<P>
+&gt;             Indeed, Jeff's optimization for eye rays doesn't thrill me.  But <BR>
+&gt;       how do you feel about optimizing on size or on intersection complexity <BR>
+&gt;       (or both)? Seems like this has a good chance of validity for <BR>
+&gt;       secondary rays, too.<BR>
+<P>
+        You are right. Using size or intersection cost in ordering your
+intersections will do good, especially in shadow ray computation. As far as the
+pixel or reflection rays are concerned, this depends on the method used. I have
+a modified version of the BSP tree where the search goes very close to the path
+of the ray and only on collection of unordered objects can we take advantage of
+the above 2 facts.
+<P>
+        Also, this is basically a hack (well, I wouldn't go quite that far).
+But size as presented to a ray depends on the direction of the ray, since
+projected area on to a ray varies.  A polygon could present its entire area to
+a ray orthogonal to it or almost nothing if its parallel to it.
+<P>
+        For shadow rays, if you have a mix of complex objects (patches, splines
+etc) and simple objects like polygons, spheres you better do this in the order
+of their complexity. That will definitely save a lot of work especially when
+there are multiple light sources and lots of spawned rays.
+<P>
+________
+<P>
+Reply From: Jeff Goldsmith
+<P>
+Ok.  Optimizations.
+<P>
+    1) The only reason that I suggest ordering from the eye is that there are
+eye rays in all scenes.  Not true for secondary.  Besides, most secondary rays
+get other kludges.  More importantly, they are somewhat random, so it's tough
+to optimize for them.
+<P>
+    2) What he is confusing with the above is the heuristic for "probability"
+determination.  That is not based on eye rays, but assumes a uniform
+distribution of ray directions throughout the scene.  This is not the case, but
+we haven't dealt with more complicated heuristics other than to decide that
+they are a bit more tricky than they might seem.
+<P>
+    3) There is a factor in the tree combination heuristic (the one that adds
+up the node costs into a tree cost) that is biased for primary rays.  I call
+the tree cost the sum of the node costs.  This isn't strictly true for
+secondary rays, because they emanate from a leaf node, thereby adding some
+additional cost to the big nodes.  We tried accounting for this by using a
+formulation that takes internal emanation costs into account.  Yes, it was more
+accurate.  Not by enough to bother with.  I think the difference was on the
+order of a few percent.  It was definitely well under the noise level.  We
+don't use it anymore for no particular reason.  Don't bother to code it, except
+as an intellectual exercise.  (Not a bad one at that.)
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art9">
+Wood Textures,
+</A></FONT>
+by Rod Bogart
+</H4>
+As for the wood textures, there really isn't a lot to say.  They were scanned
+with a Vicom frame grabber.  The data is 512x512 bytes.  The book they were
+taken from is Textures by Brodatz.  We do not have permission from the author
+or the publisher, so thats why we haven't made the whole set available.  Yes,
+we did scan the whole book (over 100 images) but without permission, I dare not
+let out more than a handful.  So, the images are on <A HREF="ftp://cs.utah.edu">cs.utah.edu</A>, and they are
+wood[1234].img.  As for mailing them (UUCP), I'd rather not.  A quarter meg
+uuencoded is a long mail message.  If you really really can't get them from a
+friend with ftp access, then ask nice.
+<P>
+RGB
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art10">
+Shadows,
+</A></FONT>
+Mirrors, and "Virtual Lighting", by Steve Stadnicki
+</H4>
+[from USENET]
+<P>
+     I am currently working on a simple raytracer (VERY simple--so far it only
+models triangles) and have a major problem.  For shadow calculations I need to
+know if there are any light sources which could shine on a point.  The problem?
+With mirrors in the scene, it's possible to have reflected light illuminate
+some section that would normally be in shadow, e. g.:
+<P>
+<PRE>
+Light-&gt; O                               |                               O'
+         \------                        |                        ------/
+                \------                 |                 ------/
+                       \------          |          ------/
+                              \------   | M ------/
+             +-----+                 \-\| i
+             |     |                 /-/| r
+             |object          /------   | r
+             |     |   /------          | o
+             |     | SSSS               | r
+----------------------------------------|
+</PRE>
+<P>
+Then the area covered by the S's would not be in shadow, even though it isn't
+directly illuminated by the light O.  I know how to solve the problem using
+"virtual" lights; that is, a light that you would obtain if you reflected the
+Light at O in the mirror above; it would appear at O'.  Multiple reflections
+can be handled by re-reflecting virtual lights, etc.  So what's my problem?
+Simple: if you have M mirrors and reflections can go up to depth K, you need
+O(M^K) virtual lights for each "real" light.  Is there any way I might be able
+to eliminate, for a given point, some combinations of reflections without
+having to do much testing?
+<P>
+<PRE>
+                                            Steven Stadnicki
+                                            <A HREF="mailto:stadnism@clutx.clarkson.edu">stadnism@clutx.clarkson.edu</A>
+</PRE>
+<P>
+P.S.  The "virtual lights" idea came from a wonderful book: "A Companion
+to Concrete Analysis", by Melzak.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art11">
+Re: Basics of Raytracing,
+</A></FONT>
+by David Jevans
+</H4>
+[from USENET]
+<P>
+If anyone is looking for the analysis of a regular subdivision
+ray tracing method, see:
+<P>
+<PRE>
+ journal:  Visual Computer July 1988
+ title:    Analysis of an Algorithm for Fast Ray Tracing Using
+           Uniform Space Subdivision
+ authors:  Cleary, J and Wyvill, G
+</PRE>
+<P>
+What the paper does is to describe the voxel traversal algorithm that Cleary
+developed and that I use in my ray tracer, and then a theoretical analysis is
+presented.  It is a convincing argument for using regular voxel subdivision
+(although my method - submitted to CGI '89 in UK - works better for scenes
+where polygons are not evenly distributed throughout a scene).
+<P>
+Visual Computer is published by Springer Verlag.  Unfortunately it doesn't
+enjoy the circulation of CG&A or TOG so it is pretty (outrageously?) expensive
+(like $160 US for 6 issues!).
+<P>
+The design of our Mesh Machine is in:
+  journal:  Proc CIPS Graphics Interface '83, 33-34, Edmonton, Alberta, May
+  title:    Design and Analysis of a Parallel Ray Tracing Computer
+  authors:  John Cleary and Brian Wyvill and Graham Birtwistle and Reddy Vatti
+<P>
+--------(second article appended)
+<P>
+In article (<A HREF="mailto:4589@polyslo.CalPoly.EDU">4589@polyslo.CalPoly.EDU</A>), sjankows@polyslo.CalPoly.EDU (Mr Booga (detonate)) writes:<BR>
+&gt;   I have a request similar to Randy Ray's (Raytracing introduction).  I am<BR>
+&gt; starting a project in parallel raytracing using a Sequent Balance 8000 and<BR>
+&gt; a couple of color Sun 3's running X.  I have virtually exhausted the <BR>
+&gt; local resources on raytracing and am in need of basic ray tracing algorithms<BR>
+&gt; and simple optimization algorithms.<BR>
+<P>
+Our university (the U. of Calgary) has significant experience in parallel ray
+tracing.  Professors Cleary and Wyvill developed a mesh machine for raytracing
+several years ago.  Graduate student (now working at Alias) Andrew Pearce
+implemented a parallel raytracer for the mesh machine that also ran on a
+network of Corvus'.
+<P>
+I implemented a parallel ray tracing algorithm for polygons and implicit
+surfaces earlier in the year on a BBN Butterfly.  I used regular spatial
+subdivision combined with adaptive (octree) subdivision to converge on the
+surfaces.  Up to 10 nodes I got almost linear speedup, and on a 70 node system
+I was still getting 50% from each new node added.
+<P>
+If anyone else is interested in references on parallel raytracing (the mesh
+machine articles, Pearces Masters thesis, or others such as Dippe in Siggraph
+86 etc) you can send me mail and I can send a list or copies of some of t
+<P>
+"behind these eyes that say I still exist..."
+<P>
+David Jevans, U of Calgary Computer Science, Calgary AB  T2N 1N4  Canada
+uucp: ...{ubc-cs,utai,alberta}!calgary!jevans
+<P>
+________
+<P>
+<PRE>
+From: <A HREF="mailto:sdg@helios.cs.duke.edu">sdg@helios.cs.duke.edu</A> (Subrata Dasgupta)
+Subject: Re: Basics of raytracing
+[from USENET]
+</PRE>
+<P>
+In article (<A HREF="mailto:77@cs-spool.calgary.UUCP">77@cs-spool.calgary.UUCP</A>) jevans@cpsc.ucalgary.ca (David Jevans) writes:<BR>
+&gt;<BR>
+&gt;Our university (the U. of Calgary) has significant experience in parallel<BR>
+&gt;ray tracing.  Professors Cleary and Wyvill developed a mesh machine for<BR>
+&gt;raytracing several years ago.  Graduate student (now working at Alias)<BR>
+&gt;Andrew Pearce implemented a parallel raytracer for the mesh machine<BR>
+&gt;that also ran on a network of Corvus'.<BR>
+<P>
+        This all sounds very interesting! A few articles back a person inquired
+about a paper on an algorithm analysis by Profs. Wyvill and Cleary. I am trying
+to track that paper down but the reason for sending you this letter is to
+request some info. on the mesh machine for ray- tracing developed at your univ.
+If you can refer me to a recent paper on this machine it will be great. At Duke
+we are developing what has come to be known as the Raycasting machine which
+computes intersection of an array of parallel rays with primitives and then
+uses constructive solid geometry to compute the shape, volume and other
+parameters of an arbitrary object. Thus I would be very much interested in any
+work in this area.
+<P>
+&gt;If anyone else is interested in references on parallel raytracing<BR>
+&gt;(the mesh machine articles, Pearces Masters thesis, or others<BR>
+&gt;such as Dippe in Siggraph 86 etc) you can send me mail and I can send<BR>
+&gt;a list or copies of some of t<BR>
+<P>
+Any other info. in this area would be very much appreciated. Thanks!
+<P>
+Subrata Dasgupta
+<P>
+Department of Computer Science, Duke University, Durham, NC 27706
+ARPA:   <A HREF="mailto:sdg@cs.duke.edu">sdg@cs.duke.edu</A>
+CSNET:  sdg@duke
+UUCP:   decvax!duke!sdg
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art12">
+Re: What is Renderman Standard?,
+</A></FONT>
+by Steve Upstill
+</H4>
+<PRE>
+Organization: Pixar -- Marin County, California
+[from USENET]
+</PRE>
+<P>
+I'm writing the RenderMan book, so I guess I'm qualified to clear up
+a couple of things from this posting:
+<P>
+In article (<A HREF="mailto:25225@tut.cis.ohio-state.edu">25225@tut.cis.ohio-state.edu</A>) fish@shape.cis.ohio-state.edu (Keith Fish) writes:<BR>
+&gt;<BR>
+&gt;I'm sure PIXAR is more than willing to send you a spec of Renderman ...<BR>
+&gt;just ask them.  Also, there may be something available through the<BR>
+&gt;Siggraph 88 proceedings.<BR>
+<P>
+There's nothing in the SIGGRAPH 88 proceedings about RenderMan.  You can
+get a copy of the spec by sending $15 (yes, I know it's a pain, but we've
+sent out ~1000 specs so far, and it got kind of expensive; this is the
+real cost) to
+    Pixar
+    3240 Kerner Blvd.
+    San Rafael, Ca. 94901
+<P>
+&gt;<BR>
+&gt;((( The following is MY understanding of Renderman )))<BR>
+&gt;<BR>
+&gt;Renderman is an attempt by PIXAR to force a de facto standard interface in the<BR>
+&gt;Graphics Rendering/Imaging arena.  My understanding is that this interface<BR>
+&gt;is based on tools/routines that they have developed throughout the years for<BR>
+&gt;use on their hardware.  Because it was not designed for general/varying<BR>
+&gt;graphics architectures, many companies wonder if it will only work well on<BR>
+&gt;their systems -- hence, making their hardware also the de facto standard.<BR>
+<P>
+RenderMan is based on about six years' research at Pixar and Lucasfilm on
+how to get quasi-photographic realism into computer graphics.  The effort
+has encompassed algorithms, software and hardware, and much of what is in
+the standard has been proven to work by actually implementing it;  so in
+some sense the above is a correct statement.  However, there is an
+implication here that RenderMan is some in-house methodology that Pixar is
+trying to foist off on the rest of the industry.  That is definitely
+untrue.  Pat Hanrahan and Tom Porter spent about six months talking to
+other companies in the industry, trying to establish a consensus and
+ensure that the standard is technically sound.  The best evidence I
+have of how much it changed as a result is the amount of work I had
+to put into changing my book between Versions 2 and 3 of the spec.
+<P>
+As for the standard being specific to some particular hardware or
+software configuration, you just have to look at the standard itself.
+From the geometric standpoint, it is a simple protocol for describing
+scenes, as generic as can be, and deliberately so.  It is essentially
+a superset of PHIGS+, with two differences: there is no provision for
+changing model descriptions once defined (you have to respecify scenes
+from one frame to another), and there are extensions for realism like
+the shading language, motion blur and depth-of-field.  The hardware-
+specificity is a canard, pure and simple.  The current (incomplete)
+version of our software runs on Sun, Silicon Graphics and '386-based
+Compaq machines, as well as on Transputer-based hardware accelerators
+in all three.
+<P>
+More specifically, I can tell you that Pat went to a lot of trouble to
+make the interface standard independent of even the basic rendering
+algorithm.  That is, RenderMan is consistent with scanline-based methods
+as well as ray tracing; standard shading models as well as radiosity
+techniques.  That wasn't easy.
+<P>
+&gt;More importantly, PIXAR already has the software written for this "standard"<BR>
+&gt;so if this becomes a standard, any competitor of PIXAR would have to make the<BR>
+&gt;$$$ investment to write this software -- a good way to limit your competition.<BR>
+<P>
+Sorry.  I'm working closely with the software group in trying to
+generate pictures and example programs for my book, and I can testify
+that the software, while quite far along, is not "already written",
+largely because of extensions to the standard that came out of
+discussions with other companies.  True enough, we probably have a
+head start on others, but the standard has been out there for five
+months now, and will probably have been around for close to a year
+before Pixar has its stuff on the market.
+<P>
+Besides, the standard specifies nine capabilities which are optional for
+any particular implementation.  No renderer should have any trouble
+meeting the RenderMan standard if it supports PHIGS primitives and
+performs such quality calculations as anti-aliasing and gamma correction.
+<P>
+&gt;PIXAR made a big push for Renderman at Siggraph 88.  Although a few companies<BR>
+&gt;agreed to endorse this package (SUN, of course ... they'd endorse anything to<BR>
+&gt;get their name in lights ;-), many took a more intelligent approach and said<BR>
+&gt;that they would evaluate it.  PIXAR basically used a lot of marketing hype<BR>
+&gt;to get support initially and even listed supporters who, when you would<BR>
+&gt;walk up to their booth at Siggraph and ask them, said they did not support it.<BR>
+<P>
+This comment is borderline offensive to me, partly because it is admittedly
+based on speculation and partly because I was around during the process
+I mentioned above, and I know what a painful and elaborate job Pat had
+to get the proposal into shape to win the support of the companies he did.
+There is a difference between endorsement and support.  Endorsement means
+"we have evaluated this; it is sound and we believe this is the way the
+industry should go".  Support means "we have hardware and/or software
+which implements this standard".  You would expect the latter to be a
+subset of the former.
+<P>
+Nineteen companies endorsed the RenderMan standard at rollout.  The main
+holdouts at this point are Silicon Graphics and Wavefront.  My personal
+suspicion (not to be taken as the views of Pixar) is that Wavefront
+perceives RenderMan as a threat to their rendering market because
+it supports features which would be difficult or impossible to
+implement using their rendering algorithm.  And Wavefront software
+runs on SGI machines.
+<P>
+&gt;Many (most ?) of the companies who looked at Renderman have decided that it<BR>
+&gt;still needs a lot of work before it can be considered as even a base to start<BR>
+&gt;the development of a standard in the rendering/imaging arena.<BR>
+<P>
+Who are these "many companies"??  What is this "lot of work"??  We would
+love to hear about.  There is a RenderMan Advisory Council made up of
+industry representatives whose job it is to hear complaints like that.
+<P>
+I don't expect to hear too many of them, however.  As I said before,
+RenderMan is basically a simple-minded extension of PHIGS (read: EXTENSION.
+Meaning "If PHIGS is good enough for you, so should be RenderMan")
+adding constructs for supporting realistic graphics.  It has gone
+through the mill of two major rewrites as a result of consultations
+with "many companies".
+<P>
+&gt;There are<BR>
+&gt;several problems in the area of getting Renderman to mesh with other current<BR>
+&gt;standard graphics environments (eg. phigs, cgi, ...) so that it becomes a<BR>
+&gt;natural extension to the less-interesting/fancy graphics people do today.<BR>
+<P>
+What are these problems??  Can you be more specific??
+<P>
+&gt;Even for the niche market of image-rendering, Renderman does not include<BR>
+&gt;many (any ?) ideas from the companies that have been in this business for<BR>
+&gt;years ...  Wavefront, Alias Research, Neo-Visuals, Disney, etc.<BR>
+<P>
+What are these ideas??  Come to think of it, what ideas has Disney
+contributed to image rendering?
+<P>
+&gt;Keith Fish<BR>
+&gt;<BR>
+&gt;PS. I'm not cutting down PIXAR -- I think that the work they do is<BR>
+&gt;    fantastic (literally)!  I just don't like marketing ploys to degrade<BR>
+&gt;    what should be good technology, and this is what the Renderman-hype<BR>
+&gt;    seems to be.<BR>
+<P>
+I appreciate your appreciation, but I wish I knew where these
+impressions of yours came from.
+<P>
+&gt;    I think that the industry can develop a good imaging<BR>
+&gt;    interface standard if everyone (animation software companies,<BR>
+&gt;    universities, graphics hardware companies, etc.) gets to contribute.<BR>
+<P>
+Again, I thought that's exactly what we did.
+<P>
+If anyone on the net is interested in more information on RenderMan
+without investing $15 in a spec, the current issue of Unix Review
+includes an article I wrote discussing the major aspects of the
+standard.  Also, the November issue of Dr. Dobb's Journal has a
+cover story on the shading language, which is RenderMan's doorway
+for extensibility.
+<P>
+Steve Upstill
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art13">
+Free On-Line Computer Graphics References,
+</A></FONT>
+by Eugene Miya
+</H4>
+[incidentally, the latest version of the Ray Tracing Bibliography by Paul
+Heckbert (and updated by myself) is available from Mark Vandewettering's
+anonymous ftp site, drizzle.cs.uoregon.edu. --EAH]
+<P>
+<PRE>
+From: <A HREF="mailto:eugene@eos.UUCP">eugene@eos.UUCP</A> (Eugene Miya)
+Subject: A little announcement (part 1 of 3)
+Organization: NASA Ames Research Center, Calif.
+[from USENET]
+</PRE>
+<P>
+For a long time now, a lot of people have been asking simple information
+queries in places like comp.graphics.  This resulted in the inevitable
+repeating of topics, flood of inane news messages (many of which are wrong),
+and a repeating cycle which bring disillusionment.
+<P>
+Computer graphics, unlike a lot of disciplines, has an overseer of the
+literature.  If you open up an ACM/SIGGRAPH proceedings you will notice a
+reference to "References" to Baldev Singh (currently at MCC).  Baldev has has
+published significant references in the Computer Graphics Quarterly for a
+couple of years (and is preparing for another shortly).  These bibliographies:
+<P>
+<PRE>
+%A Baldev Singh
+%T Computer Grap[hics Literature for 1986: A Bibliography
+%J Computer Graphics
+%V 21
+%N 3
+%D June 1987
+%P 189-208
+</PRE>
+<P>
+and
+<P>
+<PRE>
+%A Baldev Singh
+%A Gunther Schrack
+%T Computer Grap[hics Literature for 1985: A Bibliography
+%J Computer Graphics
+%V 20
+%N 3
+%D July 1986
+%P 85-145
+</PRE>
+<P>
+Coverage in the field (for graphics) is quite good.  I know, I am trying to
+maintain a comprehensive study of another field (see postings in comp.arch or
+comp.parallel).  The problem is searching for literature on a paper database is
+difficult (I won't get into details, take my word).  Frequently entries are
+also wrong (not as bad as the net however).
+<P>
+A machine readable form however, solves many of these problems.  You can update
+a machine readable form.  The problem becomes then of distribution and search,
+surprise! something computers are good for!  It is with this back ground that
+we in the Bay Area Association for Computing Machinery's Special Interest Group
+on Computer Graphics announce the availability of Singh's ACM/SIGGRAPH
+bibliography in a machine readable form.
+<P>
+While Baldev will oversee the collection and quality of entries, we with a
+generous donation of cycles and disk space from the Digital Equipment
+Corporation (DEC) will help oversee the redistribution of the computer graphics
+bibliography.
+<P>
+This first article will describe how hosts on the Internet can retrieve the
+computer graphics bibliography.  Two other optional means for those not on the
+Internet will be presented over the next two days (but clearly Internet is the
+superior way to do this).
+<P>
+THERE ARE TWO DANGERS inherent in all of these means.  The bibliography is kind
+of big.  It's not a megabyte, but it's getting there.  IF YOU ARE at an
+Internet site with lots of users, it's kind of dumb if you ALL made personal
+copies (n megabytes ;-).  So before you copy, agree who at your site will
+oversee obtaining it.  One copy per site please.
+<P>
+The second danger is everybody copying at the same time.  The information which
+follows will illustrate the problem.  The DEC host which you be copying from is
+DEC's gateway to the Internet.  It will be a tragedy to abuse this gateway if
+every site tried to copy at once.  I know, we provide the 9600 baud IMP port to
+DEC.  So let's not abuse this, let's be patient and take our turns. 1) copy the
+computer graphics bibliography only during the weekends or evenings Pacific
+Daylight or Standard time. 2) copy on a randomly determined evening of the
+week.  How?  Flip a coin 3 times (say HTH, make Head == 0, Tails == 1, this
+translates to 010 binary or 2 base 10). Using Sunday as 1, make Monday 2, copy
+Monday evening P[SD]T.  (HHH or 000, retry).  If this is confusing, wait for
+the weekend. AGAIN copy only in the evenings.
+<P>
+Now the questions you have all been patiently waiting for and I have been
+rambling: where do I get, and how do I get it.  The Internet host is the
+machine <A HREF="ftp://gatekeeper.dec.com">gatekeeper.dec.com</A> [128.45.9.52].  Please respect this machine (hacker
+ethic) for the assistance DEC is providing.  We don't wish to yank the
+bibliography from this machine.  Don't try to break in, please.
+<P>
+Old time ARPAnet hackers will know where to go from here.  The "how" is a
+process called anonymous FTP (File Transfer Protocol or Program, hasn't changed
+since 1973 ;-)] Don't all do this at once.  Below is a sample session with
+annotation as to how this works.  Catch the names of the subdirectories and
+files below.  A lot of people aren't familiar with distributed systems other
+than Email, so we've made the language oversimplistic, if you have problems
+consult your local network guru.
+<P>
+Note the bibliographies exist in a data compressed binary form.  Use the Unix
+uncompress(1) command to decode them.  Not on a Unix system?  Tough for the
+time being.  Try to find one.  The further format of individual entries is Unix
+refer format (a sample, see the two references above).  This is how Singh has
+them, and also how my bibliography is stored.  Refer has lots of advantages
+over other systems: free-format, widely available on Unix systems, uses a
+minimum of space, ASCII, fully machine and human readable (it separates the
+binary data from the text), fairly easy to learn, easily converted to other
+formats (like [bib]TeX, Scribe, etc.)
+<P>
+<PRE>
+Start script
+  eos % ftp <A HREF="ftp://gatekeeper.dec.com">gatekeeper.dec.com</A>
+        ^^^^^^^^^^^^^^^^^^^^^^ issue this command, after some time you get:
+  Connected to gatekeeper.dec.com.
+  220 <A HREF="ftp://gatekeeper.dec.com">gatekeeper.dec.com</A> FTP server (Version 4.28
+  Name (<A HREF="ftp://gatekeeper.dec.com">gatekeeper.dec.com</A>:######): anonymous
+                                    ^^^^^^^^^ use this name
+  331 Guest login ok, send ident as password.
+  Password:
+           ^^^^^^^^ does not echo, I typed "guest," doesn't matter
+  230 Guest login ok, access restrictions apply.
+  ftp&gt; cd pub/graf-bib
+       ^^^^^^^^^^^^^^^ change directory to pub/graf-bib
+  200 CWD command okay.
+  ftp&gt; binary
+       ^^^^^^  very important, you are getting compressed binary files
+  200 Type set to I.
+  ftp&gt; ls
+       ^^ optional  just to should you what you are getting ('dir' is okay, too)
+  200 PORT command okay.
+  150 Opening data connection for /bin/ls (128.102.21.2,1118) (0 bytes).
+  bib85.Z
+  bib86.Z
+  226 Transfer complete.
+  ^^^^^^^ those two filenames are what you want!
+  18 bytes received in 0.2 seconds (0.09 Kbytes/s)
+  ftp&gt; mget *
+       ^^^^^^ asks for all (star) files
+  mget bib85.Z?
+  mget bib86.Z?
+                ^ you type "y &lt;cr&gt;" or "n &lt;cr&gt;" if you want them.
+                NOTE: THIS WILL TAKE SOME TIME.
+  ftp&gt; quit
+       ^^^^  done
+  221 Goodbye.
+  eos % # Now you can uncompress bib85.Z, etc.
+end script
+</PRE>
+<P>
+If you don't have a network guru, send mail to siggraph, not the poster of this
+note below.  (Illiterates will type "reply" or "follow-up" to news.  Sorry, I'm
+very tired of this. That's why I'm doing this.)  Big thanks are due to Brian
+Reid and Jamie Painter (at DEC for this work).  Rick Beach okay'ed ACM
+copyrights.  This is not for profit.  Please ACK the above people and
+organizations (in particular, Baldev) when citing.  As I hope you can tell, we
+are really trying to advance the state of the art in computer graphics.  This
+should benefit experts as well as students alike.  It also shows the use of
+technologies other than graphics to our (graphics) benefit.
+<P>
+________
+<P>
+Subject: A little announcement (part 2 of 3)
+<P>
+I described the advantages of searching and reformatting.  I described
+anonymous FTP.  This is the way to go if you are a major Internet site like
+most universities.  The problem is: what about more casual users, poor people
+with small disks?  Well, the files reside of DEC's disk.  Just LEAVE THEM
+THERE.  Let Bay Area ACM/SIGGRAPH and Singh maintain them.  Then how do you
+access it?  By electronic mail.
+<P>
+A similar system exists at the Argonne National Labs (and AT&T Bell Labs):
+netlib numerical software distribution [CACM ref. if you need it].  A similar
+set up for benchmarks exists at the NBS (See latest IEEE Computer).  Why not do
+this for graphics references?
+<P>
+With a generous donation of cycles and disk space from the Digital Equipment
+Corporation (DEC) and some software from CSIL at Stanford we have done just
+this.
+<P>
+THERE ARE TWO DANGERS inherent: The bibliography is kind of big.  The second
+danger is everybody copying at the same time.
+<P>
+The DEC host which you be copying from is DEC's gateway to the Internet.  It
+will be a tragedy to abuse this gateway if every site tried to copy at once.
+So let's not abuse this, let's be patient and take our turns.
+<P>
+1) retrieve references only during the weekends or evenings Pacific Daylight or
+Standard time.
+<P>
+2) copy on a randomly determined evening of the week.  How?  Flip a coin 3
+times (say THT make Head == 0, Tails == 1, this translates to 101 binary or 5
+base 10). Using Sunday as 1, make Thursday 5, copy Thursday evening P[SD]T.
+(HHH or 000, retry).  If this is confusing, wait for the weekend. AGAIN copy
+only in the evenings.
+<P>
+<PRE>
+Where, okay here goes the dangerous information:
+        send mail to:
+        <A HREF="mailto:graf-bib-server@decwrl.dec.com">graf-bib-server@decwrl.dec.com</A>
+This can also be
+        {your favorite UUCP path}!decwrl!graf-bib-server
+or if you work for DEC and have ENET access:
+        DECWRL::graf-bib-server
+</PRE>
+<P>
+Your mailer should ask for a "Subject:" field.  This is important.  If your
+mailer doesn't (and lots don't) ask your system folk about mailrc file or
+mh_profiles or how to invoke this field.  Because you should place the keywords
+in that subject field.  One special keyword is "help."  You get a short little
+description.  Make the first alphanumeric (don't give "years").  Additional
+keywords are conjective (and's) causing a smaller and smaller search.  The
+contents aren't perfect, but give us time.
+<P>
+Your mail is answered by the server daemon.  It searches and tries to find
+relevant cited keywords (up to 6 significant first characters.  Choose
+carefully.  Don't ask for all references with "computer graphics."  Hope you
+understand why.  Just try "help" as your first keyword unless you know what you
+are looking for.  The information comes back in the aforementioned (yesterday)
+refer format.
+<P>
+If you don't have a network guru, send mail to siggraph, not the poster of this
+note below.  (Illiterates will type "reply" or "follow-up" to news.  Sorry, I'm
+very tired of this. That's why I'm doing this.)  Big thanks are due to Brian
+Reid and Jamie Painter (at DEC for this work).  Rick Beach okay'ed ACM
+copyrights.  This is not for profit.  Please ACK the above people and
+organizations (in particular, Baldev) when citing.  As I hope you can tell, we
+are really trying to advance the state of the art in computer graphics.  This
+should benefit experts as well as students alike.  It also shows the use of
+technologies other than graphics to our (graphics) benefit.
+<P>
+Our last note will concern one more way of getting references: just asking for
+a floppy (low tech).  We in the Bay Area ACM/SIGGRAPH local group will be
+adding to these.  Reference contributions and corrections are welcome.  It's
+only possible if we work together to see this through.
+<P>
+________
+<P>
+<PRE>
+From: <A HREF="mailto:eugene@eos.UUCP">eugene@eos.UUCP</A> (Eugene Miya)
+Subject: Re: bib notation question
+</PRE>
+<P>
+In article (<A HREF="mailto:3384@pt.cs.cmu.edu">3384@pt.cs.cmu.edu</A>) pkh@vap.vi.ri.cmu.edu (Ping Kang Hsiung) writes:<BR>
+&gt;I got Eugene Miya's bib files over the weekend. There are some<BR>
+&gt;notations used in the files that I don't understand:<BR>
+&gt;<BR>
+&gt;1. Some \(em or (em  in the %J field. What these mean?<BR>
+&gt;(and why they don't have the closing ")".)<BR>
+&gt;<BR>
+&gt;2. In the key field, there are some numbers:<BR>
+&gt;       %K I3m educational computing<BR>
+&gt;       %K I3m mechanical engineering computing<BR>
+&gt;       %K I35 modeling systems<BR>
+&gt;How do I interpret/use these I3m, I35 numbers?<BR>
+&gt;<BR>
+&gt;3. Some acronyms: CGF, CAMP, ISATA. They are not defined in the files.<BR>
+<P>
+Oops!  Sorry. I got other mail on this.  I forgot all about them.  The
+BACKSLASH macros are troff-isms.  There are tools like deroff to take them out
+or r2bib to convert things into bibTeX.  These macros are 4 characters in size
+\(em is a slightly longer dash.  They aren't a significant problem, write sed
+filter.
+<P>
+The I fields are ACM Classification codes.  You can either get them from ACM
+Computing Reviews (blue and white things, that most don't get) or you can get
+the hardcopy versions of these bibliographies (they have the CR classification
+scheme for graphics).
+<P>
+The acronyms are unfortunately a long term problems.  We can get a table to use
+use U. AZ's bib program to fill them out.
+<P>
+I hope you are all finding some use of this stuff.  We NEED people around the
+country to help us update this.  There are earlier years.  Also new papers are
+being written all the time.  They have to get entered (even finding them is
+hard).  I don't deserve the credit, I'm only pissed off that I have to read
+queries over and over.  The credit belongs to the crew of Bay Area ACM/SIGGRAPH
+working on this project. (other volunteers are welcome: especially key entry
+help)
+<P>
+Another gross generalization from
+<P>
+--eugene miya, NASA Ames Research Center, <A HREF="mailto:eugene@aurora.arc.nasa.gov">eugene@aurora.arc.nasa.gov</A>
+  ex-Lame-duck Prez. Bay Area ACM/SIGGRAPH
+  resident cynic at the Rock of Ages Home for Retired Hackers:
+  "Mailers?! HA!", "If my mail does not reach you, please accept my apology."
+  {uunet,hplabs,ncar,decwrl,allegra,tektronix}!ames!aurora!eugene
+  "Send mail, avoid follow-ups.  If enough, I'll summarize."
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art14">
+Latest Mailing List,
+</A></FONT>
+Short Form, by Eric Haines
+</H4>
+Here is the short form of the present mailing list, showing just email paths
+from an ARPA node.  If you want the full list, which includes additional info
+and snail mail addresses, drop me a note - Eric Haines
+<P>
+<PRE>
+alias   jim_arvo                apollo!<A HREF="mailto:arvo@eddie.mit.edu">arvo@eddie.mit.edu</A>
+alias   al_barr                 <A HREF="mailto:barr@csvax.caltech.edu">barr@csvax.caltech.edu</A>
+alias   brian_barsky            <A HREF="mailto:barsky@miro.berkeley.edu">barsky@miro.berkeley.edu</A>
+alias   daniel_bass             <A HREF="mailto:daniel@apollo.com">daniel@apollo.com</A>
+alias   rod_bogart              bogart%<A HREF="mailto:gr@cs.utah.edu">gr@cs.utah.edu</A>
+alias   wim_bronsvoort          dutrun!<A HREF="mailto:wim@mcvax.cwi.nl">wim@mcvax.cwi.nl</A>
+alias   at_campbell             <A HREF="mailto:atc@cs.utexas.EDU">atc@cs.utexas.EDU</A>
+alias   john_chapman            fornax!sfu-cmpt!<A HREF="mailto:chapman@cornell.uucp">chapman@cornell.uucp</A>
+alias   chuan_chee              <A HREF="mailto:ckchee@dgp.toronto.edu">ckchee@dgp.toronto.edu</A>
+alias   michael_cohen           <A HREF="mailto:m-cohen@cs.utah.edu">m-cohen@cs.utah.edu</A>
+alias   jim_ferwerda            <A HREF="mailto:jaf@squid.tn.cornell.edu">jaf@squid.tn.cornell.edu</A>
+alias   fred_fisher             FISHER%3D.dec@decwrl.dec.com
+alias   john_francis            apollo!<A HREF="mailto:johnf@eddie.mit.edu">johnf@eddie.mit.edu</A>
+alias   phil_getto              <A HREF="mailto:phil@yy.cicg.rpi.edu">phil@yy.cicg.rpi.edu</A>
+alias   andrew_glassner         <A HREF="mailto:glassner@xerox.com">glassner@xerox.com</A>
+alias   jeff_goldsmith          <A HREF="mailto:jeff@hamlet.caltech.edu">jeff@hamlet.caltech.edu</A>
+alias   chuck_grant             <A HREF="mailto:grant@icdc.llnl.gov">grant@icdc.llnl.gov</A>
+alias   paul_haeberli           sgi!<A HREF="mailto:paul@pyramid.pyramid.com">paul@pyramid.pyramid.com</A>
+alias   eric_haines             hpfcla!hpfcrs!eye!<A HREF="mailto:erich@hplabs.HP.COM">erich@hplabs.HP.COM</A>
+alias   roy_hall                <A HREF="mailto:roy@wisdom.tn.cornell.edu">roy@wisdom.tn.cornell.edu</A>
+alias   pat_hanrahan            pixar!<A HREF="mailto:pat@ucbvax.berkeley.edu">pat@ucbvax.berkeley.edu</A>
+alias   paul_heckbert           <A HREF="mailto:ph@miro.berkeley.edu">ph@miro.berkeley.edu</A>
+alias   michael_hohmeyer        <A HREF="mailto:hohmeyer@miro.berkeley.edu">hohmeyer@miro.berkeley.edu</A>
+alias   jeff_hultquist          <A HREF="mailto:hultquis@prandtl.nas.nasa.gov">hultquis@prandtl.nas.nasa.gov</A>
+alias   erik_jansen             dutio!<A HREF="mailto:fwj@mcvax.cwi.nl">fwj@mcvax.cwi.nl</A>
+alias   ken_joy                 <A HREF="mailto:joy@ucdavis.edu">joy@ucdavis.edu</A>
+alias   mike_kaplan             dana!<A HREF="mailto:mrk@hplabs.hp.com">mrk@hplabs.hp.com</A>
+alias   tim_kay                 <A HREF="mailto:tim@csvax.caltech.edu">tim@csvax.caltech.edu</A>
+alias   dave_kirk               <A HREF="mailto:dk@csvax.caltech.edu">dk@csvax.caltech.edu</A>
+alias   roman_kuchkuda          megatek!<A HREF="mailto:kuchkuda@ucsd.ucsd.edu">kuchkuda@ucsd.ucsd.edu</A>
+alias   george_kyriazis         <A HREF="mailto:kyriazis@turing.cs.rpi.edu">kyriazis@turing.cs.rpi.edu</A>
+alias   david_lister            <A HREF="mailto:lister@dg-rtp.dg.com">lister@dg-rtp.dg.com</A>
+alias   pete_litwinowicz        <A HREF="mailto:litwinow@apple.com">litwinow@apple.com</A>
+alias   gray_lorig              gray%rhea.CRAY.COM@uc.msc.umn.edu
+alias   wayne_lytle             <A HREF="mailto:wtl@cockle.tn.cornell.edu">wtl@cockle.tn.cornell.edu</A>
+alias   tom_malley              esunix!<A HREF="mailto:tmalley@cs.utah.edu">tmalley@cs.utah.edu</A>
+alias   don_marsh               <A HREF="mailto:dmarsh@apple.apple.com">dmarsh@apple.apple.com</A>
+alias   michael_natkin          <A HREF="mailto:mjn@cs.brown.edu">mjn@cs.brown.edu</A>
+alias   tim_oconnor             <A HREF="mailto:toc@wisdom.tn.cornell.edu">toc@wisdom.tn.cornell.edu</A>
+alias   masataka_ohta           mohta%titcce.cc.titech.junet%utokyo-relay.csnet@RELAY.CS.NET
+alias   tom_palmer              <A HREF="mailto:palmer@ncifcrf.gov">palmer@ncifcrf.gov</A>
+alias   darwyn_peachey          pixar!<A HREF="mailto:peachey@ucbvax.berkeley.edu">peachey@ucbvax.berkeley.edu</A>
+alias   john_peterson           <A HREF="mailto:jp@apple.apple.com">jp@apple.apple.com</A>
+alias   frits_post              dutrun!<A HREF="mailto:frits@mcvax.cwi.nl">frits@mcvax.cwi.nl</A>
+alias   pierre_poulin           <A HREF="mailto:poulin@dgp.toronto.edu">poulin@dgp.toronto.edu</A>
+alias   thierry_priol           inria!irisa!<A HREF="mailto:priol@mcvax.cwi.nl">priol@mcvax.cwi.nl</A>
+alias   panu_rekola             <A HREF="mailto:pre@cs.hut.fi">pre@cs.hut.fi</A>
+alias   david_rogers            <A HREF="mailto:dfr@cad.usna.mil">dfr@cad.usna.mil</A>
+alias   linda_roy               <A HREF="mailto:lroy@sgi.com">lroy@sgi.com</A>
+alias   cary_scofield           apollo!<A HREF="mailto:scofield@eddie.mit.edu">scofield@eddie.mit.edu</A>
+alias   pete_segal              pls%<A HREF="mailto:pixels@research.att.com">pixels@research.att.com</A>
+alias   scott_senften           apctrc!bigmac!<A HREF="mailto:senften@cornell.uucp">senften@cornell.uucp</A>
+alias   cliff_shaffer           <A HREF="mailto:shaffer@vtopus.cs.vt.edu">shaffer@vtopus.cs.vt.edu</A>
+alias   susan_spach             <A HREF="mailto:spach@hplabs.hp.com">spach@hplabs.hp.com</A>
+alias   rick_speer              <A HREF="mailto:speer@ucbvax.berkeley.edu">speer@ucbvax.berkeley.edu</A>
+alias   stephen_spencer         <A HREF="mailto:spencer@tut.cis.ohio-state.edu">spencer@tut.cis.ohio-state.edu</A>
+alias   steve_stepoway          <A HREF="mailto:stepoway@smu.edu">stepoway@smu.edu</A>
+alias   mike_stevens            apctrc!<A HREF="mailto:zfms0a@cornell.uucp">zfms0a@cornell.uucp</A>
+alias   paul_strauss            <A HREF="mailto:pss@cs.brown.edu">pss@cs.brown.edu</A>
+alias   kr_subramanian          <A HREF="mailto:subramn@cs.utexas.edu">subramn@cs.utexas.edu</A>
+alias   kelvin_thompson         <A HREF="mailto:kelvin@cs.utexas.edu">kelvin@cs.utexas.edu</A>
+alias   russ_tuck               <A HREF="mailto:tuck@cs.unc.edu">tuck@cs.unc.edu</A>
+alias   greg_turk               <A HREF="mailto:turk@cs.unc.edu">turk@cs.unc.edu</A>
+alias   ben_trumbore            <A HREF="mailto:wbt@cockle.tn.cornell.edu">wbt@cockle.tn.cornell.edu</A>
+alias   mark_vandewettering     <A HREF="mailto:markv@cs.uoregon.edu">markv@cs.uoregon.edu</A>
+alias   jack_van_wijk           ecn!<A HREF="mailto:jack@mcvax.cwi.nl">jack@mcvax.cwi.nl</A>
+alias   greg_ward               <A HREF="mailto:gjward@lbl.gov">gjward@lbl.gov</A>
+alias   bob_webber              <A HREF="mailto:webber@aramis.rutgers.edu">webber@aramis.rutgers.edu</A>
+alias   lee_westover            <A HREF="mailto:westover@cs.unc.edu">westover@cs.unc.edu</A>
+alias   andrew_woo              <A HREF="mailto:andreww@dgp.toronto.edu">andreww@dgp.toronto.edu</A>
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

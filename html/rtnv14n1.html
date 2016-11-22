@@ -1,0 +1,1051 @@
+<!-- html version of Volume 14, Number 1 -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 14, Number 1</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT> 
+<P><I>"Light Makes Right"</I> 
+<P><FONT size=+1>August 9, 2001</FONT> 
+<P><FONT size=+1>Volume 14, Number 1</FONT> 
+</CENTER>
+<P>
+Compiled by <a href="http://www.erichaines.com">Eric Haines</a>, 1050 Craft Road, Ithaca, NY 14850
+<A HREF="mailto:erich@acm.org">erich@acm.org</A>.
+Opinions expressed are mine, not Autodesk's.<P>
+All contents are copyright (c) 2000,2001, all rights reserved
+by the individual authors.
+<P>
+HTML Table of Contents at
+<A HREF="http://www.raytracingnews.org">
+http://www.raytracingnews.org</A>
+<BR>Text version at <A HREF="http://www.acm.org/tog/resources/RTNews/text/">
+http://www.acm.org/tog/resources/RTNews/text/</A>
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction</A></LI>
+<LI><A HREF="#art2">
+Ray Tracing Roundup</A></LI>
+<LI><A HREF="#art3">
+Octree Implementation and RTRT Speeds</A>, by Paul Kahler,
+Vlastimil Havran, Ingo Wald, John Stone, and Nick Chirkov</LI>
+<LI><A HREF="#art4">
+Loose Octrees for Dynamic Raytracing</A>, by Eric Haines</LI>
+<LI><A HREF="#art5">
+Processor and Compiler Comparison as of August 2001</A>, by John Stone</LI>
+<LI><A HREF="#art6">
+Triangles per Vertex</A>, by Eric Haines</LI>
+<LI><A HREF="#art7">
+Bounding Box Intersection via Origin Location</A>, by Eric Haines</LI>
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction</A></FONT></H4>
+SIGGRAPH is the great motivator for me right now, as far as getting out an
+issue of the Ray Tracing News goes. First, it's a place to announce the Ray
+Tracing Roundtable (which this year will be in the Garden East Room at the Wilshire HQ hotel at
+6:30-8 pm on Thursday), and second, by getting an issue out I don't have to
+answer any questions like, &quot;are you still compiling the Ray Tracing News?&quot;
+<P>
+The RT Roundtable: where else can one possibly ask the question, &quot;mailboxes,
+are they good or bad?&quot; Which is in fact a question I'd like to bring up:
+Slusallek says good, Shirley says bad, and only a good mudfight can decide
+the issue. Well, actually, there is one other place to ask this question: the
+course &quot;Interactive Ray-Tracing&quot;, which is on Sunday from 1:30 to 5 pm at
+SIGGRAPH, <A HREF="http://helios.siggraph.org/s2001/conference/courses/crs13.html">http://helios.siggraph.org/s2001/conference/courses/crs13.html</A>. Tim
+Purcell mentioned that he'll be addressing the topic. He's finding, for grid
+acceleration structures, that the most efficient grids are those with 5 to 10
+times as many grid cells as objects, and that even with this high ratio the
+gain due to mailboxing can often disappear.
+<P>
+At this point ray tracing itself is a tool. It's a rendering method, but the
+geometric operation of intersecting rays is useful for many other operations,
+such as light transport in general, picking, and collision detection and
+response. I even noticed ray tracing in DirectX 8 recently: the sample
+picking code uses a ray/triangle intersector to do its work. So is the RTNews
+worth continuing? Sure. It doesn't cost anything, of course (except time).
+For me the Ray Tracing News is a great place to archive those little ideas,
+web sites, book information, and other resources that otherwise get lost in
+my mailbox and bookmark list.
+<P>
+Other news: there are two books that should be of interest to readers that
+will be out by SIGGRAPH. Henrik Wann Jensen's <a href="http://www.amazon.com/exec/obidos/ASIN/1568811470/somebooksilike/">&quot;Realistic Image Synthesis
+Using Photon Mapping&quot;</a>, from AK Peters, presents both the theory and practice
+of using the photon mapping algorithm for global illumination. This technique
+works by sending out rays from the light sources and having the photons
+collect on surfaces, then using classical ray tracing to retrieve these
+collections. A simple idea, and ideas such as Arvo's &quot;Backwards Ray Tracing&quot;
+predate it, but Jensen works through many of the flaws of earlier schemes
+and presents details and fixes in a single volume. This is a nice follow-up
+work to Peter Shirley's book from last year, <a href="http://www.amazon.com/exec/obidos/ASIN/1568811101/somebooksilike/">&quot;Realistic Ray Tracing,&quot;</a> which
+deals with classical and Monte Carlo ray tracing. These two books combined
+could make a good one or two semester course: implement a ray tracer, add
+Monte Carlo, add photon mapping (though Jensen makes it too easy, giving a
+full C++ implementation for the photon map in an appendix). I've read the
+first six chapters so far and hope to finish the rest on the plane to
+SIGGRAPH. The first third of the book is a review of global illumination
+research to date. It's well-written, though sometimes jumps to equations
+with not as much explanation as I would prefer. The rest of the book is
+on photon mapping itself and how to implement it effectively. A relatively
+short book (less than 200 pages), but pure gold if you have any interest
+in using this algorithm. There is more on photon mapping at Henrik's
+homepage: <A HREF="http://graphics.stanford.edu/~henrik/">http://graphics.stanford.edu/~henrik/</A>.
+<P>
+AK Peters has another book out this SIGGRAPH: <a href="http://www.amazon.com/exec/obidos/ASIN/1568811330/somebooksilike/">&quot;Non-Photorealistic Rendering&quot;</a>,
+by Gooch and Gooch. I have not seen this book yet, but I have been looking
+forward to it. See their website for more information on NPR (though not the
+book): <A HREF="http://www.cs.utah.edu/npr/">http://www.cs.utah.edu/npr/</A> - details on the SIGGRAPH NPR BOF are also
+there. Both Jensen and the Gooches will have book signings at AK Peters'
+booth (#1918) on Tuesday afternoon, 2-3 pm for Jensen, 3:30-4:30 for the
+Gooches. Jensen is also signing at the SIGGRAPH bookstore at 3:30-4:30 (but
+it's probably cheaper to buy at the AK Peters booth).
+<P>
+Other than these two books, I'm also looking forward to <a href="http://www.amazon.com/exec/obidos/ASIN/1584500549/somebooksilike/">&quot;Game Programming Gems 2&quot;</a>, edited by Mark DeLoura, Charles River Media, booth #1910. See
+http://www.charlesriver.com/titles/gamegems2.html for a table of contents.
+The first volume primed the pump and got people
+realizing they could write articles about what they've learned doing computer graphics
+for games (most of the volume is about modeling, rendering, and animation techniques),
+so I'm expecting good things
+from this second collection of articles.
+<P>
+So, last year's puzzle, from Paul Strauss, was that you're given a square
+sheet of paper, one side is blue and the other red. You can make folds in the
+paper, but the rule is that only red can touch red. Red touching blue or blue
+touching blue is not allowed. Folds are full 180 degree foldovers, so some
+piece of paper will always touch another part of the paper. So, what is the
+maximum number of folds you can make? The answer: 5. You can first fold the
+paper in half, at an angle so that the four corners do not align and each
+pokes out a bit from the overlapping area. Now each corner is free to fold
+back on itself; you just need to fold the tips in the tiniest bit and the 5
+folds are done.
+<P>
+Rick LaMont was one person with the correct answer, and sent this fine
+graphic of a solution:
+<P>
+<PRE>
+--------------------
+|/                \|
+|                  |
+|---__             |
+|     ---__        |
+|          ---__   |
+|               ---|
+|                  |
+|\                /|
+--------------------
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+Ray Tracing Roundup</A></FONT></H4>
+The Ray Tracing News itself now has two more memorable URLs now:
+<P>
+<PRE>
+    <A HREF="http://www.raytracingnews.com">http://www.raytracingnews.com</A>
+    <A HREF="http://www.raytracingnews.org">http://www.raytracingnews.org</A>
+</PRE>
+<P>
+________
+<P>
+Ingo Wald, Philipp Slusallek, and others have been doing some interesting
+research in interactive raytracing, see:
+<P>
+<PRE>
+    <A HREF="http://graphics.cs.uni-sb.de/rtrt/">http://graphics.cs.uni-sb.de/rtrt/</A>
+</PRE>
+<P>
+If you have not looked there lately, they also have a &quot;State of the Art&quot;
+report on interactive raytracing on their Publications page.
+<P>
+________
+<P>
+WinOSi stands for &quot;Optical Simulation Rendering for Windows&quot;. It is a
+freeware open-source system for doing what sounds like photon mapping. It's
+really just begun, but even now the images in the gallery are worth a look:
+<P>
+<PRE>
+    <A HREF="http://www.winosi.onlinehome.de/">http://www.winosi.onlinehome.de/</A>
+</PRE>
+<P>
+Phil Dutre reports: &quot;The algorithm used appears to be very similar to the
+light tracing algorithms I published in various papers in the 90's, and is
+also described in my Ph.D., see
+<A HREF="http://www.graphics.cornell.edu/~phil/PUBLICATIONS/publications.html">http://www.graphics.cornell.edu/~phil/PUBLICATIONS/publications.html</A>. The
+main difference is that instead of sending a contribution ray to the screen
+from each hitpoint along the path of a particle, hitpoints in WinOSi are
+stored in a buffer. During a 2nd pass, a viewing ray is shot through each
+pixel. Each hitpoint stored in the buffer then sends a contribution ray to
+the screen if it is located in the neighborhood of the visible point along
+the viewing ray. So, the viewing rays are used as a selection mechanism
+to decide which of the hitpoints along the paths of all particles actually
+send a contribution ray to the screen.&quot;
+<P>
+________
+<P>
+Errata for Peter Shirley's book <a href="http://www.amazon.com/exec/obidos/ASIN/1568811101/somebooksilike/">&quot;Realistic Ray Tracing&quot;</a> is at:
+<P>
+<PRE>
+    <A HREF="http://www.cs.utah.edu/~shirley/errata">http://www.cs.utah.edu/~shirley/errata</A>
+</PRE>
+<P>
+He pays one beer per new error found.
+<P>
+________
+<P>
+For some (many!) practical tips on using multithreading for ray tracing,
+check out the Realtime Raytracing mailing list archives:
+<P>
+<PRE>
+    <A HREF="http://groups.yahoo.com/group/realtime_raytracing/messages/201">http://groups.yahoo.com/group/realtime_raytracing/messages/201</A>
+</PRE>
+<P>
+________
+<P>
+There are some questions and answers at Paul Bourke's web site about the free
+Tachyon ray tracer (<A HREF="http://jedi.ks.uiuc.edu/~johns/raytracer/">http://jedi.ks.uiuc.edu/~johns/raytracer/</A>), as well as a
+comparison on one scene of Tachyon and POV-Ray:
+<P>
+<PRE>
+    <A HREF="http://astronomy.swin.edu.au/pbourke/rendering/tachyon/">http://astronomy.swin.edu.au/pbourke/rendering/tachyon/</A>
+</PRE>
+<P>
+Tachyon is about 3 times as fast at rendering as POV-Ray for this test scene,
+and parsed the data about 6.5 times faster - important for large databases.
+There are also some multiprocessor timing results, showing a nearly linear
+speed-up as processors are added.
+<P>
+John ran an interesting set of experiments this spring, showing how ray
+tracing was not incredibly far from a hardware z-buffer rendering of a
+sphereflake model. The unoptimized sphereflake ran at 0.57 FPS on the ray
+tracer (with shadows and reflections) on an Athlon 1200 MHz, and 1.2 FPS on a
+GeForce2 on the same machine. The reason was that the GeForce2 was
+transform-bound, as each sphere was sent down and rendered as 400 polygons in
+tristrips. Being smarter about the tessellation of the sphere, i.e. using
+level-of-detail to make the small spheres have many less polygons, got the
+rate on the GeForce2 up to 16 FPS, and moving in closer to the sphereflake
+made Tachyon drop to 0.33 FPS. So at least in this case, after optimization
+the graphics accelerator was 50 times as fast as the ray tracer. If you'd
+like to see the images and more stats, see our Powerpoint presentation
+&quot;Real-Time Shadows&quot; at <A HREF="http://www.erichaines.com/">http://www.erichaines.com/</A>; it's two slides near the
+very end.
+<P>
+________
+<P>
+There are some useful optimization tricks for ray tracers in Java at:
+<P>
+<PRE>
+    <A HREF="http://www.graphics3d.com/matrix/3d.htm">http://www.graphics3d.com/matrix/3d.htm</A>
+</PRE>
+<P>
+Though some advice applies only to Java (e.g. &quot;avoid array dereferences&quot;),
+much of the advice applies to C and other languages, too. A key motto to
+remember, though, with all optimization tricks is &quot;test, test, test&quot;. Some of
+the tricks here (the loop countdown) may gain nothing when things like
+Hotspot are used.
+<P>
+________
+<P>
+Piero Foscari has made a basic FAQ for real-time raytracing (i.e. the demo
+scene):
+<P>
+<PRE>
+    <A HREF="http://www.acm.org/tog/resources/RTNews/demos/rtrt_faq.txt">http://www.acm.org/tog/resources/RTNews/demos/rtrt_faq.txt</A>
+</PRE>
+<P>
+________
+<P>
+A contest for writing a ray tracer using a functional language was held by
+the International Conference on Functional Programming last year. The rules
+and results are at:
+<P>
+<PRE>
+    <A HREF="http://www.cs.cornell.edu/icfp/">http://www.cs.cornell.edu/icfp/</A>
+</PRE>
+<P>
+________
+<P>
+Phil Dutre's Global Illumination Compendium has expanded considerably in the
+past year:
+<P>
+<PRE>
+    <A HREF="http://www.graphics.cornell.edu/~phil/GI/">http://www.graphics.cornell.edu/~phil/GI/</A>
+</PRE>
+<P>
+You need this resource.
+<P>
+________
+<P>
+Vlastimil Havran's Ph.D. Thesis, &quot;Heuristic Ray Shooting Algorithms&quot;,
+defended on 20 April 2001 at the Czech Technical University, can be
+downloaded at:
+<P>
+<PRE>
+   <A HREF="http://www.cgg.cvut.cz/~havran/phdthesis.html">http://www.cgg.cvut.cz/~havran/phdthesis.html</A>
+</PRE>
+<P>
+Email comments to him at <A HREF="mailto:VHavran@seznam.cz">VHavran@seznam.cz</A>.
+<P>
+Abstract:
+<P>
+Global illumination research aiming at the photo-realistic image synthesis
+pushes forward research in computer graphics as a whole. The computation of
+visually plausible images is time-consuming and far from being realtime at
+present. A significant part of computation in global illumination algorithms
+involves repetitive computing of visibility queries.
+<P>
+In the thesis, we describe our results in ray shooting, which is a well-known
+problem in the field of visibility. The problem is difficult in spite of its
+simple definition: For a given oriented half-line and a set of objects, find
+out the first object intersected by the half-line if such an object exists. A
+naive algorithm has the time complexity <I>O(N)</I>, where <I>N</I> is the number of
+objects. The naive algorithm is practically inapplicable in global
+illumination applications for a scene with a high number of objects, due its
+huge time requirements. In this thesis we deal with heuristic ray shooting
+algorithms that use additional spatial data structures. We put stress on
+average-case complexity and we particularly investigate the ray shooting
+algorithms based on spatial hierarchies. In the thesis we deal with two major
+topics.
+<P>
+In the first part of the thesis, we introduce a ray shooting computation
+model and performance model. Based on these two models we develop a
+methodology for comparing various ray shooting algorithms for a set of
+experiments performed on a set of scenes. Consecutively, we compare common
+heuristic ray shooting algorithms based on BSP trees, kd-trees, octrees,
+bounding volume hierarchies, uniform grids, and three types of hierarchical
+grids using a set of 30 scenes from Standard Procedural Database. We show
+that for this set of scenes the ray shooting algorithm based on the kd-tree
+is the winning candidate among all tested ray shooting algorithms.
+<P>
+The second and major part of the thesis presents several techniques for
+decreasing the time and space complexity for ray shooting algorithms based on
+kd-tree. We deal with both kd-tree construction and ray traversal algorithms.
+In the context of kd-tree construction, we present new methods for adaptive
+construction of the kd-tree using empty spatial regions in the scene,
+termination criteria, general cost model for the kd-tree, and modified
+surface area heuristics for a restricted set of rays. Further, we describe a
+new version of the recursive ray traversal algorithm. In context of the
+recursive ray traversal algorithm based on the kd-tree, we develop the
+concept of the largest common traversal sequence. This reduces the number of
+hierarchical traversal steps in the kd-tree for certain ray sets. We also
+describe one technique closely related to computer architecture, namely
+mapping kd-tree nodes to memory to increase the cache hit ratio for
+processors with a large cache line. Most of the techniques proposed in the
+thesis can be used in combination. In practice, the average time complexity
+of the ray shooting algorithms based on the kd-tree, as presented in this
+thesis, is about <I>O(log N)</I>, where the hidden multiplicative factor depends
+on the input data. However, at present it is not known to have been proved
+theoretically for scenes with general distribution of objects. For these
+reasons our findings are supported by a set of experiments for the
+above-mentioned set of 30 scenes.
+<P>
+________
+<P>
+Globillum/Perception Thesis<BR>
+by Hector Yee, Cornell Program of Computer Graphics
+<P>
+Abstract:
+<P>
+We present a method to accelerate global illumination computation in dynamic
+environments by taking advantage of limitations of the human visual system. A
+model of visual attention is used to locate regions of interest in a scene
+and to modulate spatiotemporal sensitivity. The method is applied in the form
+of a spatiotemporal error tolerance map. Perceptual acceleration combined
+with good sampling protocols provide a global illumination solution feasible
+for use in animation. Results indicate an order of magnitude improvement in
+computational speed. The method is adaptable and can also be used in
+image-based rendering, geometry level of detail selection, realistic image
+synthesis, video telephony and video compression.
+<P>
+<PRE>
+    <A HREF="http://www.graphics.cornell.edu/~hector/yee2000.pdf">http://www.graphics.cornell.edu/~hector/yee2000.pdf</A>
+</PRE>
+<P>
+[There is also an ACM TOG article derived from the thesis, see
+<A HREF="http://www1.acm.org/pubs/tog/yee01/index.htm">http://www1.acm.org/pubs/tog/yee01/index.htm</A> for some images and movies.
+-EAH]
+<P>
+________
+<P>
+Eigenvector Radiosity
+<P>
+Ian Ashdown has completed an MS Computer Science thesis at the University of
+British Columbia. Download it at:
+<P>
+<PRE>
+    <A HREF="http://www.cs.ubc.ca/labs/imager/th/ashdown.msc.2001.html">http://www.cs.ubc.ca/labs/imager/th/ashdown.msc.2001.html</A>
+</PRE>
+<P>
+Abstract
+<P>
+Radiative flux transfer between Lambertian surfaces can be described in terms
+of linear resistive networks with voltage sources. This thesis examines how
+these &quot;radiative transfer networks&quot; provide a physical interpretation for the
+eigenvalues and eigenvectors of form factor matrices. This leads to a novel
+approach to photorealistic image synthesis and radiative flux transfer
+analysis called eigenvector radiosity.
+<P>
+________
+<P>
+The &quot;Best Efficiency Scheme&quot; project has moved to:
+<P>
+<PRE>
+    <A HREF="http://www.cgg.cvut.cz/BES/">http://www.cgg.cvut.cz/BES/</A>
+</PRE>
+<P>
+and now includes 100 VRML models for testing, at
+<A HREF="http://www.cgg.cvut.cz/BES/scenes/www/">http://www.cgg.cvut.cz/BES/scenes/www/</A>.
+<P>
+________
+<P>
+Interactive ray tracer in Java:
+<P>
+<PRE>
+    <A HREF="http://www.antiflash.net/raytrace">http://www.antiflash.net/raytrace</A>
+</PRE>
+<P>
+There seems to be something funky with their specular highlights (I think
+it's probably just the Phong model at too low a specular power), but it's fun
+to just be able to go to the web site and have this thing work.
+<P>
+________
+<P>
+At:
+<P>
+<PRE>
+    <A HREF="http://www.siggraph.org/education/materials/HyperGraph/raytrace/rt_java/raytrace.html">http://www.siggraph.org/education/materials/HyperGraph/raytrace/rt_java/raytrace.html</A>
+</PRE>
+<P>
+is a simple little Java applet showing how ray tracing works. It uses a 2D
+view to trace rays through a scene and shows what parts of the algorithm are
+done at each point.
+<P>
+________
+<P>
+A handy page:
+<P>
+<PRE>
+    <A HREF="http://www.geocities.com/ResearchTriangle/Lab/1851/abs-mnu.htm">http://www.geocities.com/ResearchTriangle/Lab/1851/abs-mnu.htm</A>
+</PRE>
+<P>
+which has radiosity abstracts and other literature links.
+<P>
+________
+<P>
+Measured BRDF data for rendering is currently available from two sites:
+<P>
+<PRE>
+    <A HREF="http://www.graphics.cornell.edu/online/measurements/">http://www.graphics.cornell.edu/online/measurements/</A>
+    <A HREF="http://www.cs.columbia.edu/CAVE/curet/">http://www.cs.columbia.edu/CAVE/curet/</A>
+</PRE>
+<P>
+Viewers for various BRDF theoretical models are available at:
+<P>
+<PRE>
+    <A HREF="http://graphics.stanford.edu/~smr/brdf/bv/">http://graphics.stanford.edu/~smr/brdf/bv/</A>
+    <A HREF="http://pecan.srv.cs.cmu.edu/~ph/src/illum/">http://pecan.srv.cs.cmu.edu/~ph/src/illum/</A> (unfinished, though)
+</PRE>
+<P>
+Some links to other BRDF information is at:
+<P>
+<PRE>
+    <A HREF="http://graphics.stanford.edu/~smr/brdf/">http://graphics.stanford.edu/~smr/brdf/</A>.
+</PRE>
+<P>
+________
+<P>
+Paul Heckbert has made a useful BSP-tree summary page at:
+<P>
+<PRE>
+    <A HREF="http://www.cs.cmu.edu/afs/andrew/scs/cs/15-463/pub/www/notes/bsp.html">http://www.cs.cmu.edu/afs/andrew/scs/cs/15-463/pub/www/notes/bsp.html</A>
+</PRE>
+<P>
+________
+<P>
+Zoltan Karpati's &quot;3D Object Converter&quot; is a shareware program that converts
+246+ (!) file formats. The unregistered version does not save out to DXF,
+3DS, or LWO formats. The URL has moved to:
+<P>
+<PRE>
+    <A HREF="http://www.3dconverter.f2s.com">http://www.3dconverter.f2s.com</A>
+</PRE>
+<P>
+(by the way, <A HREF="http://www.f2s.com">www.f2s.com</A> has free web hosting without advertising.)
+<P>
+________
+<P>
+An implementation of the Lafortune BRDF model using RenderMan, and suitable
+for use in BMRT (<A HREF="http://www.exluna.com/products/bmrt/">http://www.exluna.com/products/bmrt/</A>), is available from
+Steve Westin at:
+<P>
+<PRE>
+    <A HREF="http://www.Graphics.Cornell.EDU/~westin/lafortune/lafortune.html">http://www.Graphics.Cornell.EDU/~westin/lafortune/lafortune.html</A>
+</PRE>
+<P>
+________
+<P>
+Demo Scene
+<P>
+The Platipus demo in &quot;prods&quot; at <A HREF="ftp://www.incognita-hq.com">www.incognita-hq.com</A> has a blend of ray
+tracing and 3D acceleration in a single scene. angel sastre
+&lt;<A HREF="mailto:icg_reboot@bigfoot.com">icg_reboot@bigfoot.com</A>&gt; comments:
+<P>
+We did some volumetric rendering with raytracing and then &quot;mixed&quot; that with a
+normal 3d scene (the scene was drawn using 3d acceleration).
+<P>
+Fair enough, it looks a bit blurry but it does give the impression of flying
+through 3d clouds.
+<P>
+____
+<P>
+There is a quite impressive RT intro, Fresnel 2 by Kolor. You can get it at
+<P>
+<PRE>
+    <A HREF="http://www.kaoz.org/kolor">http://www.kaoz.org/kolor</A>
+</PRE>
+<P>
+It has two versions, one for the PIII and the other for less powerful
+machines. You need an OpenGL capable 3D card.
+<P>
+_________
+<P>
+The web site for Dr. David Rogers' book <a href="http://www.amazon.com/exec/obidos/ASIN/1558606696/somebooksilike/">&quot;An Introduction to NURBS&quot;</a> is at:
+<P>
+<PRE>
+    <A HREF="http://www.nar-associates.com/nurbs/nurbs.html">http://www.nar-associates.com/nurbs/nurbs.html</A>
+</PRE>
+<P>
+It includes information about the book, errata, source code, etc.
+<P>
+________
+<P>
+The Graphics Gems site has gone through a major redesign (as well as getting
+a more memorable URL), with all code now directly linked to the gems, which
+have been organized by book, category, and author:
+<P>
+<PRE>
+    <A HREF="http://www.graphicsgems.org/">http://www.graphicsgems.org/</A>
+</PRE>
+<P>
+________
+<P>
+Tidbits: an early draft of &quot;Point in Polygon Strategies&quot;, and efficient code
+for doing shaft culling, is now available at the site
+<A HREF="http://www.erichaines.com/">http://www.erichaines.com/</A>.
+<P>
+________
+<P>
+If you just can't get enough on Pluecker coordinates, i.e. the articles in
+<a href="rtnv10n3.html#art11">RTNv10n3</a> and <a href="rtnv11n1.html#art3">RTNv11n1</a> weren't enough for you, try:
+<P>
+<PRE>
+    <A HREF="http://www.flipcode.com/tutorials/tut_pluecker.shtml">http://www.flipcode.com/tutorials/tut_pluecker.shtml</A>
+</PRE>
+<P>
+It is derived from the RTN articles, but has some other information and may
+be more approachable.
+<P>
+________
+<P>
+A derivation of the formula for ray/general quadric intersection, from Paul
+Kahler:
+<P>
+<PRE>
+    <A HREF="http://www.oakland.edu/~phkahler/techdoc/RayQuadric.doc">http://www.oakland.edu/~phkahler/techdoc/RayQuadric.doc</A>
+</PRE>
+<P>
+(it's a Word Doc file)
+<P>
+________
+<P>
+The site:
+<P>
+<PRE>
+    <A HREF="http://www.schorsch.com/kbase/glossary/index.html">http://www.schorsch.com/kbase/glossary/index.html</A>
+</PRE>
+<P>
+has a glossary of the various terms used in the area of lighting and related
+fields. Reasonably done, though nothing deep. There are certainly a few I've
+never heard of before (e.g. &quot;etendue&quot;).
+<P>
+________
+<P>
+Where can you find minimal indirect illumination, no atmospheric effects,
+perfectly reflective surfaces, and hard-edged shadows (depending on the
+location and size of the sun)? Yes, space, the real home of classical ray
+tracing. Check out movies and stills at:
+<P>
+<PRE>
+    <A HREF="http://www.spacebattles.com/">http://www.spacebattles.com/</A>
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Octree Implementation and RTRT Speeds</A></FONT>, by Paul Kahler (<A HREF="mailto:phkahler@oakland.edu">phkahler@oakland.edu</A>), Vlastimil Havran (<A HREF="mailto:havran@fel.cvut.cz">havran@fel.cvut.cz</A>), Ingo Wald (<A HREF="mailto:Ingo.Wald@gmx.de">Ingo.Wald@gmx.de</A>), John Stone (<A HREF="mailto:johns@ks.uiuc.edu">johns@ks.uiuc.edu</A>), and Nick Chirkov (<A HREF="mailto:nickchir@yahoo.com">nickchir@yahoo.com</A>)
+</H4>
+[excerpted from the Realtime Raytracing mailing list at
+<A HREF="http://groups.yahoo.com/group/realtime_raytracing/">http://groups.yahoo.com/group/realtime_raytracing/</A>. - EAH]
+<P>
+I've done some checking, and ran across <a href="rtnv12n2.html#art4">RTNv12n2</a> where there is an article
+covering many (all?) of the various papers on ray-octree traversal. From
+reading the descriptions, it seems that the method I worked so hard to come
+up with is #18 by Gargantini and Atkinson from 1993. Yet another algorithm
+I've independently reinvented :-) There was no link to the actual paper or
+code, so I haven't compared my implementation to theirs yet. I must say that
+this algorithm (and others like it) is VERY sensitive to the details of the
+implementation. Let me explain...
+<P>
+I started with a simple octree using 8 pointers to children at each node,
+with NULL pointers where there are no children. I use axially aligned boxes
+with subdivision always happening in the center (I have good reasons to back
+up this choice, but that's another story). My first implementation recursed
+to all 8 children as long as there was no NULL pointer. Each node was
+responsible for determining if the ray hit it. The hit test treated the node
+as the intersection of 3 slabs and checked for the existence of a non-empty
+span of the ray passing through all 3. I used a table of 8 orders to check
+the children in front to back order based on the direction the ray came from.
+The biggest problem with this is that the ray can hit at most 4 of the
+children, this means potentially many recursive calls to intersection tests
+with nodes the ray does not hit. Note that the computation lies completely
+with the child nodes, the parent only checks pointers for NULL.
+<P>
+I realized that a little work in the parent node can reduce the number of
+children checked to 4 (at most) and that helped a LOT. I ultimately reached
+the algorithm described in the abstract I found. I'm still left with some
+open questions. I can still put more work into the parent nodes, but it will
+be done even for children with NULL pointers - this will slow things down in
+some cases and speed it up in others. I can also do more work related to
+sorting things, however there are only 5 numbers whose order matters and more
+complex code may hurt things more than it helps - this one is not dependant
+on the existence of children, so I should try it. I still need to find the
+authors' code to compare - since this algorithm is so sensitive to what
+optimization is done, it's conceivable that I can beat them. A modest 2x
+performance increase would put it in direct competition with those grids
+everyone keeps talking about. Don't laugh, I've already seen an increase of
+more than 4x over my first implementation while keeping the same time
+complexity. Also, there are some things that would be best handled by
+combining sign-bits in floating point numbers as opposed to using conditional
+code. This could reduce branch prediction errors enormously, but Pentium type
+processors really aren't designed with that in mind. BTW, I expect Athlon to
+smoke P4 running this code due to the branching complexity and the 20-stage
+P4 pipes that will keep getting flushed - if the branches could be predicted,
+we'd have an even better algorithm :-)
+<P>
+Anyway, there's a demo of it at:
+<P>
+<PRE>
+    <A HREF="http://www.oakland.edu/~phkahler/rtrt">http://www.oakland.edu/~phkahler/rtrt</A>
+</PRE>
+<P>
+[There is also an interesting article on doing what is essentially adaptive
+supersampling of a low resolution version of the image (i.e. render every
+eighth pixel to start) at Paul's site at
+<A HREF="http://www.oakland.edu/~phkahler/rtrt/dre.html">http://www.oakland.edu/~phkahler/rtrt/dre.html</A> - EAH]
+<P>
+Select demo 4. It does a big fractal octree thing and lets you subdivide up
+to 8 levels deep. Most rays from the camera hit the tree root, and with 2
+light sources there's a lot more work to do also. Since the octree is fixed
+in space, I attached the camera AND light sources as children of the same
+transformation node in the scene graph, this make it look like the octree is
+spinning :-) BTW, I can turn off leaf visibility and place objects in the
+octree, but that starts making speed dependent on other things than tree
+traversal which is what I've been trying to optimize.
+<P>
+____
+<P>
+[I asked Paul for some timing numbers, and he tried some tests. -EAH]
+<P>
+My terrain dataset is 511x511 squares each divided into 2 triangles. The
+vertices are offset vertically using 2 frequencies of Perlin noise. I have
+one light source up in the sky, and turning off shadow rays only added 15% to
+the frame rate because those rays trace very efficiently.
+<P>
+I ran some more controlled tests. 320x240 images with a ray every 8th pixel
+for a total of 9600 eye rays per image. The camera was aimed 0.5 radians down
+from straight horizontal (it thrashes if you get the horizon in view with too
+many polys). This means every ray hit the ground and had 1 shadow ray cast.
+The camera was high enough to see several hundred (perhaps a couple
+thousand?) triangles at a time. My DRE was turned off so it was 19200 rays
+per frame.
+<P>
+So... with tracing a terrain grid of size 2047x2047x2 = 8,380,418 triangles I
+got 4.0 FPS with some fluctuation up to 4.1 &amp; 4.2 - call it 4.0 for a total
+of 76800 rays per sec. The root of the octree was 11 levels deep (including
+root and leaf). It took several minutes to build the terrain, and then
+another minute for the thrashing to stop after it started rendering. Last
+time I did this it allocated about 1GB of memory.
+<P>
+Next with 511x511x2 = 522,242 triangles in a 10 level octree I got... the
+same result 4.0 FPS - not fluctuating up as often. It only takes a few
+seconds to build the scene and the speed tops out in a few more. Tree depth
+is really the determining factor, not polygon count.
+<P>
+Then I pointed the camera up higher so about 75% the image was ground and
+the rest was sky (default blue color). This gave about the same speed as the
+previous test. While there are fewer rays, they have to do more work -
+passing over the ground at lower levels of the tree. The horizon looked
+really bad due to the pixel interpolation. I turned on DRE and it cleared up
+but dropped to 3.2 - 3.4 FPS.
+<P>
+Summary: I'm at about 76K-80K rays/second in a 10 level octree with 50% being
+shadow rays. If I point the camera straight down it speeds up to the 130K
+rays per second due to fewer intersection tests. All done on an Athlon 700
+with 128M RAM.
+<P>
+Paul gave an update a few months later:
+<P>
+I am now getting 140K rays per second all the time (perhaps a dip to 130K)
+and going up to 215K per second with the camera pointed down to avoid those
+over the horizon rays.
+<P>
+[Paul got this speed boost from code tweaks like turning C++ to C, inlining,
+and in translating inner loops into assembler. - EAH]
+<P>
+____
+<P>
+Vlastimil Havran &lt;<A HREF="mailto:havran@fel.cvut.cz">havran@fel.cvut.cz</A>&gt; comments:
+<P>
+I agree with the sensitivity to the implementation issues, I improved the
+efficiency of the code for octree about three times by tuning and trying
+different versions of the code etc. It seems that actual implementation is
+still very important.
+<P>
+The determining of which child nodes have to be traversed is the real
+potential source of the inefficiency. What I would recommend is to get the
+paper from J. Revelles et al, &quot;An Efficient Parametric Algorithm for Octree
+Traversal&quot;, and implement it, since the optimization idea in this paper is
+just what you are searching for and is very promising, I think.
+<P>
+Unfortunately, I have not yet time to reimplement it in my own source code.
+The paper is available at: <A HREF="http://giig.ugr.es/~curena/papers/">http://giig.ugr.es/~curena/papers/</A>, and also
+includes some pseudocode of the traversal algorithm.
+<P>
+____
+<P>
+Ingo Wald &lt;Ingo.Wald@gmx.de&gt; comments:
+<P>
+Two numbers from our interactive ray tracer [see
+<A HREF="http://graphics.cs.uni-sb.de/rtrt/">http://graphics.cs.uni-sb.de/rtrt/</A>] may be of particular interest for you:
+<UL>
+<LI>
+about 90,000 rays per second for a 4-million triangle scene in which almost
+all triangles are visible.</LI>
+<LI>about 150,000 to 600,000 primary rays per second (depending on view settings)<BR>
+for a 1.5 million triangle scene with lots of occlusion.</LI>
+</UL>
+<P>
+(Both scenes are primary rays only, flat shading)
+<P>
+All that on a 800 MHz PIII.
+<P>
+[Part of the difference in speeds is because Ingo et al are using SIMD (SSE)
+instructions in a clever way: they intersect four rays at once against a
+single triangle. Like Paul, they also pay a lot of attention to and optimize
+for cache lines and other architectural elements of their processor. -EAH]
+<P>
+____
+<P>
+John Stone &lt;<A HREF="mailto:johns@ks.uiuc.edu">johns@ks.uiuc.edu</A>&gt; notes (in a separate email; worth mentioning
+here):
+<P>
+There's a heck of a lot that can be done to fit a ray tracer to an
+architecture. Make sure to have tight loops that avoid branches, precompute
+stuff, have the cache-lines get filled nicely by making data structures fit
+them, ways to fit like data together to maximize coherency (I've seen some
+very funky code for culling for z-buffers by Intel, for example, that has a
+few copies of a mesh's data in different places to get better locality).
+<P>
+____
+<P>
+Nick Chirkov &lt;<A HREF="mailto:nickchir@yahoo.com">nickchir@yahoo.com</A>&gt; writes:
+<P>
+My ray tracer works on any polygonal models, builds BSP, and traces 40,000
+uniformly distributed rays/sec (Celeron433) on the well-known Attic (~52,000
+triangles) scene with ratio of correct hits 99.96%. All code is C++, SSE is
+not used. I can get a speed up of 150sing Intel's C++ compiler and rewrite
+something like if(*(DWORD*)&amp;float_value&lt;0) to if (float_value&lt;0.0f). I can't
+use occlusion techniques because of shadow generation [I'm not sure what this
+means. -EAH].
+<P>
+Uniformly distributed rays is slower than primary rays because of CPU cache
+misses. In real image generation it was ~60,000 rays/sec on the Attic scene
+with 3 light sources with shadows.
+<P>
+I tested a scene with ~480,000 triangles and one light source. It was an old
+ship and all triangles were within the view frustum. I got ~30,000 rays/sec.
+<P>
+[See Nick's page at
+<A HREF="http://www.geocities.com/SiliconValley/Bay/5604/raytrace.htm">http://www.geocities.com/SiliconValley/Bay/5604/raytrace.htm</A>]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Loose Octrees for Dynamic Raytracing</A></FONT>, by Eric Haines
+</H4>
+In a dynamic animation environment, one problem for ray tracers to solve is
+updating the spatial ray tracing structure as quickly as possible. This is
+especially true if multiprocessor machines are being used. Reinhard,
+Smits, and Hansen give one solution in their work, &quot;Dynamic Acceleration
+Structures for Interactive Ray Tracing,&quot;
+<A HREF="http://www.cs.utah.edu/~reinhard/egwr/">http://www.cs.utah.edu/~reinhard/egwr/</A>. In this paper they insert objects
+into a grid. As objects move outside the grid, they do a modulo operation for
+the object's location. So, say an object is in the rightmost grid cell, #9,
+in a 10x10x10 grid. It moves outside the grid - instead of recreating the
+grid, the object is moved to cell #0, but is noted as being in a &quot;copy&quot; of
+the grid at X location 1. Another way to express it is that each grid
+coordinate has a number 0-9, but think of the world as being filled with
+these grids, in a repeating grid. This meta-grid is accessed with the higher
+numerals of the object's location number. Everything starts in grid #0. So 10
+would mean meta-grid #1 along the axis, 20 is meta-grid #2, etc. Now when a
+ray travels through a grid cell containing something outside the normal grid,
+the object's real location is also checked. If the meta-grid location does
+not match the ray's meta-grid location, the object is not actually there, so
+it's not tested. As time goes on and more objects move outside the grid, this
+scheme becomes less efficient as more objects have to be tested but can never
+be hit. See the paper for how the authors decide to regenerate the grid when
+it becomes inefficient.
+<P>
+What's clever about their scheme is that when an object moves, it is quick to
+remove it from the grid and reinsert it. The grid does not have to be
+regenerated. This scheme can also work with a hierarchy of grids (i.e. nested
+grids). The authors note that normal octrees suffer from non-constant
+insertion and deletion times, as the tree has to be traversed and an object
+may get put into two or more nodes.
+<P>
+Thatcher Ulrich's &quot;loose octree&quot; spatial partitioning scheme has some
+interesting features. Meant for collision detection, it may also have
+application to real-time ray tracing. The basic idea is that you make each
+octree node actually enclose twice the space, in each direction, as its
+location in the octree. That is, normally an octree node does not overlap its
+neighbors - space is precisely partitioned. In Ulrich's scheme, the octree
+node box is extended by 1/2 in the six directions of its face. Anything
+listed in this node is inside this extended box.
+<P>
+This makes for a less-efficient partitioning of space, but has a great
+advantage for dynamic objects. As an object moves or otherwise changes, it
+can be removed and inserted in the tree &quot;instantly&quot;. Say you want to insert
+spheres into this structure. The radius of the sphere determines exactly what
+level of the octree you need to insert it at. For example, if the extended
+octree node at some level is, say, 12x12x12 units, then a sphere with a
+radius of 3 or less must fit inside this extended node if the center of the
+sphere is inside the unextended octree node. If the radius is 1.5 or less, it
+can be inserted in the next octree node down (6x6x6) or further, as it must
+fit there. So just knowing the sphere's center and radius fully determines
+which octree node to insert it into, without searching or bounds testing
+(other than walking down the tree to the node itself).
+<P>
+Similarly, deletion from the octree is quick: each object exists in one and
+only one octree node, which can be found immediately and so deleted from. It
+might even be faster to hash the octree nodes by their level and address (as
+Glassner did in his original scheme) to more quickly delete from them.
+<P>
+This gives at least some hope that octrees could be used in a dynamic ray
+tracing system. Another nice feature of octrees is that if an object moves
+outside the bounding box of the entire octree, this octree can become a
+sub-node of a larger octree made on the fly that also encloses the space the
+object moved to. I have to admit that the loose octree structure seems pretty
+inefficient to trace rays against, but really I am just brainstorming here,
+presenting a possible use for a clever, new data structure with some useful
+properties. I can imagine combining loose octrees with other schemes, e.g.
+also creating bounding boxes within each populated node lazily, as needed, to
+further speed intersection testing.
+<P>
+See more about the loose octree idea at
+<A HREF="http://www.tulrich.com/geekstuff/partitioning.html">http://www.tulrich.com/geekstuff/partitioning.html</A>, and read more about it in
+the book <a href="http://www.amazon.com/exec/obidos/ASIN/1584500492/somebooksilike/">&quot;Game Programming Gems.&quot;</a> There are some optimizations I do not
+mention here, like being able to sometimes push some objects one level deeper
+into the octree.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Processor and Compiler Comparison as of August 2001</A></FONT>, by John Stone (<A HREF="mailto:johns@ks.uiuc.edu">johns@ks.uiuc.edu</A>)
+</H4>
+I have various new info on the compiler fronts.
+<P>
+For x86 machines, I've run a bunch of benchmarks on Intel P4 and AMD Athlon
+machines, and have had interesting results. Along with this, I've tested gcc,
+the Portland Group compilers, and the beta Intel compilers for Linux.
+<P>
+On the hardware front, for the testing I've done with Tachyon (John's ray
+tracer, source at <A HREF="http://jedi.ks.uiuc.edu/~johns/raytracer/">http://jedi.ks.uiuc.edu/~johns/raytracer/</A>), the Athlon
+machines have consistently annihilated the P4 machines with which I've
+compared them. My 1.2Ghz Athlon at home is still posting a SPD balls time of
+2.6 seconds, versus about 3.0 for a 1.7Ghz P4 we have at work. I tested on a
+1.4Ghz Athlon previously and got 2.2 seconds!
+<P>
+From the testing I did recently, the PG compilers were good, but the most
+recent versions of gcc are now at about the same level of performance (I
+haven't tested recently with all combinations on the same box, but I believe
+my results indicate that if PG compilers are still better than gcc, then the
+margin has narrowed to about 3% so in performance.
+<P>
+In all cases, the new beta Intel compiler has proven to produce code that
+runs <B>slower</B> than what I've been getting out of gcc, though since it is a
+beta compiler, I can't complain too much yet. This was true when testing the
+produced binaries on both an Athlon and on a P4, with Tachyon. We <I>have</I> seen
+some performance benefits running some other codes, on the older generation
+Pentiums, but not yet on the P4. I suspect that Intel just needs a few more
+months of work before their new linux compiler is as competitive as we'd
+expect. I think the main advantages it has right now are much more
+sophisticated vectorizing features which benefit linear algebra oriented
+codes, but don't help ray tracers very much. (Tachyon has very few
+vectorizable loops presently, unfortunately...)
+<P>
+Though the timings I have below span over a couple of months, none of the
+core code in Tachyon has changed for quite a while.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Triangles per Vertex</A></FONT>, by Eric Haines
+</H4>
+I noticed a line in Peter Shirley's book <a href="http://www.amazon.com/exec/obidos/ASIN/1568811101/somebooksilike/">&quot;Realistic Ray Tracing&quot;</a>
+<P>
+<PRE>
+    Typically, a large mesh has each vertex being stored by about six
+    triangles, although there can be any number for extreme cases.
+</PRE>
+<P>
+This is true enough, but it goes stronger and deeper than that, and something
+I only recently realized (well, in 1998), so I'm passing it on here.
+<P>
+It turns out that the Euler Characteristic precludes there ever being more or
+less than about six triangles per vertex for large meshes consisting entirely
+of triangles, surprisingly enough. The formula is:
+<P>
+<PRE>
+    V + F - E = 2
+</PRE>
+<P>
+(V=vertices, F=faces, E=edges) for a closed mesh (i.e. a solid object)
+without any holes (i.e. topologically equivalent to a sphere; though a donut
+merely changes the formula to V + F - E = 0; for an open mesh without holes
+it's V + F - E = 1). The formula holds in general, but we can constrain it
+when dealing with connected triangles in a closed mesh.
+<P>
+If every entity in the mesh is a triangle, we know that the number of edges
+is going to be exactly 3/2 * the number of faces, since each face has three
+edges and each edge in a closed mesh is shared by two faces. Substitute:
+<P>
+<PRE>
+    V + F - 3/2*F = 2
+    V ~= 1/2 * F
+</PRE>
+<P>
+(I'm dropping the &quot;2&quot; constant, since it's relatively unimportant for large
+meshes). We also know that each triangle has 3 vertices, so for the total
+number of vertices to be 1/2 the number of faces, each vertex *must* be
+shared by an average of 6 triangles. I love this result, as it applies to any
+mesh. You can draw the mesh so that one vertex is shared by many triangles,
+but then the rest of the vertices are shared by proportionally less,
+balancing out to 6 - there's no way around it.
+<P>
+If the mesh is open, then the ratio will change, with the average number of
+triangles going down. Topologically, with an open mesh (one not forming a
+solid object but having some edges touching some single triangle) you can
+think of the mesh as solid, but including a polygon with many edges along the
+outside of the mesh. This many-sided polygon changes the ratio.
+<P>
+[I wrote this note to Pete, and he had just learned the same fact the day
+before receiving my note! I figure if neither of us knew this until recently,
+then it was worth presenting here.]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+Bounding Box Intersection via Origin Location</A></FONT>, by Eric Haines
+</H4>
+Schmalstieg and Tobler had a clever article two years ago:
+<P>
+Dieter Schmalstieg and Robert F. Tobler, &quot;Fast projected area computation for
+three-dimensional bounding boxes,&quot; journal of graphics tools, 4(2):37-43,
+1999. <A HREF="http://jgt.akpeters.com/papers/SchmalstiegTobler99/">http://jgt.akpeters.com/papers/SchmalstiegTobler99/</A>
+<P>
+The idea is that a bounding box can be thought of as six planes that divide
+space into 27 parts (nothing new so far, it's used in orthographic view
+volume clipping). Take the location of the eye and see which of the 27 parts
+it's in. For each of the 27 positions there is a set of faces visible from
+that position (1, 2, or 3; essentially which faces face that direction). Go a
+step further, though: in a table for the 27 entries you can do better than
+storing the faces that are visible. Instead, you store the list of box
+vertices, 4 or 6, that make up the silhouette outline of the box from that
+position. This silhouette list does not change within the volume of space (of
+the 27) that you're in. You can use this list of vertices to project onto the
+screen and directly compute the screen area of the convex polygon formed.
+<P>
+I was wondering if this algorithm might be useful for ray/box intersection. I
+have not tried it out, but the idea's to use these silhouettes for 2D point
+in polygon testing, and also find the distance along the ray by using the two
+box corners that bound the ray's direction. There is only one closest (and
+one farthest) box vertex for a given ray direction, and the index of this
+vertex can be determined once for any given ray direction. This is an idea
+from shaft culling (<A HREF="http://www.erichaines.com">http://www.erichaines.com</A>), where the closest box vertex
+to a plane is entirely determined by the normal of the plane (and a ray's
+values do define a plane, since they both have a normal and origin).
+<P>
+To begin, the closest and farthest vertex can be cast upon the ray's
+direction to find out how far these vertices are along the ray. This is
+simple: the vector from the ray's origin to the vertex dotted with the ray
+direction gives the distance to the vertex. If the ray's extent (and rays
+often are actually line segments, having a maximum distance to them, but
+&quot;line segment tracing&quot; doesn't sound as good as &quot;ray tracing&quot;) overlaps the
+box's closest and farthest distances, then the ray is likely to hit the box.
+This is not a perfect test, but is conservative: the test will sometimes say
+there's an overlap when there's not, but will never miss a box that should be
+hit.
+<P>
+If the ray survives this test, say the ray starts in a corner region. You now
+have a polygon outline. Instead of computing the ray's intersection with 3
+slabs or 3 faces (the traditional ray/box intersection methods), form a plane
+at the closest corner that is perpendicular to the ray's direction. In fact,
+you have all you need of this plane already, as the ray's normal is the
+plane's normal and the plane's distance is actually irrelevant. The idea is
+to use the ray's direction to cast the ray's origin and the silhouette
+vertices onto a 2D plane. If the ray's 2D position is inside the vertex
+list's 2D polygon, the ray is definitely inside the box. It doesn't really
+matter what the frame of reference is for the 2D plane itself, anything will
+do.
+<P>
+That's about it, and I hope it makes sense. To recap, you first look at the
+problem as how far along the ray is the box. If you survive this test, you
+see whether, looking along the ray's direction, the ray's origin is inside
+the convex polygon formed by the silhouette vertices. I have my doubts as to
+whether this test is any faster than traditional tests (the operation of
+actually casting onto a 2D plane looks to be slow), but I thought it was
+interesting that there was another way to skin this cat. This algorithm does
+have the interesting feature that it appears to avoid using division at all,
+it is mostly just dot products to cast vertices onto lines and planes.
+<P>
+<I>(Followup article in <A HREF="rtnv15n1.html#art4">RTNv15n1</A>.)</I>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

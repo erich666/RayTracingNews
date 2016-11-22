@@ -1,0 +1,2179 @@
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+                        "Light Makes Right"
+
+                         December 21, 1999
+                        Volume 12, Number 2
+
+Compiled by Eric Haines, erich@acm.org, http://www.acm.org/tog/editors/erich/
+All contents are copyright (c) 1998-9, all rights reserved by the
+        individual authors
+Archive locations:
+    HTML http://www.acm.org/tog/resources/RTNews/html/index.html
+    text version at http://www.acm.org/tog/resources/RTNews/text/
+
+Contents:
+    Introduction
+    Ray Tracing Roundup
+    The Ups and Downs of Multithreaded Ray Tracing and Optimization, by
+        John Stone
+    A Summary of Octree Ray Traversal Algorithms, by Vlastimil Havran
+    Additional Octree Traversal Notes, by John Spackman, Erik Jansen, and
+        Joel Welling
+    Z-buffer and Raytracing, by Sam Paik
+    Ray Tracing Procedural & Parametric Surfaces, by Mark VandeWettering,
+        Stephen Westin, and Matt Pharr
+    Raytracing Gloss/Translucency, by Peter Eastman, Matt Pharr, and
+        Stephen Westin
+    Importance for Ray Tracing, by Per H. Christensen
+    Good Computer Graphics Books, by Brent McPherson
+
+-------------------------------------------------------------------------------
+
+Introduction
+
+From Ken Turkowski, a sad piece of news: Pierre Bezier died on November 25,
+1999.
+
+Peter Shirley is writing a book on ray tracing. The title is "Realistic Ray
+Tracing", ISBN 1-56881-110-1, from A.K.Peters, http://www.akpeters.com, and
+looks to run 200 pages, $35. The book is not out yet, but appears to be near
+completion. I look forward to it, as it's by a master of the subject who is
+also an excellent teacher.
+
+This issue has two excellent longer pieces. Vlastimil Havran presents an
+overview of all research (that he could get his hands on) done on using
+octrees in ray tracing, then compares the more promising schemes against each
+other. John Stone gives his insights and guidelines for writing a parallel
+ray tracer on modern architectures.
+
+I appreciate Vlastimil's work from the standpoint of attempting to bring more of
+an engineering approach to the study of efficiency schemes. Instead of
+presenting yet another variant scheme and testing it against some basic
+algorithm, he compares and contrasts algorithms from the literature and truly
+attempts to find what works and what does not. Evolving architectures can
+invalidate such results over time, but this practical research is a valuable
+starting place for anyone implementing octrees. I also admire his courage in
+giving his honest opinions on how significant the various papers are,
+something that is extremely useful but rarely done in the field of computer
+graphics.
+
+John Stone's article discusses what to watch out for when attempting to
+parallelize code, and how to design from the ground up for an interactive ray
+tracer, vs. batch mode code. He also points out how changing architectures
+affect code in sometimes unexpected ways. Note that John has source code and
+related papers at his site.
+
+Per Christensen turned a brief email he sent me some months ago into a
+full-fledged article on the use of importance in ray tracing (or lack thereof).
+This technique can result in noticeable savings (especially when transparent
+objects are involved) and his extension to using it per channel should make it
+all that more effective in saving computation time.
+
+Of course, if you're a researcher you will probably ignore this issue of the
+RT News until January 12th, the SIGGRAPH 2000 deadline. It's also the
+deadline for another critical, life-changing event: it's the last day you can
+submit your Fantasy Graphics League team,
+http://www.realtimerendering.com/fgl/. The winner gets a lifetime
+subscription to the Ray Tracing News and many other valuable prizes, honors,
+titles, distinctions, and related privileges thereto, as soon as we can
+figure out what these might be.
+
+The puzzle from last issue was: given an axis-aligned cube with corners at
+(0,0,0) and (1,1,1), cut it with the three planes x=y, y=z, and x=z. How many
+pieces is the cube cut into?
+
+The answer: 6, not 8. What is interesting about this one is that there are
+any number of ways of thinking about it. One is simply to note that the three
+cutting planes all share the line running through (0,0,0)-(1,1,1), so only 6
+pieces could be formed. Another solution is to look at the cube down this
+axis, i.e. view it from say (3,3,3). The cube has a hexagonal silhouette, and
+from this view the three cuts slice it like a pie. I like this visualization
+as it shows that (literally) a different view of the problem makes the answer
+obvious. A third solution presentation thinks about the equations: for x=z,
+the cube is divided into a part where x>z and one where x<z; same for the
+other two equations. 2*2*2 would be 8 pieces, but two pieces cannot exist:
+x<y<z<x and x>y>z>x, which leaves 6 pieces that can exist.
+
+The next puzzle is one from "The Mathemagician and Pied Puzzler" by Berlekamp
+and Rodgers, http://www.akpeters.com/berlekamp2.html, an homage to Martin
+Gardner. You have a cube and you select at random three (different) corners.
+What is the chance that the triangle formed by these corners is acute (all
+angle < 90 degrees)? is a right triangle (has one angle == 90 degrees)?
+
+-------------------------------------------------------------------------------
+
+Ray Tracing Roundup
+
+Vlastimil Havran has issued a call for models for testing a variety of ray
+tracing efficiency schemes:
+
+    http://sgi.felk.cvut.cz/GOLEM/proposal1.html
+
+If you have scenes in NFF, VRML 2.0, or MGF formats (or can convert to these,
+of course), please contact his group.
+
+--------
+
+Global Illumination Compendium
+
+Phil Dutre has been collecting formulae and equations relevant to global
+illumination and putting them in a single place. Visit his page for the
+current version (at this time about 23 pages long):
+
+    http://www.graphics.cornell.edu/~phil/GI/
+
+--------
+
+36 Pentium II's on 17 servers running Linux beat a Cray using POV-Ray
+benchmark:
+
+    http://cnn.com/TECH/computing/9903/16/super.idg/
+
+(thanks to Hector Yee for this story)
+
+--------
+
+I've written a fur/hair shader (unfortunately not renderman yet) based on
+'Rendering Fur with Three Dimensional Textures' by James T.Kajiya and Timothy
+L.Kay, California Institute of Technology, Computer Graphics, Volume 23,
+Number 3, July 1989:
+
+    http://dspace.dial.pipex.com/adrian.skilling/texels/texels.html
+
+I've included code and images there.
+
+- Adrian Ian Skilling <skilling@signal.dra.hmg.gb>
+
+--------
+
+I recently completed my PhD at the MIT Graphics Group under the supervision
+of Profs. Julie Dorsey and Seth Teller. The title of my thesis is: "Radiance
+Interpolants for Interactive Scene Editing and Ray Tracing" The abstract is
+included below. The thesis is now available at:
+
+    http://www.graphics.cornell.edu/~kb/publications.html
+
+
+Abstract:
+
+Ray tracers are usually regarded as off-line rendering algorithms that are
+too slow for interactive use. This thesis introduces techniques to accelerate
+ray tracing and to support interactive editing of ray-traced scenes. These
+techniques should be useful in many applications, such as architectural
+walk-throughs, modeling, and games, and will enhance both interactive and
+batch rendering.
+
+This thesis introduces radiance interpolants: radiance samples that can be
+used to rapidly approximate radiance with bounded approximation error.
+Radiance interpolants capture object-space, ray-space, image-space and
+temporal coherence in the radiance function. New algorithms are presented
+that efficiently, accurately and conservatively bound approximation error.
+
+The interpolant ray tracer is a novel renderer that uses radiance
+interpolants to accelerate both primary operations of a ray tracer: shading
+and visibility determination. Shading is accelerated by quadrilinearly
+interpolating the radiance samples associated with a radiance interpolant.
+Determination of the visible object at each pixel is accelerated by
+reprojecting interpolants as the user's viewpoint changes. A fast scan-line
+algorithm then achieves high performance without sacrificing image quality.
+For a smoothly varying viewpoint, the combination of lazily sampled
+interpolants and reprojection substantially accelerates the ray tracer.
+Additionally, an efficient cache management algorithm keeps the memory
+footprint of the system small with negligible overhead.
+
+The interpolant ray tracer is the first accelerated ray tracer that
+reconstructs radiance from sparse samples while bounding error
+conservatively. The system controls error by adaptively sampling at
+discontinuities and radiance non-linearities. Because the error introduced by
+interpolation does not exceed a user-specified bound, the user can trade
+performance for quality.
+
+The interpolant ray tracer also supports interactive scene editing with
+incremental rendering; it is the first incremental ray tracer to support both
+object manipulation and changes to the viewpoint. A new hierarchical data
+structure, called the ray segment tree, tracks the dependencies of radiance
+interpolants on regions of world space. When the scene is edited, affected
+interpolants are rapidly identified and updated by traversing these ray
+segment trees.
+
+- Kavita Bala <kb@graphics.cornell.edu>
+http://www.graphics.cornell.edu/~kb
+
+--------
+
+A commercial product, but one that should be mentioned if only because
+commercial hardware dedicated to ray tracing is currently rare:
+
+    http://www.art-render.com/ - ART's RenderDrive
+
+Algorithm details are relatively scarce, but you might glean something from
+their page http://www.art-render.com/technology/ar250.html. There was a paper
+on this at the hardware conference that took place concurrently with SIGGRAPH
+99; no, I do not have a copy.
+
+--------
+
+Announcing Steve's Object Builder Ver 1.4
+
+Steve's Object Builder is a free script based tool that can be used to make
+3D objects for ray tracing programs such as POV-Ray. The tool uses Perl
+(Practical Extraction and Report Language) as its script language
+interpreter. One nice thing about Perl is that it is easy to use and it is
+freely available on many platforms such as UNIX, Windows, and Macintosh. You
+do not have to be a expert Perl programmer to use this tool.
+
+Features
+
+    RAW output
+    POV-Ray smooth triangle output
+    Moray UDO output
+    DXF output
+    POV scene file output
+    Set smoothing angle for POV output
+    Set edge angle for UDO output
+    Swap the y and z axis option
+    Scale the final object to a absolute size
+    Hermite curves
+    Bezier curves
+    Bspline curves
+    Catmull-rom curves
+    Translate/Rotate/Scale functions
+    Skin
+    Extrude
+    Extrude along a path
+    Gravity
+    Sweep
+    Polygon triangulation
+    Group object pieces by name
+    L-systems
+    Over 40 example objects
+
+Check out my latest version at: http://www.carr.lib.md.us/~stevensl/
+
+Steven Slegel <sslegel@pop700.gsfc.nasa.gov>
+
+[A modeller in Perl? It's more an aid for doing procedural modeling, with a
+number of constructs for you to control. The basic mode of operation is to
+define a 2D contour and extrude it in some way. Since it's procedural, things
+like L-systems can be done relatively easily. - EAH]
+
+--------
+
+I've (A.J. Chung) finally completed my Ph.D. duties and have placed the
+resulting thesis online:
+
+http://www.doc.ic.ac.uk/~ajc/Papers/thesis.ps.bz2  (2.0 MB)
+
+While this body of work does not concentrate purely on Global Illumination
+some interesting ideas are proposed, implemented and studied that may be of
+interest to researchers in this field:
+
+1. Ray space partitions for ray casting acceleration
+
+2. Detecting total occlusion of ray shafts in non-polygonal environments
+
+3. Constructing smooth shading functions over arbitrary topologies
+
+4. Robust classification of shadow regions -- umbra, penumbra and full
+   illumination.
+
+[to uncompress this file, get the bzip2 uncompressor from
+http://sourceware.cygnus.com/bzip2/ - EAH]
+
+--------
+
+Panorama is a GNU project framework for 3D graphics production. The site has
+not been updated in the past few months, but the code appears to have a
+number of more advanced effects, including volumetric lighting and an
+implementation of the cellular texture basis function:
+
+    http://www.gnu.org/software/panorama/panorama.html
+
+--------
+
+BMRT/Pixar Tidbits
+
+We used the ray tracing functionality of BMRT (http://www.bmrt.org) on A
+Bug's Life, for 15 shots totalling around 30-40 seconds. Of course, the way
+the "ray server" works is that BMRT was only used for the refraction rays
+(and what you see "through" them), the rest of the scene was rendered with
+PRMan, as usual [http://www.bmrt.org/bmrtdoc/rayserver.html].
+
+
+>Does anyone here know how BMRT's radiosity works? I hear it's the most
+>accurate algorithm developed so far, apart from reverse raytracing and the
+>like.
+
+I've never heard that. BMRT just uses a fairly standard finite element,
+progressive refinement radiosity, then substitutes the indirect component of
+the radiosity pass for the ambient() illumination in the ray tracing pass.
+It's really not all that sophisticated.
+
+- Larry Gritz <lg@pixar.com>
+
+--------
+
+A number of polygon triangulators were mentioned in RTNv10n2. Here are some
+others (and new links for older ones):
+
+    http://www.cs.unc.edu/~manocha/CODE/GEM/chapter.html
+    http://www.cosy.sbg.ac.at/~held/projects/triang/triang.html
+    http://www.cs.cmu.edu/~quake/triangle.html
+    http://www.cs.huji.ac.il/~danix/code/cdt.shar.gz
+
+The last two are more concerned with triangulations which avoid producing
+narrow triangles, which processes such as finite element analysis prefer.
+
+(links from Jeff Erickson, in comp.graphics.algorithms)
+
+--------
+
+Radiance Online is a unique web-based, fully automated, 100% self-service
+rendering server, providing user friendly rendering based on the Radiance
+synthetic imaging system:
+
+    http://www.artifice.com/rendering/render.html
+
+[Small renderings are free; an interesting concept, though it's not clear
+from the web page why you'd want to do this. The normal advantage of this
+sort of thing is that the server is much more powerful than your client
+machine, but the server available is not discussed here. - EAH]
+
+--------
+
+If you enjoy links to new ray traced images or want to announce your own
+works, consider subscribing to the Raytraced Mailing List:
+
+    http://www.povlab.org/raytraced/
+
+--------
+
+If you use POV-Ray, you might like TextureView, a free texture manager:
+
+    http://home.t-online.de/home/schmidtze/software/
+
+--------
+
+The SIGGRAPH bibliography searcher,
+http://www.siggraph.org/publications/bibliography/, is a wonderful tool which
+has been upgraded this year. It does not provide you with lists of papers on
+particular subjects, though. Pointers to some human-generated lists on
+particular topics can be found on the ACM TOG page
+http://www.acm.org/pubs/tog/BibLook.html. I welcome additions to the focussed
+bibliographies listed here (ACM TOG can also provide such bibliographies a
+home, if you do not have web space).
+
+--------
+
+Megahedron (RTNv10n2) lives on as Hypercosm:
+
+    http://www.hypercosm.com/
+
+This renderer is interesting in that it uses the trick (presented in a
+technical sketch at SIGGRAPH 99 by Abe Megahed, who runs Hypercosm) of
+reflecting rays at the vertices of polygons and sampling the reflection
+direction. The reflection color is then added to the local shade for the
+vertex and the resulting color blended as usual using Gouraud shading. It
+gives a rough, soft, sometimes funky reflection at the cost of just a few
+rays, allowing real-time reflection approximation. The same technique can be
+used for rough shadows; the major criteria affecting quality is the
+underlying mesh and its resolution on the screen.
+
+--------
+
+Ken Joy's On-Line Computer Graphics Notes and Geometric Modeling Notes pages
+have some valuable tutorials on a wide range of subjects. These are at:
+
+    http://graphics.cs.ucdavis.edu/GraphicsNotes/Graphics-Notes.html
+    http://graphics.cs.ucdavis.edu/CAGDNotes/CAGD-Notes.html
+
+(thanks to Craig Reynolds for pointing these out)
+
+--------
+
+Another Java raytracer, with source:
+
+    http://www.l-shaped.freeserve.co.uk/computing/lray/
+
+Me, I'm waiting for a ray tracer for the Palm PDA...
+
+--------
+
+Source for a Java Z-buffer class can be found here:
+
+http://home.wxs.nl/~ammeraal/grjava.html
+
+--------
+
+Stomp3D is a modeler written in pure Java. Find it at
+http://msnhomepages.talkcity.com/RedmondAve/stomp3d/download.html
+
+--------
+
+Worth a look is:
+
+http://www-personal.umich.edu/~mstock/pages/builder.html
+
+This site has some interesting 2D vortex, erosion, and other simulation
+demos, as well as some DEM converters and other tidbits.
+
+-------------------------------------------------------------------------------
+
+The Ups and Downs of Multithreaded Ray Tracing and Optimization, by John Stone
+    <johns@ks.uiuc.edu> http://www.ks.uiuc.edu/~johns/
+
+[John has one of the physically fastest ray tracing systems on the planet,
+see the end of the Introduction in RTNv11n1. -EAH]
+
+
+Basic Parallelism Issues:
+-------------------------
+
+It is well known that ray tracing is a highly parallelizable process. A naive
+ray tracer can be trivially parallelized by splitting up the image into
+chunks which are divided up evenly among processors, with each processor
+computing its own pixels entirely independently of the others. This simple
+approach will go a long ways in making a naive ray tracer run faster. With a
+more complex ray tracing system there are several trade-offs that have to be
+made:
+
+  1) The granularity of the parallel decomposition (size of the work chunks)
+     has a direct effect on the amount of load imbalance among the CPUs. The
+     larger the chunks, the more imbalanced the CPUs will tend to be. The
+     smaller the chunks, the more balanced the CPUs loads will be. A "pixel
+     cyclic" decomposition (each CPU traces every Nth pixel in the image)
+     yields the best load balance.
+
+  2) The granularity of the parallel decomposition also affects the spatial
+     coherence of consecutively traced rays on a CPU. Larger sized chunks of
+     work yield good ray coherence. The "pixel cyclic" decomposition yields
+     almost no ray coherence. Some classic ray tracing acceleration schemes
+     depend on ray coherence in order to function well (e.g. shadow cache)
+     Ray coherence has an additional side effect of promoting accesses to
+     already in-cache data structures, yielding better performance than random
+     access patterns.
+
+  3) The way that computed pixels are stored in memory can have a direct
+     effect on communications performance when gathering pixels together into
+     a final image buffer. When a CPU's finished pixels are stored in a
+     contiguous array, they are very easily transferred to their destination
+     using a minimal amount of communications, and no requirement for "packing
+     and unpacking" that data at source or destination. When groups of
+     finished pixels are not in contiguous memory, they have to be sent using
+     multiple communications calls, or by packing/unpacking at source and
+     destination. When pixels are stored in a strided manner, packing and
+     unpacking operations are necessary at both source and destination.
+
+
+Since CPU speeds have been increasing substantially every year but memory
+bandwidth and latency have not kept apace, floating point operation counts
+are no longer the dominant issue in writing high performance rendering
+software. This is especially true since great progress has been made in
+development of ray tracing efficiency schemes. Modern CPUs are highly
+pipelined, often having tens of instructions in-flight at any given time. As
+a result, it is becoming more important to avoid causing CPU pipeline stalls
+than to reduce overall operation count. Typical causes of such stalls are
+memory load/store operations, and compare/branch operations.
+
+Items 1, 2, and 3 from the above each have a relationship with the CPU issues
+in the previous paragraph. Balancing these issues is a major part of writing
+a fast ray tracer on parallel/multiprocessor computers. What combination of
+1/2/3 is best depends on what goals a ray tracer is attempting to meet. They
+are vastly different for a real-time oriented ray tracer than they are a
+normal ray tracer.
+
+
+The Challenges of Multithreading:
+---------------------------------
+
+Although the parallelism issues involved in ray tracing are well known, the
+vast majority of the work done in parallelizing ray tracing as been done on
+distributed memory parallel computers. Shared memory parallel computers offer
+a number of advantages over distributed memory machines, but they also present
+a number of challenges which need to be overcome in order to fully capitalize
+on these advantages.
+
+Some advantages of multithreading and shared memory hardware:
+
+  1) 90% of the data structures in a typical ray tracer can be shared by all
+     threads/processors, yielding a tremendous savings in memory. Most notable
+     candidates for sharing are the scene database, texture maps, and
+     volumetric data. (Most modern distributed memory ray tracers do not
+     partition the scene database across nodes, due to the high communications
+     costs and complexity involved in passing rays or objects between nodes.
+     Most implement by keeping an entire copy of the scene on each node.)
+
+  2) CPUs can synchronize and communicate with each other at tremendous
+     speeds. Typically these speeds are order(s) of magnitude faster than the
+     message passing hardware in distributed memory machines. It is easier to
+     parallelize code to very fine granularity on most shared memory machines.
+     This allows a ray tracer to extract parallelism that is difficult or
+     impossible to squeeze out of a typical distributed memory machine.
+
+
+Complications involved in multithreading and shared memory:
+
+  1) Most ray tracing algorithms were designed with sequential, non-reentrant
+     implementations in mind. Any algorithm can be adapted to yield correct
+     results in a multithreaded environment, but some perform very well, and
+     others perform very poorly. The main issue which determines performance
+     in a multithreaded environment is the way an algorithm uses memory,
+     especially memory which is shared by multiple threads.
+
+     The actual implementation issues vary considerably, including:
+
+       a) The use of unprotected static/global data. When multiple threads
+          access global/static data without the use of mutual exclusion
+          locks, the values of these data items become scrambled. Adding
+          mutex locks to protect such data items can cure the scrambling
+          problem, but may also result in poor performance if done naively.
+
+       b) The assumption that data structures will not be used in a reentrant
+          way. As with global data, shared data structures must also be
+          protected from unintentional concurrent use.
+
+       c) The use of non-reentrant, or otherwise unsafe library functions.
+          There are surprising number of commonly used library functions which
+          are not thread-safe. Library functions can encapsulate problems
+          such as a) and b), causing problems for code that uses them.
+          A simple example of this is the rand() implementation provided
+          by most C libraries. The rand() function contains internal static
+          data, and is not thread-safe. When use concurrently by different
+          threads, it yields unpredictable results ranging from incorrect
+          behavior to fatal crashing.
+
+  2) Straightforward modifications to existing data structures to allow
+     reentrancy (i.e. addition of mutex locks etc) typically yield performance
+     problems due to high lock contention etc. It often takes a slightly novel
+     approach to keep 90% of the benefits of the original sequential
+     non-reentrant code when going to a fully reentrant multithreaded
+     implementation.
+
+  3) The layout of data structures in memory may cause "hot spotting",
+     thrashing the machine's cache coherency hardware. Hot spotting
+     occurs when two unrelated data structures occupy nearby memory
+     addresses, close enough that they fall within the same cache line
+     (most SMPs), or memory page (some NUMA machines). When the "unrelated"
+     data structures are accessed concurrently by different CPUs, the cache
+     lines that contain the data structures thrashes back and forth between
+     the CPUs as writes occur to the two data structures.
+
+
+The Challenges of Real-Time Ray Tracing:
+----------------------------------------
+
+The design and implementation of a ray tracing system capable of attaining
+real-time rendering rates (15 fps or more) poses several unique challenges to
+the implementer. Some of these challenges actually simplify other design
+decisions quite a bit.
+
+  1) At a rate of 15 frames per second, there is no time to dynamically load
+     balance cpus to any great degree. By the time you figure out which
+     processors are doing too much work, and which ones are underutilized,
+     the frame is finished rendering. Since we're talking about real-time,
+     it's safe to assume that the next frame will be different (maybe quite
+     different) from the last one, so load balancing factors computed for a
+     previous frame probably aren't too helpful either. For real-time ray
+     tracing, we might as well throw out any ideas of load balancing, and
+     instead concentrate on reducing overhead in the code. The best
+     strategy for load balancing in this case is to come up with a good
+     static decomposition, balanced against ray coherency and other issues
+     mentioned previously.
+
+  2) In order to achieve high frame rates, the per-frame overhead in the ray
+     tracer itself must be minimized. Simple things like allocating image
+     buffers, allocating and clearing counter arrays for grid data structures,
+     these all add to the overhead which is incurred on every frame.
+
+  3) At 15 frames per second, there's no time for copying data around much.
+     The layout and format of the rendered pixels needs to be darn close to
+     its final form so that there's no need for various packing/unpacking of
+     strided pixel data from remote CPUs, and the number of messages sent
+     between CPUs should definitely be minimized.
+
+  4) Unlike a regular non-real-time ray tracer, overhead from simple processes
+     in the ray tracing algorithm can actually have a direct effect on the
+     maximum attainable rendering speed. Such processes include pixel value
+     range clamping and quantization, generation of primary rays according to
+     camera parameters, allocating or clearing arrays to store counters for
+     "mailboxes" used by grid acceleration schemes, etc.
+
+     Things that would never make the Top-10 list of time consuming pieces of
+     code in a regular ray tracer may actually show up as serious CPU-time
+     contenders in a real-time ray tracer when rendering scenes that are
+     simple enough to be rendered in real-time, or when using enough CPUs
+     to render more complex scenes at such a speed. A simple way to see this
+     effect is to render a "blank" screen. How fast can your favorite ray
+     tracer render an empty scene with no objects and no lights? It is
+     surprising how slow most ray tracers are before they are tuned for this.
+     Remember, we get less than 1/15th of a second to do everything.
+     Obviously, if a ray tracer can't effectively render a "blank" scene at
+     a very high rate, then there's no way it can render a real scene at
+     sufficient speed.
+
+     Once a ray tracer can render a "blank" scene at a very high rate, then
+     the next step is to start rendering progressively more complex scenes,
+     concentrating on finding unnecessary overhead when rendering very simple
+     scenes. There are often bits of overhead which can be eliminated by
+     pulling various initialization code outside of the per-frame sections of
+     code, and moved into a separate centralized initialization section.
+
+[For more information, publications, and John's source for a portable, high
+performance ray tracing system supporting MPI and threads, and with a front
+end that reads NFF, MGF, and AC3D, see his web site at
+http://www.ks.uiuc.edu/~johns/ - EAH]
+
+-------------------------------------------------------------------------------
+
+A Summary of Octree Ray Traversal Algorithms, by Vlastimil Havran
+    (havran@fel.cvut.cz)
+
+[Vlastimil is currently at the Department of Computer Science and
+Engineering, Faculty of Electrical Engineering, Czech Technical University,
+Prague]
+
+[What you are reading is a revised version of this article, something I
+normally do not do in the RTNews. The revision adds reviews of a few papers
+that the author did not have when the article was first published. - EAH]
+
+This is the revised version of the article including some papers missing in
+the original issue; date of revision: 9th May, 2000.
+
+In the previous RTNews, RTNv12n1, there was an informal discussion about
+octrees, especially about ray traversal algorithms for octrees. Since I have
+devoted some effort in the past to implementing and testing three octree ray
+traversal algorithms, I have decided to try to review these and other octree
+traversal algorithms for ray tracing in this article.
+
+There were at least 20 papers written about octrees and related stuff, in
+RTNews this topic was also heavily discussed. Last but one article about
+traversing octree that I am aware of was published more than three years ago,
+and (in this revised version) the last article was published in February 2000
+at WSCG conference. I have decided to cite these papers chronologically as
+they were published in order to estimate the contribution of these papers,
+when they appeared.
+
+Principally, creating an octree spatial data structure is nothing complex:
+
+_____________
+
+We start with the axis-aligned bounding box of the whole scene,
+consider this as a node of the octree at the depth zero. Subdivide it
+by three planes at all three axes; eight smaller bounding boxes are
+created, that are called octants. Now, recursion takes place for all
+the eight octants:
+
+1) Find out how many objects intersect the corresponding bounding box
+of the octant.
+
+2) If the number of objects is greater than a given threshold and the
+depth of the node in the octree is smaller than a maximum depth
+allowed, consider this octant as the scene and start from the
+beginning. Otherwise, mark this octant a leaf node, then assign it the
+objects intersecting with its bounding box (usually simply a linked
+list or an array of pointers to objects).
+
+
+
+The issue of when to declare the node as a leaf is usually called termination
+criteria, with the number of objects and the depth of the node are the
+variables usually discussed and used.
+
+So the octree is simple, is not it? So the question is what all the papers
+were about. Let us look at the articles.
+
+
+[1] A. S. Glassner: {Space Subdivision for Fast Ray Tracing},IEEE
+CG&A, pp.  15-22, October 1984.
+
+This is the first paper about octrees and tracing rays that is usually
+credited in citations. The traversal algorithm is simple: compute the point Q
+that is not currently inside the processed leaf-voxel, but in the neighbor
+voxel, and perform point-location for this point Q. The point location search
+always starts from the root of octree (for deeper hierarchies this may waste
+time). For memory representation Glassner used a hashing scheme over the
+octree node's unique IDs. At that time memory saving was an important issue,
+so storing empty nodes was avoided. This article is also considered
+historically the first one, that really brought significant speedup for ray
+tracing algorithm by a practical algorithm comparing with an O(N) one (the
+truth is that two octree & ray tracing article were published in 1983 in
+Japan by Fujimoto et al and Matsumato et al, but they were written in
+Japanese and thus were/are not commonly available). I implemented this
+traversal algorithm, results are below.
+
+
+[2] F. W. Jansen: {Data structures for ray tracing}, Data Structures for
+Raster Graphics, pp. 58-72, June 1985.
+
+The paper is a summary of the ray tracing algorithm and it also includes a
+section about spatial subdivision methods and ray traversal algorithms. It
+first outlines (on page 68) the recursive traversal algorithm for the
+hierarchy, that can be used both for BSP trees and octrees. No experimental
+results were presented.
+
+
+[3] Kaplan: {Space Tracing: A Constant Time Ray Tracer}, SIGGRAPH'85
+Tutorial on STAR in Image Synthesis, July 1985.
+
+This paper is actually about BSP trees, but is included since they can emulate
+octrees in a simple way by forcing the BSP construction to finish only at the
+depth of a multiple of three. My opinion is that the title of the paper is
+rather an exaggeration. The data are organized, unlike [1], in binary trees
+using pointers, but the author explicitly mentions the subdivision of the box
+into eight children. It also describes a sequential traversal algorithm
+similar to [1].
+
+
+[4] J. Sandor: {Octree Data Structures and Perspective Imagery},
+C&G Vol. 9, No. 4, pp.393-405, 1985.
+
+This paper deals with encoding objects into an octree, that are then stored
+as a double-linked list. It presents hidden surface removal based on ray
+casting; the objects used for experiments are terrain models and 3-D surfaces.
+The paper describes the possibility of rendering at different levels of
+detail, terminating the traversal octree based on user preference. In my
+opinion, it is probably one of the first papers concerning LOD for rendering,
+and the paper should likely be further considered as preceding height-field
+tracing and discrete ray tracing by Yagel et al.
+
+
+[5] A. Fujimoto et al: {ARTS: Accelerated Ray-Tracing System}, IEEE CG&A, Vol
+4, No. 4, 1986.
+
+This paper is actually about uniform grids (called SEADS), but it discusses
+the traversal algorithm for octrees, that gave rise to uniform grids. It
+follows from the paper that uniform grids were invented because the 3DDA
+traversal algorithm for octrees was not as efficient as the authors had
+expected, particularly the vertical traversal algorithm for the octree. They
+discussed the 3DDA octree traversal in detail and compare it with the
+uniform grid 3DDA traversal. For a presented scene the total rendering time
+of the ray tracing with octrees was about 3 times longer than the one for
+uniform grids, when using the octree traversal algorithm using Glassner [1].
+The time for a traversal step to the next voxel is for the uniform grid 3DDA
+13 times faster than for a octree traversal step using Glassner. The total
+rendering time and the time for one traversal step is sometimes
+misinterpreted by papers that follow.  
+
+
+[6] Q. Peng et al: {A Fast Tracing Algorithm Using Space Indexing
+Techniques}, Proceedings of Eurographics'87, pp. 11-23, 1987.
+
+This paper is about reduction of empty voxel encoding. It also discussed the
+intersection test of a triangle with a voxel. The authors claim that their
+traversal algorithm is faster in execution than [1][2], but they do not
+support it by any experimental results. In my personal view, the contribution
+of this paper is unclear.
+
+
+[7] A. S. Glassner: {Spacetime Ray Tracing for Animation}, IEEE
+CG&A, pp.  60-70, 1988.
+
+This paper touches on using a hybrid of BVH and octree together with the
+fourth dimension (time) when ray tracing animations. The details of octree
+traversal are not discussed.
+
+
+[8] J. Arvo: {Linear-Time Voxel Walking for Octrees}, RTNews2, March 1988.
+
+In this RTNews issue the author analyses the properties of the recursive
+octree traversal algorithm which actually was first published in [2] by
+Jansen. He uses BSP trees to explain the algorithm and especially for the
+analysis. Even if the concept of the traversal he reinvents is the recursive
+algorithm, the analysis is bright and it is an interesting brain exercise;
+you can try it. The originality and properties of this traversal method are
+discussed by Eric Jansen in the subsequent RTNews3 and later in RTNv5n1, also
+by Kelvin Sung in his Gems III article on BSP tree traversal and in RTNv5n2.
+
+
+[9] H. Samet: {Implementing Ray Tracing with Octrees and Neighbor
+Finding}, C&G Vol. 13, No. 4, pp.445-460, 1989.
+
+This paper introduced a special traversal method algorithm based on tables to
+neighbors. Since the results of this algorithm are presented below for SPD
+scenes, we briefly describe it: 1) compute the intersection point P of a
+given ray with the axis-aligned bounding box of the scene. 2) Move the point
+P inside the bounding box by epsilon along the ray path 3) Find out the voxel
+V of the octree containing P using point location. 4) Compute the exit point
+Q of the ray with this voxel. 5) Move Q by epsilon outside the voxel boundary
+along the ray path. 6) Ascend octree hierarchy until Q lies in the node
+pointed at. This is performed using several intricate tables for faces,
+edges, and vertices. 7) Descend down the octree until a node W of a size
+greater or equal to V, using only tables routing. 8) If the reached node W is
+not a leaf node of the octree, descend further using point location. 9)
+Compute the intersection test of a ray with the objects in the voxel. 10) If
+an intersection exist lying between P and Q, computation is over. 11)
+Otherwise, go to step 4).
+
+At first view this complicated algorithm is interesting in the sense it
+descends using point location if needed and ascends until some upper node is
+found. It does not precompute where this ascending will be in the hierarchy
+and in this way differs from recursive ray traversal. It also intelligently
+uses the information of where the ray exits the voxel to avoid point location
+when ascending and descending back to the same depth. 
+
+
+[10] H. Samet: {Application of Spatial Data Structures}, Addison-Wesley,
+Reading, Mass., 1990.
+
+Samet's book deals with spatial data structures. It discusses in depth the
+use of quadtrees and octrees in image representation, display methods, and
+other uses. It follows his first book on this topic, which is more
+theoretically based: Design and analysis of Spatial Data Structures, 1989,
+from the same publisher. Concerning octrees and ray tracing, it briefly
+surveys traversal methods (sequential, recursive, and neighbor finding). It
+covers in detail the neighbor-finding technique, it is the revised version
+of paper [9]. To this day both books are an invaluable source of information
+on spatial data structures.
+
+
+[11] J. Spackman and P. Willis: {The SMART Navigation of a Ray through
+an Oct-tree}, C&G, Vol. 15, No. 2, pp. 185-194, 1991.
+
+The paper presents a ray traversal algorithm of octrees represented with
+nodes and pointers using fixed-point arithmetic. It decomposes the
+traversal to its vertical and horizontal phase. Both these phases
+are theoretically examined within the design of the new traversal
+algorithm.  The paper also contains C-source code in the appendix,
+since the design of the traversal algorithm may be rather involved for
+the reader. No experimental measurements or comparison with
+previously published algorithms is presented, but the authors claim that
+their algorithm outperforms the one by Glassner[1].
+
+
+[12] K. Sung: {A DDA Octree Traversal Algorithm for Ray Tracing},
+Eurographics'91 proceedings, pp. 73-85, September 1991.
+
+In this paper the author uses a method similar to Fujimoto of a
+virtual uniform grid over the octree. Unlike Fujimoto's approach, the
+traversal is based on the smallest voxel size and is actually 3DDA
+uniform grid traversal algorithm. In each virtual voxel it is checked
+whether it is a new processed voxel using a smart hashing scheme,
+which was for me at the first view rather hard to understand. The
+necessary condition of this approach is that subdivision planes for
+each interior node have to lie in the middle of the current octant. He
+compares the algorithm with octree by Glassner [1], Arvo/Jansen
+[8],[2], and uniform grid [5]. The results are not striking, no
+significant difference in timings is reported (7-17%), for scene
+"mount" from SPD the proposed algorithm is even slower.
+
+
+[13] M. Agate, R. L. Grimsdale, and P. F. Lister: {The HERO Algorithm
+for Ray-Tracing Octrees}, Advances in Computer Graphics Hardware IV,
+pp. 61-73, Springer Verlag, 1991.
+
+The authors present an enumeration of the octree subcells that, together with
+their presented traversal algorithm, is suitable for hardware implementation.
+The basic idea is to construct the integer mask (0-7) according to the ray
+direction, compute the signed distance to all three subdivision planes, and
+after sorting these distances determine the order of the voxels to be
+traversed. The paper does not cover any experimental results (for the
+hardware or software implementation) or give a comparison with another
+traversal algorithm. Anyway, the algorithm is simple to implement and thus
+probably efficient.
+
+
+[14] B.S.S. Pradhan and A. Mukhopadkhyay: {Adaptive Cell Division For Ray
+Tracing}, C&G, Vol. 15, No. 4, pp. 549-522, 1991.
+
+This paper claims in the introduction that it is the combination of the
+octree and the uniform grid. I have found out after careful reading that it
+is actually about BSP trees, but they are traversed as octrees. The authors
+do not cite any paper about BSP trees (Kaplan, or MacDonald & Booth, or
+Subramanian & Fussell) and do not compare their results experimentally with
+another method. It is interesting that the octree traversal algorithm that
+was briefly outlined very much resembles the one later discussed in detail
+and published by Gargantini [14].
+
+
+[15] M.D.J. McNeill et al: {Performance of Space Subdivision Techniques},
+CGF, No. 11, Vol. 4, pp. 213-220, 1992.
+
+Authors from University of Sussex discuss the octree in the context of
+parallel execution on many processors. They deal mainly with the
+dynamic subdivision of the octree on the fly and show the statistics
+of the number of octree leaf nodes at different octree depths. They
+also provide their view of comparison among grids, octrees, and BSP
+trees to some extent using common sense, but without any experimental
+results. The interesting part is the use of the HERO [13] traversal
+algorithm for octrees that does not require the octants to have to be
+cubes. Surprisingly, they conclude the paper with the statement that
+the octree is a more efficient data structure than the BSP tree or grids.
+
+
+[16] P-K. Hsiung and R. Thibadeau: {Accelerating ARTS}, Visual
+Computer, Vol. 8, No. 3, pp. 181-190, Springer Verlag, 1992.
+
+This paper claims in the abstract that it presents a hybrid combination of
+uniform grid and octree, which is why I include this paper here. The authors
+discussed a method for when the node is subdivided into more than 8 voxels,
+namely 4^3 or 8^3 (though these should not be called octants any more). They
+call their method FINE-ARTS. For traversing between the voxels they used
+3DDA algorithm at the corresponding depth of a node. But stop reading and
+think now.................................................................
+This is actually the approach of recursive grid with limited resolution
+setting, is not it? The authors compare the results with Fujimoto's[4]
+octree and uniform grid. The authors do not cite the work of Jevans and
+Wyvill: {Adaptive voxel subdivision for ray tracing}, GI'89, pp. 164-172,
+1989, so their contribution is rather questionable.
+
+
+[17] E. Groeller: {Oct-tracing animation sequences}, SSCG'93,
+pp.96-101, 1993 (this conference has its page at
+http://www.uniba.sk/~sccg)
+
+Author presents an approach based on octrees when rendering multiple frames
+of a scene with moving CSG primitives. He uses some global CSG trees and
+local instances and for presented scenes he saves up to 75% of the rendering
+time. The paper is about temporal coherence when the viewpoint is fixed.
+Author in this paper follows the work of Glassner[7].
+
+
+[18] I. Gargantini and H.H. Atkinson: {Ray Tracing and Octree: Numerical
+Evaluation of the First Intersection}, CGF, Vol. 12, No. 4, pp. 199-210, 1993.
+
+In this paper the authors propose the recursive traversal algorithm, that has
+special encoding of octants that have to be traversed. Authors claim the
+improvement of execution speed from 32% to 62% over the Samet traversal
+code [9], when the number of voxels is huge. Since we implemented this
+traversal algorithm, we outline it briefly. We assume the signed distance to
+the entry point and exit point of the octant is known. First we compute the
+signed distances with all three subdivision planes. We sort these three
+signed distances in an ascending order. Then we disregard the signed
+distances outside the interval given by the entry point and the exit point.
+Next we identify the octants by the positioning of the intersection points
+with subdivision planes with regard to the other planes coordinates. The
+traversal is based on the knowledge that in an octree at most four octants
+can be pierced. These are induced by four intervals given by three
+intersection points inside the current octant plus entry and exit point (five
+points along the ray path gives four intervals). The authors also discuss the
+robustness of the traversal algorithm when the ray pierces the neighborhood
+of intersection of more than one splitting plane, at worst the middle point
+of the octree node.
+
+
+[19] R. Endl and M. Sommer: {Classification of Ray-Generators in
+Uniform Subdivisions and Octrees for Ray Tracing}, CGF, Vol. 13,
+No. 1, pp. 3-19, 1994.
+
+In this paper the authors give a comparative study of traversal techniques
+for uniform grids and octrees. The number of traversal methods they implement
+and test is eleven, so it is the most extensive study of octree traversal
+algorithms presented up to now. We only enumerate these traversal algorithms
+(called in the paper ray generators): a) Glassner[1] b) Peng[5] c) Samet[9]
+d) Part of Samet[9] algorithm devoted to the ascending/descending phase
+e) Sandor [4]. f) Rothe - in Dissertation of University in Karlsruhe,
+Germany, 1991, written in German. g) B. Froehlich and A. Johannsen - paper
+from 1988, also written in German. h) Sung[12] i) Fujimoto[5] j) Optimized
+traversal algorithm of Samet[9] k) two Endl's methods, which is also another
+hybrid of Samet[9] and Fujimoto[5], very similar to Fujimoto's octree
+traversal.
+
+From the paper follows that for two test scenes the (j) algorithm is probably
+the fastest. Paper concludes with stating that selection of the fastest
+acceleration method is scene dependent (uniform grid versus octree).
+
+
+[20] N. Stolte, R. Caubet: {Discrete Ray-Tracing High Resolution 3D Grids},
+WSCG'95, pp. 300-312, 1995. (WSCG conference is at http://wscg.zcu.cz)
+
+[This abstract was kindly provided by Nilo Stolte for the revised version
+of the summary.]
+
+This paper is about discrete ray tracing (originally coined by Yagel et al.),
+when the objects are represented not by surfaces or polygons, but by voxels
+in a huge 3D grid (let us say at least 256x256x256).
+
+This requires a significant amount of memory, so the authors attack the
+problem from the opposite direction, using octrees instead of 3D grids. The
+use of the octree is to reduce memory consumption and to efficiently skip
+empty space during ray traversal.
+
+They provide a two-step approach with a fixed-point 3DDDA algorithm using
+32 bits arithmetic (that loops without consulting cells while traversing
+octree empty regions), saving 50% of rendering time in comparison to Yagel's
+algorithm at the same resolution (256x256x256). The advantage increases at
+higher resolutions (512x512x512 or higher) where the 3DDDA reaches optimal
+times in each one of the two steps.
+
+The two-step traversal algorithm considers the octree as divided in two
+halves, the first half being from root until a given level (generally the
+half of the total number of levels) and the second step starting from the
+leaves of the first step until the actual octree leaves. The traversal
+algorithm is optimized using bit level operations and caches the octree
+traversed cells in a stack to search the voxels from the position of the
+last visited voxel, thus profiting from the ray-voxel coherency.
+
+
+[21] S. Worley and E. Haines: {Octrees and Whatnot}, RTNv8n2, May 16, 1995.
+
+This RTNews contribution discussed some unusual tricks for octrees and
+z-buffering using octrees. Better to read it now than have any comments.
+
+
+[22] N. Stolte, R. Caubet: {Discrete Ray-Tracing of Huge Voxel Space},
+Eurographics'95 (CGF), Vol. 14, No. 3, pp. 383-394, 1995.
+
+[This abstract was kindly provided by Nilo Stolte for the revised version
+of the summary.]
+
+This paper is an improved version of [20], with some additional ideas
+included. The 3DDDA initialization and two-steps transition algorithms
+not shown in [20] are given here. A  more detailed discussion of the
+technique is also given and a new 3DDDA algorithm (an improved version
+of the one in [20] but using 64 bit arithmetic) is presented. This
+algorithm is compared with Amanatides and Woo's algorithm in terms of
+number of operations, showing a better overall performance and better
+precision.
+
+
+[23] I. Gargantini and J.H.G. Redekop: {Evaluation Exact Intersection
+of an Octree with Full Rays using only Radix-Sort and meet
+operations}, Compugraphics'95, pp. 278-284, 1995.
+
+This paper deals with volume visualization as well. It uses the information
+about the viewpoint with regards to the bounding box of the whole scene,
+that is, 26 (3^3-1) regions. The visibility of octants is then predetermined
+by the priority order of octants for a given region, if rays hits the octree
+root node. This is then used for DDA to accelerate ray shooting, but
+unfortunately, no experimental results are reported. Similar approaches can
+be found in many visibility papers.
+
+
+[24] K. Y. Whang et al: {Octree-R: an adaptive octree for efficient
+ray tracing}, IEEE TVCG, Vol. 1, No. 4, pp. 343-349, 1995.
+
+This paper applies a cost function based on surface area heuristics to
+octree construction, precisely according to the paper of MacDonald and
+Booth ({Heuristics for Ray tracing Using Space Subdivision}, Visual
+Computer, pp.  153-165, Vol 6, No. 6, 1990). The idea is not to split
+the octree node to the eight voxels of the same size, but to position
+the plane(s) at the minimum of the cost function estimate. The cost
+function is computed independently at all three axes and the planes
+position is also selected independently. The paper does not introduce
+anything that is novel except the name Octree-R. It reports the
+results on scene gears, tetra, balls, and rings, the improvement is
+4-47% concerning the intersection tests. The authors neglect the
+rendering times in the comparison (this improvement is 17-37%). They
+do not mention which traversal algorithm they use and also they do
+not compare the results with the original paper of MacDonald and
+Booth. However, the results of this approach are below.
+
+
+[25] E. Reinhard, A.J.F. Kok, F.W. Jansen: {Cost Prediction in Ray
+Tracing}, EGWR'96, pp. 41-50, 1996.
+
+This paper is not about octrees, but it estimates the cost of a spatial
+hierarchy for a given scene, when the hierarchy is built. The issue is
+whether it is possible to predict the performance of a spatial data
+structure before ray tracing is started; this issue is important, especially
+for huge scenes. The first half of the paper is about any hierarchy, but the
+octree is taken as the example in the article at the second half. It is
+difficult to restate the results here in short, it is an interesting paper
+worth reading, also containing experimental data.
+
+
+[26] J. Revelles, C. Urena, M. Lastra: {An Efficient Parametric Algorithm
+for Octree Traversal}, pp. 212-219, WSCG'2000 conference, February 2000.
+
+
+This paper presents recursive ray traversal algorithm, similar to
+Gargantini's[18] and HERO's[13] algorithms. It differs in the way the order
+of voxels to be traversed is determined; it does not require any sorting of
+signed distance of ray intersection with subdivision planes, but it creates
+the automaton where the voxel order to be traversed is encoded. The input
+for the automaton is the plane, where the ray leaves the voxel. This
+information together with the ray direction (integer mask 0-7) already gives
+the voxel traversal order. The paper contains the pseudocode and the
+comparison with Samet[9], SametCorner[19], SametNet[19], and Gargantini[18].
+For three scenes the proposed algorithm has the best run-time. This paper I
+recommend to study, since it is the last paper published about ray octree
+traversal at present, and the published algorithm smartly uses the spatial
+information for ray traversal. The implementation is not difficult, it is
+much simpler than Samet's[9] one for example. As presented in the paper, it is
+designed for octrees with the mid-point subdivision approach, but I do not
+see the reason to be modified to work with Octree-R [24] subdivision. In my
+opinion, at the end the authors present unfair comparison with BSP trees
+based on the measurements results with one-type of regular scene (spheres in
+the grid), that is suitable for regular structures. They present the
+questionable opinion that octrees with full or nearly full leaves are more
+efficient than BSP trees.
+
+_____________
+
+I have not included papers which are specifically about BSP trees/k-d trees,
+since these are something rather different. The BSP tree can emulate the
+octree, but the octree cannot emulate the BSP tree. The cost for traversing
+this simulated octree using a BSP traversal algorithm can be higher or lower,
+but it very much depends on the implementation. I do not included on this
+list the papers which I have not read (mostly several master theses and
+technical reports), since they have been unavailable. These probably do not
+contain new stuff. I also omitted several papers which use octrees, but in
+which the octree is not a topic discussed in the paper.
+
+From of all the papers listed above we can observe these important issues:
+
+a) scheme for storing octree (hash table, linear scheme, node with pointers)
+b) construction algorithm for octree (in the midpoint of the current
+   node, the position with best cost estimate).
+c) traversal algorithm (sequential, recursive, neighbor-finding etc.)
+
+These three issues are usually somewhat intertwined. In the fall term
+of 1998 I decided to form my own opinion about octrees based on the
+implementation in the GOLEM rendering system developed at our
+department (http://www.cgg.cvut.cz/GOLEM).
+I therefore involved three undergraduate students in the fifth year
+for one term. Since I had only subset of the cited papers available at
+that time, after studying them I selected the following traversal
+algorithms to be implemented:
+
+OCTREE84-C) Glassner's classic paper [1], but implemented without a
+   hashing table, it is, using nodes with eight pointers to
+   descendants.
+
+OCTREE89-C) the paper of Samet[9], since the traversal code is intricate and
+   thus appealing.
+
+OCTREE93-C) the paper of Gargantini[18], since it was the latest one about
+   the traversal algorithm for octrees, and generally usable for ray tracing.
+
+OCTREE84-A) the approach of Octree-R[24] applied to [1].
+
+The octrees are built by subdividing the center of the box, except
+OCTREE84-A). My strong request to students was that the generated
+octrees had to be the same for all the source code, so the octree can
+be fairly compared based on ray tracing SPD scenes. The termination
+criteria was the maximum depth (also called level in some papers) of
+the node in the octree and the number of primitives in the node. For
+testing below I decided to take the maximum depth as variable 4,5,6,
+or 7. The node is not further subdivided when the number of objects is
+smaller than two.
+
+The students did their job, but later when I studied their source
+codes, I have found out that the coding itself is rather
+inefficient. Therefore, I completely rewrote their source codes, which
+took me about one man-month of programming, debugging, and testing. I
+improved the timing about three times in the best case, and thus I
+believe the source codes are now efficient enough. I also decided to
+include Octree-R for the paper of Gargantini OCTREE93-C), this is
+marked as:
+
+OCTREE93-A) the approach of Octree-R applied to [18].
+
+Letter C means center subdivision, letter A means adaptive, that is, cost
+estimate subdivision. The finding of the position of the splitting planes
+with minimum cost was performed exactly according to [20]: for the object
+and spatial medians and for N splitting planes equidistantly placed between
+these two medians, select the one with the minimum cost estimation (I used
+N=10). I would like to note that such a selection scheme does not always
+find the minimum cost estimate, since there can be a plane with better cost
+estimate (even a plane outside the median interval).
+
+Here, we present only the timings for ray tracing SPD scenes, for maximum
+depth allowed 4,5,6, and 7. The additional parameters (number of nodes,
+references to objects etc.) can be found at SPD site
+(http://www.acm.org/pubs/tog/resources/SPD/overview.html). The parameters
+reported are the same as for previous comparison paper about hierarchical
+grids, so the comparison between grids and octrees can be performed directly.
+Rendering times are in seconds, testing was conducted on Intel Pentium II,
+350 MHz, Linux, egcs-1.1.2, optimization switches -O2.
+
+
+                                    Method
+
+                             Maximum depth allowed
+
+                  4            5               6               7
+
+Scene                             OCTREE84-C
+
+ balls         626.60       227.70          121.80          102.30
+ fluid         218.00        61.68           30.50           22.85
+ gears         316.10       247.00          260.60          339.50
+ lattice        64.53        56.37           61.37           65.65
+ mount          38.70        32.40           34.76           41.19
+ rings         179.80       113.50          111.80          133.30
+ teapot         50.55        33.17           30.72           34.12
+ tetra           7.27         6.34            6.79            8.00
+ tree         2907.00      1537.00          805.30          338.20
+
+Scene                             OCTREE84-A
+
+ balls          45.74        35.40           36.88           42.18
+ fluid          25.31        20.74           21.88           24.29
+ gears         206.60       209.70          246.10          330.00
+ lattice        60.03        49.32           51.75           52.90
+ mount          32.49        28.34           30.23           36.33
+ rings         109.30        86.47           92.81          119.40
+ teapot         34.77        27.65           28.56           33.27
+ tetra           6.48         5.31            5.05            5.57
+ tree           94.44        44.67           35.33           34.84
+
+Scene                             OCTREE89-C
+
+ balls         627.00       206.30           97.29           67.47
+ fluid         222.40        60.33           28.34           18.80
+ gears         302.70       229.00          236.30          303.40
+ lattice        60.72        45.22           47.68           50.58
+ mount          35.96        28.27           28.90           32.07
+ rings         173.70       101.80           94.38          107.60
+ teapot         46.44        27.16           22.97           23.92
+ tetra           6.60         5.23            5.24            5.90
+ tree         2887.00      1510.00          769.70          288.50
+
+Scene                             OCTREE93-C
+
+ balls         624.90       218.60          116.20           91.43
+ fluid         223.50        61.33           29.87           22.00
+ gears         314.10       246.10          256.60          327.90
+ lattice        65.89        55.45           59.00           62.19
+ mount          39.72        32.71           34.42           39.12
+ rings         181.10       112.10          108.80          126.30
+ teapot         48.92        30.82           27.78           29.89
+ tetra           6.93         5.83            6.10            6.96
+ tree         2893.00      1501.00          785.80          317.60
+
+Scene                             OCTREE93-A
+
+ balls          47.05        33.80           34.99           38.86
+ fluid          24.51        19.57           20.16           21.74
+ gears         210.90       212.00          245.50          323.60
+ lattice        62.33        50.15           51.39           52.36
+ mount          33.76        29.24           30.51           35.16
+ rings         111.30        87.69           92.60          115.90
+ teapot         33.05        25.33           25.67           29.27
+ tetra           6.21         5.09            4.94            5.60
+ tree           91.05        40.57           30.88           29.90
+
+
+                Best timings achieved
+                =====================
+
+ Method/  OCTREE84-C  OCTREE84-A       OCTREE89     OCTREE93-C     OCTREE93-A
+ Scene
+
+ balls        102.30       35.40          67.47          91.43         *33.80*
+ fluid         22.85       20.74         *18.80*         22.00          19.57
+ gears        247.00     *206.60*        229.00         246.10         210.90
+ lattice       56.37       49.32         *45.22*         55.45          50.15
+ mount         32.40       28.34         *28.27*         32.71          29.24
+ rings        111.80      *86.47*         94.38         108.80          87.69
+ teapot        30.72       30.72         *22.97*         27.78          25.33
+ tetra          6.34        5.05           5.23           5.83          *4.94*
+ tree         338.20       34.84         288.50         317.60         *29.90*
+
+[I have put *'s around the fastest timing for each scene. -EAH]
+
+We can observe some interesting properties from the statistics:
+
+1) When using subdivision for center and for cost estimate subdivision, there
+   is local minimum for the maximum depth allowed, let us call it d_min. This
+   minimum is more apparent for center subdivision, the times for depths
+   d_min-1 and d_min+1 are relatively higher than for adaptive subdivision.
+   For some scenes (tree) the local minimum was not achieved for tested
+   maximum depth. This property was reported by several papers, starting with
+   Fujimoto[4]. The optimum maximum depth allowed always depends on the number
+   of objects and their distribution in the scene.
+
+2) The center subdivision always shows worse performance than cost estimate
+   subdivision for SPD scenes for the same maximum depth allowed. On the other
+   hand, the preprocessing time for cost estimate subdivision is usually
+   higher than for center subdivision.
+
+3) We cannot predict which of the subdivision methods will create a smaller
+   number of leaves. Usually, for densely occupied scenes (such as "balls" and
+   "gears") the cost estimate subdivision creates a smaller number of leaves,
+   and surprisingly, still outperforms center subdivision. For sparsely
+   occupied scenes (such as "tree") cost estimate subdivision creates a
+   significantly higher number of nodes and outperforms center subdivision
+   considerably. My opinion is that cost estimate subdivision adapts better to
+   the objects' distribution in the scene.
+
+4) The best timings do not differ too much for center subdivision and cost
+   estimate subdivision for some densely populated scenes. But for the same
+   depth, cost estimate subdivision is the indisputable winner. For sparsely
+   occupied scenes the cost estimate subdivision is of significantly better
+   performance.
+
+5) The three different traversal algorithms show different number of traversal
+   steps per ray, OCTREE84-C/A has always the largest number of traversal
+   steps reported. It is interesting that the difference in timings between
+   traversal algorithms for the same scene and subdivision approach do not
+   differ too much! The reason for that is the traversal step for OCTREE84-C/A
+   is of low computational cost, only three comparisons of coordinates per one
+   step. Surprisingly, for center subdivision the quickest implementation is
+   Samet OCTREE89/C. We suppose that the traversal tables are probably stored
+   in the cache, so a traversal using mostly these tables can be also very
+   quick. This does not correspond with [14] too much; OCTREE93 traversal cost
+   per one step is rather high. Current hardware eliminates to some extent the
+   performance dissimilarities for different traversal approaches. I can only
+   state that I, as the programmer, did my best.
+
+It is interesting to compare hierarchical grids with octrees. The performance
+of hierarchical grids and octrees constructed with cost estimate subdivision
+are very similar for SPD scenes! It is also valid for number of intersection
+tests per ray and number of traversal steps. The number of cells (interior
+nodes and leaves) generated by hierarchical grids is remarkably higher. It is
+caused by the construction of grids; when creating a grid subdivision, the
+number of cells is required to be near the number of objects in the grid
+bounding box. We should realize that the octree is only a special case of
+hierarchical grids with a specialized traversal algorithm. For SPD scenes
+measured and the parameters of statistics we can conclude that the
+hierarchies created by hierarchical grids and octrees are very similar and
+exhibit similar performances. Hierarchical grids are not so sensitive to the
+setting of parameters for grid construction as the setting of the termination
+criteria for octrees. It only supports the conclusion that these termination
+criteria for octrees, in spite of their intuitive and common sense, are not
+the most suitable for octree construction. It should be interesting to
+implement the termination criteria using the cost estimate as outlined by the
+article:
+
+K.R. Subramanian and D.S. Fussell: {Automatic Termination Criteria for Ray
+Tracing Hierarchies}, pp. 93-100, GI'91.
+
+The article only discusses the possibility of using such termination
+criteria, but no exact termination criteria are given and no experimental
+results were given in the article, though the cost of the hierarchy is
+elaborated well.
+
+It will be also interesting to compare octrees and hierarchical/uniform grid
+for huge scenes containing millions of polygons, since for such scenes
+hierarchical grids can have a real appeal. (I do not have available such
+scenes if you can provide any for this purpose, please, contact me by e-mail).
+
+
+What about the best efficiency scheme? It is related, but completely another
+problem. Now, we would like only to point out an article where the authors
+formally proved that the worst time complexity of ray shooting is O(log N),
+where N is the number of objects. See, please, L.S. Kalos and G. Marton:
+Analysis and construction of worst-case optimal ray shooting algorithms},
+C&G, Vol. 22, No. 2, pp. 167-174, 1998. Most of the methods developed by
+computer graphics people do not take worst-case complexity into account, but
+average case complexity is rather the main issue, even if not explicitly
+mentioned in the paper. It still holds that the methods aiming at the
+worst-case complexity that were developed by computational geometers exhibit
+practically unacceptable space complexity and preprocessing time complexity
+for common size scenes. At the present, I can only agree with the opinion
+that no acceleration technique has been proven to be prevalent for ray
+shooting problem for scenes with different number of objects and their
+distribution in the scene.
+
+Any comments are welcome, write to me at: havran@fel.cvut.cz
+
+[Full statistics for the test runs are linked to from the SPD web site:
+http://www.acm.org/tog/resources/SPD/overview.html. - EAH]
+
+-------------------------------------------------------------------------------
+
+Additional Octree Traversal Notes, by John Spackman, Erik Jansen
+    <F.W.Jansen@twi.tudelft.nl>, and Joel Welling <welling@psc.edu>
+
+John Spackman writes:
+
+I saw the "Octree Traversal and the Best Efficiency Scheme" thread in RTv12n2,
+as spawned by the question:
+
+  "I'm trying to find out about fast methods for traversing octrees. It
+  strikes me that you could use some kind of integer math method like a 3D
+  Bresenham algorithm to get a list of cells a ray intersects".
+
+As you point out Erik, my SMART algorithm adopts this approach; (though as I
+recall, Agate, Grimsdale and Lister's HERO approach is a variant on SMART
+rather than vice versa; I visited them at the University of Sussex in 1989).
+
+Anyway, I thought you might be interested in some code I knocked up back at
+Edinburgh University for the lazy evaluation 3-D projections of Quaternion
+Julia Sets, ray traced with SMART in integer arithmetic; see the attachment.
+This allows for some fast voxel addressing schemes during traversal. (The
+code only does orthographic views at the moment, but perspective would be
+easy enough ... )
+
+[I can send this code on to interested parties. -EAH]
+
+----
+
+Erik Jansen <F.W.Jansen@twi.tudelft.nl> replies:
+
+Thanks! Good to hear some more history. My answer to Ben was just a direct
+reaction. I did not check on the historical correct order. HERO and SMART
+just came to my mind as octree versions of the ARVO algorithm. Thanks for
+your code.
+
+BTW, I found the C&G article extremely difficult to read. It took me quite
+some time to find out that indeed the SMART algorithm was a top-down
+recursive algorithm. It was well hidden in the code. Looking backwards we all
+can see how we failed to sell our ideas in a clear and effective way.
+
+----
+
+John Spackman replies:
+
+Ah, that'll be because I found it extremely difficult to write .... ;^)
+
+I'm certainly more to blame than anyone for any confusion about the
+algorithm. Now that the WWW is here, I've uploaded some old slides which may
+clarify the approach; if you're interested, they're at
+http://homepages.tcp.co.uk/~john-mandy/smart/tree.ps
+
+--------
+
+Joel Welling <welling@psc.edu> writes:
+
+I just noticed your discussion in the latest Ray Tracing News (RTNv12n1). The
+original topic was a Bresenham-like octree traversal algorithm. Do you know
+about Spackman and Willis' "SMART" algorithm? (The Smart Navigation of a Ray
+Through an Oct-Tree by Spackman and Willis, Computers and Graphics Vol. 15,
+No. 2, pp. 185-194, 1991). It's quite elegant in C; there is a C++ version
+which is perhaps less simple but more general included in my VFleet volume
+renderer (http://www.psc.edu/Packages/VFleet_Home). It's probably not a huge
+win for ray tracing, as it comes from the days before cache coherence was the
+big issue, but it certainly fits the description of being an integer-based
+octree traversal algorithm.
+
+-------------------------------------------------------------------------------
+
+Z-buffer and Raytracing, by Sam Paik <paik@webnexus.com>
+    http://www.webnexus.com/users/paik/
+
+[from comp.graphics.algorithms]
+
+Nicolas Delalondre wrote:
+I'm trying ways to speed up my raytracing engine ( It uses currently a box
+automatic hierarchy). I've heard about the use of an modified Z-buffer can do
+it for primary rays. Is there someone to explain me how to use and implement
+such a Z-buffer? Can we use it in addition to bounding boxes?
+
+----
+
+Almost any rendering system can be used to do the eye rays. Two major
+variants:
+
+a) render, but instead of a color per pixel, use an object ID per pixel. The
+   object ID will be the first intersecting object. After "rendering" the
+   scene, you go back over the buffer and compute the scene where the eye ray
+   for each pixel is intersected with only one object, the one whose ID is in
+   the object ID buffer. This extends to light sources, you can go and compute
+   the scene from each light source's point of view (assuming you are talking
+   about a point light) and when you go to compute the ray tree, intersection
+   rays to the light can be looked up (approximated, really, due to the
+   sampling grid) instead of a full traversal of the object database.
+
+b) render, then use the z-buffer by discarding objects during the database
+   traversals that could not have an intersection with the depth in the
+   z-buffer. Same idea for the light sources--here it is called a shadow depth
+   buffer--and the usage is much easier than for the object ID buffer--just
+   compare the distance to the light with the correct pixel in the shadow
+   depth buffer, if it is further away then you conclude the point is in
+   shadow, if it is approximately equal or closer (due to sampling grid
+   errors) it is not shadowed by some other object.
+
+You can see that a good hybrid solution is to use an object ID buffer for the
+eye rays and a shadow depth buffer for the light rays.
+
+[I can comment further on method (a), having used Weghorst & Hooper's
+original code for it and implemented the algorithm again a few times over the
+years. This method is mostly a fine idea, but getting a *perfect* match
+between the Z-buffer and ray tracer is impossible. If the Z-buffer says
+there's a particular object at a pixel and the ray tracer doesn't hit it, no
+big deal, you just shoot a full eye ray. But you can get the opposite case:
+the Z-buffer says there's some object (or no object), but a full eye ray
+traced through the scene actually hits a closer object, while also hitting
+the Z-buffer's object further on. This is indetectable (short of shooting the
+full ray) and results in an incorrect pixel. Usually not a serious problem,
+but something to be aware of. One way to ameliorate the effect is to sample
+an area of the Z-buffer, e.g. get the IDs of a 2x2 or 3x3 area of the
+Z-buffer and test all these. -EAH]
+
+-------------------------------------------------------------------------------
+
+Ray Tracing Procedural & Parametric Surfaces, by Mark VandeWettering
+    <markv@pixar.com>, Stephen Westin <westin*nospam@graphics.cornell.edu>,
+    and Matt Pharr <mmp@graphics.stanford.edu>
+
+[from comp.graphics.algorithms]
+
+Anis Ahmad <anis@NOTHANKSsprint.com> wrote:
+
+What techniques are available for raytracing procedural/parametric surfaces?
+Tessellate to hell and find the intersection between the ray in question and
+the generated polygons?
+
+----
+
+It is usually preferable to stop just before the Stygian Gate, but yes, you
+are headed in the right direction. :-)
+
+I believe tessellation is in most cases the appropriate algorithm to choose.
+There are some refinements of course: tessellate only to the appropriate level
+based upon how large the patch is on the screen (to avoid linear artifacts in
+the image) and how strongly it is curved (to avoid missing highlights). You
+might also think about doing this tessellation in a lazy fashion (only
+tessellate when the first ray penetrates the bounding box of the parametric
+surface) and caching (saving and throwing away tessellations in a LRU
+fashion). The Toro crew at Stanford had some good ideas on how to make this
+work with their memory coherent raytracing research.
+
+It is hard to argue that any numerical ray-patch intersector has any
+advantages. If you'd like to try implementing one, the Nishita-Sederberg
+Bezier clipping algorithm is one to try (described in Siggraph 90 proceedings
+if memory serves) or Toth's 85 Siggraph paper on interval techniques. If you
+are clever, I believe you can combine ideas from the two techniques to
+develop one which might be superior to either.
+
+The main problem with any technique like this is that the work done by each
+algorithm amounts to essentially a patch split per iteration, usually with
+several iterations per ray. If a patch is hit many times by rays, you keep
+paying for patch splits. Any attempt to cache the split caches is very
+similar in spirit to just tessellating _anyway_, so why not just admit it up
+front, and make that work well....
+
+----
+
+Stephen Westin replies:
+
+Or, to put it another way, tessellation on demand with LRU caching is very
+similar in spirit to numerical iteration for direct intersection :).
+
+Seriously, finding an optimal tessellation for a parametric surface is a
+significant computational task, and for a trimmed surface, it hurts just to
+think about.
+
+----
+
+Matt Pharr writes:
+
+Hmm. I don't think that it's *that* terrible to find a good tessellation rate
+for a parametric surface. Can you elaborate on the problems you're thinking
+of?
+
+Granted, It's probably the hardest part about handling them in general (vs.
+bounding and evaluation, say), but the basic "project the control points onto
+the screen and use them to bound parametric rate of change approach" is
+pretty inexpensive computationally and works quite well.
+
+As for trimming, and ray traced patches, I've always been a fan of figuring
+out if the candidate hit point is actually trimmed out after an intersection
+with the non-trimmed patch is found, which is a (comparatively) easy 2d
+ray-tracing problem.
+
+----
+
+Stephen Westin replies:
+
+If you try hard to find the optimal tessellation (i.e. the minimum set of
+polygons that represent the surface to within a given tolerance), you wind up
+with some pretty funky mesh topology.
+
+
+> Granted, It's probably the hardest part about handling them in general
+> (vs. bounding and evaluation, say), but the basic "project the control
+> points onto the screen and use them to bound parametric rate of change
+> approach" is pretty inexpensive computationally and works quite well.
+
+Isn't that a conservative approach that finds the max tessellation rate
+needed and tessellates the whole patch to that level? I can imagine that it
+could over-tessellate pretty badly (which matters on large models) and
+possibly lead to cracking between patches.
+
+How does that work for secondary bounces, where there is no "screen" to
+project onto? Or, to put it better, the mapping to the screen is more complex
+and possibly ill-behaved (e.g. discontinuous).
+
+[I agree with Steve here; it's harder to tessellate well for bounce rays, and
+over-tessellation for the view is a serious problem, not a weird pathological
+case. I remember walking through a scene with a few NURBS spheres on a
+workstation which had NURBS support in microcode. At one point I thought the
+workstation had hung, but in fact it just happened to be close to one of the
+spheres and its image-based tessellation criterion caused it to generate
+millions of polygons. -EAH]
+
+
+> As for trimming, and ray traced patches, I've always been a fan of figuring
+> out if the candidate hit point is actually trimmed out after an
+> intersection with the non-trimmed patch is found, which is a
+> (comparatively) easy 2d ray-tracing problem.
+
+Assuming that relatively little is trimmed off, that's a reasonable approach.
+How does that work out with real-world CAD models? It's certainly possible
+that, say, 90% of the surface area is trimmed off, which would be a big
+efficiency hit.
+
+----
+
+and a last tidbit from Stephen Westin:
+
+As for procedurally-defined surfaces, the only reference that comes to mind
+is Kajiya's paper, "New techniques for ray tracing procedurally defined
+objects". It was presented at SIGGRAPH 83, and published in Computer Graphics
+v.17 #3. Besides laying out a method to calculate robust bounding volumes for
+fractal surfaces, he describes a really odd way to ray trace surfaces of
+revolution, involving bending space and using curved rays.
+
+-------------------------------------------------------------------------------
+
+Raytracing Gloss/Translucency, by Peter Eastman
+    <peastman@drizzle.stanford.edu>, Matt Pharr <mmp@graphics.stanford.edu>,
+    and Stephen Westin <westin*nospam@graphics.cornell.edu>
+
+[from comp.graphics.algorithms]
+
+I'm writing a ray tracer, and I want to implement gloss and translucency
+effects. In principle, this is simple - just use a random distribution to
+perturb the reflected rays about the pure specular direction, and same for
+the transmitted rays. As soon as I get into the details, though, it's not at
+all clear how to do this. I've gone through every book and article I can get
+my hands on, and none of them give any details, so I'm hoping someone on here
+can help me out.
+
+So to put it simply: what's the best way of finding the perturbed ray
+directions?  For consistency with the Phong shading model, I presumably need
+something that at least approximates a (cos)^n distribution?  Also, it needs
+to guarantee that no ray ever gets perturbed too far, so that a "reflected"
+ray actually comes out the other side of the surface. And finally, to make
+sure the rays are uniformly distributed, it would be nice if the full
+distribution can be broken up into bins, and I can specify which bin a given
+ray should be in.
+
+Simple, right? :)
+
+Any help would be *very* much appreciated!
+
+----
+
+Matt Pharr <mmp@graphics.stanford.edu> replies:
+
+A good place for starters is the book "Monte Carlo Methods: Volume I:
+Basics", by Kalos and Whitlock. Every hour you spend reading that will more
+than make up for itself in writing a good distribution ray tracer. Andrew
+Glassner's "Principles of Digital Image Synthesis" may also have some good
+material.
+
+In general, one wants to have an importance sampling function that maps two
+random numbers (u1, u2) (both between 0 and 1), to a direction on the
+hemisphere, given the outgoing direction. That importance sampling function
+should return both a new direction as well as the probability density
+function of choosing that angle (hello Kalos and Whitlock). The pdf roughly
+gives the probability of sampling that direction rather than some other
+direction.
+
+Now, the Monte Carlo estimate of the integral (which is what you're trying to
+compute) is:
+
+f_est = \Sum_0^n f(x_i) / pdf(x_i).
+
+That is, it's a sum over some number $n$ of samples of the function f() at
+point x_i, each one weighted by 1. / pdf(x_i). In this case your f() is
+equal to the value of the reflection function (e.g. Phong) times the incident
+light in direction x_i (trace a ray and recurse to compute that...)
+
+A simple importance sampling function just picks random directions on the
+hemisphere. This is a good importance function for a diffuse surface (as you
+might imagine), but it's lousy for a very glossy surface (since most of the
+directions that it chooses will be in directions where the reflection
+function is low).
+
+How to turn (u1,u2) into a direction on the hemisphere?  One option is to
+ignore (u1,u2) and pick random vectors in the unit square until you find one
+that's inside the unit sphere (exercise: show that you get a non-uniform
+distribution of directions if you just randomly pick a direction in the unit
+square.)
+
+Vector3 sampleHemisphere()
+{
+    Vector3 w;
+    do {
+        w.x = RandomDouble(-1., 1.);
+        w.y = RandomDouble(-1., 1.);
+        w.z = RandomDouble(0., 1.);
+    } while (w.length_squared() > 1. || w.z == 0.);
+
+    return w.hat(); // normalize w
+}
+
+In this case, the pdf is 1./2pi. (K&W is your friend).
+
+A better option is to map (u1,u2) to a direction. See Pete Shirley's web page
+for some techniques (I think these are in some Graphics Gems book):
+http://www.cs.utah.edu/~shirley/. Glassner probably discusses these, too. I
+just looked at Shirley's web page and was reminded of some good references:
+see in particular "Distribution Ray Tracing: Theory and Practice".
+
+If you have a more interesting reflection function (e.g. Phong), you're right
+about approximating the cos^n stuff. For Phong, it turns out that you can
+sample it exactly.
+
+What you want to do is use u1 to compute an offset from the reflected
+direction R (dtheta) and then u2 to compute a rotation around that offset
+(phi). These and some vector geometry give you the new direction.
+
+Computing dtheta (and the pdf) is the tricky part. The following function
+importance samples the Phong BRDF. I really urge you to save this message,
+read K&W and maybe some of Glassner and try to derive the importance sampling
+function on your own. Really, you'll be glad you did.
+
+// returns pdf and fills in *incoming. pdf is zero if *incoming is
+// below the horizon, in which case no ray should be traced and this
+// sample's value should be zero.
+double brdfSampleR(const Vector3 &outgoing, Vector3 *incoming,
+    double sample[2], double exponent)
+{
+    double costheta = pow(sample[0], 1. / (exponent+1));
+    double sintheta = sqrt(1 - costheta*costheta);
+    double phi = sample[1] * 2. * M_PI;
+
+    Vector3 R = reflection(outgoing);  // compute perfect reflection direction
+    Vector3 Ru, Rv;
+    R.coordSystem(&Ru, &Rv);    // computes two vectors Ru and Rv to form
+                                // a little coordinate system around R.
+
+    *incoming = R * costheta + sintheta * (sin(phi) * Ru + cos(phi) * Rv);
+
+    if (dot(*incoming, N) <= 0.)
+        return 0.;
+    else
+        return (exponent + 1) * pow(costheta, exponent);
+}
+
+The next fun thing to do with a distribution ray tracer is area lights; see
+"Monte Carlo Methods for Direct Lighting Calculations", again on Peter
+Shirley's papers web page.
+
+Hope this helps.
+
+----
+
+Stephen Westin <westin*nospam@graphics.cornell.edu> responds to Matt's
+posting:
+
+> A better option is to map (u1,u2) to a direction. See Pete Shirley's web
+> page for some techniques (I think these are in some Graphics Gems book):
+
+Gems III, pp. 80-83.
+
+
+> If you have a more interesting reflection function (e.g. Phong), you're
+> right about approximating the cos^n stuff. For Phong, it turns out that
+> you can sample it exactly.
+
+And also for Eric Lafortune's multi-cosine-lobe representation, which has at
+least a chance of physical accuracy. For most glossy surfaces, it's probably
+your best bet. A RenderMan shader implementing the function (but not random
+sampling of it) is available at
+http://www.graphics.cornell.edu/~westin/lafortune/lafortune.html.
+
+
+----
+
+Peter Eastman replies:
+
+Thanks a lot to both of you for your suggestions! I just glanced over
+Shirley's paper on distribution ray tracing, and it definitely looks like
+something I should spend some time with. Lafortune's model looks rather more
+elaborate than anything I was figuring on trying to do, but who knows - maybe
+I'll go crazy and give it a shot. I'll take a look at the other references
+you suggested too.
+
+I was thinking more about the problem last night, and came up with another
+idea for how to handle it. My idea was:
+
+1. Find a unit vector in the ideal specular direction.
+2. Add a random vector to it, chosen from a uniform spherical distribution.
+   I'd choose it using basically the method you posted - pick random x, y, and
+   z values, and throw them out if the length is too large. The radius of the
+   distribution (less than 1) determines how much reflections are blurred.
+3. Renormalize the resulting vector, and use it as the reflected ray direction.
+
+Does this sound reasonable?  It's certainly not "accurate" in any sense of
+the word, but it should be fast and look reasonably good.
+
+One other question for Matt. In the code you posted, I noticed that when your
+reflected ray direction ends up on the wrong side of the surface, you just
+return 0. Doesn't this cause reflections to get dimmer at grazing angles? Or
+do you repeatedly call the routine until it gives you a nonzero value? I was
+figuring that when this happens, I would just flip the reflection vector to
+the other size of the surface, so that the brdf would get squashed, but keep
+the same total intensity.
+
+Thanks a lot!
+
+----
+
+Matt Pharr replies:
+
+> Does this sound reasonable?  It's certainly not "accurate" in any sense of
+> the word, but it should be fast and look reasonably good.
+
+That would definitely work, in the sense of giving you pictures, but I think
+it would cause weird artifacts. As I understand the idea, you're effectively
+sampling uniformly over a cone around the reflection direction. Because the
+value of the effective reflection function doesn't fall off on the edges of
+the cone, the reflections might look weird. One possibility is to
+probabilistically reject rays, rejecting them more often the farther they get
+from the R vector. This is known as a rejection sampling technique.
+
+
+> One other question for Matt. In the code you posted, I noticed that when
+> your reflected ray direction ends up on the wrong side of the surface, you
+> just return 0. Doesn't this cause reflections to get dimmer at grazing
+> angles?
+
+You would call the function n times, n chosen ahead of time. For any times
+that the reflected ray is below the horizon, you just assign zero to that
+ray's result and still divide the sum of the samples by n when you're done.
+That flip trick, though done in certain widely used renderers, is wrong. An
+intuition is that you happen to have chosen to sample the function somewhere
+that it's zero. You'd like to avoid doing that, but when you do, that's
+relevant information and you should record it. As such, you take your lumps
+and record a zero result for the direction that you sampled.
+
+Another way of thinking about it: consider uniform sampling of a constant
+function over the hemisphere. You take n samples. Each sample has pdf 1/2pi
+(see previous message). Say the function is 2 everywhere. Your estimate of
+the function is 1/n * Sum_n (2 / (1./2pi)) = n/n * 4pi = 4pi. Now say that
+you're foolish and you pick random directions over the sphere. The pdf is
+1/4pi (surface area of unit sphere). The function is 2 for half of the
+directions you choose (on average) and 0 for the other half, making an
+average value of 1. Your estimate should be 1/n * Sum_n (0+2)*.5/(1/4pi) =
+n/n * 1./(1/4pi) = 4pi. If instead you reflected all of those rays to go in
+the up direction, you'd incorrectly get 8pi as an answer.
+
+There are a couple of different ways to think about sampling in a
+distribution ray tracer. One, which seems to be where you're starting from
+(and which is how Cook et al described the process originally), is to find a
+way to generate samples that mimic the distribution you're interested in. In
+effect, it's necessary to integrate the function and invert the integral to
+do this. Sometimes this isn't possible.
+
+Another way of thinking is in terms of importance sampling: you've got some
+function that is maybe equal to the function that you're trying to integrate
+or maybe just similar to it in some way. You figure out how to generate
+samples from that function's distribution. Then, when estimating the final
+value of the integral, you divide by a normalization factor that accounts for
+the distribution that you actually sampled from. This is a more general way
+of going about all this stuff, though it is more tricky and adds another
+layer or two to get right. But I'd urge you to try to head in that direction
+at some point in the future..
+
+----
+
+Peter Eastman responds:
+
+> That would definitely work, in the sense of giving you pictures, but I
+> think it would cause weird artifacts. As I understand the idea, you're
+> effectively sampling uniformly over a cone around the reflection direction.
+> Because the value of the effective reflection function doesn't fall off on
+> the edges of the cone, the reflections might look weird.
+
+Actually, it isn't uniform since the displacement vector can lie anywhere
+inside the sphere, not just on the surface. So the probability is maximum at
+the center of the cone (where the sphere is thickest), and goes to zero at
+the edges.
+
+
+> You would call the function n times, n chosen ahead of time. For any times
+> that the reflected ray is below the horizon, you just assign zero to that
+> ray's result and still divide the sum of the samples by n when you're done.
+
+Ah, I understand. So at each surface, you fire off many reflection rays to
+sample the distribution?  I'm following Cook's method of only firing one ray,
+and picking it according to the desired distribution. In this case, flipping
+the ray isn't really wrong, it just means that your rays have a different
+distribution at glancing angles.
+
+
+> There are a couple of different ways to think about sampling in a
+> distribution ray tracer. One, which seems to be where you're starting from
+> (and which is how Cook et al described the process originally), is to find
+> a way to generate samples that mimic the distribution you're interested
+> in. In effect, it's necessary to integrate the function and invert the
+> integral to do this. Sometimes this isn't possible.
+
+Shirley's Distribution Ray Tracing paper tells how to do that for a Phong
+distribution, so I can use his equations. Thanks again for telling me about
+that paper!
+
+-------------------------------------------------------------------------------
+
+Importance for Ray Tracing, by Per H. Christensen <per.christensen@acm.org>
+    www.aloha.net/~myandper/
+
+It recently occurred to me that there is no paper or text-book or other source
+(that I know of) that describes all the potential uses of importance to reduce
+render time for ray tracing. Importance, the adjoint of radiance, has been
+used since 1992 to speed up global illumination calculations. It is
+therefore surprising that importance is not widely used for ray tracing, where
+similar benefits can be gained: the calculations can often be sped up
+significantly if it is known a priori that the result does not have to be very
+accurate.
+
+
+1. Uses of importance in ray tracing
+
+[Hall83] describes how one can keep the fraction of contribution with each ray
+and use that to prune the ray tree -- if the result of tracing a ray is known
+a priori to contribute very little to the final image, there is no need to
+trace it. But this fraction (which is the same as importance) can also be
+used to speed up other parts of ray tracing:
+
+* Reducing the sampling of area light sources (for soft shadows).
+* Reducing the probability of sampling distant point lights (a la
+    [Shirley96]).
+* Reducing the number of rays in distribution ray tracing for glossy
+    reflection.
+* Reducing the computational effort spent in procedural texture shaders.
+* Reducing the effort to calculate normals (bump maps can be simplified or
+    skipped, geometric normals can replace interpolated normals).
+* Simplifying intersection tests if there is a level-of-detail representation
+    of geometry.
+
+There are probably several more uses than these. In addition, there are also
+some uses that are not strictly "traditional" ray tracing:
+
+* If the constant "ambient" term is replaced by a better approximation of soft
+    indirect illumination, then the computational effort spent on estimating
+    that indirect illumination can be reduced.
+* Increasing the step length in ray marching for volumes with participating
+    media.
+
+
+2. Examples
+
+If a part of a scene is seen through a semi-transparent object that lets 10%
+of the light through, the importance of the objects behind it is not small
+enough that we can avoid tracing transparency rays, but the illumination
+calculations can be simplified drastically using some or all of the
+simplifications listed above.
+
+In a scene containing water, glass, ice or similar refractive materials, each
+ray intersection will usually spawn both a reflection and a refraction ray.
+For multiple layers of these materials, there is an exponential explosion in
+the number of rays to be traced -- unless importance is used. The reflection
+coefficients depend on the angle of incidence (Fresnel's law), so some rays
+will have very little influence on the final image. If we keep an importance
+associated with each ray, we can not only avoid tracing many rays, we can also
+simplify calculations for many other rays that are somewhat important (not so
+unimportant that we can skip them altogether, but unimportant enough that we
+don't need to do all the calculations associated with them to full precision.)
+
+
+3. Why each color band should have separate importance
+
+In general, there should be a separate importance "band" for each color band.
+For an RGB color representation, there should be red, green, and blue
+importance. To see why, consider the following example: if an eye ray hits a
+yellow specular object, the importance of the reflection ray will have 0 blue
+component. If the reflection ray then hits a purely blue diffuse object
+illuminated by an area light source, we can skip all the illumination rays to
+sample that area light source since we know that none of the illumination of
+the blue object is going to show up in the rendered image.
+
+If we had only a scalar importance, we would assign the reflection ray
+importance 1, and the illumination of the blue object would be important
+enough to require tracing illumination rays to the area light source.
+
+
+4. Importance transport in ray tracing
+
+Importance is transported like light, but emitted from the eye. This means
+that eye rays have importance (1, 1, 1) and that at reflections and
+refractions, the importance should be multiplied by the reflection/refraction
+coefficients to get the importance for the new ray.
+
+Let's look at an example to see how this works in practice. If an eye ray hits
+a yellow ideal mirror, the reflection ray will get importance (1, 1, 0). If
+that reflection ray hits a 50% transmissive object, the refraction ray will
+have importance (0.5, 0.5, 0). If that ray hits a diffuse red surface with
+diffuse reflection coefficients (0.6, 0, 0), the illumination ray will have
+importance (0.3, 0, 0) -- assuming the light is a point light. For an area
+light sampled by n illumination rays, each illumination ray should have an
+importance smaller than (0.3, 0, 0), although probably not 1/n smaller.
+(Perhaps the square root of 1/n is good, I'm not sure.)
+
+
+5. Importance in global illumination
+
+Importance (also known as "potential" and "visual importance") is formally
+defined as the adjoint of radiance. It has been used in neutron transport
+theory since the late 1940s and was introduced to the global illumination
+community by Smits et al. in 1992 [Smits92] (they used it to speed up the
+calculation of a view-dependent radiosity solution). Since then, importance
+has been used to speed up calculations for many variations of both Monte Carlo
+and finite element methods. Please refer to the bibliography below for a list
+of some of the many papers about importance in global illumination.
+
+
+6. Why is importance not used more in ray tracing?
+
+Given that importance for ray tracing is conceptually simple, is simple to
+program, and gives significant speedups, the obvious question is: why don't
+more commercial and shareware ray tracers use it? In my opinion, it's a
+crying shame to burn CPU cycles computing results to an unnecessarily high
+accuracy.
+
+For ray tracers without a shader interface, all the importance book-keeping
+can be done behind the back of the user. For ray tracers with a shader
+interface, shader writers need to make their shaders exploit importance. This
+will increase their programming effort since each shader should be able to
+perform both simplified (approximate) calculation and full (accurate)
+calculation. But the pay-off in reduced rendering time is really worth it.
+And if some shader writers don't want to use importance (for whatever reason),
+they can just ignore it.
+
+I would be interested in a discussion on why importance is not more widely
+used in ray tracers. I would also like to hear some "battle stories" from
+people implementing importance in ray tracers. The way I see it, only the
+Blue Moon ray tracer has a good excuse not to use importance since it has to
+adhere to the Renderman specification. But what about all the other commercial
+and shareware ray tracers without importance? 
+
+[As a data point, the two ray tracers I developed for commercial products had
+Hall's importance method built in to them, turned on by default. It saves a
+number of nearly useless rays, and we never had complaints. That said, you
+usually have to be conservative in doing importance testing for a classical
+ray tracer. For example, you generally want to assign an importance to a
+particular material overall, so that you either generate all reflection rays
+or none of them - generating just a few of them could lead to noticeable
+artifacts. -EAH]
+
+
+References:
+
+[Hall83] Roy Hall, Donald Greenberg. "A testbed for realistic image
+synthesis". IEEE Computer Graphics and Applications, 3(8):10-20. November
+1983. Describes the use of importance (although it wasn't called that) to
+avoid tracing rays whose contribution to the image is insignificant.
+
+[Shirley96] Peter Shirley, Changyaw Wang, Kurt Zimmerman. "Monte Carlo
+techniques for direct lighting calculations". ACM Transactions on Graphics,
+15(1):1-36. January 1996. Describes how to sample only a subset of a large
+number of direct light sources without introducing bias.
+
+[Smits92]: see bibliography below.
+
+
+Annotated bibliography (very incomplete!) of papers on importance in global
+illumination:
+
+Larry Aupperle, Pat Hanrahan. "Importance and discrete three point
+transport". Fourth Eurographics Workshop on Rendering, pp. 85-94. June
+1993. Uses importance for a finite element method akin to hierarchical
+radiosity, but able to handle glossy reflections.
+
+Philippe Bekaert, Yves Willems. "Importance-driven progressive refinement
+radiosity". Rendering Techniques '95 (Proceedings of the 6th Eurographics
+Workshop on Rendering), pp. 316-325. Springer-Verlag, 1995. Extension of
+progressive refinement radiosity to use importance in the refinement
+criterion.
+
+Per Christensen, David Salesin, Tony DeRose. "A continuous adjoint
+formulation for radiance transport". Fourth Eurographics Workshop on
+Rendering, pp. 95-104. June 1993. Introduces exitant importance, a quantity
+closely related to the adjoint of radiance. Exitant importance is transported
+exactly like radiance, but emitted from the eye.
+
+Per Christensen, Eric Stollnitz, David Salesin, Tony DeRose. "Global
+illumination of glossy environments using wavelets and importance". ACM
+Transactions on Graphics, 15(1):36-71. January 1996. Uses importance for a
+finite element method simulating glossy global illumination.
+
+Philip Dutre, Yves Willems. "Importance-driven Monte Carlo light tracing".
+Fifth Eurographics Workshop on Rendering, pp. 185-194. 1995. Uses importance
+for photon tracing.
+
+Philip Dutre, Phillipe Bekaert, Frank Suykens, Yves Willems. "Bidirectional
+radiosity". Rendering Techniques '97 (Proceedings of the 8th Eurographics
+Workshop on Rendering), pp. 205-216. Springer-Verlag, 1997. Radiosity method
+using importance, avoids computing any radiosity for unimportant patches.
+
+Jeffrey Lewins. Importance, the Adjoint Function: the Physical Basis of
+Variational and Pertubation Theory in Transport and Diffusion Problems.
+Pergamon Press, 1965. Book with a detailed description of the use of
+importance in neutron transport theory. Mentions that the term "importance"
+was coined by Harry Soodak in 1948.
+
+Attila Neumann, Laszlo Neumann, Philippe Bekaert, Yves Willems, Werner
+Purgahofer. "Importance-driven stochastic ray radiosity". Rendering
+Techniques '96 (Proceedings of the 7th Eurographics Workshop on Rendering),
+pp. 111-122. Springer-Verlag, 1996. Uses importance to modulate patch
+sampling probabilities in order to reduce variance in important parts of the
+scene.
+
+Sumant Pattanaik, S. Mudur. "The potential equation and importance in
+illumination computations". Computer Graphics Forum, 12(2):131-136.
+Eurographics, 1993. Introduced importance for photon (particle) tracing.
+
+Sumant Pattanaik, S. Mudur. "Adjoint equations and random walks for
+illumination computation". ACM Transactions on Graphics, 14(1):77-102.
+January 1995. Describes importance for photon (particle) tracing.
+
+Ingmar Peter, Georg Pietrek. "Importance driven construction of photon maps".
+Rendering Techniques '98 (Proceedings of the 9th Eurographics Workshop on
+Rendering), pp. 269-280. Springer-Verlag, 1998. Traces "importance photons"
+from the eye position before tracing photons from the light source. Uses the
+importance to decide where to trace and store photons.
+
+Peter Schr"oder and Pat Hanrahan. "Wavelet methods for radiance computations".
+Fifth Eurographics Workshop on Rendering, pp. 303-311. June 1994. Uses
+importance for adaptive refinement of wavelet radiance.
+
+Brian Smits, James Arvo, David Salesin. "An importance-driven radiosity
+algorithm". Computer Graphics (Proceedings of ACM SIGGRAPH '92), pp. 273-282.
+July 1992. Seminal paper introducing the use of importance to global
+illumination; uses it to speed up hierarchical radiosity.
+
+Laszlo Szirmay-Kalos, Balazs Csebfalvi, Werner Purgathofer. "Importance
+driven quasi-random walk solution of the rendering equation". Computers &
+Graphics, 23(2):203-212. 1999.
+
+Eric Veach, Leonidas Guibas. "Bidirectional estimators for light transport".
+Fifth Eurographics Workshop on Rendering, pp. 147-162. Uses importance for
+bidirectional Monte Carlo simulation of global illumination.
+
+Eric Veach. "Non-symmetric scattering in light transport algorithms".
+Rendering Techniques '96 (Proceedings of the 7th Eurographics Workshop on
+Rendering), pp. 81-90. Springer-Verlag, 1996. Shows that if the bidirectional
+scattering distribution function BSDF is non-symmetric, importance is
+scattered differently than radiance. Examples are specular refraction and the
+use of shading normals different than geometric normals.
+
+-------------------------------------------------------------------------------
+
+Good Computer Graphics Books, by Brent McPherson <brentmc@microsoft.com>
+
+[From comp.graphics.algorithms; I liked his list, so I thought it worth
+reprinting. -EAH]
+
+Zachary Turner wrote:
+can anyone recommend some good books on computer graphics theory? Obviously
+there's the Foley book, can anyone recommend some other good ones?
+
+
+First, I would recommend anything by Alan Watt. I find his writing style very
+accessible and understandable. His book, "3D Computer Graphics" is more
+accessible to a beginner than Foley et al. IMHO. As a computer graphics
+programmer, I find the Graphics Gems books indispensable but they are not
+ideal tools for learning the theory.
+
+Here's a few good books from my bookshelf:
+
+- 3D Computer Graphics, Watt
+- Advanced Animation & Rendering Techniques, Watt & Watt
+- Computer Graphics: Principles & Practice, Foley et al.
+- Mathematical Elements for Computer Graphics, Rogers/Adams
+- Procedural Elements of Computer Graphics, Rogers
+- Computer Graphics Handbook, Mortenson
+- Computational Geometry in C, O' Rourke
+- Graphics Gems I-V - The Computer Image, Watt/Policarpo
+- Principles of Digital Image Synthesis I&II, Glassner
+- Splines for use in CG and Geometric Modeling, Bartels/Beatty/Barsky
+- Texturing and Modeling: A Procedural Approach, Ebert
+- A Trip Down the Graphics Pipeline, Blinn
+- Dirty Pixels, Blinn
+
+-------------------------------------------------------------------------------
+END OF RTNEWS

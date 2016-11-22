@@ -1,0 +1,1219 @@
+<!-- html version of Volume 2, Number 2 :  -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 2, Number 2</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>February 20, 1989</FONT>
+<P><FONT size=+1>Volume 2, Number 2</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1989, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art2">
+New Subscribers,
+</A></LI>
+by Turner Whitted, Mike Muuss
+<LI><A HREF="#art3">
+The BRL CAD Package,
+</A></LI>
+by Mike Muuss
+<LI><A HREF="#art4">
+New Book: _Illumination and Color in Computer Generated Imagery_,
+by Roy Hall,
+</A></LI>
+review by Eric Haines
+<LI><A HREF="#art5">
+Uniform Distribution of Sample Points on a Surface
+</A></LI>
+<LI><A HREF="#art6">
+Depth of Field Problem,
+</A></LI>
+by Marinko Laban
+<LI><A HREF="#art7">
+Query on Frequency Dependent Reflectance,
+</A></LI>
+by Mark Reichert
+<LI><A HREF="#art8">
+"Best of comp.graphics" ftp Site,
+</A></LI>
+by Raymond Brand
+<LI><A HREF="#art9">
+Notes on Frequency Dependent Refraction
+</A></LI>
+<LI><A HREF="#art10">
+Sound Tracing
+</A></LI>
+<LI><A HREF="#art11">
+Laser Speckle
+</A></LI>
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction,
+</A></FONT>
+by Eric Haines
+</H4>
+Whew, things have piled up!  I've culled my comp.graphics findings as best as
+I can.  I've decided to delete everything on the question of what a stored
+ray-trace image should be called ("image", "bytemap", "pixmap", and "bitmap"
+were some of the candidates).  It's a good question, but the discussion just
+got too long to recap.  Paul Heckbert's original posting advocated not using
+"bitmap" for 24 bit images, since "bitmap" denotes an M x N x 1 bit deep image
+in most settings.  It would be pleasant to get a consensus on acceptable usage,
+but it's also interesting to me from a `word history' standpoint.  If you have
+an opinion you'd like to share on this topic, pass it on to me and I'll
+summarize them (if possible, a 25 word or less summation would be nice).  My
+own is: "I'm a product of my environment.  Cornell used bitmap, Hewlett-Packard
+uses bitmap, so I tend to use `bitmap', `24 bit deep bitmap', or `image'".
+<P>
+I've put all the comp.graphics postings at the end, and the good news is that
+the queue is now empty.  The `Sound Tracing' postings to comp.graphics were many
+and wordy.  I've tried to pare them down to references, interesting questions
+that arose, and informed (or at least informed-sounding to my naive ears)
+opinions.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+New Subscribers
+</A></FONT>
+</H4>
+# Turner Whitted<BR>
+# Numerical Design Limited<BR>
+# 133 1/2 E. Franklin Street<BR>
+# P.O. Box 1316<BR>
+# Chapel Hill, NC 27514<BR>
+alias   turner_whitted  gould!rti!ndl!<A HREF="mailto:jtw@sun.com">jtw@sun.com</A><BR>
+<P>
+[this mail path is just a good guess - does gould have an arpa connection?
+The uucp path I use is:
+            turner_whitted      hpfcrs!hpfcla!hplabs!sun!gould!rti!ndl!jtw
+]
+<P>
+# Michael John Muuss -- ray-tracing for predictive analysis of 3-D CSG models<BR>
+# Leader, Advanced Computer Systems Team<BR>
+# Ballistic Research Lab<BR>
+# APG, MD  21005-5066<BR>
+# USA<BR>
+# ARPANET:  <A HREF="mailto:mike@BRL.MIL">mike@BRL.MIL</A><BR>
+# (301)-278-6678                [telephone is discouraged, use E-mail instead]<BR>
+alias   mike_muuss      <A HREF="mailto:mike@BRL.MIL">mike@BRL.MIL</A><BR>
+<P>
+I lead BRL's Advanced Computer Systems Team (ACST) in research projects in
+(a) CSG solid modeling, ray-tracing, and analysis, (b) advanced processor
+architectures [mostly MIMD of late], (c) high-speed networking, and (d)
+operating systems.  We are the developers of the BRL-CAD Package, which is a
+sophisticated Combinatorial Solid Geometry (CSG) solid modeling system, with
+ray-tracing library, several lighting models, a variety of non-optical
+"lighting" models (eg, radar) [available on request], a device independent
+framebuffer library, a collection of image-processing tools, etc.  This
+software totals about 150,000 lines of C code, which we make available in
+source form under the terms of a "limited distribution agreement" at no charge.
+<P>
+My personal interests wander all over the map, right now I'm fiddling with some
+animation software, some D/A converters for digital music processing, and some
+improvements to our network-distributed ray-tracer protocol.
+<P>
+Thanks for the invitation to join!
+<P>
+<PRE>
+        Best,
+         -mike
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+The BRL CAD PACKAGE
+</A></FONT>
+</H4>
+Short Summary
+<P>
+In FY87 two major releases of the BRL CAD Package software were
+made (Feb-87, July-87), along with two editions of the associated
+400 page manual. The package includes a powerful solid modeling
+capability and a network-distributed image-processing capability.
+This software is now running at over 300 sites. It has been
+distributed to 42 academic institutions in twenty states and four
+countries including Yale, Princeton, Stanford, MIT,USC, and UCLA.
+The University of California - San Diego is using the package for
+rendering brains in their Brain Mapping Project at the
+Quantitative Morphology Laboratory. 75 different businesses have
+requested and received the software including 23 Fortune 500
+companies including: General Motors, AT&T, Crysler Motors
+Corporation, Boeing, McDonnell Douglas, Lockheed, General
+Dynamics, LTV Aerospace & Defense Co., and Hewlett Packard. 16
+government organizations representing all three services, NSA,
+NASA, NBS and the Veterns Administration are running the code.
+Three of the four national laboratories have copies of the BRL
+CAD package. More than 500 copies of the manual have been
+distributed.
+<P>
+BRL-CAD started in 1979 as a task to provide an interactive
+graphics editor for the BRL target description data base.
+<P>
+Today it is &gt; 100,00 lines of C source code:
+<P>
+<PRE>
+        Solid geometric editor
+        Ray tracing utilities
+        Lighting model
+        Many image-handling, data-comparison, and other
+        supporting utilities
+</PRE>
+<P>
+It runs under UNIX and is supported over more than a dozen product
+lines from Sun Workstations to the Cray 2.
+<P>
+In terms of geometrical representation of data, BRL-CAD supports:
+<P>
+<PRE>
+        the original Constructive Solid Geometry (CSG) BRL data
+        base which has been used to model &gt; 150 target descriptions,
+        domestic and foreign
+</PRE>
+<P>
+<PRE>
+        extensions to include both a Naval Academy spline
+        (Uniform B-Spline Surface) as well as a U. of
+        Utah spline (Non-Uniform Rational B-Spline [NURB] Surface)
+        developed under NSF and DARPA sponsorship
+</PRE>
+<P>
+<PRE>
+        a facerted data representation, (called PATCH),
+        developed by Falcon/Denver
+        Research Institute and used by the Navy and Air Force for
+        vulnerability and signature calculations (> 200 target
+        descriptions, domestic and foreign
+</PRE>
+<P>
+It supports association of material (and other attribute properties)
+with geometry which is critical to subsequent applications codes.
+<P>
+It supports a set of extensible interfaces by means of which geometry
+(and attribute data) are passed to applications:
+<P>
+<PRE>
+        Ray casting
+        Topological representation
+        3-D Surface Mesh Generation
+        3-D Volume Mesh Generation
+        Analytic (Homogeneous Spline) representation
+</PRE>
+<P>
+Applications linked to BRL-CAD:
+<P>
+<PRE>
+o Weights and Moments-of-Inertia
+o An array of Vulnerability/Lethality Codes
+o Neutron Transport Code
+o Optical Image Generation (including specular/diffuse reflection,
+        refraction, and multiple light sources, animation, interference)
+o Bistatic laser target designation analysis
+o A number of Infrared Signature Codes
+o A number of Synthetic Aperture Radar Codes (including codes
+        due to ERIM and Northrop)
+o Acoustic model predictions
+o High-Energy Laser Damage
+o High-Power Microwave Damage
+o Link to PATRAN [TM] and hence to ADINA, EPIC-2, NASTRAN, etc.
+        for structural/stress analysis
+o X-Ray calculation
+</PRE>
+<P>
+BRL-CAD source code has been distributed to approximately 300
+computer sites, several dozen outside the US.
+<P>
+__________
+<P>
+To obtain a copy of the BRL CAD Package distribution, you must send
+enough magnetic tape for 20 Mbytes of data. Standard nine-track
+half-inch magtape is the strongly preferred format, and can be written
+at either 1600 or 6250 bpi, in TAR format with 10k byte records. For
+sites with no half-inch tape drives, Silicon Graphics and SUN tape
+cartridges can also be accommodated. With your tape, you must also
+enclose a letter indicating
+<P>
+<PRE>
+(a) who you are,
+(b) what the BRL CAD package is to be used for,
+(c) the equipment and operating system(s) you plan on using,
+(d) that you agree to the conditions listed below.
+</PRE>
+<P>
+This software is an unpublished work that is not generally available to
+the public, except through the terms of this limited distribution.
+The United States Department of the Army grants a royalty-free,
+nonexclusive, nontransferable license and right to use, free of charge,
+with the following terms and conditions:
+<P>
+1. The BRL CAD package source files will not be disclosed to third
+parties. BRL needs to know who has what, and what it is being used for.
+<P>
+2.  BRL will be credited should the software be used in a product or written
+about in any publication.  BRL will be referenced as the original
+source in any advertisements.
+<P>
+3.  The software is provided "as is", without warranty by BRL.
+In no event shall BRL be liable for any loss or for any indirect,
+special, punitive, exemplary, incidental, or consequential damages
+arising from use, possession, or performance of the software.
+<P>
+4.  When bugs or problems are found, you will make a reasonable effort
+to report them to BRL.
+<P>
+5.  Before using the software at additional sites, or for permission to
+use this work as part of a commercial package, you agree to first obtain
+authorization from BRL.
+<P>
+6.  You will own full rights to any databases or images you create with this
+package.
+<P>
+All requests from US citizens, or from US government agencies should be
+sent to:
+<P>
+<PRE>
+        Mike Muuss
+        Ballistic Research Lab
+        Attn: SLCBR-SECAD
+        APG, MD  21005-5066
+</PRE>
+<P>
+If you are not a US citizen (regardless of any affiliation with a
+US industry), or if you represent a foreign-owned or foreign-controlled
+industry, you must send your letter and tape through your Ambassador to
+the United States in Washington DC. Have your Ambassador submit the
+request to:
+<P>
+<PRE>
+        Army Headquarters
+        Attn: DAMI-FL
+        Washington, DC  20310
+</PRE>
+<P>
+Best Wishes,<BR>
+ -Mike Muuss<BR>
+<P>
+Leader, Advanced Computer Systems Team<BR>
+ArpaNet:  &lt;Mike @ BRL.ARPA&gt;<BR>
+<P>
+________
+<P>
+p.s. from David Rogers:
+<P>
+If you have the _Techniques in Computer Graphics_ book from Springer-Verlag the
+frontispiece was done with RT the BRL ray tracer.  It is also discussed in a
+paper by Mike Muuss in that book.
+<P>
+________
+<P>
+p.s. from Eric Haines:
+<P>
+Mike Muuss was kind enought to send me the documentation (some two inches
+thick) for the BRL package.  I haven't used the BRL software (sadly, it does
+not seem to run on my HP machine yet - I hope someone will do a conversion
+someday...), but the package looks pretty impressive.  Also, such things as the
+Utah RLE package and `Cake' (an advanced form of `make') come as part of the
+distribution.  There are also interesting papers on the system, the design
+philosophy, parallelism, and many other topics included in the documentation.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+_Illumination and Color in Computer Generated Imagery_
+</A></FONT>
+ by Roy Hall
+</H4>
+Springer-Verlag, New York, 1989, 282 pages
+<P>
+(article by Eric Haines)
+<P>
+Roy Hall's book is out, and all I'll say about it is that you should have one.
+The text (what little I've delved into so far) is well written and complemented
+with many explanatory figures and images.  There are also many appendices
+(about 100 pages worth) filled with concise formulae and "C" code.  Below is
+the top-level Table of Contents below to give you a sense of what the book
+covers.
+<P>
+The "C" code will probably be available publicly somewhere sometime soon.  I'll
+post the details here when it's ready for distribution.
+<P>
+<PRE>
+    1.0 Introduction                             8 pages
+    2.0 The Illumination Process                36 pages
+    3.0 Perceptual Response                     18 pages
+    4.0 Illumination Models                     52 pages
+    5.0 Image Display                           40 pages
+    Appendix I - Terminology                     2 pages
+    Appendix II - Controlling Appearance        10 pages
+    Appendix III - Example Code                 86 pages
+    Appendix IV - Radiosity Algorithms          14 pages
+    Appendix V - Equipment Sources               4 pages
+    References                                   8 pages
+    Index                                        4 pages
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Uniform Distribution of Sample Points on a Surface
+</A></FONT>
+</H4>
+[Mark Reichert asked last issue how to get a random sampling of a sphere]
+<P>
+    How to generate a uniformly distributed set of rays over the unit sphere:
+Generate a point inside the bi-unit cube.  (Three uniform random numbers in
+[-1,1].)  Is that point inside the unit sphere (and not at the origin)?  If
+not, toss it and generate another (not too often.)  If so, treat it as a vector
+and normalize it.  Poof, a vector on the unit sphere.  This won't guarantee a
+isotropic covering of the unit sphere, but is helpful to generate random
+samples.
+<P>
+--Jeff Goldsmith
+<P>
+________
+<P>
+    One method is simply to do a longitude/latitude split-up of the sphere (and
+randomly sampling within each patch), but instead of making the latitude lines
+at even degree intervals, put the latitude divisions at even intervals along
+the sphere axis (instead of even altitude [a.k.a. theta] angle intervals).
+Equal axis divisions give us equal areas on the sphere's surface (amazingly
+enough - I didn't believe it was this simple when I saw this in the Standard
+Mathematics Tables book, so rederived it just to be sure).
+<P>
+    For instance, let's say you'd like 32 samples on a unit sphere.  Say we
+make 8 longitude lines, so that now we want to make 4 patches per slice, and so
+wish to make 4 latitudinal bands of equal area.  Splitting up the vertical axis
+of the sphere, we want divisions at -0.5, 0, and 0.5.  To change these
+divisions into altitude angles, we simply take the arcsin of the axis values,
+e.g. arcsin(0.5) is 30 degrees.  Putting latitude lines at the equator and at
+30 and -30 degrees then gives us equal area patches on the sphere.  If we
+wanted 5 patches per slice, we would divide the axis of the unit sphere (-1 to
+1) into 5 pieces, and so get -0.6,-0.2,0.2,0.6 as inputs for arcsin().  This
+gives latitude lines on both hemispheres at 36.87 and 11.537 degrees.
+<P>
+    The problem with the whole technique is deciding how many longitude vs.
+latitude lines to make.  Too many longitude lines and you get narrow patches,
+too many latitude and you get squat patches.  About 2 * long = lat seems pretty
+good, but this is just a good guess and not tested.
+<P>
+    Another problem is getting an even jitter to each patch.  Azimuth is
+obvious, but you have to jitter in the domain for the altitude.  For example,
+in a patch with an altitude from 30 to 90 degrees, you cannot simply select a
+random degree value between 30 and 90, but rather must get a random value
+between 0.5 and 1 (the original axis domain) and take the arcsin of this to
+find the degree value.  (If you didn't do it this way, the samples would tend
+to be clustered closer to the poles instead of evenly).
+<P>
+    Yet another problem with the above is that you get patches whose geometry
+and topology can vary widely.  Patches at the pole are actually triangular, and
+patches near the equator will be much more squat than those closer to the
+poles.  If you would rather have patches with more of an equal extent than a
+perfectly equal area, you could use a cube with a grid on each face cast upon
+the sphere (radiosity uses half of this structure for hemi-cubes).  The areas
+won't be equal, but they'll be pretty close and you can weight the samples
+accordingly.  There are many other nice features to using this cast cube
+configuration, like being able to use scan-line algorithms, being able to vary
+grid size per face (or even use quadtrees), being able to access the structure
+without having to perform trigonometry, etc.  I use it to tessellate spheres in
+the SPD package so that I won't get those annoying clusterings at the poles of
+the sphere, which can be particularly noticeable when using specular
+highlighting.
+<P>
+--Eric Haines
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Depth of Field Problem
+</A></FONT>
+</H4>
+From: Marinko Laban via Frits Post      dutrun!<A HREF="mailto:frits@mcvax.cwi.nl">frits@mcvax.cwi.nl</A>
+<P>
+First an introduction. I'm a Computer Graphics student at the Technical
+University of Delft, The Netherlands. My assignment was to do some research
+about distributed ray tracing. I actually implemented a distributed ray tracer,
+but during experiments a very strange problem came up. I implemented
+depth-of-field exactly in the way R.L.  Cook described in his paper. I decided
+to do some experiments with the shape of the f-stop of the simulated camera.
+First I simulated a square-shaped f-stop. Now I now this isn't the real thing
+in an actual photocamera, but I just tried. I divided the square f-stop in a
+regular raster of N x N sub-squares, just in the way you would subdivide a
+pixel in subpixels. All the midpoints of the subsquares were jittered in the
+usual way. Then I rendered a picture. Now here comes the strange thing. My
+depth-of-field effect was pretty accurate, but on some locations some jaggies
+were very distinct. There were about 20 pixels in the picture that showed very
+clear aliasing of texture and object contours. The funny thing was that the
+rest of the picture seemed alright. When I rendered the same picture with a
+circle-shaped f-stop, the jaggies suddenly disappeared! I browsed through my
+code of the square f-stop, but I couldn't find any bugs. I also couldn't find a
+reasonable explanation of the appearance of the jaggies. I figure it might have
+something to do with the square being not point-symmetric, but that's as far as
+I can get. I would like to know if someone has experience with the same
+problem, and does somebody has a good explanation for it ...
+<P>
+<PRE>
+Many thanks in advance,
+Marinko Laban
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+Query on Frequency Dependent Reflectance
+</A></FONT>
+</H4>
+From: hpfcla!sunrock!kodak!supra!reichert@Sun.COM (Mark Reichert x25948)
+<P>
+Hello.
+<P>
+I'm adding fresnel reflectance to my shader.  I'm in need of data for
+reflectance as a function of frequency for non-polarized light at normal
+incidence.  I would like to build a stockpile of this data for a wide variety
+of materials.  I currently have some graphs of this data, but would much prefer
+the actual sample points in place of the curve-fitted stuff I have now. (not to
+mention the typing that you might save me).
+<P>
+If you have stuff such as this, and can share it with me, I would be most
+appreciative. Also, if there is some Internet place where I might look, that
+would be fine too.
+<P>
+Thanks,
+<P>
+Mark
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art8">
+"Best of comp.graphics" ftp Site,
+</A></FONT>
+by Raymond Brand
+</H4>
+A collection of the interesting/useful [in my opinion] articles from
+comp.graphics over the last year and a half is available for anonymous ftp.
+<P>
+It contains answers to most of the "most asked" questions from that period
+as well as most of the sources posted to comp.graphics.
+<P>
+Now that you know what is there, you can find it in directory pub/graphics
+at albanycs.albany.edu.
+<P>
+If you have anything to add to the collection or wish to update something
+in it, or have have some ideas on how to organize it, please contact me at
+one of the following.
+<P>
+[There's also a subdirectory called "ray-tracers" which has source code for
+you-know-whats and other software--EAH]
+<P>
+<PRE>
+--------
+Raymond S. Brand                 <A HREF="mailto:rsbx@beowulf.uucp">rsbx@beowulf.uucp</A>
+3A Pinehurst Ave.                <A HREF="mailto:rsb584@leah.albany.edu">rsb584@leah.albany.edu</A>
+Albany NY  12203                 FidoNet 1:7729/255 (518-489-8968)
+(518)-482-8798                   BBS: (518)-489-8986
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art9">
+Notes on Frequency Dependent Refraction
+</A></FONT>
+</H4>
+Newsgroups: comp.graphics
+<P>
+In article 3324@uoregon.uoregon.edu
+<A HREF="mailto:markv@pixar.com">markv@uoregon.uoregon.edu</A> (Mark VandeWettering) writes:<BR>
+< }<    Finally, has anyone come up with a raytracer whose refraction model<BR>
+< }< takes into account the varying indices of refraction of different light<BR>
+< }< frequencies?  In other words, can I find a raytracer that, when looking<BR>
+< }< through a prism obliquely at a light source, will show me a rainbow?<BR>
+< }<BR>
+< }     This could be tough. The red, green, and blue components of monitors<BR>
+< }only simulate the full color spectrum. On a computer, yellow is a mixture<BR>
+< }of red and green. In real life, yellow is yellow. You'd have to cast a<BR>
+< }large number of rays and use a large amount of computer time to simulate<BR>
+< }a full color spectrum. (Ranjit pointed this out in his article and went<BR>
+< }into much greater detail).<BR>
+< <BR>
+< Actually, this problem seems the easiest.  We merely have to trace rays<BR>
+< of differing frequency (perhaps randomly sampled) and use Fresnel's<BR>
+< equation to determine refraction characteristics.  If you are trying to<BR>
+< model phase effects like diffraction, you will probably have a much more<BR>
+< difficult time.
+<P>
+This has already been done by a number of people.  One paper by T. L. Kunii
+describes a renderer called "Gemstone Fire" or something.  It models refraction
+as you suggest to get realistic looking gems.  Sorry, but I can't recall where
+(or if) it has been published.  I have also read several (as yet) unpublished
+papers which do the same thing in pretty much the same way.
+<P>
+David Jevans, U of Calgary Computer Science, Calgary AB  T2N 1N4  Canada
+uucp: ...{ubc-cs,utai,alberta}!calgary!jevans
+<P>
+________
+<P>
+&gt;From: <A HREF="mailto:coifman@yale.UUCP">coifman@yale.UUCP</A> (Ronald Coifman)<BR>
+<P>
+&gt;&gt;     This could be tough. ...<BR>
+&gt;<BR>
+&gt;This is the easy part...<BR>
+&gt;You fire say 16 rays per pixel anyway to do<BR>
+&gt;antialiasing, and assign each one a color (frequency).  When the ray<BR>
+&gt;is refracted through an object, take into account the index of<BR>
+&gt;refraction and apply Snell's law.  A student here did that<BR>
+&gt;and it worked fine.  He simulated rainbows and diffraction effects<BR>
+&gt;through prisms.<BR>
+&gt;<BR>
+&gt;       (Spencer Thomas (U. Utah, or is it U. Mich. now?) also implemented <BR>
+&gt;the same sort of thing at about the same time.<BR>
+<P>
+  Yep, I got a Masters degree for doing that (I was the student Rob is refer-
+ring to).  The problem in modelling dispersion is to integrate the primary
+sample, over the visible frequencies of light.  Using the Monte Carlo integra-
+tion techniques of Cook on the visible spectrum yields a nice, fairly simple
+solution, albeit at the cost of supersampling at ~10-20 rays per pixel, where
+dispersive sampling is required.
+<P>
+  Thomas used a different approach.  He adaptively subdivided the spectrum
+based on the angle of spread of the dispersed ray, given the range of frequen-
+cies it represents.  This can be more efficient, but can also have unlimited
+growth in the number of samples.  Credit Spencer Thomas; he was first.
+<P>
+  As at least one person has pointed out, perhaps the most interesting aspect
+of this problem is that of representing the spectrum on an RGB monitor.  That's
+an open problem; I'd be really interested in hearing about any solutions that
+people have come up with.  (No, the obvious CIE to RGB conversion doesn't work
+worth a damn.)
+<P>
+  My solution(s) can be found in "A Realistic Model of Refraction for Computer
+Graphics", F. Kenton Musgrave, Modelling and Simulation on Microcomputers 1988
+conference proceedings, Soc. for Computer Simulation, Feb. 1988, in my UC Santa
+Cruz Masters thesis of the same title, and (hopefully) in an upcoming paper
+"Prisms and Rainbows: a Dispersion Model for Computer Graphics" at the Graphics
+Interface conference this summer.  (I can e-mail troff sources for these papers
+to interested parties, but you'll not get the neat-o pictures.)
+<P>
+  For a look at an image of a physical model of the rainbow, built on the
+dispersion model, see the upcoming Jan. IEEE CG&A "About the Cover" article.
+<P>
+<PRE>
+                                        Ken Musgrave
+</PRE>
+<P>
+<PRE>
+Ken Musgrave                    arpanet: <A HREF="mailto:musgrave@yale.edu">musgrave@yale.edu</A>
+Yale U. Math Dept.
+Box 2155 Yale Station           Primary Operating Principle:
+New Haven, CT 06520                             Deus ex machina
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art10">
+Sound Tracing
+</A></FONT>
+</H4>
+&gt;From: <A HREF="mailto:ph@miro.Berkeley.EDU">ph@miro.Berkeley.EDU</A> (Paul Heckbert)<BR>
+Subject: Re: Sound tracing<BR>
+[source: comp.graphics]<BR>
+<P>
+In article (<A HREF="mailto:239@raunvis.UUCP">239@raunvis.UUCP</A>) kjartan@raunvis.UUCP<BR>
+(Kjartan Pierre Emilsson Jardedlisfraedi) asks:<BR>
+&gt;  Has anyone had any experience with the application of ray-tracing techniques<BR>
+&gt; to simulate acoustics, i.e. the formal equivalent of ray-tracing using sound<BR>
+&gt; instead of light? ...<BR>
+<P>
+Yes, John Walsh, Norm Dadoun, and others at the University of British Columbia
+have used ray tracing-like techniques to simulate acoustics.  They called their
+method of tracing polygonal cones through a scene "beam tracing" (even before
+Pat Hanrahan and I independently coined the term for graphics applications).
+<P>
+Walsh et al simulated the reflection and diffraction of sound, and were able to
+digitally process an audio recording to simulate room acoustics to aid in
+concert hall design.  This is my (four year old) bibliography of their papers:
+<P>
+<PRE>
+    %A Norm Dadoun
+    %A David G. Kirkpatrick
+    %A John P. Walsh
+    %T Hierarchical Approaches to Hidden Surface Intersection Testing
+    %J Proceedings of Graphics Interface '82
+    %D May 1982
+    %P 49-56
+    %Z hierarchical convex hull or minimal bounding box to optimize intersection
+    testing between beams and polyhedra, for graphics and acoustical analysis
+    %K bounding volume, acoustics, intersection testing
+</PRE>
+<P>
+<PRE>
+    %A John P. Walsh
+    %A Norm Dadoun
+    %T The Design and Development of Godot:
+    A System for Room Acoustics Modeling and Simulation
+    %B 101st meeting of the Acoustical Society of America
+    %C Ottawa
+    %D May 1981
+</PRE>
+<P>
+<PRE>
+    %A John P. Walsh
+    %A Norm Dadoun
+    %T What Are We Waiting for?  The Development of Godot, II
+    %B 103rd meeting of the Acoustical Society of America
+    %C Chicago
+    %D Apr. 1982
+    %K beam tracing, acoustics
+</PRE>
+<P>
+<PRE>
+    %A John P. Walsh
+    %T The Simulation of Directional Sound Sources
+    in Rooms by Means of a Digital Computer
+    %R M. Mus. Thesis
+    %I U. of Western Ontario
+    %C London, Canada
+    %D Fall 1979
+    %K acoustics
+</PRE>
+<P>
+<PRE>
+    %A John P. Walsh
+    %T The Design of Godot:
+    A System for Room Acoustics Modeling and Simulation, paper E15.3
+    %B Proc. 10th International Congress on Acoustics
+    %C Sydney
+    %D July 1980
+</PRE>
+<P>
+<PRE>
+    %A John P. Walsh
+    %A Marcel T. Rivard
+    %T Signal Processing Aspects of Godot:
+    A System for Computer-Aided Room Acoustics Modeling and Simulation
+    %B 72nd Convention of the Audio Engineering Society
+    %C Anaheim, CA
+    %D Oct. 1982
+</PRE>
+<P>
+<PRE>
+Paul Heckbert, CS grad student
+508-7 Evans Hall, UC Berkeley           UUCP: ucbvax!miro.berkeley.edu!ph
+Berkeley, CA 94720                      ARPA: <A HREF="mailto:ph@miro.berkeley.edu">ph@miro.berkeley.edu</A>
+</PRE>
+<P>
+________
+<P>
+&gt;From: jevans@ucalgary.ca (David Jevans)<BR>
+Subject: Re: Sound tracing<BR>
+[source: comp.graphics]<BR>
+<P>
+Three of my friends did a sound tracer for an undergraduate project last year.
+The system used directional sound sources and microphones and a
+ray-tracing-like algorithm to trace the sound.  Sound sources were digitized
+and stored in files.  Emitters used these sound files.  At the end of the 4
+month project they could digitize something, like a person speaking, run it
+through the system, then pump the results through a speaker.  An acoustic
+environment was built (just like you build a model for graphics).  You could
+get effects like echoes and such.  Unfortunately this was never published.  I
+am trying to convince them to work on it next semester...
+<P>
+David Jevans, U of Calgary Computer Science, Calgary AB  T2N 1N4  Canada
+uucp: ...{ubc-cs,utai,alberta}!calgary!jevans
+<P>
+________
+<P>
+&gt;From: <A HREF="mailto:eugene@eos.UUCP">eugene@eos.UUCP</A> (Eugene Miya)<BR>
+<P>
+May I also add that you research all the work on acoustic lasers done at places
+like the Applied Physics Lab.
+<P>
+________
+<P>
+&gt;From: <A HREF="mailto:riley@batcomputer.tn.cornell.edu">riley@batcomputer.tn.cornell.edu</A> (Daniel S. Riley)<BR>
+Organization: Cornell Theory Center, Cornell University, Ithaca NY<BR>
+<P>
+In article (<A HREF="mailto:572@epicb.UUCP">572@epicb.UUCP</A>) david@epicb.UUCP (David P. Cook) writes:<BR>
+&gt;&gt;In article (<A HREF="mailto:7488@watcgl.waterloo.edu">7488@watcgl.waterloo.edu</A>) ksbooth@watcgl.waterloo.edu (Kelly Booth) writes:<BR>
+&gt;&gt;&gt;[...]  It is highly unlikely that a couple of hackers thinking about<BR>
+&gt;&gt;&gt;the problem for a few minutes will generate startling break throughs<BR>
+&gt;&gt;&gt;(possible, but not likely).<BR>
+<P>
+Ok, I think most of us can agree that this was a reprehensible attempt at
+arbitrary censorship of an interesting discussion.  Even if some of the
+discussion is amateurish and naive.
+<P>
+&gt;  The statement made above<BR>
+[...]<BR>
+&gt;  Is appalling!  Sound processing is CENTURIES behind image processing.<BR>
+&gt;               If we were to apply even a few of our common algorithms<BR>
+&gt;               to the audio spectrum, it would revolutionize the<BR>
+&gt;               synthizer world.  These people are living in the stone<BR>
+&gt;               age (with the exception of a few such as Kuerdswell [sp]).<BR>
+<P>
+On the other hand, I think David is *seriously* underestimating the state of
+the art in sound processing and generation.  Yes, Ray Kurzweil has done lots of
+interesting work, but so have many other people.  Of the examples David gives,
+most (xor'ing, contrast stretching, fuzzing, antialiasing and quantization) are
+as elementary in sound processing as they are in image processing.  Sure, your
+typical music store synthesizer/sampler doesn't offer these features (though
+some come close--especially the E-mu's), but neither does your vcr.  And the
+work Kurzweil music and Kurzweil applied intelligence have done on instrument
+modelling and speech recognition go WAY beyond any of these elementary
+techniques.
+<P>
+The one example I really don't know about is ray tracing.  Sound tracing is
+certainly used in some aspects of reverb design, and perhaps other areas of
+acoustics, but I don't know at what level diffraction is handled--and
+diffraction is a big effect with sound propagation.  You also have to worry
+about phases, interference, and lots of other fun effects that you can (to
+first order) ignore in ray tracing.  References, anyone?  (Perhaps I should
+resubscribe to comp.music, and try there...)
+<P>
+(off on a tangent: does any one know of work on ray tracers that will do things
+like coherent light sources, interference, diffraction, etc?  In particular,
+anyone have a ray tracer that will do laser speckling right?  I'm pretty naive
+about the state of the art in image synthesis, so I have no idea if such beasts
+exist.  It looks like a hard problem to me, but I'm just a physicist...)
+<P>
+&gt;No, this is not a WELL RESEARCHED area as Kelly would have us believe.  The<BR>
+&gt;sound people are generally not attacking sound synthesis as we attack<BR>
+&gt;vision synthesis.  This is wonderful thinking, KEEP IT UP!<BR>
+<P>
+Much work in sound synthesis has been along lines similar to image synthesis.
+Some of it is proprietary, and the rest I think just receives less attention,
+since sound synthesis doesn't have quite the same level of perceived
+usefulness, or the "sexiness", of image synthesis.  But it is there.
+Regardless, I agree with David that this is an interesting discussion, and I
+certainly don't mean to discourage any one from thinking or posting about it.
+<P>
+-Dan Riley (<A HREF="mailto:dsr@lns61.tn.cornell.edu">dsr@lns61.tn.cornell.edu</A>, cornell!batcomputer!riley)
+-Wilson Lab, Cornell U.
+<P>
+________
+<P>
+&gt;From: <A HREF="mailto:kjartan@raunvis.UUCP">kjartan@raunvis.UUCP</A> (Kjartan Pierre Emilsson Jardedlisfraedi)<BR>
+Newsgroups: comp.graphics<BR>
+<P>
+  We would like to begin by thanking everybody for their good replies, which
+will in no doubt come handy.  We intend to try to implement such a sound tracer
+soon and we had already made some sort of model for it, but we were checking
+whether there was some info lying around about such tracers.  It seems that our
+idea wasn't far from actual implementations and that is reassuring.
+<P>
+  For the sake of Academical Curiosity and overall Renaissance-like
+Enlightenment in the beginning of a new year we decided to submit our crude
+model to the critics and attention of this newsgroup, hoping that it won't
+interfere too much with the actual subject of the group, namely computer
+graphics.
+<P>
+<CENTER>
+                        The Model:
+</CENTER>
+<P>
+We have some volume with an arbitrary geometry (usually simple such
+as a concert hall or something like that). Squares would work just
+fine as primitives.  Each primitive has definite reflection
+properties in addition to some absorption filter which possibly
+filters out some frequencies and attenuates the signal.
+  In this volume we put a sound emitter which has the following
+form:
+<P>
+<PRE>
+        The sound emitter generates a sound sample in the form
+        of a time series with a definite mean power P.  The emitter
+        emits the sound with a given power density given as some
+        spherical distribution. For simplicity we tessellate this
+        distribution and assign to each patch the corresponding mean
+        power.
+</PRE>
+<P>
+At some other point we place the sound receptor which has the
+following form:
+<P>
+<PRE>
+        We take a sphere and cut it in two equal halves, and then
+        separate the two by some distance d.  We then tessellate the
+        half-spheres (not including the cut).  We have then a crude
+        model of ears.
+</PRE>
+<P>
+Now for the actual sound tracing we do the following:
+<P>
+<PRE>
+        For each patch of the two half-spheres, we cast a ray
+        radially from the center, and calculate an intersection
+        point with the enclosing volume.  From that point we
+        determine which patch of the emitter this corresponds to,
+        giving us the emitted power.  We then pass the corresponding
+        time series through the filter appropriate to the given
+        primitives, calculate the reflected fraction, attenuate the
+        signal by the square of the distance, and eventually
+        determine the delay of the signal.
+</PRE>
+<P>
+<PRE>
+        When all patches have been traced, we sum up all the time
+        series and output the whole lot through some stereo device.
+</PRE>
+<P>
+A more sophisticated model would include secondary rays and
+sound 'shadowing' (The shadowing being a little tricky as it is
+frequency dependent)
+<P>
+pros & cons ?
+<PRE>
+                                Happy New Year !!
+
+                                        -Kjartan & Dagur
+</PRE>
+<P>
+<PRE>
+Kjartan Pierre Emilsson
+Science Institute - University of Iceland
+Dunhaga 3
+107 Reykjavik
+Iceland                                 Internet: <A HREF="mailto:kjartan@raunvis.hi.is">kjartan@raunvis.hi.is</A>
+</PRE>
+<P>
+________
+<P>
+&gt;From: <A HREF="mailto:brent@itm.UUCP">brent@itm.UUCP</A> (Brent)<BR>
+Organization: In Touch Ministries, Atlanta, GA<BR>
+<P>
+    Ok, here's some starting points: check out the work of M. Schroeder at the
+Gottingen. (Barbarian keyboard has no umlauts!)  Also see the recent design work
+on the Orange County Civic Auditorium and the concert hall in New Zealand.
+These should get you going in the right direction.  Dr. Schroeder laid the
+theoretical work and others ran with it.  As far as sound ray tracing and
+computer acoustics being centuries behind, I doubt it.  Dr. S. has done things
+like record music in stereo in concert halls, digitized it, set up playback
+equipment in an anechoic chamber (bldg 15 at Murry Hill), measured the path
+from the right speaker to the left ear, and from the left speaker to the right
+ear, digitized the music and did FFTs to take out the "crossover paths" he
+measured.  Then the music played back sounded just like it did in the concert
+hall.  All this was done over a decade ago.
+<P>
+    Also on acoustic ray tracing: sound is much "nastier" to figure than
+pencil-rays of light.  One must also consider the phase of the sound, and the
+specific acoustic impedance of the reflecting surfaces.  Thus each reflection
+introduces a phase shift as well as direction and magnitude changes.  I haven't
+seen too many optical ray-tracers worrying about interference and phase shift
+due to reflecting surfaces.  Plus you have to enter vast world of
+psychoacoustics, or how the ear hears sound.  In designing auditoria one must
+consider "binaural dissimilarity" (Orange County) and the much-debated
+"auditory backward inhibition" (see the Lincoln Center re-designs).
+Resonance?? how many optical chambers resonate? (outside lasers?)  All in all,
+modern acoustic simulations bear much more resemblance to Quantum Mechanic
+"particle in the concert hall" type calculations than to simple ray-traced
+optics.
+<P>
+    Postscript: eye-to-source optical ray tracing is a restatement of
+Rayleigh's "reciprocity principle of sound" of about a century ago.
+Acoustitions have been using it for at least that long.
+<P>
+<PRE>
+        happy listening,
+</PRE>
+<P>
+<PRE>
+                brent laminack (gatech!itm!brent)
+</PRE>
+<P>
+________
+<P>
+<PRE>
+Reply-To: <A HREF="mailto:trantow@csd4.milw.wisc.edu">trantow@csd4.milw.wisc.edu</A> (Jerry J Trantow)
+Subject: Geometric Acoustics (Sound Tracing)
+Summary: Not so easy, but here are some papers
+Organization: University of Wisconsin-Milwaukee
+</PRE>
+<P>
+Some of the articles I have found include
+<P>
+Criteria for Quantitative Rating and Optimum Design on Concert Halls
+<P>
+<PRE>
+Hulbert, G.M.  Baxa, D.E. Seireg, A.
+University of Wisconsin - Madison
+J Acoust Soc Am v 71 n 3 Mar 83 p 619-629
+ISSN 0001-4966, Item Number: 061739
+</PRE>
+<P>
+Design of room acoustics and a MCR reverberation system for Bjergsted
+Concert hall in Stavanger
+<P>
+<PRE>
+Strom, S.  Krokstad, A.  Sorsdal, S.  Stensby, S.
+Appl Acoust v19 n6 1986 p 465-475
+Norwegian Inst of Technology, Trondheim, Norw
+ISSN 0003-682X, Item Number: 000913
+</PRE>
+<P>
+I am also looking for an English translation of:
+<P>
+Ein Strahlverfolgungs-Verafahren Zur Berechnung von Schallfelern in Raemem
+[ Ray-Tracing Program for the calculation of sound fields of rooms ]
+<P>
+<PRE>
+Voralaender, M.
+Acoustica v65 n3 Feb 88 p 138-148
+ISSN 0001-7884, Item Number: 063350
+</PRE>
+<P>
+If anyone is interested in doing a translation I can send the German copy that
+I have.  It doesn't do an ignorant fool like myself any good and I have a hard
+time convincing my wife or friends who know Deutch to do the translation.
+<P>
+A good literature search can discover plenty of articles, quite a few of which
+are about architectural design of music halls.  With a large concert hall, the
+calculations are easier because of the dimensions.  (the wavelength is small
+compared to the dimensions of the hall)
+<P>
+The cases I am interested in are complicated by the fact that I want to work
+with relatively small rooms, large sources, and to top it off low (60hz)
+frequencies.  I vaguely remember seeing a blurb somewhere about a program done
+by BOSE ( the speaker company) that calculated sound fields generated by
+speakers in a room.  I would appreciate any information on such a beast.
+<P>
+The simple source for geometric acoustics is described in Beranek's Acoustic in
+the chapter on Radiation of Sound.  To better appreciate the complexity from
+diffraction, try the chapter on The Radiation and Scattering of Sound in Philip
+Morse's Vibration and Sound ISBN 0-88318-287-4.
+<P>
+I am curious as to the commercial software that is available in this area.
+Does anyone have any experience they could comment on???
+<P>
+______
+<P>
+&gt;From: <A HREF="mailto:markv@uoregon.uoregon.edu">markv@uoregon.uoregon.edu</A> (Mark VandeWettering)<BR>
+Subject: More Sound Tracing<BR>
+Organization: University of Oregon, Computer Science, Eugene OR<BR>
+<P>
+I would like to present some preliminary ideas about sound tracing, and
+critique (hopefully profitably) the simple model presented by Kjartan Pierre
+Emilsson Jardedlisfraedi.  (Whew! and I thought my name was bad, I will
+abbreviate it to KPEJ)
+<P>
+CAVEAT READER: I have no expertise in acoustics or sound engineering.  Part of
+the reason I am writing this is to test some basic assumptions that I have made
+during the course of thinking about sound tracing.  I have done little/no
+research, and these ideas are my own.
+<P>
+KJEP had a model related below:
+<P>
+&gt;       We have some volume with an arbitrary geometry (usually simple such<BR>
+&gt;       as a concert hall or something like that). Squares would work just<BR>
+&gt;       fine as primitives.  Each primitive has definite reflection<BR>
+&gt;       properties in addition to some absorption filter which possibly<BR>
+&gt;       filters out some frequencies and attenuates the signal.<BR>
+<P>
+One interesting form of sound reflector might be the totally
+diffuse reflector (Lambertian reflection).  It seems that if
+this is the assumption, then the appropriate algorithm to use
+might be radiosity, as opposed to raytracing.  Several problems
+immediately arise:
+<P>
+<PRE>
+        1.      how to handle diffraction and interference?
+        2.      how to handle "relativistic effects" (caused by
+                the relatively slow speed of sound)
+</PRE>
+<P>
+The common solution to 1 in computer graphics is to ignore it.
+Is this satisfactory in the audio case?  Under what
+circumstances or applications is 1 okay?
+<P>
+Point 2 is not often considered in computer graphics, but in
+computerized sound generation, it seems critical to accurate
+formation of echo and reverberation effects.  To properly handle
+time delay in radiosity would seem to require a more difficult
+treatment, because the influx of "energy" at any given time
+from a given patch could depend on the outgoing energy at a
+number of previous times.  This seems pretty difficult, any
+immediate ideas?
+<P>
+&gt;         Now for the actual sound tracing we do the following:<BR>
+&gt;<BR>
+&gt;               For each patch of the two half-spheres, we cast a ray<BR>
+&gt;               radially from the center, and calculate an intersection<BR>
+&gt;               point with the enclosing volume.  From that point we<BR>
+&gt;               determine which patch of the emitter this corresponds to,<BR>
+&gt;               giving us the emitted power.  We then pass the corresponding<BR>
+&gt;               time series through the filter appropriate to the given<BR>
+&gt;               primitives, calculate the reflected fraction, attenuate the<BR>
+&gt;               signal by the square of the distance, and eventually<BR>
+&gt;               determine the delay of the signal.  <BR>
+&gt;<BR>
+&gt;               When all patches have been traced, we sum up all the time<BR>
+&gt;               series and output the whole lot through some stereo device.<BR>
+<P>
+One open question: how much directional information is captured
+by your ears?  Since you can discern forward/backward sounds as
+well as left/right, it would seem that ordinary stereo
+headphones are incapable of reproducing sounds as complex as one
+would like.  Can the ears be fooled in clever ways?
+<P>
+The only thing I think this model lacks is secondary "rays" or
+echo/reverb effects.  Depending on how important they are,
+radiosity algorithms may be more appropriate.
+<P>
+Feel free to comment on any of this, it is an ongoing "thought
+experiment", and has made a couple of luncheon conversations
+quite interesting.
+<P>
+Mark VandeWettering
+<P>
+________
+<P>
+&gt;From: <A HREF="mailto:ksbooth@watcgl.waterloo.edu">ksbooth@watcgl.waterloo.edu</A> (Kelly Booth)<BR>
+Organization: U. of Waterloo, Ontario<BR>
+<P>
+In article (<A HREF="mailto:3458@uoregon.uoregon.edu">3458@uoregon.uoregon.edu</A>) markv@drizzle.UUCP (Mark VandeWettering) writes:<BR>
+&gt;<BR>
+&gt;               1.      how to handle diffraction and interference?<BR>
+&gt;               2.      how to handle "relativistic effects" (caused by<BR>
+&gt;                       the relatively slow speed of sound)<BR>
+&gt;       <BR>
+&gt;       The common solution to 1 in computer graphics is to ignore it.<BR>
+<P>
+<PRE>
+Hans P. Moravec,
+"3D Graphics and Wave Theory"
+Computer Graphics 15:3 (August, 1981) pp. 289-296.
+(SIGGRAPH '81 Proceedings)
+</PRE>
+<P>
+[Trivia Question: Why does the index for the proceedings list this as starting
+on page 269?]
+<P>
+Also, something akin to 2 has been tackled in some ray tracers where dispersion
+is taken into account (this is caused by the refractive index depending on the
+frequency, which is basically a differential speed of light).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art11">
+Laser Speckle
+</A></FONT>
+</H4>
+&gt;From: <A HREF="mailto:jevans@cpsc.ucalgary.ca">jevans@cpsc.ucalgary.ca</A> (David Jevans)<BR>
+<P>
+In article (<A HREF="mailto:11390016@hpldola.HP.COM">11390016@hpldola.HP.COM</A>), paul@hpldola.HP.COM (Paul Bame) writes:<BR>
+&gt; A raytracer which did laser speckling right might also be able<BR>
+&gt; to display holograms.  <BR>
+<P>
+A grad student at the U of Calgary a couple of years ago did something like
+this.  He was using holographic techniques for character recognition, and could
+generate synthetic holograms.  Also, what about Pixar?  See IEEE CG&A 3 issues
+ago.
+<P>
+David Jevans, U of Calgary Computer Science, Calgary AB  T2N 1N4  Canada
+uucp: ...{ubc-cs,utai,alberta}!calgary!jevans
+<P>
+________
+<P>
+&gt;From: <A HREF="mailto:dave@onfcanim.UUCP">dave@onfcanim.UUCP</A> (Dave Martindale)<BR>
+Organization: National Film Board / Office national du film, Montreal<BR>
+<P>
+Laser speckle is a particularly special case of interference, because it
+happens in your eye, not on the surface that the laser is hitting.
+<P>
+A ray-tracing system that dealt with interference of light from different
+sources would show the interference fringes that occur when a laser light
+source is split into two beams and recombined, and the interference of acoustic
+waves.  But to simulate laser speckle, you'd have to trace the light path all
+the way back into the viewer's eye and calculate interference effects on the
+retina itself.
+<P>
+If you don't believe me, try this: create a normal two-beam interference fringe
+pattern.  As you move your eye closer, the fringes remain the same physical
+distance apart, becoming wider apart in angular position as viewed by your eye.
+The bars will remain in the same place as you move your head from side to side.
+<P>
+Now illuminate a target with a single clean beam of laser light.  You will see
+a fine speckle pattern.  As you move your eye closer, the speckle pattern does
+not seem to get any bigger - the spots remain the same angular size as seen by
+your eye.  As you move your head from side to side, the speckle pattern moves.
+<P>
+As the laser light reflects from a matte surface, path length differences
+scramble the phase of light traveling by slightly different paths.  When a
+certain amount of this light is focused on a single photoreceptor in your eye
+(or a camera), the light combines constructively or destructively, giving the
+speckle pattern.  But the size of the "grains" in the pattern is basically the
+same as the spacing of the photoreceptors in your eye - basically each cone in
+your eye is receiving a random signal independent of each other cone.
+<P>
+The effect depends on the scattering surface being rougher than 1/4 wavelength
+of light, and the scale of the roughness being smaller than the resolution
+limit of the eye as seen from the viewing position.  This is true for almost
+anything except a highly-polished surface, so most objects will produce
+speckle.
+<P>
+Since the pattern is due to random variation in the diffusing surface, there is
+little point in calculating randomness there, tracing rays back to the eye, and
+seeing how they interfere - just add randomness directly to the final image
+(although this won't correctly model how the speckle "moves" as you move your
+head).
+<P>
+However, to model speckle accurately, the pixel spacing in the image has to be
+no larger than the resolution limit of the eye, about half an arc minute.  For
+a CRT or photograph viewed from 15 inches away, that's 450 pixels/inch, far
+higher than most graphics displays are capable of.  So, unless you have that
+sort of system resolution, you can't show speckle at the correct size.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

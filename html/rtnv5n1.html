@@ -1,0 +1,892 @@
+<!-- html version of Volume 5, Number 1 :  -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 5, Number 1</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>July 10, 1992</FONT>
+<P><FONT size=+1>Volume 5, Number 1</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1991,1992, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction - SIGGRAPH roundtable, etc
+</A></LI>
+<LI><A HREF="#art2">
+New People, New Addresses, etc
+</A></LI>
+<LI><A HREF="#art3">
+Texturing Parameterization,
+</A></LI>
+by Haakan "Zap" Andersson
+<LI><A HREF="#art4">
+NuGrid results,
+</A></LI>
+by Mike Gigante
+<LI><A HREF="#art5">
+Recursive Ray Traversal,
+</A></LI>
+by Erik Jansen and Wim de Leeuw,
+Response by Kelvin Sung
+<LI><A HREF="#art6">
+Ideal Grid/Object Densities,
+</A></LI>
+by Dan Gehlhaar, Marc Andreessen
+<LI><A HREF="#art7">
+BVH Traversal Results,
+</A></LI>
+by Nicholas Wilt
+<LI><A HREF="#art8">
+Ray Tracing Roundup,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art9">
+Mail Based 3D File Server,
+</A></LI>
+by Bob Lindabury
+<LI><A HREF="#art10">
+Imagine That,
+</A></LI>
+by Steve Worley
+<LI><A HREF="#art11">
+Correct Roots for Torus Intersection,
+</A></LI>
+by Haakan "Zap" Andersson
+<LI><A HREF="#art12">
+Information on Taos Parallel Processor,
+</A></LI>
+by Paul Wain
+<LI><A HREF="#art13">
+The Glazing Trick,
+</A></LI>
+by Haakan "Zap" Andersson
+<LI><A HREF="#art14">
+Bug in Ray-Convex Polyhedron Intersector in Graphics Gems II,
+</A></LI>
+Eric Haines
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction
+</A></FONT>
+</H4>
+As usual, I've organized a "ray tracing roundtable" for this year's SIGGRAPH.
+This is about the sixth year we've done this.  What normally happens is 50-100
+people show up, we go around the room introducing ourselves and saying a
+little about what we've done lately, then break up and schmooz.  During intros
+you can say things like "RayShade hackers, let's meet in this corner of the
+room after intros" or somesuch.  It's fun to finally attach faces with names,
+and I've found it gets my brain hopping to exchange ideas with like-minded
+souls.
+<P>
+I've got a confirmed room in the Convention Center during the dead time
+between when the sessions end and the technical reception begins.  Look for an
+announcement of the location wherever "Special Interest Groups" are listed
+(I'll probably also list it under "Birds of a Feather", if like last year they
+don't post where the SIG meetings are located (The difference between a "BOF"
+and a "SIG" meeting?  All I know is I can reserve a room if it's a "SIG"
+meeting)).
+<P>
+Official time:  5:15-6:15 pm Thursday, July 30th
+<P>
+No guarantees about the shape of the table...
+<P>
+________
+<P>
+It's a bit embarrassing putting this issue together, reading the backlog of
+notes ending in phrases like "have a nice Xmas".  What can I say, I've been
+busy...  Culling through all this stuff has been pleasant.  There are some
+nice new ideas and interesting research results.  I've tried to minimize
+the endless stream of announcements about some of the new free software (geez,
+don't these people know the rest of us are trying to make money selling this
+stuff?!) by summarizing these in an article called "Ray Tracing Roundup".
+<P>
+By the way, if you're reading this on comp.graphics, don't ask to subscribe -
+"The RT News" is always posted to comp.graphics.  If you think you missed an
+issue, check the <A HREF="ftp://princeton.edu">princeton.edu</A> archive site (assuming you have FTP).
+<P>
+There is a lot more stuff to wade through, a few articles I want to pass by
+the authors again, etc, but for now I thought the amount of material was
+enough to make an issue.  Enjoy, and see you at SIGGRAPH.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+New People,
+</A></FONT>
+New Addresses, etc
+</H4>
+Steve Worley - solid texturing, ray tracing efficiency (mostly statistical)
+Apex Software Publishing
+405 El Camino Real #121
+Menlo Park CA 94025
+alias steve_worley   <A HREF="mailto:worley@cup.portal.com">worley@cup.portal.com</A>
+<P>
+I have become very involved in developing algorithms for ray tracing,
+especially in statistical analysis and "smart" ray-tree pruning and
+antialiasing.  I am also working on a method of "on-demand modelling" where a
+ray tracer might not even compute an object's polygons unless its bounding
+volume is pierced.  Thus, forests of millions of trees are possible with
+modest memory requirements:  distant trees are never even synthesized.  (This
+is one algorithm where true ray tracing is orders of magnitude faster than a Z
+buffer or scanline algorithm...  a scary thought!)  I have also written code
+for over 100 (!) Perlin-style solid textures as a commercial product.
+<P>
+________
+<P>
+<PRE>
+Manoj Patel           - stereo, motion blur
+Computer Science Department
+North Carolina State University
+Raleigh, N.C. 27695-8206
+(919) 515-3271
+e-mail: <A HREF="mailto:mp@adm.csc.ncsu.edu">mp@adm.csc.ncsu.edu</A>
+</PRE>
+<P>
+   I am a lowly graduate student at North Carolina State University.  I am
+working on combining motion blur and stereo (using a modified version of
+Rayshade).  My speciality is staying incredibly busy 24 hrs a day but getting
+very little done :-).
+<P>
+   I would be interested in hearing from people that have implemented motion
+blur.  I have been assuming that most people use supersampling or stochastic
+sampling (across about 8 - 24 time frames), but have few sources to back this
+up (<A HREF="ftp://i.e">i.e</A> please tell me know what is done "in the real world").
+<P>
+________
+<P>
+<PRE>
+Laurie Gerholz
+Unisys Corporation
+3199 Pilot Knob Road, M.S. F2L09
+Eagan, MN 55121
+(612) 687-2913
+<A HREF="mailto:vlad@moria.sp.unisys.com">vlad@moria.sp.unisys.com</A>
+</PRE>
+<P>
+My interests in computer graphics currently include ray tracing techniques,
+radiosity techniques, and methods of building scene models which can be
+rendered via ray tracing or radiosity.  I am currently working on a ray
+tracing scene renderer which will run under Microsoft Windows.  This is
+a part-time hobby effort, not at all related to my real job (too bad!).
+<P>
+________
+<P>
+<PRE>
+Antonio Costa - ray tracing, visualization, modeling
+INESC - North
+Largo Mompilher 22
+4100 Porto Portugal
+(351 2) 321006 ext. 329
+alias antonio_costa     <A HREF="mailto:a_costa@inescn.rccn.pt">a_costa@inescn.rccn.pt</A>
+# alias antonio_costa   <A HREF="mailto:acc@asterix.inescn.pt">acc@asterix.inescn.pt</A>
+</PRE>
+<P>
+I have developed my own extensible ray tracer in the past 2 years for U*ix,
+VMS, DOS and Transputers.  I am very interested in texturing (2D and 3D) and
+better ray tracing...  I am also doing some things in scientific visualization
+applied to medicine.  I am looking for a subject to start my PhD work next
+year.  [The ray tracer is at <A HREF="ftp://asterix.inescn.pt">asterix.inescn.pt</A> [192.35.246.17].  It does
+bicubic patches and other interesting things.  -EAH]
+<P>
+________
+<P>
+Brian Corrie
+<P>
+I am moving to the land down under, to work on the Visualization project at
+the Australian National University in Canberra.  Interests are the same as
+before, roughly, Realistic Rendering, Shading Languages, and Parallelization.
+They have some interesting hardware down there.  I will be working on a 128
+node Fujitsu AP1000, a MIMD parallel machine, parallelizing algorithms for
+visualization.  My new email address is <A HREF="mailto:bcorrie@cs.anu.edu.au">bcorrie@cs.anu.edu.au</A>.  G'day.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Texturing Parameterization,
+</A></FONT>
+by Haakan "Zap" Andersson (<A HREF="mailto:zap@lage.lysator.liu.se">zap@lage.lysator.liu.se</A>)
+</H4>
+<PRE>
+* Texturing:
+  I had a smelly problem with the AutoCAD entity "polyface" (= a bunch of
+  vertices and then a bunch of 3angles or 4angles referring to those by index)
+  since AutoCAD don't know a THING about texturing, it naturally does not
+  include texturing coordinates.  And by default, RayTracker did texture EACH
+  LITTLE POLYGON separately, yielding VERY ugly results.
+</PRE>
+<P>
+<PRE>
+  What I *did* was simple, but (semi) effective:  Look at ye normal vector.
+  If Z component is largest, texture in XY space, if Y is largest, texture in
+  XZ space, and if X is largest in YZ space!  That created good results as
+  long as the objects depicted were boxes and such, a brick texture was
+  correctly oriented automatically on the faces and so on.  Curved surfaces
+  Weren't that good (I used the pre-smoothing normal, so each polygon had its
+  own texturing at least, i.e.  no change of texture-space over the polygon).
+  But what the heck, it look quite alright, and actually, some of the funnier
+  effects of the weird texturing on curved objects looked like some kind of
+  inlaid material (like inlaid wood) or so where texture space just happened
+  to swap.  Perhaps you have thought of some similar criteria?
+</PRE>
+<P>
+[Indeed I have - I independently invented this method a few years back, and
+I've found it useful since then.  It's particularly good with textures like
+carpet or iron or suchlike:  there is little distortion and you usually can't
+see the discontinuities when things flip from one "face" to another.  Even
+when there is some "grain" to the texture, it usually looks pretty cool. - EAH]
+<P>
+<PRE>
+  Another idea I had was to average ALL NORMALS in any given polysurface,
+  weighted by area, and that would give me a "normal" to the objects "most
+  flat" orientation...  then one would texture in the plane orthogonal to that
+  normal...  The problem is that one most often want the X direction of a
+  texture to follow the horizon (not to get rotated textures)...
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+NuGrid results,
+</A></FONT>
+by Mike Gigante (<A HREF="mailto:mg@godzilla.cgl.citri.edu.au">mg@godzilla.cgl.citri.edu.au</A>)
+</H4>
+[Mike wrote of some results from his efficiency scheme:
+<P>
+<PRE>
+%A Michael Gigante
+%T Accelerated Ray Tracing Using Non-Uniform Grids
+%J Proc. of Ausgraph '90
+%C Melbourne, Australia
+%D Sept. 1990
+%P 157-63
+</PRE>
+<P>
+- EAH]
+<P>
+As I made the claim that NUgrid would "just take care of the SPD balls
+example automatically", I thought I would followup on some results.
+These results are using rayshade 4.0.2 for which we have added NUgrid
+as well as the existing uniform grid. This model is exactly as
+generated by your SPD program (i.e. no hand tweaking to remove the
+ground plane from the uniform grid):
+<P>
+<PRE>
+Resolution      Grid Method     NuGrid Method
+ 8                 7810.45         850.94
+10                 7083.62         647.86
+12                 7248.39         574.53
+14                 6477.42         518.00
+16                 5759.92         540.98
+18                 5000.04         532.22
+20                 4235.32         567.90
+22                 3407.94         558.84
+24                 2837.32         552.42
+26                 2544.04         537.30
+</PRE>
+<P>
+note that NUgrid is far less sensitive to grid resolution and of course is
+significantly faster :-)
+<P>
+NUgrid doesn't always win as much, but it is always less sensitive to picking
+the "right" grid resolution.
+<P>
+[I would like to see how these results compare to two level gridding (i.e.
+complicated objects get their own grid - see next article).  An automatic way
+to implement this is if a box contains more than so many items, nest a gridded
+box in it.  This is one of David Jevans & Brian Wyvill's ideas in "Adaptive
+Voxel Subdivision for Ray Tracing," Proceedings of Graphics Interface '89, and
+has evidently been used by Alias Inc, to good effect.  I wish some Rayshade
+hacker would go and implement this method (hint hint). - EAH]
+<P>
+[Mike wrote about some interesting new results he's found that's made NuGrid
+even faster; hopefully more about these in the next issue. - EAH]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Recursive Ray Traversal,
+</A></FONT>
+by Erik Jansen and Wim de Leeuw (<A HREF="mailto:fwj@dutidh.tudelft.nl">fwj@dutidh.tudelft.nl</A>), TU Delft
+</H4>
+Spatial subdivision for ray tracing has been a popular subject over the last
+decade, but unfortunately even after all these years there is still a lot of
+confusion about what can be considered the best spatial subdivision method
+(grid or adaptive) and the best ray traversal method (sequential, bottom-up, or
+recursive-top-down).  Regularly, papers appear with a comparison between a
+'new' (read:  a small variation on an existing) method and a standard (read:
+naive) method, being always favourable for the first one.
+<P>
+In the mid eighties I did some experiments comparing a sequential ray
+traversal with a recursive ray traversal for an adaptive spatial subdivision
+(Excell).  See also the discussion in the RTnews issues of March 26, 1988, Jim
+Arvo:  Linear-time voxel walking for BSP and April 7, 1988, Erik Jansen:  Re:
+Linear-time voxel walking for BSP.  I did not found a clear difference in
+performance between the two methods (of course the Excell spatial directory is
+an efficient index, not requiring any tree traversal), as reported in the
+above mentioned issues of RTnews.
+<P>
+Nevertheless, papers are still appearing in conferences and journals that
+either prove that recursive traversal is performing worse than a newly
+proposed method or performing better in those cases where it is proposed as a
+'new' method.  This is reason enough to do a new comparison.
+<P>
+As part of a master's thesis project Wim de Leeuw first did some experiments
+with recursive traversal on an adaptive binary space subdivision, comparing it
+with the DDAOCT algorithm of Kelvin Sung (Eurographics'91).  The DDAOCT did
+certainly not do better than the recursive method.  Furthermore the DDAOCT
+method is very sensitive to the size of the hashtable.
+<P>
+Secondly, the recursive traversal/adaptive subdivision algorithm was
+implemented in Rayshade, a very fast ray tracer using a sequential grid
+traversal algorithm (see RayShade 4.0 and RayShade timings in RTnews Nov, 20,
+1991).  The uniform grid method of RayShade is very sensitive to the 'teapot
+in stadium' problem and therefore RayShade provides a two-level grid option:
+a grid for the whole scene and separate grids for complex (sub)objects.  The
+adaptive subdivision/recursive ray traversal was implemented with only minor
+modifications to RayShade.  The recursive traversal uses a stack and
+alternatively halfs the xmin-xmax, ymin-ymax, zmin-zmax ray intervals as
+described in RTnews April 7, 1988.
+<P>
+Here are the timings for the two/three methods (in seconds on a HP-700):
+<P>
+model      grid   grid/subgrid  recursive/bsp
+<P>
+<PRE>
+balls      942       156        366
+gears      977       857       1155
+mount      214                  263
+rings      307       299        441
+teapot     154                  171
+tetra       39                   84
+tree      2246       134        278
+<A HREF="ftp://conf.room">conf.room</A>  283                  269
+</PRE>
+<P>
+Conf. room is the room by Greg Ward that was converted from Radiance format
+to RayShade format.
+<P>
+As you see RayShade (with two-level grid) is indeed very fast, mainly because
+of the additional raybox test within each cell.  The raybox test is not of
+much use in an adaptive subdivision because the cells are already tight
+enough.
+<P>
+Of course there are always ways to improve the recursive version by making
+larger changes to RayShade, for instance by inputting polygons not by their
+enclosing box but by their own extent, but that would not really change the
+picture, we think.
+<P>
+These have been our experiments so far.  The code for the recursive ray
+traversal and the model data of the conference room can be obtained from us
+(<A HREF="mailto:fwj@duticg.tudelft.nl">fwj@duticg.tudelft.nl</A>).
+<P>
+________
+<P>
+[I received this from Kelvin Sung (<A HREF="mailto:ksung@sherman.cs.uiuc.edu">ksung@sherman.cs.uiuc.edu</A>) in response.
+- EAH]
+<P>
+I hope I have pointed this out in comp.graphics, but in [the Eurographics '91]
+paper when I say "ARVO", I was referring to Glassner's Tree Coherence (Re:
+SIGGRAPH 90 Advance Ray Tracing Course Notes).  It was my mistake.  In that
+paper, I did not actually compare DDAOCT with Arvo's linear tree walking or
+Eric Jansen's recursive algorithm.  I agree 100% with their claim.  In fact,
+after realizing my mistake during the September Eurographics '91 conference,
+in November Peter Shirley and I implemented Arvo's linear tree walking
+algorithm and tested things out and we realized that linear tree walking is a
+better algorithm (independently from Jansen).  We wrote up our experience as a
+Gem (which will appear in Graphics Gems III, as "Ray Tracing with the BSP
+Tree").
+<P>
+[Note that the code for Graphics Gems III is now available on <A HREF="ftp://princeton.edu">princeton.edu</A> in
+pub/Graphics.  The book itself will be out at SIGGRAPH from Academic Press.]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Ideal Grid/Object Densities,
+</A></FONT>
+by Dan Gehlhaar, Marc Andreessen
+</H4>
+[From the Rayshade mailing list]
+<P>
+From Dan:
+<P>
+I am rendering large protein structures with overlapping reflective spheres.
+'Engridding' the primitives speeds the rendering considerably, as might be
+expected for a big conglomerate of 2000 spheres.  My choice of grid size has
+been made mostly through trial-and-error, though.
+<P>
+So here's my question:  Assuming a near-uniform density of primitives, what
+primitive/voxel ratio will result in optimal performance?  Or does it vary a
+lot from one case to another?  My trials (however limited) suggest a ratio of
+about 4 or 5 primitives/voxel.  Does anyone have any suggestions?
+<P>
+From Marc:
+<P>
+That's about what I settled on a while back (again through trial and
+error), something like a 10x10x10 grid for 5000 spheres.  It would
+sure be nice if Rayshade could compute an optimum grid size based on
+primitive distribution.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+BVH Traversal Results,
+</A></FONT>
+by Nicholas Wilt (<A HREF="mailto:npw@coos.dartmouth.edu">npw@coos.dartmouth.edu</A>)
+</H4>
+[excerpts from email by Nicholas]
+<P>
+I just finished an undergraduate thesis in ray tracing.  I implemented a
+ray tracer in C++ and compared a number of optimization strategies.  I
+thought you might be interested in some of the results I ran into.
+<P>
+<PRE>
+    - Bounding volume hierarchies generated by the technique of Goldsmith and
+      Salmon yield huge speedups over naive ray tracing (obviously).  I'd
+      guess 10-20X.
+</PRE>
+<P>
+<PRE>
+    - You go slower if you combine with Snyder-Barr ray boxes because the ray
+      box rejection rate is small (45%) and you have to recompute the ray box
+      every time the ray hits a bounding volume (which is frequently when the
+      BVH was generated automatically).
+</PRE>
+<P>
+<PRE>
+    - Kay-Kajiya BVH traversal reduces the number of intersections, but not by
+      much in my experience.  In fact, only the Sphereflake image (modified
+      from the SPD) saw a big enough reduction for the priority queue to be
+      worthwhile.  A 20% reduction in intersections resulted in a <4% speedup
+      over the naive traversal.  In the other test images, naive traversal was
+      faster.
+</PRE>
+<P>
+[I asked what "Snyder-Barr" boxes were in this context. -EAH]
+<P>
+Snyder-Barr boxes:
+<P>
+When you hit a bounding volume, enclose the ray's traversal of the bounding
+volume in a "ray box."  This is an axis-aligned bounding box using the two
+points where the ray enters and exits the bounding box.  An object cannot
+intersect the ray unless its bounding box intersects the ray box.  If the
+bounding box for each object is precomputed, it costs you at most six
+comparisons to reject the intersection, or after six comparisons you have to
+do the intersection calculation after all.  And since most ray boxes only
+enclose a small fraction of the bounding box's volume, the rejection rate
+should be high.
+<P>
+Also, if you find an intersection you can make the ray box smaller ("restrict"
+it?)  because you know that a closer intersection isn't going to be found
+beyond the one you just found.  This is done using the ray's direction
+cosines.
+<P>
+If you have a super-naive BVH (example:  one root bounding volume), this works
+great.  The ray hits the root, you enclose its traversal of the root bounding
+volume in a ray box.  The ray box encloses a tiny fraction of the root
+bounding volume, so you get 95-99% rejection rate, i.e.  almost all
+intersection calculations end after &lt;=6 comparisons.  The problem is that it
+doesn't reduce the number of intersection tests, just makes them a lot
+cheaper, so using a G-S hierarchy is much better.  And when you combine the
+two, you hit so many bounding boxes (which requires you to compute the points
+where the ray enters and exits the bounding box, then do a bunch of
+comparisons so the ray box is defined by min/max vectors) that it's not worth
+the trouble.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art8">
+Ray Tracing Roundup,
+</A></FONT>
+by Eric Haines
+</H4>
+This column is meant to quickly summarize new versions, features, and tools
+available for various ray tracers and related products.
+<P>
+TTDDD:  these programs convert 3D objects in the binary TTDDD format into
+either OFF, NFF, Rayshade, or vort format.  There is also a Postscript object
+viewer (very handy - I can quickly preview objects using GhostScript), and it
+also outputs Framemaker MIF files.  These programs are SHAREWARE.  Registered
+users also get code to automatically convert text strings into 3D objects
+using any TeX font.  This package and many objects are available at
+<A HREF="ftp://wuarchive.wustl.edu">wuarchive.wustl.edu</A>, in /graphics/graphics/objects/TDDD.  Some of the objects
+are excellent:  one of my favorite test objects is the Star Wars "Imperial
+Scout Walker."  Contact Glenn Lewis (<A HREF="mailto:glewis@pcocd2.intel.com">glewis@pcocd2.intel.com</A>).
+<P>
+There are a number of new VORT input files from Italy.  (Contact Alessandro
+Villani (<A HREF="mailto:raytr@astrpi.difi.unipi.it">raytr@astrpi.difi.unipi.it</A>)).  They are available for anonymous ftp:
+<P>
+<PRE>
+    pub/contrib/artscenes/room.tar.Z on gondwana.ecr.mu.oz.au (128.250.1.63)
+    pub/graphics/room.tar.Z on munnari.oz.au (128.250.1.21)
+</PRE>
+<P>
+The models are mainly objects in a room:  clock, ashtray, bed, lights,
+television, etc.  Contact Eric H. Echidna (<A HREF="mailto:echidna@ecr.mu.oz.au">echidna@ecr.mu.oz.au</A>)
+<P>
+RayShade is now in version 4.0.6 at princeton.edu:pub/Graphics.  There is an
+active, helpful mailing list for this group - contact
+<A HREF="mailto:rayshade-request@cs.princeton.edu">rayshade-request@cs.princeton.edu</A> to get put on it.
+<P>
+Inetray is a network version for running Rayshade 4.0.  FTP it from
+<A HREF="ftp://maggia.ethz.ch">maggia.ethz.ch</A> (directory pub/inetray).  It allows parallel calculation of
+rayshade pictures for multiprocessing machines and over a network of machines.
+You need SUN RPC 4.0 or newer.  Contact Andreas Thurnherr (<A HREF="mailto:ant@ips.id.ethz.ch">ant@ips.id.ethz.ch</A>)
+for more information.
+<P>
+There is an X window fonts converter into Rayshade 3.0 polygons, by Ron Sass
+(<A HREF="mailto:sass@cps.msu.edu">sass@cps.msu.edu</A>).  Anonymous ftp from acs.cps.msu.edu in the file
+pub/sass/gentxt.c.  There is also a tool for Rayshade animation here.
+<P>
+The code for a recursive ray traversal efficiency scheme for RayShade and the
+model data of Greg Ward's conference room can be obtained from Erik Jansen
+(<A HREF="mailto:fwj@duticg.tudelft.nl">fwj@duticg.tudelft.nl</A>).  Hopefully this will be made available via FTP some
+time soon.  See the related article in this issue.
+<P>
+Radiance is going great guns.  There's now even an Amiga port of Radiance 2.0.
+Check <A HREF="ftp://hobbes.lbl.gov">hobbes.lbl.gov</A> (128.3.12.38) /pub/ports/amiga or osgiliath.id.dth.dk
+(129.142.65.24) /pub/amiga/graphics/Radiance.  Contact Per Bojsen
+(<A HREF="mailto:bojsen@ithil.id.dth.dk">bojsen@ithil.id.dth.dk</A>).
+<P>
+The IRIT solid modeler 3.0 is now available at an ftp site near you, e.g.
+<A HREF="ftp://ftp.uu.net">ftp.uu.net</A> (192.48.96.2):/graphics/irit, among others.  This is an X-based CSG
+modeller which now includes freeform surfaces, and it runs on a large number
+of platforms.
+<P>
+At <A HREF="ftp://asterix.inescn.pt">asterix.inescn.pt</A> [192.35.246.17] is a ray tracer by Antonio Costa.  I
+haven't played with it, but it evidently renders bicubic patches and other
+interesting things.
+<P>
+POV (aka Son of DKBTrace, done by people on CompuServe) still seems to be in
+beta test or somesuch.
+<P>
+Studio Amiga is a 3D modelling and ray tracing specific BBS, (817) 467-3658.
+24 hours, 105 Meg online.
+<P>
+The Utah Raster Toolkit version 3.1 should be out of testing some time after
+SIGGRAPH.  There are a number of bug fixes and so on - worth getting if you
+use it.  Harass Spencer Thomas for when it'll be out (<A HREF="mailto:spencer@med.umich.edu">spencer@med.umich.edu</A>)
+<P>
+If you are interested in Greg Turk's work on reaction-diffusion textures
+(SIGGRAPH '91), he's placed C code for generating these in the anonymous ftp
+directory at UNC.  Connect to <A HREF="ftp://ftp.cs.unc.edu">ftp.cs.unc.edu</A> and grab the files in the
+directory pub/reaction_diffusion.
+<P>
+Greg notes an implementation detail accidentally left out of the paper:  The
+value of chemical "b" should not be allowed to go below zero.  While I'm on
+the subject, I noticed a minor typo in the Witkin/Kass paper on the topic:
+the center term in equation four should be "-4 * a^2 - h^2 * b".  Also, their
+reference #2 has incorrect page numbers - should be 363-385.
+<P>
+Graphics Gems III code is available via anonymous FTP at <A HREF="ftp://princeton.edu">princeton.edu</A> in
+/pub/Graphics/GraphicsGems/GemsIII.  Have fun puzzling it out (since the book
+itself is not out quite yet).  There are some nice bits, like Ben Trumbore's
+bounding volumes (I *think* I know what he's doing...) and Kelvin Sung's new
+BSP code.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art9">
+Mail Based 3D File Server,
+</A></FONT>
+by Bob Lindabury (<A HREF="mailto:lightwave-admin@bobsbox.rent.com">lightwave-admin@bobsbox.rent.com</A>)
+</H4>
+A mail based file server for 3D objects, 24bit JPEG images, GIF images
+and image maps is now online for all those with Internet mail access.
+<P>
+The server is the official archive site for the Lightwave 3D mail-list.
+<P>
+Besides the above mentioned image-based files, the server contains many
+PD and Shareware graphics utilities for several computer platforms
+including Amiga, IBM and Macintosh.
+<P>
+Some samples include:
+<P>
+<PRE>
+DKBTRACE    - Raytracer for IBM, Amiga and Mac
+RAYSHADE    - Raytracer for the Mac
+QRT         - Raytracer for IBM, Amiga and Mac
+[...]
+Objects     - Objects for Imagine, Videoscape, Lightwave and others
+Demos       - ImageCels, Caligari, Autodesk 3D Studio and others
+</PRE>
+<P>
+Plus much more!  And many more to come!
+<P>
+The server resides on my BBS called "The Graphics BBS".  The BBS is
+operational 24 hours a day 7 days a week at the phone number of +1
+908/469-0049.  It utilizes a Hayes V-Series 9600 V.42 modem. (soon to
+upgrade to a V.32 modem)
+<P>
+If you would like to submit objects, scenes or images to the server,
+please pack, uuencode and then mail the files to the address:
+<P>
+<PRE>
+        <A HREF="mailto:server@bobsbox.rent.com">server@bobsbox.rent.com</A>
+</PRE>
+<P>
+For information on obtaining files from the server send a mail message
+to the address:
+<P>
+<PRE>
+        <A HREF="mailto:file-server@graphics.rent.com">file-server@graphics.rent.com</A>
+</PRE>
+<P>
+with the following in the body of the message:
+<P>
+<PRE>
+HELP
+/DIR
+</PRE>
+<P>
+and a help file describing how to use the server and a complete
+directory listing will be sent to you via mail.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art10">
+Imagine That,
+</A></FONT>
+by Steve Worley (<A HREF="mailto:worley@cup.portal.com">worley@cup.portal.com</A>)
+</H4>
+Imagine is a commercial program that runs on Amiga computers which is in
+the process of being ported to SGI's.  It has a complete modeller,
+layout editor, and renderer built in, and is one of the two most popular
+3D programs on that platform.
+<P>
+I actually use it since I do a lot of mathematical/parametric modelling using
+C code.  Since I have an Amiga at home and a Sun at work, I can output
+rayshade objects and render them at work, or Imagine objects and render them
+at home; very convenient.  In fact, I got started with parametric modelling
+about a year and a half ago by tearing apart your "tree" program you wrote for
+the SPD package; now I'm working on exploding objects, and breaking them in
+"reasonable" places when they are subjected to stress.  Lots of fun!  I also
+worked with Glenn to try to produce an algorithm to morph different objects
+into one another.  It wasn't a dismal failure, but it is nothing I want to try
+to sell to ILM...  I also enjoy playing with building new Perlin-style solid
+textures.  That's ALWAYS a lot of fun.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art11">
+Correct Roots for Torus Intersection,
+</A></FONT>
+by Haakan "Zap" Andersson (<A HREF="mailto:zap@lage.lysator.liu.se">zap@lage.lysator.liu.se</A>)
+</H4>
+When using the torii-intersector you gave me [I sent the code from Graphics
+Gems II, Joseph Cychosz's torus intersector, I believe.  - EAH], we have the
+trouble of getting the wrong side when rmajor &lt; rminor and above all when
+rmajor &lt; 0, which are both quite valid and well defined torii shapes.
+<P>
+Ok, here's what you do:
+<P>
+Check if rmajor &gt; rminor.
+<P>
+If so, hit is OK as is.
+<P>
+If not, calculate the distance between the hit you got and torus center.
+We will be needing the distance SQUARED, so no need for a square root.
+Put the distance squared in variable SqrDist.
+<P>
+<PRE>
+If rmajor &lt; rminor && rmajor &gt; 0
+   if SqrDist &lt; (rminor*rminor - rmajor*rmajor)
+      then discard the hit, it's on the wrong surface.
+If rmajor &lt; rminor && rmajor &lt; 0
+   if SqrDist &gt; (rminor*rminor - rmajor*rmajor)
+      then discard the hit, it's on the wrong surface.
+</PRE>
+<P>
+Voila!
+<P>
+________
+<P>
+Joe Cychosz (<A HREF="mailto:3ksnn64@ecn.purdue.edu">3ksnn64@ecn.purdue.edu</A>) responds:
+<P>
+I did test the case where the torus was degenerate, however I did not
+consider the application sense of it not really being a wanted surface.
+I will study this further and incorporate your suggestion.
+<P>
+Also, not include in the GEM is the following code which compensates for
+the order of the roots being transposed.  I didn't include it since it
+would make the GEM dependent on the behaviour of the root solver.
+<P>
+Insert after the call to SolveQuartic:
+<P>
+<PRE>
+/*      SolveQuartic returns root pairs in reversed order.              */
+        if  ( *nhits &gt; 1 )
+            m = rhits[0]; u = rhits[1]; rhits[0] = u; rhits[1] = m;
+        if  ( *nhits &gt; 3 )
+            m = rhits[2]; u = rhits[3]; rhits[2] = u; rhits[3] = m;
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art12">
+Information on Taos Parallel Processor,
+</A></FONT>
+by Paul Wain (<A HREF="mailto:ee89psw@brunel.ac.uk">ee89psw@brunel.ac.uk</A>)
+</H4>
+[edited from bits and pieces by Paul. - EAH]
+<P>
+I am after any info on the Taos parallel processor raytracing stuff.
+<P>
+        The reason I sat up and paid attention when I read about Taos was only
+because of the way it handles code from a programmer's point of view.
+<P>
+        Apparently it doesn't link the program at the compilation stage but
+rather downloads the objects as and when they are needed, and destroys them as
+they are finished with (how quickly depends on their priority).  Also, if one
+branch calls an object which is already resident on another node rather than
+load dwon from the data store it loads in from the other node.
+<P>
+        Also, the programmer doesn't need to allocate them to the nodes and
+ensure that all the node loads are balanced.  Indeed Taos does this for the
+programmer to supposedly ensure optimum performance.
+<P>
+        It can apparently do a 790x400 24bpp colour raytrace on
+256 compound objects in under 15 minutes. And supposedly a 50x50 array of em
+can do real-time raytracing....
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art13">
+The Glazing Trick,
+</A></FONT>
+by Haakan "Zap" Andersson (<A HREF="mailto:zap@lage.lysator.liu.se">zap@lage.lysator.liu.se</A>)
+</H4>
+[This is an excerpt from a longer document by Zap - more later.  It's one of
+those tricks that many people know, but if you don't know it then it's worth
+knowing.  Or something. - EAH]
+<P>
+   Next "bad" thing with standard Phong is the inability to get really shiny
+surfaces.  Pumping up the specular exponent makes the shiny spot SMALLER, not
+(as it should) SHARPER.  So it might look pretty shiny on a sphere, but use it
+on a cube, the chance of you ever SEEING that tiny little specular spot is
+very small, unless the light is positioned just right in respect to the viewer
+and some cube surface.
+<P>
+   There is a nice and simple trick for this, used frequently by Pixar in
+their little movies:  You simply threshold the specular light instead of
+feeding it directly to the output light.  Let's assume we have a function
+similar to the Renderman (tm) function SmoothStep() that work like this:
+<P>
+<PRE>
+    Smoothstep(a,b,x)
+</PRE>
+<P>
+<PRE>
+    if (x &lt; a) return 0.0;
+    if (x &gt; b) return 1.0;
+    if (x &gt; a and x &lt; b) return a smooth gradation between 0.0 and
+                            1.0 (Pixar uses a hermite spline I think)
+</PRE>
+<P>
+<PRE>
+  Then let our "all new" specular highlight be...
+</PRE>
+<P>
+<PRE>
+  OLD specular formula: Ks * (cos b ^ Ke)
+</PRE>
+<P>
+<PRE>
+  NEW specular formula: Ks * SmoothStep(0.4,0.5,cos b ^ Ke)
+</PRE>
+<P>
+  ...where the numbers (here 0.4 and 0.5) could be anything you wish.  This
+gives the surface a "glazed" appearance and may be useful modelling glass and
+similar.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art14">
+Bug in Ray-Convex Polyhedron Intersector in Graphics Gems II,
+</A></FONT>
+by Eric Haines
+</H4>
+This bug was found by Peter Flatau.  The test for my polyhedron intersector
+was (p. 576, middle of the page):
+<P>
+<PRE>
+        if ( t &lt; 0.0 ) return ( MISSED ) ;
+        if ( t &lt; tfar ) {
+            /* hit near face, update normal */
+</PRE>
+<P>
+It should be:
+<P>
+<PRE>
+        if ( t &lt; tnear ) return ( MISSED ) ;         &lt;-- 0.0 to tnear
+        if ( t &lt; tfar ) {
+            /* hit far face, update normal */           &lt;-- near to far
+</PRE>
+<P>
+        Also, the text in Graphics Gems II has the same bug.  The last
+sentence on page 249 should be:
+<P>
+<PRE>
+        "If the compute t is less than tnear, then the polyhedron is ..."
+                                       ^
+                                       +--was "0"
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

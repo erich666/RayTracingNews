@@ -1,0 +1,715 @@
+<!-- html version of Volume 2, Number 3 :  -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 2, Number 3</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>May 12, 1989</FONT>
+<P><FONT size=+1>Volume 2, Number 3</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1989, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction
+</A></LI>
+<LI><A HREF="#art2">
+New People,
+</A></LI>
+by Carl Bass, Paul Wanuga
+<LI><A HREF="#art3">
+QRT Ray Tracer (and five other Amiga Ray Tracers),
+</A></LI>
+by Steve Koren
+<LI><A HREF="#art4">
+New Version of MTV Ray Tracer,
+</A></LI>
+by Mark VandeWettering
+<LI><A HREF="#art5">
+Re: Ray Traced Bounding Spheres,
+</A></LI>
+by Earl Culham
+<LI><A HREF="#art6">
+Noise and Turbulence Function Code,
+</A></LI>
+Pascal and C, by Jon Buller,
+William Dirks
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction
+</A></FONT>
+</H4>
+Well, we're now at the point where there are six ray tracers for the Amiga.
+Interestingly, none of them have implicit efficiency schemes (i.e. where the
+user does not have to intervene and create the efficiency structure himself).
+Admittedly, efficiency schemes are more code, but I've found that I was getting
+a factor of three speed up for a simple scene (a ten ball sphereflake) by using
+an efficiency scheme vs. not using one.  When your computer is the speed of an
+Amiga, efficiency schemes become vital.
+<P>
+Next time I'll include "Tracing Tricks", an article I "edited" for the latest
+(and last) "Introduction to Ray Tracing" course notes.  The article is a "best
+of the RT News" compendium of efficiency tricks.  By the way, the course notes
+should be quite a bargain: they'll consist of the book of our notes by Academic
+Press, plus some new tidbits and reprints of "classic" articles.
+<P>
+I would like to put the "Ray Tracing News" back issues somewhere that people
+can FTP them.  Personally I don't have a computer that has an FTP site, so if
+there are any volunteers that would like to store the back issues, please
+contact me.  The entire archive is about 448K at this point (not including this
+issue), broken into 5 parts.  Can you volunteer?
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+New People
+</A></FONT>
+</H4>
+# Carl Bass - hybrid shading models and quick(er) hidden surface methods<BR>
+# Ithaca Software<BR>
+# 902 West Seneca Street<BR>
+# Ithaca, NY 14850<BR>
+# 607-273-3690<BR>
+alias   carl_bass       <A HREF="mailto:carl@mssun1.msi.cornell.edu">carl@mssun1.msi.cornell.edu</A><BR>
+<P>
+Carl is the co-founder of Ithaca Software Inc (once upon a time called "Flying
+Moose Inc"), which sells the HOOPS package for all kinds of computers.  This is
+an object-oriented system which I don't know much about beyond that their
+debugger is called WHOOPS.
+<P>
+________
+<P>
+#<BR>
+# Paul Wanuga<BR>
+# Cornell Program of Computer Graphics<BR>
+# 120 Rand Hall<BR>
+# Ithaca, NY 14853<BR>
+# (607)-255-4880<BR>
+alias   paul_wanuga     <A HREF="mailto:phw@love.tn.cornell.edu">phw@love.tn.cornell.edu</A><BR>
+Erich:<BR>
+<P>
+     Could you please include me in your list of wiz-bango ray tracers?  It
+appears Don has me slated for research in ray-tracing complex, realistic,
+non-procedural environments.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+QRT Ray Tracer (and five other Amiga Ray Tracers),
+</A></FONT>
+by Steve Koren
+</H4>
+        This package appeared on comp.graphics a few months back.  I believe
+the latest version of the package is available from Mark VandeWettering's FTP
+site (see next article).  Write to Steve for more info:
+<P>
+<PRE>
+        hpfela!<A HREF="mailto:koren@hplabs.hp.com">koren@hplabs.hp.com</A>
+</PRE>
+<P>
+The software is written in C and worked just fine on my system.  Below is an
+excerpt of the UserMan.doc file of the QRT system (which Steve extensively
+documented).
+<P>
+QRT is a ray tracing  image  rendering  system  that runs under a
+variety  of  operating  systems.   It  has  a  free  format input
+language   with   extensive   error   detection   and   reporting
+capabilities.
+<P>
+QRT was developed on the Amiga  personal  computer, so it will
+be compared to  other  Amiga  ray  tracers.  There  are, to my
+knowledge, five other  Amiga  ray  tracers,  each with its own
+strengths  and  weaknesses.    I  will  describe  each  system
+briefly, and compare it to QRT.  All the Amiga ray tracers can
+operate in HAM (4096 color) mode.
+<P>
+<PRE>
+  RT: RT was the first ray  tracer  written for the Amiga, by
+      Eric    Graham.  It will model  a universe made of only
+      spheres, a   sky, and a checkered  or solid ground.  It
+      is  relatively  fast,  but  not  generally  useful  for
+      realistic modeling   because  of the sphere limitation.
+      The input language  is  cryptic,  although  some  error
+      checking is done.  The  system  will  only generate low
+      resolution images.
+</PRE>
+<P>
+<PRE>
+ SILVER: I have never seen SILVER, so I cannot say much about
+      this system.
+</PRE>
+<P>
+<PRE>
+ SCULPT-4D: This package  incorporates  an interactive editor
+      for  creating  objects,   and  is  capable  of  quickly
+      generating a preliminary  image  of  the scene by using
+      hidden surface techniques.  However, every primitive is
+      made of polygons, and some  primitives  such as spheres
+      require hundreds of  polygons  for a smooth texture, so
+      the ray tracing is very slow.   Also, the package takes
+      a large amount of memory to run, and is prone to system
+      crashes.  Its chief  feature  is  the ability to create
+      arbitrary shaped objects  using  a series of triangles.
+      Mirrored, dull, or shiny objects are supported.
+</PRE>
+<P>
+<PRE>
+ CLIGHT: This ray tracer also has  an interactive editor, but
+      produces very poor quality  images.   It is not capable
+      of any patterning or reflection characteristics.
+</PRE>
+<P>
+<PRE>
+ DBW: This is possibly the most  complete  ray tracer for the
+      Amiga.  It will support objects  with arbitrary degrees
+      of reflection and gloss,  depth  of field effects, some
+      texturing,   wavy   surfaces,   fractals,   transparent
+      surfaces, diffuse  propagation  of light from object to
+      object,  and  5  primitive   types  (sphere,  triangle,
+      parallelogram, fractal, and ring).  The input language,
+      however,   is    so    cryptic    as   to   be   nearly
+      incomprehensible, and  if  there  is  any  error in the
+      input file,  it  will  crash  the  system.   It is also
+      painfully slow;  some  images  take  16  to 24 hours to
+      complete.
+</PRE>
+<P>
+QRT is meant to be a  compromise  between the fast, simple ray
+tracers and the slow powerful systems.   It compares favorably
+in speed to RT, and in power  to  Sculpt-3d  or DBW.  It has a
+very friendly input language  with  extensive  error checking.
+Here are some features of QRT:
+<P>
+<PRE>
+   o  Multiple primitive types, including user defined
+      quadratic surfaces
+</PRE>
+<P>
+<PRE>
+   o  Arbitrary levels of diffuse reflection, spectral
+      reflection, transmission, ambient lighting, and gloss
+</PRE>
+<P>
+<PRE>
+   o  User defined pattern information for objects
+</PRE>
+<P>
+<PRE>
+   o  Bounding boxes for groups of objects
+</PRE>
+<P>
+<PRE>
+   o  Shadows
+</PRE>
+<P>
+<PRE>
+   o  Multiple light sources with different characteristics
+</PRE>
+<P>
+<PRE>
+   o  Arbitrary Phong spectral reflection coefficients
+</PRE>
+<P>
+<PRE>
+   o  Color dithering to increase the apparent number of
+      colors
+</PRE>
+<P>
+<PRE>
+   o  Easy to use, free format input language with error
+      checking.  Parameters are by keyword and may appear in
+      any order.
+</PRE>
+<P>
+<PRE>
+   o  Supports medium resolution (128k dots/screen)
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+New Version of MTV Ray Tracer,
+</A></FONT>
+by Mark VandeWettering
+</H4>
+Mark VandeWettering's nice little ray tracer (polygons, spheres, cones and
+cylinders, Kay/Kajiya efficiency scheme, yacc/lex parser for NFF format,
+otherwise written in C) was released on USENET in three parts on March 27.
+Others have interesting features, but the selection of primitives and the speed
+of the code of the MTV ray tracer is a big plus.  It's currently my favorite
+public domain ray tracer (the amazing BRL package I consider private).
+<P>
+The package is available at the usual comp.sources.unix archive sites or from
+Mark via anonymous ftp at drizzle.cs.uoregon.edu.  Mark's address is:
+<P>
+<PRE>
+    <A HREF="mailto:markv@drizzle.cs.uoregon.edu">markv@drizzle.cs.uoregon.edu</A>
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Re: Ray Traced Bounding Spheres,
+</A></FONT>
+by Earl Culham (<A HREF="mailto:ECULHAM@UALTAVM.BITNET">ECULHAM@UALTAVM.BITNET</A>)
+</H4>
+Organization: University of Alberta VM/CMS
+<P>
+In article (<A HREF="mailto:17241@versatc.UUCP">17241@versatc.UUCP</A>), ritter@versatc.UUCP (Jack Ritter) writes:
+<P>
+&gt;Given a cluster of points in 3 space, is there<BR>
+&gt;a good method for finding the minimum radius<BR>
+&gt;sphere which encloses all the points?  If not<BR>
+&gt;minimum, at least "small"?  Certainly it should<BR>
+&gt;be tighter than the sphere which encloses the<BR>
+&gt;minimum bounding box.<BR>
+&gt;<BR>
+&gt;I have a feeling the solution is iterative. If<BR>
+&gt;so, I could provide a good initial guess for the<BR>
+&gt;center & radius.<BR>
+<P>
+The solution is not iterative. A simple solution is available in a two step
+process, and is characterized by whether three, or only two of the points are
+on the surface of the optimal sphere.
+<P>
+Given the points, A, B, and C.<BR>
+Searching for the center of the optimal sphere, P, with the smallest
+radius, R.
+<P>
+Checking the midpoints.
+<P>
+set P = point halfway between A and B<BR>
+set R = 1/2 of length from A to B<BR>
+If length from C to P is less than or equal to R ---&gt; done<BR>
+Repeat with line A-C, and B-C if needed.
+<P>
+Extending the midpoints at right angles.
+<P>
+build the line which intersects A-B at a right angle through the midpoint
+  of A-B, call the line D.
+build the line which intersects A-C at a right angle through the midpoint
+  of A-C, call it E.
+P is the point where D and E intersect. (Solve the simultaneous equations;
+  R is the length A-P)
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Noise and Turbulence Function Code,
+</A></FONT>
+Pascal and C, by Jon Buller, William Dirks
+</H4>
+Re: Pixar's noise function, by Jon Buller (<A HREF="mailto:bullerj@handel.colostate.edu">bullerj@handel.colostate.edu</A>)
+Organization: Colorado State University, Ft. Collins CO 80523
+<P>
+In article (<A HREF="mailto:3599@pixar.UUCP">3599@pixar.UUCP</A>) aaa@pixar.UUCP (Tony Apodaca) writes:<BR>
+&gt;In article (<A HREF="mailto:2553@ssc-vax.UUCP">2553@ssc-vax.UUCP</A>) coy@ssc-vax.UUCP (Stephen B Coy) writes:<BR>
+&gt;&gt;          ...My question:  Does anyone out there know what this<BR>
+&gt;&gt;noise function really is?<BR>
+&gt;<BR>
+&gt;       Three-dimensional simulated natural textures using pseudorandom<BR>
+&gt;functions were simultaneously and independently developed by Darwyn<BR>
+&gt;Peachey and Ken Perlin in 1984-5.  Both have papers in the 1985<BR>
+&gt;Siggraph Proceedings describing their systems.  Perlin, in particular,<BR>
+&gt;describes in detail how noise() is implemented and can be used creatively<BR>
+<P>
+<PRE>
+   [A description of the properties of the noise function goes here...]
+</PRE>
+<P>
+&gt;       If you have ever been interested in realistic computer graphics, do<BR>
+&gt;whatever it takes to get a look at Perlin's paper.  In 1985, his pictures<BR>
+&gt;were absolutely astounding.  In 1989, they are STILL astounding.<BR>
+<P>
+No kidding, some of those pictures are INCREDIBLE.
+<P>
+     Here is my code for a look-alike to the Pixar Noise function, and while I
+can't say anything about exactly what Pixar's looks like, I think this is
+probably close.  After reading the 1985 SIGGRAPH papers on 3d texturing, (and
+seeing my prof's code to do a similar thing) I wrote this.  It uses a quadratic
+B-Spline instead of the cubic Hermite interpolant implied in the paper.  Also
+note that DNoise is just the x, y, and z derivatives of Noise (which are also
+B-Splines).  The hashing functions are from Knuth's Art of Computer Programming
+(I don't remember which volume though).
+<P>
+I know the code is Pascal, and all of you will hate it, but I believe I write
+better Pascal than C...  One final note, this was Lightspeed Pascal 2.0 for the
+Macintosh, but things have been reformatted slightly to get it on the net.  I
+hope this is what you all wanted.
+<P>
+________
+<P>
+More:
+<P>
+One other thing you might notice, Noise is C1 continuous, DNoise is only C0.
+This means that DNoise will have creases in it (along the planes of the random
+grid.  To see this, crank out a square: 0 &lt; X &lt; 5, 0 &lt; Y &lt; 5, Z=0.  You will see smooth
+regions within each unit square, and creases between squares.  To avoid this,
+use a cubic B-Spline, or cubic Hermite (as hinted to in the SIGGRAPH
+proceedings) the problem there, is that you either need more data points (64
+instead of 27) for the B-Spline, or derivative info at each point of the grid
+(a normal plane, 4 floats instead of 1).  This would take too muh time for me
+to code up to be worth it, and would probably run too much slower (10min for a
+200x200 pixel picture now, ug.)  If somebody wants to give me a cray-3 to play
+with, I'll write more accurate (and slower) code, until then... 8-)
+<P>
+Jon
+<A HREF="mailto:bullerj@handel.cs.colostate.edu">bullerj@handel.cs.colostate.edu</A>          ...!ncar!ccncsu!handel!bullerj<BR>
+(These are my ideas (and code), nobody else SHOULD want these bugs)<BR>
+I'm just trying to graduate.  Apple, Pixar, HP, etc. take note, I would like
+your job offers, I have tired of the university life.
+<P>
+[NOTE: I have attached the Pascal code for the Turbulence functions.  The Noise
+functions are in the next message in "C".  Sorry about the mixed languages, but
+I haven't nicely translated these. -- EAH]
+<P>
+<PRE>
+(* ---------- cut here ---------- cut here ---------- cut here ---------- *)
+
+const
+   MaxPts = 512;  { Must be 2^n}
+   MPM1 = MaxPts - 1;
+type
+   PtsTyp = array[0..MaxPts] of Extended;
+var
+   Points: PtsTyp;
+
+function Turb (Size: Integer;
+               ScaleFactor: Extended;
+               Loc: Vect;
+               Pts: PtsTyp): Extended;
+   var
+      Scale, Result: Extended;
+      Cur: Integer;
+begin
+   Result := Noise(Loc, Pts);
+   Scale := 1.0;
+
+   Cur := 1;
+   while Cur &lt; Size do begin
+      Cur := BSL(Cur, 1);          {Cur := Cur * 2}
+      Scale := Scale * ScaleFactor;
+      Loc := Scale_Vect(2.0, Loc);
+      Result := Result + Noise(Loc, Pts) * Scale;
+   end;
+   Turb := Result;
+end;
+
+function DTurb (Size: Integer;
+                ScaleFactor: Extended;
+                Loc: Vect;
+                Pts: PtsTyp): Vect;
+   var
+      Result: Vect;
+      Scale: Extended;
+      Cur: Integer;
+begin
+   Result := DNoise(Loc, Pts);
+   Scale := 1.0;
+
+   Cur := 1;
+   while Cur &lt; Size do begin
+      Cur := BSL(Cur, 1);
+      Scale := Scale * ScaleFactor;
+      Loc := Scale_Vect(2.0, Loc);
+      Result := Add_Vect(Result, Scale_Vect(Scale, DNoise(Loc, Pts)));
+   end;
+   DTurb := Result;
+end;
+</PRE>
+<P>
+______________________________________
+<P>
+C Versions of Noise and DNoise Routines, by William Dirks
+(<A HREF="mailto:dirks@oak.cis.ohio-state.edu">dirks@oak.cis.ohio-state.edu</A>)
+<P>
+Organization: Ohio State University Computer and Information Science
+<P>
+It was suggested to me that some of you would be interested in my
+translated-into-C-and-corrected versions of noise() and Dnoise().
+<P>
+So, here they are.
+<P>
+Note that this is only noise and Dnoise.  The turbulence routines are
+not included 'cause I haven't translated them yet.
+<P>
+Oh yeah, initnoise() fills the pts[] array with random numbers between
+0 and 1.  Don't forget to initialize, or noise will always return 0.
+(That's been experimentally verified! :-))
+<P>
+--Bill--
+<P>
+[Note that you should look over the rand() function if you use this stuff.
+Some rand()'s need initialization (srand()), and some give numbers from 0
+to 32767, and so should use this as a divisor. -- EAH]
+<P>
+<PRE>
+---------cut-here------------------------------------cut-here--------
+/*
+**      Noise and Dnoise routines
+*
+*       Many thanks to Jon Buller of Colorado State University for these
+*       routines.
+*/
+
+typedef struct vector {
+   double x, y, z;
+} Vector;
+
+#define NUMPTS  512<BR>
+#define P1      173<BR>
+#define P2      263<BR>
+#define P3      337<BR>
+#define phi     0.6180339<BR>
+
+static double pts[NUMPTS];
+
+
+void initnoise()
+{
+   int i;
+
+   for (i = 0; i &lt; NUMPTS; ++i)
+      pts[i] = rand() / 2.147483e9;
+}
+
+double noise(p)
+Vector *p;
+{
+   int xi, yi, zi;
+   int xa, xb, xc, ya, yb, yc, za, zb, zc;
+   double xf, yf, zf;
+   double x2, x1, x0, y2, y1, y0, z2, z1, z0;
+   double p000, p100, p200, p010, p110, p210, p020, p120, p220;
+   double p001, p101, p201, p011, p111, p211, p021, p121, p221;
+   double p002, p102, p202, p012, p112, p212, p022, p122, p222;
+
+   xi = floor(p-&gt;x);
+   xa = floor(P1 * (xi * phi - floor(xi * phi)));
+   xb = floor(P1 * ((xi + 1) * phi - floor((xi + 1) * phi)));
+   xc = floor(P1 * ((xi + 2) * phi - floor((xi + 2) * phi)));
+
+   yi = floor(p-&gt;y);
+   ya = floor(P2 * (yi * phi - floor(yi * phi)));
+   yb = floor(P2 * ((yi + 1) * phi - floor((yi + 1) * phi)));
+   yc = floor(P2 * ((yi + 2) * phi - floor((yi + 2) * phi)));
+
+   zi = floor(p-&gt;z);
+   za = floor(P3 * (zi * phi - floor(zi * phi)));
+   zb = floor(P3 * ((zi + 1) * phi - floor((zi + 1) * phi)));
+   zc = floor(P3 * ((zi + 2) * phi - floor((zi + 2) * phi)));
+
+   p000 = pts[xa + ya + za & NUMPTS - 1];
+   p100 = pts[xb + ya + za & NUMPTS - 1];
+   p200 = pts[xc + ya + za & NUMPTS - 1];
+   p010 = pts[xa + yb + za & NUMPTS - 1];
+   p110 = pts[xb + yb + za & NUMPTS - 1];
+   p210 = pts[xc + yb + za & NUMPTS - 1];
+   p020 = pts[xa + yc + za & NUMPTS - 1];
+   p120 = pts[xb + yc + za & NUMPTS - 1];
+   p220 = pts[xc + yc + za & NUMPTS - 1];
+   p001 = pts[xa + ya + zb & NUMPTS - 1];
+   p101 = pts[xb + ya + zb & NUMPTS - 1];
+   p201 = pts[xc + ya + zb & NUMPTS - 1];
+   p011 = pts[xa + yb + zb & NUMPTS - 1];
+   p111 = pts[xb + yb + zb & NUMPTS - 1];
+   p211 = pts[xc + yb + zb & NUMPTS - 1];
+   p021 = pts[xa + yc + zb & NUMPTS - 1];
+   p121 = pts[xb + yc + zb & NUMPTS - 1];
+   p221 = pts[xc + yc + zb & NUMPTS - 1];
+   p002 = pts[xa + ya + zc & NUMPTS - 1];
+   p102 = pts[xb + ya + zc & NUMPTS - 1];
+   p202 = pts[xc + ya + zc & NUMPTS - 1];
+   p012 = pts[xa + yb + zc & NUMPTS - 1];
+   p112 = pts[xb + yb + zc & NUMPTS - 1];
+   p212 = pts[xc + yb + zc & NUMPTS - 1];
+   p022 = pts[xa + yc + zc & NUMPTS - 1];
+   p122 = pts[xb + yc + zc & NUMPTS - 1];
+   p222 = pts[xc + yc + zc & NUMPTS - 1];
+
+   xf = p-&gt;x - xi;
+   x1 = xf * xf;
+   x2 = 0.5 * x1;
+   x1 = 0.5 + xf - x1;
+   x0 = 0.5 - xf + x2;
+
+   yf = p-&gt;y - yi;
+   y1 = yf * yf;
+   y2 = 0.5 * y1;
+   y1 = 0.5 + yf - y1;
+   y0 = 0.5 - yf + y2;
+
+   zf = p-&gt;z - zi;
+   z1 = zf * zf;
+   z2 = 0.5 * z1;
+   z1 = 0.5 + zf - z1;
+   z0 = 0.5 - zf + z2;
+
+   return   z0 * (y0 * (x0 * p000 + x1 * p100 + x2 * p200) +
+                  y1 * (x0 * p010 + x1 * p110 + x2 * p210) +
+                  y2 * (x0 * p020 + x1 * p120 + x2 * p220)) +
+            z1 * (y0 * (x0 * p001 + x1 * p101 + x2 * p201) +
+                  y1 * (x0 * p011 + x1 * p111 + x2 * p211) +
+                  y2 * (x0 * p021 + x1 * p121 + x2 * p221)) +
+            z2 * (y0 * (x0 * p002 + x1 * p102 + x2 * p202) +
+                  y1 * (x0 * p012 + x1 * p112 + x2 * p212) +
+                  y2 * (x0 * p022 + x1 * p122 + x2 * p222));
+}
+
+Vector Dnoise(p)
+Vector *p;
+{
+   Vector v;
+   int xi, yi, zi;
+   int xa, xb, xc, ya, yb, yc, za, zb, zc;
+   double xf, yf, zf;
+   double x2, x1, x0, y2, y1, y0, z2, z1, z0;
+   double xd2, xd1, xd0, yd2, yd1, yd0, zd2, zd1, zd0;
+   double p000, p100, p200, p010, p110, p210, p020, p120, p220;
+   double p001, p101, p201, p011, p111, p211, p021, p121, p221;
+   double p002, p102, p202, p012, p112, p212, p022, p122, p222;
+
+   xi = floor(p-&gt;x);
+   xa = floor(P1 * (xi * phi - floor(xi * phi)));
+   xb = floor(P1 * ((xi + 1) * phi - floor((xi + 1) * phi)));
+   xc = floor(P1 * ((xi + 2) * phi - floor((xi + 2) * phi)));
+
+   yi = floor(p-&gt;y);
+   ya = floor(P2 * (yi * phi - floor(yi * phi)));
+   yb = floor(P2 * ((yi + 1) * phi - floor((yi + 1) * phi)));
+   yc = floor(P2 * ((yi + 2) * phi - floor((yi + 2) * phi)));
+
+   zi = floor(p-&gt;z);
+   za = floor(P3 * (zi * phi - floor(zi * phi)));
+   zb = floor(P3 * ((zi + 1) * phi - floor((zi + 1) * phi)));
+   zc = floor(P3 * ((zi + 2) * phi - floor((zi + 2) * phi)));
+
+   p000 = pts[xa + ya + za & NUMPTS - 1];
+   p100 = pts[xb + ya + za & NUMPTS - 1];
+   p200 = pts[xc + ya + za & NUMPTS - 1];
+   p010 = pts[xa + yb + za & NUMPTS - 1];
+   p110 = pts[xb + yb + za & NUMPTS - 1];
+   p210 = pts[xc + yb + za & NUMPTS - 1];
+   p020 = pts[xa + yc + za & NUMPTS - 1];
+   p120 = pts[xb + yc + za & NUMPTS - 1];
+   p220 = pts[xc + yc + za & NUMPTS - 1];
+   p001 = pts[xa + ya + zb & NUMPTS - 1];
+   p101 = pts[xb + ya + zb & NUMPTS - 1];
+   p201 = pts[xc + ya + zb & NUMPTS - 1];
+   p011 = pts[xa + yb + zb & NUMPTS - 1];
+   p111 = pts[xb + yb + zb & NUMPTS - 1];
+   p211 = pts[xc + yb + zb & NUMPTS - 1];
+   p021 = pts[xa + yc + zb & NUMPTS - 1];
+   p121 = pts[xb + yc + zb & NUMPTS - 1];
+   p221 = pts[xc + yc + zb & NUMPTS - 1];
+   p002 = pts[xa + ya + zc & NUMPTS - 1];
+   p102 = pts[xb + ya + zc & NUMPTS - 1];
+   p202 = pts[xc + ya + zc & NUMPTS - 1];
+   p012 = pts[xa + yb + zc & NUMPTS - 1];
+   p112 = pts[xb + yb + zc & NUMPTS - 1];
+   p212 = pts[xc + yb + zc & NUMPTS - 1];
+   p022 = pts[xa + yc + zc & NUMPTS - 1];
+   p122 = pts[xb + yc + zc & NUMPTS - 1];
+   p222 = pts[xc + yc + zc & NUMPTS - 1];
+
+   xf = p-&gt;x - xi;
+   x1 = xf * xf;
+   x2 = 0.5 * x1;
+   x1 = 0.5 + xf - x1;
+   x0 = 0.5 - xf + x2;
+   xd2 = xf;
+   xd1 = 1.0 - xf - xf;
+   xd0 = xf - 1.0;
+
+   yf = p-&gt;y - yi;
+   y1 = yf * yf;
+   y2 = 0.5 * y1;
+   y1 = 0.5 + yf - y1;
+   y0 = 0.5 - yf + y2;
+   yd2 = yf;
+   yd1 = 1.0 - yf - yf;
+   yd0 = yf - 1.0;
+
+   zf = p-&gt;z - zi;
+   z1 = zf * zf;
+   z2 = 0.5 * z1;
+   z1 = 0.5 + zf - z1;
+   z0 = 0.5 - zf + z2;
+   zd2 = zf;
+   zd1 = 1.0 - zf - zf;
+   zd0 = zf - 1.0;
+
+   v.x        = z0 * (y0 * (xd0 * p000 + xd1 * p100 + xd2 * p200) +
+                      y1 * (xd0 * p010 + xd1 * p110 + xd2 * p210) +
+                      y2 * (xd0 * p020 + xd1 * p120 + xd2 * p220)) +
+                z1 * (y0 * (xd0 * p001 + xd1 * p101 + xd2 * p201) +
+                      y1 * (xd0 * p011 + xd1 * p111 + xd2 * p211) +
+                      y2 * (xd0 * p021 + xd1 * p121 + xd2 * p221)) +
+                z2 * (y0 * (xd0 * p002 + xd1 * p102 + xd2 * p202) +
+                      y1 * (xd0 * p012 + xd1 * p112 + xd2 * p212) +
+                      y2 * (xd0 * p022 + xd1 * p122 + xd2 * p222));
+
+   v.y        = z0 * (yd0 * (x0 * p000 + x1 * p100 + x2 * p200) +
+                      yd1 * (x0 * p010 + x1 * p110 + x2 * p210) +
+                      yd2 * (x0 * p020 + x1 * p120 + x2 * p220)) +
+                z1 * (yd0 * (x0 * p001 + x1 * p101 + x2 * p201) +
+                      yd1 * (x0 * p011 + x1 * p111 + x2 * p211) +
+                      yd2 * (x0 * p021 + x1 * p121 + x2 * p221)) +
+                z2 * (yd0 * (x0 * p002 + x1 * p102 + x2 * p202) +
+                      yd1 * (x0 * p012 + x1 * p112 + x2 * p212) +
+                      yd2 * (x0 * p022 + x1 * p122 + x2 * p222));
+
+   v.z        = zd0 * (y0 * (x0 * p000 + x1 * p100 + x2 * p200) +
+                       y1 * (x0 * p010 + x1 * p110 + x2 * p210) +
+                       y2 * (x0 * p020 + x1 * p120 + x2 * p220)) +
+                zd1 * (y0 * (x0 * p001 + x1 * p101 + x2 * p201) +
+                       y1 * (x0 * p011 + x1 * p111 + x2 * p211) +
+                       y2 * (x0 * p021 + x1 * p121 + x2 * p221)) +
+                zd2 * (y0 * (x0 * p002 + x1 * p102 + x2 * p202) +
+                       y1 * (x0 * p012 + x1 * p112 + x2 * p212) +
+                       y2 * (x0 * p022 + x1 * p122 + x2 * p222));
+   return v;
+}
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

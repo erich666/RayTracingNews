@@ -1,0 +1,1649 @@
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+                        "Light Makes Right"
+
+                         January 18, 1996
+                        Volume 9, Number 1
+
+Compiled by Eric Haines, 3D/EYE Inc, 1050 Craft Road, Ithaca, NY 14850
+	erich@acm.org; opinions expressed are mine, not 3D/EYE's
+All contents are copyright (c) 1995, 1996, all rights reserved by the
+	individual authors
+Archive locations:  anonymous FTP at ftp://princeton.edu/pub/Graphics/RTNews/,
+	ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/,
+	ftp://ftp.povray.org/pub/povray/Ray-Tracing-News/, and many others.
+	HTML http://www.povray.org/rtn/index.html,
+	HTML http://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/html/ and
+	HTML ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/html/index.html
+
+Contents:
+    Introduction
+    Results of the Name that Area Ratio Contest, by Eric Haines and Arijan Siska
+    Another Contest: Sphere in Box ratio, by Eric Haines
+    Ray Tracing Roundup
+    A Freeware modeller supporting VRML, by Stephen Chenney
+    3D Point Hashing, by Steve Worley
+    5D vs. BSP and ABVH, by Nguyen Duc Cuong aka "JuHu"
+    Interacting with Ray Traces, by Bert Peers
+    Hierarchical Techniques for Glossy Global Illumination, by Per Christensen
+    Global Illumination SIGGRAPH meeting, by Greg Ward
+    Total Internal Reflection, by Eric Haines, Greg Ward, and Chris Larson
+    Pretemporal Imaging Systems, by Ken Musgrave and Eric Haines
+    PNG Status, by Tim Wegner and Tom Lane
+    Cinematography References, by Dan Wexler
+    Getting Rid of the Divide, by Frank Compagner and Bob Pendleton
+
+-------------------------------------------------------------------------------
+
+Introduction
+
+One or two things have happened since the last issue, back in August.  We
+released a product called TriSpectives, which is a fun modeling/rendering/
+animation package for Windows 95 and NT.  Since I am now involved in a public
+commercial enterprise (prior to this we were mostly doing behind the scenes
+work for HP), I will generally avoid discussing in the RT News such products
+as !FalseSpace, 3D-Atelier, LightSwell, RayReverie, and AutoPUNK [hmmm, that
+calls for a contest:  if you are one of the first three to identify these five
+commercial products I just paraphrased, you win a 30 day trial version of
+TriSpectives].  Oh, and I will also avoid mentioning in the RT News
+TriSpectives, that's T-R-I... just kidding.  But, since this is my last
+chance, check out http://www.eye.com for TriSpectives info, etc; the freebies
+page is my favorite area.  Also, we're hiring people - see the Company Info
+page for the latest listings.
+
+I am glad to have an excuse to no longer track in the RT News all the various
+commercial packages, as that is a full time job and then some.  Instead the RT
+News will focus more on research issues, on free or extremely cheap software,
+and on other resources both on-line and off.  If you are interested in the
+commercial scene, check out the Tessellation Times
+(http://www.3dartist.com/tess/tessmain.htm), which is associated with _3D
+Artist_ magazine.  It is an excellent bi-weekly source of information on
+commercial rendering trends, and amazingly enough is free.
+
+jgt:  I am one of around ten editors of the new "journal of graphics tools",
+from A.K. Peters (Alice Peters helped produce the first volume of _Graphics
+Gems_).  Ronen Barzel (ronen@pixar.com) of Pixar is the Editor in Chief, and
+Andrew Glassner is the founding editor.  Think "Graphics Gems" and "Numerical
+Recipes" and you have a sense of what sort of articles we are after:  useful
+results, tutorials, guidelines for choosing algorithms, and so on.  The
+journal is peer reviewed (academics take note), and now has a web site,
+courtesy of the ACM, at http://www.acm.org/jgt .
+
+The only fun computer toy I have bought recently is the Snappy Video Snapshot
+(on the web at http://www.play.com/pages/snaphead.html).  What a cute thing:
+for about $200 or less it is a phaser sized box with a 9 volt battery which
+plugs into your parallel port and hooks up to a video camera, VCR, or TV.
+Bring up the software and you can capture video shots on your computer at
+three different resolutions and up to 24 bits of color.  It is fast to install
+and use (though catching exactly the right shot from a video can take a few
+tries).  Also, it comes with Gryphon Morph, a nice image morphing package, and
+Fauve Matisse "lite", a reasonable natural paint program.  It is pretty easy
+to take pictures of friends, pull them in, then morph one into the other.  Why
+am I talking about it here?  Because it is also a pretty good way to scan in
+materials and photos for use as textures.  When you use a perfectly still
+video image you can up the scanning quality within Snappy's software and
+multiple frames are blended and filtered to give pretty sharp images.  It
+beats a flatbed scanner for cost, speed (faster than a scanner, and no waiting
+to get film developed), and amount of desktop real estate it takes.
+
+-------------------------------------------------------------------------------
+
+Results of the Name that Area Ratio Contest, by Eric Haines and Arijan Siska
+	<arijan@kette.fer.uni-lj.si>
+
+So, the problem posed was:  given the set of all arbitrary triangles (i.e.  3
+random dots, anywhere on a 2D plane) and a 2D bounding box around each, what
+is the average ratio of the area covered by the triangle vs.  the box?
+
+The trivial answer is:  1/2, because I did not properly state that the 2D
+bounding box is axis aligned (sorry about that).  So, what is the answer for
+axis aligned bounding boxes?
+
+This problem turned out to be a lot trickier than I first thought.  When I
+asked it, I figured out the answer for any given triangle where all three
+points of the triangle touch the bounding box.  The gist is that you do not
+have to worry about the infinite plane for this case, as the ratio between the
+triangle and bounding box is all that matters.  So, the bounding box can be
+thought of as size 1x1, and one corner of the triangle is always at one of the
+bounding box corners, and the other two points on the triangle can freely move
+along the two edges opposite this corner:
+
+	    +-- this triangle point can be anywhere along this edge
+	    V
+       1+---*-----+
+	| X       |
+	|         * <-- and this tri. point can be anywhere along this edge
+	|         |
+	|         |}Y
+	|         |
+	*---------+
+	^         1
+	+-- and this point must be at a corner
+
+With the distances X and Y as shown, the area of the triangle is:
+
+    A = 1 - X/2 - Y/2 - (1-X)*(1-Y)/2 = (1-X*Y)/2
+
+Doing a double integral of X and Y each over [0,1] gives the answer 3/8ths.
+
+Unfortunately, it's a bit harder than that:  what if just two of the
+triangle's points touch the bounding box (i.e.  are at opposite corners of the
+bounding box) and the third point is somewhere inside the box?  Call these
+"two point" triangles.  This ratio is not so hard to compute, it turns out to
+be 1/6th (see solution).  But, what is the ratio between these two point
+triangles and the previous, three points on the bounding box types?
+Personally, I struggled with this one and did not feel comfortable with my
+answer, as it did not closely agree with the empirical answer my C program
+found.
+
+The person who won this contest is Arijan Siska, who came up with a good proof
+showing that the ratio between "two point" and "three point" types as 1:2.  He
+made the same oversight that I did (forgetting the "two point" types), but
+when informed of this, quickly derived the rest and sent in a convincing
+answer, which follows.  Jack Ritter <jritter@netcom.com> gets an honorable
+mention for getting the empirical answer first, 0.3055, by performing monte
+carlo testing.  Joe Demers <joed@graphics.usc.edu> had a solution that was
+very close, the first to get 3/8th and 1/6th as the sub-answers, and almost
+but not quite coming up with a way to blend the two (like I said, nor did I).
+
+No one took up the challenge of determining the average area of an arbitrary
+non-intersecting quadrilateral and its bounding box (nor do I envy anyone the
+task!).
+
+The rest of the solution follows, in Arijan's words.
+
+----
+
+- [for two point triangles] you end up with a triangle with one side going
+from (0,0) to (1,1) and the third point being anywhere within the unit square.
+
+- if the third point touches the unit square the triangle has already been
+processed by the case with all points on the b. box.
+
+- area of this 2point on b. box triangle is:
+
+   +------------* (1,1)         pt = 1/2 - (1-x)y/2 - x y - (1-y)x/2
+   |          / |                  = (1-x-y)/2
+   |        / / |
+   |      /  /  |               average pt = 1/6
+   |    / pt /  |
+   |  /  ---*------
+   |/ ---   |   | y
+   *--------|---+
+(0,0)       | x
+
+- now the portion of 2point and 3point on b. box triangles out of all triangles:
+
+If we think of a triangle as a two point line with third point added to it, we
+can state the condition for triangle to touch b. box in only two points is to
+have the third point inserted between first two points in x and y dimension or
+inserted beyond first two points - see the picture:
+
+	A  |    |            point x3 has to be in the regions A B C or D.
+	   |x1  |
+      -----*----+---------
+	   |\ B |
+	   | \  |
+	   |  \ |
+	   | C \|x2
+      -----+----*---------
+	   |    | D
+	   |    |
+
+Let's take a one dimensional example:
+
+1.  We use finite region [0,1] in which we generate random points.  This
+region can be later expanded to infinity without affecting the results
+(probabilities).
+
+2. Generate 2 random points:
+       0   x1     x2         1
+       |----*======*---------|
+
+probability of a third point x3 being placed between these two points is equal
+to the average distance between x1 and x2.  That distance (= probability) is
+
+Integrate[x-y,{x,0,1},{y,0,x}]*2 = 1/3           # this is Mathematica notation
+
+3. In two dimensions the probability of the third point being in the regions
+
+		A       B & C       D
+A B C or D is (1/3)^2 + (1/3)^2 + (1/3)^2 = 1/3. This gives us ratio:
+
+2 p. on b. box triangles : 3 p on b box tri. = 1/3 : 2/3
+
+- total area can be stated as:
+
+2/3 * 3/8 + 1/3 * 1/6 = 11/36 ~ 0.3055555555555555555
+
+Hope this time I'm right!
+
+
+I've done a random test myself, and the result for 33,619,968 triangles gives
+an average area ratio of 0.305586785790013.  So my analytical solution should
+be a correct one.
+
+P.S.  Check out my homepage if you have some spare time:
+http://luz.fer.uni-lj.si/users/arijan-eng.html
+[there are lots of ray traced images, a ray tracer, and more.  -EAH]
+
+----
+
+Arijan later noted:
+
+My simulation is currently at 238,157,824 trigs with average ratio
+0.305573593013203, but I doubt the precision due to random number generator
+properties and precision.
+
+-------------------------------------------------------------------------------
+
+Another Contest: Sphere in Box ratio, by Eric Haines
+
+I have another problem, again a useful result for ray tracing:  what is the
+average cross-sectional area of the projection of a sphere vs.  a bounding box
+around the sphere?  In other words, given a sphere in a bounding box, what is
+the chance that an arbitrary ray (originating outside the bounding box)
+hitting the box will also hit the sphere?
+
+[hint:  actually, this question can be restated to get rid of the sphere,
+though this does not make it any easier to compute.]
+
+I *think* this is pretty easy, but right now I have not sat down and figured
+it out myself.
+
+The prize for the best correct answer:  a copy of Syndesis' Avalon CD ROM (see
+RTNv8n1), kindly donated by John Foust of Syndesis,
+http://www.webmaster.com:80/syndesis/)
+
+-------------------------------------------------------------------------------
+
+Ray Tracing Roundup
+
+A new version of Lparser, an organic form grower using L-systems, is available
+at http://www.xs4all.nl/~ljlapre/ .  This is a fun page to visit even if you
+do not want the software; don't miss excellent non L-systems work such as "The
+Designer's Dream".  The new version of Lparser now has VRML output, among
+other additions, so you can put weird squid meets yam creatures in your VRML
+worlds (or some very realistic looking creatures, in fact).
+
+--------
+
+FREE access to 'The official POV-Ray CDROM'
+
+Well, I've finally done something I've been meaning to do for some time, but
+had little time in which to do it - and that is to HTML-ise the Official
+POV-Ray CDROM and place it onto the Web !
+
+As of now, 'The Official POV-Ray CDROM' is available for free browsing and
+downloading at http://www.povray.org/pov-cdrom/. If you've been wondering
+what's really on the CD but never had a chance to find out, now's your chance!
+
+[I've trimmed the announcement down to just this, but check it out - it's a
+fully HTML-ized version of the directory structure of the CD, with much
+material that cannot be found anywhere else on the Net. -EAH]
+
+- Chris Cason <Chris.Cason@oaks.com.au>
+
+--------
+
+Font3D is a utility program for the generation of 3-dimensional text objects.
+Once created, these objects can be included in a scene description file for
+later modelling or rendering.  Several different output formats are supported,
+including:
+
+     o  Persistence of Vision 2.x
+     o  Vivid 2.0
+     o  AutoCad DXF
+     o  RenderMan RIB
+     o  RAW Triangles
+
+It uses TrueType fonts for input.  Find it at:
+ftp://ftp.povray.org/pub/povray/utilities/font3d11.zip
+
+[This package includes C++ source code, which is cool. -EAH]
+
+--------
+
+PVMPOV allows distribution of POV-Ray 2.2 across a heterogeneous network of
+computers.  While not ideal, and not even with all the features I'd like it
+to have, it does a pretty good job with long traces, and is relatively
+useful in any type of computing environment.
+
+http://www-mddsp.enel.ucalgary.ca/People/adilger/povray/pvmpov.html
+
+- Andreas Dilger <adilger@enel.ucalgary.ca>
+
+--------
+
+Nathan Loofbourrow has an interesting collection of links to papers available
+on the Web, including some on rendering and radiosity:
+
+	http://www.cis.ohio-state.edu/~loofbour/papers.html
+
+- from Stephen Spencer (spencer@siggraph.org)
+
+--------
+
+Here's the short address for my home page:
+
+http://www.cs.cmu.edu/~ph
+
+Have you seen "Deja News"?  Go to my web page, and follow "misc links" at the
+top, then follow "Deja News" (near bottom of page) and you can search for:
+
+	haines
+	heckbert
+	(natas* | nasta*) & kinski
+
+for example.  It is basically a searchable index of recent USENET articles.
+Very cool for info junkies!
+
+Also check out some of the other links on my misc page, like the
+computational geometry bibliography or the computational geometry
+software directory.
+
+- Paul Heckbert <ph@hostess.graphics.cs.cmu.edu>
+
+[Other searchers are also now adding netnews search capabilities.  For
+example, try Alta Vista at http://www.altavista.digital.com, which searches the
+web and netnews.  -EAH]
+
+--------
+
+An extensive survey of triangulation algorithms is given by:
+
+Paul S. Heckbert and Michael Garland:
+Fast Polygonal Approximation of Terrains and Height Fields.
+Carnegie Mellon University tech report CMU-CS-95-181, August 1995.
+http://www.cs.cmu.edu/afs/cs/user/garland/public/scape
+
+- Yishay <timc@netvision.net.il>
+
+--------
+
+Cornell Sampler
+
+A few of the great images from Cornell:
+	http://www.graphics.cornell.edu/sampler/
+
+--------
+
+I am updating my list of graphics pages at:
+
+http://www.graphics.cornell.edu/~shirley/graphics.html
+
+If you know of any I should add, please let me know.
+
+Also, if you have online Monte Carlo code or papers, please let me know and I
+will add you to:
+
+http://www.graphics.cornell.edu/~shirley/mc.html
+
+- Pete Shirley <shirley@graphics.cornell.edu>
+
+--------
+
+The VRML Sourcebook rocks the house!  It covers all of that evil nitty-gritty
+I purposely left out of my own book.  But now I have a text I can recommend
+- in good conscience - to people who need something more technical.
+
+- Mark Pesce <mpesce@netcom.com>
+
+[For more info, check:
+
+    http://www.wiley.com/compbooks/k26.html
+
+Every VRML programmer should own this one, period. -EAH]
+
+--------
+
+Que Publishing, a division of Macmillan Computer Publishing, is proud
+to announce "Special Edition Using VRML," by Stephen Matsuba and
+Bernie Roehl.
+The book provides 800 pages of detailed information about VRML,
+including tutorials on creating VRML worlds, tips and tricks,
+optimization techniques, and useful insights into the design of the
+language.
+Also included is comprehensive coverage of the various tools that are
+available for creating VRML worlds, as well as the available browsers.
+Since the VRML specification is constantly evolving, several chapters are
+devoted to examining the future of the language.
+
+For world-builders, over half a dozen worlds are detailed in the
+book, along with accompanying commentary by their creators.  For
+programmers, there's a chapter on writing VRML translators and scene
+generators.
+Also included with the book is a CD-ROM with dozens of useful
+utilities, sample worlds, browsers, 3D Modelers, toolkits and other
+VRML resources.
+
+Special Edition Using VRML should be available on store shelves by the
+middle of February.
+
+- Benjamin Milstead
+
+--------
+
+I wanted to advertise the URL of a page I am developing with surveys and links
+to research on parallel volume rendering:
+
+    http://www.cse.ucsc.edu/~craig/pdr.html
+
+Please feel free to submit URL's and or comments.  I'm also the maintainer of
+the FAQ for the mp-render community.  This FAQ is reachable from the above
+site, or available by anonymous ftp:
+    ftp://ftp.cse.ucsc.edu/pub/mp-render/mp-render.faq
+
+- Craig Wittenbrink <craig@cse.ucsc.edu>
+
+--------
+
+There's a big RenderMan site out there, I think in California. Ah, here it is:
+
+    http://pete.cs.caltech.edu/RMR/rmTop.htmld/rmTop.html
+
+- Stephen Spencer <spencer@emily.cgrg.ohio-state.edu>
+
+--------
+
+Quaternion Tutorial
+
+Ken Offer (koffer@io.com) wrote:
+: Can anyone mention a good text for those wishing to comprehend the
+: intricate details of quaternions?
+
+How intricate do you want to get?  Sir Hamilton, who invented the beasts,
+wrote some books.  I don't recommend them for the beginner and there is
+nothing about computer graphics in them.  (That is only to be expected, since
+matrices were invented by Cayley after quaternions and computers only came in
+the next century.)  You could try my brief tutorial at
+ftp://ftp.cis.upenn.edu/pub/graphics/shoemake/.  If you can find a copy of the
+Siggraph 85 Proceedings (tough, I know), my paper there may help.  There are
+also a number of articles in the various Graphics Gems books.
+
+Quaternions are simple to program and use, but deep comprehension still
+beckons me 10 years after my first paper on them.
+
+- Ken Shoemake <shoemake@bambi.cis.upenn.edu>
+
+--------
+
+Now available (for free) at http://www.ledalite.com:
+
+* 200+ photometric data files for fluorescent light fixtures
+* Documentation and ANSI C source code for an IESNA LM-63 photometric
+  data file parser (public domain)
+* Demonstration radiosity renderer for MS-Windows 3.1 and Windows '95
+* Radiosity bibliography
+* Color quantization bibliography
+* ... and more
+
+- Ian Ashdown <iashdown@ledalite.com>
+
+--------
+
+Per Christensen, Eric Stollnitz, David Salesin and I have been doing some
+research on extending clustering to glossy global illumination.  Last month we
+submitted a paper "Clustering for Glossy Global Illumination" summarizing our
+research to ACM TOG.  The paper is available online via anonymous ftp from
+ftp://espresso.cs.washington.edu/pub/danix/clustering .
+
+An earlier version of this paper was submitted to Siggraph 95 (and was
+rejected).  Fortunately, the comments of the anonymous reviewers challenged us
+to substantially improve both the paper and the implementation.
+
+The highlights of the results section are:  a comparison with RADIANCE on a
+glossy "sphereflake" model and nice global illumination solutions for an
+architectural environment with ~8000 initial surfaces, most of which are
+glossy.
+
+If you happen to read the paper and have any comments, please e-mail them to
+me.
+
+- Dani Lischinski <danix@cs.washington.edu>
+
+--------
+
+BMRT Update
+
+[BMRT is a RenderMan compliant ray tracer/radiosity renderer.  See RTNv8n1.]
+
+BMRT is still going strong.  In fact, I just updated the FTP site
+(ftp://ftp.gwu.edu/pub/graphics/BMRT) with a new revision that has
+some enhancements and bug fixes.  I've had a WWW site for a while,
+too: http://www.seas.gwu.edu/student/gritz/bmrt.html.  One new
+feature is that I use the Mesa library (freeware OpenGL clone), so
+all the non-SGI ports now support the polygon previewer and other
+features that were previously only enabled on my SGI version.
+
+The software is quite widely used, including by a lot of well known
+studios (who mostly use PRMan, but occasionally use BMRT for
+particular effects that are easier with ray tracing).  It was used
+recently for some effects on the show "Star Trek: Voyager", and also
+was used to render the new video logo for the Utah Jazz (NBA team),
+which apparently is shown whenever their games are broadcast.
+
+- Larry Gritz <lg@pixar.com>
+
+--------
+
+Rayshade on Linux:
+
+Direct URL	http://www.carsinfo.com/~eric/rayshade-linux.tar.gz
+Indirect	http://www.carsinfo.com/~eric/		< Has link to it
+
+- Eric Bardes <eric@carsinfo.com>
+
+----
+
+Netshade
+
+I'm a little uncertain about releasing this to the world at this point, but
+there have been many recent questions about it (and about Rayshade in general)
+so I thought I should just do it.
+
+This was a project I started some time ago, when I had a different job and
+free time.  Now I have little free time, so I cannot easily continue serious
+work on it.  So, here it is.  Perhaps the net can make it cleaner and I can be
+a patch-applying droid.  ;)
+
+If any changes are made to the source, PLEASE mail them to me as well.
+
+Netshade 0.0.3 (really beta :) can be found on:
+	ftp://packrat.flame.org/pub/netshade/
+
+Comments, suggestions, and flames to me.  I'll apply the usual mail filter and
+ignore the latter.  :)
+
+- Michael Graff <explorer@iastate.edu>
+
+--------
+
+For a free blobby modeler, with source code, visit:
+
+	http://beebalm.cit.cornell.edu/Info/People/pbenton
+
+Alex Benton's homepage.  Source is available (soon in a zip file), and it's
+pretty fun to use:  you move the spheres around and watch the implicit surface
+form on the fly (turn on Blobby Surface under View).  It is more of an
+educational demo right now, but since the code is available it could be
+hacked to export to DXF, etc.
+
+- Eric Haines
+
+--------
+
+Free Models
+
+Well, my web page has moved one more time to:
+
+	http://www.loop.com/~hhc
+
+Hopely, connection will be much better.
+
+In case you have never been to my web page, the following is a summary of what
+it has.
+
+1. Free 3D Models in .3ds format
+     * Victorinox Swiss Army Knife
+     * Deoxyriboneucleic acid
+2. Free Star Wars related Models in .3ds format
+     * 16 Models of Rebel Alliance Weapons
+     * 16 Models of Empire Weapons
+     * 7 Other Models
+3. Thumbnails of my Architectural Works
+4. thumbnails of my Industrial and Miscellaneous Models
+5. Gallery of raytraced images of my models and animation
+
+Do enjoy my free models.  All models on my site are created by me.
+[A nice little site, the knife is great.  -EAH]
+
+- Harry H. Chang <hhc@loop.com>
+
+--------
+
+Crisis in Perspective, Inc. announced JOEY 4.0, an integrated programmers
+tool kit for Windows 95 and NT, that promises to enable developers to create
+3D applications without any prior 3D graphics knowledge or experience.  It
+sells for $250; it's available for evaluation at:
+
+	http://www.teleport.com/~cip
+
+[If you use Visual C++ and MFC, you should give JOEY a look; I saw it at
+SIGGRAPH and it looked pretty cool, a nice way to get some 3D controls in
+place quickly.  There is a book from Springer Verlag
+(http://www.springer-ny.com or http://www.springer.de/) by Roy Hall and
+Danielle Forsyth about JOEY, with some of the system's code and development
+tools included on a floppy.  "Interactive 3-D Graphics in Windows," Approx.
+390 pp.  3 1/2" disk, Softcover ISBN 0-387-94573-3.  I plan to have a short
+review of this book and software here soon.  -EAH]
+
+--------
+
+For a tutorial on constraint based modeling, see:
+
+	http://www.cs.purdue.edu/homes/cmh/electrobook/intro.html
+
+It is from Purdue, and my modeling friends tell me it is quite good.
+
+- Eric Haines
+
+--------
+
+The Proceedings of the Rendering Workshops 5 and 6 are available now!
+
+5th Rendering Workshop 1994:
+Photorealistic Rendering Techniques (ed. Sakas, Shirley, Mueller)
+ISBN 3-540-58475-7
+
+6th Rendering Workshop 1995:
+Rendering Techniques'95 (ed. Hanrahan, Purgathofer)
+ISBN 3-211-82733-1
+
+order from: Springer-Verlag, http://www.springer.de/ or
+http://www.springer-ny.com
+
+- Werner Purgathofer (wp@stellaris.cg.tuwien.ac.at)
+
+--------
+
+Radiosity system
+
+I'd like to announce the initial release of the radiosity code developed in
+our research group.  Our group is at:
+
+    http://www.cs.kuleuven.ac.be/cwis/research/graphics/graphics-E.shtml
+
+Features:
+---------
+
+- It does both shooting (progressive refinement radiosity) and
+  gathering.
+- Hierarchical refinement if you like (for both shooting or gathering)
+- Importance-driven if you like (for both shooting or gathering)
+- Formfactor computation by numerical integration. The ray-casting
+  for visibility determination is accelerated by using hierarchical bounding
+  boxes, shadow caching and shaftculling.
+- handles both triangles and (convex) quadrilaterals.
+- T-vertex elimination and many other rendering options.
+- reads Greg Ward's MGF scene description files (see
+  http://radsite.lbl.gov/mgf/HOME.html)
+- a more or less nice user interface and interactive view manipulation.
+- ...
+
+It requires
+- Motif,
+- Silicon Graphics' Iris GL (or a clone) or PEX
+- an ANSI-C compiler (gcc 2.7.0 was used to develop it) and GNU make (or
+  another make which offers the .include feature, unless you change
+  the Makefiles a bit) to compile it.
+
+You can obtain this code for free on URL:
+
+	http://www.cs.kuleuven.ac.be/~philippe/rad.html
+
+- Philippe Bekaert <Philippe.Bekaert@cs.kuleuven.ac.be>
+
+--------
+
+Form Factor of a Cow
+
+[This is a radiosity joke, "what's the form factor of a cow?", and the fact
+that someone actually computed it once made it truly strange.  What adds to it
+is to find out that the simplification for a cow is, well, read on.  -EAH]
+
+I did look up the cow paper once, and it is for real.  The motivation was
+designing heating systems for the care of livestock.
+
+Here is a summary:
+
+"Uses mechanical integrator to measure factors from various wall elements to a
+cow, and presents some results for size of equivalent sphere that gives same
+factor as cow.  It is found that the sphere origin should be place at
+one-fourth of the withers-to-pin-bone length back of the withers, at a height
+above the floor of two-thirds the height of the withers, and the equivalent
+sphere radius should be 1.8, 2.08 or 1.78 times the heart girth for exchange
+with the floor and ceiling, sidewalls, or front and back walls respectively.
+Also discusses exchange between cows and entire bounding walls, floor and
+ceiling and between parallel cows."
+
+I don't think I kept a copy of the paper, so please don't ask me for it.  As I
+recall, the authors were from California, and the paper was initially read at
+an agricultural meeting held at Cornell.
+
+Pastorally,
+- Holly E Rushmeier <holly@cam.nist.gov>
+
+----
+
+Ian Ashdown notes:
+
+%A R. L. Perry
+%A E. P. Speck
+%T Geometric Factors for Thermal Radiation Exchange between Cows and their
+Surroundings
+%R Technical Report 59-323
+%I Journal of the American Society of Agricultural Engineering
+%D 1959
+%K form factors
+%Z a seminal paper in computing cow form factors
+
+--------
+
+My favorite image manipulation program on Unix is still ImageMagick, at:
+
+	http://www.wizards.dupont.com/cristy/ImageMagick.html
+
+It's no PhotoShop, but it *is* free and with source, and you can run batch
+jobs.  It and the old but good Utah Raster Toolkit are two of the many reasons
+our systems administrator can take my Unix workstation away only by prying it
+from my cold, dead fingers.
+
+On PC's the shareware Paint Shop Pro and LView Pro are both reasonable image
+manipulation programs, though both have their gaps.  I prefer PSP, but LView
+Pro allows you to make GIFs transparent (good for HTML hacking).  Search for
+the latest versions of these (and just about any other shareware and freeware
+for PC's) at the Virtual Software Library:
+
+	http://vsl.cnet.com/
+
+--------
+
+The coolest graphics java applet for me is Paul Haeberli's impressionist paint
+program.  See:
+
+	http://reality.sgi.com/grafica/
+
+It is based on Paul's "paint by numbers" work presented at SIGGRAPH '90.
+His 3D interactive java applet here is also impressively fast.
+
+- Eric Haines
+
+--------
+
+Other sites of interest:
+
+	http://www.essi.fr/~diard/photon4d.html - Photon 4D, a Unix based ray
+		tracer, z-buffer renderer, and Motif interface.  The author is
+		looking for beta testers at this point.
+	http://www.cyberstation.fr/~dolivier/povlab.html - POVLAB modeler page,
+		a modeler for POV-Ray.
+	http://www.lightside.com/3dsite - 3D Site's new address, a great
+		clearinghouse for all things computer graphical
+	http://graphics.rent.com/ - A graphics user related site, lots of
+		pointers and graphics package mailing list addresses and
+		material.
+	http://www.PrimeNet.com:80/~grieggs/cg_faq.html - computer graphics FAQ
+	http://www.research.microsoft.com/research/graphics/glassner -
+		Andrew Glassner's home page, interesting graphics research
+	http://www.sdsc.edu/SDSC/Partners/vrml/software/textures.html -
+		sources of free textures on the Web.
+	http://www.exit109.com/~jimh/ - a nice little gallery; the glass
+		sphere experiments are different and interesting.
+	http://www2.cinenet.net/GWEB - professional computer animators' site
+	http://intranet.on.ca/~sshah/booklist.html#Graphics - list of graphics
+		books and ISBNs, pointers to some publishers now on line.
+	http://www.dcs.ed.ac.uk/home/mxr/objects.html - another free 3D model
+		site.
+	http://rushmore.JPL.NASA.GOV/~ndr/tiff - Unofficial TIFF homepage
+
+- Eric Haines
+
+--------
+
+If you are interested in having your computer look at you, check out:
+
+	http://www.cs.cmu.edu/~cil/vision.html
+
+a home page pointing at many computer vision related resources.
+
+-------------------------------------------------------------------------------
+
+A Freeware modeller supporting VRML, by Stephen Chenney
+	<schenney@cs.berkeley.edu>
+
+I'm the author of the free scene design program Sced.  The next release of
+Sced will come shortly, and it will include the capability to export VRML.
+
+For those who've never heard of Sced (probably most of you):
+- Runs on almost any UNIX platform with X11R5 or better.
+- Constraint based modelling interface.
+- Support for CSG objects.
+- Exports to POVray, rayshade, radiance, renderman and now VRML.
+
+There's lot's to say but I won't say it.  Find out more at:
+
+    http://http.cs.berkeley.edu/~schenney/sced/sced.html
+
+[There is also a patched version of Sced called Sceda, at:
+    http://www.cyberus.ca/~denism/sceda/sceda.html
+which adds keyframing abilities. - EAH]
+
+-------------------------------------------------------------------------------
+
+3D Point Hashing, by Steve Worley <spworley@best.com>
+
+[I asked Steve if he had any good hashing function for 3D points in space.  In
+other words, is there some good function that takes a 3D point and gives back
+a hash value in some range, and has a good spread of hashing numbers.  For
+example, this can be useful for finding and deleting duplicate vertices, or
+for getting a repeatable seed value for a 3D procedural texture function or
+fractal terrain generator.  Making a function which does not lead to
+patterning or clumping is not obvious; for example, the function "int(x+y+z)
+modulus range" would be a bad function:  all points within 0 <= x+y+z < 1, a
+sort of diagonal slab, and so all have the same hash number.  If you made a
+fractal mountain with this function, you would probably see diagonal strips at
+the same altitude.  Or if your entire object fell inside one slab, all the
+vertices would have the same hash number and so not save you any sorting time.
+This problem is called aliasing.  -EAH]
+
+I've been working on fast but thorough hashing.
+
+OK, the major problem with FP numbers is that are 17.000000000 and
+17.000000001 the same number?  If no (in other words, ANY difference
+makes them distinct) you run into problems if any operations have been
+applied to them. Copying usually does not corrupt them.
+
+A strategy for FP I expect would deal with the 4 (or 8) bytes
+that make up the value - converting to some integer/exponent or
+whatever is horribly slow.
+
+So basically you have a 3 sets of 4 bytes, and you want to mash all
+twelve bytes into a unique hash. Lots of ways to do this, some fast,
+some very good.
+
+Probably the fastest version would be something like:
+
+float position[3];
+unsigned char *byte;
+
+byte=(unsigned char *)position; /* lets us address the floats as 12 bytes */
+
+unsigned long hash;
+hash = 3*byte[0] + 5*byte[1] + 7*byte[2] + 11*byte[3] + .... (prime)*byte[n]
+
+This is VERY fast. However it can suffer from aliasing, especially when the
+input float values have zero bytes in their binary representation.
+
+The high quality way is to use an "S-box" to mash the bits around thoroughly.
+[This is THE theme of cryptography]. An S-box is just a way of taking
+one byte and outputting another, with a (random, usually) truth table.
+In practice an 8x8 S-box (8 bits in, 8 bits out) can be made really easily
+by the pseudocode:
+
+  for i=0 to 255
+    sbox[i]=i;
+  next i
+
+  for i=0 to 255
+    j=random(0,255)
+    swap sbox[i] with sbox[j]
+  next i
+
+Then the (very high quality) hash of a byte x is sbox[x].  All an S-box is is
+bit-swizzling. It is mapping sets of bits to new sets of bits.  However it does
+it completely nonlinearly, which is what you want.
+
+To combine this with many bytes, you can do a lot of things.  For your
+purposes, it's probably enough to do...
+
+hash = 3*sbox[byte[0]] + 5*sbox[byte[1]^123] + 7*sbox[byte[2]^47]...
+	+ (prime)*sbox[byte xor some random (fixed) number];
+
+The mults probably are not even horribly necessary.
+
+Actually in both cases you may want to use larger primes, like 101, 247, etc,
+not 3, 5, 7.
+
+Ken Perlin uses the algorithm:
+
+hash = (sbox[(X+sbox[(Y+sbox[Z%256])%256])%256];
+
+This is a compromise, since it has excellent behavior locally (as the LSB
+changes) but it causes repeated areas, i.e.
+HASH(x,y,z)=HASH(x+i*256,y+j*256,z+k*256).  It is more efficient than a longer
+hash since it needs only three sbox lookups.  This hash is good for generating
+noise samples on an integer lattice but is terrible for finding matching
+vertices (e.g. 1.0, 1.5, and 1.99 as inputs all give the same hash number
+out).
+
+There are lots and lots and lots of variations.  But the sbox method is
+extremely good as a basic tool to use. If you are looking for cryptographically
+secure hashing, you can chain rules, like hashing each byte into a new byte
+with a new sbox, then shifting the full 12 bytes right 4 bits and hashing
+again. In crypto, they often do 10 "rounds" of this kind of iteration.
+
+I should mention that my main hashing has been for stuff like fractal
+noise values at gridpoints.
+
+It is surprisingly easy to get bad aliasing on a uniform grid!! Aliasing
+you can actually SEE as repeated patches. This is why I was researching
+all this s-box stuff. Luckily s-boxes only take 256 bytes of ram and
+a little precompute.
+
+Trick #3: make a 512 byte array of your sbox appended to itself,
+so sbox[256]=sbox[0], sbox[257]=sbox[1]...
+
+Then you can do:
+
+hash= sbox[byte[0]+sbox[byte[1]+sbox[byte[2]+... ]]]]
+
+[the 512 byte array is just so that you do not overflow when adding. -EAH]
+
+This is a REALLY good hash, but only gives you 0-255 out.
+
+One other note, you can move to a 16x16 S-box, same idea. Your memory usage
+jumps from 256 (or 512) bytes to 120 or 240K. But then you are chunking two
+bytes at a time. It's a better hash, and nearly twice as fast (after the sbox
+is built).
+
+There are even more details than this: stuff about collisions
+from "pipelines" when things are just one bit different that for the best
+hashing you want to avoid.
+
+-------------------------------------------------------------------------------
+
+5D vs. BSP and ABVH, by Nguyen Duc Cuong aka "JuHu" <cn1@irz.inf.tu-dresden.de>
+
+[GX is an "extended" ray tracer with some interesting capabilities, including
+the use of 5D ray classification, a hybrid BSP and ABVH efficiency scheme,
+selection of sampling patterns, area light sources, etc.  One of its primary
+uses has been in testing efficiency schemes.  Find it at:
+
+    http://www.inf.tu-dresden.de/~cn1/gx.html
+
+I find this work to be interesting as it explores two relatively new and
+unexplored ray tracer efficiency schemes.  Because the connection to JuHu's
+site (at least from here) is tenuous and slow, I reprint the results of his
+efficiency scheme exploration here.  -EAH]
+
+Surprisingly, BSP isn't always faster than ABVH, especially when
+over-partitioning occurs.  From my experiments, the max. number of candidates
+in a node can be adjusted to any given number, but the max. level of
+subdivision should be between 8-10.
+
+The results from my BSP- and 5D-Implementation show that 5D is faster than BSP
+only if the scene contains many low-reflective/refractive polygons with small
+changes in curvature (teapot.nff, for example).  For other .NFFs of SPD, such
+as balls.nff, jacks.nff etc., 5D is much slower than BSP, and the required
+memory for 5D is enormous compared to BSP.  Another problem is that the main
+advantage of 5D over BSP is not having to compute the voxel-path, but if the
+BSP-tree is balanced, it is possible to find the closest intersection very
+soon after few voxel-tests.  And, the beam/box overlap-test for the
+reclassification of candidates lists undermines the efficiency of 5D, too.  I
+think 5D is only attractive for eye-rays and shadow-rays, because with these
+coherency is high enough.
+
+Hardware :
+Iris Indigo w/ 33 MHZ IP12 Processor, Main memory size: 48 Mbytes
+
+- Object-CH : shadow cache hits by last object
+- Voxel-CH  : shadow cache hits by last voxel
+- BSP-Tree is generated w/ X/Y (means the max. depth is X and
+  the max. number of objects in a node is Y)
+- Preparation and tracing times are given in seconds.
+
+For these tests, GX uses BSP as a first method and ABVH as the second, which
+generates an ABVH for each BSP-node.  Pure BSP or pure AVBH can be applied by
+setting the max.  number of candidates in a BSP-Node to 1 or to a large
+number.
+
+  max. subdivision depth =
+    ceil(log(number of primitives / max. num of prim. in a node)/log(2)) + 1 )
+
+
+gears4.nff
+===============================
+Eye rays         :      40000
+Reflection rays  :      13335
+Refraction rays  :      16749
+Shadow rays      :      238681
+
+---------+------+-------+-------+------+------+-------+-------+-------
+BSP-Tree | 15/1 | 11/10 | 10/20 | 9/50 | 8/90 | 7/200 | 6/400 |5/1000
+---------+------+-------+-------+------+------+-------+-------+-------
+Preparing|  74  |  52   |  60   |  65  |  56  |  55   |  76   |  86
+---------+------+-------+-------+------+------+-------+-------+-------
+Tracing  | 651  | 308   | 298   | 293  | 259  | 340   | 418   | 597
+---------+------+-------+-------+------+------+-------+-------+-------
+Object-CH| 40376| 41524 | 41572 |42145 |42454 | 41866 | 4183  | 40253
+---------+------+-------+-------+------+------+-------+-------+-------
+Voxel-CH |  2578|  5889 |  7077 |10568 |12296 | 16492 | 20374 | 24056
+---------+------+-------+-------+------+------+-------+-------+-------
+
+
+balls4.nff
+======================
+Eye          |  40000
+Reflection   |  30889
+Refraction   |  0
+Shadow       |  150967
+
+---------+-------+-------+-------+------+------+-------+-------+-------
+BSP-Tree | 14/1  | 11/10 | 10/20 | 9/50 | 8/90 | 7/200 | 6/400 | 4/1000
+---------+-------+-------+-------+------+------+-------+-------+-------
+Preparing|    37 |    45 |    40 |  65  |   44 |    43 |    47 |    65
+---------+-------+-------+-------+------+------+-------+-------+-------
+Tracing  |   634 |   352 |   261 | 293  |  228 |   264 |   348 |   891
+---------+-------+-------+-------+------+------+-------+-------+-------
+Object-CH| 23270 | 23660 | 23718 |42145 |23971 |  2382 | 23897 | 23429
+---------+-------+-------+-------+------+------+-------+-------+-------
+Voxel-CH |   594 |  1470 |  2162 |10568 | 3942 |  4985 |  5973 |  8617
+---------+-------+-------+-------+------+------+-------+-------+-------
+
+
+[As it turns out, Matt Quail just tipped me off that George Simiakis,
+who also has explored 5D ray classification (RTNv6n1, RTNv7n5), has just put
+his thesis on the net (it's 4 megs, he should be compressing it soon):
+    ftp://ftp.sys.uea.ac.uk/pub/ah/G.Simiakakis_PhD.ps 
+gzipped (much smaller! 0.7 megs) at:
+    http://hardy.ocs.mq.edu.au/~mquail/G.Simiakakis_PhD.ps.gz
+
+Paging through it, this thesis looks like a good overview of existing RT
+efficiency research, and Matt said the research looks well done.  The thesis
+examines pure 5D and hybrids using this scheme, along with an in-depth study
+of making such algorithms parallelizable.
+
+George Simiakis writes:
+"If you ask me what I really think about 5D, I believe it is good for low
+complexity scenes with lots of ray coherence, but I prefer 3D methods (or the
+2D grid, see my thesis) as an all-around method.  In other words I prefer
+scalability, general robustness and predictability of performance.  Ray
+tracing may not be solved 100% but new improvements are bound to be
+insignificant compared to improvements in the past.  I hope to work on
+parallel radiosity now.  There is still some efficiency work to be done there."
+
+-EAH]
+
+-------------------------------------------------------------------------------
+
+Interacting with Ray Traces, by Bert Peers <BERT.PEERS@student.kuleuven.ac.be>
+
+Mark Craig <as5mcrai@scot1.ucsalford.ac.uk> asks:
+>Has anyone ever pre-calculated a z-buffer, that is generated a scene in a ray
+>tracer or similar app. and somehow stored the depth of each pixel in a buffer
+>and used this for the zbuffer. I think the results would look interesting.
+
+Yep, I have written a little IBM Demo called 'The Attic', maybe you'll find it
+on some demo collection cd as ATTICFIX.ZIP, which does just that:  an image of
+a sphere with some cylinders (difficult to scan convert) was raytraced,
+including some 'cool' procedural texturing (not possible in realtime) and with
+this stored, fixed zbuffer, a realtime rotating cube was mixed.  Looks good.
+
+[This is actually a fun trick, and can even be useful.  I once wrote a demo
+for an HP graphics box where they had a weird mode where you could compare
+with the z-buffer but not write to it, and could render into an overlay plane.
+The effect:  you could have a fully ray traced camshaft or whatever and move a
+semi-transparent (screen-door) square around through this scene and the object
+- cool effect, you could get a good sense of the contours of the object, while
+having a nice rendering on display.  -EAH]
+
+-------------------------------------------------------------------------------
+
+Hierarchical Techniques for Glossy Global Illumination, by Per Christensen
+	<per@cs.washington.edu>
+
+Abstract:
+
+This dissertation concerns efficient computation of realistic images.  To
+compute realistic synthetic images, the effect of global illumination is
+essential.  Ray tracing algorithms solve the global illumination problem for
+specular interreflections, and radiosity algorithms solve it for diffuse
+interreflections.  But computing a solution is more complicated when the
+surfaces have glossy reflection.
+
+This dissertation describes hierarchical techniques for efficient solution of
+the glossy global illumination problem.  Two types of hierarchy are utilized:
+wavelets to accurately represent radiance distributions on surface patches,
+and clusters to approximately represent radiant intensity from groups of
+surface patches.  Without hierarchical techniques, the solution time would be
+quadratic in the number of patches and O(b^{1.5}) in the number of basis
+functions b.  The hierarchical techniques make solution time linear in both
+the number of patches and in the number of basis functions.  This reduction is
+significant since the numbers of patches and basis functions are large for
+accurate solutions in realistic environments.  Furthermore, directional
+importance is used to focus refinement of the solution on parts that
+contribute significantly to a particular view of the scene.
+
+Our method is the first finite-element method capable of handling complex
+glossy scenes.
+
+----
+
+If you would like to read more than the abstract, go to
+
+  http://www.cs.washington.edu/homes/per/publication.html
+
+and click on "dissertation" or "smaller version".  The smaller version is much
+faster to transfer, but has no color images.
+
+[A paper on this topic by Per Christensen, Eric Stollnitz, David Salesin and
+Dani Lischinski is available online via anonymous ftp from
+ftp://espresso.cs.washington.edu/pub/danix/clustering . - EAH]
+
+-------------------------------------------------------------------------------
+
+Global Illumination SIGGRAPH meeting, by Greg Ward <greg@theo.lbl.gov>
+
+Well, we just got out of our annual Siggraph [global illumination] lunch
+meeting, so I thought I would jot some notes about it while it was still fresh
+in my overcrowded brain.
+
+There were about 20 of us attending, and I won't embarrass myself by
+misspelling (or forgetting) everyone's name, but instead I'll just mention some
+of the topics we covered and what was said about them.
+
+1. Sharing models and data
+
+To address need for shared models that are usable and useful for global
+illumination, a new format has been developed called MGF (for Materials and
+Geometry Format) and models and libraries are now available from:
+
+	http://radsite.lbl.gov/mgf/HOME.html
+
+Or, if you only have ftp access, try:
+
+	ftp://hobbes.lbl.gov/www/mgf/
+
+This format supports a reasonable reflectance model, CIE XYZ and spectral
+colors, and the IES luminaire data format for light sources.  A number of
+models from Radiance and other sources have been collected, and we encourage
+people with big hearts to add their own models to our collection.  Write to me
+if you have any questions or want to get on the mailing list for how to
+improve this format to meet our long-term needs.
+
+2. Setting up light sources
+
+Dan Wexler [see his article] pointed out that one of the biggest time sinks
+in animation and rendering for film is the setting up of light sources, and
+that methods for making this more interactive were critical to this
+application.  Specifically, he felt that a "deep raster" approach (similar to
+that developed by Sequin et al and presented at Siggraph 4 years or so ago)
+was a good way to go.  In general, he felt there needed to be more of an
+emphasis on animation and interaction than there was in our current focus on
+static environments and generating one really nice image.
+
+3. Image-based rendering
+
+Pete Shirley addressed a general question to the group about the relative
+importance and promise of image-based rendering (ala Quicktime VR) versus
+polygon-based methods.  The overall response seemed to indicate that indeed
+image interpolation was a significant direction to head in the future, though
+polygon rendering will continue to be important when object manipulating is
+required and for nearby objects.  It seemed that at least five people there
+were actively pursuing such techniques.  (Check out this year's Siggraph
+proceedings on Plenoptic Modeling and Quicktime VR, also Nimeroff et al in
+Eurographics Rendering Workshop '95.)
+
+4. Visibility processing
+
+Several people talked about the difficulty of geometric simplification and
+other statistical or computational geometry methods for detecting visibility
+changes or approximating visibility.  Christine Piatko of NIST reminded folks
+that tracking visibility is an O(N^6) problem and not something you want to do
+explicitly, and there was an interesting paper by Francois Sillion and George
+Drettakis (similar in some respects to the one Francois presented at EGRW this
+June) on approximating shadows.  Jeff Nimeroff of UPenn also mentioned the
+work he had done with Julie Dorsey and Holly Rushmeier and presented at EGRW
+on statistical measures of object visibility for looking at this problem.  It
+was agreed by most that statistical measures or simplification were necessary
+in large environments, though there is still much work to be done in this
+area.
+
+5. Calibrated input and output
+
+Holly Rushmeier (who by the way is next year's Siggraph papers chair) talked a
+little about the difficulty of obtaining accurate physical data from
+real-world scenes, and a number of people lamented about the undetermined
+nature of image-to-output mappings for computer monitors, printers and film
+recorders.  It was suggested that these devices be measured, which is
+certainly possible, and that this data be shared with the larger community.
+(Hear, hear, let's all do it, etc.)  Holly and I also reminded people to look
+at the conference room image measurements and model we have made available on
+the web site:
+
+	http://radsite.lbl.gov/mgf/compare.html
+
+From there, you can also pick up an online copy of our EGRW '95 paper on image
+metrics if you haven't purchased the Springer-Verlag proceedings yet.
+
+6. Getting papers into Siggraph
+
+Henrik Wann Jensen of Denmark asked about the lack of papers covering global
+illumination this year at Siggraph, and if this was a trend or what?  Holly
+answered that there's a bias against incremental work in any field, and that
+Siggraph tends to accept papers that are new directions rather than the
+logical next step in a technique previously published.  Ian Ashdown of
+Ledalite said that he had submitted something that reviewers liked except that
+it didn't have any pretty pictures and was therefore rejected.  (No one had
+anything to say to console him on this.)  I made the unsubstantiated claim
+that it can help to provide evidence of a real-life application along with an
+incremental improvement in one or more existing algorithms, and Holly agreed
+that there must be a balance between application and innovation.
+
+There is a lot of useful information by the way on next year's Siggraph in New
+Orleans.  Look for the "new" icons on the web site:
+
+	http://www.s95.siggraph.org/conferences/siggraph96/siggraph96.html
+
+In particular, you should be aware of the new electronic abstract requirement
+for technical papers.
+
+7. Oracle-assisted rendering
+
+Another trend that people discussed (me for one) was the use of oracles to
+decide when and where to apply which algorithms (a.k.a. "hacks") to improve
+the speed and quality of renderings.  Some information may be derived from the
+scene itself, but other assistance will always require the user to help the
+program to guide the calculation.  This is not as bad as it sounds, since
+users are after all necessary to rendering, so they may as well guide it.  I
+directed people to my EGRW '95 paper on the subject, which I can make
+available online if people are interested.  Although I don't plan to pursue
+this too much myself, I think it continues to be an interesting and promising
+direction for investigation.
+
+8. Rendering code available
+
+Philipp Slusallek of Erlangen Univ.  mentioned to the group that they have a
+renderer that extends Renderman input to include global illumination
+calculations (physically-based) and that code is available from him.  His
+address is <slusallek@informatik.uni-erlangen.de> if you're interested.  (He's
+going to hate me when he gets back.)
+
+Remember also about the Blue Moon Ray Tracer, written by Larry Gritz
+<lg@pixar.com> and available at:
+
+	http://www.seas.gwu.edu/student/gritz/bmrt.html
+
+It also does some global illumination calculations, though I'm not in a
+position to compare the two.
+
+As long as I'm plugging other people's code, must mention my own for those of
+you who have been asleep or locked up for some time:
+
+	http://radsite.lbl.gov/radiance/HOME.html
+
+Well, that's about it I guess.  Anyone else who was there and remembers stuff
+I forgot or points I left out, please pipe in.  I tend to do a really bad job
+at these sorts of summaries, and I neglected to take notes during the meeting,
+so I'm relying here on my less-than-adequate memory.
+
+-------------------------------------------------------------------------------
+
+Total Internal Reflection, by Eric Haines, Greg Ward <greg@hobbes.lbl.gov>,
+	and Chris Larson <larson@kingston.cs.ucla.edu>
+
+I asked a few people:
+
+	I've run into an interesting implementation problem (again) which I've
+found annoying.  Imagine you've got something with a big index of refraction,
+like a diamond, and you shoot a ray at it.  A refraction ray is spawned and
+passes through the diamond.  Due to total internal reflection (TIR) (i.e. the
+ray's past the critical angle) no refraction ray exits when this refracted ray
+(the one passing through the diamond) now intersects the surface, only a
+reflection ray is generated which bounces back through the diamond.  The normal
+correction for TIR is to simply boost the reflection ray's contribution if the
+refraction ray is not generated.
+
+	However, what happens if this reflection ray again hits, TIR occurs,
+and again only a reflection ray is spawned?  Say this happens again and again
+until the maximum level of computation is reached and we call it quits.  What
+happens at this point?  That is, how do you shade this bottommost ray?  Very
+little color has been picked up along the way, as it is expected that the
+reflection ray eventually hits something mostly diffuse and takes up that
+color.
+
+	Really, this is just a special case of the general problem of what
+should happen when the maximum ray level is hit.  Currently my kludgy fix is
+to say when the maximum level is hit we simply don't shoot the reflection ray
+but return the background color times the reflectivity and call it a day.
+I've also tried just taking the bottommost ray's surface and boost the diffuse
+component, but this is scary.  I am interested to hear how other ray tracer
+coders have handled this problem.  (Perhaps I can glue up the answers into an
+article for the Ray Tracing News).
+
+----
+
+Greg Ward <greg@hobbes.lbl.gov> replied:
+
+I don't think you will see black faces due to TIR because the light in a
+mutifaceted gem eventually finds a surface at a passable angle.  If the
+light started from inside a pane of glass or something, it might not ever
+get out, it's true, but that's the way it is.  The light that can't get
+out also couldn't get in, i.e. any incident angle up to 90 degrees refracts
+to less than the TIR angle.
+
+[Greg focusses on the gem case in particular, but I am interested
+in some general solution for the situation.  Thinking about it later, I
+realized that in some cases there just is no good answer:  TIR is how fiber
+optics work, and rays down a fiber optic cable yields a huge ray depth. - EAH]
+
+----
+
+Chris Larson <larson@kingston.cs.ucla.edu> replied:
+
+Two comments. First of all, I don't hard code any "maximum level" for rays;
+rather, I maintain a fraction for each ray, indicating its contribution to
+the intensity (color, whatever) assigned to the root ray. Recursion stops
+when this fraction falls below one bit of intensity in the final color. I
+suppose this is still a hard limit in one sense, but it allows as many 
+reflections/refractions as necessary to obtain this approximation of the root
+ray's color. It also has the nice property that reflected/refracted rays
+which don't contribute much can be solved without recursing to a hard
+maximum level. Although this could just as easily be done with the maximum
+level approach, my method provides this without any additional complexity.
+
+However, this method can still lead to infinite total internal reflection. To
+combat that problem, rays are attenuated based upon the distance they travel
+through any transparent (or translucent) media. This attenuation is based
+upon the physical characteristics of the media in question (exponential decay
+for non-conductors, different for conductors because the index of refraction
+is complex for an electrically conductive medium; I think there is another
+thread around here discussing this very point). Such attenuation is in
+addition to the typical division of energy performed between reflected and
+refracted rays.
+
+Nothing about either of these approaches is new and different; it was simply
+my chosen solution to the same problem.
+
+[For more on adaptive depth, see IEEE CG&A, Roy Hall, A Testbed for Realistic
+Image Synthesis, v.3, n.8, Nov. 1983.  This method bears repeating here as it
+is a good technique to save time; I use it too.  But without a maximum depth
+you can potentially bounce a ray forever, as with the fiber optic case.  After
+getting people's insights, my conclusion for TIR for now is what Hall
+concluded, that a maximum depth is called for just to avoid a near-infinite
+compute time for each TIR ray.  However, this leads back to my original
+question:  how to shade once I reach this maximum level?  If you have written
+a ray tracer, please let me know how you treat this case.  -EAH]
+
+-------------------------------------------------------------------------------
+
+Pretemporal Imaging Systems, by Ken Musgrave and Eric Haines
+
+You, too, can get in on the technology Ken Musgrave and I are developing.  As
+you may know, sometimes it is possible to get an index of refraction *less*
+than 1.0.  Ken writes:
+
+  "Anomalous dispersion", the peculiar asymptotic curves for refractive index
+  vs. frequency which I mentioned before, can yield a refractive index of less
+  than 1.0, but apparently only occurs at frequencies higher than visible light
+  (e.g., UV and X rays).  Or so say Born & Wolf in "Principles of Optics", 1964
+  edition, pp. 93.  Another reference I read contradicts this, saying that it
+  happens in dyes -- which are necessarily colored, due to the presence of an
+  absorption band in the visible frequencies.
+
+We suspect that the 6000-8000 Angstrom area of the spectrum holds a roseate
+coloured light which we can utilize in making spectacles.  By having an index
+of refraction which is less than 1.0, the light itself then must be moving
+faster than the speed of light in vacuum.  As you no doubt have surmised, such
+spectacles would have the property of being able to look forward in time,
+though admittedly only a small amount.  However, we believe with an elaborate
+application of smoky dispersive materials and mirrors we can make a marketable
+product.
+
+Ken suggests the names:
+
+    "Pretemporal imaging systems"
+		or
+    "Supersimultaneous transmission optics"
+
+for the industrial version, but what we need is a good consumer brand name,
+and that's where you can come in (my suggestions of Turbo-X-Lenses and
+Tachyon-Lenses are lame in the extreme).  Just send us your suggestions along
+with all your loose change and convertible bonds and we'll let you in on the
+ground floor (or even the basement) of our enterprise.
+
+I think we could have an initial public offering at SIGGRAPH at a nickel a
+share (for all those nickels which Ken Perlin should have made for developing
+turbulence functions).  I say we put all the initial money into the
+exploration of amber colored zymurgical beverages and their optical properties
+when placed in prism sided glass mugs.
+
+-------------------------------------------------------------------------------
+
+PNG Status, by Tim Wegner <twegner@phoenix.net> and Tom Lane <tgl@netcom.com>
+
+[PNG (say "ping") is the new alternative to GIF, with development helped by
+CompuServe.  Here's an update.  -EAH]
+
+To find out who is leading the way with PNG, check out Greg Roelf's page at:
+
+http://quest.jpl.nasa.gov/PNG/
+
+Greg is one of the PNG spec developers (I'm a minor one also) and is one of
+the zip/unzip developers.  The page cited above will lead you to lists of
+software that already supports PNG (there's a lot) as well as portable source
+code libraries if you want to implement PNG in your own application.  These
+are the Libpng and Zlib libraries, which are written in C and have been tested
+on many platforms.
+
+CompuServe has endorsed PNG, and Spyglass Mosaic supports inline PNG now.  Any
+browser can support PNG via helper applications.  Under UNIX, there are
+patches available for adding PNG support to Mosaic and Netscape.
+
+PNG incorporates all the features that make GIF popular, and provides a
+badly-needed update including support for true color, gamma, and alpha
+channels.  PNG uses the same deflate/inflate algorithm as zip/unzip/gzip that
+is as patent safe as is possible these days.  PNG and JPEG are complementary;
+the main difference being the use of lossless vs lossy compression.  Unlike
+GIF, both support true color (PNG also supports palette based color.)
+
+----
+
+Tom Lane (organizer of the Independent JPEG Group) notes:
+
+PNG is always going to be much faster at decompression than compression, same
+as everything else that's based on the "zip" compression method.  This is the
+right tradeoff for most applications:  you make an image file once and then
+look at it many times.
+
+PNG is strictly lossless.  On photo-like images it will never be able to beat
+JPEG for file size; that's not the point of PNG.  The other side of the coin
+is that JPEGed images can turn to mush after a few editing cycles due to
+lossiness.  PNG files won't.
+
+PNG is smaller than other lossless image formats.  For instance, it can store
+a palette-color image in less space than GIF.  But lossy compression methods
+will always beat lossless methods on file size; that's the only reason people
+put up with the obvious drawbacks of a lossy method.
+
+----
+
+And this just in from Tim Wegner:
+
+The W3C is now releasing the PNG Specification, Version 0.92, as a W3C
+Working Draft.  You can see the draft through the link at the W3C
+Technical Report page:
+	http://www.w3.org/pub/WWW/TR/
+
+[This is important for PNG acceptance, as it is now aimed to become a Web
+standard. -EAH]
+
+-------------------------------------------------------------------------------
+
+Cinematography References, by Dan Wexler <wexler@pdi.com>
+
+Last week at SigGraph I mentioned that the Cinematography literature is
+replete with information concerning real-time global illumination.
+
+Here are a couple of my favorite references:
+
+American Cinematographer Manual
+    Published by the American Society of Cinematographers (ASC), this is the
+    Foley, vanDam (F&H) of all cameramen and lighting experts.  Complete
+    descriptions of all types of cameras, lights, lenses, filters and supports
+    are given along with comparison tables.  Techniques for special visual
+    effects (background plates, compositing, miniatures, travelling mattes,
+    optical printers), and special techniques (arial, underwater, arctic,
+    tropical, day for night, stereo 3D, sound, television) are briefly
+    discusses.  There's even a section on Computer Graphics.  This is a small
+    book that can be found in many good book stores and sells for about $70.
+    ISBN 0-935578-11-0
+
+[Sing-Choong Foo <sfoo@graphics.cornell.edu> notes that "the price is only
+$49.95.  You can order it from ASC (American Society of Cinematographers)
+(213)969-4333.]
+
+Millerson, Gerald; "Lighting for Television and Film"; 3rd Ed.; Focal Press;
+    This is a very good introduction on how to light for film and video.
+    Excellent discussions of the aesthetic qualities of light and perception.
+    The basic principals of lighting (key, fill, shadows, balance, direction,
+    continuity) are summarized.  Detailed chapters on lighting people, the
+    production process, atmospheric lighting, light sources and equipment,
+    color temperature, picture control, scenery, and visual effects.  A great
+    book to learn how to light a scene to achieve a specific mood.  First
+    published in '72, third edition revised in '91.  ISBN 0-240-51299-5
+
+Malkiewicz, Kris; "Cinematography"; Simon & Schuster; '73 & '89
+    A shorter, but thorough treatment of the basic techniques.  Chapters
+    include Cameras, Films and Sensitometry, Filters and Light, Picture
+    Quality Control, Sound Recording, Cutting and Lab Work, The Basics of
+    Optical Printing, Vehicle and Underwater Cinematography, Production, and
+    Video Transfer.  ISBN 0-671-76220-6
+
+Other excellent texts include:
+
+Lowell, Ross; "Matters of Light & Depth"; Broad Street Books; '92
+    ISBN 1-879174-03-0
+
+Brown, Braun & Grondin; "Lighting Secrets for the Professional Photographer";
+    Writers Digest Books; '90; ISBN 0-89879-412-9
+
+Hart, John; "Lighting for Action"; AMPHOTO; '92; ISBN 0-8174-4225-1
+
+
+These contain other references, and I will happily send you more if you send
+me mail.  I think I might like the third one because the author makes special
+mention of Haskell Wexler, who is, of course, not related to me in any way I
+know of.  I am indebted to Jean Cunningham, one of our local lighting experts
+for most of these references.
+
+I cannot emphasize enough how much there is to learn from this body of
+knowledge.  Good lighting with a bad renderer always looks better than bad
+lighting with a good renderer, IMHO.
+
+Daniel Wexler
+R&D Staff, Pacific Data Images
+
+-------------------------------------------------------------------------------
+
+Getting Rid of the Divide, by Frank Compagner <fc@fee.uva.nl> and
+	Bob Pendleton <bobp@bga.com>
+
+[A common question when implementing z-buffer algorithms is how one can avoid
+the division per pixel that is needed to correctly perform texture mapping.
+Division is usually an expensive operation, so is worth avoiding at almost any
+cost.  (Yes, this has nothing to do with ray tracing per se, but as I have
+said before, I will include topics here that are interesting to me.  Also,
+more and more renderers are becoming hybrid systems, where eye rays are done
+using z-buffers, so it has some relevance).  -EAH]
+
+Three possible ways of getting rid of the divide are:
+
+   1 : lines of constant z (that's q to you, for some reason)
+       First, find the 2-d, screenspace, line along which the polygon has
+       constant z (or q). There exists such a line for any polygon in any
+       orientation. Then scan convert your polygon along this line. As z
+       is constant along this line, linear interpolation of the texture
+       coordinates does give you the more or less correct result (as
+       long as you do the divide along the poly's edges to get the correct
+       values to interpolate between).
+       pro's : - potentially very fast.
+	       - if all your poly's are walls/floors (ala doom/marathon),
+		 this gets a lot easier because then the lines of constant
+		 z are vertical/horizontal lines across the screen.
+	       - very easy to do light diminishing with distance (or fog).
+       con's : - nasty implementation. You have to be *very* careful how
+		 you scan convert along these lines in order to avoid holes
+		 and/or multiple writes to the same pixel. This is especially
+		 true for the edges.
+	       - as the on-screen line along which you are scan converting
+		 is (necessarily) an approximation of the real line of
+		 constant z, the texture coordinates will not be absolutely
+		 correct.
+
+   2 : (scanline) subdivision.
+       This is what you mention above: the divide and conquer approach.
+       You linearly interpolate the texture coordinates, while making sure
+       the distance across which you interpolate doesn't get too big. You
+       can do this by cutting up big polygons into lots of smaller ones, or
+       (the more popular approach) by sampling the texture coordinates at
+       a couple of points for each scanline (by doing the divide) and
+       interpolating between them.
+       pro's : - relatively easy implementation.
+	       - when correctly implemented, easy to trade a bit of speed
+		 for accuracy and vice versa. That is, you can simply
+		 decide which combination of speed and accuracy looks best
+		 after you've implemented it.
+       con's : - there are usually still artifacts from the linear
+		 interpolation visible. These are in part caused by:
+	       - hard to find a good rule for the subdivision process (how
+		 to cut up the polygons/scanlines). This must be continuous
+		 from frame to frame as sudden jumps in the places where
+		 you cut/sample will produce very strange looking results.
+		 (I think this is where SlipStream 5000 (a new 3D racing
+		 game for the pc, there's a demo somewhere) breaks down.
+		 Just fly close to a wall and move around a bit, it makes
+		 me want to cry :^).
+
+   3 : n-th order approximation.
+       Here you do not linearly interpolate the texture coordinates (a
+       first order approximation), instead you use a higher order of
+       approximation. Usually, this means a quadratic approximation, where
+       you pick a third point somewhere between the endpoints and "draw" a
+       2nd order polynomial (a parabola) through these points. The
+       mathematics of this are not completely straightforward, but they
+       aren't exactly rocket-science either. If you want me to explain this
+       in more detail, mail me, or, better yet, post here so others can read
+       it as well.
+       pro's : - very nice, clean implementation. Your inner loop can look
+		 as simple as :
+		 for (x=0; x < dx; x++){
+		   *screenptr++ = texture[u][v];
+			      // well, ok, you'll have to round
+		   u += du;   // u and v, but that's no real
+		   v += dv;   // problem with fixed point math.
+		   du += ddu;
+		   dv += ddv;
+		  }
+	       - (almost) as fast as approach 1).
+       con's : - we're approximating a hyperbola by a parabola, so the
+		 results will not be exact. (but pretty close, if you're
+		 careful)
+	       - not so easy to pick a midpoint. It's not hard to formulate
+		 in mathematical terms where the ideal midpoint is, but
+		 calculating it in real time is very expensive, You can,
+		 however, get quite good results with some simple rules.
+
+These are not the only ways of doing it, but I haven't heard of another method
+that will ge reasonable results at a reasonable frame rate.  All of these
+approaches are approximating, i.e. will not look as good as the real thing,
+but you can get pretty close.  At the moment, there is no realtime free
+direction texturemapper for the pc, ppc, or any other "low-end" machine that
+does do the divide, and some of them (descent, magic carpet...)  do look quite
+good.
+
+My personal favourite is approach nr. 3 (possibly combined with 2), although
+this is probably because I like a clean, elegant, solution more than anything
+else.  I've heard somewhere that Descent uses this approach, but I'm not sure
+about this.
+
+And while we're on the subject, these are just my ideas/opinions on the
+subject, and while I don't think they are wildly of the mark, I don't think
+they are 100% correct either.  If anyone sees things differently, just say so.
+
+----
+
+Bob Pendleton <bobp@bga.com> comments:
+
+Linear interpolation with runs of 16 pixels seems to be the best trade off
+between speed and image quality for perspective texture mapping using current
+PCs.
+
+-------------------------------------------------------------------------------
+END OF RTNEWS

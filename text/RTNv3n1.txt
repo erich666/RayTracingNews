@@ -1,0 +1,1186 @@
+ _ __                 ______                         _ __
+' )  )                  /                           ' )  )
+ /--' __.  __  ,     --/ __  __.  _. o ____  _,      /  / _  , , , _
+/  \_(_/|_/ (_/_    (_/ / (_(_/|_(__<_/ / <_(_)_    /  (_</_(_(_/_/_)_
+             /                               /|
+            '                               |/
+
+                        "Light Makes Right"
+
+                        January 2, 1990
+                        Volume 3, Number 1
+
+Compiled by Eric Haines, 3D/Eye Inc, 2359 Triphammer Rd, Ithaca, NY 14850
+    NOTE ADDRESS CHANGE: wrath.cs.cornell.edu!eye!erich
+    [distributed by Michael Cohen <m-cohen@cs.utah.edu>, but send
+    contributions and subscriptions requests to Eric Haines]
+All contents are US copyright (c) 1989,1990 by the individual authors
+Archive locations: anonymous FTP at cs.uoregon.edu (128.223.4.1) and at
+		   freedom.graphics.cornell.edu (128.84.247.85), /pub/RTNews
+Other sites: uunet.uu.net:/graphics
+
+Contents:
+    Introduction
+    New People
+    Archive Site for Ray Tracing News, by Kory Hamzeh
+    Ks + T > 1, by Craig Kolb and Eric Haines
+    Quartic Roots, and "Intro to RT" Errata, by Larry Gritz and Eric Haines
+    More on Quartics, by Larry Spence
+    Question: Kay and Kajiya Slabs for Arbitrary Quadrics?
+	by Thomas C. Palmer
+    Ambient Term, by Pierre Poulin
+    Book Reviews on Hierarchical Data Structures of Hanan Samet,
+	by A. T. Campbell, III
+    Comparison of Kolb, Haines, and MTV Ray Tracers, Part I, by Eric Haines
+    Raytracer Performance of MTV, by Steve Lamont
+    BRL-CAD Ray Tracer Timings, by Gavin Bell
+    BRL-CAD Benchmarking and Parallelism, by Mike Muuss
+    ======== USENET cullings follow ========
+    Rayshade Patches Available, by Craig Kolb
+    Research and Timings from IRISA, by Didier Badouel
+    Concerning Smart Pixels, by John S. Watson
+    Input Files for DBW Render, by Tad Guy
+    Intersection with Rotated Cubic Curve Reference, by Richard Bartels
+    Needed: Quartz surface characteristics, by Mike Macgirvin
+    Solution to Smallest Sphere Enclosing a Set of Points, by Tom Shermer
+    True Integration of Linear/Area Lights, by Kevin Picott
+
+-------------------------------------------------------------------------------
+
+Introduction
+
+	This issue's focus is on timings from various people using a wide
+selection of hardware and software.  Much of the delay in getting out this
+issue was my desire to finish up my own timing tests of MTV's, Kolb's, and my
+own ray tracers on the same machine.  I hope some of you will find this
+information of use.
+
+	Another feature of this issue is a pair of book reviews.  One of the
+purposes of the RT News is to provide people with sources of information
+relevant to ray tracing.  So, I would like to see more reviews, or even just
+brief descriptions of articles and books that you come across.  Keeping up to
+date in this field is going to take more time as the years go by, so please do
+pass on any good finds you may have.  Also, if you're an author, please feel
+free to send a copy of the abstract here for publication.  This service is
+already provided to a certain extent by SIGGRAPH for thesis work.  However,
+even a duplication of their efforts is worthwhile, since an electronic version
+is much easier to search and manipulate.
+
+-------------------------------------------------------------------------------
+
+New People
+
+# Kory Hamzeh
+# 6640 Nevada Ave.
+# Canoga Park, Ca 91303
+# Email: UUCP:     avatar!kory or ..!uunet!psivax!quad1!avatar!kory
+# INTERNET: avatar!kory@quad.com
+alias	kory_hamzeh	quad.com!avatar!kory
+
+I'm not professionally involved in ray tracing.  Just personally fascinated by
+it.  I have written a couple of ray tracers (who hasn't yet?) and I'm in the
+midst of designing a 24 bit frame buffer.  Since I don't do this on a
+professional level, I lack some of the resources required to develop real
+products.  I maintain a archive site with a lot of graphics related items
+(including Ray Tracing News).  If you need to access the archive (anonymous
+uucp only) please send me mail.
+
+--------
+
+#
+# Steve Lamont, sciViGuy - parallelism
+# NCSC,
+# Box 12732,
+# Research Triangle Park, NC 27709
+alias	steve_lamont	cornell!spl%mcnc.org
+
+--------
+
+# Bob Kozdemba - novice tracer, futures, also radiosity
+# Hewlett-Packard Co.
+# 7641 Henry Clay Blvd.
+# Liverpool, NY 14450
+# (315-451-1820 x265)
+alias   bob_kozdemba    hpfcla!hpfcse!hpurvmc!koz
+
+I work for HP in Syracuse, NY as a systems engineer.  I will be attending SU
+starting in Jan. `89 working toward my BS with a focus in computer graphics.
+My job responsibilities are to provide technical support to customers and
+sales in the areas of Starbase graphics and X Windows.  Lately I have been
+experimenting with HP's SBRR product [radiosity and ray tracing part of the HP
+graphics package] and trying to keep abreast of futures in graphics.  I have
+written an extremely primitive ray tracer and I am looking for ideas on how to
+implement reflections and transparency.
+
+--------
+
+# Robert Goldberg
+# Queens College of CUNY
+# Comp. Sci. Dep't
+# 65-34 Kissena Blvd.
+# Flushing, N.Y. 11367-0904
+# Work : 3d Modeling algorithms, with appl. to graphics and image processing
+# Phone: Work -  (718) 520-5100
+alias	robert_goldberg	rrg@acf8.nyu.edu
+
+--------
+
+# John Olsen - refraction, radiosity, antialiasing, stereo images.
+# Hewlett-Packard, Mail Stop 73
+# 3404 E. Harmony Road
+# Ft Collins, CO 80525
+# (303) 229-6746
+# email:  olsen@hq.HP.COM, hplabs!hpfcdq!olsen
+alias	john_olsen	hpfcdq.hp.com!olsen
+
+Currently, I've been spending some time tinkering with the DBWrender ray
+tracer making it produce 24 bit/pixel QRT-format images.  I like the QRT
+output format, but I like some of the features of DBWrender, such as
+antialiasing and fading to a background color.
+
+I've thought about writing my own ray tracer with all the features I want, but
+so far I've resisted this evil temptation, and only looked for fancier ones
+already done by others who could not resist the temptation.  :^)
+
+I've just installed an alias for a local ray tracing news distribution.  You
+can send it to raylist@hpfcjo.HP.COM (or if you can't reach, try something
+like hplabs!hpfcdq!hpfcjo!raylist).
+
+--------
+
+# Andrew Hunt, andrew@erm.oz
+# Earth Resource Mapping, 130 Hay St, Subiaco, Western Australia 6008
+# Phone: +61 9 388 2900   Fax: +61 9 388 2901
+# ACSnet: andrew@erm.oz
+alias	andrew_hunt	uunet!munnari!erm.erm.oz.au!andrew
+
+In 1987 I implemented a "Three Dimensional Digital Differential Analyser"
+(3D-DDA) algorithm, along the lines of Fujimoto and Iwata`s, and used it to
+speed up a raytracing system under development at the Computer Science
+Department at Curtin University of Technology.
+
+Recently I have got a bit busy developing commercial image processing software
+to devote much time to Ray Tracing.
+
+Sometime during 1990 I plan to try to port our Ray Tracing system to a
+Transputer based platform.
+
+--------
+
+# Nick Beadman - Distributed Ray Tracing, Efficiency
+# School of Information Systems
+# University of East Anglia
+# Norwich
+# Norfolk
+# United Kingdom
+alias	nick_beadman	cmp7112@sys.uea.ac.uk
+
+At the moment I'm trying to implement a distributed ray tracer on 8 t800s on a
+meiko computing surface using C, with little success I should add.  It all
+part of a big third year computing project worth a sixth of my degree.
+
+--------
+
+# Peter Miller - algorithms, realism
+# 18 Daintree Cr
+# Kaleen ACT 2617
+# AUSTRALIA
+# CONTACT LIST ONLY: subscription through melbourne
+#Phone:  +61-62-514611 (W)
+#	 +61-62-415117 (H)
+#        UUCP    {uunet,mcvax,ukc}!munnari!neccan.oz!pmiller
+#        ARPA    pmiller%neccan.oz@uunet.uu.net
+#        CSNET   pmiller%neccan.oz@australia
+#        ACSnet  pmiller@neccanm.oz
+alias	peter_miller	cornell!uunet!munnari!neccan.necisa.oz.au!peter
+
+  I have been interested in ray tracing since 1984, when I wrote a ray tracer
+before I knew it was called ray tracing!  Since then I have been reading
+journals and tinkering with my ray tracer.
+
+  The last 3 years were spent marooned off the net, with very poor graphics
+output devices; so while some work was done on the ray tracer, I now have a
+lot of catching up to do.
+
+--------
+
+# Mike J. McNeill
+# VLSI and Graphics Research Group,
+# EAPS II,
+# University of Sussex,
+# Falmer, BRIGHTON, East Sussex, BN1 9Qt
+# TEL: +44 273 606755 x 2617
+# EMAIL: (JANET) mikejm@syma.sussex.ac.uk | (UUCP) ...mcsun!ukc!syma!mikejm
+alias	mike_mcneill	mike@syma.sussex.ac.uk
+
+I am currently researching into parallelising the RT algorithm on a
+multiprocessor architecture.  I'm using object space subdivision using a fast
+octree traversal algorithm.  At the moment I'm simulating the architecture
+using C via TCP/IP protocols on a distributed Apollo network.  Interested in
+all aspects of speed-up, parallel architectures, coherency and radiosity -
+dare I mention animation and Linda?  Also does anyone know of a modelling
+package for use on the Apollos?
+
+-------------------------------------------------------------------------------
+
+Archive Site for Ray Tracing News, by Kory Hamzeh
+
+Avatar is an archive site which archives Ray Tracing News, comp.source.unix,
+comp.sources.misc, and other goodies. Archived files can be access by any
+one using anonymous uucp file transfers. A list of all files in the archive
+can be found in avatar!/usr/archive/index. Note that this file is quite
+large (about 40K). If you are only interested in the graphics related 
+archives, snarf the file avatar!/usr/archive/comp/graphics/gfx_index.
+All Ray Tracing News Archives (except for the first few) are stored in 
+/usr/archive/comp/graphics directory. They are named in the following
+fashion:
+
+	RTNewsvXXiYY.Z
+
+Where XX is the volume number, YY is the issue number. Note that all files
+(except index and gfx_index) are compressed.
+
+Before trying to access avatar, your L.sys file (or Systems file, depending
+on which flavor of UUCP you have) must be edited to contain the following
+info:
+
+#
+# L.sys entry for avatar.
+#
+# NOTE: 'BREAK' tells uucico to send a break on the line. This keyword
+# may vary from one flavor of UUCP to another. Contact your system
+# administrator if your not sure.
+#
+# 1200 baud 
+avatar Any ACU 1200 18188847503 "" BREAK "" BREAK ogin: anonuucp
+#
+# 2400 baud
+avatar Any ACU 2400 18188847503 "" BREAK ogin: anonuucp
+#
+# 19200 baud (PEP mode) for Telebit Trailblazers only
+avatar Any ACU 19200 18188847503 ogin:-\n-ogin: anonuucp
+
+After the previous lines are entered in you L.sys file, you may use the
+following command to get the index file:
+
+    uucp avatar!/usr/archive/index /usr/spool/uucppublic/index
+
+This command will grab the file from avatar and put it in your 
+/usr/spool/uucppublic directory using the name index. For example,
+to get Ray Tracing News Volume 2, Issue 5, execute the following
+command:
+
+   uucp avatar!/usr/archive/comp/graphics/RTNewsv02i05.Z /tmp/RTnewsv02i05.Z
+
+NOTE that some shells (like csh) use the "!" as an escape character, so
+use a "\" before the "!".
+
+If you experience problems getting to any of the files, I can be reached
+via e-mail at:
+
+    UUCP: avatar!kory or ..!uunet!psivax!quad1!avatar!kory
+    INTERNET: avatar!kory@quad.com soon to be kory@avatar.avatar.com
+
+
+Enjoy,
+Kory Hamzeh
+
+-------------------------------------------------------------------------------
+
+Ks + T > 1, by Craig Kolb and Eric Haines
+
+From: Craig Kolb <craig@weedeater.math.yale.edu>
+
+While adding adaptive tree pruning to rayshade (and discovering a bug), I came
+across a question I've had regarding the SPD for a while.
+
+Some objects have Ks + T > 1.  How can this be?  For example, the spheres in
+"mountain" have Ks = .9 and T = .9.  Unless I'm completely out to lunch (which
+is possible), ths means that subsequent specularly reflected rays are weighted
+by .9, and that transmitted rays are also weighted by .9.  This leads to
+"glowing" objects pretty quickly.
+
+What's wrong in the above description?  Be warned that in "nff2shade.awk", I
+set the "specular reflectance" to be min(Ks, 1. - T).
+
+--------
+
+My reply:
+
+	Actually, true enough, Ks + T > 1 does occur in the SPD stuff.
+I use T in a funny way, since I was trying to make databases that would
+display both using hidden surface and ray tracing algorithms.  Hmmm, how
+to explain?  Well, imagine you have a glass ball: under the hidden surface
+system (without transparency), you'd like the ball to appear opaque, and
+so a high Kd is in order.  Now if the thing's transparent, you don't want
+Kd to be high.  So what I do is lower Kd and Ks by ( 1 - T ).  An admittedly
+weird shading model, which I've now changed a bit (i.e. reflectance and
+transmittance are now entirely separate).  So, your solution of turning down
+the reflectance is fine.  I should add that I didn't really explain all this
+as it's irrelevant for timings (all we care about is what rays get generated,
+not the final color), but I agree, it would be nicer to get a good resulting
+picture as a check.  I'll change that in the next update of SPD, actually...
+thanks for pointing it out!
+
+--------
+
+Craig's reply:
+
+Ah, I get it.
+
+I brought it up because it does make a difference timing-wise if you're using
+adaptive tree pruning.  Although you say in the SPD stuff that pruning
+shouldn't be used, Mark's raytracer currently has no option to turn it off.  I
+was comparing pruned vs. pruned, and noticed that I had many fewer reflected
+rays, since my reflectance for the transparent gears was .05 rather than .95.
+
+-------------------------------------------------------------------------------
+
+Quartic Roots, and "Intro to RT" Errata,
+	by Larry Gritz (vax5.cit.cornell.edu!cfwy)
+
+    I was trying to find the solution to a quartic equation to solve a
+ray-torus intersection test.  I've gotten lots of replies, but generally fall
+into one of two categories:  either solve the quartic equation (I forget the
+reference now, but I'll send you either a reference or the formula if you want
+[It's in the _CRC Standard Math Tables_ book - EAH]), or by some iterative
+method.  Everybody says (and I have confirmed this experimentally) that
+solving the equation is very numerically unstable.  I have chosen to use the
+Laguerre method from Press, et. al. _Numerical Recipes in C_, which is slow,
+but seems to work, and finds all roots without needing to specify brackets for
+the roots.  (An advantage since although I can bracket all possible real roots
+with the bounding box test that I already do, I'm not really sure how many
+roots lie within the brackets.)
+
+    What actually turns out to be a bigger problem is that I got the quartic
+coefficients from the SIGGRAPH '88 Ray Tracing Course Notes (on page 3-14 of
+Pat Hanrahan's section).
+
+[Larry and I thrashed this out over a number of passes (boy, I wish I had access
+to Mathematica or somesuch), and came out with the following corrected
+equation set for those on page 93 of _An Introduction to Ray Tracing_:
+
+	a4 & a3 - Pat's are OK.
+        a2 = 2(x1^2+y1^2+z1^2)((x0^2+y0^2+z0^2)-(a^2+b^2)) 
+              + 4 * (x0x1+y0y1+z0z1)^2 + 4a^2z1^2
+	a1 = 4 * (x0x1+y0y1+z0z1)((x0^2+y0^2+z0^2)-(a^2+b^2))
+		+ 8a^2 * z0 * z1
+	a0 = ((x0^2+y0^2+z0^2)-(a^2+b^2))^2 - 4a^2(b^2-z^2)
+
+- EAH]
+
+-------------------------------------------------------------------------------
+
+More on Quartics, by Larry Spence
+    From: larry@csccat.UUCP
+    Newsgroups: comp.graphics
+    Subject: Re: Solution to quartic eqn?
+
+>I didn't ask the question, but thanks for your input.  However, Ferrari's
+>theorem yields a fast and very accurate answer.
+                  ^^^^
+Are you sure about this?  If it's the same closed-form solution that you find
+in the CRC books, etc., doesn't it use trig functions and cube roots?   Seems
+to me there was a paper by Kajiya in the early '80s on numerical ray tracing,
+and there have been several in the last few years.  My advice would be to go
+look at SIGGRAPH proceedings from 1981 on.  Certainly, a closed form solution
+like the one suggested wouldn't take advantage of any coherence in the problem,
+unless you wrote all the trig stuff yourself.
+
+[Comments, anyone?  I never saw any replies. - EAH]
+
+-------------------------------------------------------------------------------
+
+Question: Kay and Kajiya Slabs for Arbitrary Quadrics?
+	by Thomas C. Palmer <palmer@mcnc.org>
+
+Here's a question regarding slabs for arbitrary quadrics.  Kay & Kajiya '86
+discusses computing slabs for polygons and implicit surfaces.  The method for
+implicit surfaces using Lagrange multipliers and gives an example using
+spheres.  This is easy and works quite nicely for canonical (i.e. centered
+and axis aligned) quadrics.  K&K handle object rotations and translations
+during the slab computation.  What about quadrics that have been transformed
+by some arbitrary matrix prior to input and look like this:
+
+ax^2 + 2bxy + 2cxz + 2dxw + ey^2 + 2fyz + 2gyw + hz^2 + 2izw + jw^2 = 0 ?
+
+The xy, xz, and yz terms prevent a simple solution via Lagrange multipliers.
+Has anyone done this?  How do you handle quadric bounding planes?  Note that
+K&K cheated for the tree branchs in the tree models.  Each cylinder has
+endpoint capping spheres so the cylinder's extent is just the combined extent
+of the two spheres.
+
+Thanks for your help -
+
+-Tom
+
+Thomas C. Palmer		North Carolina Supercomputing Center
+Cray Research, Inc.		Phone: (919) 248-1117
+PO Box 12732			Arpanet: palmer@ncsc.org
+3021 Cornwallis Road
+Research Triangle Park, NC
+27709
+
+-------------------------------------------------------------------------------
+
+Ambient Term, by Pierre Poulin (poulin@dgp.toronto.edu)
+
+I just read your Tracing tricks in the latest Ray Tracing News. Thanks for
+passing that on to us, this was very interesting.
+
+One trick you mentioned was to put a light source at the eye position in 
+order to eliminate the ambient term. This is a simple trick I did not know.
+However, you noted that highlights appears as artifacts.
+
+Since you know that this light does not need any shadow rays, you could use
+only the diffuse intensity created by this light to approximate the ambient
+term, hence creating no undesirable highlights.
+
+I know, this is very easy and everyone probably knows that. But just in
+case you would not have thought about it, I wanted to indicate it to you. I
+just hope I am not the 10,000th to tell you :^)
+
+--------
+
+My reply:
+
+	I'm glad to hear that you enjoyed the "Tracing Tricks" article -
+sometimes I worry that I'm just publishing ideas that everyone already knows.
+I've tried having the ambient light have no highlight, and it's sort of
+interesting, but the lack of highlight can look a little strange for those
+objects where there really would be a highlight (it sort of makes them look
+less shiny, though it also depends upon the other lights in the scene).
+Nonetheless, turning it off is definitely worth exploring.  You're the first
+person to comment on this, actually.  Thanks for taking the time to write, and
+do keep in touch.
+
+-------------------------------------------------------------------------------
+
+Book Reviews on Hierarchical Data Structures of Hanan Samet,
+	by A. T. Campbell, III (atc@cs.utexas.edu)
+
+
+"The Design and Analysis of Spatial Data Structures", and 
+"Applications of Spatial Data Structures", by Hanan Samet,
+Addison-Wesley, 1990.
+
+		Reviewed by A. T. Campbell, III
+
+This two-volume series of books is one man's effort to provide a guide to the
+study of hierarchical data structures.  The topic has extensive influence on
+many fields, particularly computer graphics, image processing, and
+computational geometry.  Hanan Samet is a well-established expert in the
+field, with literally dozens of publications.  As a computer graphics
+researcher, I eagerly anticipated the books' publication.  A close examination
+of both volumes leads to one conclusion:  the books are extremely worthwhile.
+
+The integration of diverse material is remarkable.  Comprehensive research
+results throughout the spectrum of science are drawn together seamlessly.
+Samet has really done a thorough job of pulling together literature from a
+vast collection of conferences and journals, both major and minor.
+
+The level of explanation is good.  Samet has obviously read all of his
+references thoroughly.  The descriptions of algorithms reflect an
+understanding of what is really going on.  Even algorithms mentioned briefly
+are given a good essential description.
+
+Numerous topics are covered.  Algorithms for such problems as
+proximity-searching, efficient storage of image and volume data, constructive
+solid geometry, data structure conversion, hidden surface removal, and
+ray-tracing fill the books.  Pseudo-ALGOL code examples present detailed
+explanations of how to build and traverse many of the data structures.
+Ray-tracing enthusiasts in particular will enjoy a detailed description of how
+to trace a path through an octree.
+
+There are, however, a few problems with the presentation.  Despite the
+ambitious titles of the volumes, there is nowhere near as much theory or
+practical advice as one might expect.  The emphasis is instead on explaining
+literally everything at an understandable level.  While this makes the books a
+wonderful introduction to all sorts of stuff, the reader still needs guidance
+in choosing what techniques to actually use.
+
+The title of the first volume, "The Design and Analysis of Spatial Data
+Structures", obviously invokes comparison with the classic text "The Design
+and Analysis of Computer Algorithms", by Aho, Hopcroft, and Ullman.  However,
+Samet's approach differs greatly from that of Aho et al.  While the data
+structures are described and discussed in detail, the analysis is not very
+formal.  Theorems and proofs, as well as detailed algorithm analysis, are not
+much in evidence.  A more appropriate title might simply be "An Introduction
+to Spatial Data Structures".
+
+The second book, "Applications of Spatial Data Structures", covers basically
+every research result in hierarchical algorithms, major or minor.  It is
+exceptionally good at explaining techniques succinctly.  The depth is not
+sufficient enough to implement the techniques without referring to the
+original papers, however.  Additionally, the reader is given no good feel for
+which results should actually be used.  If a technique is commonly used in
+industry or never used because of impracticality, Samet never says so.  The
+reader who expects a "cookbook" solution to his problem will be disappointed.
+
+The books are primarily of use for two purposes.  First, they provide a good
+introduction to those aspects of computational geometry and image processing
+which are most likely to be of interest to a person working in graphics.
+Second, they provide a very complete guidebook to the literature.  I would
+suggest that researchers and practitioners have these volumes on their
+reference shelves.  Due to the sheer volume of material presented, I would not
+recommend them for use as course textbooks.
+
+-------------------------------------------------------------------------------
+
+Comparison of Kolb, Haines, and MTV Ray Tracers, Part I, by Eric Haines
+
+	I decided to compare the MTV ray tracer, the Kolb "rayshade" software,
+and my own modified "SBRR" ray tracing package to see the efficiency of each.
+My goal was to see what sort of performance was obtained by each ray tracer
+and note the strengths and weaknesses of each.  This first section of the
+report marks the state of current results, consisting of timings from the
+"gprof" command for each package, using the Standard Procedural Database (SPD)
+package.  All three packages were run on an HP 350 workstation with a floating
+point accelerator board.  The compiler options were "-g -G +ffpa" (debug,
+profile, with special floating-point only compile), using HP-UX 6.5.
+
+	The three ray tracers were selected from all the existing packages by
+having the following properties:  (1) Each could handle all the primitives in
+the SPD package, and (2) each had some automatic efficiency scheme.  Other
+packages do not support all the primitives (e.g. DBW does not have cylinders,
+cones, or n-sided polygons), or do not have automatic efficiency generation
+(e.g.  QRT lets you explicitly create bounding boxes, but has no way for this
+to happen automatically).
+
+	The MTV ray tracer was created by Mark VandeWettering, and uses the
+Kay/Kajiya hierarchy approach (i.e. sorting objects along X/Y/Z and splitting
+each group, recursively).  To make it conform to the requirements of the SPD
+tests, "minweight" was set to 0.0 in order to disable tree pruning a la Hall's
+method.
+
+	Craig Kolb's "rayshade" ray tracer uses a 22x22x22 grid on all scenes.
+Because of the use of grids (i.e.  3DDDA), it was found to be sensitive to the
+background polygons used in the SPD package.  In four of the SPD scenes
+(balls, gears, rings, and tree) there is a "ground" polygon.  The "rayshade"
+software allows some user intervention in how the database is structured.  It
+was found that faster timings (sometimes strikingly quicker) could be obtained
+by leaving this background polygon out of the grid structure.  Changing the
+database in this manner is forbidden by the SPD tests, but both sets of
+results are presented because of the difference in timings.
+
+	The SBRR package is not public domain, but rather is part of the
+graphics software in all HP workstations using the Turbo-SRX graphics
+accelerator.  It uses the Goldsmith and Salmon automatic bounding volume
+hierarchy method.  It should also be noted that this package is full featured,
+which has a corresponding slowdown effect when intersection computations are
+performed.  For example, polygons can be single or double sided, with
+different materials, colors per vertex, normals per vertex, and other
+combinations available.  Since the package has a "hardware assist" by using
+the graphics engine as an item buffer (see Weghorst and Hooper), timings are
+given both with and without this assist.  The times without are the fairer of
+the two for comparison.
+
+Without further ado, here are the timings:
+
+MTV	   Basic
+-----      -----
+balls	   12604
+gears	   38123
+mount	    9307
+rings	   24286
+tetra	    1081
+tree	    8056
+
+
+Kolb	   Basic	Modified
+-----      -----        --------
+balls	   14871	    3224
+gears	   12601	   11449
+mount	    2989	    2989 (i.e. same - no modification needed)
+rings	    8348	    8103
+tetra	     836	     836 (i.e. same - no modification needed)
+tree	   18957	    2505
+
+
+SBRR	   Basic	Item Bfr
+-----      -----        --------
+balls	    5027	    4126
+gears	   13561	   12776
+mount	    5440	    3749
+rings	   11044	   10446
+tetra	    1187	     457
+tree	    3229	    2719
+
+
+So, considering the MTV ray tracer as 1.00, here are the relative performance
+times of each tracer - (MTV time / RT time) - i.e. higher is faster, and can
+be thought of as how many times faster it is:
+
+SPD	MTV-Base	Kolb-Bas	Kolb-Mod	SBRR-Bas	SBRR-Bfr
+-----   --------	--------	--------	--------        --------
+balls	  1.00		  0.85		  3.91		  1.40		  3.05
+gears	  1.00		  3.02		  3.32		  2.81		  3.33
+mount	  1.00		  3.11		<--same		  1.71		  2.48
+rings	  1.00		  2.91		  3.00		  2.20		  2.32
+tetra	  1.00		  1.29		<--same		  0.91		  2.37
+tree	  1.00		  0.42		  3.22		  2.50		  2.96
+
+Some interesting phenomena are revealed by the statistics.  The "tetra"
+database is pretty much the same absolute speed for everyone.  However, given
+the performance for other scenes, it is noteworthy that MTV performs
+relatively faster on this than others.  I've noticed this, too, when trying
+Kay/Kajiya myself - this scheme just soars on tetra, though I am not sure why.
+Perhaps it is the smallness and regularity of the objects, which would go well
+with Kay/Kajiya's assumption that using the centroid of these is reasonable.
+For other databases one can imagine better hierarchies that those constructed
+by Kay/Kajiya.  For example, with mount, the four spheres above the fractal
+mountain should be in their own cluster just off the top of the hierarchy
+tree.
+
+The "tetra" scene is a strange test in that most (around 81%) of the scene
+is background, so what we tend to test here is affected more by how fast one can
+traverse a scene, set up rays, shade, and store values in a file.  It will take
+further analysis to see where the time is spent.
+
+The Kolb ray tracer is interesting in how much its efficiency scheme is
+affected by the geometry of the scene.  The "teapot in a football stadium"
+effect I've written about previously hits grid efficiency schemes with a
+vengeance.  For example, moving the ground polygon from the grid subdivision
+to outside of it makes rayshade perform 4.6 times faster for balls, and 7.7
+times faster for tree!  The point is that grids perform best when the scene is
+relatively "compact".  The large ground polygons in these scenes cause the
+entire grid to get larger in two directions, and so make many more objects
+fall inside but a few grid squares, thereby ruining much of the efficiency of
+the grid.
+
+Comparing Kolb to MTV, we see that overall Kolb is faster.  Kolb does worse on
+balls and tree using the unmodified database, but otherwise outperforms MTV,
+being about twice as fast.  When the ground polygon is taken out of the grid
+subdivision, Kolb is more than 3 times faster for all cases except tetra.
+
+Comparing SBRR and MTV shows SBRR to be faster for most cases, with MTV being
+slightly faster for tetra.  Overall SBRR is almost twice as fast with its
+basic performance, and about 2.75 times faster when the item buffer is used.
+
+Comparing SBRR and Kolb is a bit tricky, since there are two tests of each.
+Taking the basic tests in each, Kolb and SBRR are comparable: Kolb outperforms
+SBRR in four cases, and SBRR outperforms Kolb in two (and for one of those,
+tree, it is almost 6 times faster).  SBRR has some things to learn from Kolb
+(which is why I'm doing all this, anyway), as Kolb's modified database results
+point towards the fact that faster performance is possible.
+
+So, on the basis of pure raw timings, Kolb and SBRR without modifications or
+accelerators are of comparable speed.  With user intervention into the
+database structure, Kolb can become noticeably faster.  It should also be
+noted that Kolb uses a default of 22x22x22 grid cells, which is under user
+control and so could be tuned to further improve performance.
+
+Actually, this is an interesting open question:  what heuristics can be used
+to determine a reasonable grid size for a scene?  Also, is there a reasonable
+way to determine if such performance destroyers such as ground polygons are
+present automatically, and so remove them from the grid subdivision itself?
+David Jevans' and Brian Wyvill's work on nested grid subdivisions ("Adaptive
+Voxel Subdivision for Ray Tracing", Proceedings of Graphics Interface '89, p.
+164-172) might lead to a less variable performance and to greater overall
+speed.  Craig and I have discussed this, but unfortunately he has no time to
+try this out - perhaps someone out there can experiment and compare
+results.
+
+As mentioned, this is research in progress.  My next step will be to analyze
+the statistics generated by each program and see where time is spent.
+
+-------------------------------------------------------------------------------
+
+Raytracer Performance of MTV, by Steve Lamont
+
+>   Could you pass on your timings on ray tracer performance on various
+> machines and any thoughts or experiences you want to share about the subject?
+
+The parallelization was done in a brute force manner, forking processes and
+dividing the work by the number of processes.  The parent process remains
+behind and reads the scanlines in a round robin fashion from pipes.  There is
+no communication from the parent to the child processes once the forking has
+been done; the ray tracing routines simply march down the scan lines.  This
+approach works well on a homogeneous architecture where all processes run at
+approximately the same speed and no process "dries up" or runs out of work to
+do.
+
+This works well for single frames.  However, my approach for a large animation
+is to simply parcel out work on a frame per processor basis.
+
+I've built the MTV raytracer on the Cray, the IRIS, and the Ardent Titan...
+and here are some preliminary results on a 128 x 128 test image (the balls
+image with reflections but no refractions, 3 light sources, 11 primitives (16
+with bounding volumes)
+
+			processes
+		      (CPU seconds)
+	Machine		1	4	Notes
+
+	Y-MP/8-432	4.0	1.0	-hopt,intrinsics,vector
+	IRIS (4D/240)*  8.2	2.1	-O2 (MIPS R3000/3010)
+	Titan (P2)     30.0     7.7	-O3 (MIPS R2000 + prop. vector/fp unit)
+	Titan (P3)	7.2	---	Run by vendor. (MIPS R3000/3010 +
+					proprietary vector unit)
+
+Wall clock times improved by a factor of 2.5 to 3, which squares pretty well
+with Amdahl's law as extended for small parallel architectures.
+
+These are *preliminary* results with respect to the Titan -- we've only had it
+for a couple of weeks.  On none of the machines did MTV vectorize in any way
+to speak of.  In fact, turning off vectorization improves performance for
+several "short vector" loops; e.g., loops of vector length 3.
+
+Timings were done on a fairly heavily loaded Cray and an empty IRIS and Titan.
+
+The Cray is a Y-MP with four processors (upgradable to 8, hence the 8-4) and
+32 mWords of central memory.  There is also a 128 mWord SSD (Solid-state
+storage device).  We also have 40 gBytes of rotating storage (a combination of
+DS-40s and DD-49s).
+
+[*] Actually, this machine is a CDC Cyber 910-624 but the only difference
+between it and a "genuine" Silicon Graphics IRIS 4D/240 is the color of its
+box and the binding on the manuals.
+
+[Disclaimer:  These comments are solely the responsibility of the author and
+no endorsement by the North Carolina Supercomputing Center should be inferred]
+
+Steve Lamont, sciViGuy			EMail:	spl@ncsc.org
+NCSC, Box 12732, Research Triangle Park, NC 27709
+
+-------------------------------------------------------------------------------
+
+BRL-CAD Ray Tracer Timings, by Gavin Bell (gavin@krypton.sgi.com)
+
+These results are third-hand; I can vouch for the accuracy of our machine's
+results, but the BRL people may have more recent results to share.  The only
+experience I have with ray-tracing timing on our machines is with a simple,
+interactive ( :-> ) ray-tracer demo called 'flyray'.  I modified it to be
+fully parallelized; it uses one CPU to display a real-time display of the
+scene being ray-traced (complete with rays shooting into and bouncing around
+the scene), and the other N-1 CPUs to compute ray-object intersections (these
+results are shown in a separate window).  As for timing... runs REAL fast on
+an 8 CPU system.
+
+What follows is a form letter I've been sending to people who asked for
+ray-tracing timings.
+
+------------------------
+
+This is a response to all of those people who asked me for the BRL-CAD
+ray-tracing benchmark results.  I'm surprised at how many of you there are!
+
+First, a little bit about myself.  I work in Technical Marketing, the 'Demos
+and Benchmarks' group here at Silicon Graphics.  I'm not usually involved in
+benchmarks; I work mainly on our demos.
+
+The rest of this text comes directly from a 'SGI Benchmark Summary' prepared
+by one of our Marketing people.  The numbers are communicated to him by the
+software engineer who did the benchmark.  These benchmark summaries are
+communicated to salespeople in a weekly newsletter as soon as the results come
+in.  Other summaries done include:
+
+'INDUSTRY STANDARD':
+Dhrystones, Digital Review Labs, Linpack, Livermore Fortran Kernals, MUSBUS,
+Whetstones.
+
+OTHERS:
+LES50 (computational fluid dynamics), Moldflow (finite element analysis),
+Molecular Dynamics, Nord, UFLA, GROMOS (all computational chemistry).
+
+If you want more information on any of these benchmarks, please see a SGI
+sales rep-- I can't keep typing in all of these numbers!!  Also, please
+remember that these benchmarks were done for a specific customer, who was
+interested in a specific machine, so most of them were not benchmarked on our
+whole product line (the 'Industry Standard' benchmarks, however, are usually
+run on all of our products).
+
+APPLICATION  BENCHMARK NAME  CUSTOMER
+-----------  --------------  --------
+Rendering    BRL-CAD 3.7     US Army Ballistic Research Lab
+
+LANGUAGE     SUMMARY DATE
+--------     ------------
+C            9/5/89
+
+DESCRIPTION
+-----------
+The BRL-CAD benchmark is a part of the US Army Ballistic Research Laboratory's
+BRL-CAD package.  The core of the BRL-CAD benchmark is a ray-tracing program
+which consists of about 150,000 lines of C code.  Computations are performed
+in double precision floating point.
+
+Five separate data bases are input to the ray tracing program, resulting in
+six performance ratings (one for each, plus a total which is the mean of the
+other five) .  When rendered, each data base will produce a 512x512x24 bit
+color shaded image.  The images are of increasing complexity, and are
+identified as 'Moss', 'World', 'Star', 'Bldg' and 'M35'.
+
+RESULTS
+-------
+The result of this benchmark is reported as rays traced per second, and
+referred to as Ray Tracing Figure of Merit (RTFM).  Higher numbers indicate
+better performance.
+
+The code was parallelized by inserting user directives to create multiple
+processes to trace rays.
+
+RESULTS FOR SGI MACHINES:
+    Note:  The actual report has nice graphs here.
+Machine        RTFM
+-------------------
+1x16 (4D/80)    714
+2x16 (4D/120)  1358
+4x25 (4D/240)  5034
+8x25 (4D/280)  7434
+    Note:  NxMM numbers refer to the number of processors in the
+	machine (N) running at MM MHZ.
+
+COMPETITIVE RESULTS:
+Machine   # Processors  RTFM  Relative Performance
+--------------------------------------------------
+Vax 780        1          77     1.0
+Sun3           1          88     1.1
+Convex C120    1         163     3.6
+Sun4           1         435     5.6
+SGI 4D/120S    2        1358    17.5
+Alliant FX/80  8        2783    33.6
+SGI 4D/240S    4        4456    70.4
+Cray X-MP/48   4        7217   116.1
+SGI 4D/280     8        7434   119.7
+
+ANALYSIS
+--------
+The BRL-CAD benchmark exhibits excellent speedup as processors are added.
+This is due to the coarse granularity inherent in the ray tracing problem
+being solved.  Each ray is processed independently, with no data dependencies
+among the rays.  This means that multiple processors can each work on separate
+rays simultaneously, with minimal need for synchronization among processors.
+
+While the code is highly parallelizable, it is not efficiently vectorizable
+because of short vector lengths.  The combination of these two
+characteristics explain the phenomenal performance of Silicon Graphics
+machines relative to vector machines like Cray and Alliant.
+
+The characteristics of this benchmark that lead to high performance by the
+Silicon Graphics machines are common to all ray tracing applications.
+
+--------
+
+Here is another note from Gavin:
+
+My only experience with the BRL ray-tracer came when I was at Princeton
+University - I installed it on Silicon Graphics machines there for the
+Graphics Lab.  That was two years ago; as far as I could tell, it didn't use
+octrees or any other space-partitioning algorithm.  I used a ray-tracer
+written at Princeton (the precursor of what is now Craig Kolb's rayshade
+program; Craig and I had the same thesis advisor) which did do octrees; it was
+infinitely faster than the BRL beast.
+
+-------------------------------------------------------------------------------
+
+BRL-CAD Benchmarking and Parallelism, by Mike Muuss (mike@BRL.MIL)
+
+I'm sort of on vacation right now, so I'm going to cop out and just send you
+the TROFF input for several things that I have handy about how we benchmark
+ray-tracing in the BRL-CAD Package.
+
+The first one is our benchmark summary paper.
+
+The second one is a portion of a paper that I wrote called ``Workstations,
+Networking, Distributed Graphics, and Parallel Processing''.
+
+You may publish and/or redistribute both documents as you wish.  Note that the
+United States Government holds the "copyright", ie, it is not permissible to
+copyright this material.
+
+[These papers are rather lengthy, so I won't include them in this issue.
+If you would like copies, look at the archive sites for Muuss.benchmrk and
+Muuss.parallel, or write me. - EAH]
+
+
+======== USENET cullings follow ===============================================
+
+Rayshade Patches Available, by Craig Kolb
+	From: craig@weedeater.math.yale.edu
+	Newsgroups: comp.graphics
+	Organization: Math Department, Yale University
+
+Patches 1-3 for rayshade v3.0 are available via anonymous ftp from
+weedeater.math.yale.edu (new address:  130.132.23.17) in directory
+pub/rayshade.3.0/patches.  The patches fix several minor bugs, clean up the
+documentation, and provide new features.
+
+Several people have expressed an interest in 'trading' rayshade input files.
+If you have an interesting input file that you'd like to share, feel free to
+deposit it in the "incoming" directory on weedeater or send it to me via
+email.  I will make these files available in the pub/Rayinput directory on
+weedeater.
+
+Rayshade is supposedly "on the verge" of appearing in comp.sources.unix,
+patches and all.
+
+-------------------------------------------------------------------------------
+
+Research and Timings from IRISA, by Didier Badouel
+	From: badouel@irisa.irisa.fr
+	Newsgroups: comp.graphics
+	Organization: IRISA, Rennes (Fr)
+
+We have a parallel raytracer (called PRay) at IRISA which as MTV uses NFF
+description databases.  This raytracer has been implemented on an iPSC/2, on a
+SEQUENT BALANCE and also on serial computers (SUN3, GOULD NP1) to make better
+comparisons.
+
+I give you the various synthesis times for the well known 'Teapot' database.
+The image has been rendering with a 512X512 resolution with 3 light sources.
+Results are as follows :
+
+                        #PEs    Time (in sec.)
+        ________________________________________
+        SUN3:                   8877 (~ 2h27mn)
+        ________________________________________
+        GOULD NP1:              1642 (~ 27mn)
+        ________________________________________
+        SEQUENT BALANCE 1       37121 (~ 10h18mn)
+                        2       18567
+                        3       12381
+                        4       9285
+                        5       7431
+                        6       6197
+                        7       5311
+                        8       4656
+                        9       4138 (~ 1h9mn)
+        ________________________________________
+        iPSC/2          1       6294 (~ 1h45mn)
+                        2       3332
+                        4       1700
+                        8       860
+                        16      440
+                        32      224
+                        64      119 (~ 2mn)
+        ________________________________________
+
+The code running on the iPSC/2 emulates a virtual shared memory over the local
+PEs.  The database is not duplicated but all the local memories are used.  The
+remaining memory after loading code and data is used as a cache to speed up
+low global accesses.
+
+-----
+
+        In order to benchmark our parallel raytracer running on an iPSC/2,
+which use Eric Haines' NFF file format as input, we would like to know 
+if other people have a parallel raytracer using these databases
+in order to make some comparisons.
+
+        One of our goals is to render the largest possible 
+database.  For the moment, we have rendered the 'tetra10'
+database:
+        - the database contains more than 1 million polygons (1048576
+          polygons)
+        - the size of the database with its 'object access structure' (a
+          grid) is 140 MO.
+        - the synthesis time is 526 seconds on the iPSC/2 with 64 nodes
+          and 4 MO node memory.
+        - however, on account of using NFF text file format, reading the
+          input is  very slow (more than 3 hours for 'tetra10') when using 
+          YACC and LEX. Furthermore, our iPSC/2 configuration does not have
+          I/O  node  system.
+
+________________________________________________________________
+  Didier  BADOUEL                       badouel@irisa.fr
+  INRIA / IRISA                         Phone : +33 99 36 20 00
+ Campus Universitaire de Beaulieu       Fax :   99 38 38 32
+ 35042 RENNES CEDEX - FRANCE            Telex : UNIRISA 950 473F
+________________________________________________________________
+
+-------------------------------------------------------------------------------
+
+Concerning Smart Pixels, by John S. Watson
+	From: watson@ames.arc.nasa.gov (John S. Watson)
+	Newsgroups: comp.graphics
+	Organization: NASA - Ames Research Center
+
+In article <207400033@s.cs.uiuc.edu> mccaugh@s.cs.uiuc.edu writes:
+>
+> Does anyone know of a system with "smart" pixels? 
+
+Once upon a time I wrote a ray tracer in which the pixels used heuristics to
+determine their sampling rate.  Since the reason for doing it was to speed
+things up, the heuristic had to be simpler than casting a ray( s, if
+sub-sampling).  I used difference in previous pixels values, with a little
+randomness tossed in.  So pixels changing quickly were sampled every frames,
+while pixels that were hardly ever changing were sampled only once every 10
+frames.  The results:  much faster, but with a graininess on the edges of
+moving objects.  I needed to make the pixels more aware of what was happening
+with its neighbors.  Never got around to doing that.
+
+Another problem is big pictures have lots of pixels ... 512x512 = 0.25 million.
+To be smart you must have a memory.
+
+To save memory, I combined the above with an Area-of-Interest/Variable Acuity
+(AOIVA) Ray Tracer.
+
+Hope this helps, 
+John S. Watson, Civil Servant from Hell        ARPA: watson@ames.arc.nasa.gov 
+NASA Ames Research Center                      UUCP:  ...!ames!watson
+Any opinions expressed herein are, like, solely the responsibility of the, like,
+author and do not, like, represent the opinions of NASA or the U.S. Government.
+
+-------------------------------------------------------------------------------
+
+Input Files for DBW Render, by Tad Guy
+	From: tadguy@cs.odu.edu (Tad Guy)
+	Newsgroups: comp.graphics
+	Organization: Old Dominion University, Norfolk, VA
+
+In article <6475@pt.cs.cmu.edu> te07@edrc.cmu.edu (Thomas Epperly) writes:
+   I was wondering if anyone had any neat input files for DBW_Render available
+   for anonymous ftp.
+
+xanth.cs.odu.edu as /amiga/dbw.zoo.  If you have a network of, say, sun
+workstations, you might as well get /amiga/distpro.zoo, which will allow to
+distribute the computations over many machines.
+
+-------------------------------------------------------------------------------
+
+Intersection with Rotated Cubic Curve Reference, by Richard Bartels
+	From: rhbartels@watcgl.waterloo.edu
+	Newsgroups: comp.graphics
+	Organization: U. of Waterloo, Ontario
+
+In article <1445@tukki.jyu.fi> toivanen@tukki.jyu.fi (Jari Toivanen) writes:
+ :
+ :I would like to know is there any simple and effective solution to
+ :following problem:
+ :
+ : [intersecting a ray with a rotated cubic curve]
+ :
+ :Jari Toivanen                           Segments are for worms ;-)
+ :University of Jyvaskyla, Finland        Internet: toivanen@tukki.jyu.fi
+
+Look at the article:
+
+        Ray Tracing Objects Defined By Sweeping Planar Cubic Splines
+        Jarke J. van Wijk
+        ACM Transactions on Graphics
+        Vol. 3, No. 3, July, 1984, pp. 223-237
+
+I believe that the author subsequently wrote a whole book on the subject.
+
+[Incidentally, this article also has a method for quickly intersecting a tight
+fitting bounding volume around such curves.  I've found this test useful for
+use as a torus bounding volume.  Also, does anyone know of the existence and
+the name of the book Richard mentions?  - EAH]
+
+-------------------------------------------------------------------------------
+
+Needed: Quartz surface characteristics, by Mike Macgirvin
+	From: mike@relgyro.stanford.edu
+	Newsgroups: comp.graphics
+	Organization: Stanford Relativity Gyro Experiment (GP-B)
+
+I am in need of the surface characteristics for fused quartz.  Ambient,
+diffuse and specular color characteristics, Phong coefficent, reflectance,
+and transparency.  I have the index of refraction (Well, I have to average it,
+c'est la vie).
+
+I have attempted to derive these experimentally, but find the resulting traced
+image lacking in many ways, and a simulation visualization I am working on
+requires accuracy.
+
+I am using Kolb's 'rayshade' if it affects your responses.
+
+Please respond via e-mail if possible.
+
+-------------------------------------------------------------------------------
+
+Solution to Smallest Sphere Enclosing a Set of Points, by Tom Shermer
+	From: shermer@cs.sfu.ca
+	Newsgroups: comp.graphics
+	Organization: School of Computing Science, SFU, Burnaby, B.C. Canada
+
+>I need the solution for the following problem:
+>find the smallest sphere that encloses a set of given points, in both
+>2-D and 3-D (or even n-D, if you like).
+>
+
+This problem can be solved in linear time (in any fixed dimension)
+by the technique of prune-and-search (sometimes called ``Megiddo's
+Technique''), either directly or by first converting the problem
+to a linear program.  The most relevant reference (for 2d & 3d) is:
+
+Linear-time Algorithms for Linear Programming in R^3 and Related Problems,
+        Nimrod Megiddo, SIAM J. Comput, v. 12, No. 4, Nov 1983, pp. 759-776.
+
+
+Other related references:
+
+Linear time algorithms for two- and three- variable linear programs,
+        M.E. Dyer, SIAM J. Comput, v. 13, 1984, 31-45.
+
+On a multidimensional search technique and its application to the
+Euclidean one-center problem,
+        M. E. Dyer, Dept. Math and Stats TR, Teesside Polytechnic,
+        Middlesbrough, Cleveland TS1 3BA, UK, 1984.
+
+Linear programming in linear time when the dimension is fixed,
+        N. Megiddo, JACM 31, 1984, 114-127
+
+The weighted Euclidean 1-center problem,
+        N. Megiddo, Mathematics of Operations Research 8, 1983, 498-504
+
+On the Ball Spanned by Balls
+        N. Megiddo, manuscript (this may have appeared in the literature
+        by now)
+
+-------------------------------------------------------------------------------
+
+True Integration of Linear/Area Lights, by Kevin Picott
+	From: kpicott@alias.UUCP
+	Newsgroups: comp.graphics
+	Organization: Alias Research Inc.
+
+Has anyone seen any work done on evaluating the diffuse and specular
+illumination produced by linear and/or area lights?  I have checked all the
+standard sources and all information I find gets to the point where the
+integration is set up and then a little hand waving is performed accompanied
+by the magical words "numerically integrated".  This works but is too slow
+for my purposes.  Does anyone know of any work done in different directions
+(ie faster evaluation) ?
+
+--------
+
+Thanks to all who replied to my query about linear and area lights.
+
+In the area of linear lights, two papers on analytical solutions were found.
+The first, by John Amanatides and Pierre Poulin has been submitted to
+Eurographics '90 and I'll hopefully get a look at that soon.
+
+The second, "Shading Models for Point and Linear Sources", ACM TOGS, 4(2),
+April 1985, pp. 124-146.  by T. Nishita, I. Okamura, E. Nakamae, proposes
+an analytic solution to the diffuse component, but only under certain
+circumstances.
+
+The latter unfortunately reduces to numerical integration in the majority of
+cases where spline surfaces are involved, although a method of optimization is
+given that reduces computation time for the numerical integration.  This
+method would seem to be suited to lighting parallel and perpendicular to the
+illuminated surfaces.
+
+There was also a paper entitled "A Comprehensive Light-Source Description for
+Computer Graphics", IEEE CG&A, July 1984, by Channing P. Verbeck and Donald
+P. Greenberg that approximates both linear and area light sources as a series
+of point sources.  This is a compromise to numerical integration, but is still
+computationally expensive.
+
+In summary, the analytical solution to linear sources exists and is
+calculable, at least for the diffuse component.  The specular component
+exists, but direct calculation is almost expensive as numerical integration.
+
+As far as area light sources are concerned... no analytical solutions were
+found.  In fact, from the work examined I was left with the impression that
+even if the solution existed it would not be very useful from a light
+illumination point of view (ie non-radiosity).  (Comments?)
+
+--
+ Kevin Picott   aka   Socrates   aka   kpicott%alias@csri.toronto.edu
+ Alias Research Inc.  R+D     Toronto, Ontario... like, downtown
+
+-------------------------------------------------------------------------------
+END OF RTNEWS

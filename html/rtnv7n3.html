@@ -1,0 +1,1657 @@
+<!-- html version of Volume 7, Number 3 :  -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 7, Number 3</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>July 6, 1994</FONT>
+<P><FONT size=+1>Volume 7, Number 3</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1994, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction
+</A></LI>
+<LI><A HREF="#art2">
+Ray Tracing Roundtable at SIGGRAPH '94,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art3">
+Books at SIGGRAPH '94,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art4">
+Radiosity: A Programmer's Perspective,
+</A></LI>
+by Ian Ashdown
+<LI><A HREF="#art5">
+Computational Geometry in C,
+</A></LI>
+by Joseph O'Rourke
+<LI><A HREF="#art6">
+Simple Databases Available For Rendering (Global Illumination),
+</A></LI>
+by
+Peter Shirley
+<LI><A HREF="#art7">
+Radiance Version 2.4 Available,
+</A></LI>
+by Greg Ward
+<LI><A HREF="#art8">
+Faster Ray-Torus Intersection,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art9">
+RAT PACK: Free Ray Tracing Research Software,
+</A></LI>
+by Tom Wilson
+<LI><A HREF="#art10">
+Light Beams Tricks,
+</A></LI>
+by Chris Thornborrow
+<LI><A HREF="#art11">
+On-Line Ray Tracing Bibliography,
+</A></LI>
+by Ian Grimstead
+<LI><A HREF="#art12">
+Polynomials,
+</A></LI>
+by Han-Wen Nienhuys
+<LI><A HREF="#art13">
+Shadow Caching Observation,
+</A></LI>
+by Han-Wen Nienhuys
+<LI><A HREF="#art14">
+Small Comment on GGems III bsp.c,
+</A></LI>
+by Han-Wen Nienhuys
+<LI><A HREF="#art15">
+Fogsources,
+</A></LI>
+by Han-Wen Nienhuys
+<LI><A HREF="#art16">
+The Rayce Ray Tracer,
+</A></LI>
+by Han-Wen Nienhuys
+<LI><A HREF="#art17">
+Ray Tracing Roundup
+</A></LI>
+<LI><A HREF="#art18">
+A Storage Trick for 3D Polygons,
+</A></LI>
+by Eric Haines
+<LI><A HREF="#art19">
+Illumination-Related Abstracts from the Proceedings of Graphics Interface '93
+</A></LI>
+<LI><A HREF="#art20">
+Design and Aims of the YART Graphics Kernel,
+</A></LI>
+by Ekkehard 'Ekki' Beier
+<LI><A HREF="#art21">
+Distribution Ray Tracing,
+</A></LI>
+by Marc Levoy
+<LI><A HREF="#art22">
+Ray Tracing,
+</A></LI>
+Antialiasing, and What To Do Instead, Steven Demlow
+<LI><A HREF="#art23">
+Yet Another Illumination Ph.D.,
+</A></LI>
+by George Drettakis
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction
+</A></FONT>
+</H4>
+This issue is one of perhaps three to five I'm planning to get out in July, as
+I try to clean out the backlog before SIGGRAPH.  This issue is focussed on
+SIGGRAPH and other conferences, theory and algorithms, things like that.  The
+next issue will be more hobbyist oriented (it may be out as soon as tomorrow).
+I also hope to create a commercial product review issue - nothing formal,
+mostly ravings from the nets.  Anyway, this issue brings me partially up to
+date to April 20th of the backlog...
+<P>
+So, why continue editing and writing for the Ray Tracing News now that the
+Usenet group comp.graphics.raytracing exists?  Mostly for the reason anything
+gets editing - content and form.  90% the Usenet group traffic is "where do
+I find?" and "how do I make?" type questions, which is just fine for a
+newsgroup, but not something you want to save around.  I see the purpose of
+the Ray Tracing News as gathering information which is useful to researchers,
+graphics artists, and hobbyists:  resources, theory, and general algorithms
+(vs. ray tracer specific operations).  Also, there is interesting traffic
+which concerns ray tracing and rendering in general (of which I catch but a
+small whiff with my automated keywords searchers [see <A HREF="rtnv7n2.html#art19">RTNv7n2</A>]) in many other
+newsgroups.  By the way, if you want to start a flame-war, strongly assert on
+alt.games.doom that Doom uses/does not use ray casting to determine wall
+visibility (I never did figure out if anyone had the right answer on that
+one).
+<P>
+I suspect, given the massive influx of new Usenet users and whatnot, that we'll
+see more and more edited (vs. moderated newsgroups) material over time.
+Newsgroups are starting to get overwhelming, and I personally can't keep up.
+I know that there are many who read the RT News but don't follow
+Usenet because of the low signal-to-noise ratio.  It's mostly a labor of
+love for me (also, I like to organize this stuff for my own use), but once
+the infrastructure and standards exist for person-to-person electronic cash
+transfers via email, expect an explosion of edited material for sale for
+pennies.  Ahhh, nah, I'm just dreaming - the InfoBahn is really meant for
+Gilligan's Island reruns on demand, right?
+<P>
+SIGGRAPH stuff:  be sure to check out the "Technical Sketches" sessions, which
+are new this year.  These presentations are short, informal talks about work in
+progress.  For example, Nicholas Wilt will discuss the advantages (and
+pitfalls) he found in working with C++ in creating his object oriented ray
+tracer (see the review of his book in <A HREF="rtnv7n2.html#art4">RTNv7n2</A>).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+Ray Tracing Roundtable at SIGGRAPH '94,
+</A></FONT>
+by Eric Haines
+</H4>
+You're invited!  If you're at SIGGRAPH this year, come to the Ray Tracing
+Roundtable.  It's on Thursday at 5:15 pm (actually, we have the room from 5 to
+7, so you can show up early) at the Clarion Hotel (next to the convention
+center, acc. to the map) in Salon 14 (a swell room name, combining the
+Romantic imagery of a literary salon with a number).  What do we do there?  We
+schmooze until the papers reception starts at 7 pm.  Essentially, it's a place
+to put names with faces and meet like-minded people.  Sadly, the swimsuit and
+pie-eating contests are canceled this year.  Otherwise, it'll be pretty much
+the same as the last N years, where N &gt; 5:  we go around the room and
+introduce ourselves, then things break up and we talk.  So, to summarize:
+<P>
+<PRE>
+        Time:  Thursday at 5:15-6:15 pm or so
+        Place:  Clarion Hotel, Salon 14
+</PRE>
+<P>
+Since ray tracing research is essentially dead (except for some of those
+parallel and volume rendering guys), I expect a lot of discussion about
+whether Wired or Mondo 2000 is the most retina-damaging.  Seriously, now that
+ray-tracing has become a mainstream computer graphics artist and hobbyist
+oriented activity, I'll be interested to see who shows up and what people are
+doing nowadays.  Me, I haven't traced my own rays in perhaps two years (though
+am planning to soon) and am more interested in texturing and GUI issues, so
+show up if you're interested in 3D rendering and interaction in general.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Books at SIGGRAPH '94,
+</A></FONT>
+by Eric Haines
+</H4>
+This SIGGRAPH promises to have a bunch of great books coming out.  <I>Graphics
+Gems IV</I> is already out, of course, and has some wonderful subtly useful bits
+of information.  I'm particularly glad to see Ken Shoemake's articles about
+Arcball [a great GUI technique of rotating objects or the view] and about
+matrix decomposition [sometimes valuable for animation and other things].
+These topics were covered by him in Graphics Interface back in 1992, but the
+truth is that unless it's in SIGGRAPH it tends to get ignored.
+<P>
+Another book which has come out this year is <I>Programming for Graphics Files
+in C and C++</I>, by John Levine, J.  Wiley, 1994.  It's interesting to compare
+with <I>Graphics File Formats</I> by Kay and Levine, McGraw-Hill, 1992.  You'd
+think the newer volume would be better in all respects, since the same author
+is involved in each.  I used both of these recently for writing a Targa output
+routine, and they're fairly different.  The newer volume is code oriented,
+with text mostly there as comments for the code, while the older spent time
+explaining the file format more thoroughly.  For example, color maps and the
+2.0 Targa format are explained in the earlier book but not in the latter
+because no code is given to interpret these.  I am also unimpressed by the
+quality of the code given (as proof:  the compute_runlengths() routine on page
+212 spends a lot of time setting runlength[col] = 0 and checking this on pages
+209-210, which is not necessary, since the runlengths accessed by writetga()
+will always be non-zero).
+<P>
+Francois Sillion and Claude Puech's book on radiosity, <I>Radiosity and Global
+Illumination</I>, from Morgan-Kaufmann (approx 250 pages, ISBN 1-55860-277-1,
+$49.95), will be out at SIGGRAPH.  I glanced through the early version at
+last year's SIGGRAPH, and it should be of comparable quality to Cohen and
+Wallace's <I>Radiosity and Realistic Image Synthesis</I> (Academic Press), released
+at last year's SIGGRAPH.
+<P>
+Ian Ashdown's book on making radiosity practical, <I>Radiosity:  A Programmer's
+Perspective</I>, from John Wiley & Sons, should sell well.  It's the first book
+of its kind, and should help put to rest those arguments about how radiosity
+is too complex or too slow.  See the <A HREF="#art4">separate article in this issue</A> for a
+quick rundown by the author.
+<P>
+Another practical book, this time for GUI programmers and users, is <I>The
+Inventor Mentor</I>, by Josie Wernecke, from Addison-Wesley.  It's for SGI's
+OpenInventor object-oriented system for creating graphics applications.  From
+all reports OpenInventor is a nice development system, and even if you're not
+using SGI's it's got some good methods for 3D manipulation, etc.  (though I
+wish they had used Arcball, which is wonderful).
+<P>
+David Ebert is the editor and an author of the forthcoming book <I>Texturing and
+Modeling:  A Procedural Approach</I>, from Academic Press.  The co-authors are
+Ken Musgrave, Darwyn Peachey, Ken Perlin, and Steve Worley.  Another good
+title for this book might have been "A Bunch of Guys Playing with Noise"; much
+of its focus is on using the noise function in many different ways for making
+everything from smoke to mountains.  The focus is mostly on inorganic
+substances; there is a little about, say, evolutionary procedural systems such
+as L-systems.  Which is fine:  there's a lot of great in-depth material here
+for people using procedural functions for texturing.  Particularly useful (at
+least for me) were Worley's and Peachey's sections on how to avoid various
+problems (e.g. patterning, aliasing), how to make the noise function fast,
+and how to expose parameters controlling designed textures to the naive user.
+There is plenty of pseudo-code from all of the authors, who pass on their tips
+and tricks in a straightforward fashion.  This book will be used as part of
+their course at SIGGRAPH.
+<P>
+Another book which just came out is <I>Photorealistic Rendering in Computer
+Graphics</I>, edited by Pere Brunet and Frederik Jansen, Springer Verlag.  This
+is the proceedings of the Second Eurographics Workshop on Rendering.  This
+conference happened way back in 1991, but I'm happy to see the proceedings
+made it to the light of day (partly for personal reasons, I admit:  I'm happy
+to see my shaft culling paper not disappearing forever).  There are papers by
+Sillion, Ward, Shirley, Kirk and Arvo, and many others.  There are other
+lesser known authors who have done some interesting work.  For example,
+Christophe Schlick's paper on "An Adaptive Sampling Technique for
+Multidimensional Integration by Ray-Tracing" looks like a good way to go for
+doing Monte Carlo type rendering adaptively.  Brigitta Lange's article on "The
+Simulation of Radiant Light Transfer with Stochastic Ray-Tracing" is an
+in-depth treatment of implementing Kajiya's Rendering Equation techniques.
+Anyway, browse through it and convince someone else to buy it (Springer-Verlag
+books tend to be pricey).
+<P>
+If you're looking for a book on CG (computational geometry, that is), consider
+<I>Computational Geometry in C</I>, by Joseph O'Rourke (see the table of contents
+listing <A HREF="#art5">in this issue</A> for more information), which came out in January.  For
+example, here at 3D/Eye a co-worker found it helpful in designing a robust
+polygon tessellator.  His comments are "a good book; full of tricks".
+<P>
+Don Hearn and Pauline Baker's <I>Computer Graphics</I> is now in its second edition
+(652 pages, Prentice Hall, $61.00, ISBN 013-161530-0).  This edition is a
+major rewrite, bringing the book up to date with the latest research.  It's
+also the first computer graphics textbook that (gasp!) actually has color
+pictures integrated into the text, instead of plates.  I've paged through it
+and it looks like a reasonable beginner/intermediate textbook on the subject,
+and is definitely user friendly.  Fragments of code in Pascal are used
+throughout to explain algorithms, so the book has a hands-on, practical feel
+to it.
+<P>
+The book that I think is the most important new work at SIGGRAPH '94 won't be
+there, and won't be a book; it'll be out come October, it'll be two volumes
+(it weighs in at 1400 pages), and I would guess there will be a mock-up or
+somesuch on display.  It's Andrew Glassner's <I>Principles of Digital Image
+Synthesis</I>, from Morgan-Kaufmann.  This book is focussed on the theory of
+computer graphics (yes, the field is indeed more than just hacks and tricks).
+The science of perception, of sampling and filtering, of how materials
+interact with light, and all sorts of other topics are covered.  It's
+certainly not light reading, but it does our field a great service.  Glassner
+does all the wading into dusty tomes on everything from Monte Carlo theory to
+the Kubelka-Munk pigment model to, well, you name it, and pulls out and
+explains the parts that are relevant to computer graphics (and also notes the
+parts that might be relevant but are currently unexplored).  There are many
+figures and graphs throughout.  The book does *not* discuss efficient
+rendering algorithms per se; there are no implementation information for
+hidden surface renderers, ray tracing, quick filtering, etc.  The reason is
+simple:  such algorithms are well covered by many other texts, and what
+methods are popular changes over time.  The scientific theory specific to
+computer graphics is scattered over a wide number of disciplines, the
+foundations of theory do not change (much) over time, and to date there has
+been no unified presentation of this material.  Now there is, and I think this
+book is a historic step in making computer graphics accepted as an discipline
+in its own right.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Radiosity: A Programmer's Perspective,
+</A></FONT>
+by Ian Ashdown (<A HREF="mailto:72060.2420@CompuServe.COM">72060.2420@CompuServe.COM</A>)
+</H4>
+[This should give you an idea of the sort of book this is. - EAH]
+<P>
+<PRE>
+Title:                  Radiosity: A Programmer's Perspective
+Author:                 Ian Ashdown
+Publisher:              John Wiley & Sons, Inc.
+Publication Date:       Summer '94 (in time for SIGGRAPH)
+
+Part I          Radiosity Models Light
+Chapter 1       Measuring Light
+Chapter 2       Radiosity Theory
+
+Part II         Tools of the Trade
+Chapter 3       Building an Environment
+Chapter 4       A Viewing System
+
+Part III        Radiosity and Realism
+Chapter 5       Form Factor Determination
+Chapter 6       Solving the Radiosity Equation
+Chapter 7       Meshing Strategies
+Chapter 8       Looking to the Future
+
+Appendix A      Photometric and Radiometric Definitions
+Appendix B      Eigenvector Radiosity
+Appendix C      Memory Management Issues
+Appendix D      Color Quantization Techniques
+Appendix E      AutoCAD DXF File Format
+</PRE>
+<P>
+The 512-page book will include 7,500+ lines of documented C++ source code for
+a fully functional and mostly platform-independent radiosity renderer.
+Approximately 1,200 lines of C and C++ are used to provide a user interface
+for Microsoft Windows in 16-bit and 32-bit versions (Windows 3.1 and
+Win32/Windows NT).
+<P>
+  I make it very clear in my book that the industry bible is "Radiosity and
+Realistic Image Synthesis".  What I have attempted to provide is an
+inexpensive ($40) radiosity testbed for personal desktop computers.  In it I
+have implemented a standalone 3-D viewing system with Gouraud shading, color
+dithering, gamma correction and so forth (Chapters 3 and 4), a review of form
+factor determination methods and three implementations (hemi-cube, cubic
+tetrahedron and ray casting), a review of iterative techniques for solving the
+radiosity equation (with an implementation of progressive refinement
+radiosity, including the ambient lighting term and positive overshooting),
+meshing techniques (with an adaptive subdivision implementation), and a review
+of other radiosity techniques.  Despite the title, the underlying mathematics
+are complete and self-contained.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Computational Geometry in C,
+</A></FONT>
+by Joseph O'Rourke (<A HREF="mailto:orourke@cs.smith.edu">orourke@cs.smith.edu</A>)
+</H4>
+346+xi pages, 228 exercises, 200 figures, 219 references
+<P>
+<PRE>
+Cambridge University Press
+ISBN 0-521-44592-2/Pb \$24.95,
+ISBN 0-521-44034-3/Hc \$49.95.
+Cambridge University Press,
+40 West 20th Street,
+New York, NY 10011-4211.
+1-800-872-7423
+
+Chapter titles:
+        1. Polygon triangulation
+        2. Polygon partitioning
+        3. Convex hulls in two dimensions
+        4. Convex hulls in three dimensions
+        5. Voronoi diagrams
+        6. Arrangements
+        7. Search and intersection
+        8. Motion planning
+        9. Additional topics
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Simple Databases Available For Rendering (Global Illumination),
+</A></FONT>
+by Peter Shirley (<A HREF="mailto:shirley@cs.indiana.edu">shirley@cs.indiana.edu</A>)
+</H4>
+Hello fellow global illumination fans.  This is a note about some simple
+databases to test rendering that I have put together.  They are in the spirit
+of (but not quite as neat as) the ray tracing test scenes put together by Eric
+Haines.  They are greyscale and diffuse and mostly quadrilaterals, so expect
+something designed for ease of use in arbitrary renderers.  Anyway, if you use
+them and experience any problems, please let me know by email.
+<P>
+____
+<P>
+Some sample databases for rendering calculations are available by anonymous
+ftp.  There are eleven scenes each with a sample image from a particular
+viewpoint.  Ten of the scenes have all quadrilaterals, and one also has a
+sphere.  The scenes are achromatic.  Nine are all diffuse, one has a specular
+surfaces, and one has a glass object.
+<P>
+The scenes range in complexity from an empty room with six quadrilaterals, to
+a 100 room scene with 41800 quadrilaterals.
+<P>
+More scenes may be supplied later.  If you want other types of scenes or need
+help converting our geom files to your own format, contact Peter Shirley at
+<A HREF="mailto:shirley@cs.indiana.edu">shirley@cs.indiana.edu</A>.
+<P>
+The data is available via anonymous ftp at <A HREF="ftp://moose.cs.indiana.edu">moose.cs.indiana.edu</A>
+(129.79.254.191) in pub/RW5.  This directory contains a README file and
+several subdirectories (one of which has compressed tar files for the other
+directories).
+<P>
+____
+<P>
+There has been an addition of two sample density volumes (128^3 and 64^3) to
+the databases Georgios Sakas and I have prepared for the 5th Eurographics
+Workshop in Rendering to held in Darmstadt, Germany on 13-15 June, 1994 (The
+deadline for paper submission is 5 April, 1994).
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+Radiance Version 2.4 Available,
+</A></FONT>
+by Greg Ward (<A HREF="mailto:greg@hobbes.lbl.gov">greg@hobbes.lbl.gov</A>)
+</H4>
+Radiance version 2.4 is now available for downloading by anonymous ftp from
+<A HREF="ftp://hobbes.lbl.gov">hobbes.lbl.gov</A> (128.3.12.38) in Berkeley, California and soon will be
+available from <A HREF="ftp://nestor.epfl.ch">nestor.epfl.ch</A> (128.178.139.3) in Lausanne, Switzerland.  If
+you do not have access to ftp, you may request the software on 60 Mbyte 1/4
+inch tape cartridge.
+<P>
+Relatively little has changed in the 6 months since our last release.  We have
+added a couple of new CAD translators, one for Wavefront and one for an
+intermediate T-mesh data format.
+<P>
+The main reason for creating this release is to take advantage of an
+opportunity to put the software on this year's Siggraph CD-ROM.  If you have
+release 2.3 already and don't use it much, you may want to wait until the
+CD-ROM comes out to install 2.4, and read the new systems paper on Radiance at
+the same time.
+<P>
+In a related announcement, we now have some Radiance HTML documents on hobbes
+for those of you using Mosaic (or its equivalent).  The URL is:
+<P>
+<PRE>
+    <A HREF="html://hobbes.lbl.gov/www/radiance/radiance.html">html://hobbes.lbl.gov/www/radiance/radiance.html</A>
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art8">
+Faster Ray-Torus Intersection,
+</A></FONT>
+by Eric Haines
+</H4>
+&gt;Would like to know if anyone can offer tips/algorithm for solving for<BR>
+&gt;intersection of a ray and a torus.  I have generated a 4th order<BR>
+&gt;polynomial from torus equation and ray parametric eqns.  Got a solution<BR>
+&gt;method for a cubic from Numerical Recipes in C and can use it in the<BR>
+&gt;method for 4th order eqns shown in CRC handbook.<BR>
+&gt;<BR>
+&gt;Just wondered if there's an easier and/or faster way.<BR>
+<P>
+This is exactly what I did.  Just wait until you run into those imprecision
+problems...
+<P>
+Anyway, using the closed form approach you outline seems the way to go.  My
+only addition was to add a very bounding "box" test for the torus.  Using Van
+Wijk's method (in an ACM TOG article and in his thesis) for testing a ray
+against a surface of revolution, you can derive a simple quadric test which
+gives a very close bounding volume, essentially it bounds the torus with a
+rectangle around the cross section which is swept around - imagine a squared
+off tire being the bounding box.  The advantage here is just that you don't
+have to do the whole 4th order shebang - the 2nd order surface can be tested
+very efficiently using Van Wijk's method of classification; then if you hit
+you need to do the whole test.  This method is lots better for tori with a
+large interior radius vs.  bounding boxes, as the method properly says a lot
+of the rays passing through the ring are misses and so saves on testing.  I
+haven't done a formal analysis, though.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art9">
+RAT PACK: Free Ray Tracing Research Software,
+</A></FONT>
+by Tom Wilson (<A HREF="mailto:wilson@forest.dab.ge.com">wilson@forest.dab.ge.com</A>)
+</H4>
+Very soon I will have the next release of RAT ready for release.  RAT is a RAy
+Tracing PACKage which is useful in research environments.  This means that if
+you're looking for a pretty picture generator, you're not going to want this
+software.  However, if you want to test accelerators or otherwise steal ray
+tracing code, you might want the package.  The package has enormous
+improvements over the last release, but it's still far from awesome (if you
+take 3 and add 10 to it, it is still much less than 100 8-).
+<P>
+I've started working on a Mac version, but there are two things preventing me
+from finishing it before the release:  (1) my Mac has no FPU and I have no
+desire to wait weeks for images to be generated, and (2) making all the
+Mac-like features (pull-down menus, etc.)  is going to take some time.
+However, the release will come with Think C projects to at least build the
+code.  If the user has an FPU then the code can be compiled with that option
+turned on.  Many readability/usability improvements have been made.
+<P>
+I've had one person add an accelerator to the package in the past and that
+should be even easier now.  I intend to add Kirk/Arvo's scheme and Ohta's
+scheme in the near future, but I've been saying that for a while.
+<P>
+I will NOT be posting the package to c.g or putting it at an ftp site.  You
+can request it via e-mail.  When it is ready I will mail it out to my mailing
+list.  For more info (like the README from the last release, etc.), send
+e-mail.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art10">
+Light Beams Tricks,
+</A></FONT>
+by Chris Thornborrow (<A HREF="mailto:ct@epcc.ed.ac.uk">ct@epcc.ed.ac.uk</A>)
+</H4>
+<A HREF="mailto:rowley@crl.ucsd.edu">rowley@crl.ucsd.edu</A> writes:<BR>
+&gt; I'm interested in simulating light-beam effects using POV-Ray.<BR>
+&gt; This would be something that looked like a search-light, or<BR>
+&gt; a starburst.<BR>
+<P>
+In general, this isn't an easy problem to solve if you can see the beam from
+any angle and a full solution involves integrating over the light reflected by
+particles encountered by the ray through the beam.  Sometimes, just a
+constant, scaled by the distance traveled through the beam will work if you
+are at right angles to the trajectory of the beam.  As an undergrad I solved
+for spheres of light (lamps in fog), cones of light (headlights) and
+quadrilateral cross section cones (beams from a window).
+<P>
+Depending on the quality you are looking for, simply using a single flat
+polygon at 90 degrees to the viewer with appropriately chosen intensities of
+colour (less at the spread out end) and transparency will give a passable
+effect.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art11">
+On-Line Ray Tracing Bibliography,
+</A></FONT>
+by Ian Grimstead (<A HREF="mailto:I.J.Grimstead@cm.cf.ac.uk">I.J.Grimstead@cm.cf.ac.uk</A>)
+</H4>
+This is to announce the availability on the Web of an On-Line Ray Tracing
+Bibliography.  It is divided into appropriate sections, and includes many
+abstracts from the papers it holds.
+<P>
+The references were taken from Tom Wilson's collection of articles, whom I
+thank & credit him for his hard work.
+<P>
+The site is now stable, but updates will not commence until the pages have
+been fully tested.
+<P>
+The address of the site is:
+<P>
+<A HREF="http://www.cm.cf.ac.uk:/Ray.Tracing/">http://www.cm.cf.ac.uk:/Ray.Tracing/</A>
+<P>
+To view & use the bibliography, you require an html viewer such as Mosaic or
+Lynx.  If you're not sure what I'm talking about, ask your sys admin about
+Mosaic; if they don't know, then get them to acquire the software via archie!
+<P>
+This software enables you to view hyper text pages (including pictures,
+animation, sounds) distributed around the World Wide Web, and to link into
+ftp, gopher and news servers.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art12">
+Polynomials,
+</A></FONT>
+by Han-Wen Nienhuys (<A HREF="mailto:hanwen@stack.urc.tue.nl">hanwen@stack.urc.tue.nl</A>)
+</H4>
+Algebraic sufaces are nasty shapes.  They're kind of slow, and they suffer
+from surface acne:  Rays P + t*D spawned off an algebraic, always have an
+intersection at t = 0.  Due to numerical inaccuracies, we often find t which
+are small, but bigger than our current tolerance.  This produces phantom
+shadows, digital zits and and more unwanted effects.
+<P>
+If we could prevent this from happening, then 4th order algebraic shapes don't
+need accurate but slow root finders such as Sturm sequences.  So our problem
+is how to filter zeros of polynomials p(t) = 0 if t = 0?  First we need to
+know what will the consequences be for a polynomial p(t), if it has an
+intersection at t = 0.  The anwer is simple, it will look like:
+<P>
+<PRE>
+ p(t) = a_1*t + a_2 * t^2 + ... + a_n*t^n
+</PRE>
+<P>
+Because p(t) = 0 is a raytracing equation we know that the intersection at t =
+0 is useless anyway, so we might just as well discard it, giving
+<P>
+<PRE>
+ p_2(t) = a_1 + a_2 * t + ... + a_n*t^n-1
+</PRE>
+<P>
+as a result.  This will give the same results as p(t) = 0.  This kills two
+birds with one stone.  By throwing away the intersection at t = 0, we
+eliminate noise, and at the same time reduce the order of the equation.  The
+intersection will now also be cheaper!
+<P>
+Still, there is a small caveat, due to inaccuracies, the polynomial is more
+likely to be
+<P>
+<PRE>
+  p(t) = a_0 + a_1 * t + ...
+</PRE>
+<P>
+<PRE>
+And p(E) = 0 from a small E, |E| &lt; TOLERANCE &lt;&lt;1.
+Setting
+|E| &lt; TOLERANCE &lt;&lt;1, we find that
+</PRE>
+<P>
+<PRE>
+  0 = p(E) = a_0 + a_1 * E + O(|E|^2)   (E -&gt; 0)
+</PRE>
+<P>
+the expression O(|E|^2) means:  smaller than some constant multiplied by
+|E|^2, if E tends to 0.  In other words, it can be neglected.  Then
+approximately
+<P>
+<PRE>
+  E = -(a_0 / a_1), and |a_0/a_1|  &lt; TOLERANCE
+</PRE>
+<P>
+holds. The converse is also true, ie if |a_0/a_1|  &lt; TOLERANCE &lt;&lt;1
+then p(E) = 0 for a small E, |E| &lt; TOLERANCE.
+<P>
+So we can strip a_0, and lessen the degree of p(t) if
+<P>
+<PRE>
+  (a_0 / a_1) &lt; TOLERANCE.
+</PRE>
+<P>
+Caveat:  if the result of evaluating an algebraic P(x,y,z) with (x,y,z) = P +
+t*D, has a large error, then this will fail, the resulting polynomial could
+have a zero at some t, |t| &gt; TOLERANCE.
+<P>
+Experimental results
+<P>
+I implemented it in Rayce, and it does work, but not as good as I had wished.
+I've tried a zoomed in version of papercl.r (A remake of the
+Cook/Carpenter/Porter paperclip; it contains three torii).  This filtering
+mechanism eliminated phantom shadows at the edges of the torii.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art13">
+Shadow Caching Observation,
+</A></FONT>
+by Han-Wen Nienhuys (<A HREF="mailto:hanwen@stack.urc.tue.nl">hanwen@stack.urc.tue.nl</A>)
+</H4>
+Shadow caching is a useful way for quickly determining whether an intersection
+will be in a shadow.  This is the idea:  one object that blocks light is
+enough to have a shadow at an intersection point.  So each time you find an
+object that blocks a ray, store it, and test this object the first thing at
+the next shadowray.  Because second level rays are different from first level
+rays, the shadow rays spawned off their intersection point are different.
+Therefore it seems a good idea to have a cache for each recursion level and
+each lightsource.
+<P>
+On the other hand, a quick survey of the raytracers on my harddisk revealed
+that PoV and Rayshade cache only one object per lightsource.  MTV and Art have
+a cache for each level.  Nobody seems do make a distinction between reflected
+and refracted rays.  Let me explain:  if a recursion-level 1 intersection
+could be from an eyeray that is refracted, or an eyeray which has been
+reflected.  Since the reflected and refracted rays will have entirely
+different directions, their respective intersection points, and hence the
+blocking objects for a given lightsource, will usually be different.
+<P>
+The solution:  instead of passing the recursion depth to the recursive
+function trace(), pass a tree, which looks like:
+<P>
+<PRE>
+  struct Tree {
+    struct Tree *reflect_tree, reflact_tree;
+    int recursion;
+    object **shadow_cache
+  }
+</PRE>
+<P>
+shadow_cache is an array with a pointer to the last blocking object for each
+lightsource.
+<P>
+<PRE>
+  shade (Tree *t, ...)
+  {
+    if (reflection) {
+      [set up reflection ray]
+      color = trace (t-&gt;reflected, ...);
+   }
+}
+</PRE>
+<P>
+I've implemented this in Rayce, and for scenes with both refraction and
+reflection, it doubles the number of cache hits.
+<P>
+[Interesting to me - I implemented essentially the same thing for our
+commercial ray tracer, assuming it would be a win for minimal extra memory,
+but never tested it out to see whether the improvement was noticeable. - EAH]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art14">
+Small Comment on GGems III bsp.c,
+</A></FONT>
+by Han-Wen Nienhuys (<A HREF="mailto:hanwen@stack.urc.tue.nl">hanwen@stack.urc.tue.nl</A>)
+</H4>
+I've adapted Graphics Gems III's BSP code for use in Rayce, and I have a small
+remark.  Although most of the code was inefficient because it had to be
+educational and understandable, the authors forgot a simple optimization.  It
+will make the code even simpler.  Change:
+<P>
+<PRE>
+    if ( RayObjIntersect(ray, currentNode-&gt;members, obj, distance) ) {
+        PointAtDistance(ray, distance, &p);
+        if (PointInNode(currentNode, p))
+            return TRUE;
+    }
+</PRE>
+<P>
+to
+<P>
+<PRE>
+    if ( RayObjIntersect(ray, currentNode-&gt;members,obj, distance)) {
+
+        /* intersection in currentnode ? */
+        if (distance &gt; min && distance &lt;  max) {
+          return TRUE;
+        }
+    }
+</PRE>
+<P>
+This saves 10 floating point operations, and 2 function calls.
+<P>
+Kirk and Arvo limited the recursion depth of the tree by setting a hard coded
+limit at 49.  It makes more sense to determine the depth of the bintree from
+the object database.  I've tweaked the subdivide() procedure to stop
+subdividing a node, if subdivision has no effect.  This has two pros:
+<P>
+1. The depth doesn't have an arbitrary limit.
+<P>
+2. If all objects of a node overlap, then the subdivision won't help,
+if you'd continue subdivision, the tracing will take extra time.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art15">
+Fogsources,
+</A></FONT>
+by Han-Wen Nienhuys (<A HREF="mailto:hanwen@stack.urc.tue.nl">hanwen@stack.urc.tue.nl</A>)
+</H4>
+Yesterday, I was riding my bicycle at night, and I was thinking of how to
+raytrace my surroundings.  It was a bit foggy, and the light of the
+streetlights was scattered in a beautiful glowing haze.  While riding, I came
+up with a method to model these foggy lights.  This method should also be good
+for modelling the "neon", that some folks on PCGNet want to do with PoV.
+<P>
+So let I = I(d) be the intensity at a certain point, which has distance d from
+the lightsource.  What's happening in the fog?  The mist of water drops
+scatters the light.  If a drop is further away from a lightsource, then it
+will receive less light from the lightsource.  Therefore I(d) should be a
+decreasing function.  The total amount of light that a ray will encounter on
+its way from its origin P to its intersection point P + D*e, is
+<P>
+<PRE>
+   e
+   /
+   | I( distance(lightsource, P + t*D) ) dt
+   /
+   0
+</PRE>
+<P>
+This isn't really correct, we're neglecting the fact that the light which is
+reflected from a drop in our direction will also be attenuated when traveling
+from the drop to our eyes.
+<P>
+For actual implementation, we need to know distance explicitly.  Let's first
+derive that one.  Let (,) denote a dotproduct
+<P>
+<PRE>
+                           L
+                           ^
+                           d_0
+                           v
+ P --------X-------------------------------------&gt; P + e * D
+
+           ^--  P + t * D
+
+P   = origin of ray
+D   = direction of ray
+X   = a point on the ray described by P + t*D
+L   = lightsource
+d_0 = the closest the ray can get to L.
+e   = endpoint of the ray, the first intersection
+</PRE>
+<P>
+We have:
+<P>
+<PRE>
+ distance ^ 2  =  (P - L + t*D, P - L + t*D)
+</PRE>
+<P>
+On the other hand, the distance would be easy to calculate, if we knew d_0,
+shortest distance between the ray and the light.  By setting the derivative of
+the formula above to 0, we find:
+<P>
+<PRE>
+  t_0 =  - (P-L, D)/(D, D).
+</PRE>
+<P>
+&gt;From this you can calculate d_0, and the distance is found, by simply using<BR>
+Pythagoras:<BR>
+<P>
+<PRE>
+  distance^2 = d(t) ^2 =  d_0 ^ 2 + ( (t - t_0)*|D| ) ^2
+</PRE>
+<P>
+For simplicity, let's assume |D| = 1, then the above formula reduces to
+<P>
+<PRE>
+  d(t) ^ 2 = d_0 ^ + (t - t_0)^2.
+</PRE>
+<P>
+All we have to do now is choosing an intensity function I(d).  I propose this
+one:  I(d) = 1/d^2, because it will give a simple formula.  A physically more
+correct one would be I(d) = exp(-cd)/d^2, for a given constant c.  The exp()
+is there, because intensity decreases exponentially with distance due to
+absorption.  The ^2 is there because light falls of at 1/r^2 in a 3
+dimensional perfectly transmitting medium.  However, calculation would involve
+a not-so-nice integral, which I didn't want to integrate (and probably can't
+be found explicitly).
+<P>
+However, if we set I = 1/d^2, then we get:
+<P>
+<PRE>
+           e
+          /         d t
+light =   |  ------------------  =
+          /  (t - t0)^2 + d_0^2
+          0
+</PRE>
+<P>
+This is an easy integral:  substitute k := t - t0, substitute x := k/d_0, and
+you the anwer you finally get is:
+<P>
+<PRE>
+  ( atan((e-t0)/d_0) - atan((-t0)/d_0 ) )/ d_0.
+</PRE>
+<P>
+I will probably implement this in my raytracer, but I am not sure when.
+[he did, see below. -EAH]
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art16">
+The Rayce Ray Tracer,
+</A></FONT>
+by Han-Wen Nienhuys (<A HREF="mailto:hanwen@stack.urc.tue.nl">hanwen@stack.urc.tue.nl</A>)
+</H4>
+[The above articles all went into Han-Wen's ray tracer, below. Also, note
+that Rayfmt sounds generally useful, i.e. could be used with POV-ray, I think.
+-EAH]
+<P>
+Rayce 2.8, the newest version of my raytracer is available now.
+<P>
+[RAYCE]
+<P>
+   Rayce is a raytracer I've written to find out how raytracing works.  It's
+written for purely educational purposes.  If you want to make neat pictures,
+use PoV or Vivid instead.  Oh, by the way, "educational" means "for my
+education", but you could use it in a C.G.  class too.  It wouldn't make a
+very good example, though, I am afraid.  Most of the design and implementation
+is my own, our university library's copy of "An intro to Ray Tracing" hasn't
+been available for some time, so I was on my own, while programming Rayce.
+<P>
+   Still, Rayce has been expanded very much, and I plan to incorporate a lot
+of weird and new stuff into it.
+<P>
+<PRE>
+   What features does Rayce have?
+
+   - Rayce supports these primitives:  sphere, quadric, plane, lightsource,
+     box, torus, algebraic, superquadric, polygon, triangle, disc
+   - It has these non-primitives: composite, translational extrusion, CSG
+   - Rayce has distribution raytracing for rendering penumbra, motion blur,
+     gloss and translucency.
+   - Rayce has multiple efficiency schemes (well :-): manual bounding
+     hierarchies or recursive bintree traversal.
+   - The sources are GPL-ed, and they're portably written ANSI C.
+   - Debugging facilities
+   - A POV like input language
+   - Imagemaps
+   What important features are still missing?
+   - Solid texturing
+   - Bumpmaps
+   - Serious anti aliasing.
+   - Support for these primitives
+        * Heightfield
+        * Bezierpatches
+        * Cones
+        * Blob
+
+Newities in version 2.8
+        * bg.c: fogsource
+        * csg.c: limited CSG intersection autobounding (gives a nice speed
+        increase compared to PoV on some scenes, luchter.r :)
+        * added rayfmt (raytrace scene formatter) to distribution
+        * shade.c: directional (distant) light
+        * poly.c: polynomial real_clean filter, reduces phantom shadows
+        * bsp.c: bsp. Wowie! Rayce is FAST!
+        * object.c: no_shadow, no_reflect, no_refract, no_eye analog of
+        PoV's no_shadow.
+        * grids.c: grid trees, with jitter. better pictures with
+        distribution raytracing
+        * shade.c: lightsources can have speed
+        * shade.c: Microfacet models, Reitz (Trowbridge & Reitz), Blinn,
+        Phong,  Cook (Beckmann), Gauss
+</PRE>
+<P>
+[RAYFMT]
+<P>
+   Rayfmt is a simple Raytrace datafile formatter. It only uses the
+`{}', `[]' and `&lt;&gt;' for indenting the code, it's not a codewalker.
+<P>
+   Rayfmt indents code in my favorite indentation.  I mainly use it
+to keep my datafiles clean, and to make other people's scenes
+readable.  It's also great for beautifying computer generated scene
+files.
+<P>
+[AVAILABILITY]
+<P>
+Rayce 2.8 & Rayfmt 1.14 consists of:
+<P>
+<PRE>
+     rayce28m.zip: .texi manual sources
+     rayce28x.zip: Turbo C++ executable [Can someone make a 32 bit
+     DOS version of Rayce?]
+     rayce28d.zip: documentation and some scenes
+     rayce28l.zip: linux executable
+     rayce28s.zip: C sources to Rayce
+     rayfmt114.zip: Rayfmt 1.14, raytrace scene formatter
+</PRE>
+<P>
+Rayce & Rayfmt are available at:
+<P>
+<PRE>
+BBS
+     Bennekom BBS: fido node 2:283/203, PCGNet 9:580/203, tel.
+     31-8389-15331. (freqqing times: 07.30 to 01.00, local time in
+     Holland)  Bennekom BBS supports V32bis and V42bis.
+</PRE>
+<P>
+<PRE>
+ftp
+     <A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/rayce/">wuarchive.wustl.edu:/graphics/graphics/ray/rayce/</A>
+     [it might still be in /pub/MSDOS_UPLOADS/graphics/]
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art17">
+Ray Tracing Roundup
+</A></FONT>
+</H4>
+In case you've been missing it, there is a FAQ for comp.graphics.raytracing.
+Either wait for it to get reposted, FTP from <A HREF="ftp://ftp.uwa.edu.au">ftp.uwa.edu.au</A>:  pub/povray/FAQ
+(and probably elsewhere), or contact Andy Wardley (<A HREF="mailto:abw@dsbc.icl.co.uk">abw@dsbc.icl.co.uk</A>), the
+FAQ's author, for more info.
+<P>
+____
+<P>
+There is a new FTP list for 3D graphics related sources, models, images,
+papers, etc. in Nick Fotis' FAQ, which is at <A HREF="ftp://rtfm.mit.edu">rtfm.mit.edu</A> [18.70.0.209] in
+the directory pub/usenet/news.answers.  You can also get this listing by using
+a mail server:  send a e-mail message to <A HREF="mailto:mail-server@rtfm.mit.edu">mail-server@rtfm.mit.edu</A> containing
+the keyword "help" (without quotes) in the message body.  The new list is much
+changed from my old one; useless sites deleted, new ones added, and a fair bit
+of clean up and whatnot.
+        Eric Haines
+<P>
+____
+<P>
+The Graphics Gems IV code is available on <A HREF="ftp://princeton.edu/pub/Graphics/GraphicsGems/GemsIV/">princeton.edu</A> in
+/pub/Graphics/GraphicsGems/GemsIV/GGemsIV.tar.Z or ggemsiv.zip.  Some minor
+errata and corrections have been made to this code (i.e. it's improved from
+what's distributed with the book).
+<P>
+____
+<P>
+I've put together a heightfield/terrain rendering mailing list
+(<A HREF="mailto:heightfield-request@monet.seas.gwu.edu">heightfield-request@monet.seas.gwu.edu</A>); the idea for its creation came from
+the successful Terrain Rendering SIG at SIGGRAPH '93.
+        Matt Pharr (<A HREF="mailto:pharr@CS.YALE.EDU">pharr@CS.YALE.EDU</A>)
+<P>
+____
+<P>
+A new version of the [Computational Geometry] biblio is ready for pickup via
+anonymous ftp from <A HREF="ftp://cs.usask.ca/pub/geometry/">cs.usask.ca</A>, in file pub/geometry/geombib.tar.Z as usual.
+        Bill Jones (<A HREF="mailto:jones@skdad.usask.ca">jones@skdad.usask.ca</A>)
+<P>
+____
+<P>
+DEM as heightfield
+<P>
+I've put some code together which will take files in the DEM format that the
+PC landscape renderer VistaPro uses and convert them to rayshade-style
+heightfield files.  I believe, however, that the VistaPro DEM format is
+different from the USGS DEM format.  In any case, I can make what I have
+available to anyone who is interested...
+        Matthew Pharr (<A HREF="mailto:pharr-matthew@CS.YALE.EDU">pharr-matthew@CS.YALE.EDU</A>)
+<P>
+____
+<P>
+Ian Ashdown taking over the Radiosity bibliography from me, send him new
+references from now on.  Contact:  Ian Ashdown (<A HREF="mailto:72060.2420@CompuServe.COM">72060.2420@CompuServe.COM</A>)
+        Eric Haines
+<P>
+____
+<P>
+The previous issue of the RT News (<A HREF="rtnv7n2.html">RTNv7n2</A>) has been translated to PostScript:
+<P>
+<PRE>
+    anonymous FTP from <A HREF="ftp://princeton.edu/pub/Graphics/RTNews/RTNv7n2.ps.Z">princeton.edu:/pub/Graphics/RTNews/RTNv7n2.ps.Z</A>
+</PRE>
+<P>
+All credit goes to Ben Black, who volunteered to do this conversion.  Fonts
+are used pleasantly throughout (they certainly beat the usual constant width
+text).  If you find this conversion to be worthwhile, let me know and we'll
+look at getting out further issues in plaintext and PostScript (Ben also
+mentioned that RTF is also easy for him to churn out, so mention if that is of
+interest).  With a little work figures and images could be added to future
+PostScript versions.
+        Eric Haines
+<P>
+____
+<P>
+Errata on Errata:
+<P>
+<A HREF="rtnv7n1.html#art20">RTNv7n1</A> had errata for "Adventures in Ray Tracing", by Alfonso Hermida.
+Alfonso's listed email address was wrong, it should be:
+<P>
+<PRE>
+        <A HREF="mailto:AFANH@STDVAX.GSFC.NASA.GOV">AFANH@STDVAX.GSFC.NASA.GOV</A>
+</PRE>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art18">
+A Storage Trick for 3D Polygons,
+</A></FONT>
+by Eric Haines
+</H4>
+I beat the point-in-polygon problem to near-death in Graphics Gems IV.  One
+trick I realized laters is that you can save a noticeable amount of storage if
+you use the method of dropping the 3D coordinate which corresponds to the
+largest magnitude coordinate of the plane's normal (for example, say the
+normal is [-2 -6 3], then the Y coord is the absolute largest, so drop the Y
+coordinates and use X and Z).  This means you truly can just store 2
+coordinates per vertex, since the third (which you shouldn't need for a ray
+tracer anyway, but might for some other reason) is implicit given the plane
+equation.
+<P>
+In other words, you find the "major axis", throw away its coordinate, and
+store only the other two, since that's all you need for the point in poly test
+anyway (you also note for the polygon which coordinate was thrown away).  If
+for some reason you do need the third coordinate value, you can always
+rederive it by plugging the other two coordinates into the polygon's plane
+equation and solving for it.
+<P>
+Some of you may be going "Eric's getting senile" at this point, since it
+sounds obvious, but I never thought of it before.  Blame it all on the CAD
+people I hang out with - you never throw away data and rederive it in this way
+in CAD, since you need that data to actually make something and don't want
+imprecision creeping in.  But if you're rendering, it's fine to throw away
+what you don't need while rendering an image.  The other nice thing throwing
+away data gives you is that you can use a single 2D fully optimized subroutine
+for point-in-polygon testing, vs. having three routines (one for when X is
+thrown away, one for Y, one for Z); nice from a maintainability and a
+compactness standpoint.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art19">
+Illumination-Related Abstracts from the Proceedings of Graphics Interface '93
+</A></FONT>
+ (May 19-21, 1993, Toronto, Ont. CA)
+</H4>
+[I'm afraid I lost the name of the kind soul who typed all these in.  Tom
+Wilson, perhaps?  I'm not sure...  Yes, these are for the '93 GI, if anyone
+has '94's available electronically, let me know and I'll publish them - EAH]
+<P>
+"An Adaptive Discretization Method for Progressive Radiosity"
+<P>
+Lalonde (<A HREF="mailto:lalonde@cs.ubc.ca">lalonde@cs.ubc.ca</A>)
+<P>
+The solutions of the radiosity method are highly dependent on the
+discretization used.  All methods used to generate these discretizations have
+to date depended on the scene being formed of polygonal surfaces.  However,
+these are often not the most efficient representations of the objects.  The
+meshing process usually only takes geometry into account, making shadow edges
+awkward to deal with.  In addition, there are a number of restrictions that
+the radiosity method requires of the model that most available modellers do
+not enforce.
+<P>
+The method presented here allows non-polygonal objects to be used as input to
+a progressive radiosity method.  The environment is sampled by ray casting,
+removing the need for a polygonal representation to be provided.  The method
+allows the generation of a discretization that is sensitive to lighting
+changes, not only to geometric constraints.  One effect of this is that higher
+order discontinuities in surface lighting are detected and the discretization
+can be focused in these areas without user intervention.
+<P>
+++++
+<P>
+"Geometric Simplification for Indirect Illumination Calculations"
+<P>
+Rushmeier,Patterson & Veerasamy (<A HREF="mailto:holly@cam.nist.gov">holly@cam.nist.gov</A>)
+<P>
+We present a new method for accelerating global illumination calculations in
+the generation of physically accurate images of geometrically complex
+environments.  In the new method, the environment geometry is simplified by
+eliminating small isolated surfaces, and replacing clusters of small surfaces
+with simple, optically equivalent,boxes.  A radiosity solution is then
+performed on the simplified geometry.  The radiosity solution is then used in
+a multi-pass method to estimate the radiances responsible for indirect
+illumination.  We present a preliminary implementation of the new method, and
+some initial images and timing results.  The initial results indicate that
+using simplified geometries for indirect illumination calculations produces
+images in times significantly less that previous multi-pass methods without a
+reduction in image quality.
+<P>
+++++
+<P>
+"Computing Illumination from Area Light Sources by Approximate Contour
+Integration"
+<P>
+Vedel (<A HREF="mailto:vedel@dmi.ens.fr">vedel@dmi.ens.fr</A>)
+<P>
+A new method using approximate contour integration to accurately compute
+direct illumination from diffuse area sources in presence of curved obstacles
+is presented.  All visibility tests are done using ray tracing so the method
+can be applied to a large class of objects.
+<P>
+Computation of illumination on a pixel by pixel basis is necessary to
+accurately capture sharp shadows.  However in soft penumbra zones many shadow
+rays are needed to quantize the penumbra finely enough and avoid banding
+artifacts.  Furthermore these zones usually cover lots of pixels.  We make use
+of the fact that silhouettes of objects in a scene are smooth for the most
+part to replace them by polygonal lines in source space.  The method allows
+the estimation of intensity gradients.  Penumbras with no aliasing are
+obtained with fewer rays than with usual adaptive sampling techniques.
+<P>
+++++
+<P>
+"Spatially Nonuniform Scaling Functions for High Contrast Images"
+<P>
+Chiu, Herf, Shirley, Swamy, Wang & Zimmerman (<A HREF="mailto:shirley@cs.indiana.edu">shirley@cs.indiana.edu</A>)
+<P>
+An algorithm is presented that scales the pixel intensities of a computer
+generated grey scale image so that they are displayable on a standard CRT.
+This scaling is spatially nonuniform over the image in that different pixels
+with the same intensity in the original image may have different intensities
+in the resulting image.  The goal of this scaling transformation is to produce
+an image on the CRT that perceptually mimics the calculated image, while
+staying within the physical limitations of the CRT.
+<P>
+++++
+<P>
+"Common Illumination between Real and Computer Generated Scenes"
+<P>
+Fournier, Gunawan, Romanzin (<A HREF="mailto:fournier@cs.ubc.ca">fournier@cs.ubc.ca</A>)
+<P>
+The ability to merge a real video image (RVI) with a computer-generated image
+(CGI) enhances the usefulness of both.  To go beyond "cut and paste" and
+chroma-keying, and merge the two images successfully, one must solve the
+problems of common viewing parameters, common visibility and common
+illumination.  The result can be dubbed Computer Augmented Reality (CAR).
+<P>
+We present in this paper techniques for approximating the common global
+illumination for RVI's and CGI's, assuming some elements of the scene geometry
+of the real world and common viewing parameters are known.  Since the real
+image is a projection of the exact solution for the global illumination in the
+real world (done by nature), we approximate the global illumination of the
+merged image by making the RVI part of the solution to the common global
+illumination computation.  The objects in the real scene are replaced by few
+boxes covering them; the image intensity of the RVI is used as the initial
+surface radiosity of the visible part of the boxes; the surface reflectance of
+the boxes is approximated by subtracting an estimate of the illuminant
+intensity based on the concept of ambient light; finally global illumination
+using classic radiosity computation is used to render the surface of the CGIs
+with respect to their new environment and for calculating the amount of image
+intensity correction needed for surfaces of the real image.
+<P>
+An example animation testing these techniques has been produced.  Most of the
+geometric problems have been solved in a relatively ad hoc manner.  The
+viewing parameters were extracted by interactive matching of the synthetic
+scene ith the RVI's.  The visibility is determined byh the relative position of
+the "blocks" representing the real objects and the computer generated objects,
+and a moving computer generated light has been inserted.  The results of the
+merging are encouraging, and would be effective for many applications.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art20">
+Design and Aims of the YART Graphics Kernel,
+</A></FONT>
+by Ekkehard 'Ekki' Beier (<A HREF="mailto:Ekkehard.Beier@Prakinf.TU-Ilmenau.DE">Ekkehard.Beier@Prakinf.TU-Ilmenau.DE</A>)
+</H4>
+In this article the principal design of the graphics kernel YART shall be
+described.  YART is being developed at the Technical University of Ilmenau
+(Germany) and is part of the GOOD project.  Further components of this project
+are an interactive front end and a class library for distributed applications.
+All this is free, available with all source.  Everybody is invited to use,
+modify, and extend YART.  Any comments, contributions, and bug fixes would be
+greatly appreciated.
+<P>
+In contrast to most others systems (like ray-tracers) or libraries (like SGI's
+GL or PHIGS PLUS) YART integrates different kinds of rendering at the same
+time.  These are (currently):
+<P>
+* Shading\Wireframe - used for realtime animations/simulations
+<P>
+* Raytracing - the slowest rendering mechanism, but generating images with the
+best quality.
+<P>
+* Radiosity - a nice kind of rendering, but only useful for static scenes; if
+a scene is computed (scene decomposition, diffuse light distribution) it can
+be seen from different viewpoints as fast as standard Shading.  Shading and
+Raytracing are always available, Radiosity has to be installed at
+configuration time (i.e. done by setting a compilation flag).
+<P>
+This coexistence has advantages, because Shading can be used as a built-in
+previewer.  For example, a complete animation or simulation can be checked
+using the Shading mode for the camera.  After finding the optimal parameters
+for time dependencies, camera control, etc.  the camera may be switched into
+raytracing mode to generate a lot of image files on disc.
+<P>
+On the other hand, the ray-tracer interface of the primitives is used for
+implementing a pick operation in order to allow direct interactions while in
+the shading mode for the camera.
+<P>
+YART is an open system with one essential aim:  extensibility.  YART is built
+around some essential abstract terms similarly to PREMO, an upcoming ISO
+standard:
+<P>
+A CAMERA takes PRIMITIVEs from a SCENE and puts them to a PIXMAP.  The kind of
+projection, rendering, etc. and special features like supersampling and
+stereoviewing are hidden in the specific camera class.  Any new camera can be
+implemented using transparent subclassing.  Examples of concrete cameras are
+OneRayCamera (for ray-tracing test purposes) and LookatCamera (perspective
+view, allowing shading, raytracing, radiosity in one and the same pixmap).  A
+StereoCamera has been implemented as a demo for the SGI GL port of YART.  An
+orthographic camera will be implemented in next release.  If you don't like
+the YART implementation of transparency or refraction computation, just
+subclass your own camera class and overload the related methods.
+<P>
+A PRIMITIVE is a graphical output object that may own different rendering
+protocols.  Thus, every primitive has more than one representation.  YART
+defines a set of base primitives:  Polymarker, Polyline, Polygon, Polyhedron,
+Quadmesh, (TriangleStrip, Spline, NURBS).  These objects are in principle
+directly supported by (hardware-based) shading pipelines.  These universal
+primitives are dynamically editable, and they can be empty or partially
+instantiated.  All other primitives (so-called higher-levels:  text,
+analytical, OFF) are built on top of these.  Thus, these are automatically
+portable.  New high-level primitives can be created by parameterization of the
+universal primitives, e.g. analytically defined objects like a sphere may
+parameterize a quadmesh to get their Shading presentation.  However, the
+inherited ray-tracing interface of the quadmesh is overwritten using the
+analytical description of the sphere.  The Shading representation of a special
+ray-tracing primitive can be much simpler than the ray-tracing representation.
+In the extreme this could be a bounding box only, usable for interactions.
+<P>
+YART supports hierarchical objects:  all attributes and the modelling matrices
+will automatically inherited down to the children of an object.  Furthermore,
+all rendering interfaces automatically manage children of objects.  However,
+they can be overwritten, if the complex object can be analytically defined to
+get a faster ray-tracing.  The hierarchical objects automatically compute
+recursive hierarchical bounding boxes in world coordinates to optimize the
+ray-tracing and pick operation.  Extensions can be made in subclasses to
+integrate time dependency, physical parameters or whatever you want.
+<P>
+Here is an example of an user-defined class (in C++):
+<P>
+<PRE>
+class RT_RobotArm: public RT_Primitive {
+    int left;
+    // 1 means left arm - 0 means right arm
+  public:
+    RT_RobotArm(char *_name, int _l): RT_Primitive( _name), left( _l ) {
+        RT_Primitive *p;
+        (p = new RT_Sphere(0, 0.5))-&gt;father( this );
+        (p =  new RT_Sphere(0, 0.45))-&gt;father( this );
+        p-&gt;translate( RT_Vector( left ? -0.3 : 0.3, -0.4, 0.3 ));
+        (p =  new RT_Sphere(0, 0.4))-&gt;father( this );
+        p-&gt;translate( RT_Vector( left ? -0.4 : 0.4, -0.75, 0.7 ));
+    }
+};
+</PRE>
+<P>
+usage:
+<P>
+<PRE>
+class RT_Robot:public RT_Primitive {
+    RT_Primitive *solid, *head, *arml, *armr, *shl, *shr;
+  public:
+    RT_Robot(char *_name): RT_Primitive( _name) {
+        ...
+        (arml = new RT_RobotArm(0, 1))-&gt;father( this );
+        arml-&gt;translate( RT_Vector(-1.1, 1, 0));
+
+        (armr = new RT_RobotArm(0, 0))-&gt;father( this );
+        armr-&gt;translate( RT_Vector(1.1, 1, 0));
+        ...
+    }
+};
+</PRE>
+<P>
+This is the only stuff to implement (+ one or two methods for the interpreter
+interface), all other things are inherited.  To avoid compile-link cycles for
+each new class an interpretative class system basing on the additional
+interpretative language binding (Tcl) is provided.
+<P>
+The new user-defined primitives are indistinguishable from the prefabricated
+ones.  With the implementation of YART extensions the number of classes of
+primitives will rise, but the amount of platform-dependent code will drop
+relatively.  In YART0.40 5 per cent of source code was platform dependent.
+<P>
+A further advantage of inheritance we found in the last few months.  The heavy
+changes (kernel tuning, attribute mechanisms, ...)  did not or only minimally
+influenced the derived classes.
+<P>
+A well-defined number of virtual methods of the Primitive class is provided to
+be used in user-defined extensions.  For instance, a method to recreate the
+geometry (and display list) as a result of attribute changes or a method that
+will be called from the framework around when the modelling matrix has
+changed.  In the scientific package this is used to recalculate the electric
+field, if a source or sink has been moved (using the interactive front-end).
+<P>
+Further essential terms in short:  ATTRIBUTEs are properties of PRIMITIVES,
+for instance Fillstyle and Resolution.  Application-specific attributes can be
+added very easily.  Attributes (even user-defined) can be assigned to or
+inquired from every object.
+<P>
+SCENEs are unordered lists of PRIMITIVES and are used as input for cameras.
+An example for a subclassed special scene is the Radiosity scene.
+<P>
+PIXMAPs are abstract units for displaying rasterized images, for example,
+online display, MPEG-based storage pixmaps, and can be coupled with IMAGES.
+<P>
+IMAGEs represent abstractly image files, the access to an image is independent
+from the specific format such as Targa or (SGI) RGB.
+<P>
+INPUT DEVICES are objects, too.  They're event-controlled, callback-oriented,
+extensible, platform independent and can directly be coupled with output
+objects.  As output objects, (basic) input objects can be nested into complex
+input objects.  Input devices can be driven stand-alone or coupled to a camera
+(in this case, they can have scene independent, camera specific visual
+feedback).
+<P>
+Furthermore there are LIGHTS, TEXTURES, MAPPINGS, (animation) RECORDERS, etc.
+as interactive objects, too.
+<P>
+A few more points:
+<P>
+- Besides the C++ API a consistent interpretative API (Tcl) is provided for
+testing, prototyping and programming.  Tcl is a simple-to-use language without
+types, and has C-like control structures (for, if then else, while, ...)  with
+an OSF/Motif-like widget set (Tk).
+<P>
+- Persistence is provided for all objects and realized by dumping Tcl code.
+<P>
+- Built-in documentation describes the behavior of all objects.  This is
+important for the reusability of YART extensions.
+<P>
+- YART is platform-dependent.  Currently supported are SGI GL, PHIGS PLUS
+ISO-C and pure X11.  OpenGl and RS/6000 GL are in the works, PEX in
+perspective.
+<P>
+- Integration of 2D user interfaces (Tk)
+<P>
+YART has still a lot of areas to be implemented, for example:
+- polygon/quadmesh ray-tracer interface
+- splines and NURBS
+- CSG and sweep modeling
+- a faster (PEX based) shader to have realtime interactions on LINUX (the
+        current one is very slooooooooow)
+<P>
+But our manpower is limited.  Thus, everybody is heartily welcomed to join
+this project.
+<P>
+Contact (and mailing list): <A HREF="mailto:yart@prakinf.tu-ilmenau.de">yart@prakinf.tu-ilmenau.de</A>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art21">
+Distribution Ray Tracing,
+</A></FONT>
+by Marc Levoy (<A HREF="mailto:levoy@blueridge.Stanford.EDU">levoy@blueridge.Stanford.EDU</A>)
+</H4>
+[my Usenet news filter client is based in Stanford (see <A HREF="rtnv7n2.html#art19">RTNv7n2</A> for details -
+it's a nice resource), and so picks up local Stanford newsgroups for classes,
+etc.  This popped up one day, and Marc gave me permission to reprint it.  I
+thought it was interesting to see a slice of one class' assignment; these are
+hints to them on how to implement a ray tracer.  It should really be edited to
+be fully understandable, but I leave it to you to read between the lines. -EAH]
+<P>
+///// su.class.cs348b.47 /////
+<P>
+Dear class,
+<P>
+A few clarifications and hints regarding distribution ray tracing:
+<P>
+1.  Many people have asked Chase or myself about comparing ray / path trees in
+when distributing reflected or refracted rays.  To my knowledge, there's no
+literature on this question.  After thinking about it for a while, we
+concluded that there is no good way to do this.  If you distribute your rays
+over a variety of reflection / refraction directions, the ray or path trees
+associated with adjacent image plane samples will almost certainly differ,
+triggering possibly unnecessary subdivisions.  We therefore suggest disabling
+comparison of ray / path trees when you have enabled distribution ray tracing
+(or disable comparison of ray / path trees for those image plane sample
+regions containing any rays that strike any objects for which you have defined
+a distribution (depending on how you implement this part of the assignment)).
+<P>
+2.  Some people are confused about the relationship between distribution
+versus classical (i.e. nondistribution) ray tracing, and ray tree versus path
+tracing.  The first and second pairs of techniques constitute orthogonal
+considerations when designing a ray tracer.  All four algorithms in this 2 x 2
+matrix are plausible.  For example, one can imagine a nondistribution ray
+tracer that does ray tree (as opposed to path) tracing, in which case the
+branching factor at each surface is zero, one, or two (one specular reflection
+ray and one specular refraction ray), not including rays cast directly to
+light sources to render the diffuse component.  One can also imagine a
+distribution ray tracer that does path tracing; at each surface, you choose
+one direction from the distribution you are sampling and continue the path in
+that direction.  I require you in this assignment to support both distribution
+and nondistribution ray tracing, but you need not support both ray tree and
+path tracing - just pick one of the latter two.
+<P>
+3.  I have presented adaptive algorithms in which a subdivision decision is
+performed only at the image plane.  For distribution ray tracing using ray
+trees (as opposed to paths), a spray of rays is traced from each intersected
+surface.  Your sampling of this distribution can be regular or stochastic, and
+can be nonadaptive or adaptive.  This makes a 2 x 2 matrix of algorithms, as
+described in class a long time ago.  You can pick any one of these, and the
+decision need not be related to what you do on the image plane.  For example,
+if you choose an adaptive algorithm, you would performing adaptive sampling of
+the near-specular (i.e. glossy) reflection direction distribution at the
+intersected surface.  This adaptive sampling would be in addition to and
+totally independent of any adaptive sampling you perform at the image plane.
+I don't require that you do any fancy sampling at intersected surfaces as I
+required for your sampling of the image plane in assignment #2.  I just want
+you to be aware that theory supports doing such fancy things if you are so
+inclined.
+<P>
+4.  Remember that there is another choice you must make when distributing rays
+at intersected surfaces; you must choose between distributing rays uniformly
+(in the statistical sense - the actual distribution can be regular or
+stochastic) and weighting them unequally according to a gloss (or
+translucence) function, or distributing rays nonuniformly according to the
+gloss function.  As stated in class, the latter is a form of importance
+sampling.  I don't require any particular solution here; just be prepared to
+explain what you've done.
+<P>
+Hope this helps.
+<P>
+-Your prof
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art22">
+Ray Tracing,
+</A></FONT>
+Antialiasing, and What To Do Instead, Steven Demlow (<A HREF="mailto:demlow@cis.ohio-state.edu">demlow@cis.ohio-state.edu</A>)
+</H4>
+Arijan Siska, a computer graphics fan wrote:<BR>
+&gt;I want to get some attention to the (in my opinion) a very serious issue:<BR>
+&gt;antialiasing.<BR>
+&gt;I would like to hear you opinion, especially results of your own research in<BR>
+&gt;this area.<BR>
+<P>
+I played around with a variety of AA approaches in both my own ray tracer and
+the public domain [not PD, actually - EAH] POV ray tracer.  I tried various
+derivations and combinations of supersampling, stochastic jittering, adaptive
+methods, and filtering.  For the animation project I was working on I ended up
+using 4x4 stochastically jittered grids on each pixel and a tent filter that
+extended into the (cached, of course) grids of neighboring pixels.  I've been
+working on using a hexagonal grid instead of a rectangular one (this gets
+tricky when you try to overlap the arbitrarily-sized filtering grids of
+adjacent pixels).  The hex grid supposedly provides close to an optimal ray
+distribution for AA purposes.
+<P>
+It sounds like you would do well to add filtering to your ray tracer - it can
+help a lot.
+<P>
+The conclusion I came to, after eight months of rendering on a bunch of
+HP7?0s, was that ray tracing is not the way to go to generate a lot of high-
+quality images. :)  I love ray tracing but there are reasons that it sees
+little use in production environments.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art23">
+Yet Another Illumination Ph.D.
+</A></FONT>
+[his title, not mine - EAH], by George Drettakis (<A HREF="mailto:dret@dgp.toronto.edu">dret@dgp.toronto.edu</A>)
+</H4>
+Hi everybody,
+<P>
+I just finished the final version of my PhD thesis.  It is available by anon
+ftp at dgp.toronto.edu:pub/dret/PhD.  There are postscript files (for single
+and double-sided printers) and tiff files for all the colour images.  It will
+soon also be available as CSRI Technical Report 293 (ftp only at
+<A HREF="ftp://ftp.csri.toronto.edu:csri-technical-reports/293">ftp.csri.toronto.edu:csri-technical-reports/293</A>).  I welcome all comments or
+suggestions at either <A HREF="mailto:dret@dgp.toronto.edu">dret@dgp.toronto.edu</A> or George.Drettakis@imag.fr
+<P>
+It can be quoted either as "Ph.D. thesis, Dept. of Computer Science,
+University of Toronto", or as : "CSRI Technical Report no. 293,
+University of Toronto".
+<P>
+<PRE>
+Thanks,
+George Drettakis                          Dynamic Graphics Project
+                                          Computer Systems Research Institute
+Phone +1 (416) 978 5473                   University of Toronto
+FAX   +1 (416) 978-0458                   Toronto, Ontario CANADA M5S 1A4
+e-mail: <A HREF="mailto:dret@dgp.toronto.edu">dret@dgp.toronto.edu</A>  or dret@dgp.utoronto.ca
+</PRE>
+<P>
+_____________________
+<P>
+Here is the info:
+<P>
+Title:
+Structured Sampling and Reconstruction of Illumination for Image Synthesis
+<P>
+Degree:  Ph.D., University of Toronto, Department of Computer Science
+<P>
+Author:  George Drettakis
+<P>
+Abstract:
+<P>
+An important goal of image synthesis is to achieve accurate, efficient and
+consistent sampling and reconstruction of illumination varying over surfaces
+in an environment.  A new approach is introduced for the treatment of diffuse
+polyhedral environments lit by area light sources, based on the identification
+of important properties of illumination structure.  The properties of
+unimodality and curvature of illumination in unoccluded environments are used
+to develop a high quality sampling algorithm which includes error bounds.  An
+efficient algorithm is presented to partition the scene polygons into a mesh
+of cells, in which the visible part of the source has the same topology.  A
+fast incremental algorithm is presented to calculate the backprojection, which
+is an abstract representation of this topology.  The behaviour of illumination
+in the penumbral regions is carefully studied, and is shown to be monotonic
+and well behaved within most of the mesh cells.  An algorithm to reduce the
+mesh size, and an algorithm which selects between linear and quadratic
+interpolants are presented.  The results show that the mesh size and the
+degrees of the interpolants can be reduced without significant degradation of
+image quality.  The preceding algorithms are combined into a complete
+structured sampling approach that allows accurate and efficient representation
+of illumination using interpolating polynomials for scenes with occlusion.
+Images with accurate shadows can be produced from the structured
+representation using either ray-casting or polygon rendering hardware.
+Finally, it is shown that our methodology generalises easily to the global
+illumination problem.  An iterative solution to a Galerkin finite element
+approach is proposed, and it is shown how the structured algorithms provide a
+good initial approximation for the iteration, enhance efficiency for numerical
+integration and allow adaptive mesh modification.  The structure-driven global
+illumination algorithm thus promises significant improvement over previous
+higher-order finite element solutions.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

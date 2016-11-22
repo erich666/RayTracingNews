@@ -1,0 +1,445 @@
+<!-- html version of Volume 2, Number 8 :  -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 2, Number 8</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>October 27, 1989</FONT>
+<P><FONT size=+1>Volume 2, Number 8</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1989, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Introduction
+</A></LI>
+<LI><A HREF="#art2">
+Tracing Tricks,
+</A></LI>
+edited by Eric Haines
+<UL>
+<LI><A HREF="#art3">
+Ambient Light
+</A></LI>
+<LI><A HREF="#art4">
+Efficiency Schemes
+</A></LI>
+<LI><A HREF="#art5">
+Bounding Volume Hierarchy
+</A></LI>
+<LI><A HREF="#art6">
+Octree
+</A></LI>
+<LI><A HREF="#art7">
+Bounding Box Intersection
+</A></LI>
+<LI><A HREF="#art8">
+Spline Surface Intersection
+</A></LI>
+<LI><A HREF="#art9">
+Acknowledgements
+</A></LI>
+<LI><A HREF="#art10">
+Bibliography
+</A></LI>
+</UL>
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Introduction
+</A></FONT>
+</H4>
+        I've decided to pass on an article published in the SIGGRAPH '89
+"Introduction to Ray Tracing" course notes.  It's something of a "best of the
+Ray Tracing News" compendium of ideas.  Since the notes are not easy for
+everyone to access, and the article probably will not be printed elsewhere, I
+thought it worthwhile to reprint here.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+Tracing Tricks,
+</A></FONT>
+edited by Eric Haines
+</H4>
+<I><A HREF="rtnews2d.html#art6">
+previous discussion of topic</A></I>
+<P>
+Over the years I have learnt a variety of tricks to increase the performance
+and image quality of my ray tracer.  It's almost a cliche that today's
+successful trick is tomorrow's established technique.  Photorealistic computer
+graphics is, after all, concerned with figuring out shortcuts and
+approximations for rendering various physical phenomena, i.e. tricks.
+<P>
+For whatever reason, many of the tricks mentioned here are not common
+knowledge.  Some have been published (and sometimes overlooked), some have
+been discussed informally and have never made it into research papers, and
+others seem to have appeared out of nowhere.  It's most likely that there are
+tricks that are commonly known that have not percolated over to me yet.
+<P>
+When possible, I have tried to give appropriate references or attributions; if
+not attributed, the ideas are my own (I think!).  My apologies if I have
+overlooked anyone.  Only references that do not appear in the book's "Ray
+Tracing Bibliography" are included at the end of this article.  For more
+general rendering hacks, see [Whitted85], which originally inspired me to
+attempt to pass on some ideas from my bag of tricks.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Ambient Light
+</A></FONT>
+</H4>
+One common trick (origins unknown) is to put a light at the eye to do better
+ambient lighting.  Normally if a surface is lit by only ambient light, its
+shading is pretty crummy.  For example, a non-reflective cube totally in
+shadow will have all of its faces shaded the exact same shade.  All edges
+disappear and the cube becomes a hexagonal blob.  The light at the eye gives
+the cube definition.  Note that a light at the eye does not need shadow
+testing:  wherever the eye can see, the light can see, and vice versa.
+However, this trick can lead to various artifacts, e.g.  there will always be
+a highlight near the center of every specular sphere in the image.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Efficiency Schemes
+</A></FONT>
+</H4>
+There are any number of efficiency schemes out there, including Bounding
+Volume Hierarchy, Octree, Grid, and 5D Ray Classification.  See Jim Arvo's
+section of the book for an excellent overview of all of these.  The most
+important conclusion is that any efficiency scheme is better than none.  Even
+on the simplest scenes an efficiency scheme will help execution.  For example,
+in one test scene with only ten objects, using an efficiency scheme made the
+job take only one third the time.  Grid subdivision is probably the quickest
+to implement, though the others are not that much harder.
+<P>
+While at the University of Utah, John Peterson and Tom Malley actually
+implemented Whitted/Rubin, Kay/Kajiya, and an octree scheme, and found that
+all three schemes were within 10-20% of each other speedwise.  In an informal
+survey at SIGGRAPH '88, the BV Hierarchy, Octree, Grid and 5D schemes all had
+about the same number of users (all the 5D users were from Apollo; on the
+other hand, 5D is the new kid on the block).
+<P>
+There are a number of techniques I have found to be generally useful for all
+efficiency schemes.
+<P>
+1) When shadow testing, keep the opaque object (if any) which shadowed each
+   light for each ray tree node.  Try this object immediately during the next
+   shadow test at that ray tree node.  Odds are that whatever shadowed your
+   last intersection point will shadow again.  If the object is hit you can
+   immediately stop testing because the light is not seen.  This was first
+   published in [Haines86].
+<P>
+2) When shadow testing, save transparent objects for later intersection.  Only
+   if no opaque object is hit should the transparent objects be tested.  The
+   idea here is to avoid doing work on transparent filters when in fact the
+   light does not reach the surface.
+<P>
+3) Don't calculate the normal for each intersection.  Get the normal only
+   after all intersection calculations are done and the closest object for
+   each node is known.  After all, each ray can have only one intersection
+   point and one normal.  Saving intermediate results is worthwhile for some
+   intersection calculations, which are then used if the object is actually
+   hit.  This idea was first mentioned in [Whitted85].  Similarly, other
+   calculations about the surface can be delayed, such as (u,v) location, etc.
+<P>
+4) One other idea (which I have not tested) is sorting each intersection list
+   by various criteria.  Most efficiency schemes have in common the idea of
+   lists of objects to be tested.  For a given list, the order of testing is
+   important.  For example, all else being equal, if a list contained a spline
+   surface and a polygon, I would want to test the polygon first since it is
+   usually a quicker intersection test.  Given an opaque object and a bounding
+   box in a list, I probably want to test the opaque object first when doing
+   shadow testing, since I want to find any intersection as soon as possible.
+   If two polygons are on the list, I probably want to test the larger one
+   first, as it is more likely to cast a shadow or give me a maximum depth
+   (see next section).  There are many variations on this theme and at this
+   point little work has been done on these possibilities.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art5">
+Bounding Volume Hierarchy
+</A></FONT>
+</H4>
+I have a strong bias towards this scheme since it handles a wide variety of
+object sizes, types, and orientations in a robust fashion.  Other schemes will
+often be faster, but this scheme has the fewest crippling pathological cases
+(e.g. a grid subdivision scheme is useless whenever most of the objects fall
+into one grid box).  I favor the automatic bounding volume generation technique
+described by [Goldsmith87].
+<P>
+I have found a number of tricks to speed up hierarchy traversal, most of which
+are simple to implement. Some of the ideas can also be useful for other
+efficiency schemes.
+<P>
+1) Keep track of the closest intersection distance.  Whenever an object is
+   hit, keep its distance as the maximum distance to search.  During further
+   intersection testing use this distance to cut short the intersection
+   calculations:  if an object or bounding box is beyond the maximum distance,
+   no further testing of it needs to be done.  Note that for shadow testing
+   the distance to the light provides an initial maximum.
+<P>
+2) When building a ray intersection tree, keep the ray tree which was
+   previously built.  For each ray tree node, intersect the object in the old
+   ray tree, then proceed to intersect the bounding box/object tree.  By
+   intersecting the old object first you can usually obtain a good maximum
+   distance immediately, which can then be used to aid trick #1.
+<P>
+3) When shooting rays from a surface (e.g.  reflection, refraction, or shadow
+   rays), get the initial list of objects to intersect from the bounding
+   volume hierarchy.  For example, a ray beginning on a sphere must hit the
+   sphere's bounding volume, so include all other objects in this bounding
+   volume in the immediate test list.  The bounding volume which is the parent
+   of the sphere's bounding volume must also automatically be hit, and its
+   other children should automatically be added to the test list, and so on up
+   the object tree.  Note also that this list can be calculated once for any
+   object, and so could be created and kept around under a least-recently-used
+   storage scheme.  Another advantage of this scheme is that nearby neighbors
+   of the object are tested for shadowing first.  These neighbors are more
+   likely to cast a shadow on the point than any random object.  I first saw
+   this trick used in Weghorst and Hooper's ray tracer at Cornell's Program of
+   Computer Graphics.
+<P>
+4) Similar to trick #3, the idea is simply to do the same list making process
+   for the eye position.  Check if the eye position is inside the topmost node
+   of the hierarchy.  If it is, check the children which are boxes.  Continue
+   to check and unwrap until you are left with a list of objects to intersect.
+   Again, the idea is to avoid wasting time shooting a ray against boxes which
+   you know must be hit.
+<P>
+   For light sources, since the farthest endpoint of the ray is also known, it
+   can also be used to open some boxes early on.  The tradeoff here, however,
+   is that for shadow testing we want to find any intersection we can.
+   Wasting time opening boxes near the light or ray origin might be better
+   spent trying to find an intersection as fast as possible.
+<P>
+5) An improvement to trick #3 is also to use trick #4 to open more boxes
+   initially.  You work up the hierarchy opening all parent boxes; any
+   children of the parent (except the original one, of course) are then tested
+   against the ray position.  However, this can be done only when the trick is
+   done on the fly, since the ray's origin will change.
+<P>
+Kay & Kajiya's hierarchy scheme [Kay86] is about the best overall traversal
+method.  However, Jeff Goldsmith and others note that if you do use Kay &
+Kajiya's heapsort on bounding volumes in order to get the closest, don't
+bother to do it for illumination rays.  In shadowing, you don't care about the
+closest intersection, but just whether anything blocks the light.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art6">
+Octree
+</A></FONT>
+</H4>
+There are a few tips on accessing and moving through the octree.  Olin Lathrop
+and others have pointed out that there is a faster method than Glassner's
+hashing scheme for finding which octree voxel contains a point.  Quickest is
+to simply transform the point into the octree's (0,0,0) to (1,1,1) space.  Say
+you allow your octree a maximum of eight levels.  This means you'll want to
+convert from world coordinates to eight bits in X, Y, and Z.  For example, if
+the octree box went from 3.0 to 6.0 along the X axis in world space, you would
+convert 5.25 into the binary fraction 0.11000000 (which is equal to 0.75
+decimal, which is where 5.25 lies between 3.0 and 6.0).  The most significant
+bit of each binary fraction for each coordinate is then combined and used to
+access the correct topmost octree voxel (i.e. 0 through 7, similar to
+Glassners' scheme).  The next-most significant three bits are then stripped
+off, and the corresponding subordinate octree voxel is accessed, on down until
+a leaf voxel is found.
+<P>
+In practice, each octree voxel notes whether it is a parent of further voxels
+or is a leaf and contains a list of objects to hit.  If it is a parent, it
+stores a list of 8 pointers to its subordinate octrees, with null pointers
+meaning that the subordinate octree is empty; otherwise, a list of objects is
+used.
+<P>
+One problem with building octrees is deciding when enough is enough.  You want
+to subdivide an octree voxel if the number of objects is too many, but you may
+find that these further subdivisions do not gain you anything.  Olin Lathrop
+has an interesting method for octree subdivision.  First, the biggest win is
+to subdivide on the fly.  Never subdivide anything until you find there is a
+demand for it (this same idea was used by Arvo and Kirk [Arvo87] in their 5D
+efficiency scheme).  His subdivision criteria are, in order of precedence:
+<P>
+1) Do not subdivide if subdivision generation limit is hit.
+<P>
+2) Do not subdivide if a voxel contains less than X objects (These first two
+   criteria were first proposed in [Glassner84]).  Olin uses X=1.
+<P>
+3) Do not subdivide if less than N rays passed through this voxel, but did not
+   hit anything.  Olin uses N=4.
+<P>
+4) Do not subdivide if M*K &gt;= N, where M is the number of rays that passed
+   through this voxel that did hit something, and K is a parameter you chose.
+   Olin uses K=2, but suspects it should be higher.  This step seeks to avoid
+   subdividing a voxel that may be large, but has a good history of producing
+   real intersections anyway.  Keep in mind that for every ray that did hit
+   something, there are probably shadow test rays that did not hit anything.
+   This can distort the statistics, and make a voxel appear less "tight" than
+   it really is, hence the need for larger values of K.
+<P>
+Another possible criterion is to base the subdivision generation limit
+(criterion 1) on the number of objects in the octree.  If you had, say, 6
+objects and 5 of them are clustered tightly together, you may find your octree
+reaching its maximum depth without the subordinate octrees actually splitting
+up the 5 objects.  These octree voxels are useless, costing extra time and
+memory.  They could be avoid by setting the limit based on the total number of
+objects.  I use something along the lines of the depth limit being equal to
+log sub 4 of (number of objects).
+<P>
+Andrew Glassner has a better method to avoid this problem.  When you subdivide
+a voxel, look at its children.  If only one child is non-empty, replace the
+original voxel with its non-null child.  Do this recursively until the
+subdivision criterion is satisfied.  He does this in his spacetime ray tracer,
+and the speedup can be large.  Note that this scheme means adding a field to
+the octree structure to identify what level in the hierarchy it represents.
+<P>
+An idea to speed octree traversal was first mentioned to me by Andrew Glassner
+and later by Mike Kaplan.  The idea is to place a pointer on each face of each
+octree voxel.  If a voxel's face is next to a larger or same size voxel, a
+pointer to this neighbor is stored.  If the voxel face's neighbors are
+smaller, then the face pointer is set to point at the bordering voxel of the
+same size (which is these neighbors' common parent).  If there are no
+neighbors (i.e. the face is on the exterior), a null pointer is stored.
+<P>
+When a ray exits a voxel, the voxel face is accessed and the next voxel found
+directly.  This voxel may have to be descended, but this trick saves having to
+descend the octree from the top.
+<P>
+Mike Kaplan independently arrived at a similar method, in which he stores
+quadtrees at the faces so that he can immediately access the next voxel and
+avoid any descent altogether.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art7">
+Bounding Box Intersection
+</A></FONT>
+</H4>
+The fastest method in general is Kay and Kajiya's slab intersection method
+[Kay86].  As they point out, precompute as much as you can for the ray, i.e.
+check whether the ray is parallel to any of the axes, and for whichever axes
+it is not, computing the multiplicative inverse of the ray direction vector.
+However, there are other tests which can actually improve the performance of
+the box intersector.  For example, I have found that for my particular ray
+tracer, if we first do a quick inside-outside test with the ray origin and the
+box, the overall box intersection time goes down (for a related trick, which
+is something of a preprocess version of this method, see #4 under "Bounding
+Volume Hierarchy").
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art8">
+Spline Surface Intersection
+</A></FONT>
+</H4>
+There are three camps on this question:  the numerical analysts, the polygon
+meshers, and the synthesists (who do a little of each).  The following
+comments are distilled from John Peterson's thoughts on the subject.  The
+analytic methods are often slow, and there are many nightmares involved in
+finding roots of two equations (see section 9.6 of [Press86]).  To find the
+quadrilaterals, John recommends subdividing the surfaces by using the Oslo
+Algorithm, due to its generality [Bartels87, Sweeney86].  Easiest to implement
+is simply subdividing the surface by a given step size, then ray tracing the
+mesh of polygons produced (throwing these polygons into an octree or grid
+efficiency scheme is recommended).  Another method is to use adaptive
+subdivision with a quadtree structure, checking a flatness criteria to see
+whether a given quadrilateral should be subdivided into four
+sub-quadrilaterals.
+<P>
+Peterson's subdivision criterion is to use a bounding box around each quad
+generated, subdividing until the box is smaller than a certain number of
+pixels.  A drawback of this method is that it does not elegantly handle
+objects that are part of the scene yet do not appear in the viewing frustum
+(e.g.  if the teapot is only seen in a mirror, we cannot get a good sense of
+how much to subdivide it).  Snyder and Barr [Snyder87] have some good
+recommendations on this process, and they use the change in the tangent vector
+between the quad's points as a subdivision criterion.  This article also
+points out other pitfalls of tessellation and of rendering polygons with a
+normal at each vertex.
+<P>
+If adaptive techniques are used, one problem to guard against is cracking.
+Say there are two adjacent quadrilaterals, and one has been subdivided into
+four smaller quads.  Something must be done along the seam between the two
+large quadrilaterals, as normally the subdivision point between the two common
+vertices will not lie on the large, undivided quad.  If rendered from some
+angle, there will be a noticeable crack between the large quad and the two
+neighboring smaller quads.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art9">
+Acknowledgements
+</A></FONT>
+</H4>
+This article owes a large debt to Andrew Glassner, who began "The Ray Tracing
+News," an informal journal for ray tracing researchers to share ideas.  He has
+kept the hardcopy version moving along, while I have had the pleasure of
+running the electronic edition.  Most of the ideas given a personal
+attribution in this article are from contributions to the "News", and I thank
+all those who have contributed to it over the years.  Finally, my thanks to
+Kells Elmquist and Andrew Glassner for their comments on this paper.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art10">
+Bibliography
+</A></FONT>
+</H4>
+[Bartels87] Bartels, Richard H., John C.  Beatty, Brian A.  Barsky, An
+Introduction to Splines for Use in Computer Graphics, Morgan Kaufmann, Los
+Altos, California, 1987.
+<P>
+[Press88] Press, William H.  et al, Numerical Recipes in C, Cambridge
+University Press, Cambridge, 1988.
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,497 @@
+<!-- html version of Volume 1, Number 4 : Tue May  2 10:09:23 EDT 1995 -->
+<HTML><HEAD><TITLE>Ray Tracing News, Volume 1, Number 4</TITLE></HEAD>
+<BODY>
+<CENTER>
+<FONT size=+7>Ray Tracing News</FONT>
+<P><I>"Light Makes Right"</I>
+<P><FONT size=+1>March 8, 1988</FONT>
+<P><FONT size=+1>Volume 1, Number 4</FONT>
+</CENTER>
+<P>
+Compiled by <AUTHOR><A HREF="http://www.acm.org/tog/editors/erich/">Eric Haines</A></AUTHOR>
+<A HREF="mailto:erich@acm.org">erich@acm.org
+</A>.
+Opinions expressed are mine.<P>
+All contents are copyright (c) 1988, all rights reserved
+by the individual authors
+<P>
+Archive locations:  anonymous FTP at
+<A HREF="ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/">
+ftp://ftp-graphics.stanford.edu/pub/Graphics/RTNews/</A>,<BR>
+<A HREF="ftp://wuarchive.wustl.edu/graphics/graphics/ray/RTNews/">
+wuarchive.wustl.edu:/graphics/graphics/RTNews</A>, and many others.
+<P>
+You may also want to check out
+<A HREF="index.html">
+the Ray Tracing News issue guide</A>
+and the
+<a href="http://www.cis.ohio-state.edu/hypertext/faq/usenet/graphics/raytrace-faq/top.html">ray tracing FAQ</a>.
+<HR>
+<P><H2><A NAME="contents">
+Contents:
+</A></H2>
+<UL>
+<LI><A HREF="#art1">
+Surface Acne,
+</A></LI>
+by Eric Haines and Jeff Goldsmith
+<LI><A HREF="#art2">
+Goldsmith/Salmon Hierarchy Building,
+</A></LI>
+by Jeff Goldsmith
+<LI><A HREF="#art3">
+Efficiency Tricks Followup,
+</A></LI>
+by Masataka Ohta, Jeff Goldsmith, Eric Haines
+<LI><A HREF="#art4">
+Primitive/Box Overlap Testing (extracts from USENET news),
+</A></LI>
+by Ruud Waaj,
+Paul Heckbert, Andrew Glassner
+</UL>
+<HR>
+<H4><FONT size=+1><A NAME="art1">
+Surface Acne,
+</A></FONT>
+by Eric Haines and Jeff Goldsmith
+</H4>
+        A problem which just about every ray tracer has run into, and which
+has rarely appeared in the literature (and even more rarely been solved in any
+way) is what I call "surface acne".
+<P>
+        An easy way to explain this problem is with an example.  Say you are
+looking at a double sided (i.e. no culling) cylinder primitive.  You shoot an
+eye ray, hitting the outside.  Now you look at a light.  As it turns out, the
+intersection point truly is bathed by the light, and so should see it.  What
+actually may happen is that the shadow test ray hits the cylinder.  In images
+this will show up as black dots or other anomalous shadings - "surface acne".
+I've seen this left in some images to give an interesting textured effect, but
+normally it's a real problem.
+<P>
+        How did this happen?  Well, theoretically it can't.  However, due to
+precision error the following happens.  When you hit the cylinder and
+calculated the intersection point in world space, the point computed was
+actually ever so slightly inside the cylinder.  Now, when the shadow ray
+is sent out, it is tested against the cylinder's surface, and an intersection
+is found at some tiny distance from the origin.
+<P>
+        A common solution is to just assign an epsilon to each intersector and
+cross your fingers.  In other words, what you really do is move the ray origin
+ever so slightly along the shadow (or reflection or refraction) ray direction
+and hope this was far enough that the new origin is 'outside' of the object
+(in actuality, what you want is for the new origin to be on the same side of
+the object as the parent ray, except for refraction rays, which want to start
+on the opposite side).  This works fairly well for test systems, but is pretty
+scary stuff for software used by anyone who didn't design it (e.g. some user
+decides to input his molecular database in meters, causing all his data to be
+much smaller in radius than my fudge factor.  When I add my fudge factor
+distance to the ray, I find that my new ray origin is way outside the scene).
+<P>
+        Another solution is to not test the item intersected if it is not
+self-shadowing.  For example, a polygon cannot cast a shadow on itself, so
+should not be tested for intersection when a ray originates on its surface.
+This works fine for some primitives, but falls apart when self-shadowing
+objects (cylinders, tori, spline surfaces, etc) are used.
+<P>
+        I have also experimented with some root polishing techniques, which
+help to solve some problems, but I'll leave it at this for now.  Has anyone
+any better solutions for surface acne (ideally foolproof ones)?  I suspect
+that the best solution is a combination of the above techniques, but hopefully
+I'm missing some concept that might make this problem easy to solve.  Hope to
+hear from you all on this!
+<P>
+_____________
+<P>
+Addenda from Jeff Goldsmith:
+<P>
+    Al [Barr] and I have used a technical term for "surface acne,"
+too.  We called it "black dots" or more often "black shit."
+(Zbuffers have similar problems.  The results are called
+"zbuffer shit" or "zippers".  Mostly the cruder term is
+used since the artifacts are not particularly desirable.)
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art2">
+Goldsmith/Salmon Hierarchy Building,
+</A></FONT>
+by Jeff Goldsmith
+</H4>
+Well, I was going to write up some info on the Goldsmith/Salmon hierarchy
+building algorithm, but the RT News buffer was filled almost immediately and
+I haven't done it yet.  However, there was this from Jeff Goldsmith, about
+his earlier paper (IEEE CG&A, May 1987):
+<P>
+       If you are going to spend some time and effort on automatic
+    tree generation stuff (Note: paper 2 is almost done--mostly
+    talks about parallelism and hypercubes, but some stuff on trees
+    as well--mostly work heuristics that include primitives
+    and so on) I'd like to hear some thinking about the evaluation
+    function.  Firstly, it's optimized for primary rays.  That turns
+    out to be an unfortunate choice, since most rays are secondary
+    rays.  We've come up with a second order correction that is
+    good for evaluating trees, but turns the generation algorithm
+    into O(n log^2 n).  We've not played around with it enough to
+    tell whether it works.  If you have some thoughts/solutions,
+    that would be nice.  Another finding on the same vein that is
+    much more important is: the mean (see next note) seems to be
+    reasonably close, but sigma is very high for the predictions
+    vs. actual tries.  This wasn't important (actually, wasn't
+    detected) on a sequential machine, but became crucial on a
+    parallel machine.  Some of the variation is due to our assumption/
+    attempt at view direction independence.  (Clearly, stuff in back
+    is not checked for intersection much.)  I don't know whether
+    that is all of it--we get bizarre plots of this data.  If you
+    have any thoughts on how to make a better or more precise
+    evaluation function, I'd really like to hear the reasoning and
+    perhaps steal and use the results.
+    Oh, the promised note: The mean is only correct if the highest
+    level bounding volume (root node) is contained completely within
+    the view volume.  If it isn't, the actual results end up proportional
+    to the predicted ones, but I haven't worked out the constant.
+    (It shows up on our graphs pretty clearly, though.)
+<P>
+        The second part of the algorithm is the builder.  I'm not
+    convinced that it is a very good method at all, but it met the
+    criteria I set up when trying to decompose trees--O(below n^2)
+    and reasonably local (I was trying to use simulated annealing
+    at the time.)  Some other features were environmental; some were
+    because I couldn't think of a better way.  In no sense am I convinced
+    that the incremental approach or the specific one chosen is best.
+    I'd like to hear about that, too.
+<P>
+        The only part I really like about the whole thing is the
+    general approach of using heuristics to guess at some value
+    (rated in flops eventually) and then trying to optimize that
+    value.  Beyond that, I think there is a whole realm of computational
+    techniques waiting to be used to approximately solve optimization
+    problems.  I'm really interested in other work done in that
+    direction and especially results regarding graphics.
+<P>
+        Thanks for the good words; I seem to have been mentioned
+    in most of the last issue.  I bet that has something to do with
+    my having acquired a network terminal on my desk less than a
+    month ago (yay!).
+<P>
+<I><A HREF="rtnews3a.html#art6">
+more discussion of topic</A></I>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art3">
+Efficiency Tricks Followup,
+</A></FONT>
+by Masataka Ohta, Jeff Goldsmith, Eric Haines
+</H4>
+<I><A HREF="rtnews2b.html#art6">
+previous discussion of topic</A></I>
+<P>
+These are comments generated by Jeff Goldsmith's note that Kay/Kajiya sorting is
+not needed for shadow rays.
+<P>
+___________
+<P>
+Comments from Masataka Ohta:
+<P>
+In the latest ray tracing news, you write:
+<P>
+&gt;Efficiency Tricks<BR>
+<P>
+&gt;Since illumination rays form the bulk of the rays we<BR>
+&gt;trace.<BR>
+<P>
+If so, instead of space tracing, you should use ray coherence
+at least for the illumination rays.
+<P>
+The ray coherent approaches are found in CG&A vol. 6, no. 9 "The
+Light Buffer: A Shadow-Testing Accelerator" and in my paper "ray
+coherence theorem and constant time ray tracing algorithm" in
+proceedings of CG International '87.
+<P>
+&gt;In addition, if CSG is used, more times occur when the nearest<BR>
+&gt;intersection is of less value.  This seems to indicate that<BR>
+&gt;space tracing techniques are doing some amount of needless work.<BR>
+<P>
+How about tracing illumination rays from light sources, instead
+of from object surface? It will be faster for your CSG case,
+if the surface point lies in the shadow, though if the surface
+point is illuminated, there will be no speed improvement.
+<P>
+The problem is interesting to me because my research on coherent
+ray tracer also suggests that it is much better to trace illumination
+rays from the light source.
+<P>
+Do you have any other reasons to determine from where illumination rays
+are fired?
+<P>
+____
+<P>
+Jeff Goldsmith's reply:
+<P>
+Actually, I believe you, though I won't say with certainty
+that we know the best way to do shadow testing.  However,
+I'm interested in fundamentally understanding the ray tracing
+algorithm and determining what computation MUST be done, so
+the realization that space tracing illumination rays still
+seems meaningful.  In fact, it is my opinion that space tracing
+is not the right way to go and "backwards" (classical) ray
+tracing will eventually be closer to what will be used 30
+years from now.  I won't even try to defend that position;
+no one knows the answers.  What we are trying to do is
+shed a little "light" on the subject.  Thanks for your
+comments.
+<P>
+____
+<P>
+From Eric Haines:
+<P>
+        I just got from Ohta the same note Ohta sent to you, plus your reply.
+Your reply is so short that I've lost the sense of it.  So, if you don't mind,
+a quick explanation would be useful.
+<P>
+&gt; However,<BR>
+&gt; I'm interested in fundamentally understanding the ray tracing<BR>
+&gt; algorithm and determining what computation MUST be done, so<BR>
+&gt; the realization that space tracing illumination rays still<BR>
+&gt; seems meaningful.<BR>
+<P>
+What is "the realization that space tracing illumination rays"?  I'm missing
+something here - which realization?
+<P>
+&gt; In fact, it is my opinion that space tracing<BR>
+&gt; is not the right way to go and "backwards" (classical) ray<BR>
+&gt; tracing will eventually be closer to what will be used 30<BR>
+&gt; years from now.<BR>
+<P>
+Do you mean by "space tracing" Ohta's method?
+<P>
+Basically, it looks like I should reread Ohta's article, but I thought I'd
+check first.
+<P>
+______________
+<P>
+Further explanation from Jeff Goldsmith:
+<P>
+I think that a word got dropped from the sentence, either when I
+typed it in or later.  (Who knows--I do that about as often as
+computers do.)
+<P>
+I meant:  Since distance order is not needed for illumination
+rays, space tracing methods in general (not Ohta's in particular)
+do extra work.  It's not always clear that extra information costs
+extra computation, but they usually go hand in hand.  (It was just
+a rehash of the original message.)  Anyway, if extra computation is
+being done, perhaps then there is an algorithm that does not do
+this computation, yet does all the others (or some others...)
+that is of lower asymptotic time complexity.
+<P>
+Basically, this all boils down to my response to various claims
+that people have "constant time" ray tracers. It is just not
+true.  It can't be true if they are using a method that will yield
+the first intersection along a path since we know that that
+computation cannot be done in less than O(n log n) without a
+discretized distance measurement.  I don't think that space
+tracers discretize distance in the sense of a bucket sort, but
+I could be convinced, I suppose.  Anyway, that's what the ramblings
+are all about.  If you have some insights, I'd like to start an
+argument (sorry, discussion) on the net about the topic.  What
+do you think?
+<P>
+<I><A HREF="rtnews2d.html#art3">
+more discussion of topic</A></I>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<H4><FONT size=+1><A NAME="art4">
+Primitive/Box Overlap Testing (extracts from USENET news),
+</A></FONT>
+by Ruud Waaj, Paul Heckbert, Andrew Glassner
+</H4>
+There was recently some interesting interchange about octree building on USENET.
+Some people don't read or don't receive comp.graphics, so the rest of this
+issue consists of these messages.
+<P>
+________________
+<P>
+From Ruud Waij (who is not on the RT News e-mail mailing list):
+<P>
+In article (<A HREF="mailto:198@dutrun.UUCP">198@dutrun.UUCP</A>) winffhp@dutrun.UUCP (ruud waij) writes:
+My ray tracing program, which can display the
+primitives block, sphere cone and cylinder,
+uses spatial enumeration of the object space
+(subdivision in regularly located cubical cells
+(voxels)) to speed up computation.
+<P>
+The voxels each have a list of primitives.
+If the surface of a primitive is inside a voxel,
+this primitive will be put in the list of the voxel.
+<P>
+I am currently using bounding boxes around the
+primitives: if part of the bounding box is
+inside the voxel, the surface of the primitive
+is said to be inside the voxel.
+This is a very easy method but also very s-l-o-w.
+<P>
+I am trying to find a better way of determining
+whether the surface of a primitive is in a voxel
+or not, but I am not very succesful.
+Does anyone out there have any suggestions?
+<P>
+_______________
+<P>
+Response from Paul Heckbert:
+<P>
+Yes, interesting problem!  Fitting a bounding box around the object and listing
+that object in all voxels intersected by the bounding box will be inefficient as
+it can list the object in many voxels not intersected by the object itself.
+Imagine a long, thin cylinder at an angle to the voxel grid.
+<P>
+I've never implemented this, but I think it would solve your
+problem for general quadrics:
+<P>
+<PRE>
+    find zmin and zmax for the object.
+    loop over z from zmin to zmax, stepping from grid plane to grid plane.
+        find the conic curve of the intersection of the quadric with the plane.
+        this will be a second degree equation in x and y (an ellipse,
+            parabola, hyperbola, or line).
+        note that you'll have to deal with the end caps of your cylinders
+            and similar details.
+        find ymin and ymax for the conic curve.
+        loop over y from ymin to ymax,
+            stepping from grid line to grid line within the current z-plane
+            find the intersection points of the current y line with the conic.
+            this will be zero, one, or two points.
+            find xmin and xmax of these points.
+            loop over x from xmin to xmax.
+                the voxel at (x, y, z) intersects the object
+</PRE>
+<P>
+Perhaps others out there have actually implemented stuff like this and will
+enlighten us with their experience.
+<P>
+_________________
+<P>
+Response from Andrew Glassner:
+<P>
+  Ruud and I have discussed this in person, but I thought I'd respond
+anyway - both to summarize our discussions and offer some comments
+on the technique.
+<P>
+  The central question of the posting was how to assign the surfaces
+of various objects to volume cells, in order to use some form spatial
+subdivision to accelerate ray tracing.  Notice that there are at
+least two assumptions underlying this method.  The first assumes that
+the interior of each object is homogeneous in all respects, and thus
+uninteresting from a ray-tracing point of view.  As a counterexample,
+if we have smoke swirling around inside a crystal ball, then this
+"homogeneous-contents" assumption breaks down fast.
+<P>
+  To compensate, we either must include the volume inside each object
+to each cell's object list (and support a more complex object description
+encompassing both the surface and the contents), or include as new objects
+the stuff within the original.
+<P>
+  The other assumption is that objects have hard edges; otherwise we have
+to revise our definition of "surface" in this context.  This can begin
+to be a problem with implicit surfaces, though I haven't seen this really
+discussed yet in print.  But so as long as we're using hard-edged objects
+with homogeneous interiors, the "surface in a cell" approach is still
+attractive.  From here on I'll assume that cells are rectangular boxes.
+<P>
+  So to which cells do we attach a particular surface?  Ruud's current
+technique (gathered from his posting) finds the bounding box of the surface
+and marks every cell that is even partly within the bounding volume.  Sure,
+this marks a lot of cells that need not be marked.  One way to reduce the
+marked cell count is to notice that if the object is convex, we can unmark
+any cell that is completely within the object; we test the 8 corners with
+an inside/outside test (fast and simple for quadrics; only slightly slower
+and harder for polyhedra).  If all 8 corners are "inside", unmark the cell.
+Of course, this assumes convex cells - like boxes.  Note that some quadrics
+are not convex (e.g. hyperboloid of one sheet) so you must be at least
+a little careful here.
+<P>
+  The opposite doesn't hold - just because all 8 corners are outside
+does NOT mean a cell may be unmarked.  Consider the end of a cylinder
+poking into one side of a box, like an ice-cream bar on a stick,
+where the ice-cream bar itself is our cell.  The stick is within the
+ice cream, but all the corners of the ice cream bar are outside the stick.
+Since this box contains some of the stick's surface, the box should still
+be marked.  So our final cells have either some inside and some outside
+corners, or all outside corners.
+<P>
+  What do we lose by having lots of extra cells marked?  Probably not
+much.  By storing the ray intersection parameter with each object after
+an intersection has been computed, we don't ever need to actually
+repeat an intersection.  If the ray id# that is being traced matches
+the ray id# for which the object holds the intersection parameter, we
+simply return the intersection value.  This requires getting access to
+the object's description and then a comparison - probably the object
+access is the most expensive step.  But most objects are locally
+coherent (if you hit a cell containing object A, the next time you need
+object A again will probably be pretty soon).  So "false positives" -
+cells who claim to contain an object they really don't - aren't so bad,
+since the pages containing an object will probably still be resident
+when we need it again.
+<P>
+  We do need to protect ourselves, though, against a little gotcha that
+I neglected to discuss in my '84 CG&A paper.  If you enter a cell and
+find that you hit an object it claims to contain, you must check that
+the intersection you computed actually resides within that cell.  It's
+possible that the cell is a false positive, so the object itself isn't
+even in the cell.  It's also possible that the object is something like
+a boomerang, where it really is within the current cell but the actual
+intersection is in another cell.  The loss comes in when the intersection
+is actually in the next cell, but another surface in the next cell (but
+not in this one) is actually in front.  Even worse, if you're doing CSG,
+that phony intersection can distort your entire precious CSG status tree!
+The moral is not to be fooled just because you hit an object in a cell;
+check to be sure that the intersection itself is also within the cell.
+<P>
+  How to find the bounding box of a quadric?  A really simple way is
+to find the bounding box of the quadric in its canonical space, and
+then transform the box into the object's position.  Fit a new bounding
+box around the eight transformed corners of the original bounding box.
+This will not make a very tight volume at all, (imagine a slanted,
+tilted cylinder and its bounding box), but it's quick and dirty and
+I use it for getting code debugged and at least running.
+<P>
+  If you have a convex hull program, you can compute the hull for
+concave polyhedra and use its bounding box; obviously you needn't
+bother for convex polyhedra.  For parametric curved surfaces you can
+try to find a polyhedral shell the is guaranteed to enclose the
+surface; again you can find the shell's convex hull and then find
+the extreme values along each co-ordinate.
+<P>
+  If your boxes don't have to be axis-aligned, then the problem changes
+significantly.  Consider a sphere: an infinite number of equally-sized
+boxes at different orientation will enclose the sphere minimally.  More
+complicated shapes appear more formidable.  An O(n^3) algorithm for
+non-aligned bounding boxes can be found in "Finding Minimal Enclosing
+Boxes" by O'Rourke (International Journal of Computer and Information
+Sciences, Vol 14, No 3, 1985, pp. 183-199).
+<P>
+  Other approaches include traditional 3-d scan conversion, which I think
+should be easily convertable into an adaptive octree environment.  Or you
+can grab the bull by the horns and go for raw octree encoding, approximating
+the surface with lots of little sugar cubes.  Then mark any cell in your
+space subdivision tree that encloses (some or all of) any of these cubes.
+<P>
+<I><A HREF="rtnews2d.html#art4">
+more discussion of topic</A></I>
+<P>
+<IMG src="teadot.gif">
+back to
+<A HREF="#contents">contents</A>
+<HR>
+<ADDRESS>
+Eric Haines / <A HREF="mailto:erich@acm.org">erich@acm.org</A>
+</ADDRESS>
+</BODY>
+</HTML>
